@@ -85,17 +85,17 @@ bool os::handlesOpenedSig[] = {
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t os::staticAtomicMutex::keeper;
+pthread_mutex_t os::syncThreadSection::keeper;
 
 #endif
 
 //-------------------------------------------------------------------
 
-os::staticAtomicMutex os::keeper;
+os::syncThreadSection os::keeper;
 
 //-------------------------------------------------------------------
 
-os::staticAtomicMutex::staticAtomicMutex()
+os::syncThreadSection::syncThreadSection()
 {
 #ifdef PTHREAD_EXT
 
@@ -112,7 +112,7 @@ os::staticAtomicMutex::staticAtomicMutex()
 
 //-------------------------------------------------------------------
 
-os::staticAtomicMutex::~staticAtomicMutex()
+os::syncThreadSection::~syncThreadSection()
 {
 #ifdef PTHREAD_EXT
 
@@ -124,13 +124,13 @@ os::staticAtomicMutex::~staticAtomicMutex()
 //-------------------------------------------------------------------
 
 void
-os::staticAtomicMutex::acquire()
+os::syncThreadSection::acquire()
 {
 #ifdef PTHREAD_EXT
 
 	errno = pthread_mutex_lock(&keeper);
 	if (errno != 0 && errno != EDEADLK)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSTATICATOMICMUTEX, SYSTEMSTATICATOMICMUTEXEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYSTEMSTATICATOMICMUTEXEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -138,27 +138,27 @@ os::staticAtomicMutex::acquire()
 //-------------------------------------------------------------------
 
 void
-os::staticAtomicMutex::release()
+os::syncThreadSection::release()
 {
 #ifdef PTHREAD_EXT
 
 	errno = pthread_mutex_unlock(&keeper);
 	if (errno != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSTATICATOMICMUTEX, SYSTEMSTATICATOMICMUTEXEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYSTEMSTATICATOMICMUTEXEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
 
 //-------------------------------------------------------------------
 
-os::raceHazardGuard::raceHazardGuard()
+os::syncThreadStack::syncThreadStack()
 {
 	keeper.acquire();
 }
 
 //-------------------------------------------------------------------
 
-os::raceHazardGuard::~raceHazardGuard()
+os::syncThreadStack::~syncThreadStack()
 {
 	keeper.release();
 }
@@ -790,7 +790,7 @@ os::setSignalHandler(long signal,
 					 signalHandler handler,
 					 int blockSignals)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 #ifdef DL_EXT
 
@@ -833,7 +833,7 @@ os::setMicroTimer(unsigned long timeout,
 				  signalHandler handler,
 				  int blockSignals)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 #ifdef DL_EXT
 
@@ -893,7 +893,7 @@ os::setTimer(long timeout,
 			 signalHandler handler,
 			 int blockSignals)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 #ifdef DL_EXT
 
@@ -968,7 +968,7 @@ os::sendSignal(int pid,
 void
 os::unsetSignalHandler(long signal)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 #ifdef DL_EXT
 
@@ -1034,7 +1034,7 @@ void
 os::setSignalHandler(const dodoString &path,
 					 void             *toInit)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 #ifdef DL_FAST
 	void *handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);

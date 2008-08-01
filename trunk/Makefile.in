@@ -78,21 +78,21 @@ OBJECTS:=dbAccumulator.o \
 	rpcJsonServer.o \
 	rpcJsonValue.o \
 	image.o \
-	pcRaceHazardGuard.o \
-	pcAtomicLock.o \
-	pcAtomicMutex.o \
-	pcAtomicSemaphore.o \
+	pcSyncStack.o \
+	pcSyncSection.o \
+	pcSyncThreadSection.o \
+	pcSyncProcessSection.o \
 	pcProcessCollection.o \
 	pcThreadCollection.o \
 	pcJobCollection.o \
-	pcThreadGuard.o \
-	pcProcessGuard.o \
-	pcThreadSharedDataGuard.o \
-	pcProcessSharedDataGuard.o \
-	pcSharedDataGuard.o \
-	pcThreadSharedDataCollectionGuard.o \
-	pcProcessSharedDataCollectionGuard.o \
-	pcSharedDataCollectionGuard.o \
+	pcSyncThreadStack.o \
+	pcSyncProcessStack.o \
+	pcSyncThreadDataSingle.o \
+	pcSyncProcessDataSingle.o \
+	pcSyncDataSingle.o \
+	pcSyncThreadDataCollection.o \
+	pcSyncProcessDataCollection.o \
+	pcSyncDataCollection.o \
 	libraryLoader.o \
 	cgiServer.o \
 	cgiExchange.o \

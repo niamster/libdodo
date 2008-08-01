@@ -9,7 +9,7 @@
 #include <libdodo/cgiProcessor.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/cgiFastServer.h>
-#include <libdodo/pcThreadSharedDataGuard.h>
+#include <libdodo/pcSyncThreadDataSingle.h>
 
 #include <iostream>
 

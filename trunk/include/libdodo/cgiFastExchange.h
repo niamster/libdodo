@@ -39,7 +39,7 @@
 #include <libdodo/types.h>
 #include <libdodo/cgiFastExchangeEx.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/pcThreadGuard.h>
+#include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo
 {

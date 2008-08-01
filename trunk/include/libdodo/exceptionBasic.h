@@ -86,7 +86,7 @@ namespace dodo
 			ERRMODULE_XEXEC,
 			ERRMODULE_TOOLSFILESYSTEM,
 			ERRMODULE_TOOLSOS,
-			ERRMODULE_TOOLSOSSTATICATOMICMUTEX,
+			ERRMODULE_TOOLSOSSYNCTHREADSECTION,
 			ERRMODULE_TOOLSTIME,
 			ERRMODULE_TOOLSMISC,
 			ERRMODULE_TOOLSCODE,
@@ -109,12 +109,12 @@ namespace dodo
 			ERRMODULE_IOEVENT,
 			ERRMODULE_PCPROCESSCOLLECTION,
 			ERRMODULE_PCTHREADCOLLECTION,
-			ERRMODULE_PCTHREADSHAREDDATAGUARD,
-			ERRMODULE_PCPROCESSSHAREDDATAGUARD,
-			ERRMODULE_PCPROCESSSHAREDDATACOLLECTIONGUARD,
-			ERRMODULE_PCTHREADSHAREDDATACOLLECTIONGUARD,
-			ERRMODULE_PCATOMICMUTEX,
-			ERRMODULE_PCATOMICSEMAPHORE,
+			ERRMODULE_PCSYNCTHREADDATASINGLE,
+			ERRMODULE_PCSYNCPROCESSDATASINGLE,
+			ERRMODULE_PCSYNCTHREADDATACOLLECTION,
+			ERRMODULE_PCSYNCPROCESSDATACOLLECTION,
+			ERRMODULE_PCSYNCTHREADSECTION,
+			ERRMODULE_PCSYNCPROCESSSECTION,
 			ERRMODULE_LIBRARYLOADER,
 			ERRMODULE_IMAGE,
 			ERRMODULE_CGIPROCESSOR,
@@ -295,21 +295,21 @@ namespace dodo
 	#endif
 
 				/**
-				 * @class staticAtomicMutex performs atomic locks using mutexes
+				 * @class syncThreadSection performs atomic locks using mutexes
 				 */
-				class staticAtomicMutex
+				class syncThreadSection
 				{
 					public:
 
 						/**
 						 * consructor
 						 */
-						staticAtomicMutex();
+						syncThreadSection();
 
 						/**
 						 * destructor
 						 */
-						virtual ~staticAtomicMutex();
+						virtual ~syncThreadSection();
 
 						/**
 						 * lock critical section
@@ -330,25 +330,25 @@ namespace dodo
 	#endif
 				};
 
-				static staticAtomicMutex keeper;             ///< lock
+				static syncThreadSection keeper;             ///< lock
 
 				/**
-				 * @class raceHazardGuard provides thread safe behaviour
+				 * @class syncThreadStack provides thread safe behaviour
 				 * @note it locks in constructor and unlocks in destructor
 				 */
-				class raceHazardGuard
+				class syncThreadStack
 				{
 					public:
 
 						/**
 						 * contructor
 						 */
-						raceHazardGuard();
+						syncThreadStack();
 
 						/**
 						 * destructor
 						 */
-						virtual ~raceHazardGuard();
+						virtual ~syncThreadStack();
 				};
 
 				static unsigned long instances;

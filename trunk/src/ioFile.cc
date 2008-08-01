@@ -128,7 +128,7 @@ file::~file()
 int
 file::getInDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
@@ -141,7 +141,7 @@ file::getInDescriptor() const
 int
 file::getOutDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
@@ -154,7 +154,7 @@ file::getOutDescriptor() const
 void
 file::clone(const file &fd)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (opened)
 	{
@@ -221,7 +221,7 @@ file::clone(const file &fd)
 void
 file::close()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = FILE_OPERATION_CLOSE;
@@ -250,7 +250,7 @@ file::open(const dodoString &a_path,
 		   short a_fileType,
 		   short a_mode)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = FILE_OPERATION_OPEN;
@@ -440,7 +440,7 @@ file::_write(const char *const a_buf)
 void
 file::erase()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	char *empty = new char[outSize];
 
@@ -466,7 +466,7 @@ file::erase()
 void
 file::flush()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_FLUSH, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
@@ -480,7 +480,7 @@ file::flush()
 dodoString
 file::getPath() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	return path;
 }
@@ -585,7 +585,7 @@ file::_writeStream(const char *const a_buf)
 short
 file::getFileType() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	return fileType;
 }

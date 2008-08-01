@@ -38,7 +38,7 @@
 #include <libdodo/ioEventEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/pcThreadGuard.h>
+#include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo
 {
@@ -58,7 +58,7 @@ namespace dodo
 		/**
 		 * @class event provides information if in/output stream is readable/writable
 		 */
-		class event : virtual public pc::thread::guardHolder
+		class event : virtual public pc::sync::thread::stack
 		{
 
 			private:

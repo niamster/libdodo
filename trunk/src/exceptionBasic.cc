@@ -301,17 +301,17 @@ void *basic::handlesEx[] = {
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t basic::staticAtomicMutex::keeper;
+pthread_mutex_t basic::syncThreadSection::keeper;
 
 #endif
 
 //-------------------------------------------------------------------
 
-basic::staticAtomicMutex basic::keeper;
+basic::syncThreadSection basic::keeper;
 
 //-------------------------------------------------------------------
 
-basic::staticAtomicMutex::staticAtomicMutex()
+basic::syncThreadSection::syncThreadSection()
 {
 #ifdef PTHREAD_EXT
 
@@ -328,7 +328,7 @@ basic::staticAtomicMutex::staticAtomicMutex()
 
 //-------------------------------------------------------------------
 
-basic::staticAtomicMutex::~staticAtomicMutex()
+basic::syncThreadSection::~syncThreadSection()
 {
 #ifdef PTHREAD_EXT
 
@@ -340,7 +340,7 @@ basic::staticAtomicMutex::~staticAtomicMutex()
 //-------------------------------------------------------------------
 
 void
-basic::staticAtomicMutex::acquire()
+basic::syncThreadSection::acquire()
 {
 #ifdef PTHREAD_EXT
 
@@ -352,7 +352,7 @@ basic::staticAtomicMutex::acquire()
 //-------------------------------------------------------------------
 
 void
-basic::staticAtomicMutex::release()
+basic::syncThreadSection::release()
 {
 #ifdef PTHREAD_EXT
 
@@ -363,14 +363,14 @@ basic::staticAtomicMutex::release()
 
 //-------------------------------------------------------------------
 
-basic::raceHazardGuard::raceHazardGuard()
+basic::syncThreadStack::syncThreadStack()
 {
 	keeper.acquire();
 }
 
 //-------------------------------------------------------------------
 
-basic::raceHazardGuard::~raceHazardGuard()
+basic::syncThreadStack::~syncThreadStack()
 {
 	keeper.release();
 }
@@ -400,7 +400,7 @@ basic::basic(int a_errModule,
 													  file(a_file),
 													  message(a_message)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 	getInstance();
 	
@@ -414,7 +414,7 @@ basic::basic(int a_errModule,
 
 basic::~basic() throw()
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 	--instances;
 
@@ -448,7 +448,7 @@ basic::~basic() throw()
 
 basic::operator const dodoString & ()
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 	return baseErrstr;
 }
@@ -458,7 +458,7 @@ basic::operator const dodoString & ()
 const char *
 basic::what() const throw()
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 	return baseErrstr.c_str();
 }
@@ -470,7 +470,7 @@ basic::setErrorHandler(errorModuleEnum module,
 						errorHandler handler,
 						void *data)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 	getInstance();
 
@@ -505,7 +505,7 @@ void
 basic::setErrorHandlers(errorHandler handler,
 						 void *data)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 	getInstance();
 
@@ -544,7 +544,7 @@ basic::setErrorHandlers(errorHandler handler,
 void
 basic::unsetErrorHandler(errorModuleEnum module)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 #ifdef DL_EXT
 
@@ -576,7 +576,7 @@ basic::unsetErrorHandler(errorModuleEnum module)
 void
 basic::unsetErrorHandlers()
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 #ifdef DL_EXT
 	deinitBaseExModule deinit;
@@ -617,7 +617,7 @@ basic::setErrorHandlers(const dodoString &path,
 						 void *data,
 						 void *toInit)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 	getInstance();
 
@@ -676,7 +676,7 @@ basic::setErrorHandler(const dodoString &path,
 						void *data,
 						void *toInit)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 	getInstance();
 
@@ -731,7 +731,7 @@ __basicMod
 basic::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
-	raceHazardGuard tg;
+	syncThreadStack tg;
 
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);

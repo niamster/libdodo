@@ -68,7 +68,7 @@ channel::~channel()
 void
 channel::read(char * const a_void)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = IO_OPERATION_READ;
@@ -115,7 +115,7 @@ channel::read(char * const a_void)
 void
 channel::readString(dodoString &a_str)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = IO_OPERATION_READSTRING;
@@ -168,7 +168,7 @@ channel::readString(dodoString &a_str)
 void
 channel::readStream(char * const a_void)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = IO_OPERATION_READSTREAM;
@@ -199,7 +199,7 @@ channel::readStream(char * const a_void)
 void
 channel::readStreamString(dodoString &a_str)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	a_str.clear();
 
@@ -253,7 +253,7 @@ channel::readStreamString(dodoString &a_str)
 void
 channel::writeString(const dodoString &a_buf)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 
@@ -291,7 +291,7 @@ channel::writeString(const dodoString &a_buf)
 void
 channel::write(const char *const a_buf)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 
@@ -330,7 +330,7 @@ channel::write(const char *const a_buf)
 void
 channel::writeStreamString(const dodoString &a_buf)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -399,7 +399,7 @@ channel::writeStreamString(const dodoString &a_buf)
 void
 channel::writeStream(const char *const a_buf)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	unsigned long _outSize = outSize;
 

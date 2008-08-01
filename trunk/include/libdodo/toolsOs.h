@@ -518,21 +518,21 @@ namespace dodo
 
 #endif
 				/**
-				 * @class staticAtomicMutex performs atomic locks using mutexes
+				 * @class syncThreadSection performs atomic locks using mutexes
 				 */
-				class staticAtomicMutex
+				class syncThreadSection
 				{
 					public:
 
 						/**
 						 * consructor
 						 */
-						staticAtomicMutex();
+						syncThreadSection();
 
 						/**
 						 * destructor
 						 */
-						virtual ~staticAtomicMutex();
+						virtual ~syncThreadSection();
 
 						/**
 						 * lock critical section
@@ -551,25 +551,25 @@ namespace dodo
 #endif
 				};
 
-				static staticAtomicMutex keeper;                 ///< lock
+				static syncThreadSection keeper;                 ///< lock
 
 				/**
-				 * @class raceHazardGuard provides thread safe behaviour
+				 * @class syncThreadStack provides thread safe behaviour
 				 * @note it locks in constructor and unlocks in destructor
 				 */
-				class raceHazardGuard
+				class syncThreadStack
 				{
 					public:
 
 						/**
 						 * contructor
 						 */
-						raceHazardGuard();
+						syncThreadStack();
 
 						/**
 						 * destructor
 						 */
-						virtual ~raceHazardGuard();
+						virtual ~syncThreadStack();
 				};
 		};
 	};

@@ -141,7 +141,7 @@ exchange::_close(int socket,
 void
 exchange::close()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
@@ -171,7 +171,7 @@ exchange::init(int a_socket,
 			   bool a_blocked,
 			   bool blockInherited)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (opened)
 	{
@@ -213,7 +213,7 @@ exchange::init(int a_socket,
 bool
 exchange::isAlive()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
 		return false;

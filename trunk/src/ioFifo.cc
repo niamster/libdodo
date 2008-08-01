@@ -105,7 +105,7 @@ fifo::~fifo()
 void
 fifo::clone(const fifo &fd)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (opened)
 	{
@@ -164,7 +164,7 @@ fifo::clone(const fifo &fd)
 int
 fifo::getInDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FIFOEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, FIFOEX_FIFONOTOPENED, IOFIFOEX_FIFONOTOPENED_STR, __LINE__, __FILE__);
@@ -177,7 +177,7 @@ fifo::getInDescriptor() const
 int
 fifo::getOutDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 	
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FIFOEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, FIFOEX_FIFONOTOPENED, IOFIFOEX_FIFONOTOPENED_STR, __LINE__, __FILE__);
@@ -191,7 +191,7 @@ fifo::getOutDescriptor() const
 void
 fifo::close()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = FIFO_OPERATION_CLOSE;
@@ -222,7 +222,7 @@ fifo::close()
 void
 fifo::open()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = FIFO_OPERATION_OPEN;
@@ -405,7 +405,7 @@ fifo::_write(const char *const buf)
 void
 fifo::flush()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 	
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FIFOEX_FLUSH, exception::ERRNO_LIBDODO, FIFOEX_FIFONOTOPENED, IOFIFOEX_FIFONOTOPENED_STR, __LINE__, __FILE__);
@@ -419,7 +419,7 @@ fifo::flush()
 network::__peerInfo
 fifo::peerInfo()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 	
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FIFOEX_PEERINFO, exception::ERRNO_LIBDODO, FIFOEX_FIFONOTOPENED, IOFIFOEX_FIFONOTOPENED_STR, __LINE__, __FILE__);
@@ -481,7 +481,7 @@ fifo::peerInfo()
 bool
 fifo::isBlocked()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	return blocked;
 }
@@ -492,7 +492,7 @@ fifo::isBlocked()
 void
 fifo::block(bool flag)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FIFOEX_BLOCK, exception::ERRNO_LIBDODO, FIFOEX_FIFONOTOPENED, IOFIFOEX_FIFONOTOPENED_STR, __LINE__, __FILE__);

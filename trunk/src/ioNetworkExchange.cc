@@ -123,7 +123,7 @@ exchange::init(__initialAccept &a_init)
 void
 exchange::close()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
@@ -151,7 +151,7 @@ exchange::init(int a_socket,
 			   bool a_blocked,
 			   bool blockInherited)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (opened)
 	{
@@ -191,7 +191,7 @@ exchange::init(int a_socket,
 bool
 exchange::isAlive()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
 		return false;
@@ -408,7 +408,7 @@ exchange::flush()
 int
 exchange::getInDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	return socket;
 }
@@ -418,7 +418,7 @@ exchange::getInDescriptor() const
 int
 exchange::getOutDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	return socket;
 }
