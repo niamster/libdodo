@@ -5,13 +5,15 @@
  */
 
 #include <libdodo/toolsMisc.h>
-#include <libdodo/image.h>
+#include <libdodo/graphicsImage.h>
+#include <libdodo/graphicsTransform.h>
 #include <libdodo/ioFile.h>
 
 #include <iostream>
 
 using namespace dodo;
 using namespace io;
+using namespace graphics;
 
 using namespace std;
 
@@ -32,7 +34,8 @@ hook(void *odata,
 		{
 			image *img = (image *)imData->executor;
 			img->disableAll();
-			img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
+			graphics::transform tr(img);
+			tr.rotate(TRANSFORM_ROTATEDIRECTIONANGLE_180);
 			img->enableAll();
 		}
 		catch (dodo::exception::basic ex)
@@ -52,6 +55,7 @@ int main(int argc, char **argv)
 	{
 #ifdef IMAGEMAGICK_EXT
 		image im;
+		graphics::transform tr(&im);
 
 #ifndef IMAGE_WO_XEXEC
 
@@ -65,7 +69,7 @@ int main(int argc, char **argv)
 		im.read("test.png");
 		cout << im.getCompression() << " " << im.getEncoder() << " " << im.getQuality() << endl;
 
-		im.scale(1000, 1000);
+		tr.scale(1000, 1000);
 
 		im.write("test.jpg");
 

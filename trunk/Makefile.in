@@ -77,7 +77,8 @@ OBJECTS:=dbAccumulator.o \
 	rpcJsonResponse.o \
 	rpcJsonServer.o \
 	rpcJsonValue.o \
-	image.o \
+	graphicsTransform.o \
+	graphicsImage.o \
 	pcSyncStack.o \
 	pcSyncSection.o \
 	pcSyncThreadSection.o \
