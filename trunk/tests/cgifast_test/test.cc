@@ -19,9 +19,9 @@ using namespace std;
 
 using namespace dodo;
 using cgi::fast::exchange;
-using dodo::pc::thread::shared::dataGuard;
+using dodo::pc::sync::thread::data::single;
 
-dataGuard sh;
+single sh;
 
 void
 cgif(exchange &fcgi)

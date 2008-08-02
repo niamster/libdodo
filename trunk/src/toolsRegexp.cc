@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexp.cc
+ *            toolsRegexp.cc
  *
  *  Thu Sep 20 01:43:24 2005
  *  Copyright  2005  Ni@m
@@ -27,9 +27,9 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/regexp.h>
+#include <libdodo/toolsRegexp.h>
 
-using namespace dodo;
+using namespace dodo::tools;
 
 regexp::regexp(regexp &rt)
 {

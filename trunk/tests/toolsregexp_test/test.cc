@@ -5,10 +5,11 @@
  */
 
 
-#include <libdodo/regexp.h>
+#include <libdodo/toolsRegexp.h>
 #include <iostream>
 
 using namespace dodo;
+using namespace tools;
 
 using namespace std;
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexpEx.h
+ *            toolsRegexpEx.h
  *
  *  Thu MAr 06 00:36:47 2008
  *  Copyright  2008  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _REGEXPEX_H_
-#define _REGEXPEX_H_
+#ifndef _TOOLSREGEXPEX_H_
+#define _TOOLSREGEXPEX_H_
 
 #include <libdodo/directives.h>
 
@@ -36,12 +36,15 @@
 
 namespace dodo
 {
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum regexpExFunctionsID
+	namespace tools
 	{
-		REGEXPEX_COMPILE,
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum regexpExFunctionsID
+		{
+			REGEXPEX_COMPILE,
+		};
 	};
 };
 

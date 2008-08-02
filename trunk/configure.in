@@ -555,7 +555,6 @@ AC_CONFIG_FILES([Makefile
                  tests/dbpostgresql_test/Makefile
                  tests/dbsqlite_test/Makefile
                  tests/db_test/Makefile
-                 tests/regexp_test/Makefile
                  tests/iononblocked_ionetwork_test/Makefile
                  tests/iononblocked_ionetworkssl_test/Makefile
                  tests/iostdio_test/Makefile
@@ -577,6 +576,7 @@ AC_CONFIG_FILES([Makefile
                  tests/toolscode_test/Makefile
                  tests/toolslogger_test/Makefile
                  tests/toolslibrary_test/Makefile
+                 tests/toolsregexp_test/Makefile
                  tests/xexec_test/Makefile
                  tests/rpcxmlhttpclient_test/Makefile
                  tests/rpcxmlcgiserver_test/Makefile

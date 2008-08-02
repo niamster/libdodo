@@ -35,10 +35,10 @@ OBJECTS:=dbAccumulator.o \
 	toolsString.o \
 	toolsLogger.o \
 	toolsLibrary.o \
+	toolsRegexp.o \
 	types.o \
 	xexec.o \
 	exceptionBasic.o \
-	regexp.o \
 	ioChannel.o \
 	ioFile.o \
 	ioEvent.o \

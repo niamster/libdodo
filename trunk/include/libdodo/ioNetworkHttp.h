@@ -42,7 +42,7 @@
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/ioNetworkHttpEx.h>
 #include <libdodo/types.h>
-#include <libdodo/regexp.h>
+#include <libdodo/toolsRegexp.h>
 #include <libdodo/cgiServer.h>
 
 namespace dodo
@@ -133,7 +133,7 @@ namespace dodo
 				 * constructor
 				 */
 				__httpPostFile();
-				
+
 				dodoString path;										///< path to file
 				dodoString mime;										///<  mimetype of the file
 			};
@@ -328,7 +328,7 @@ namespace dodo
 					static const dodoString requestHeaderStatements[HTTP_REQUESTHEADERSTATEMENTS];                              ///< HTTP request headers[see httpRequestHeaderEnum]
 					static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];                            ///< HTTP response headers[see httpResponseHeaderEnum]
 
-					regexp httpStatusRE;                                                                                        ///< parser for HTTP response status code
+					tools::regexp httpStatusRE;                                                                                        ///< parser for HTTP response status code
 
 					__httpResponse response;                                                                                    ///< HTTP response data
 					tools::__url urlComponents;                                                                                 ///< HTTP URL components
