@@ -1,5 +1,5 @@
 /***************************************************************************
- *            xmlProcessorEx.h
+ *            dataFormatXmlProcessorEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _XMLPROCESSOREX_H_
-#define _XMLPROCESSOREX_H_
+#ifndef _DATAFORMATXMLPROCESSOREX_H_
+#define _DATAFORMATXMLPROCESSOREX_H_
 
 #include <libdodo/directives.h>
 
@@ -36,36 +36,42 @@
 
 namespace dodo
 {
-	namespace xml
+	namespace data
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum processorExR
+		namespace format
 		{
-			PROCESSOREX_EMPTYDOCUMENT,
-			PROCESSOREX_NOROOTNODE,
-		};
+			namespace xml
+			{
+				/**
+				 * libdodo defined errors
+				 */
+				enum processorExR
+				{
+					PROCESSOREX_EMPTYDOCUMENT,
+					PROCESSOREX_NOROOTNODE,
+				};
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
-#define XMLPROCESSOREX_EMPTYDOCUMENT_STR "File or buffer doesn't contain XML document."
-#define XMLPROCESSOREX_NOROOTNODE_STR    "XML document doesn't have root node."
+				/**
+				 * explanations for libdodo defined errors
+				 */
+		#define DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR "File or buffer doesn't contain XML document."
+		#define DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR    "XML document doesn't have root node."
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum processorFunctionsID
-		{
-			PROCESSOREX_PARSEFILE,
-			PROCESSOREX_PARSE,
-			PROCESSOREX_ERRHANDLER,
-			PROCESSOREX_GETBUFFERINFO,
-			PROCESSOREX_PARSEBUFFER,
-			PROCESSOREX_GETFILEINFO,
-			PROCESSOREX_PARSEBUFFERINT,
-			PROCESSOREX_PARSEFILEINT,
+				/**
+				 * IDs of functions where exception might be thrown
+				 */
+				enum processorFunctionsID
+				{
+					PROCESSOREX_PARSEFILE,
+					PROCESSOREX_PARSE,
+					PROCESSOREX_ERRHANDLER,
+					PROCESSOREX_GETBUFFERINFO,
+					PROCESSOREX_PARSEBUFFER,
+					PROCESSOREX_GETFILEINFO,
+					PROCESSOREX_PARSEBUFFERINT,
+					PROCESSOREX_PARSEFILEINT,
+				};
+			};
 		};
 	};
 };

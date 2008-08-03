@@ -9044,7 +9044,7 @@ $as_echo "$ac_cv_prog_gcc_traditional" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/json_test/Makefile tests/cgifast_test/Makefile tests/cgi_test/Makefile tests/dbmysql_test/Makefile tests/dbpostgresql_test/Makefile tests/dbsqlite_test/Makefile tests/db_test/Makefile tests/iononblocked_ionetwork_test/Makefile tests/iononblocked_ionetworkssl_test/Makefile tests/iostdio_test/Makefile tests/iofile_toolsfilesystem_test/Makefile tests/iofifo_pcthreadcollection_test/Makefile tests/ionetwork_pcthreads_test/Makefile tests/ionetworkclient_test/Makefile tests/ionetworkserver_test/Makefile tests/ionetworksslserver_test/Makefile tests/ionetworksslclient_test/Makefile tests/ionetworkhttp_test/Makefile tests/pcthreadcollection_test/Makefile tests/pcprocesscollection_test/Makefile tests/pcjobcollection_test/Makefile tests/toolsnetwork_test/Makefile tests/toolsos_test/Makefile tests/toolstime_test/Makefile tests/toolsmisc_test/Makefile tests/toolscode_test/Makefile tests/toolslogger_test/Makefile tests/toolslibrary_test/Makefile tests/toolsregexp_test/Makefile tests/xexec_test/Makefile tests/rpcxmlhttpclient_test/Makefile tests/rpcxmlcgiserver_test/Makefile tests/rpcjsonhttpclient_test/Makefile tests/rpcjsoncgiserver_test/Makefile tests/xml_test/Makefile"
+ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/cgifast_test/Makefile tests/cgi_test/Makefile tests/dbmysql_test/Makefile tests/dbpostgresql_test/Makefile tests/dbsqlite_test/Makefile tests/db_test/Makefile tests/iononblocked_ionetwork_test/Makefile tests/iononblocked_ionetworkssl_test/Makefile tests/iostdio_test/Makefile tests/iofile_toolsfilesystem_test/Makefile tests/iofifo_pcthreadcollection_test/Makefile tests/ionetwork_pcthreads_test/Makefile tests/ionetworkclient_test/Makefile tests/ionetworkserver_test/Makefile tests/ionetworksslserver_test/Makefile tests/ionetworksslclient_test/Makefile tests/ionetworkhttp_test/Makefile tests/pcthreadcollection_test/Makefile tests/pcprocesscollection_test/Makefile tests/pcjobcollection_test/Makefile tests/toolsnetwork_test/Makefile tests/toolsos_test/Makefile tests/toolstime_test/Makefile tests/toolsmisc_test/Makefile tests/toolscode_test/Makefile tests/toolslogger_test/Makefile tests/toolslibrary_test/Makefile tests/toolsregexp_test/Makefile tests/xexec_test/Makefile tests/rpcxmlhttpclient_test/Makefile tests/rpcxmlcgiserver_test/Makefile tests/rpcjsonhttpclient_test/Makefile tests/rpcjsoncgiserver_test/Makefile tests/dataformatjson_test/Makefile tests/dataformatxml_test/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -9653,7 +9653,6 @@ do
     "bin/dodo-config") CONFIG_FILES="$CONFIG_FILES bin/dodo-config" ;;
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
     "tests/image_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/image_test/Makefile" ;;
-    "tests/json_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/json_test/Makefile" ;;
     "tests/cgifast_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/cgifast_test/Makefile" ;;
     "tests/cgi_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/cgi_test/Makefile" ;;
     "tests/dbmysql_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dbmysql_test/Makefile" ;;
@@ -9687,7 +9686,8 @@ do
     "tests/rpcxmlcgiserver_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/rpcxmlcgiserver_test/Makefile" ;;
     "tests/rpcjsonhttpclient_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/rpcjsonhttpclient_test/Makefile" ;;
     "tests/rpcjsoncgiserver_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/rpcjsoncgiserver_test/Makefile" ;;
-    "tests/xml_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/xml_test/Makefile" ;;
+    "tests/dataformatjson_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dataformatjson_test/Makefile" ;;
+    "tests/dataformatxml_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dataformatxml_test/Makefile" ;;
 
   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

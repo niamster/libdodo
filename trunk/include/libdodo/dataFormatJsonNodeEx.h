@@ -1,8 +1,8 @@
 /***************************************************************************
- *            rpcXmlMethod.h
+ *            dataFormatJsonNodeEx.h
  *
- *  Wed Apr 09 23:30:55 2008
- *  Copyright  2008  Ni@m
+ *  Mon Oct 20 02:15:55 2007
+ *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,45 +27,51 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCXMLMETHOD_H_
-#define _RPCXMLMETHOD_H_
+#ifndef _DATAFORMATJSONNODEEX_H_
+#define _DATAFORMATJSONNODEEX_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/rpcMethod.h>
-#include <libdodo/rpcXmlValue.h>
-#include <libdodo/dataFormatXmlProcessor.h>
+#include <libdodo/exceptionBasic.h>
 
 namespace dodo
 {
-	namespace rpc
+	namespace data
 	{
-		namespace xml
+		namespace format
 		{
-			/**
-			 * @class method defines RPC method in XML representation
-			 */
-			class method
+			namespace json
 			{
-				public:
+				/**
+				 * libdodo defined errors
+				 */
+				enum nodeExR
+				{
+					NODEEX_WRONGTYPEREQUESTED,
+					NODEEX_ARRAYOUTOFRANGE,
+					NODEEX_MALFORMEDJSON,
+				};
 
-					/**
-					 * @return method parsed from XML node
-					 * @param node defines XML node
-					 */
-					static rpc::method xmlToMethod(dodo::data::format::xml::node &node);
+				/**
+				 * explanations for libdodo defined errors
+				 */
+		#define DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
+		#define DATAFORMATJSONNODEEX_ARRAYOUTOFRANGE_STR    "Array key is out of range."
+		#define DATAFORMATJSONNODEEX_MALFORMEDJSON_STR      "Malformed json object."
 
-					/**
-					 * @return XML node parsed from method
-					 * @param data defines method structure
-					 */
-					static dodo::data::format::xml::node methodToXml(const rpc::method &data);
-
-				protected:
-
-					static const char trimSymbols[2];                     ///< symbols to trim in the end and in the begining of the XML node value
+				/**
+				 * IDs of functions where exception might be thrown
+				 */
+				enum nodeFunctionsID
+				{
+					NODEEX_BROPERATORSTRING,
+					NODEEX_BROPERATORNUMERIC,
+					NODEEX_GETSTRING,
+					NODEEX_GETBOOLEAN,
+					NODEEX_GETNUMERIC,
+					NODEEX_GETARRAY,
+					NODEEX_GETOBJECT,
+				};
 			};
 		};
 	};

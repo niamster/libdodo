@@ -1,8 +1,8 @@
 /***************************************************************************
- *            jsonNodeEx.h
+ *            dataFormatXmlNode.cc
  *
- *  Mon Oct 20 02:15:55 2007
- *  Copyright  2007  Ni@m
+ *  Wed Nov 30 22:02:16 2005
+ *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,48 +27,15 @@
  * set shiftwidth=4
  */
 
-#ifndef _JSONNODEEX_H_
-#define _JSONNODEEX_H_
 
-#include <libdodo/directives.h>
+#include <libdodo/dataFormatXmlNode.h>
 
-#include <libdodo/exceptionBasic.h>
+using namespace dodo::data::format::xml;
 
-namespace dodo
+node::node() : CDATA(false),
+			   empty(false)
 {
-	namespace json
-	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum nodeExR
-		{
-			NODEEX_WRONGTYPEREQUESTED,
-			NODEEX_ARRAYOUTOFRANGE,
-			NODEEX_MALFORMEDJSON,
-		};
+}
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
-#define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
-#define JSONNODEEX_ARRAYOUTOFRANGE_STR    "Array key is out of range."
-#define JSONNODEEX_MALFORMEDJSON_STR      "Malformed json object."
+//-------------------------------------------------------------------
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum nodeFunctionsID
-		{
-			NODEEX_BROPERATORSTRING,
-			NODEEX_BROPERATORNUMERIC,
-			NODEEX_GETSTRING,
-			NODEEX_GETBOOLEAN,
-			NODEEX_GETNUMERIC,
-			NODEEX_GETARRAY,
-			NODEEX_GETOBJECT,
-		};
-	};
-};
-
-#endif

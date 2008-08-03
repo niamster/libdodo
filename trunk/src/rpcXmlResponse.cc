@@ -32,9 +32,9 @@
 using namespace dodo::rpc::xml;
 
 dodo::rpc::response
-response::xmlToResponse(dodo::xml::node &node)
+response::xmlToResponse(dodo::data::format::xml::node &node)
 {
-	dodoMap<dodoString, dodoArray<dodo::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
+	dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
 		return rpc::response();
 
@@ -44,10 +44,10 @@ response::xmlToResponse(dodo::xml::node &node)
 	{
 		resp.succ = false;
 
-		dodoArray<dodo::xml::node> &arr0 = i->second;
+		dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 		if (arr0.size() > 0)
 		{
-			dodoArray<dodo::xml::node> &arr1 = arr0[0].children["value"];
+			dodoArray<dodo::data::format::xml::node> &arr1 = arr0[0].children["value"];
 			if (arr1.size() > 0)
 				resp.values.assign(1, value::xmlToValue(arr1[0]));
 		}
@@ -58,16 +58,16 @@ response::xmlToResponse(dodo::xml::node &node)
 		{
 			resp.succ = true;
 
-			dodoArray<dodo::xml::node> &arr0 = i->second;
+			dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 			if (arr0.size() == 0)
 				return resp;
 
-			dodoArray<dodo::xml::node> &nodeArray = arr0[0].children["param"];
+			dodoArray<dodo::data::format::xml::node> &nodeArray = arr0[0].children["param"];
 
-			dodoArray<dodo::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
+			dodoArray<dodo::data::format::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 			for (; o != p; ++o)
 			{
-				dodoArray<dodo::xml::node> &arr1 = o->children["value"];
+				dodoArray<dodo::data::format::xml::node> &arr1 = o->children["value"];
 				if (arr1.size() > 0)
 					resp.values.push_back(value::xmlToValue(arr1[0]));
 			}
@@ -79,23 +79,23 @@ response::xmlToResponse(dodo::xml::node &node)
 
 //-------------------------------------------------------------------
 
-dodo::xml::node
+dodo::data::format::xml::node
 response::responseToXml(const rpc::response &data)
 {
-	dodoArray<dodo::xml::node> nodeArr;
+	dodoArray<dodo::data::format::xml::node> nodeArr;
 
-	dodo::xml::node resp;
+	dodo::data::format::xml::node resp;
 	resp.name = "methodResponse";
 
 	if (data.succ)
 	{
-		dodo::xml::node params;
+		dodo::data::format::xml::node params;
 		params.name = "params";
 
-		dodo::xml::node param;
+		dodo::data::format::xml::node param;
 		param.name = "param";
 
-		dodoArray<dodo::xml::node> subNodeArr;
+		dodoArray<dodo::data::format::xml::node> subNodeArr;
 
 		dodoArray<rpc::value>::const_iterator i = data.values.begin(), j = data.values.end();
 		for (; i != j; ++i)
@@ -114,7 +114,7 @@ response::responseToXml(const rpc::response &data)
 	}
 	else
 	{
-		dodo::xml::node fault;
+		dodo::data::format::xml::node fault;
 		fault.name = "fault";
 
 		dodoArray<rpc::value>::const_iterator i = data.values.begin();

@@ -5,13 +5,13 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/xmlProcessor.h>
+#include <libdodo/dataFormatXmlProcessor.h>
 #include <libdodo/toolsMisc.h>
 
 #include <iostream>
 
 using namespace dodo;
-using namespace xml;
+using namespace data::format::xml;
 
 using namespace std;
 

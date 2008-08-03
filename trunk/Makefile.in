@@ -54,10 +54,10 @@ OBJECTS:=dbAccumulator.o \
 	ioNetworkExchange.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
-	jsonProcessor.o \
-	jsonNode.o \
-	xmlProcessor.o \
-	xmlNode.o \
+	dataFormatJsonProcessor.o \
+	dataFormatJsonNode.o \
+	dataFormatXmlProcessor.o \
+	dataFormatXmlNode.o \
 	dataShared.o \
 	rpcValue.o \
 	rpcMethod.o \

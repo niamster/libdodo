@@ -1,5 +1,5 @@
 /***************************************************************************
- *            jsonNode.cc
+ *            dataFormatJsonNode.cc
  *
  *  Mon Oct 20 02:15:55 2007
  *  Copyright  2007  Ni@m
@@ -27,9 +27,9 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/jsonNode.h>
+#include <libdodo/dataFormatJsonNode.h>
 
-using namespace dodo::json;
+using namespace dodo::data::format::json;
 
 node::node() : valueDataType(DATATYPE_NULL)
 {
@@ -168,7 +168,7 @@ node
 node::operator[](const dodoString &key)
 {
 	if (valueDataType != DATATYPE_OBJECT)
-		throw exception::basic(exception::ERRMODULE_JSONNODE, NODEEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return objectValue[key];
 }
@@ -179,10 +179,10 @@ node
 node::operator[](unsigned long key)
 {
 	if (valueDataType != DATATYPE_ARRAY)
-		throw exception::basic(exception::ERRMODULE_JSONNODE, NODEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	if (key >= arrayValue.size())
-		throw exception::basic(exception::ERRMODULE_JSONNODE, NODEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, NODEEX_ARRAYOUTOFRANGE, JSONNODEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, NODEEX_ARRAYOUTOFRANGE, DATAFORMATJSONNODEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
 
 	return arrayValue[key];
 }
@@ -201,7 +201,7 @@ dodoString
 node::getString()
 {
 	if (valueDataType != DATATYPE_STRING)
-		throw exception::basic(exception::ERRMODULE_JSONNODE, NODEEX_GETSTRING, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETSTRING, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return stringValue;
 }
@@ -212,7 +212,7 @@ bool
 node::getBoolean()
 {
 	if (valueDataType != DATATYPE_BOOLEAN)
-		throw exception::basic(exception::ERRMODULE_JSONNODE, NODEEX_GETBOOLEAN, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETBOOLEAN, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return booleanValue;
 }
@@ -223,7 +223,7 @@ long
 node::getNumeric()
 {
 	if (valueDataType != DATATYPE_NUMERIC)
-		throw exception::basic(exception::ERRMODULE_JSONNODE, NODEEX_GETNUMERIC, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETNUMERIC, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return numericValue;
 }
@@ -234,7 +234,7 @@ dodoArray<node>
 node::getArray()
 {
 	if (valueDataType != DATATYPE_ARRAY)
-		throw exception::basic(exception::ERRMODULE_JSONNODE, NODEEX_GETARRAY, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETARRAY, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return arrayValue;
 }
@@ -245,7 +245,7 @@ dodoMap<dodoString, node, dodo::dodoMapStringCompare>
 node::getObject()
 {
 	if (valueDataType != DATATYPE_OBJECT)
-		throw exception::basic(exception::ERRMODULE_JSONNODE, NODEEX_GETOBJECT, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETOBJECT, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return objectValue;
 }

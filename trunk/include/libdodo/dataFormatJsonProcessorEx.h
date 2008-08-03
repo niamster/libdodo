@@ -1,5 +1,5 @@
 /***************************************************************************
- *            jsonProcessorEx.h
+ *            dataFormatJsonProcessorEx.h
  *
  *  Mon Oct 20 02:15:55 2007
  *  Copyright  2007  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _JSONPROCESSOREX_H_
-#define _JSONPROCESSOREX_H_
+#ifndef _DATAFORMATJSONPROCESSOREX_H_
+#define _DATAFORMATJSONPROCESSOREX_H_
 
 #include <libdodo/directives.h>
 
@@ -36,33 +36,39 @@
 
 namespace dodo
 {
-	namespace json
+	namespace data
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum processorExR
+		namespace format
 		{
-			PROCESSOREX_MALFORMEDJSONNUMERIC,
-			PROCESSOREX_MALFORMEDJSONNULL,
-			PROCESSOREX_MALFORMEDJSONBOOLEAN,
-		};
+			namespace json
+			{
+				/**
+				 * libdodo defined errors
+				 */
+				enum processorExR
+				{
+					PROCESSOREX_MALFORMEDJSONNUMERIC,
+					PROCESSOREX_MALFORMEDJSONNULL,
+					PROCESSOREX_MALFORMEDJSONBOOLEAN,
+				};
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
-#define JSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
-#define JSONPROCESSOREX_MALFORMEDJSONNULL_STR    "Malformed json object: null."
-#define JSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
+				/**
+				 * explanations for libdodo defined errors
+				 */
+		#define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
+		#define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR    "Malformed json object: null."
+		#define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum processorFunctionsID
-		{
-			PROCESSOREX_PROCESSBOOLEAN,
-			PROCESSOREX_PROCESSNULL,
-			PROCESSOREX_PROCESSNUMERIC,
+				/**
+				 * IDs of functions where exception might be thrown
+				 */
+				enum processorFunctionsID
+				{
+					PROCESSOREX_PROCESSBOOLEAN,
+					PROCESSOREX_PROCESSNULL,
+					PROCESSOREX_PROCESSNUMERIC,
+				};
+			};
 		};
 	};
 };

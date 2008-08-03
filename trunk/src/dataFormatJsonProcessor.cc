@@ -1,5 +1,5 @@
 /***************************************************************************
- *            jsonProcessor.cc
+ *            dataFormatJsonProcessor.cc
  *
  *  Mon Oct 20 02:15:55 2007
  *  Copyright  2007  Ni@m
@@ -27,9 +27,9 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/jsonProcessor.h>
+#include <libdodo/dataFormatJsonProcessor.h>
 
-using namespace dodo::json;
+using namespace dodo::data::format::json;
 
 processor::processor()
 {
@@ -203,7 +203,7 @@ processor::processValue(node &node,
 			case '\t':
 
 				break;
-				
+
 			case '"':
 
 				node.valueDataType = DATATYPE_STRING;
@@ -252,7 +252,7 @@ processor::processBoolean(bool &node,
 						  unsigned long pos)
 {
 	if ((root.size() - pos) < 4)
-		throw exception::basic(exception::ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, JSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
 
 	if (root.substr(pos, 4) == "true")
 	{
@@ -269,7 +269,7 @@ processor::processBoolean(bool &node,
 			return pos + 4;
 		}
 		else
-			throw exception::basic(exception::ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, JSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
 	}
 
 	return pos;
@@ -282,12 +282,12 @@ processor::processNull(const dodoString &root,
 					   unsigned long pos)
 {
 	if ((root.size() - pos) < 4)
-		throw exception::basic(exception::ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSNULL, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, JSONPROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSNULL, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
 
 	if (root.substr(pos, 4) == "null")
 		return pos + 3;
 	else
-		throw exception::basic(exception::ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSNULL, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, JSONPROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSNULL, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
 
 	return pos;
 
@@ -311,7 +311,7 @@ processor::processNumeric(long &node,
 			case '\r':
 			case '\n':
 			case '\t':
-				
+
 				break;
 
 			case '1':
@@ -338,12 +338,12 @@ processor::processNumeric(long &node,
 			case '}':
 
 				node = tools::string::stringToL(numeric);
-				
+
 				return i - 1;
 
 			default:
 
-				throw exception::basic(exception::ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSNUMERIC, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNUMERIC, JSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSNUMERIC, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNUMERIC, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR, __LINE__, __FILE__);
 		}
 	}
 
@@ -392,7 +392,7 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
 					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 					{
 						subNodeValue.clear();
-						
+
 						subNodeValue.valueDataType = DATATYPE_OBJECT;
 
 						i = processObject(subNodeValue.objectValue, root, i);
@@ -423,7 +423,7 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
 					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 					{
 						subNodeValue.clear();
-						
+
 						subNodeValue.valueDataType = DATATYPE_STRING;
 
 						i = processString(subNodeValue.stringValue, root, i);

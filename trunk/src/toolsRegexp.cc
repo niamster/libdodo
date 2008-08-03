@@ -214,7 +214,7 @@ regexp::compile(const dodoString &pattern)
 	const char *error;
 	code = pcre_compile2(pattern.c_str(), bits, &errn, &error, &errOffset, NULL);
 	if (code == NULL)
-		throw exception::basic(exception::ERRMODULE_REGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
+		throw exception::basic(exception::ERRMODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
 
 #else
 
@@ -234,7 +234,7 @@ regexp::compile(const dodoString &pattern)
 #define ERROR_LEN 256
 		char error[ERROR_LEN];
 		regerror(errn, &code, error, ERROR_LEN);
-		throw exception::basic(exception::ERRMODULE_REGEXP, REGEXPEX_COMPILE, exception::ERRNO_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
+		throw exception::basic(exception::ERRMODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
 	}
 
 #endif

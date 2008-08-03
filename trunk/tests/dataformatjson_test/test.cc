@@ -5,13 +5,13 @@
  */
 
 #include <libdodo/toolsMisc.h>
-#include <libdodo/jsonProcessor.h>
-#include <libdodo/jsonNode.h>
+#include <libdodo/dataFormatJsonProcessor.h>
+#include <libdodo/dataFormatJsonNode.h>
 
 #include <iostream>
 
 using namespace dodo;
-using namespace json;
+using namespace data::format::json;
 
 using namespace std;
 
