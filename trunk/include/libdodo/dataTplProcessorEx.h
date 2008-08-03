@@ -1,7 +1,7 @@
 /***************************************************************************
- *            dbSqlConstructorEx.h
+ *            dataTplProcessorEx.h
  *
- *  Mon Jul 18 20:25:14 2005
+ * Tue Jan 24 19:05:57 2006
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,42 +27,54 @@
  * set shiftwidth=4
  */
 
-#ifndef _DBSQLCONSTRUCTOREX_H_
-#define _DBSQLCONSTRUCTOREX_H_
+#ifndef _DATATPLPROCESSOREX_H_
+#define _DATATPLPROCESSOREX_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo
 {
-	namespace db
+	namespace data
 	{
-		namespace sql
+		namespace tpl
 		{
 			/**
 			 * libdodo defined errors
 			 */
-			enum sqlConstructorExR
+			enum processorExR
 			{
-				SQLCONSTRUCTOREX_EMPTYREQUEST,
-				SQLCONSTRUCTOREX_UNKNOWNJOINTYPE,
+				PROCESSOREX_WRONGFORSTATEMENT,
+				PROCESSOREX_WRONGVARSTATEMENT,
+				PROCESSOREX_DODOISRESERVEDVARNAME,
+				PROCESSOREX_WRONGASSIGNSTATEMENT,
+				PROCESSOREX_WRONGBLOCK,
+				PROCESSOREX_NOTCLOSEDBRACKET,
 			};
 
 			/**
 			 * explanations for libdodo defined errors
 			 */
-	#define DBSQLCONSTRUCTOREX_EMPTYREQUEST_STR    "Query is empty. Are you sure?"
-	#define DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR "Unknown join type."
+	#define DATATPLPROCESSOREX_WRONGFORSTATEMENT_STR     "Wrong `for` statement."
+	#define DATATPLPROCESSOREX_WRONGVARSTATEMENT_STR     "In variable statement `}` wasn't closed."
+	#define DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR "dodo.* is reserved variable name."
+	#define DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR  "Wrong `assing` statement."
+	#define DATATPLPROCESSOREX_WRONGBLOCK_STR            "Wrong block construction."
+	#define DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR "Bracket was opened(closed) but not closed(opened)."
 
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum sqlConstructorFunctionsID
+			enum processorFunctionsID
 			{
-				SQLCONSTRUCTOREX_QUERYCOLLECT,
-				SQLCONSTRUCTOREX_JOINCOLLECT,
+				PROCESSOREX__PREPROCESSSTRING,
+				PROCESSOREX_BLOCKEND,
+				PROCESSOREX__FOR,
+				PROCESSOREX_GETVAR,
+				PROCESSOREX_GETVARNAME,
+				PROCESSOREX_ASSIGN,
+				PROCESSOREX__ASSIGN,
 			};
 		};
 	};

@@ -7,12 +7,13 @@
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/cgiServer.h>
 #include <libdodo/cgiBasicExchange.h>
-#include <libdodo/cgiProcessor.h>
+#include <libdodo/dataTplProcessor.h>
 
 #include <iostream>
 
 using namespace dodo;
 using namespace cgi;
+using namespace data::tpl;
 
 using namespace std;
 
@@ -72,7 +73,7 @@ int main(int argc, char **argv)
 			return 0;
 		}
 	}
-	
+
 	cgit.HEADERS[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 
 	cgit.setCookie("test", "Ni@m");
@@ -95,7 +96,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-		processor cgip(cgit);
+		processor cgip;
 
 		cgip.assign("main", "index.tpl");
 		cgip.assign("test", "test");
@@ -120,7 +121,7 @@ int main(int argc, char **argv)
 		arr2.push_back(arr1);
 		cgip.assign("arr2", arr2);
 
-		cgip.display("test.tpl");
+		cgit.printStream(cgip.process("test.tpl"));
 	}
 	catch (dodo::exception::basic ex)
 	{

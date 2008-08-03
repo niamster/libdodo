@@ -6,7 +6,7 @@
 
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/cgiServer.h>
-#include <libdodo/cgiProcessor.h>
+#include <libdodo/dataTplProcessor.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/cgiFastServer.h>
 #include <libdodo/pcSyncThreadDataSingle.h>
@@ -18,6 +18,7 @@ using namespace std;
 #ifdef FASTCGI_EXT
 
 using namespace dodo;
+using namespace data::tpl;
 using cgi::fast::exchange;
 using dodo::pc::sync::thread::data::single;
 
@@ -52,7 +53,7 @@ cgif(exchange &fcgi)
 
 	try
 	{
-		processor cgip(cgit);
+		processor cgip;
 
 		cgip.assign("test", "hoho");
 		cgip.assign("show", "That's works!");
@@ -76,7 +77,7 @@ cgif(exchange &fcgi)
 		arr2.push_back(arr1);
 		cgip.assign("arr2", arr2);
 
-		cgip.display("test.tpl");
+		cgit.printStream(cgip.process("test.tpl"));
 	}
 	catch (dodo::exception::basic ex)
 	{

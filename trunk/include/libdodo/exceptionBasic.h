@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _BASEEX_H_
-#define _BASEEX_H_
+#ifndef _EXCEPTIONBASIC_H_
+#define _EXCEPTIONBASIC_H_
 
 #include <libdodo/directives.h>
 
@@ -95,6 +95,7 @@ namespace dodo
 			ERRMODULE_DATAFORMATXMLPROCESSOR,
 			ERRMODULE_DATAFORMATJSONNODE,
 			ERRMODULE_DATAFORMATJSONPROCESSOR,
+			ERRMODULE_DATATPLPROCESSOR,
 			ERRMODULE_DATASHARED,
 			ERRMODULE_IOFILE,
 			ERRMODULE_IOFIFO,
@@ -118,7 +119,6 @@ namespace dodo
 			ERRMODULE_PCSYNCPROCESSSECTION,
 			ERRMODULE_GRAPHICSIMAGE,
 			ERRMODULE_GRAPHICSTRANSFORM,
-			ERRMODULE_CGIPROCESSOR,
 			ERRMODULE_CGIFASTSERVER,
 			ERRMODULE_CGIFASTEXCHANGE,
 			ERRMODULE_CGISERVER,
@@ -175,7 +175,7 @@ namespace dodo
 			friend class singleton<basic>;
 
 			private:
-				
+
 				/**
 				 * constructor
 				 */

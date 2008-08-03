@@ -58,6 +58,7 @@ OBJECTS:=dbAccumulator.o \
 	dataFormatJsonNode.o \
 	dataFormatXmlProcessor.o \
 	dataFormatXmlNode.o \
+	dataTplProcessor.o \
 	dataShared.o \
 	rpcValue.o \
 	rpcMethod.o \
@@ -99,8 +100,7 @@ OBJECTS:=dbAccumulator.o \
 	cgiExchange.o \
 	cgiBasicExchange.o \
 	cgiFastServer.o \
-	cgiFastExchange.o \
-	cgiProcessor.o
+	cgiFastExchange.o
 
 ###########################################################
 

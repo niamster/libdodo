@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiProcessor.cc
+ *            dataTplProcessor.cc
  *
  *  Sun Jan 22 19:05:57 2006
  *  Copyright  2005  Ni@m
@@ -27,9 +27,9 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/cgiProcessor.h>
+#include <libdodo/dataTplProcessor.h>
 
-using namespace dodo::cgi;
+using namespace dodo::data::tpl;
 
 const dodoString processor::statements[] = {
 	"dodo",
@@ -66,12 +66,11 @@ const dodoString processor::statements[] = {
 
 //-------------------------------------------------------------------
 
-processor::processor(server &a_cgi) : continueFlag(false),
-									  breakDeepness(0),
-									  loopDeepness(0),
-									  iterator(1),
-									  namespaceDeepness(1),
-									  CGI(a_cgi)
+processor::processor() : continueFlag(false),
+						 breakDeepness(0),
+						 loopDeepness(0),
+						 iterator(1),
+						 namespaceDeepness(1)
 {
 	dodo[statements[PROCESSOR_STATEMENT_VERSION]] = PACKAGE_STRING;
 	dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = "1";
@@ -126,7 +125,7 @@ processor::_preProcessString(const dodoString &buffer,
 		{
 			j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], begin);
 			if (j != dodoString::npos)
-				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
+				throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
 
 			break;
 		}
@@ -136,7 +135,7 @@ processor::_preProcessString(const dodoString &buffer,
 
 			j = temp.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], begin);
 			if (j != dodoString::npos)
-				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, i), path.c_str()));
+				throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, i), path.c_str()));
 		}
 
 		i += 2;
@@ -152,7 +151,7 @@ processor::_preProcessString(const dodoString &buffer,
 				continue;
 			}
 			else
-				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>`", getLineNumber(newLinePos, j), path.c_str()));
+				throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>`", getLineNumber(newLinePos, j), path.c_str()));
 
 		}
 
@@ -166,23 +165,23 @@ processor::_preProcessString(const dodoString &buffer,
 				continue;
 			}
 			else
-				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>`", getLineNumber(newLinePos, j), path.c_str()));
+				throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>`", getLineNumber(newLinePos, j), path.c_str()));
 		}
 
 		j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], i);
 		if (j == dodoString::npos)
-			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, j), path.c_str()));
+			throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, j), path.c_str()));
 
 		if (j > 0 && buffer[j - 1] == '*')
-			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>", getLineNumber(newLinePos, j), path.c_str()));
+			throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>", getLineNumber(newLinePos, j), path.c_str()));
 
 		if (j > 0 && buffer[j - 1] == '<')
-			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>", getLineNumber(newLinePos, j), path.c_str()));
+			throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>", getLineNumber(newLinePos, j), path.c_str()));
 
 		dodoString temp = buffer.substr(i, j - i);
 
 		if (temp.find(statements[PROCESSOR_STATEMENT_OPEN_ST]) != dodoString::npos)
-			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
+			throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
 
 		j += 2;
 	}
@@ -465,7 +464,7 @@ processor::assign(dodoString varName,
 				  const dodoArray<dodoStringMap> &varVal)
 {
 	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
-		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
 	globalArray.erase(varName);
@@ -481,7 +480,7 @@ processor::assign(dodoString varName,
 				  const dodoStringMap &varVal)
 {
 	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
-		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
 	globalArray.erase(varName);
@@ -497,7 +496,7 @@ processor::assign(dodoString varName,
 				  const dodoStringArray &varVal)
 {
 	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
-		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
 	globalHash.erase(varName);
@@ -513,7 +512,7 @@ processor::assign(dodoString varName,
 				  const dodoString &varVal)
 {
 	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
-		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	globalArray.erase(varName);
 	globalHash.erase(varName);
@@ -719,11 +718,11 @@ processor::blockEnd(const dodoString &buffer,
 	{
 		u = buffer.find(statements[PROCESSOR_STATEMENT_OPEN_ST], m);
 		if (u == dodoString::npos)
-			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, CGIPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
+			throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, DATATPLPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 		b = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], u + 2);
 		if (b == dodoString::npos)
-			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, CGIPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
+			throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, DATATPLPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 		for (p = u; p < b; ++p)
 			if (buffer[p] != ' ' && buffer[p] != '\t' && buffer[p] != '\n' && buffer[p] != '\r')
@@ -828,17 +827,17 @@ processor::_assign(unsigned long start,
 	dodoStringArray temp = tools::misc::explode(statement, statements[PROCESSOR_STATEMENT_ASSIGN_OP], 2);
 
 	if (temp.size() == 0)
-		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
+		throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	dodoString varName = trim(temp[0]);
 	if (varName.size() == 0)
-		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
+		throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
 	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
-		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
+		throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	local[namespaceDeepness][varName] = getVar(temp[1], start, path);
 
@@ -910,7 +909,7 @@ processor::_for(const dodoString &buffer,
 
 	p = statement.find(statements[PROCESSOR_STATEMENT_IN], i + 1);
 	if (p == dodoString::npos)
-		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__FOR, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGFORSTATEMENT, CGIPROCESSOREX_WRONGFORSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
+		throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__FOR, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGFORSTATEMENT, DATATPLPROCESSOREX_WRONGFORSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	dodoString targetVar = getVarName(statement.substr(p + 2), start, path);
 	dodoString forSpace = buffer.substr(start, u - start);
@@ -1428,7 +1427,7 @@ processor::getVarName(const dodoString &a_varName,
 		{
 			b = varName.find(statements[PROCESSOR_STATEMENT_CLOSE_VARPART], c + 1);
 			if (b == dodoString::npos)
-				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_GETVARNAME, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGVARSTATEMENT, CGIPROCESSOREX_WRONGVARSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
+				throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX_GETVARNAME, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGVARSTATEMENT, DATATPLPROCESSOREX_WRONGVARSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 			++cb;
 
@@ -1663,15 +1662,6 @@ processor::trim(const dodoString &statement)
 	}
 
 	return temp;
-}
-
-//-------------------------------------------------------------------
-
-void
-processor::display(const dodoString &path)
-{
-	CGI.print(this->process(path));
-	CGI.flush();
 }
 
 //-------------------------------------------------------------------

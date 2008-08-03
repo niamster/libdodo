@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _LIBRARYLOADER_H_
-#define _LIBRARYLOADER_H_
+#ifndef _TOOLSLIBRARY_H_
+#define _TOOLSLIBRARY_H_
 
 #include <libdodo/directives.h>
 

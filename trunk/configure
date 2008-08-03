@@ -3561,7 +3561,15 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 
-echo "" > include/libdodo/directives.runtime.h
+cat > include/libdodo/directives.runtime.h  <<EOF
+/***************************************************************************
+*            directives.runtime.h
+****************************************************************************/
+
+#ifndef _DIRECTIVES_RUNTIME_H_
+#define _DIRECTIVES_RUNTIME_H_
+
+EOF
 
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
@@ -7853,6 +7861,8 @@ fi
 	else
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"
 	fi
+
+echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
 
 # Checks for header files.
 { $as_echo "$as_me:$LINENO: checking for sys/wait.h that is POSIX.1 compatible" >&5
