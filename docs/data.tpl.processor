@@ -88,25 +88,25 @@ blocks:
 		
 		example:
 			//c++ code:
-			cgi::processor cgip;
+			dodo::data::tpl::processor tp;
 			
 			dodoStringArray arr;
 			arr.push_back("one");
 			arr.push_back("two");
 			arr.push_back("three");
-			cgip.assign("arr",arr);
+			tp.assign("arr",arr);
 			
 			dodoStringMap arr1;
 			arr1["one"] = "one";
 			arr1["two"] = "two";
 			arr1["three"] = "three";
-			cgip.assign("arr1",arr1);
+			tp.assign("arr1",arr1);
 			
 			dodoArray<dodoStringMap> arr2;
 			arr2.push_back(arr1);
 			arr1["one"] = "three";
 			arr2.push_back(arr1);
-			cgip.assign("arr2",arr2);
+			tp.assign("arr2",arr2);
 			
 			//template
 			<(for $b in $arr)>

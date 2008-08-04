@@ -1,17 +1,15 @@
 Brief overview of libdodo's modules
 
-baseEx:
+exception::
 	error handling through exception mechanism
 
 cgi::
 	HTTP server side subsystem
+	serving incoming requests
+	providing outgoing response
 
 	fast::
 		support for fast-cgi
-
-	processor:
-		template processor
-		process template using specific syntax to produce output content
 
 io:: 
 	input/output interaction subsystem
@@ -22,33 +20,32 @@ db::
 	SQL-independent interface for communication with databases
 	support for: MySQL, PostreSQL, SQLite
 
-regexp:
-	regular expression subsystem(match, replace)
-	support for: POSIX/PCRE[compile-time]
+data::
+	tpl::processor
+		template processor
+		process template using specific syntax to produce output content
+	
+	xml::
+		XML subsystem(parse, produce)
 
-xml:
-	XML subsystem(parse, produce)
+	json::
+		json subsystem(parse, produce)
+
+	shared
+		access to shared data storage
 
 tools::
-	operation system, time, string, filesystem, network, compression, ...
+	regexp[POSIX/PCRE[compile-time]], operation system, time, string, filesystem, network, en/decoding, library manipulations, logging ...
 
-image:
+graphics:
 	image manipulation subsystem
 
 xexec:
 	system of pre/post exec operations for the libdodo modules
 
-ipc::
-	job execution control(processes, threads), race condition control(for processes, threads), access to shared memory
-
-libraryLoader:
-	load routines and data from shared objects or archive objects
-
-logger:
-	log subsystem
-
-json::
-	json subsystem(parse, produce)
+pc::
+	parallel computation subsystem
+	job execution control(processes, threads), race condition control(for processes, threads), synchronization
 
 rpc::
 	rpc client/server subsystem
