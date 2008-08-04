@@ -48,7 +48,7 @@ namespace dodo
 				/**
 				 * @class stack provides concurrent lock for processes interconnection
 				 */
-				class stack : public sync::stack
+				class stack : virtual public sync::stack
 				{
 					protected:
 

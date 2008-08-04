@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		rpc::json::httpClient client;
+		rpc::json::http::client client;
 
 		client.setUrl("http://localhost/libdodo/rpcjsoncgiserver_test/test.cgi");
 

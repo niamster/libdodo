@@ -29,36 +29,17 @@
 
 #include <libdodo/rpcJsonCgiServer.h>
 
-using namespace dodo::rpc::json;
+using namespace dodo::rpc::json::cgi;
 
-cgiServer::cgiServer(cgi::server &a_provider) : provider(a_provider)
-{
-	provider.HEADERS[cgi::SERVER_RESPONSEHEADER_CONTENTTYPE] = "application/json";
-
-	provider.printHeaders();
-}
-
-//-------------------------------------------------------------------
-
-cgiServer::~cgiServer()
+server::server(dodo::cgi::server &a_provider) : rpc::cgi::server(a_provider, "application/json")
 {
 }
 
 //-------------------------------------------------------------------
 
-void
-cgiServer::sendTextRequest(const dodoString &response)
+server::~server()
 {
-	provider.print(response);
-	provider.flush();
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-cgiServer::receiveTextResponse()
-{
-	return provider.content;
-}
-
-//-------------------------------------------------------------------

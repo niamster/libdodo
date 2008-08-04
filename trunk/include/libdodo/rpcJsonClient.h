@@ -47,7 +47,7 @@ namespace dodo
 			/**
 			 * @class client defines client-side JSON-RPC instrument
 			 */
-			class client : public rpc::client
+			class client : virtual public rpc::client
 			{
 				public:
 

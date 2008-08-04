@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		rpc::xml::httpClient client;
+		rpc::xml::http::client client;
 
 		client.setUrl("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi");
 

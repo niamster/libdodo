@@ -96,7 +96,7 @@ namespace dodo
 #endif
 
 			/**
-			 * @class Server provides network connection interface
+			 * @class server provides network connection interface
 			 */
 			class server : public connection,
 						   virtual public eventInfo

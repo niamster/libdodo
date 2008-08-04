@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlCgiServer.h
+ *            rpcHttpClient.cc
  *
- *  Sat Apr 12 23:06:55 2008
+ *  Sat Apr 12 16:49:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,46 +27,46 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCXMLCGISERVER_H_
-#define _RPCXMLCGISERVER_H_
+#include <libdodo/rpcHttpClient.h>
 
-#include <libdodo/directives.h>
+using namespace dodo::rpc::http;
 
-#include <libdodo/types.h>
-#include <libdodo/cgiServer.h>
-#include <libdodo/rpcCgiServer.h>
-#include <libdodo/rpcXmlServer.h>
-
-namespace dodo
+client::client(const dodoString &ct) : ct(ct)
 {
-	namespace rpc
-	{
-		namespace xml
-		{
-			namespace cgi
-			{
-				/**
-				 * @class server defines server-side RPC instrument
-				 */
-				class server : public xml::server,
-							   public rpc::cgi::server
-				{
-					public:
 
-						/**
-						 * constructor
-						 * @param provider defines cgi I/O provider
-						 */
-						server(dodo::cgi::server &provider);
+}
 
-						/**
-						 * destructor
-						 */
-						virtual ~server();
-				};
-			};
-		};
-	};
-};
+//-------------------------------------------------------------------
 
-#endif
+client::~client()
+{
+
+}
+
+//-------------------------------------------------------------------
+
+void
+client::sendTextRequest(const dodoString &method)
+{
+	http.POST(method, ct);
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+client::receiveTextResponse()
+{
+	io::network::__httpResponse response = http.getResponse();
+
+	return response.data;
+}
+
+//-------------------------------------------------------------------
+
+void
+client::setUrl(const dodoString &url)
+{
+	http.setUrl(url);
+}
+
+//-------------------------------------------------------------------

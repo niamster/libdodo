@@ -63,7 +63,7 @@ namespace dodo
 			/**
 			 * @class server defines server-side JSON-RPC instrument
 			 */
-			class server : public rpc::server
+			class server : virtual public rpc::server
 			{
 				public:
 

@@ -29,9 +29,9 @@ handler(const dodoString &method, const dodoArray<value> &values, const void *id
 
 int main(int argc, char **argv)
 {
-	cgi::basic::exchange cgiio;
-	cgi::server provider(cgiio,true);
-	rpc::xml::cgiServer srv(provider);
+	dodo::cgi::basic::exchange cgiio;
+	dodo::cgi::server provider(cgiio,true);
+	rpc::xml::cgi::server srv(provider);
 
 	try
 	{

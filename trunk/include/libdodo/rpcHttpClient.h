@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlCgiServer.h
+ *            rpcHttpClient.h
  *
- *  Sat Apr 12 23:06:55 2008
+ *  Sat Apr 12 16:49:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,43 +27,63 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCXMLCGISERVER_H_
-#define _RPCXMLCGISERVER_H_
+#ifndef _RPCHTTPCLIENT_H_
+#define _RPCHTTPCLIENT_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/cgiServer.h>
-#include <libdodo/rpcCgiServer.h>
-#include <libdodo/rpcXmlServer.h>
+#include <libdodo/ioNetworkHttp.h>
+#include <libdodo/rpcClient.h>
 
 namespace dodo
 {
 	namespace rpc
 	{
-		namespace xml
+		namespace http
 		{
-			namespace cgi
+			/**
+			 * @class client defines client-side RPC instrument
+			 */
+			class client : virtual public rpc::client
 			{
-				/**
-				 * @class server defines server-side RPC instrument
-				 */
-				class server : public xml::server,
-							   public rpc::cgi::server
-				{
-					public:
+				public:
 
-						/**
-						 * constructor
-						 * @param provider defines cgi I/O provider
-						 */
-						server(dodo::cgi::server &provider);
+					/**
+					 * constructor
+					 * @param ct defines content type of the request
+					 */
+					client(const dodoString &ct);
 
-						/**
-						 * destructor
-						 */
-						virtual ~server();
-				};
+					/**
+					 * destructor
+					 */
+					virtual ~client();
+
+					/**
+					 * set url to RPC server
+					 * @param url define url to RPC server
+					 */
+					virtual void setUrl(const dodoString &url);
+
+				protected:
+
+					/**
+					 * send request
+					 * @param method defines rpc method call
+					 */
+					virtual void sendTextRequest(const dodoString &method);
+
+					/**
+					 * get response
+					 * @return rpc response result
+					 */
+					virtual dodoString receiveTextResponse();
+
+					io::network::http http;///< http handler
+
+					dodoString ct;///< content-type of the request
+
 			};
 		};
 	};

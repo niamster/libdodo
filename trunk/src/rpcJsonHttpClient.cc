@@ -29,44 +29,19 @@
 
 #include <libdodo/rpcJsonHttpClient.h>
 
-using namespace dodo::rpc::json;
+using namespace dodo::rpc::json::http;
 
-httpClient::httpClient()
+client::client() : rpc::http::client("application/json")
 {
 
 }
 
 //-------------------------------------------------------------------
 
-httpClient::~httpClient()
+client::~client()
 {
 
 }
 
 //-------------------------------------------------------------------
 
-void
-httpClient::sendTextRequest(const dodoString &method)
-{
-	http.POST(method, "application/json");
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-httpClient::receiveTextResponse()
-{
-	io::network::__httpResponse response = http.getResponse();
-
-	return response.data;
-}
-
-//-------------------------------------------------------------------
-
-void
-httpClient::setUrl(const dodoString &url)
-{
-	http.setUrl(url);
-}
-
-//-------------------------------------------------------------------

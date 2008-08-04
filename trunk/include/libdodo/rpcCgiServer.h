@@ -1,5 +1,5 @@
 /***************************************************************************
- *            rpcXmlCgiServer.h
+ *            rpcCgiServer.h
  *
  *  Sat Apr 12 23:06:55 2008
  *  Copyright  2008  Ni@m
@@ -27,43 +27,55 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCXMLCGISERVER_H_
-#define _RPCXMLCGISERVER_H_
+#ifndef _RPCCGISERVER_H_
+#define _RPCCGISERVER_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
 #include <libdodo/cgiServer.h>
-#include <libdodo/rpcCgiServer.h>
-#include <libdodo/rpcXmlServer.h>
+#include <libdodo/rpcServer.h>
 
 namespace dodo
 {
 	namespace rpc
 	{
-		namespace xml
+		namespace cgi
 		{
-			namespace cgi
+			/**
+			 * @class server defines server-side RPC instrument
+			 */
+			class server : virtual public rpc::server
 			{
-				/**
-				 * @class server defines server-side RPC instrument
-				 */
-				class server : public xml::server,
-							   public rpc::cgi::server
-				{
-					public:
+				public:
 
-						/**
-						 * constructor
-						 * @param provider defines cgi I/O provider
-						 */
-						server(dodo::cgi::server &provider);
+					/**
+					 * constructor
+					 * @param provider defines cgi I/O provider
+					 * @param ct defines content-type of the response
+					 */
+					server(dodo::cgi::server &provider, const dodoString &ct);
 
-						/**
-						 * destructor
-						 */
-						virtual ~server();
-				};
+					/**
+					 * destructor
+					 */
+					virtual ~server();
+
+				protected:
+
+					/**
+					 * send request
+					 * @param response defines rpc method call
+					 */
+					virtual void sendTextRequest(const dodoString &response);
+
+					/**
+					 * get response
+					 * @return rpc response result
+					 */
+					virtual dodoString receiveTextResponse();
+
+					dodo::cgi::server &provider;
 			};
 		};
 	};

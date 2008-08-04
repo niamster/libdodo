@@ -65,6 +65,8 @@ OBJECTS:=dbAccumulator.o \
 	rpcResponse.o \
 	rpcClient.o \
 	rpcServer.o \
+	rpcHttpClient.o \
+	rpcCgiServer.o \
 	rpcXmlClient.o \
 	rpcXmlHttpClient.o \
 	rpcXmlServer.o \

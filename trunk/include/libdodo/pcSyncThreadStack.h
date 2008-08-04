@@ -47,7 +47,7 @@ namespace dodo
 				/**
 				 * @class stack provides mutex lock
 				 */
-				class stack : public sync::stack
+				class stack : virtual public sync::stack
 				{
 					protected:
 
