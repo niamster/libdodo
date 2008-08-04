@@ -37,7 +37,7 @@
 #include <libdodo/rpcResponse.h>
 #include <libdodo/rpcJsonResponseEx.h>
 #include <libdodo/rpcJsonValue.h>
-#include <libdodo/jsonProcessor.h>
+#include <libdodo/dataFormatJsonProcessor.h>
 
 namespace dodo
 {
@@ -58,7 +58,7 @@ namespace dodo
 					 * @param version defines version of JSON-RPC response
 					 * @param id defines ID of JSON-RPC response
 					 */
-					static rpc::response jsonToResponse(dodo::json::node &node, dodoString &version, long &id);
+					static rpc::response jsonToResponse(dodo::data::format::json::node &node, dodoString &version, long &id);
 
 					/**
 					 * @return JSON node parsed from response
@@ -66,7 +66,7 @@ namespace dodo
 					 * @param version defines version of JSON-RPC request
 					 * @param id defines ID of JSON-RPC request
 					 */
-					static dodo::json::node responseToJson(const rpc::response &data, const dodoString &version, long id);
+					static dodo::data::format::json::node responseToJson(const rpc::response &data, const dodoString &version, long id);
 			};
 		};
 	};

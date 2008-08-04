@@ -46,7 +46,7 @@
 #include <libdodo/cgiFastServerEx.h>
 #include <libdodo/cgiFastExchange.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/ipcThreadGuard.h>
+#include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo
 {
@@ -58,7 +58,7 @@ namespace dodo
 			 * @typedef serverHandler defines type of function that will be called on new cgi request
 			 * @param ex defines fast::exchange object for I/O
 			 */
-			typedef void (*serverHandler)(exchange *ex);
+			typedef void (*serverHandler)(exchange &ex);
 
 			/**
 			 * @class fast provides fast CGI functionality

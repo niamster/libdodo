@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
@@ -21,13 +21,13 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		server sock(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+		server sock(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 
 		__initialAccept fake;
 
 		sock.bindNListen("127.0.0.1", 7778, 1);
-		sock.setOption(OPTIONS_OPTION_REUSE_ADDRESS, true);
-		sock.setLingerOption(OPTIONS_LINGEROPTION_HARD_CLOSE);
+		sock.setOption(CONNECTION_OPTION_REUSE_ADDRESS, true);
+		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
 		sock.blockInherited = true;
 		sock.block(false);
 
@@ -67,9 +67,9 @@ int main(int argc, char **argv)
 		}
 
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.file << "\t" << ex.line << endl;
+		cout << (dodoString)ex << "\t" << ex.file << "\t" << ex.line << endl;
 	}
 
 	return 0;

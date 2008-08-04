@@ -128,10 +128,10 @@ file::~file()
 int
 file::getInDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX_GETINDESCRIPTOR, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	return fileno(handler);
 }
@@ -141,10 +141,10 @@ file::getInDescriptor() const
 int
 file::getOutDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX_GETOUTDESCRIPTOR, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	return fileno(handler);
 }
@@ -154,12 +154,12 @@ file::getOutDescriptor() const
 void
 file::clone(const file &fd)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (opened)
 	{
 		if (fclose(handler) != 0)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLONE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		handler = NULL;
 
@@ -181,11 +181,11 @@ file::clone(const file &fd)
 
 		oldDesc = fileno(fd.handler);
 		if (oldDesc == -1)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLONE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLONE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		
 		switch (mode)
 		{
@@ -210,7 +210,7 @@ file::clone(const file &fd)
 		}
 
 		if (handler == NULL)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLONE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		opened = true;
 	}
@@ -221,7 +221,7 @@ file::clone(const file &fd)
 void
 file::close()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = FILE_OPERATION_CLOSE;
@@ -231,7 +231,7 @@ file::close()
 	if (opened)
 	{
 		if (fclose(handler) != 0)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		handler = NULL;
 
@@ -250,7 +250,7 @@ file::open(const dodoString &a_path,
 		   short a_fileType,
 		   short a_mode)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = FILE_OPERATION_OPEN;
@@ -264,7 +264,7 @@ file::open(const dodoString &a_path,
 	if (opened)
 	{
 		if (fclose(handler) != 0)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		opened = false;
 	}
@@ -274,7 +274,7 @@ file::open(const dodoString &a_path,
 	else
 	{
 		if (path.size() == 0)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_LIBDODO, FILEEX_WRONGFILENAME, IOFILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_OPEN, exception::ERRNO_LIBDODO, FILEEX_WRONGFILENAME, IOFILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 		else
 		{
 			struct stat st;
@@ -283,7 +283,7 @@ file::open(const dodoString &a_path,
 			if (::lstat(path.c_str(), &st) == -1)
 			{
 				if (errno != ENOENT)
-					throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 			else
 				exists = true;
@@ -291,14 +291,14 @@ file::open(const dodoString &a_path,
 			if (fileType == FILE_FILETYPE_FIFO_FILE)
 			{
 				if (exists && !S_ISFIFO(st.st_mode))
-					throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_LIBDODO, FILEEX_WRONGFILENAME, IOFILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_OPEN, exception::ERRNO_LIBDODO, FILEEX_WRONGFILENAME, IOFILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 				if (!exists)
 					tools::filesystem::mkfifo(path, DEFAULT_FILE_PERM);
 			}
 			else
 			{
 				if ((fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE || fileType ==  FILE_FILETYPE_CHAR_FILE) && exists && !S_ISREG(st.st_mode) && !S_ISCHR(st.st_mode))
-					throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_LIBDODO, FILEEX_WRONGFILENAME, IOFILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_OPEN, exception::ERRNO_LIBDODO, FILEEX_WRONGFILENAME, IOFILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 			}
 
 			switch (mode)
@@ -333,7 +333,7 @@ file::open(const dodoString &a_path,
 	}
 
 	if (handler == NULL)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
 
@@ -350,11 +350,11 @@ void
 file::_read(char * const a_void)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX__READ, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__READ, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 		if (fseek(handler, pos * inSize, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	memset(a_void, '\0', inSize);
 
@@ -369,7 +369,7 @@ file::_read(char * const a_void)
 				continue;
 
 			if (ferror(handler) != 0)
-				throw baseEx(ERRMODULE_IOFILE, FILEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -382,7 +382,7 @@ void
 file::_write(const char *const a_buf)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__WRITE, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
@@ -398,7 +398,7 @@ file::_write(const char *const a_buf)
 				{
 					delete [] t_buf;
 
-					throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
 				read = fread(t_buf, outSize, 1, handler);
@@ -406,15 +406,15 @@ file::_write(const char *const a_buf)
 				delete [] t_buf;
 
 				if (read != 0)
-					throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_LIBDODO, FILEEX_CANNOTOVEWRITE, IOFILEEX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__WRITE, exception::ERRNO_LIBDODO, FILEEX_CANNOTOVEWRITE, IOFILEEX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
 			}
 
 			if (fseek(handler, pos, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 		else
 		if (fseek(handler, 0, SEEK_END) == -1)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	while (true)
@@ -428,7 +428,7 @@ file::_write(const char *const a_buf)
 				break;
 
 			if (ferror(handler) != 0)
-				throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -440,7 +440,7 @@ file::_write(const char *const a_buf)
 void
 file::erase()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	char *empty = new char[outSize];
 
@@ -466,13 +466,13 @@ file::erase()
 void
 file::flush()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX_FLUSH, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_FLUSH, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fflush(handler) != 0)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -480,7 +480,7 @@ file::flush()
 dodoString
 file::getPath() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	return path;
 }
@@ -491,12 +491,12 @@ unsigned long
 file::_readStream(char * const a_void)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__READSTREAM, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
 		if (fseek(handler, 0, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		for (unsigned long i(0); i < pos; ++i)
 		{
@@ -511,10 +511,10 @@ file::_readStream(char * const a_void)
 					case ENOMEM:
 					case ENXIO:
 
-						throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
-				throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_LIBDODO, FILEEX_FILEISSHORTERTHANGIVENPOSITION, IOFILEEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__READSTREAM, exception::ERRNO_LIBDODO, FILEEX_FILEISSHORTERTHANGIVENPOSITION, IOFILEEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
 			}
 		}
 	}
@@ -532,7 +532,7 @@ file::_readStream(char * const a_void)
 				break;
 
 			if (ferror(handler) != 0)
-				throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -547,10 +547,10 @@ void
 file::_writeStream(const char *const a_buf)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITESTREAM, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__WRITESTREAM, exception::ERRNO_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fseek(handler, 0, SEEK_END) == -1)
-		throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	unsigned long sent_received = 0;
 
@@ -566,7 +566,7 @@ file::_writeStream(const char *const a_buf)
 					continue;
 
 				if (ferror(handler) != 0)
-					throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -585,7 +585,7 @@ file::_writeStream(const char *const a_buf)
 short
 file::getFileType() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	return fileType;
 }

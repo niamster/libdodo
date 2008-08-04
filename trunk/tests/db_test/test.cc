@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/dbConnector.h>
 #include <libdodo/dbSqlConstructor.h>
 #include <libdodo/dbPostgresql.h>
@@ -30,7 +30,7 @@ hook(void *odata,
 
 	if (sql->operType == DB_OPERATION_EXEC)
 	{
-		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
+		cout << endl << endl << "request: " << ((sql::constructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
 }
 
@@ -138,17 +138,17 @@ int main(int argc, char **argv)
 		
 		try
 		{
-			((sqlConstructor *)pp)->getFieldsTypes("test");
+			((sql::constructor *)pp)->getFieldsTypes("test");
 		}
-		catch(baseEx &ex)
+		catch(dodo::exception::basic &ex)
 		{
-			cout << (string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+			cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 
-			((sqlConstructor *)pp)->setFieldType("test", "date", FIELDTYPE_TEXT);
-			((sqlConstructor *)pp)->setFieldType("test", "operation", FIELDTYPE_TEXT);
-			((sqlConstructor *)pp)->setFieldType("test", "id", FIELDTYPE_NUMERIC);
-			((sqlConstructor *)pp)->setFieldType("test", "d", FIELDTYPE_NUMERIC);
-			((sqlConstructor *)pp)->setFieldType("test", "b", FIELDTYPE_BINARY);
+			((sql::constructor *)pp)->setFieldType("test", "date", sql::FIELDTYPE_TEXT);
+			((sql::constructor *)pp)->setFieldType("test", "operation", sql::FIELDTYPE_TEXT);
+			((sql::constructor *)pp)->setFieldType("test", "id", sql::FIELDTYPE_NUMERIC);
+			((sql::constructor *)pp)->setFieldType("test", "d", sql::FIELDTYPE_NUMERIC);
+			((sql::constructor *)pp)->setFieldType("test", "b", sql::FIELDTYPE_BINARY);
 		}
 
 		dodoStringMap arr;
@@ -227,9 +227,9 @@ int main(int argc, char **argv)
 		if (store.fields.size() == 3 && store.rows.size() > 0)
 			tools::filesystem::writeToFile("test.db", (*store.rows.begin())[2]);
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+		cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 	}
 
 	delete pp;

@@ -60,15 +60,15 @@ server::setResponseEncoding(const dodoString &a_encoding)
 dodo::rpc::method
 server::processCall(const dodoString &data)
 {
-	dodo::xml::processor xmlValue;
+	dodo::data::format::xml::processor xmlValue;
 
 	rqEncoding = xmlValue.getBufferInfo(data).encoding;
 
-	dodo::xml::__nodeDef xmlMethodCall;
+	dodo::data::format::xml::__nodeDef xmlMethodCall;
 	xmlMethodCall.name = "methodCall";
 	xmlMethodCall.ignoreChildrenDef = true;
 
-	dodo::xml::node node = xmlValue.processBuffer(xmlMethodCall, data);
+	dodo::data::format::xml::node node = xmlValue.processBuffer(xmlMethodCall, data);
 
 	return method::xmlToMethod(node);
 }
@@ -78,7 +78,7 @@ server::processCall(const dodoString &data)
 dodoString
 server::processCallResult(const rpc::response &resp)
 {
-	dodo::xml::processor xmlValue;
+	dodo::data::format::xml::processor xmlValue;
 
 	return xmlValue.make(response::responseToXml(resp), rpEncoding);
 }
@@ -107,7 +107,7 @@ server::serve()
 
 		rpEncoding = encoding;
 	}
-	catch (baseEx &ex)
+	catch (exception::basic &ex)
 	{
 		rpc::response response;
 		response.fault(ex.baseErrstr);

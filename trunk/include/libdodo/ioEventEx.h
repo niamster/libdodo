@@ -1,5 +1,5 @@
 /***************************************************************************
- *            eventEx.h
+ *            ioEventEx.h
  *
  *  Thu Sep 09 03:41:24 2006
  *  Copyright  2006  Ni@m
@@ -32,7 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 
 namespace dodo
 {

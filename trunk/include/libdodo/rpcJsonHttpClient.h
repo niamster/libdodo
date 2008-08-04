@@ -34,6 +34,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/rpcJsonClient.h>
+#include <libdodo/rpcHttpClient.h>
 #include <libdodo/ioNetworkHttp.h>
 
 namespace dodo
@@ -42,44 +43,26 @@ namespace dodo
 	{
 		namespace json
 		{
-			/**
-			 * @class httpClient defines client-side RPC instrument
-			 */
-			class httpClient : public client
+			namespace http
 			{
-				public:
+				/**
+				 * @class client defines client-side RPC instrument
+				 */
+				class client : public json::client,
+							   public rpc::http::client
+				{
+					public:
 
-					/**
-					 * constructor
-					 */
-					httpClient();
+						/**
+						 * constructor
+						 */
+						client();
 
-					/**
-					 * destructor
-					 */
-					virtual ~httpClient();
-
-					/**
-					 * set url to JSON-RPC server
-					 * @param url define url to JSON-RPC server
-					 */
-					virtual void setUrl(const dodoString &url);
-
-				protected:
-
-					/**
-					 * send request
-					 * @param method defines rpc method call
-					 */
-					virtual void sendTextRequest(const dodoString &method);
-
-					/**
-					 * get response
-					 * @return rpc response result
-					 */
-					virtual dodoString receiveTextResponse();
-
-					io::network::http http;
+						/**
+						 * destructor
+						 */
+						virtual ~client();
+				};
 			};
 		};
 	};

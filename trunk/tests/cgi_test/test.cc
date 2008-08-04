@@ -4,26 +4,30 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/cgiServer.h>
-#include <libdodo/cgiProcessor.h>
+#include <libdodo/cgiBasicExchange.h>
+#include <libdodo/dataTplProcessor.h>
 
 #include <iostream>
 
 using namespace dodo;
 using namespace cgi;
+using namespace data::tpl;
 
 using namespace std;
 
 int main(int argc, char **argv)
 {
+	basic::exchange cgiio;
+
 	///first type: pass headers and print them immediately
 	//	dodoStringMap head;
 	//	head[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
-	//	server cgit(head, false);
+	//	server cgit(&cgiio, head, false);
 
 	///second type: use default headers and do not print them immediately
-	server cgit(true);
+	server cgit(cgiio, true);
 
 	dodoString user = cgit.getAuthenticationInfo().user;
 
@@ -69,7 +73,7 @@ int main(int argc, char **argv)
 			return 0;
 		}
 	}
-	
+
 	cgit.HEADERS[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 
 	cgit.setCookie("test", "Ni@m");
@@ -92,7 +96,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-		processor cgip(cgit);
+		processor cgip;
 
 		cgip.assign("main", "index.tpl");
 		cgip.assign("test", "test");
@@ -117,11 +121,11 @@ int main(int argc, char **argv)
 		arr2.push_back(arr1);
 		cgip.assign("arr2", arr2);
 
-		cgip.display("test.tpl");
+		cgit.printStream(cgip.process("test.tpl"));
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cgit.printStream((string)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
+		cgit.printStream((dodoString)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
 	}
 
 	return 0;

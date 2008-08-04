@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioStdio.h>
 #include <libdodo/toolsNetwork.h>
 
@@ -89,9 +89,9 @@ int main(int argc, char **argv)
 		st.writeStreamString(o);
 		st.writeStreamString("\nexiting\n");
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;

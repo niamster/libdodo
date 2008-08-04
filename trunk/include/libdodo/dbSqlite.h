@@ -49,7 +49,7 @@ namespace dodo
 		 * @class sqlite provides an interface to sqlite db
 		 * @note for field type autodetection sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
 		 */
-		class sqlite : public sqlConstructor
+		class sqlite : public sql::constructor
 		{
 			private:
 

@@ -46,7 +46,7 @@
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkServerEx.h>
 #include <libdodo/types.h>
-#include <libdodo/ioNetworkOptions.h>
+#include <libdodo/ioNetworkConnection.h>
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/xexec.h>
 #include <libdodo/ioEventInfo.h>
@@ -96,9 +96,9 @@ namespace dodo
 #endif
 
 			/**
-			 * @class Server provides network connection interface
+			 * @class server provides network connection interface
 			 */
-			class server : public options,
+			class server : public connection,
 						   virtual public eventInfo
 #ifndef IO_WO_XEXEC
 						   ,
@@ -120,8 +120,8 @@ namespace dodo
 
 					/**
 					 * constructor
-					 * @param family defines family of the socket[see ServerOptionsProtoFamilyEnum]
-					 * @param type defines type of the socket[see ServerOptionsTransferTypeEnum]
+					 * @param family defines family of the socket[see connectionProtoFamilyEnum]
+					 * @param type defines type of the socket[see connectionTransferTypeEnum]
 					 */
 					server(short family, short type);
 

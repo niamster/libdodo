@@ -721,7 +721,7 @@ enable_zlib_lib
 with_iconv
 enable_iconv_lib
 with_imagemagick
-enable_image_xexec_support
+enable_graphics_xexec_support
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1368,8 +1368,8 @@ Optional Features:
                           do not unload library to produce better performance
   --enable-zlib-lib       enable zlib as lib
   --enable-iconv-lib      enable iconv as lib
-  --disable-image-xexec-support
-                          compile image w/o xexec support
+  --disable-graphics-xexec-support
+                          compile graphics w/o xexec support
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -3561,7 +3561,15 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 
-echo "" > include/libdodo/directives.runtime.h
+cat > include/libdodo/directives.runtime.h  <<EOF
+/***************************************************************************
+*            directives.runtime.h
+****************************************************************************/
+
+#ifndef _DIRECTIVES_RUNTIME_H_
+#define _DIRECTIVES_RUNTIME_H_
+
+EOF
 
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
@@ -7835,24 +7843,26 @@ fi
 
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tenabled"
 
-		# Check whether --enable-image-xexec-support was given.
-if test "${enable_image_xexec_support+set}" = set; then
-  enableval=$enable_image_xexec_support; IMAGE_W_XEXEC="$enableval"
+		# Check whether --enable-graphics-xexec-support was given.
+if test "${enable_graphics_xexec_support+set}" = set; then
+  enableval=$enable_graphics_xexec_support; GRAPHICS_W_XEXEC="$enableval"
 else
-  IMAGE_W_XEXEC="yes"
+  GRAPHICS_W_XEXEC="yes"
 fi
 
-		if test "$IMAGE_W_XEXEC" = "no"
+		if test "$GRAPHICS_W_XEXEC" = "no"
 		then
-			echo -n -e "#define IMAGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+			echo -n -e "#define GRAPHICS_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"
 	fi
+
+echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
 
 # Checks for header files.
 { $as_echo "$as_me:$LINENO: checking for sys/wait.h that is POSIX.1 compatible" >&5
@@ -9044,7 +9054,7 @@ $as_echo "$ac_cv_prog_gcc_traditional" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/json_test/Makefile tests/cgifast_test/Makefile tests/cgi_test/Makefile tests/dbmysql_test/Makefile tests/dbpostgresql_test/Makefile tests/dbsqlite_test/Makefile tests/db_test/Makefile tests/regexp_test/Makefile tests/iononblocked_ionetwork_test/Makefile tests/iononblocked_ionetworkssl_test/Makefile tests/iostdio_test/Makefile tests/iofile_toolsfilesystem_test/Makefile tests/iofifo_ipcthreadcollection_test/Makefile tests/ionetwork_ipcthreads_test/Makefile tests/ionetworkclient_test/Makefile tests/ionetworkserver_test/Makefile tests/ionetworksslserver_test/Makefile tests/ionetworksslclient_test/Makefile tests/ionetworkhttp_test/Makefile tests/ipcthreadcollection_test/Makefile tests/ipcprocesscollection_test/Makefile tests/ipcjobcollection_test/Makefile tests/toolsnetwork_test/Makefile tests/toolsos_test/Makefile tests/toolstime_test/Makefile tests/toolsmisc_test/Makefile tests/toolscode_test/Makefile tests/xexec_test/Makefile tests/libraryloader_test/Makefile tests/logger_test/Makefile tests/rpcxmlhttpclient_test/Makefile tests/rpcxmlcgiserver_test/Makefile tests/rpcjsonhttpclient_test/Makefile tests/rpcjsoncgiserver_test/Makefile tests/xml_test/Makefile"
+ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/cgifast_test/Makefile tests/cgi_test/Makefile tests/dbmysql_test/Makefile tests/dbpostgresql_test/Makefile tests/dbsqlite_test/Makefile tests/db_test/Makefile tests/iononblocked_ionetwork_test/Makefile tests/iononblocked_ionetworkssl_test/Makefile tests/iostdio_test/Makefile tests/iofile_toolsfilesystem_test/Makefile tests/iofifo_pcthreadcollection_test/Makefile tests/ionetwork_pcthreads_test/Makefile tests/ionetworkclient_test/Makefile tests/ionetworkserver_test/Makefile tests/ionetworksslserver_test/Makefile tests/ionetworksslclient_test/Makefile tests/ionetworkhttp_test/Makefile tests/pcthreadcollection_test/Makefile tests/pcprocesscollection_test/Makefile tests/pcjobcollection_test/Makefile tests/toolsnetwork_test/Makefile tests/toolsos_test/Makefile tests/toolstime_test/Makefile tests/toolsmisc_test/Makefile tests/toolscode_test/Makefile tests/toolslogger_test/Makefile tests/toolslibrary_test/Makefile tests/toolsregexp_test/Makefile tests/xexec_test/Makefile tests/rpcxmlhttpclient_test/Makefile tests/rpcxmlcgiserver_test/Makefile tests/rpcjsonhttpclient_test/Makefile tests/rpcjsoncgiserver_test/Makefile tests/dataformatjson_test/Makefile tests/dataformatxml_test/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -9653,41 +9663,41 @@ do
     "bin/dodo-config") CONFIG_FILES="$CONFIG_FILES bin/dodo-config" ;;
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
     "tests/image_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/image_test/Makefile" ;;
-    "tests/json_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/json_test/Makefile" ;;
     "tests/cgifast_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/cgifast_test/Makefile" ;;
     "tests/cgi_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/cgi_test/Makefile" ;;
     "tests/dbmysql_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dbmysql_test/Makefile" ;;
     "tests/dbpostgresql_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dbpostgresql_test/Makefile" ;;
     "tests/dbsqlite_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dbsqlite_test/Makefile" ;;
     "tests/db_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/db_test/Makefile" ;;
-    "tests/regexp_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/regexp_test/Makefile" ;;
     "tests/iononblocked_ionetwork_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/iononblocked_ionetwork_test/Makefile" ;;
     "tests/iononblocked_ionetworkssl_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/iononblocked_ionetworkssl_test/Makefile" ;;
     "tests/iostdio_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/iostdio_test/Makefile" ;;
     "tests/iofile_toolsfilesystem_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/iofile_toolsfilesystem_test/Makefile" ;;
-    "tests/iofifo_ipcthreadcollection_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/iofifo_ipcthreadcollection_test/Makefile" ;;
-    "tests/ionetwork_ipcthreads_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ionetwork_ipcthreads_test/Makefile" ;;
+    "tests/iofifo_pcthreadcollection_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/iofifo_pcthreadcollection_test/Makefile" ;;
+    "tests/ionetwork_pcthreads_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ionetwork_pcthreads_test/Makefile" ;;
     "tests/ionetworkclient_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ionetworkclient_test/Makefile" ;;
     "tests/ionetworkserver_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ionetworkserver_test/Makefile" ;;
     "tests/ionetworksslserver_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ionetworksslserver_test/Makefile" ;;
     "tests/ionetworksslclient_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ionetworksslclient_test/Makefile" ;;
     "tests/ionetworkhttp_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ionetworkhttp_test/Makefile" ;;
-    "tests/ipcthreadcollection_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ipcthreadcollection_test/Makefile" ;;
-    "tests/ipcprocesscollection_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ipcprocesscollection_test/Makefile" ;;
-    "tests/ipcjobcollection_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ipcjobcollection_test/Makefile" ;;
+    "tests/pcthreadcollection_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/pcthreadcollection_test/Makefile" ;;
+    "tests/pcprocesscollection_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/pcprocesscollection_test/Makefile" ;;
+    "tests/pcjobcollection_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/pcjobcollection_test/Makefile" ;;
     "tests/toolsnetwork_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/toolsnetwork_test/Makefile" ;;
     "tests/toolsos_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/toolsos_test/Makefile" ;;
     "tests/toolstime_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/toolstime_test/Makefile" ;;
     "tests/toolsmisc_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/toolsmisc_test/Makefile" ;;
     "tests/toolscode_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/toolscode_test/Makefile" ;;
+    "tests/toolslogger_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/toolslogger_test/Makefile" ;;
+    "tests/toolslibrary_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/toolslibrary_test/Makefile" ;;
+    "tests/toolsregexp_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/toolsregexp_test/Makefile" ;;
     "tests/xexec_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/xexec_test/Makefile" ;;
-    "tests/libraryloader_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/libraryloader_test/Makefile" ;;
-    "tests/logger_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/logger_test/Makefile" ;;
     "tests/rpcxmlhttpclient_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/rpcxmlhttpclient_test/Makefile" ;;
     "tests/rpcxmlcgiserver_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/rpcxmlcgiserver_test/Makefile" ;;
     "tests/rpcjsonhttpclient_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/rpcjsonhttpclient_test/Makefile" ;;
     "tests/rpcjsoncgiserver_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/rpcjsoncgiserver_test/Makefile" ;;
-    "tests/xml_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/xml_test/Makefile" ;;
+    "tests/dataformatjson_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dataformatjson_test/Makefile" ;;
+    "tests/dataformatxml_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dataformatxml_test/Makefile" ;;
 
   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

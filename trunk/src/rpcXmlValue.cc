@@ -37,9 +37,9 @@ const char value::trimSymbols[] = { ' ',
 //-------------------------------------------------------------------
 
 dodo::rpc::value
-value::xmlToValue(dodo::xml::node &node)
+value::xmlToValue(dodo::data::format::xml::node &node)
 {
-	dodoMap<dodoString, dodoArray<dodo::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
+	dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
 		return rpc::value();
 
@@ -49,7 +49,7 @@ value::xmlToValue(dodo::xml::node &node)
 	{
 		val.valueDataType = DATATYPE_INTEGER;
 
-		dodoArray<dodo::xml::node> &arr0 = i->second;
+		dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 		if (arr0.size() > 0)
 			val.integerValue = tools::string::stringToI(tools::string::trim(arr0[0].value, trimSymbols, 2));
 		else
@@ -61,7 +61,7 @@ value::xmlToValue(dodo::xml::node &node)
 		{
 			val.valueDataType = DATATYPE_BOOLEAN;
 
-			dodoArray<dodo::xml::node> &arr0 = i->second;
+			dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 			if (arr0.size() > 0)
 				val.booleanValue = tools::string::stringToI(tools::string::trim(arr0[0].value, trimSymbols, 2)) == 1 ? true : false;
 			else
@@ -73,7 +73,7 @@ value::xmlToValue(dodo::xml::node &node)
 			{
 				val.valueDataType = DATATYPE_STRING;
 
-				dodoArray<dodo::xml::node> &arr0 = i->second;
+				dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 				if (arr0.size() > 0)
 					val.stringValue = tools::string::trim(arr0[0].value, trimSymbols, 2);
 			}
@@ -83,7 +83,7 @@ value::xmlToValue(dodo::xml::node &node)
 				{
 					val.valueDataType = DATATYPE_DOUBLE;
 
-					dodoArray<dodo::xml::node> &arr0 = i->second;
+					dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 					if (arr0.size() > 0)
 						val.doubleValue = tools::string::stringToD(tools::string::trim(arr0[0].value, trimSymbols, 2));
 					else
@@ -95,17 +95,17 @@ value::xmlToValue(dodo::xml::node &node)
 					{
 						val.valueDataType = DATATYPE_STRUCT;
 
-						dodoArray<dodo::xml::node> &arr0 = i->second;
+						dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 						if (arr0.size() == 0)
 							return val;
 
-						dodoArray<dodo::xml::node> &nodeArray = arr0[0].children["member"];
+						dodoArray<dodo::data::format::xml::node> &nodeArray = arr0[0].children["member"];
 
-						dodoArray<dodo::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
+						dodoArray<dodo::data::format::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 						for (; o != p; ++o)
 						{
-							dodoArray<dodo::xml::node> &arr1 = o->children["name"];
-							dodoArray<dodo::xml::node> &arr2 = o->children["value"];
+							dodoArray<dodo::data::format::xml::node> &arr1 = o->children["name"];
+							dodoArray<dodo::data::format::xml::node> &arr2 = o->children["value"];
 							if (arr1.size() > 0 && arr2.size() > 0)
 								val.structValue.insert(make_pair(tools::string::trim(arr1[0].value, trimSymbols, 2), xmlToValue(arr2[0])));
 						}
@@ -116,17 +116,17 @@ value::xmlToValue(dodo::xml::node &node)
 						{
 							val.valueDataType = DATATYPE_ARRAY;
 
-							dodoArray<dodo::xml::node> &arr0 = i->second;
+							dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 							if (arr0.size() == 0)
 								return val;
 
-							dodoArray<dodo::xml::node> &arr1 = arr0[0].children["data"];
+							dodoArray<dodo::data::format::xml::node> &arr1 = arr0[0].children["data"];
 							if (arr1.size() == 0)
 								return val;
 
-							dodoArray<dodo::xml::node> &nodeArray = arr1[0].children["value"];
+							dodoArray<dodo::data::format::xml::node> &nodeArray = arr1[0].children["value"];
 
-							dodoArray<dodo::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
+							dodoArray<dodo::data::format::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 							for (; o != p; ++o)
 								val.arrayValue.push_back(xmlToValue(*o));
 						}
@@ -141,15 +141,15 @@ value::xmlToValue(dodo::xml::node &node)
 
 //-------------------------------------------------------------------
 
-dodo::xml::node
+dodo::data::format::xml::node
 value::valueToXml(const rpc::value &data)
 {
-	dodoArray<dodo::xml::node> nodeArr;
+	dodoArray<dodo::data::format::xml::node> nodeArr;
 
-	dodo::xml::node node;
+	dodo::data::format::xml::node node;
 	node.name = "value";
 
-	dodo::xml::node subNode;
+	dodo::data::format::xml::node subNode;
 
 	switch (data.valueDataType)
 	{
@@ -197,7 +197,7 @@ value::valueToXml(const rpc::value &data)
 		{
 			subNode.name = "array";
 
-			dodo::xml::node dataNode;
+			dodo::data::format::xml::node dataNode;
 			dataNode.name = "data";
 
 			dodoArray<rpc::value>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
@@ -218,12 +218,12 @@ value::valueToXml(const rpc::value &data)
 		{
 			subNode.name = "struct";
 
-			dodo::xml::node memberNode, memberNameNode, memberValueNode;
+			dodo::data::format::xml::node memberNode, memberNameNode, memberValueNode;
 			memberNode.name = "member";
 			memberNameNode.name = "name";
 			memberValueNode.name = "value";
 
-			dodoArray<dodo::xml::node> subNodeArr;
+			dodoArray<dodo::data::format::xml::node> subNodeArr;
 
 			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator i = data.structValue.begin(), j = data.structValue.end();
 			for (; i != j; ++i)

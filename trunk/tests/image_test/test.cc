@@ -5,7 +5,8 @@
  */
 
 #include <libdodo/toolsMisc.h>
-#include <libdodo/image.h>
+#include <libdodo/graphicsImage.h>
+#include <libdodo/graphicsTransform.h>
 #include <libdodo/ioFile.h>
 
 #include <iostream>
@@ -17,7 +18,9 @@ using namespace std;
 
 #ifdef IMAGEMAGICK_EXT
 
-#ifndef IMAGE_WO_XEXEC
+using namespace graphics;
+
+#ifndef GRAPHICS_WO_XEXEC
 
 void
 hook(void *odata,
@@ -32,10 +35,11 @@ hook(void *odata,
 		{
 			image *img = (image *)imData->executor;
 			img->disableAll();
-			img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
+			graphics::transform tr(img);
+			tr.rotate(TRANSFORM_ROTATEDIRECTIONANGLE_180);
 			img->enableAll();
 		}
-		catch (baseEx ex)
+		catch (dodo::exception::basic ex)
 		{
 			cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
 		}
@@ -52,8 +56,9 @@ int main(int argc, char **argv)
 	{
 #ifdef IMAGEMAGICK_EXT
 		image im;
+		graphics::transform tr(&im);
 
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 
 		im.addPreExec(hook, NULL);
 
@@ -65,7 +70,7 @@ int main(int argc, char **argv)
 		im.read("test.png");
 		cout << im.getCompression() << " " << im.getEncoder() << " " << im.getQuality() << endl;
 
-		im.scale(1000, 1000);
+		tr.scale(1000, 1000);
 
 		im.write("test.jpg");
 
@@ -84,7 +89,7 @@ int main(int argc, char **argv)
 		cout << size << endl;
 #endif
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
 	}

@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/types.h>
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	{
 		try
 		{
-			client st(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+			client st(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 			exchange exch;
 			dodoString str;
 
@@ -34,19 +34,19 @@ int main(int argc, char **argv)
 				exch.readStreamString(str);
 				cout << "\ngot:\n" << str << "\n";
 			}
-			catch (baseEx ex)
+			catch (dodo::exception::basic ex)
 			{
-				cout << (string)ex << "\t" << ex.line << endl;
+				cout << (dodoString)ex << "\t" << ex.line << endl;
 			}
 		}
-		catch (baseEx ex)
+		catch (dodo::exception::basic ex)
 		{
-			cout << (string)ex << "\t" << ex.line << endl;
+			cout << (dodoString)ex << "\t" << ex.line << endl;
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;

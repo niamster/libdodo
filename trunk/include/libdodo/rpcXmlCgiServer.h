@@ -34,6 +34,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/cgiServer.h>
+#include <libdodo/rpcCgiServer.h>
 #include <libdodo/rpcXmlServer.h>
 
 namespace dodo
@@ -42,38 +43,27 @@ namespace dodo
 	{
 		namespace xml
 		{
-			/**
-			 * @class server defines server-side RPC instrument
-			 */
-			class cgiServer : public server
+			namespace cgi
 			{
-				public:
+				/**
+				 * @class server defines server-side RPC instrument
+				 */
+				class server : public xml::server,
+							   public rpc::cgi::server
+				{
+					public:
 
-					/**
-					 * constructor
-					 */
-					cgiServer(cgi::server &provider);
+						/**
+						 * constructor
+						 * @param provider defines cgi I/O provider
+						 */
+						server(dodo::cgi::server &provider);
 
-					/**
-					 * destructor
-					 */
-					virtual ~cgiServer();
-
-				protected:
-
-					/**
-					 * send request
-					 * @param response defines rpc method call
-					 */
-					virtual void sendTextRequest(const dodoString &response);
-
-					/**
-					 * get response
-					 * @return rpc response result
-					 */
-					virtual dodoString receiveTextResponse();
-
-					cgi::server &provider;
+						/**
+						 * destructor
+						 */
+						virtual ~server();
+				};
 			};
 		};
 	};

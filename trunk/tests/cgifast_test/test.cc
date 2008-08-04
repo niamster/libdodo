@@ -4,12 +4,12 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/cgiServer.h>
-#include <libdodo/cgiProcessor.h>
+#include <libdodo/dataTplProcessor.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/cgiFastServer.h>
-#include <libdodo/ipcThreadSharedDataGuard.h>
+#include <libdodo/pcSyncThreadDataSingle.h>
 
 #include <iostream>
 
@@ -18,13 +18,14 @@ using namespace std;
 #ifdef FASTCGI_EXT
 
 using namespace dodo;
+using namespace data::tpl;
 using cgi::fast::exchange;
-using dodo::ipc::thread::shared::dataGuard;
+using dodo::pc::sync::thread::data::single;
 
-dataGuard sh;
+single sh;
 
 void
-cgif(exchange *fcgi)
+cgif(exchange &fcgi)
 {
 	using namespace cgi;
 
@@ -41,18 +42,18 @@ cgif(exchange *fcgi)
 	(*inc)++;
 	sh.release();
 
-	fcgi->writeStreamString(tools::string::iToString(*inc) + "<br>");
-	fcgi->writeStreamString(cgit.GET["a"] + "<br>");
-	fcgi->writeStreamString(cgit.POST["hidden"] + "<br>");
-	fcgi->writeStreamString(cgit.POST["test"] + "<br>");
-	fcgi->writeStreamString(cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
-	fcgi->writeStreamString(cgit.COOKIES["test"] + "<br>");
-	fcgi->writeStreamString(tools::string::iToString(cgit.FILES["file"].size) + "<br>");
-	fcgi->writeStreamString("<br>");
+	fcgi.writeStreamString(tools::string::iToString(*inc) + "<br>");
+	fcgi.writeStreamString(cgit.GET["a"] + "<br>");
+	fcgi.writeStreamString(cgit.POST["hidden"] + "<br>");
+	fcgi.writeStreamString(cgit.POST["test"] + "<br>");
+	fcgi.writeStreamString(cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
+	fcgi.writeStreamString(cgit.COOKIES["test"] + "<br>");
+	fcgi.writeStreamString(tools::string::iToString(cgit.FILES["file"].size) + "<br>");
+	fcgi.writeStreamString("<br>");
 
 	try
 	{
-		processor cgip(cgit);
+		processor cgip;
 
 		cgip.assign("test", "hoho");
 		cgip.assign("show", "That's works!");
@@ -76,14 +77,14 @@ cgif(exchange *fcgi)
 		arr2.push_back(arr1);
 		cgip.assign("arr2", arr2);
 
-		cgip.display("test.tpl");
+		cgit.printStream(cgip.process("test.tpl"));
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		fcgi->writeStreamString(ex.baseErrstr + " " + tools::string::lToString(ex.line));
+		fcgi.writeStreamString(ex.baseErrstr + " " + tools::string::lToString(ex.line));
 	}
 
-	fcgi->writeStreamString("<br>");
+	fcgi.writeStreamString("<br>");
 }
 
 #endif
@@ -112,7 +113,7 @@ int main(int argc, char **argv)
 
 		delete shared;
 	}
-	catch (baseEx &ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl << endl;
 	}

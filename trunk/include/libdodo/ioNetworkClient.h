@@ -46,7 +46,7 @@
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkClientEx.h>
 #include <libdodo/types.h>
-#include <libdodo/ioNetworkOptions.h>
+#include <libdodo/ioNetworkConnection.h>
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/xexec.h>
 #include <libdodo/ioEventInfo.h>
@@ -98,7 +98,7 @@ namespace dodo
 			/**
 			 * @class client provides network connection interface
 			 */
-			class client : public options
+			class client : public connection
 #ifndef IO_WO_XEXEC
 						   ,
 						   public xexec
@@ -119,8 +119,8 @@ namespace dodo
 
 					/**
 					 * constructor
-					 * @param family defines family of the socket[see ClientOptionsProtoFamilyEnum]
-					 * @param type defines type of the socket[see ClientOptionsTransferTypeEnum]
+					 * @param family defines family of the socket[see connectionProtoFamilyEnum]
+					 * @param type defines type of the socket[see connectionTransferTypeEnum]
 					 */
 					client(short family, short type);
 

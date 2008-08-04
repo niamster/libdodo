@@ -51,7 +51,6 @@
 #include <libdodo/ioNetworkServer.h>
 #include <libdodo/ioSsl.h>
 #include <libdodo/types.h>
-#include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioNetworkSslExchange.h>
 #include <libdodo/xexec.h>
 #include <libdodo/ioEventInfo.h>
@@ -65,7 +64,7 @@ namespace dodo
 			namespace ssl
 			{
 				/**
-				 * @class Server provides network connection interface
+				 * @class server provides network connection interface
 				 */
 				class server : public network::server
 				{
@@ -83,8 +82,8 @@ namespace dodo
 
 						/**
 						 * constructor
-						 * @param family defines family of the socket[see ServerOptionsProtoFamilyEnum]
-						 * @param type defines type of the socket[see ServerOptionsTransferTypeEnum]
+						 * @param family defines family of the socket[see connectionProtoFamilyEnum]
+						 * @param type defines type of the socket[see connectionTransferTypeEnum]
 						 */
 						server(short family, short type);
 

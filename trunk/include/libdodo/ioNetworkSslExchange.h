@@ -46,14 +46,13 @@
 #include <poll.h>
 #include <openssl/ssl.h>
 
-#include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioNetworkSslExchangeEx.h>
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/ioSsl.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
-#include <libdodo/ipcThreadGuard.h>
+#include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo
 {

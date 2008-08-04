@@ -7,7 +7,7 @@
 #include <libdodo/toolsMisc.h>
 #include <libdodo/toolsCode.h>
 #include <libdodo/ioFile.h>
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetwork.h>
 
@@ -67,11 +67,11 @@ int main(int argc, char **argv)
 		cout << tools::code::bzCompress(tools::filesystem::getFileContents("Makefile"), 9).size() << endl;
 #endif
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << endl << ex.baseErrno << endl << ex.baseErrstr  << ex.line << endl << ex.file << endl;
 	}
-	catch (exception ex)
+	catch (std::exception ex)
 	{
 		cout << endl << ex.what() << endl;
 	}

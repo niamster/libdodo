@@ -29,9 +29,9 @@
 
 #include <libdodo/dbSqlConstructor.h>
 
-using namespace dodo::db;
+using namespace dodo::db::sql;
 
-const dodoString sqlConstructor::sqlQStArr[] =
+const dodoString constructor::sqlQStArr[] =
 {
 	" union ",
 	" union all ",
@@ -41,7 +41,7 @@ const dodoString sqlConstructor::sqlQStArr[] =
 
 //-------------------------------------------------------------------
 
-const dodoString sqlConstructor::sqlJoinArr[] =
+const dodoString constructor::sqlJoinArr[] =
 {
 	" join ",
 	" left outer join ",
@@ -53,7 +53,7 @@ const dodoString sqlConstructor::sqlJoinArr[] =
 
 //-------------------------------------------------------------------
 
-const dodoString sqlConstructor::sqlAddArr[] =
+const dodoString constructor::sqlAddArr[] =
 {
 	" where ",
 	" having ",
@@ -66,7 +66,7 @@ const dodoString sqlConstructor::sqlAddArr[] =
 
 //-------------------------------------------------------------------
 
-const dodoString sqlConstructor::statements[] =
+const dodoString constructor::statements[] =
 {
 	"=",
 	"='",
@@ -92,20 +92,20 @@ const dodoString sqlConstructor::statements[] =
 
 //-------------------------------------------------------------------
 
-sqlConstructor::sqlConstructor()
+constructor::constructor()
 {
 }
 
 //-------------------------------------------------------------------
 
-sqlConstructor::~sqlConstructor()
+constructor::~constructor()
 {
 }
 
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::setFieldType(const dodoString &table,
+constructor::setFieldType(const dodoString &table,
                              const dodoString &field,
                              short type)
 {
@@ -115,7 +115,7 @@ sqlConstructor::setFieldType(const dodoString &table,
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
+constructor::additionalCollect(unsigned int qTypeTocheck,
 								  const dodoString &collectedString)
 {
 	if (collectedData.qShift == ACCUMULATOR_NONE)
@@ -131,7 +131,7 @@ sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::callFunctionCollect()
+constructor::callFunctionCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
 	request.append(collectedData.table);
@@ -143,7 +143,7 @@ sqlConstructor::callFunctionCollect()
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::callProcedureCollect()
+constructor::callProcedureCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_CALL];
 	request.append(collectedData.table);
@@ -155,7 +155,7 @@ sqlConstructor::callProcedureCollect()
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::selectCollect()
+constructor::selectCollect()
 {
 	if (collectedData.table.size() > 0)
 	{
@@ -174,7 +174,7 @@ sqlConstructor::selectCollect()
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::insertCollect()
+constructor::insertCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
@@ -282,7 +282,7 @@ sqlConstructor::insertCollect()
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::insertSelectCollect()
+constructor::insertSelectCollect()
 {
 	dodoString fieldsPartTo = tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 
@@ -306,7 +306,7 @@ sqlConstructor::insertSelectCollect()
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::updateCollect()
+constructor::updateCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_UPDATE];
 	request.append(collectedData.table);
@@ -402,7 +402,7 @@ sqlConstructor::updateCollect()
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::delCollect()
+constructor::delCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_DELETE];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
@@ -412,7 +412,7 @@ sqlConstructor::delCollect()
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::subCollect()
+constructor::subCollect()
 {
 	request = tools::misc::implode(collectedData.subQueries, sqlQStArr[collectedData.qType - 1]);
 }
@@ -420,7 +420,7 @@ sqlConstructor::subCollect()
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::joinCollect()
+constructor::joinCollect()
 {
 	dodoStringArray::iterator i = collectedData.joinTables.begin(), j = collectedData.joinTables.end();
 	dodoStringArray::iterator o = collectedData.joinConds.begin(), p = collectedData.joinConds.end();
@@ -430,7 +430,7 @@ sqlConstructor::joinCollect()
 		if (*m >= 0 && *m < JOINTYPESTSTATEMENTS)
 			request.append(sqlJoinArr[*m]);
 		else
-			throw baseEx(ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, ERR_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
 
 		request.append(*i);
 
@@ -445,7 +445,7 @@ sqlConstructor::joinCollect()
 //-------------------------------------------------------------------
 
 dodoString
-sqlConstructor::queryCollect()
+constructor::queryCollect()
 {
 	bool additionalActions = true;
 	bool selectAction = false;
@@ -516,7 +516,7 @@ sqlConstructor::queryCollect()
 #ifndef FAST
 
 	if (request.size() == 0)
-		throw baseEx(ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_QUERYCOLLECT, ERR_LIBDODO, SQLCONSTRUCTOREX_EMPTYREQUEST, DBSQLCONSTRUCTOREX_EMPTYREQUEST_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_QUERYCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_EMPTYREQUEST, DBSQLCONSTRUCTOREX_EMPTYREQUEST_STR, __LINE__, __FILE__);
 
 #endif
 
@@ -542,7 +542,7 @@ sqlConstructor::queryCollect()
 //-------------------------------------------------------------------
 
 dodoString
-sqlConstructor::escapeFields(const dodoString &data)
+constructor::escapeFields(const dodoString &data)
 {
 	dodoString temp;
 

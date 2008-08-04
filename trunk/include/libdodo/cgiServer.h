@@ -39,21 +39,16 @@
 #include <libdodo/toolsMisc.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
-#include <libdodo/cgiFastServer.h>
+#include <libdodo/cgiExchange.h>
 #include <libdodo/ioStdio.h>
 
 namespace dodo
 {
 	namespace rpc
 	{
-		namespace xml
+		namespace cgi
 		{
-			class cgiServer;
-		};
-
-		namespace json
-		{
-			class cgiServer;
+			class server;
 		};
 	};
 
@@ -286,8 +281,7 @@ namespace dodo
 		 */
 		class server
 		{
-			friend class rpc::xml::cgiServer;
-			friend class rpc::json::cgiServer;
+			friend class rpc::cgi::server;
 
 			private:
 
@@ -301,48 +295,24 @@ namespace dodo
 
 				/**
 				 * constructor
+				 * @param cf defines I/O interface
+				 * @param silent defines whether to print headers in constructor or not
+				 * @param autocleanFiles defines whether to clean POST files in destructor
+				 * @param postFilesInMem defines place of POST files[disk or memory]
+				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
+				 */
+				server(exchange &cf, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+
+				/**
+				 * constructor
+				 * @param cf defines I/O interface
 				 * @param headers defines headers that will be printed
 				 * @param silent defines whether to print headers in constructor or not
 				 * @param autocleanFiles defines whether to clean POST files in destructor
 				 * @param postFilesInMem defines place of POST files[disk or memory]
 				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 				 */
-				server(dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
-
-
-				/**
-				 * constructor
-				 * @param silent defines whether to print headers in constructor or not
-				 * @param autocleanFiles defines whether to clean POST files in destructor
-				 * @param postFilesInMem defines place of POST files[disk or memory]
-				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
-				 */
-				server(bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
-
-#ifdef FASTCGI_EXT
-
-				/**
-				 * constructor
-				 * @param cf defines cgi::fast::exchange I/O interface
-				 * @param silent defines whether to print headers in constructor or not
-				 * @param autocleanFiles defines whether to clean POST files in destructor
-				 * @param postFilesInMem defines place of POST files[disk or memory]
-				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
-				 */
-				server(fast::exchange *cf, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
-
-				/**
-				 * constructor
-				 * @param cf defines cgi::fast::exchange I/O interface
-				 * @param headers defines headers that will be printed
-				 * @param silent defines whether to print headers in constructor or not
-				 * @param autocleanFiles defines whether to clean POST files in destructor
-				 * @param postFilesInMem defines place of POST files[disk or memory]
-				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
-				 */
-				server(fast::exchange *cf, dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
-
-#endif
+				server(exchange &cf, dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 				/**
 				 * destructor
@@ -536,13 +506,7 @@ namespace dodo
 				 */
 				static dodoString trim(const dodoString &data);
 
-#ifdef FASTCGI_EXT
-
-				bool serverFastSet;                    ///< true if use ioSERVERFast
-
-#endif
-
-				io::channel *cgiIO;                                                                                     ///< SERVER I/O instance
+				exchange &cgiIO;                                                                                     ///< SERVER I/O instance
 
 				mutable bool headersPrinted;                                                                            ///< true if headers have been printed
 

@@ -51,7 +51,6 @@
 #include <libdodo/ioNetworkClient.h>
 #include <libdodo/ioSsl.h>
 #include <libdodo/types.h>
-#include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioNetworkSslExchange.h>
 #include <libdodo/xexec.h>
 #include <libdodo/ioEventInfo.h>
@@ -84,8 +83,8 @@ namespace dodo
 
 						/**
 						 * constructor
-						 * @param family defines family of the socket[see ClientOptionsProtoFamilyEnum]
-						 * @param type defines type of the socket[see ClientOptionsTransferTypeEnum]
+						 * @param family defines family of the socket[see connectionProtoFamilyEnum]
+						 * @param type defines type of the socket[see connectionTransferTypeEnum]
 						 */
 						client(short family, short type);
 

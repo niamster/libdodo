@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/types.h>
@@ -53,9 +53,9 @@ process(exchange fse)
 			exit(0);
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << "Smth happened!" << (string)ex << endl;
+		cout << "Smth happened!" << (dodoString)ex << endl;
 		cout.flush();
 	}
 	catch (...)
@@ -70,9 +70,9 @@ int main(int argc, char **argv)
 	try
 	{
 
-		server sock(OPTIONS_PROTO_FAMILY_IPV4,OPTIONS_TRANSFER_TYPE_STREAM);
-		//server sock(OPTIONS_PROTO_FAMILY_IPV6,OPTIONS_TRANSFER_TYPE_STREAM);
-		//server sock(OPTIONS_PROTO_FAMILY_UNIX_SOCKET,OPTIONS_TRANSFER_TYPE_STREAM);
+		server sock(CONNECTION_PROTO_FAMILY_IPV4,CONNECTION_TRANSFER_TYPE_STREAM);
+		//server sock(CONNECTION_PROTO_FAMILY_IPV6,CONNECTION_TRANSFER_TYPE_STREAM);
+		//server sock(CONNECTION_PROTO_FAMILY_UNIX_SOCKET,CONNECTION_TRANSFER_TYPE_STREAM);
 
 		__peerInfo info;
 		__initialAccept fake;
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 		sock.blockInherited = false;
 		sock.block(false);
 		
-		sock.setLingerOption(OPTIONS_LINGEROPTION_HARD_CLOSE);
+		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
 
 		exchange conn;
 
@@ -104,9 +104,9 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;

@@ -54,7 +54,7 @@ event::~event()
 int
 event::addChannel(const eventInfo &fl)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	__eventInOutDescriptors tempD;
 
@@ -73,7 +73,7 @@ dodoArray<bool>
 event::isReadable(const dodoArray<int> &pos,
 							 int timeout) const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	int count = -1;
 
@@ -132,7 +132,7 @@ event::isReadable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -151,7 +151,7 @@ dodoArray<bool>
 event::isWritable(const dodoArray<int> &pos,
 							 int timeout) const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	int count = -1;
 
@@ -210,7 +210,7 @@ event::isWritable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -229,7 +229,7 @@ bool
 event::isReadable(int pos,
 							 int timeout) const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	pollfd fd;
 
@@ -254,7 +254,7 @@ event::isReadable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -266,7 +266,7 @@ event::isReadable(int pos,
 void
 event::delChannel(int pos)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	dodoArray<__eventInOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
@@ -284,7 +284,7 @@ bool
 event::isWritable(int pos,
 							 int timeout) const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	pollfd fd;
 
@@ -309,7 +309,7 @@ event::isWritable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 

@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioFile.h>
 #include <libdodo/toolsFilesystem.h>
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 			cout << arr[i];
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << ex.baseErrstr << "\t" << ex.line << endl;
 	}
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 		io2.readString(str);
 		cout << "\n\n" << str << "\n\n";
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << ex.baseErrstr << "\t" << ex.line << "\t" << ex.file << endl;
 	}

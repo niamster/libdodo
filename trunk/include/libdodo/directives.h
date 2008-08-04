@@ -106,8 +106,8 @@
 /**
  * default values of socket buffer for io operations()
  */
-#define IONETWORKOPTIONS_SOCKET_INSIZE            102400
-#define IONETWORKOPTIONS_SOCKET_OUTSIZE           102400
+#define IONETWORKCONNECTION_SOCKET_INSIZE            102400
+#define IONETWORKCONNECTION_SOCKET_OUTSIZE           102400
 
 /**
  * default values of stdin/out buffer for io operations(stdio)
@@ -118,8 +118,8 @@
 /**
  * linger options
  */
-#define IONETWORKOPTIONS_SOCKET_LINGER_PERIOD     1
-#define IONETWORKOPTIONS_SOCKET_LINGER_OPTION     OPTIONS_LINGEROPTION_WAIT_CLOSE
+#define IONETWORKCONNECTION_SOCKET_LINGER_PERIOD     1
+#define IONETWORKCONNECTION_SOCKET_LINGER_OPTION     CONNECTION_LINGEROPTION_WAIT_CLOSE
 
 /**
  * max length of the filesystem path

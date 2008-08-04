@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/dbPostgresql.h>
 
 #include <iostream>
@@ -26,7 +26,7 @@ hook(void *odata, short int type, void *udata)
 
 	if (sql->operType == DB_OPERATION_EXEC)
 	{
-		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
+		cout << endl << endl << "request: " << ((sql::constructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
 }
 
@@ -112,9 +112,9 @@ int main(int argc, char **argv)
 		}
 
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << ex.line;
+		cout << (dodoString)ex << ex.line;
 	}
 
 #else

@@ -36,7 +36,7 @@
 #include <libdodo/toolsString.h>
 #include <libdodo/rpcResponse.h>
 #include <libdodo/rpcXmlValue.h>
-#include <libdodo/xmlProcessor.h>
+#include <libdodo/dataFormatXmlProcessor.h>
 
 namespace dodo
 {
@@ -55,13 +55,13 @@ namespace dodo
 					 * @return response parsed from XML node
 					 * @param node defines XML node
 					 */
-					static rpc::response xmlToResponse(dodo::xml::node &node);
+					static rpc::response xmlToResponse(dodo::data::format::xml::node &node);
 
 					/**
 					 * @return XML node parsed from response
 					 * @param data defines response structure
 					 */
-					static dodo::xml::node responseToXml(const rpc::response &data);
+					static dodo::data::format::xml::node responseToXml(const rpc::response &data);
 			};
 		};
 	};

@@ -49,7 +49,7 @@ value
 response::getValue(unsigned long position)
 {
 	if (position >= values.size())
-		throw baseEx(ERRMODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, ERR_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 
 	return values[position];
 }
@@ -88,7 +88,7 @@ value
 response::operator[](unsigned long position)
 {
 	if (position >= values.size())
-		throw baseEx(ERRMODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, ERR_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 
 	return values[position];
 }

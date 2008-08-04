@@ -31,8 +31,8 @@
 
 using namespace dodo::tools;
 
-inline dodoString
-misc::dummyTools(const dodoString &data)
+dodoString
+dummyEscape(const dodoString &data)
 {
 	return data;
 }
@@ -50,7 +50,7 @@ misc::random(void *data,
 	{
 		file = fopen("/dev/urandom", "r");
 		if (file == NULL)
-			throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
@@ -58,10 +58,10 @@ misc::random(void *data,
 		{
 			file = fopen("/dev/random", "r");
 			if (file == NULL)
-				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 		else
-			throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
 	}
 
 	while (true)
@@ -75,14 +75,14 @@ misc::random(void *data,
 				continue;
 
 			if (ferror(file) != 0)
-				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
 	}
 
 	if (fclose(file) != 0)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -308,7 +308,7 @@ misc::explode(const dodoString &fields,
 			  const dodoString &separator,
 			  int limit)
 {
-	return explode(fields, &dummyTools, separator, limit);
+	return explode(fields, &dummyEscape, separator, limit);
 }
 
 //-------------------------------------------------------------------
@@ -321,7 +321,7 @@ misc::implode(const dodoStringArray &fields,
 			  int limit)
 {
 	if (fields.size() == 0)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
 
 	int k(0);
 
@@ -354,7 +354,7 @@ misc::implode(const dodoStringArray &fields,
 			  const dodoString &frame,
 			  int limit)
 {
-	return implode(fields, &dummyTools, separator, frame, limit);
+	return implode(fields, &dummyEscape, separator, frame, limit);
 }
 
 //-------------------------------------------------------------------
@@ -364,7 +364,7 @@ misc::implode(const dodoStringArray &fields,
 			  const dodoString &separator,
 			  int limit)
 {
-	return implode(fields, &dummyTools, separator, limit);
+	return implode(fields, &dummyEscape, separator, limit);
 }
 
 //-------------------------------------------------------------------
@@ -376,7 +376,7 @@ misc::implode(const dodoStringArray &fields,
 			  int limit)
 {
 	if (fields.size() == 0)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
 
 	int k(0);
 
@@ -413,7 +413,7 @@ misc::mail(const dodoString &to,
 	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 
 	if (sendmail == NULL)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_MAIL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	fprintf(sendmail, "To: %s\n", to.c_str());
 	fprintf(sendmail, "Subject: %s\n", subject.c_str());
@@ -422,7 +422,7 @@ misc::mail(const dodoString &to,
 	fprintf(sendmail, "\n%s\n", message.c_str());
 
 	if (pclose(sendmail) == -1)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_MAIL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -451,12 +451,12 @@ misc::mail(const dodoString &host,
 
 	bool auth = login.size() > 0 ? true : false;
 
-	short family = OPTIONS_PROTO_FAMILY_IPV4;
+	short family = CONNECTION_PROTO_FAMILY_IPV4;
 	if (host.find(":") != dodoString::npos)
-		family = OPTIONS_PROTO_FAMILY_IPV6;
+		family = CONNECTION_PROTO_FAMILY_IPV6;
 
 	exchange ex;
-	client net(family, OPTIONS_TRANSFER_TYPE_STREAM);
+	client net(family, CONNECTION_TRANSFER_TYPE_STREAM);
 
 	net.connect(host, port, ex);
 
@@ -467,7 +467,7 @@ misc::mail(const dodoString &host,
 	ex.readStreamString(mess);
 
 	if (string::stringToI(mess.substr(0, 3)) != 250)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_LIBDODO, MISCEX_BADMAILHELO, TOOLSMISCEX_BADMAILHELO_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_MAIL, exception::ERRNO_LIBDODO, MISCEX_BADMAILHELO, TOOLSMISCEX_BADMAILHELO_STR, __LINE__, __FILE__);
 
 	if (auth)
 	{
@@ -489,7 +489,7 @@ misc::mail(const dodoString &host,
 			ex.readStreamString(mess);
 
 			if (string::stringToI(mess.substr(0, 3)) != 334)
-				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_MAIL, exception::ERRNO_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 			dodoString ticket = code::decodeBase64(mess.substr(4));
 
@@ -533,7 +533,7 @@ misc::mail(const dodoString &host,
 			ex.readStreamString(mess);
 
 			if (string::stringToI(mess.substr(0, 3)) != 235)
-				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_MAIL, exception::ERRNO_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 		}
 		else
 		{
@@ -543,19 +543,19 @@ misc::mail(const dodoString &host,
 				ex.readStreamString(mess);
 
 				if (string::stringToI(mess.substr(0, 3)) != 334)
-					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_MAIL, exception::ERRNO_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(code::encodeBase64(login) + "\r\n");
 				ex.readStreamString(mess);
 
 				if (string::stringToI(mess.substr(0, 3)) != 334)
-					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_MAIL, exception::ERRNO_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(code::encodeBase64(pass) + "\r\n");
 				ex.readStreamString(mess);
 
 				if (string::stringToI(mess.substr(0, 3)) != 235)
-					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_MAIL, exception::ERRNO_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 			}
 			else
 			{
@@ -565,7 +565,7 @@ misc::mail(const dodoString &host,
 					ex.readStreamString(mess);
 
 					if (string::stringToI(mess.substr(0, 3)) != 334)
-						throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_MAIL, exception::ERRNO_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 				}
 			}
 		}

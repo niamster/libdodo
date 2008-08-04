@@ -33,13 +33,12 @@ OBJECTS:=dbAccumulator.o \
 	toolsTime.o \
 	toolsNetwork.o \
 	toolsString.o \
-	jsonProcessor.o \
-	jsonNode.o \
+	toolsLogger.o \
+	toolsLibrary.o \
+	toolsRegexp.o \
 	types.o \
 	xexec.o \
-	baseEx.o \
-	regexp.o \
-	logger.o \
+	exceptionBasic.o \
 	ioChannel.o \
 	ioFile.o \
 	ioEvent.o \
@@ -48,20 +47,26 @@ OBJECTS:=dbAccumulator.o \
 	ioFifo.o \
 	ioSsl.o \
 	ioNetworkHttp.o \
-	ioNetworkOptions.o \
+	ioNetworkConnection.o \
 	ioNetworkSslExchange.o \
 	ioNetworkSslServer.o \
 	ioNetworkSslClient.o \
 	ioNetworkExchange.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
-	xmlProcessor.o \
-	xmlNode.o \
+	dataFormatJsonProcessor.o \
+	dataFormatJsonNode.o \
+	dataFormatXmlProcessor.o \
+	dataFormatXmlNode.o \
+	dataTplProcessor.o \
+	dataShared.o \
 	rpcValue.o \
 	rpcMethod.o \
 	rpcResponse.o \
 	rpcClient.o \
 	rpcServer.o \
+	rpcHttpClient.o \
+	rpcCgiServer.o \
 	rpcXmlClient.o \
 	rpcXmlHttpClient.o \
 	rpcXmlServer.o \
@@ -76,29 +81,28 @@ OBJECTS:=dbAccumulator.o \
 	rpcJsonResponse.o \
 	rpcJsonServer.o \
 	rpcJsonValue.o \
-	image.o \
-	ipcRaceHazardGuard.o \
-	ipcAtomicLock.o \
-	ipcAtomicMutex.o \
-	ipcAtomicSemaphore.o \
-	ipcProcessCollection.o \
-	ipcThreadCollection.o \
-	ipcJobCollection.o \
-	ipcThreadGuard.o \
-	ipcProcessGuard.o \
-	ipcThreadSharedDataGuard.o \
-	ipcProcessSharedDataGuard.o \
-	ipcSharedDataGuard.o \
-	ipcSharedData.o \
-	ipcThreadSharedDataCollectionGuard.o \
-	ipcProcessSharedDataCollectionGuard.o \
-	ipcSharedDataCollectionGuard.o \
-	libraryLoader.o \
+	graphicsTransform.o \
+	graphicsImage.o \
+	pcSyncStack.o \
+	pcSyncSection.o \
+	pcSyncThreadSection.o \
+	pcSyncProcessSection.o \
+	pcProcessCollection.o \
+	pcThreadCollection.o \
+	pcJobCollection.o \
+	pcSyncThreadStack.o \
+	pcSyncProcessStack.o \
+	pcSyncThreadDataSingle.o \
+	pcSyncProcessDataSingle.o \
+	pcSyncDataSingle.o \
+	pcSyncThreadDataCollection.o \
+	pcSyncProcessDataCollection.o \
+	pcSyncDataCollection.o \
 	cgiServer.o \
+	cgiExchange.o \
+	cgiBasicExchange.o \
 	cgiFastServer.o \
-	cgiFastExchange.o \
-	cgiPreprocessor.o \
-	cgiProcessor.o
+	cgiFastExchange.o
 
 ###########################################################
 

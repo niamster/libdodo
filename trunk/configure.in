@@ -10,7 +10,15 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 
-echo "" > include/libdodo/directives.runtime.h
+cat > include/libdodo/directives.runtime.h  <<EOF
+/***************************************************************************
+*            directives.runtime.h
+****************************************************************************/
+
+#ifndef _DIRECTIVES_RUNTIME_H_
+#define _DIRECTIVES_RUNTIME_H_
+
+EOF
 
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
@@ -511,20 +519,22 @@ fi
 		
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tenabled"
 
-		AC_ARG_ENABLE(image-xexec-support,
-			AS_HELP_STRING([--disable-image-xexec-support],[compile image w/o xexec support]),
-			[IMAGE_W_XEXEC="$enableval"], [IMAGE_W_XEXEC="yes"])
-		if test "$IMAGE_W_XEXEC" = "no"
+		AC_ARG_ENABLE(graphics-xexec-support,
+			AS_HELP_STRING([--disable-graphics-xexec-support],[compile graphics w/o xexec support]),
+			[GRAPHICS_W_XEXEC="$enableval"], [GRAPHICS_W_XEXEC="yes"])
+		if test "$GRAPHICS_W_XEXEC" = "no"
 		then
-			echo -n -e "#define IMAGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+			echo -n -e "#define GRAPHICS_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 			
-			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"
 	fi
+
+echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h        
 
 # Checks for header files.
 AC_HEADER_SYS_WAIT
@@ -545,44 +555,44 @@ AC_STRUCT_TM
 AC_PROG_GCC_TRADITIONAL
 
 AC_CONFIG_FILES([Makefile
-		 bin/dodo-config
-                 tests/Makefile
-                 tests/image_test/Makefile
-                 tests/json_test/Makefile
-                 tests/cgifast_test/Makefile
-                 tests/cgi_test/Makefile
-                 tests/dbmysql_test/Makefile
-                 tests/dbpostgresql_test/Makefile
-                 tests/dbsqlite_test/Makefile
-                 tests/db_test/Makefile
-                 tests/regexp_test/Makefile
-                 tests/iononblocked_ionetwork_test/Makefile
-                 tests/iononblocked_ionetworkssl_test/Makefile
-                 tests/iostdio_test/Makefile
-                 tests/iofile_toolsfilesystem_test/Makefile
-				 tests/iofifo_ipcthreadcollection_test/Makefile
-                 tests/ionetwork_ipcthreads_test/Makefile
-                 tests/ionetworkclient_test/Makefile
-                 tests/ionetworkserver_test/Makefile
-                 tests/ionetworksslserver_test/Makefile
-                 tests/ionetworksslclient_test/Makefile
-                 tests/ionetworkhttp_test/Makefile
-                 tests/ipcthreadcollection_test/Makefile
-                 tests/ipcprocesscollection_test/Makefile
-                 tests/ipcjobcollection_test/Makefile
-                 tests/toolsnetwork_test/Makefile
-                 tests/toolsos_test/Makefile
-                 tests/toolstime_test/Makefile
-                 tests/toolsmisc_test/Makefile
-                 tests/toolscode_test/Makefile
-                 tests/xexec_test/Makefile
-                 tests/libraryloader_test/Makefile
-                 tests/logger_test/Makefile
-                 tests/rpcxmlhttpclient_test/Makefile
-                 tests/rpcxmlcgiserver_test/Makefile
-				 tests/rpcjsonhttpclient_test/Makefile
-				 tests/rpcjsoncgiserver_test/Makefile
-                 tests/xml_test/Makefile])
+				bin/dodo-config
+				tests/Makefile
+				tests/image_test/Makefile
+				tests/cgifast_test/Makefile
+				tests/cgi_test/Makefile
+				tests/dbmysql_test/Makefile
+				tests/dbpostgresql_test/Makefile
+				tests/dbsqlite_test/Makefile
+				tests/db_test/Makefile
+				tests/iononblocked_ionetwork_test/Makefile
+				tests/iononblocked_ionetworkssl_test/Makefile
+				tests/iostdio_test/Makefile
+				tests/iofile_toolsfilesystem_test/Makefile
+				tests/iofifo_pcthreadcollection_test/Makefile
+				tests/ionetwork_pcthreads_test/Makefile
+				tests/ionetworkclient_test/Makefile
+				tests/ionetworkserver_test/Makefile
+				tests/ionetworksslserver_test/Makefile
+				tests/ionetworksslclient_test/Makefile
+				tests/ionetworkhttp_test/Makefile
+				tests/pcthreadcollection_test/Makefile
+				tests/pcprocesscollection_test/Makefile
+				tests/pcjobcollection_test/Makefile
+				tests/toolsnetwork_test/Makefile
+				tests/toolsos_test/Makefile
+				tests/toolstime_test/Makefile
+				tests/toolsmisc_test/Makefile
+				tests/toolscode_test/Makefile
+				tests/toolslogger_test/Makefile
+				tests/toolslibrary_test/Makefile
+				tests/toolsregexp_test/Makefile
+				tests/xexec_test/Makefile
+				tests/rpcxmlhttpclient_test/Makefile
+				tests/rpcxmlcgiserver_test/Makefile
+				tests/rpcjsonhttpclient_test/Makefile
+				tests/rpcjsoncgiserver_test/Makefile
+				tests/dataformatjson_test/Makefile
+				tests/dataformatxml_test/Makefile])
 
 AC_OUTPUT
 

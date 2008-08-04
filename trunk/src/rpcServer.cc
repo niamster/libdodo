@@ -98,7 +98,7 @@ server::serve()
 		else
 			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL)));
 	}
-	catch (baseEx &ex)
+	catch (exception::basic &ex)
 	{
 		response response;
 		response.fault(ex.baseErrstr);

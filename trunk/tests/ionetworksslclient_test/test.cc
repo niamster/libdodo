@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetworkSslClient.h>
 #include <libdodo/types.h>
 
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 
 		cout << tools::network::getHostPrimaryIp(host) << endl;
 
-		client st(io::network::OPTIONS_PROTO_FAMILY_IPV4, io::network::OPTIONS_TRANSFER_TYPE_STREAM);
+		client st(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 		
 		io::ssl::__certificates certs;
 		certs.ca = "host.pem";
@@ -63,9 +63,9 @@ int main(int argc, char **argv)
 
 #endif
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;

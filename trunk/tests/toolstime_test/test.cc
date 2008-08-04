@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/toolsTime.h>
@@ -31,9 +31,9 @@ int main(int argc, char **argv)
 
 		cout << tools::time::timestamp(tools::time::now()).sec << endl;
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << endl;
+		cout << (dodoString)ex << "\t" << ex.line << endl;
 	}
 
 	return 0;

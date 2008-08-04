@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetworkSslServer.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/toolsOs.h>
@@ -78,9 +78,9 @@ process(exchange fse)
 			exit(0);
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << "Smth happened!" << (string)ex << endl;
+		cout << "Smth happened!" << (dodoString)ex << endl;
 		cout.flush();
 	}
 	catch (...)
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 	{
 #ifdef OPENSSL_EXT
 
-		server sock(io::network::OPTIONS_PROTO_FAMILY_IPV4, io::network::OPTIONS_TRANSFER_TYPE_STREAM);
+		server sock(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 
 		io::network::__peerInfo info;
 		__initialAccept fake;
@@ -130,9 +130,9 @@ int main(int argc, char **argv)
 		}
 #endif
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;

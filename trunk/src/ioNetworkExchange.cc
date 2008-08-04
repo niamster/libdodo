@@ -123,7 +123,7 @@ exchange::init(__initialAccept &a_init)
 void
 exchange::close()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
@@ -151,7 +151,7 @@ exchange::init(int a_socket,
 			   bool a_blocked,
 			   bool blockInherited)
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (opened)
 	{
@@ -191,7 +191,7 @@ exchange::init(int a_socket,
 bool
 exchange::isAlive()
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	if (!opened)
 		return false;
@@ -219,7 +219,7 @@ void
 exchange::_write(const char * const data)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
@@ -243,7 +243,7 @@ exchange::_write(const char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -269,7 +269,7 @@ exchange::_write(const char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -287,7 +287,7 @@ void
 exchange::_read(char * const data)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(data, '\0', inSize);
 
@@ -313,7 +313,7 @@ exchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -342,7 +342,7 @@ exchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -371,7 +371,7 @@ unsigned long
 exchange::_readStream(char * const data)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(data, '\0', inSize);
 
@@ -387,7 +387,7 @@ exchange::_readStream(char * const data)
 			if (errno == EAGAIN)
 				break;
 
-			throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -408,7 +408,7 @@ exchange::flush()
 int
 exchange::getInDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	return socket;
 }
@@ -418,7 +418,7 @@ exchange::getInDescriptor() const
 int
 exchange::getOutDescriptor() const
 {
-	raceHazardGuard pg(this);
+	protector pg(this);
 
 	return socket;
 }

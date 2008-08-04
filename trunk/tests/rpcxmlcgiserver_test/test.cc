@@ -4,7 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
+#include <libdodo/cgiBasicExchange.h>
 #include <libdodo/rpcXmlCgiServer.h>
 
 #include <iostream>
@@ -28,8 +29,9 @@ handler(const dodoString &method, const dodoArray<value> &values, const void *id
 
 int main(int argc, char **argv)
 {
-	cgi::server provider(true);
-	rpc::xml::cgiServer srv(provider);
+	dodo::cgi::basic::exchange cgiio;
+	dodo::cgi::server provider(cgiio,true);
+	rpc::xml::cgi::server srv(provider);
 
 	try
 	{
@@ -37,7 +39,7 @@ int main(int argc, char **argv)
 
 		srv.serve();
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << ex.message << "\t" << ex.baseErrstr << endl;
 	}

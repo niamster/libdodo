@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioStdio.h>
 #include <libdodo/directives.h>
 
@@ -45,9 +45,9 @@ int main(int argc, char **argv)
 		st.write((char *)&a);
 		st.flush();
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << endl;
+		cout << (dodoString)ex << "\t" << ex.line << endl;
 	}
 	return 0;
 }

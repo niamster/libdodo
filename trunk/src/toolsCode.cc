@@ -161,7 +161,7 @@ code::codesetConversion(const dodoString &buffer,
 {
 	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
-		throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	size_t in, out, outBefore;
 	char *inFake, *outFake;
@@ -181,7 +181,7 @@ code::codesetConversion(const dodoString &buffer,
 	{
 		delete [] outBuffer;
 
-		throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	dodoString result;
@@ -214,7 +214,7 @@ code::zCompress(const dodoString &buffer,
 	strm.opaque = Z_NULL;
 
 	if ((ret = deflateInit2(&strm, level, Z_DEFLATED, 15, level, type)) < 0)
-		throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 
 	strm.avail_in =  buffer.size();
 	strm.next_in = (Bytef *)buffer.c_str();
@@ -232,7 +232,7 @@ code::zCompress(const dodoString &buffer,
 		{
 			delete [] byteBuf;
 
-			throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 		}
 
 		strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -261,7 +261,7 @@ code::zDecompress(const dodoString &buffer)
 	strm.opaque = Z_NULL;
 
 	if ((ret = inflateInit2(&strm, 15)) < 0)
-		throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 
 	byteBuf = new Bytef[ZLIB_CHUNK];
 
@@ -279,7 +279,7 @@ code::zDecompress(const dodoString &buffer)
 		{
 			delete [] byteBuf;
 
-			throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 		}
 
 		strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -665,7 +665,7 @@ code::decodeASCII85(const dodoString &string)
 						case 'z':
 
 							if (count != 0)
-								throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, ERR_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
 							result.append(4, '\0');
 
@@ -687,7 +687,7 @@ code::decodeASCII85(const dodoString &string)
 								break;
 							}
 
-							throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, ERR_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+							throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
 						case '\n':
 						case '\r':
@@ -703,7 +703,7 @@ code::decodeASCII85(const dodoString &string)
 						default:
 
 							if (string[k] < '!' || string[k] > 'u')
-								throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, ERR_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
 							tuple += (string[k] - '!') * powASCII85[count++];
 							if (count == 5)
@@ -960,7 +960,7 @@ code::bzCompress(const dodoString &buffer,
 
 	int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
 	if (ret != BZ_OK)
-		throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_BZCOMPRESS, ERR_BZIP, CODEEX_BADBZCOMPRESSION, TOOLSCODEEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZCOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZCOMPRESSION, TOOLSCODEEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
 
 	return dodoString(dst, len);
 }
@@ -977,7 +977,7 @@ code::bzDecompress(const dodoString &buffer)
 
 	int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
 	if (ret != BZ_OK)
-		throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, ERR_BZIP, CODEEX_BADBZDECOMPRESSIONINIT, TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONINIT, TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
 
 	int src_len = buffer.size();
 	char *src = new char[src_len + 1];
@@ -1015,12 +1015,12 @@ code::bzDecompress(const dodoString &buffer)
 		delete [] src;
 		free(dst);
 
-		throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, ERR_BZIP, CODEEX_BADBZDECOMPRESSION, TOOLSCODEEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSION, TOOLSCODEEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
 	}
 
 	ret = BZ2_bzDecompressEnd(&bzs);
 	if (ret != BZ_OK)
-		throw baseEx(ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, ERR_BZIP, CODEEX_BADBZDECOMPRESSIONFINISH, TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONFINISH, TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
 
 	return _buffer;
 }

@@ -47,7 +47,7 @@ client::~client()
 dodoString
 client::processCall(const rpc::method &meth)
 {
-	dodo::json::processor jsonValue;
+	dodo::data::format::json::processor jsonValue;
 
 	return jsonValue.make(method::methodToJson(meth, rqVersion, ++rqId));
 }
@@ -57,9 +57,9 @@ client::processCall(const rpc::method &meth)
 dodo::rpc::response
 client::processCallResult(const dodoString &data)
 {
-	dodo::json::processor jsonValue;
+	dodo::data::format::json::processor jsonValue;
 
-	dodo::json::node node = jsonValue.process(data);
+	dodo::data::format::json::node node = jsonValue.process(data);
 
 	return response::jsonToResponse(node, rpVersion, rpId);
 }

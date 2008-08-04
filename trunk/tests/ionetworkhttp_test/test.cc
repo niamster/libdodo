@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetworkHttp.h>
 #include <libdodo/types.h>
 
@@ -62,9 +62,9 @@ int main(int argc, char **argv)
 		for (; i != j; ++i)
 			cout << i->name << "=" << i->value << "\n~~\n";
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;
