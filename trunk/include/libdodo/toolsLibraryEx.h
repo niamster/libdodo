@@ -36,28 +36,31 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum libraryExR
+	namespace toosl
 	{
-		LIBRARYEX_LIBRARYNOTOPENED,
-	};
+		/**
+		 * libdodo defined errors
+		 */
+		enum libraryExR
+		{
+			LIBRARYEX_LIBRARYNOTOPENED,
+		};
 
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define TOOLSLIBRARYEX_LIBRARYNOTOPENED_STR "Library was not opened."
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum libraryFunctionsID
-	{
-		LIBRARYEX_OPEN,
-		LIBRARYEX_CLOSE,
-		LIBRARYEX_GET,
-		LIBRARYEX_BROPERATORSTRING,
-		LIBRARYEX_GETSYMBOLS,
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define TOOLSLIBRARYEX_LIBRARYNOTOPENED_STR "Library was not opened."
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum libraryFunctionsID
+		{
+			LIBRARYEX_OPEN,
+			LIBRARYEX_CLOSE,
+			LIBRARYEX_GET,
+			LIBRARYEX_BROPERATORSTRING,
+			LIBRARYEX_GETSYMBOLS,
+		};
 	};
 };
 

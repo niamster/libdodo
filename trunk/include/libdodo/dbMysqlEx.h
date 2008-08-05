@@ -36,14 +36,17 @@
 
 namespace dodo
 {
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum mysqlFunctionsID
+	namespace db
 	{
-		MYSQLEX_CONNECT,
-		MYSQLEX_EXEC,
-		MYSQLEX_GETFIELDSTYPES,
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum mysqlFunctionsID
+		{
+			MYSQLEX_CONNECT,
+			MYSQLEX_EXEC,
+			MYSQLEX_GETFIELDSTYPES,
+		};
 	};
 };
 
