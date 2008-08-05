@@ -1,0 +1,96 @@
+class LibdodoHg(CPackageRecipe):
+
+    name = 'libdodo-hg'
+    version = ''
+	tagversion = ''
+ 
+    buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user']
+ 
+    def setup(r):
+        r.addArchive('http://libdodo.sourceforge.net/hg/libdodo/archive/%(version)s.tar.bz2')
+
+        extraconfig = ''	
+	
+	if Use.deque:
+            extraconfig +=' --enable-deque'
+        else:
+            extraconfig +=' --disable-deque'
+
+	if Use.ioXexec:
+            extraconfig +=' --enable-io-xexec-support'
+        else:
+            extraconfig +=' --disable-io-xexec-support'
+
+	if Use.graphicsXexec:
+            extraconfig +=' --enable-graphics-xexec-support'
+        else:
+            extraconfig +=' --disable-graphics-xexec-support'
+
+	if Use.dbXexec:
+            extraconfig +=' --enable-db-xexec-support'
+        else:
+            extraconfig +=' --disable-db-xexec-support'
+
+	if Use.sqlite3:
+            r.buildRequires += ['sqlite:devel']
+	    extraconfig +=' --with-sqlite3'
+
+        if Use.postgresql:
+            r.buildRequires += ['postgresql:devel']
+	    extraconfig +=' --with-postgresql'
+
+	if Use.mysql:
+            r.buildRequires += ['mysql:devel']
+	    extraconfig +=' --with-mysql CPPFLAGS=-I/usr/include/mysql LDFLAGS=-L/usr/lib/mysql'
+
+        if Use.ssl:
+            r.buildRequires += ['openssl:devel']
+	    extraconfig +=' --with-openssl'
+
+	if Use.fcgi:
+            r.buildRequires += ['fcgi:devel']
+	    extraconfig +=' --with-fcgi'
+
+	if Use.pcre:
+            r.buildRequires += ['pcre:devel']
+	    extraconfig +=' --with-pcre'
+
+	if Use.dl:
+	    extraconfig +=' --with-dl'
+
+	if Use.libxml2:
+            r.buildRequires += ['libxml2:devel']
+	    extraconfig +=' --with-libxml2'
+
+	if Use.pthread:
+	    extraconfig +=' --with-pthread'
+
+	if Use.bzip2:
+            r.buildRequires += ['bzip2:devel']
+	    extraconfig +=' --with-bzip2'
+
+	if Use.zlib:
+            r.buildRequires += ['zlib:devel']
+	    extraconfig +=' --with-zlib'
+
+	if Use.iconv:
+	    extraconfig +=' --with-iconv'
+
+	if Use.imagemagick:
+            r.buildRequires += ['ImageMagick:devel']
+	    extraconfig +=' --with-imagemagick'
+
+	if Use.bfd:
+            r.buildRequires += ['binutils:devel']
+	    extraconfig +=' --with-bfd'
+
+        r.Replace(r.tagversion, '%s' % r.version, 'trunk/configure.in')
+        r.Run('autoconf', dir='trunk')
+
+        r.Configure(extraconfig, dir='trunk')
+        
+        r.Make(dir='trunk')
+        r.Make(dir='trunk/tests')
+        r.Install('trunk/libdodo.so.%(version)s','%(libdir)s/')
+        r.Symlink('%(libdir)s/libdodo.so.%(version)s','%(libdir)s/libdodo.so')
+        r.Install('trunk/include/','%(includedir)s/libdodo/')

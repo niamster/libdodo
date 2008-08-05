@@ -1,0 +1,73 @@
+class Libdodo(CPackageRecipe):
+    name = 'libdodo'
+    version = '0.11.0'
+ 
+    buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user']
+ 
+    def setup(r):
+        r.addArchive('mirror://sourceforge/libdodo/')
+
+        extraconfig = ''	
+	
+	if Use.deque:
+            extraconfig +=' --enable-deque'
+        else:
+            extraconfig +=' --disable-deque'
+
+	if Use.sqlite3:
+            r.buildRequires += ['sqlite']
+	    extraconfig +=' --with-sqlite3'
+
+        if Use.postgresql:
+            r.buildRequires += ['postgresql']
+	    extraconfig +=' --with-postgresql'
+
+	if Use.mysql:
+            r.buildRequires += ['mysql']
+	    extraconfig +=' --with-mysql CPPFLAGS=-I/usr/include/mysql LDFLAGS=-L/usr/lib/mysql'
+
+	if Use.ssl:
+            r.buildRequires += ['openssl:devel']
+	    extraconfig +=' --with-openssl'
+
+	if Use.fcgi:
+            r.buildRequires += ['fcgi']
+	    extraconfig +=' --with-fcgi'
+
+	if Use.pcre:
+            r.buildRequires += ['pcre']
+	    extraconfig +=' --with-pcre'
+
+	if Use.dl:
+	    extraconfig +=' --with-dl'
+
+	if Use.libxml2:
+            r.buildRequires += ['libxml2']
+	    extraconfig +=' --with-libxml2'
+
+	if Use.pthread:
+	    extraconfig +=' --with-pthread'
+
+	if Use.bzip2:
+            r.buildRequires += ['bzip2']
+	    extraconfig +=' --with-bzip2'
+
+	if Use.zlib:
+            r.buildRequires += ['zlib']
+	    extraconfig +=' --with-zlib'
+
+	if Use.iconv:
+	    extraconfig +=' --with-iconv'
+
+	if Use.imagemagick:
+            r.buildRequires += ['ImageMagick']
+	    extraconfig +=' --with-imagemagick'
+
+        r.Run('autoconf')
+
+        r.Configure(extraconfig)
+        
+        r.Make()
+        r.Install('%(name)s.so.%(version)s','%(libdir)s/')
+        r.Symlink('%(libdir)s/%(name)s.so.%(version)s','%(libdir)s/%(name)s.so')
+        r.Install('include/','%(includedir)s/%(name)s/')
