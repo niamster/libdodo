@@ -41,7 +41,7 @@ client::client(client &fs) : network::client(fs)
 
 client::client(short a_family,
 			   short a_type) : network::client(a_family,
-			   								   a_type),
+											   a_type),
 							   sslCtx(NULL),
 							   sslHandle(NULL),
 							   sslConnected(false)

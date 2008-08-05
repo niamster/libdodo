@@ -39,7 +39,7 @@ single::single(single &sts)
 //-------------------------------------------------------------------
 
 single::single(unsigned int value,
-					 const char   *a_key) : data(NULL)
+			   const char   *a_key) : data(NULL)
 {
 	if (a_key == NULL)
 	{

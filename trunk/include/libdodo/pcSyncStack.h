@@ -49,7 +49,7 @@ namespace dodo
 			{
 				protected:
 
-					section *keeper;                 ///< lock
+					section *keeper;                                     ///< lock
 
 					/**
 					 * destructor
@@ -76,7 +76,7 @@ namespace dodo
 
 						protected:
 
-							stack *parent;                         ///< lock
+							stack *parent;                                                     ///< lock
 					};
 			};
 		};

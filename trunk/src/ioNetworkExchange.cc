@@ -52,7 +52,7 @@ exchange::exchange(exchange &fse)
 	execObjectData = (void *)&collectedData;
 
 #endif
-	
+
 	inSize = fse.inSize;
 	outSize = fse.outSize;
 	socketOpts = fse.socketOpts;

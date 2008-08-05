@@ -67,15 +67,15 @@ namespace dodo
 			__xexecImageCollectedData(int &operType,
 									  void *executor);
 
-			ImageInfo *imInfo;                                              ///< image info handler
-			Image *imHandle;                                                ///< image handler
+			ImageInfo *imInfo;                                                          ///< image info handler
+			Image *imHandle;                                                            ///< image handler
 
-			int &operType;                                                  ///< xexec operation
+			int &operType;                                                              ///< xexec operation
 
-			void *executor;                                                 ///< class that executed hook
+			void *executor;                                                             ///< class that executed hook
 		};
 
-	#define IMAGE_MAPPINGSTATEMENTS 3
+#define IMAGE_MAPPINGSTATEMENTS 3
 
 		/**
 		 * @enum imageMappingEnum defines the order of pixels
@@ -87,22 +87,22 @@ namespace dodo
 			IMAGE_MAP_CMYK
 		};
 
-	#define IMAGE_PIXELSIZESTATEMENTS 6
+#define IMAGE_PIXELSIZESTATEMENTS 6
 
 		/**
 		 * @enum imagePixelSizeEnum defines size of pixel
 		 */
 		enum imagePixelSizeEnum
 		{
-			IMAGE_PIXELSIZE_CHAR,           ///< 8 bits
-			IMAGE_PIXELSIZE_SHORT,          ///< 16 bits
-			IMAGE_PIXELSIZE_INT,            ///< 32(16 on some CPUs) bits
-			IMAGE_PIXELSIZE_LONG,           ///< 32(32 on some CPUs) bits
-			IMAGE_PIXELSIZE_FLOAT,          ///< 32 bits
-			IMAGE_PIXELSIZE_DOUBLE,         ///< 64 bits
+			IMAGE_PIXELSIZE_CHAR,                       ///< 8 bits
+			IMAGE_PIXELSIZE_SHORT,                      ///< 16 bits
+			IMAGE_PIXELSIZE_INT,                        ///< 32(16 on some CPUs) bits
+			IMAGE_PIXELSIZE_LONG,                       ///< 32(32 on some CPUs) bits
+			IMAGE_PIXELSIZE_FLOAT,                      ///< 32 bits
+			IMAGE_PIXELSIZE_DOUBLE,                     ///< 64 bits
 		};
 
-	#define IMAGE_ENCODERSTATEMENTS 6
+#define IMAGE_ENCODERSTATEMENTS 6
 
 		/**
 		 * @enum imageEncoderEnum defines image encoder
@@ -117,7 +117,7 @@ namespace dodo
 			IMAGE_ENCODER_ICO,
 		};
 
-	#define IMAGE_COMPRESSIONSTATEMENTS 8
+#define IMAGE_COMPRESSIONSTATEMENTS 8
 
 		/**
 		 * @enum imageCompressionEnum defines type of compression
@@ -129,9 +129,9 @@ namespace dodo
 			IMAGE_COMPRESSION_LZW,
 			IMAGE_COMPRESSION_RLE,
 			IMAGE_COMPRESSION_ZIP,
-			IMAGE_COMPRESSION_JPEG,                 ///< only for JPEG
-			IMAGE_COMPRESSION_LOSSLESSJPEG,         ///< only for JPEG
-			IMAGE_COMPRESSION_JPEG2000,             ///< only for JPEG
+			IMAGE_COMPRESSION_JPEG,                             ///< only for JPEG
+			IMAGE_COMPRESSION_LOSSLESSJPEG,                     ///< only for JPEG
+			IMAGE_COMPRESSION_JPEG2000,                         ///< only for JPEG
 		};
 
 		/**
@@ -139,11 +139,11 @@ namespace dodo
 		 */
 		struct __imageInfo
 		{
-			void *data;                     ///< 2D array of pixels
-			unsigned long width;            ///< width of the image
-			unsigned long height;           ///< height of the image
-			short mapping;                  ///< type of mapping[see imageMappingEnum]
-			short pixelSize;                ///< type of pixel
+			void *data;                                 ///< 2D array of pixels
+			unsigned long width;                        ///< width of the image
+			unsigned long height;                       ///< height of the image
+			short mapping;                              ///< type of mapping[see imageMappingEnum]
+			short pixelSize;                            ///< type of pixel
 		};
 
 		/**
@@ -151,8 +151,8 @@ namespace dodo
 		 */
 		struct __imageSize
 		{
-			unsigned long width;            ///< width of the image
-			unsigned long height;           ///< height of the image
+			unsigned long width;                        ///< width of the image
+			unsigned long height;                       ///< height of the image
 		};
 
 		/**
@@ -265,16 +265,16 @@ namespace dodo
 
 			protected:
 
-				ExceptionInfo *exInfo;                                      ///< exception info handler
+				ExceptionInfo *exInfo;                                                      ///< exception info handler
 
-				__xexecImageCollectedData collectedData;                    ///< data collected for xexec
+				__xexecImageCollectedData collectedData;                                    ///< data collected for xexec
 
 			private:
 
-				static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                                    ///< image mapping statements
-				static const StorageType pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];                          ///< pixel type statements
-				static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                                    ///< image encoder
-				static const CompressionType compressionStArr[IMAGE_COMPRESSIONSTATEMENTS];                  ///< image compression
+				static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                                                       ///< image mapping statements
+				static const StorageType pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];                                             ///< pixel type statements
+				static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                                                       ///< image encoder
+				static const CompressionType compressionStArr[IMAGE_COMPRESSIONSTATEMENTS];                                     ///< image compression
 		};
 
 		/**
@@ -296,7 +296,7 @@ namespace dodo
 
 			private:
 
-				bool initialized;             ///< true if environment was initialized in the object
+				bool initialized;                             ///< true if environment was initialized in the object
 		};
 
 		extern __image_init__ __image_init_object__;

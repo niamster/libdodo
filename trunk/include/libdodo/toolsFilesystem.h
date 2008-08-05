@@ -100,14 +100,14 @@ namespace dodo
 		 */
 		struct __fileInfo
 		{
-			dodoString name;                    ///< file name
-			int perm;                           ///< file permissions[see filePermissionModesEnum]
-			int type;                           ///< file type[see filesystemFileTypeEnum]
-			long size;                          ///< file size
-			long modTime;                       ///< modyfication time
-			long accTime;                       ///< access time
-			int gid;                            ///< group id of the file
-			int uid;                            ///< user id of the file
+			dodoString name;                                ///< file name
+			int perm;                                       ///< file permissions[see filePermissionModesEnum]
+			int type;                                       ///< file type[see filesystemFileTypeEnum]
+			long size;                                      ///< file size
+			long modTime;                                   ///< modyfication time
+			long accTime;                                   ///< access time
+			int gid;                                        ///< group id of the file
+			int uid;                                        ///< user id of the file
 		};
 
 		/**
@@ -261,7 +261,7 @@ namespace dodo
 				 * @return file size
 				 * @param path indicates path what to describe
 				 */
-				static long getSize(const dodoString &path);                 ///< in bytes
+				static long getSize(const dodoString &path);                                 ///< in bytes
 
 				/**
 				 * @return file access time

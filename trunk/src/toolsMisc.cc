@@ -246,8 +246,8 @@ misc::isInArray(const dodoStringArray &arr,
 
 bool
 misc::isInList(const dodoStringList &arr,
-				const dodoString &needle,
-				bool icase)
+			   const dodoString &needle,
+			   bool icase)
 {
 	bool (*cmpFunc)(const dodoString &, const dodoString &);
 

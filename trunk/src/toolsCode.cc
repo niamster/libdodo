@@ -58,9 +58,9 @@ using namespace dodo::tools;
 //-------------------------------------------------------------------
 
 static unsigned char PADDING[] = {
-	0x80, 0,	0,    0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0, 0, 0, 0
+	0x80, 0,	0,        0,	0,        0,		0,    0,		0,    0,		0,    0,		0,    0,		0,    0,		0, 0, 0, 0, 0, 0,
+	0,    0,	0,        0,	0,        0,		0,    0,		0,    0,		0,    0,		0,    0,		0,    0,		0, 0, 0, 0, 0, 0,0,
+	0,    0,	0,        0,	0,        0,		0,    0,		0,    0,		0,    0,		0,    0,		0,    0,		0, 0, 0
 };
 
 /**
@@ -315,7 +315,7 @@ code::hexToChar(char first,
 		case '8':
 		case '9':
 
-			val = (16 * (int (first) - 48));
+			val = (16 * (int(first) - 48));
 
 			break;
 
@@ -324,7 +324,7 @@ code::hexToChar(char first,
 			if (first > 90)
 				first -= 32;
 
-			val = (16 * (int (first) - 55));
+			val = (16 * (int(first) - 55));
 	}
 
 	switch (second)
@@ -340,7 +340,7 @@ code::hexToChar(char first,
 		case '8':
 		case '9':
 
-			val += (int (second) - 48);
+			val += (int(second) - 48);
 
 			break;
 
@@ -349,10 +349,10 @@ code::hexToChar(char first,
 			if (second > 90)
 				second -= 32;
 
-			val += (int (second) - 55);
+			val += (int(second) - 55);
 	}
 
-	return char (val);
+	return char(val);
 }
 
 //-------------------------------------------------------------------

@@ -32,7 +32,7 @@
 using namespace dodo::pc::sync::process;
 
 section::section(unsigned int value,
-					 const char   *a_key)
+				 const char   *a_key)
 {
 	key = new char[strlen(a_key) + 1];
 	strcpy(key, a_key);

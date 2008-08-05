@@ -381,7 +381,7 @@ basic::syncThreadStack::~syncThreadStack()
 
 //-------------------------------------------------------------------
 
-basic::basic() throw()
+basic::basic() throw ()
 {
 	instances = 1;
 }
@@ -389,25 +389,25 @@ basic::basic() throw()
 //-------------------------------------------------------------------
 
 basic::basic(int a_errModule,
-			   int functionID,
-			   int errnoSource,
-			   int a_errno,
-			   const dodoString &a_errstr,
-			   unsigned long a_line,
-			   const dodoString &a_file,
-			   const dodoString &a_message) throw() : errModule(a_errModule),
-													  funcID(functionID),
-													  errnoSource(errnoSource),
-													  baseErrno(a_errno),
-													  baseErrstr(a_errstr),
-													  line(a_line),
-													  file(a_file),
-													  message(a_message)
+			 int functionID,
+			 int errnoSource,
+			 int a_errno,
+			 const dodoString &a_errstr,
+			 unsigned long a_line,
+			 const dodoString &a_file,
+			 const dodoString &a_message) throw () : errModule(a_errModule),
+													 funcID(functionID),
+													 errnoSource(errnoSource),
+													 baseErrno(a_errno),
+													 baseErrstr(a_errstr),
+													 line(a_line),
+													 file(a_file),
+													 message(a_message)
 {
 	syncThreadStack tg;
 
 	getInstance();
-	
+
 	++instances;
 
 	if (handlerSetEx[errModule])
@@ -416,7 +416,7 @@ basic::basic(int a_errModule,
 
 //-------------------------------------------------------------------
 
-basic::~basic() throw()
+basic::~basic() throw ()
 {
 	syncThreadStack tg;
 
@@ -460,7 +460,7 @@ basic::operator const dodoString & ()
 //-------------------------------------------------------------------
 
 const char *
-basic::what() const throw()
+basic::what() const throw ()
 {
 	syncThreadStack tg;
 
@@ -471,8 +471,8 @@ basic::what() const throw()
 
 void
 basic::setErrorHandler(errorModuleEnum module,
-						errorHandler handler,
-						void *data)
+					   errorHandler handler,
+					   void *data)
 {
 	syncThreadStack tg;
 
@@ -507,7 +507,7 @@ basic::setErrorHandler(errorModuleEnum module,
 
 void
 basic::setErrorHandlers(errorHandler handler,
-						 void *data)
+						void *data)
 {
 	syncThreadStack tg;
 
@@ -618,8 +618,8 @@ basic::unsetErrorHandlers()
 
 bool
 basic::setErrorHandlers(const dodoString &path,
-						 void *data,
-						 void *toInit)
+						void *data,
+						void *toInit)
 {
 	syncThreadStack tg;
 
@@ -677,8 +677,8 @@ basic::setErrorHandlers(const dodoString &path,
 
 bool
 basic::setErrorHandler(const dodoString &path,
-						void *data,
-						void *toInit)
+					   void *data,
+					   void *toInit)
 {
 	syncThreadStack tg;
 
@@ -733,7 +733,7 @@ basic::setErrorHandler(const dodoString &path,
 
 __basicMod
 basic::getModuleInfo(const dodoString &module,
-					  void *toInit)
+					 void *toInit)
 {
 	syncThreadStack tg;
 

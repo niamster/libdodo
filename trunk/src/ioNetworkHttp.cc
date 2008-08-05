@@ -42,7 +42,7 @@ const dodoString http::requestHeaderStatements[] = { "Accept",
 													 "Date",
 													 "If-Modified-Since",
 													 "User-Agent",
-													 "Cookie",				};
+													 "Cookie",             };
 
 //-------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ const dodoString http::responseHeaderStatements[] = { "Accept-Ranges",
 													  "Server",
 													  "WWW-Authenticate",
 													  "Proxy-Authenticate",
-													  "X-Powered-By",        };
+													  "X-Powered-By",		};
 
 //-------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ __httpResponse::__httpResponse() : code(0),
 
 __httpPostFile::__httpPostFile(const dodoString path,
 							   const dodoString mime) : path(path),
-							   							mime(mime)
+														mime(mime)
 {
 }
 
@@ -90,7 +90,7 @@ __httpPostFile::__httpPostFile()
 //-------------------------------------------------------------------
 
 http::__proxyAuthInfo::__proxyAuthInfo() : enabled(false),
-												 authType(PROXYAUTHTYPE_NONE)
+										   authType(PROXYAUTHTYPE_NONE)
 {
 }
 
@@ -181,7 +181,7 @@ http::setUrl(const dodoString &a_url)
 
 #endif
 
-			throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_SETURL, exception::ERRNO_LIBDODO, HTTPEX_UNSUPPORTEDSURICHEME, IONETWORKHTTPEX_UNSUPPORTEDSURICHEME_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_SETURL, exception::ERRNO_LIBDODO, HTTPEX_UNSUPPORTEDSURICHEME, IONETWORKHTTPEX_UNSUPPORTEDSURICHEME_STR, __LINE__, __FILE__);
 	}
 
 	unsigned long portSize = urlComponents.port.size();
@@ -194,8 +194,8 @@ http::setUrl(const dodoString &a_url)
 #ifdef OPENSSL_EXT
 
 		else
-			if (scheme == SCHEME_HTTPS)
-				urlComponents.port = "443";
+		if (scheme == SCHEME_HTTPS)
+			urlComponents.port = "443";
 
 #endif
 
@@ -281,106 +281,106 @@ http::GET()
 
 #ifdef OPENSSL_EXT
 
-			else
+		else
+		{
+			net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
+			data.append("CONNECT ");
+			data.append(urlComponents.host);
+			data.append(":");
+			data.append(urlComponents.port);
+			data.append(" HTTP/1.0\r\n");
+			if (requestHeaders.find(HTTP_REQUESTHEADER_PROXYAUTHORIZATION) != requestHeaders.end())
 			{
-				net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
-				data.append("CONNECT ");
-				data.append(urlComponents.host);
-				data.append(":");
-				data.append(urlComponents.port);
-				data.append(" HTTP/1.0\r\n");
-				if (requestHeaders.find(HTTP_REQUESTHEADER_PROXYAUTHORIZATION) != requestHeaders.end())
-				{
-					data.append(requestHeaderStatements[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
-					data.append(": ");
-					data.append(requestHeaders[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
-					data.append("\r\n");
-				}
+				data.append(requestHeaderStatements[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
+				data.append(": ");
+				data.append(requestHeaders[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
 				data.append("\r\n");
-
-				ex->outSize = data.size();
-				ex->exchange::_write(data.c_str());
-
-				char proxyData[512];
-				ex->setInBufferSize(512);
-				ex->inSize = 512;
-
-				try
-				{
-					switch (getProxyConnectResponse(proxyData, ex))
-					{
-						case GETCONTENTSTATUS_NORMAL:
-
-							break;
-
-						case GETCONTENTSTATUS_PROXYBASICAUTH:
-
-							if (authTries > 2)
-							{
-								authTries = 0;
-
-								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-							}
-
-							makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-
-							delete ex;
-							delete net;
-							ex = NULL;
-							net = NULL;
-
-							GET();
-
-							clear();
-
-							return;
-
-						case GETCONTENTSTATUS_PROXYDIGESTAUTH:
-
-							if (authTries > 2)
-							{
-								authTries = 0;
-
-								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-							}
-
-							makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
-
-							delete ex;
-							delete net;
-							ex = NULL;
-							net = NULL;
-
-							GET();
-
-							clear();
-
-							return;
-					}
-				}
-				catch (...)
-				{
-					delete ex;
-					delete net;
-
-					clear();
-
-					throw;
-				}
-
-				if (certsSet)
-					((ssl::client *)net)->setSertificates(certs);
-				else
-					((ssl::client *)net)->initSsl();
-
-				((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
-				((ssl::client *)net)->connectSsl();
-
-				((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
-
-				((ssl::client *)net)->socket = -1;
-				((ssl::client *)net)->sslHandle = NULL;
 			}
+			data.append("\r\n");
+
+			ex->outSize = data.size();
+			ex->exchange::_write(data.c_str());
+
+			char proxyData[512];
+			ex->setInBufferSize(512);
+			ex->inSize = 512;
+
+			try
+			{
+				switch (getProxyConnectResponse(proxyData, ex))
+				{
+					case GETCONTENTSTATUS_NORMAL:
+
+						break;
+
+					case GETCONTENTSTATUS_PROXYBASICAUTH:
+
+						if (authTries > 2)
+						{
+							authTries = 0;
+
+							throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+						}
+
+						makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+
+						delete ex;
+						delete net;
+						ex = NULL;
+						net = NULL;
+
+						GET();
+
+						clear();
+
+						return;
+
+					case GETCONTENTSTATUS_PROXYDIGESTAUTH:
+
+						if (authTries > 2)
+						{
+							authTries = 0;
+
+							throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+						}
+
+						makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
+
+						delete ex;
+						delete net;
+						ex = NULL;
+						net = NULL;
+
+						GET();
+
+						clear();
+
+						return;
+				}
+			}
+			catch (...)
+			{
+				delete ex;
+				delete net;
+
+				clear();
+
+				throw;
+			}
+
+			if (certsSet)
+				((ssl::client *)net)->setSertificates(certs);
+			else
+				((ssl::client *)net)->initSsl();
+
+			((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
+			((ssl::client *)net)->connectSsl();
+
+			((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
+
+			((ssl::client *)net)->socket = -1;
+			((ssl::client *)net)->sslHandle = NULL;
+		}
 #endif
 	}
 	else
@@ -776,106 +776,106 @@ http::POST(const dodoString &a_data,
 
 #ifdef OPENSSL_EXT
 
-			else
+		else
+		{
+			net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
+			data.append("CONNECT ");
+			data.append(urlComponents.host);
+			data.append(":");
+			data.append(urlComponents.port);
+			data.append(" HTTP/1.0\r\n");
+			if (requestHeaders.find(HTTP_REQUESTHEADER_PROXYAUTHORIZATION) != requestHeaders.end())
 			{
-				net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
-				data.append("CONNECT ");
-				data.append(urlComponents.host);
-				data.append(":");
-				data.append(urlComponents.port);
-				data.append(" HTTP/1.0\r\n");
-				if (requestHeaders.find(HTTP_REQUESTHEADER_PROXYAUTHORIZATION) != requestHeaders.end())
-				{
-					data.append(requestHeaderStatements[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
-					data.append(": ");
-					data.append(requestHeaders[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
-					data.append("\r\n");
-				}
+				data.append(requestHeaderStatements[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
+				data.append(": ");
+				data.append(requestHeaders[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
 				data.append("\r\n");
-
-				ex->outSize = data.size();
-				ex->exchange::_write(data.c_str());
-
-				char proxyData[512];
-				ex->setInBufferSize(512);
-				ex->inSize = 512;
-
-				try
-				{
-					switch (getProxyConnectResponse(proxyData, ex))
-					{
-						case GETCONTENTSTATUS_NORMAL:
-
-							break;
-
-						case GETCONTENTSTATUS_PROXYBASICAUTH:
-
-							if (authTries > 2)
-							{
-								authTries = 0;
-
-								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-							}
-
-							makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-
-							delete ex;
-							delete net;
-							ex = NULL;
-							net = NULL;
-
-							POST(data, type);
-
-							clear();
-
-							return;
-
-						case GETCONTENTSTATUS_PROXYDIGESTAUTH:
-
-							if (authTries > 2)
-							{
-								authTries = 0;
-
-								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-							}
-
-							makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
-
-							delete ex;
-							delete net;
-							ex = NULL;
-							net = NULL;
-
-							POST(data, type);
-
-							clear();
-
-							return;
-					}
-				}
-				catch (...)
-				{
-					delete ex;
-					delete net;
-
-					clear();
-
-					throw;
-				}
-
-				if (certsSet)
-					((ssl::client *)net)->setSertificates(certs);
-				else
-					((ssl::client *)net)->initSsl();
-
-				((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
-				((ssl::client *)net)->connectSsl();
-
-				((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
-
-				((ssl::client *)net)->socket = -1;
-				((ssl::client *)net)->sslHandle = NULL;
 			}
+			data.append("\r\n");
+
+			ex->outSize = data.size();
+			ex->exchange::_write(data.c_str());
+
+			char proxyData[512];
+			ex->setInBufferSize(512);
+			ex->inSize = 512;
+
+			try
+			{
+				switch (getProxyConnectResponse(proxyData, ex))
+				{
+					case GETCONTENTSTATUS_NORMAL:
+
+						break;
+
+					case GETCONTENTSTATUS_PROXYBASICAUTH:
+
+						if (authTries > 2)
+						{
+							authTries = 0;
+
+							throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+						}
+
+						makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+
+						delete ex;
+						delete net;
+						ex = NULL;
+						net = NULL;
+
+						POST(data, type);
+
+						clear();
+
+						return;
+
+					case GETCONTENTSTATUS_PROXYDIGESTAUTH:
+
+						if (authTries > 2)
+						{
+							authTries = 0;
+
+							throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+						}
+
+						makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
+
+						delete ex;
+						delete net;
+						ex = NULL;
+						net = NULL;
+
+						POST(data, type);
+
+						clear();
+
+						return;
+				}
+			}
+			catch (...)
+			{
+				delete ex;
+				delete net;
+
+				clear();
+
+				throw;
+			}
+
+			if (certsSet)
+				((ssl::client *)net)->setSertificates(certs);
+			else
+				((ssl::client *)net)->initSsl();
+
+			((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
+			((ssl::client *)net)->connectSsl();
+
+			((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
+
+			((ssl::client *)net)->socket = -1;
+			((ssl::client *)net)->sslHandle = NULL;
+		}
 
 #endif
 	}
@@ -1236,7 +1236,7 @@ http::extractHeaders(const dodoString &data,
 
 short
 http::getProxyConnectResponse(char *data,
-				 exchange *ex)
+							  exchange *ex)
 {
 	unsigned long size = 0, i;
 	bool endOfHeaders = false;
@@ -1585,7 +1585,7 @@ http::clear()
 
 void
 http::setAuthInfo(const dodoString &user,
-                  const dodoString &password)
+				  const dodoString &password)
 {
 	urlComponents.login = user;
 	urlComponents.password = password;

@@ -55,21 +55,21 @@ namespace dodo
 						 */
 						node();
 
-						dodoString name;                                                                                ///< name of the node [[tag]]
+						dodoString name;                                                                                                        ///< name of the node [[tag]]
 
-						dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> children;                            ///< children
+						dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> children;                                                    ///< children
 
-						dodoStringMap attributes;                                                                       ///< attributes
+						dodoStringMap attributes;                                                                                               ///< attributes
 
-						dodoString value;                                                                               ///< value of the node
+						dodoString value;                                                                                                       ///< value of the node
 
-						dodoString ns;                                                                                  ///< namespace of the node
-						dodoString nsHref;                                                                              ///< uri "value"
-						dodoString nsDef;                                                                               ///< namespace
-						dodoString nsDefHref;                                                                           ///< namespace URI
+						dodoString ns;                                                                                                          ///< namespace of the node
+						dodoString nsHref;                                                                                                      ///< uri "value"
+						dodoString nsDef;                                                                                                       ///< namespace
+						dodoString nsDefHref;                                                                                                   ///< namespace URI
 
-						bool CDATA;                                                                                     ///< true if CDATA
-						bool empty;                                                                                     ///< true if node doesn't have contents : `<node />`
+						bool CDATA;                                                                                                             ///< true if CDATA
+						bool empty;                                                                                                             ///< true if node doesn't have contents : `<node />`
 				};
 			};
 		};

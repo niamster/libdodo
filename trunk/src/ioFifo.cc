@@ -59,7 +59,7 @@ fifo::fifo(const fifo &fd) : inFifoBuffer(fd.inFifoBuffer),
 	execObjectData = (void *)&collectedData;
 
 #endif
-	
+
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
@@ -74,7 +74,7 @@ fifo::fifo(const fifo &fd) : inFifoBuffer(fd.inFifoBuffer),
 			if (newDesc != -1)
 				inHandle = fdopen(newDesc, "r");
 		}
-		
+
 		oldDesc = fileno(fd.outHandle);
 		if (oldDesc != -1)
 		{
@@ -134,23 +134,23 @@ fifo::clone(const fifo &fd)
 		oldDesc = fileno(fd.inHandle);
 		if (oldDesc == -1)
 			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
 			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		
+
 		inHandle = fdopen(newDesc, "r");
 		if (inHandle == NULL)
 			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		
+
 		oldDesc = fileno(fd.outHandle);
 		if (oldDesc == -1)
 			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		
+
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
 			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		
+
 		outHandle = fdopen(newDesc, "w");
 		if (outHandle == NULL)
 			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -178,7 +178,7 @@ int
 fifo::getOutDescriptor() const
 {
 	protector pg(this);
-	
+
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FIFOEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, FIFOEX_FIFONOTOPENED, IOFIFOEX_FIFONOTOPENED_STR, __LINE__, __FILE__);
 
@@ -197,7 +197,7 @@ fifo::close()
 	operType = FIFO_OPERATION_CLOSE;
 	performXExec(preExec);
 #endif
-	
+
 	if (opened)
 	{
 		if (fclose(inHandle) != 0)
@@ -228,7 +228,7 @@ fifo::open()
 	operType = FIFO_OPERATION_OPEN;
 	performXExec(preExec);
 #endif
-	
+
 	if (opened)
 	{
 		if (fclose(inHandle) != 0)
@@ -247,11 +247,11 @@ fifo::open()
 
 	if (pipe(pipefd) != 0)
 		throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 	if (blocked)
 	{
 		int blockFlag;
-		
+
 		blockFlag = fcntl(pipefd[0], F_GETFL);
 		if (blockFlag == -1)
 			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -260,7 +260,7 @@ fifo::open()
 
 		if (fcntl(pipefd[0], F_SETFL, blockFlag) == -1)
 			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		
+
 		blockFlag = fcntl(pipefd[1], F_GETFL);
 		if (blockFlag == -1)
 			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -406,7 +406,7 @@ void
 fifo::flush()
 {
 	protector pg(this);
-	
+
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FIFOEX_FLUSH, exception::ERRNO_LIBDODO, FIFOEX_FIFONOTOPENED, IOFIFOEX_FIFONOTOPENED_STR, __LINE__, __FILE__);
 
@@ -420,7 +420,7 @@ network::__peerInfo
 fifo::peerInfo()
 {
 	protector pg(this);
-	
+
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILE, FIFOEX_PEERINFO, exception::ERRNO_LIBDODO, FIFOEX_FIFONOTOPENED, IOFIFOEX_FIFONOTOPENED_STR, __LINE__, __FILE__);
 
@@ -432,7 +432,7 @@ fifo::peerInfo()
 
 	int desc = fileno(inHandle);
 	if (desc == -1)
-			throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_PEERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_PEERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (::getpeername(desc, &sa, &len) == 1)
 	{
@@ -502,11 +502,11 @@ fifo::block(bool flag)
 
 	int blockFlag;
 	int desc;
-	
+
 	desc = fileno(inHandle);
 	if (desc == -1)
 		throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 	blockFlag = fcntl(desc, F_GETFL);
 	if (blockFlag == -1)
 		throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -518,11 +518,11 @@ fifo::block(bool flag)
 
 	if (fcntl(desc, F_SETFL, blockFlag) == -1)
 		throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 	desc = fileno(outHandle);
 	if (desc == -1)
 		throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 	blockFlag = fcntl(desc, F_GETFL);
 	if (blockFlag == -1)
 		throw exception::basic(exception::ERRMODULE_IOFIFO, FIFOEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

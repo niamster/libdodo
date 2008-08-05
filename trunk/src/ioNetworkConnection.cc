@@ -32,13 +32,13 @@
 using namespace dodo::io::network;
 
 connection::connection() : lingerOpts(IONETWORKCONNECTION_SOCKET_LINGER_OPTION),
-					 lingerSeconds(IONETWORKCONNECTION_SOCKET_LINGER_PERIOD),
-					 inTimeout(IONETWORK_RECIEVE_TIMEOUT),
-					 outTimeout(IONETWORK_SEND_TIMEOUT),
-					 inSocketBuffer(IONETWORKCONNECTION_SOCKET_INSIZE),
-					 outSocketBuffer(IONETWORKCONNECTION_SOCKET_OUTSIZE),
-					 socket(-1),
-					 blocked(true)
+						   lingerSeconds(IONETWORKCONNECTION_SOCKET_LINGER_PERIOD),
+						   inTimeout(IONETWORK_RECIEVE_TIMEOUT),
+						   outTimeout(IONETWORK_SEND_TIMEOUT),
+						   inSocketBuffer(IONETWORKCONNECTION_SOCKET_INSIZE),
+						   outSocketBuffer(IONETWORKCONNECTION_SOCKET_OUTSIZE),
+						   socket(-1),
+						   blocked(true)
 {
 }
 
@@ -191,7 +191,7 @@ connection::isSetOption(int option) const
 
 void
 connection::setOption(short option,
-				   bool flag)
+					  bool flag)
 {
 	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
@@ -263,7 +263,7 @@ connection::setOption(short option,
 
 void
 connection::setLingerOption(short option,
-						 int seconds)
+							int seconds)
 {
 	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETLINGERSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);

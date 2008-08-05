@@ -55,7 +55,7 @@ namespace dodo
 				 */
 				__additionalData(dodoString &encoding);
 
-				dodoString &encoding; ///< response/request encoding
+				dodoString &encoding;                 ///< response/request encoding
 			};
 			/**
 			 * @class server defines server-side XML-RPC instrument
@@ -73,7 +73,7 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~server();
-					
+
 					/**
 					 * @param encoding defines response encoding
 					 */
@@ -102,9 +102,9 @@ namespace dodo
 					 * @param response defines RPC response representation
 					 */
 					virtual dodoString processCallResult(const rpc::response &response);
-					
-					dodoString rpEncoding; ///< encoding of the messages['UTF-8' by default]
-					dodoString rqEncoding; ///< encoding of the messages['UTF-8' by default]
+
+					dodoString rpEncoding;                      ///< encoding of the messages['UTF-8' by default]
+					dodoString rqEncoding;                      ///< encoding of the messages['UTF-8' by default]
 			};
 		};
 	};

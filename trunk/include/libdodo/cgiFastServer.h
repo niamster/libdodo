@@ -110,7 +110,7 @@ namespace dodo
 					 * @note if limit is exhausted `listen` will return
 					 * if limit is 0 `listen` never returns
 					 */
-					virtual void listen(unsigned long limit=0);
+					virtual void listen(unsigned long limit = 0);
 
 					/**
 					 * @return true if called as a fast CGI[not as a CGI]
@@ -121,9 +121,9 @@ namespace dodo
 
 #ifdef PTHREAD_EXT
 
-					bool threading;                                     ///< true use threading
+					bool threading;                                                         ///< true use threading
 
-					unsigned int threadsNum;                            ///< amount of threads
+					unsigned int threadsNum;                                                ///< amount of threads
 
 					/**
 					 * thread that holds one queue of CGI requests
@@ -131,15 +131,15 @@ namespace dodo
 					 */
 					static void *stackThread(void *data);
 
-					static pthread_mutex_t acceptM;                            ///< accept request mutex
-					static pthread_mutex_t requestsM;                            ///< request conter mutex
+					static pthread_mutex_t acceptM;                                                     ///< accept request mutex
+					static pthread_mutex_t requestsM;                                                   ///< request conter mutex
 
 #endif
 
-					static serverHandler handler;                        ///< function to be called on new request
+					static serverHandler handler;                                               ///< function to be called on new request
 
-					static unsigned long limit; ///< limit of requests to serve; if 0 server forever[0 by default]
-					static unsigned long requests; ///< counter of requests
+					static unsigned long limit;                                                 ///< limit of requests to serve; if 0 server forever[0 by default]
+					static unsigned long requests;                                              ///< counter of requests
 			};
 		};
 	};

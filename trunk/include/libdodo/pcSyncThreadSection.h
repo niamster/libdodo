@@ -79,11 +79,11 @@ namespace dodo
 
 					protected:
 
-	#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
-						pthread_mutex_t keeper;                     ///< mutex
+						pthread_mutex_t keeper;                                             ///< mutex
 
-	#endif
+#endif
 				};
 			};
 		};

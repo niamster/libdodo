@@ -84,8 +84,8 @@ namespace dodo
 			 */
 			__tuples();
 
-			dodoArray<dodoStringArray> rows;                    ///< rows of data
-			dodoStringArray fields;                             ///< names of fields
+			dodoArray<dodoStringArray> rows;                                ///< rows of data
+			dodoStringArray fields;                                         ///< names of fields
 		};
 
 		/**
@@ -109,12 +109,12 @@ namespace dodo
 			 */
 			__connectionInfo(const dodoString &db, const dodoString &host, const dodoString &user, const dodoString &password, const dodoString &path=__dodostring__, int port=0);
 
-			dodoString db;                      ///< database name
-			dodoString host;                    ///< hostname
-			dodoString user;                    ///< username
-			dodoString password;                ///< password
-			dodoString path;                    ///< path to db or unix socket
-			unsigned int port;                  ///< port
+			dodoString db;                                  ///< database name
+			dodoString host;                                ///< hostname
+			dodoString user;                                ///< username
+			dodoString password;                            ///< password
+			dodoString path;                                ///< path to db or unix socket
+			unsigned int port;                              ///< port
 		};
 
 		/**
@@ -134,7 +134,7 @@ namespace dodo
 		 */
 		class connector
 #ifndef DB_WO_XEXEC
-						: public xexec
+			: public xexec
 #endif
 		{
 			public:
@@ -333,11 +333,11 @@ namespace dodo
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false) = 0;
 
-				bool reconnect;                 ///< if true tries to reconect in case when `exec` failed with connection error[true by default]
+				bool reconnect;                                 ///< if true tries to reconect in case when `exec` failed with connection error[true by default]
 
 			protected:
 
-				bool connected;                 ///< true if connected to the db
+				bool connected;                                 ///< true if connected to the db
 		};
 	};
 };

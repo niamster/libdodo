@@ -56,8 +56,8 @@ namespace dodo
 				 */
 				__additionalData(dodoString &version, long &id);
 
-				dodoString &version; ///< response/request version
-				long &id; ///< response/request ID
+				dodoString &version;                    ///< response/request version
+				long &id;                               ///< response/request ID
 			};
 
 			/**
@@ -76,7 +76,7 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~server();
-					
+
 					/**
 					 * set version of JSON-RPC response
 					 * @param version defines version of JSON-RPC response
@@ -106,12 +106,12 @@ namespace dodo
 					 * @param response defines RPC response representation
 					 */
 					virtual dodoString processCallResult(const rpc::response &response);
-					
-					dodoString rqVersion; ///< request version
-					dodoString rpVersion; ///< response version['1.1' by default]
-					
-					long rqId; ///< request ID
-					long rpId; ///< response ID
+
+					dodoString rqVersion;                       ///< request version
+					dodoString rpVersion;                       ///< response version['1.1' by default]
+
+					long rqId;                                  ///< request ID
+					long rpId;                                  ///< response ID
 			};
 		};
 	};

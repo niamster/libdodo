@@ -52,8 +52,8 @@ namespace dodo
 			 */
 			enum connectionTransferTypeEnum
 			{
-				CONNECTION_TRANSFER_TYPE_STREAM,                   ///< Sequenced, reliable, connection-based byte streams
-				CONNECTION_TRANSFER_TYPE_DATAGRAM,                 ///< Connectionless, unreliable datagrams of fixed maximum length
+				CONNECTION_TRANSFER_TYPE_STREAM,                                    ///< Sequenced, reliable, connection-based byte streams
+				CONNECTION_TRANSFER_TYPE_DATAGRAM,                                  ///< Connectionless, unreliable datagrams of fixed maximum length
 			};
 
 			/**
@@ -71,13 +71,13 @@ namespace dodo
 			 */
 			enum connectionOptionEnum
 			{
-				CONNECTION_OPTION_KEEP_ALIVE = 1,                          ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-				CONNECTION_OPTION_REUSE_ADDRESS,                           ///< Should allow reuse of local addresses[it's accepted by default].
-				CONNECTION_OPTION_DONOT_USE_GATEWAY,                       ///< Requests  that outgoing messages bypass the standard routing facilities.
-				CONNECTION_OPTION_BROADCAST,                               ///< Permits  sending of broadcast messages, if this is supported by the protocol.
-				CONNECTION_OPTION_OOB_INLINE,                              ///< Out-of-band(marked urgent) data keep inline in recieve operation.
+				CONNECTION_OPTION_KEEP_ALIVE = 1,                                           ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+				CONNECTION_OPTION_REUSE_ADDRESS,                                            ///< Should allow reuse of local addresses[it's accepted by default].
+				CONNECTION_OPTION_DONOT_USE_GATEWAY,                                        ///< Requests  that outgoing messages bypass the standard routing facilities.
+				CONNECTION_OPTION_BROADCAST,                                                ///< Permits  sending of broadcast messages, if this is supported by the protocol.
+				CONNECTION_OPTION_OOB_INLINE,                                               ///< Out-of-band(marked urgent) data keep inline in recieve operation.
 #ifdef SO_REUSEPORT
-				CONNECTION_OPTION_REUSE_PORT,                              ///< Should allow reuse of local port.
+				CONNECTION_OPTION_REUSE_PORT,                                               ///< Should allow reuse of local port.
 #endif
 			};
 
@@ -86,9 +86,9 @@ namespace dodo
 			 */
 			enum connectionLingerOptionEnum
 			{
-				CONNECTION_LINGEROPTION_GRACEFUL_CLOSE,                    ///< close returns immediately, but any unsent data is transmitted (after close returns).
-				CONNECTION_LINGEROPTION_HARD_CLOSE,                        ///< close returns immediately, and any unsent data is discarded.
-				CONNECTION_LINGEROPTION_WAIT_CLOSE,                        ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+				CONNECTION_LINGEROPTION_GRACEFUL_CLOSE,                                     ///< close returns immediately, but any unsent data is transmitted (after close returns).
+				CONNECTION_LINGEROPTION_HARD_CLOSE,                                         ///< close returns immediately, and any unsent data is discarded.
+				CONNECTION_LINGEROPTION_WAIT_CLOSE,                                         ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
 			};
 
 			/**
@@ -96,8 +96,8 @@ namespace dodo
 			 */
 			struct __peerInfo
 			{
-				dodoString host;                        ///< host of the box
-				int port;                               ///< port of the box
+				dodoString host;                                        ///< host of the box
+				int port;                                               ///< port of the box
 			};
 
 			/**
@@ -215,20 +215,20 @@ namespace dodo
 					 */
 					virtual void _close(int socket);
 
-					int socketOpts;                                     ///< socket options
+					int socketOpts;                                                         ///< socket options
 
-					short lingerOpts;                                   ///< socket linger option
-					int lingerSeconds;                                  ///< socket linger timeout
+					short lingerOpts;                                                       ///< socket linger option
+					int lingerSeconds;                                                      ///< socket linger timeout
 
-					unsigned long inTimeout;                            ///< incomming operation timeout of socket; in microseconds
-					unsigned long outTimeout;                           ///< outgoing operation timeout of socket; in microseconds
+					unsigned long inTimeout;                                                ///< incomming operation timeout of socket; in microseconds
+					unsigned long outTimeout;                                               ///< outgoing operation timeout of socket; in microseconds
 
-					unsigned long inSocketBuffer;                       ///< incoming buffer size of socket; in bytes
-					unsigned long outSocketBuffer;                      ///< outgoing buffer size of socket; in bytes
+					unsigned long inSocketBuffer;                                           ///< incoming buffer size of socket; in bytes
+					unsigned long outSocketBuffer;                                          ///< outgoing buffer size of socket; in bytes
 
-					int socket;                                         ///< socket descriptor
+					int socket;                                                             ///< socket descriptor
 
-					bool blocked;                                       ///< if true socket is blocked
+					bool blocked;                                                           ///< if true socket is blocked
 			};
 		};
 	};

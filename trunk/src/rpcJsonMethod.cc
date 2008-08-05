@@ -38,9 +38,9 @@ method::jsonToMethod(dodo::data::format::json::node &node,
 {
 	if (node.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
 		throw exception::basic(exception::ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
-	
+
 	dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare> &obj = node.objectValue;
-		
+
 	rpc::method meth;
 
 	meth.name = obj["method"].getString();
@@ -53,11 +53,11 @@ method::jsonToMethod(dodo::data::format::json::node &node,
 
 	if (params.valueDataType != dodo::data::format::json::DATATYPE_ARRAY && params.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
 		throw exception::basic(exception::ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_PARAMSNOTANARRAY, RPCJSONMETHODEX_PARAMSNOTANARRAY_STR, __LINE__, __FILE__);
-	
+
 	if (params.valueDataType == dodo::data::format::json::DATATYPE_ARRAY)
 	{
 		dodoArray<dodo::data::format::json::node>::iterator i = params.arrayValue.begin(), j = params.arrayValue.end();
-		for (;i!=j;++i)
+		for (; i != j; ++i)
 			meth.arguments.push_back(value::jsonToValue(*i));
 	}
 	else
@@ -79,15 +79,15 @@ method::methodToJson(const rpc::method &data,
 	meth.valueDataType = dodo::data::format::json::DATATYPE_OBJECT;
 
 	dodo::data::format::json::node node;
-	
-	node.valueDataType = dodo::data::format::json::DATATYPE_STRING;	
+
+	node.valueDataType = dodo::data::format::json::DATATYPE_STRING;
 
 	node.stringValue = data.name;
 	meth.objectValue.insert(make_pair(dodoString("method"), node));
-	
+
 	node.stringValue = version;
 	meth.objectValue.insert(make_pair(dodoString("version"), node));
-	
+
 	node.stringValue.clear();
 
 	node.valueDataType = dodo::data::format::json::DATATYPE_NUMERIC;
@@ -103,12 +103,12 @@ method::methodToJson(const rpc::method &data,
 		{
 			node.valueDataType = dodo::data::format::json::DATATYPE_ARRAY;
 
-			for (;i!=j;++i)
-				node.arrayValue.push_back(value::valueToJson(*i));	
-		
+			for (; i != j; ++i)
+				node.arrayValue.push_back(value::valueToJson(*i));
+
 			meth.objectValue.insert(make_pair(dodoString("params"), node));
 		}
-		
+
 	}
 
 	return meth;

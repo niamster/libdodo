@@ -76,8 +76,8 @@ namespace dodo
 
 					protected:
 
-						sem_t *keeper;                              ///< section
-						char *key;                                  ///< key for the section
+						sem_t *keeper;                                                      ///< section
+						char *key;                                                          ///< key for the section
 				};
 			};
 		};

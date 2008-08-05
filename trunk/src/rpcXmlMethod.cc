@@ -43,7 +43,7 @@ method::xmlToMethod(dodo::data::format::xml::node &node)
 	rpc::method meth;
 
 	dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin(), j = node.children.end();
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 	{
 		if (tools::string::iequal(i->first, "methodName"))
 		{

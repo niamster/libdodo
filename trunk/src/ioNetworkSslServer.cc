@@ -41,7 +41,7 @@ server::server(server &fs) : network::server(fs)
 
 server::server(short a_family,
 			   short a_type) : network::server(a_family,
-			   								   a_type),
+											   a_type),
 							   sslCtx(NULL)
 {
 #ifndef IO_WO_XEXEC

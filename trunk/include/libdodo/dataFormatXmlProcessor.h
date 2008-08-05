@@ -61,17 +61,17 @@ namespace dodo
 					 */
 					__nodeDef();
 
-					dodoString name;                                                    ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
+					dodoString name;                                                                        ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-					dodoMap<dodoString, __nodeDef> children;                            ///< children definitions
+					dodoMap<dodoString, __nodeDef> children;                                                ///< children definitions
 
-					long chLimit;                                                       ///< limit of children to search for[-1 for unlimit, default]
-					bool ignoreChildrenDef;                                             ///< if true - parse all children tree if no children definition is given; false by default
+					long chLimit;                                                                           ///< limit of children to search for[-1 for unlimit, default]
+					bool ignoreChildrenDef;                                                                 ///< if true - parse all children tree if no children definition is given; false by default
 
-					dodoStringArray attributes;                                         ///< node attrributes; if empty - take all
-					bool ignoreAttributesDef;                                           ///< if true - parse all attributes if no attributes definition is given; true by default
+					dodoStringArray attributes;                                                             ///< node attrributes; if empty - take all
+					bool ignoreAttributesDef;                                                               ///< if true - parse all attributes if no attributes definition is given; true by default
 
-					dodoString ns;                                                      ///< node namespace; if empty parser skips namespace specification
+					dodoString ns;                                                                          ///< node namespace; if empty parser skips namespace specification
 				};
 
 				/**
@@ -90,11 +90,11 @@ namespace dodo
 					 */
 					__info(const dodoString &version, const dodoString &encoding, const dodoString &root, int compression);
 
-					dodoString version;                 ///< version of XML document
-					dodoString encoding;                ///< encoding of XML document
-					dodoString root;                    ///< name of the root element of XML document
+					dodoString version;                                     ///< version of XML document
+					dodoString encoding;                                    ///< encoding of XML document
+					dodoString root;                                        ///< name of the root element of XML document
 
-					int compression;                    ///< compression of XML document
+					int compression;                                        ///< compression of XML document
 				};
 
 				/**
@@ -152,7 +152,7 @@ namespace dodo
 						 */
 						virtual node processBuffer(const dodoString &buffer);
 
-						bool icaseNames;                    ///< if true ignore case of names[false by default]
+						bool icaseNames;                                            ///< if true ignore case of names[false by default]
 
 						/**
 						 * @return XML info
@@ -206,7 +206,7 @@ namespace dodo
 						 */
 						virtual node parse(const __nodeDef &definition);
 
-		#ifdef LIBXML2_EXT
+#ifdef LIBXML2_EXT
 
 						/**
 						 * @return true if content is in CDATA
@@ -252,11 +252,11 @@ namespace dodo
 						 */
 						virtual void getNodeInfo(const xmlNodePtr xnode, node &sample);
 
-		#endif
+#endif
 
 					private:
 
-		#ifdef LIBXML2_EXT
+#ifdef LIBXML2_EXT
 
 						/**
 						 * @typedef xcharCmp defines name compare function
@@ -265,7 +265,7 @@ namespace dodo
 						 */
 						typedef int (*xcharCmp)(const xmlChar *one, const xmlChar *two);
 
-						xcharCmp cmpFunc;                    ///< name compare function
+						xcharCmp cmpFunc;                                            ///< name compare function
 
 						/**
 						 * find node by definition
@@ -274,8 +274,8 @@ namespace dodo
 						 */
 						xmlNodePtr findNode(const __nodeDef &definition, xmlNodePtr node);
 
-						xmlDocPtr document;                     ///< XML Document
-						xmlAttr *attribute;                     ///< XML attributes
+						xmlDocPtr document;                                             ///< XML Document
+						xmlAttr *attribute;                                             ///< XML attributes
 
 						/**
 						 * catche libprocessor2 warnings
@@ -284,9 +284,9 @@ namespace dodo
 						 */
 						static void errHandler(void *data, xmlErrorPtr error);
 
-		#endif
+#endif
 
-		#define PROCESSOR_STATEMENTS 11
+#define PROCESSOR_STATEMENTS 11
 
 						/**
 						 * @enum processorStatementEnum defines processor statements
@@ -307,7 +307,7 @@ namespace dodo
 							PROCESSOR_STATEMENT_LTSLASH,
 						};
 
-						static const dodoString statements[PROCESSOR_STATEMENTS];                 ///< processor statements
+						static const dodoString statements[PROCESSOR_STATEMENTS];                                         ///< processor statements
 				};
 			};
 		};

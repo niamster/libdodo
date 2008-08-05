@@ -140,10 +140,10 @@ namespace dodo
 						 */
 						virtual void connectSsl();
 
-						SSL_CTX *sslCtx;                                ///< SSL context
-						SSL *sslHandle;                                 ///< SSL connection handle
+						SSL_CTX *sslCtx;                                                        ///< SSL context
+						SSL *sslHandle;                                                         ///< SSL connection handle
 
-						bool sslConnected;                              ///< true if SSL connection established
+						bool sslConnected;                                                      ///< true if SSL connection established
 				};
 			};
 		};

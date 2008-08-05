@@ -88,10 +88,10 @@ namespace dodo
 
 				private:
 
-					int socket;                                 ///< socket
+					int socket;                                                     ///< socket
 
-					bool blocked;                               ///< true if blocked
-					bool blockInherited;                        ///< true if block flag is inherited
+					bool blocked;                                                   ///< true if blocked
+					bool blockInherited;                                            ///< true if block flag is inherited
 			};
 
 			/**
@@ -130,7 +130,7 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~exchange();
-				
+
 					/**
 					 * init object
 					 * @param init defines initial data[got from ::accept method]
@@ -166,7 +166,7 @@ namespace dodo
 					 * @param blockInherited defines block flag inheritance
 					 */
 					virtual void init(int socket, bool blocked, bool blockInherited);
-					
+
 					/**
 					 * flush output
 					 * @note does nothing for network connections

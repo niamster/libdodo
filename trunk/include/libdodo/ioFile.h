@@ -65,10 +65,10 @@ namespace dodo
 		 */
 		enum fileOpenmodeEnum
 		{
-			FILE_OPENMODE_READ_ONLY,                            ///< error if not exists file
-			FILE_OPENMODE_READ_WRITE,                           ///< creates if not exists
-			FILE_OPENMODE_READ_WRITE_TRUNCATE,                  ///< if exists=truncates
-			FILE_OPENMODE_APPEND                                ///< for readin'; writin' to the end; you may skip parameter `pos` for write method
+			FILE_OPENMODE_READ_ONLY,                                        ///< error if not exists file
+			FILE_OPENMODE_READ_WRITE,                                       ///< creates if not exists
+			FILE_OPENMODE_READ_WRITE_TRUNCATE,                              ///< if exists=truncates
+			FILE_OPENMODE_APPEND                                            ///< for readin'; writin' to the end; you may skip parameter `pos` for write method
 		};
 
 		/**
@@ -76,10 +76,10 @@ namespace dodo
 		 */
 		enum fileFiletypeEnum
 		{
-			FILE_FILETYPE_REG_FILE,                     ///< regular file
-			FILE_FILETYPE_TMP_FILE,                     ///< temporary file[will be deleted after exit(or close)]
-			FILE_FILETYPE_FIFO_FILE,                    ///< FIFO file
-			FILE_FILETYPE_CHAR_FILE                     ///< CHAR file
+			FILE_FILETYPE_REG_FILE,                                 ///< regular file
+			FILE_FILETYPE_TMP_FILE,                                 ///< temporary file[will be deleted after exit(or close)]
+			FILE_FILETYPE_FIFO_FILE,                                ///< FIFO file
+			FILE_FILETYPE_CHAR_FILE                                 ///< CHAR file
 		};
 
 		/**
@@ -97,7 +97,7 @@ namespace dodo
 				 * @note if type is TMP_FILE path is ignored
 				 */
 				file(const dodoString &path = __dodostring__, short fileType = FILE_FILETYPE_REG_FILE, short mode = FILE_OPENMODE_READ_WRITE);
-				
+
 				/**
 				 * copy constructor
 				 * @note xexec object is not copied
@@ -108,7 +108,7 @@ namespace dodo
 				 * destructor
 				 */
 				virtual ~file();
-				
+
 				/**
 				 * clone file object
 				 * @param fd defines object to clone
@@ -140,10 +140,10 @@ namespace dodo
 				 */
 				virtual void erase();
 
-				unsigned long pos;                      ///< read/write/erase position[0 by default]
+				unsigned long pos;                                              ///< read/write/erase position[0 by default]
 
-				bool overwrite;                              ///< if true block will be overwritten; for regular and temp files only[false by default]
-				bool append;                            ///< if true, will append to the end of the file, even if pos is set[false by default]
+				bool overwrite;                                                 ///< if true block will be overwritten; for regular and temp files only[false by default]
+				bool append;                                                    ///< if true, will append to the end of the file, even if pos is set[false by default]
 
 				/**
 				 * @return path of the opened file
@@ -193,11 +193,11 @@ namespace dodo
 
 			private:
 
-				dodoString path;                        ///< file path
-				short fileType;                         ///< type of file
-				short mode;								///< file open mode[see fileOpenmodeEnum]
+				dodoString path;                                                                        ///< file path
+				short fileType;                                                                         ///< type of file
+				short mode;                                                                             ///< file open mode[see fileOpenmodeEnum]
 
-				FILE *handler;                          ///< file handler
+				FILE *handler;                                                                          ///< file handler
 		};
 	};
 };

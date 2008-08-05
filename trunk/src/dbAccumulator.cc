@@ -99,7 +99,7 @@ accumulator::callProcedure(const dodoString &name,
 						   const dodoStringArray &arguments)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CALL_PROCEDURE;
-	
+
 	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = name;
@@ -161,7 +161,7 @@ accumulator::insert(const dodoString &a_table,
 					const dodoStringMap &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
-	
+
 	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;
@@ -189,7 +189,7 @@ accumulator::insert(const dodoString &a_table,
 					const dodoArray<dodoStringMap> &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
-	
+
 	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;
@@ -227,7 +227,7 @@ accumulator::insert(const dodoString &a_table,
 					const dodoStringArray &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
-	
+
 	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;
@@ -248,7 +248,7 @@ accumulator::insert(const dodoString &a_table,
 					const dodoStringArray &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
-	
+
 	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;
@@ -337,7 +337,7 @@ accumulator::update(const dodoString &a_table,
 					const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_UPDATE;
-	
+
 	collectedData.table = a_table;
 	collectedData.fields = a_fields;
 
@@ -363,7 +363,7 @@ accumulator::del(const dodoString &a_table,
 				 const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_DELETE;
-	
+
 	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;

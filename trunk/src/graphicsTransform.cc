@@ -67,7 +67,7 @@ transform::setImage(image *a_im)
 
 void
 transform::scale(unsigned long width,
-			 unsigned long height)
+				 unsigned long height)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);

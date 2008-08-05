@@ -55,9 +55,9 @@ namespace dodo
 				/**
 				 * explanations for libdodo defined errors
 				 */
-		#define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
-		#define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR    "Malformed json object: null."
-		#define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
+#define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
+#define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR    "Malformed json object: null."
+#define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
 
 				/**
 				 * IDs of functions where exception might be thrown

@@ -82,7 +82,7 @@ collection::del(unsigned long position)
 
 void
 collection::set(unsigned long position,
-						 void          *data)
+				void          *data)
 {
 	protector tg(this);
 

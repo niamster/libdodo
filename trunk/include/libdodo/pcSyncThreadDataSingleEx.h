@@ -56,8 +56,8 @@ namespace dodo
 					/**
 					 * explanations for libdodo defined errors
 					 */
-	#define PCSYNCTHREADDATASINGLEEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
-	#define PCSYNCTHREADDATASINGLEEX_CANNOTLOCK_STR      "The share is currently locked. Timeout exhousted."
+#define PCSYNCTHREADDATASINGLEEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
+#define PCSYNCTHREADDATASINGLEEX_CANNOTLOCK_STR      "The share is currently locked. Timeout exhousted."
 
 					/**
 					 * IDs of functions where exception might be thrown

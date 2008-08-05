@@ -126,7 +126,7 @@ namespace dodo
 
 				private:
 
-					FCGX_Request *request;                        ///< fast CGI descriptor
+					FCGX_Request *request;                                            ///< fast CGI descriptor
 			};
 		};
 	};

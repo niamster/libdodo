@@ -34,7 +34,7 @@ using namespace dodo::io;
 #ifndef IO_WO_XEXEC
 
 __xexecIoChannelCollectedData::__xexecIoChannelCollectedData(int &a_operType,
-                                                             void *a_executor) : operType(a_operType),
+															 void *a_executor) : operType(a_operType),
 																				 executor(a_executor)
 {
 }

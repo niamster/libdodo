@@ -79,13 +79,13 @@ namespace dodo
 	 */
 	struct __xexecItem
 	{
-		inExec func;            ///< function to execute
-		void *data;             ///< user data
-		bool enabled;           ///< if true hook is enabled
-		int position;           ///< object identificator
+		inExec func;                    ///< function to execute
+		void *data;                     ///< user data
+		bool enabled;                   ///< if true hook is enabled
+		int position;                   ///< object identificator
 
 #ifdef DL_EXT
-		void *handle;            ///< handle to library
+		void *handle;                    ///< handle to library
 #endif
 	};
 
@@ -94,8 +94,8 @@ namespace dodo
 	 */
 	struct __xexecItemList
 	{
-		dodoList<__xexecItem> exec;             ///< hooks
-		bool execDisabled;                      ///< if true hooks are disabled
+		dodoList<__xexecItem> exec;                     ///< hooks
+		bool execDisabled;                              ///< if true hooks are disabled
 	};
 
 	/**
@@ -123,10 +123,10 @@ namespace dodo
 	 */
 	struct __xexecMod
 	{
-		char name[64];                          ///< name of the library
-		char discription[256];                  ///< discription of the library
-		char hook[64];                          ///< name of function in module that will be a hook
-		short execType;                         ///< type of hook[see xexecModuleActionTypeEnum]
+		char name[64];                                  ///< name of the library
+		char discription[256];                          ///< discription of the library
+		char hook[64];                                  ///< name of function in module that will be a hook
+		short execType;                                 ///< type of hook[see xexecModuleActionTypeEnum]
 	};
 
 	/**
@@ -151,8 +151,8 @@ namespace dodo
 		 */
 		__xexecCounts();
 
-		int pre;                ///< identificator of preExec
-		int post;               ///< identificator of postExec
+		int pre;                        ///< identificator of preExec
+		int post;                       ///< identificator of postExec
 	};
 
 #endif
@@ -433,17 +433,17 @@ namespace dodo
 			 */
 			virtual void performXExec(__xexecItemList &list) const;
 
-			mutable __xexecItemList preExec;                            ///< preExec hooks
-			mutable __xexecItemList postExec;                           ///< postExec hooks
+			mutable __xexecItemList preExec;                                        ///< preExec hooks
+			mutable __xexecItemList postExec;                                       ///< postExec hooks
 
-			int execs;                                                  ///< hook counter
+			int execs;                                                              ///< hook counter
 
-			dodoList<__xexecItem>::iterator current;                    ///< iterator for list[for matched with getXexec method]
+			dodoList<__xexecItem>::iterator current;                                ///< iterator for list[for matched with getXexec method]
 
-			mutable int operType;                                       ///< operation type set by main action
+			mutable int operType;                                                   ///< operation type set by main action
 
-			short execObject;                                           ///< type of object[see xexecObjectTypeEnum]
-			void *execObjectData;                                       ///< object data
+			short execObject;                                                       ///< type of object[see xexecObjectTypeEnum]
+			void *execObjectData;                                                   ///< object data
 	};
 
 };

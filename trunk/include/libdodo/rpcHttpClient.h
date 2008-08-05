@@ -80,9 +80,9 @@ namespace dodo
 					 */
 					virtual dodoString receiveTextResponse();
 
-					io::network::http http;///< http handler
+					io::network::http http;                    ///< http handler
 
-					dodoString ct;///< content-type of the request
+					dodoString ct;                    ///< content-type of the request
 
 			};
 		};

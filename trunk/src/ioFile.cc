@@ -76,7 +76,7 @@ file::file(const file &fd) : overwrite(fd.overwrite),
 	execObjectData = (void *)&collectedData;
 
 #endif
-	
+
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
@@ -85,9 +85,9 @@ file::file(const file &fd) : overwrite(fd.overwrite),
 		int oldDesc, newDesc;
 
 		oldDesc = fileno(fd.handler);
-	
+
 		newDesc = dup(oldDesc);
-		
+
 		switch (mode)
 		{
 			case FILE_OPENMODE_READ_WRITE:
@@ -165,7 +165,7 @@ file::clone(const file &fd)
 
 		opened = false;
 	}
-	
+
 	overwrite = fd.overwrite;
 	append = fd.append;
 	path = fd.path;
@@ -182,11 +182,11 @@ file::clone(const file &fd)
 		oldDesc = fileno(fd.handler);
 		if (oldDesc == -1)
 			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
 			throw exception::basic(exception::ERRMODULE_IOFILE, FILEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		
+
 		switch (mode)
 		{
 			case FILE_OPENMODE_READ_WRITE:

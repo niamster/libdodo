@@ -51,9 +51,9 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-	#define GRAPHICSIMAGEEX_BADINFO_STR    "Bad information for image was provided."
-	#define GRAPHICSIMAGEEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
-	#define GRAPHICSIMAGEEX_LONGPATH_STR "Path to image is too long."
+#define GRAPHICSIMAGEEX_BADINFO_STR    "Bad information for image was provided."
+#define GRAPHICSIMAGEEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
+#define GRAPHICSIMAGEEX_LONGPATH_STR "Path to image is too long."
 
 		/**
 		 * IDs of functions where exception might be thrown

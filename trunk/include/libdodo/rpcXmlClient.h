@@ -86,9 +86,9 @@ namespace dodo
 					 * @param data defines buffer that contains RPC response
 					 */
 					virtual rpc::response processCallResult(const dodoString &data);
-					
-					dodoString rpEncoding; ///< encoding of the messages['UTF-8' by default]
-					dodoString rqEncoding; ///< encoding of the messages['UTF-8' by default]
+
+					dodoString rpEncoding;                      ///< encoding of the messages['UTF-8' by default]
+					dodoString rqEncoding;                      ///< encoding of the messages['UTF-8' by default]
 
 			};
 		};

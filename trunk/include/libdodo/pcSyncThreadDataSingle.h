@@ -100,15 +100,15 @@ namespace dodo
 
 						protected:
 
-							void *data;                                     ///< shared data
+							void *data;                                                                 ///< shared data
 
-	#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
-							pthread_mutex_t mutex;                          ///< lock
+							pthread_mutex_t mutex;                                                      ///< lock
 
-	#endif
+#endif
 
-							timespec timeout;                               ///< lcok timeout
+							timespec timeout;                                                           ///< lcok timeout
 					};
 				};
 			};

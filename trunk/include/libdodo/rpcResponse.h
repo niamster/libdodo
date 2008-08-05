@@ -45,7 +45,7 @@ namespace dodo
 		{
 			class response;
 		};
-		
+
 		namespace json
 		{
 			class response;
@@ -119,8 +119,8 @@ namespace dodo
 
 			private:
 
-				dodoArray<value> values;                        ///< response values
-				bool succ;                                      ///< true if server returned non-fail response
+				dodoArray<value> values;                                        ///< response values
+				bool succ;                                                      ///< true if server returned non-fail response
 		};
 	};
 };

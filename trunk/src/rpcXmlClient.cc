@@ -43,7 +43,7 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-void 
+void
 client::setRequestEncoding(const dodoString &a_encoding)
 {
 	rqEncoding = a_encoding;
@@ -73,7 +73,7 @@ dodo::rpc::response
 client::processCallResult(const dodoString &data)
 {
 	dodo::data::format::xml::processor xmlValue;
-	
+
 	rpEncoding = xmlValue.getBufferInfo(data).encoding;
 
 	dodo::data::format::xml::__nodeDef xmlMethodResponse;

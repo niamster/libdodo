@@ -45,7 +45,7 @@ namespace dodo
 		namespace tpl
 		{
 			/**
-			 * @class cgiProcessor parses template
+			 * @class processor parses template
 			 * @note brief reference on usage:
 			 * syntax:
 			 *
@@ -262,7 +262,7 @@ namespace dodo
 					 */
 					virtual void clear();
 
-					dodoString tplBasePath;                 ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
+					dodoString tplBasePath;                                     ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
 
 				protected:
 
@@ -412,30 +412,30 @@ namespace dodo
 					 */
 					virtual dodoArray<unsigned long> detectNewLines(const dodoString &buffer);
 
-					dodoArray< dodoArray<unsigned long> > newLinePositions;                 ///< stack of positions of new lines of templates
+					dodoArray< dodoArray<unsigned long> > newLinePositions;                                                                                             ///< stack of positions of new lines of templates
 
-					dodoStringList processed;                                                                                         ///< files that will be skipped due to the recursion
+					dodoStringList processed;                                                                                                                           ///< files that will be skipped due to the recursion
 
-					dodoStringMap global;                                                                                                   ///< set of global variables[user-set]
-					dodoMap<dodoString, dodoStringArray> globalArray;                                                                       ///< global user-defined variables(arrays)
-					dodoMap<dodoString, dodoStringMap> globalHash;                                                                          ///< global user-defined variables(hashes)
-					dodoMap<dodoString, dodoArray<dodoStringMap> > globalArrayHash;                                                         ///< global user-defined variables(array of hashes)
+					dodoStringMap global;                                                                                                                               ///< set of global variables[user-set]
+					dodoMap<dodoString, dodoStringArray> globalArray;                                                                                                   ///< global user-defined variables(arrays)
+					dodoMap<dodoString, dodoStringMap> globalHash;                                                                                                      ///< global user-defined variables(hashes)
+					dodoMap<dodoString, dodoArray<dodoStringMap> > globalArrayHash;                                                                                     ///< global user-defined variables(array of hashes)
 
-					dodoMap<unsigned int, dodoStringMap> local;                                                                             ///< local variables[occur in `for` block]
-					dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> > localHash;                                                   ///< local variables(hashes)[occur in `for` block]
+					dodoMap<unsigned int, dodoStringMap> local;                                                                                                         ///< local variables[occur in `for` block]
+					dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> > localHash;                                                                               ///< local variables(hashes)[occur in `for` block]
 
-					dodoStringMap dodo;                                                                                                     ///< auxillary variables[dodo defined][for dodo.*]
+					dodoStringMap dodo;                                                                                                                                 ///< auxillary variables[dodo defined][for dodo.*]
 
-					bool continueFlag;                                                                                                      ///< indicates `continue` state
+					bool continueFlag;                                                                                                                                  ///< indicates `continue` state
 
-					unsigned int breakDeepness;                                                                                             ///< deepness of the break
-					unsigned int loopDeepness;                                                                                              ///< deepness of the loop
+					unsigned int breakDeepness;                                                                                                                         ///< deepness of the break
+					unsigned int loopDeepness;                                                                                                                          ///< deepness of the loop
 
-					unsigned long iterator;                                                                                                 ///< amount of iterations of the loop
+					unsigned long iterator;                                                                                                                             ///< amount of iterations of the loop
 
-					unsigned int namespaceDeepness;                                                                                               ///< cgi object through what output will be performed
+					unsigned int namespaceDeepness;                                                                                                                     ///< cgi object through what output will be performed
 
-	#define PROCESSOR_STATEMENTS 30
+#define PROCESSOR_STATEMENTS 30
 
 					/**
 					 * @enum processorStatementEnum defines processor statements
@@ -475,7 +475,7 @@ namespace dodo
 						PROCESSOR_STATEMENT_CLOSE_VARPART,
 					};
 
-					static const dodoString statements[PROCESSOR_STATEMENTS];                 ///< processor statements[for dodo.*, ...]
+					static const dodoString statements[PROCESSOR_STATEMENTS];                                     ///< processor statements[for dodo.*, ...]
 			};
 		};
 	};

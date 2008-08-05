@@ -86,12 +86,12 @@ namespace dodo
 
 					private:
 
-						int socket;                                     ///< socket
+						int socket;                                                             ///< socket
 
-						SSL *sslHandle;                                 ///< SSL connection handle
+						SSL *sslHandle;                                                         ///< SSL connection handle
 
-						bool blocked;                                   ///< true if blocked
-						bool blockInherited;                            ///< true if block flag is inherited
+						bool blocked;                                                           ///< true if blocked
+						bool blockInherited;                                                    ///< true if block flag is inherited
 				};
 
 				/**
@@ -147,7 +147,7 @@ namespace dodo
 
 					protected:
 
-						SSL *sslHandle;                         ///< SSL connection handle
+						SSL *sslHandle;                                                 ///< SSL connection handle
 
 						/**
 						 * close socket connection

@@ -153,7 +153,7 @@ namespace dodo
 						 */
 						virtual void acceptSsl(__initialAccept &init);
 
-						SSL_CTX *sslCtx;                                ///< SSL context
+						SSL_CTX *sslCtx;                                                        ///< SSL context
 				};
 			};
 		};

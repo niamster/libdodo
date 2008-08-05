@@ -93,11 +93,11 @@ namespace dodo
 					 */
 					virtual rpc::response processCallResult(const dodoString &data);
 
-					dodoString rqVersion; ///< request version['1.1' by default]
-					dodoString rpVersion; ///< response version
+					dodoString rqVersion;                       ///< request version['1.1' by default]
+					dodoString rpVersion;                       ///< response version
 
-					long rqId; ///< request ID
-					long rpId; ///< response ID
+					long rqId;                                  ///< request ID
+					long rpId;                                  ///< response ID
 			};
 		};
 	};

@@ -65,7 +65,7 @@ namespace dodo
 		class fifo : virtual public channel
 		{
 			public:
-				
+
 				/**
 				 * copy constructor
 				 * @note xexec object is not copied
@@ -81,7 +81,7 @@ namespace dodo
 				 * destructor
 				 */
 				virtual ~fifo();
-				
+
 				/**
 				 * clone fifo object
 				 * @param fd defines object to clone
@@ -94,12 +94,12 @@ namespace dodo
 				 * @note it can be used to get info foreign 'inputter' if you ar using inetd
 				 */
 				network::__peerInfo peerInfo();
-				
+
 				/**
 				 * open fifo
 				 */
 				virtual void open();
-				
+
 				/**
 				 * close fifo
 				 */
@@ -121,8 +121,8 @@ namespace dodo
 				 */
 				virtual void block(bool flag);
 
-				int inFifoBuffer;                        ///< input buffer
-				int outFifoBuffer;                       ///< output buffer
+				int inFifoBuffer;                                           ///< input buffer
+				int outFifoBuffer;                                          ///< output buffer
 
 			protected:
 
@@ -160,12 +160,12 @@ namespace dodo
 				 */
 				virtual void _writeStream(const char * const data);
 
-				FILE *inHandle;                             ///< input stream descriptor
-				FILE *outHandle;                             ///< output stream descriptor
-			
+				FILE *inHandle;                                                 ///< input stream descriptor
+				FILE *outHandle;                                                ///< output stream descriptor
+
 			private:
 
-				bool blocked;                           ///< true if stream is blocked
+				bool blocked;                                           ///< true if stream is blocked
 		};
 	};
 };

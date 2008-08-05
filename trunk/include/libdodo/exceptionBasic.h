@@ -128,19 +128,19 @@ namespace dodo
 			ERRMODULE_RPCJSONRESPONSE,
 		};
 
-	#define BASEEX_MODULES    48
+#define BASEEX_MODULES    48
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 		/**
 		 * @struct __basicMod is returned from initBaseExModule in the library
 		 */
 		struct __basicMod
 		{
-			char name[64];                          ///< name of the library
-			char discription[256];                  ///< discription of the library
-			char hook[64];                          ///< name of the function in module that will be as a hook
-			short module;                           ///< for what module handler should be set[see errorModuleEnum]
+			char name[64];                                      ///< name of the library
+			char discription[256];                              ///< discription of the library
+			char hook[64];                                      ///< name of the function in module that will be as a hook
+			short module;                                       ///< for what module handler should be set[see errorModuleEnum]
 		};
 
 		/**
@@ -154,7 +154,7 @@ namespace dodo
 		 */
 		typedef void (*deinitBaseExModule)();
 
-	#endif
+#endif
 
 		class basic;
 
@@ -170,7 +170,7 @@ namespace dodo
 		 * @class basic describes exception that has been thrown
 		 */
 		class basic : public std::exception,
-					   public singleton<basic>
+					  public singleton<basic>
 		{
 			friend class singleton<basic>;
 
@@ -179,7 +179,7 @@ namespace dodo
 				/**
 				 * constructor
 				 */
-				basic() throw();
+				basic() throw ();
 
 			public:
 
@@ -194,12 +194,12 @@ namespace dodo
 				 * @param file defines file where exception has been thrown
 				 * @param message defines custom message that might clarify the exception
 				 */
-				basic(int errModule, int functionID, int errnoSource, int baseErrno, const dodoString &baseErrstr, unsigned long line, const dodoString &file, const dodoString &message = __dodostring__) throw();
+				basic(int errModule, int functionID, int errnoSource, int baseErrno, const dodoString &baseErrstr, unsigned long line, const dodoString &file, const dodoString &message = __dodostring__) throw ();
 
 				/**
 				 * destructor
 				 */
-				~basic() throw();
+				~basic() throw ();
 
 				/**
 				 * @return error string
@@ -209,19 +209,19 @@ namespace dodo
 				/**
 				 * return error string
 				 */
-				virtual const char *what() const throw();
+				virtual const char *what() const throw ();
 
-				int errModule;                  ///< module where exception has been thrown
-				int funcID;                       ///< function where exception has been thrown[see *Ex.h headers for IDs]
-				int errnoSource;                ///< the source of the error code and of the error string
+				int errModule;                                              ///< module where exception has been thrown
+				int funcID;                                                 ///< function where exception has been thrown[see *Ex.h headers for IDs]
+				int errnoSource;                                            ///< the source of the error code and of the error string
 
-				int baseErrno;                              ///< error code
-				dodoString baseErrstr;                      ///< error string
+				int baseErrno;                                              ///< error code
+				dodoString baseErrstr;                                      ///< error string
 
-				unsigned long line;                         ///< line where exception has been thrown
-				dodoString file;                            ///< file where exception has been thrown
+				unsigned long line;                                         ///< line where exception has been thrown
+				dodoString file;                                            ///< file where exception has been thrown
 
-				dodoString message;                         ///< custom message that might clarify the exception
+				dodoString message;                                         ///< custom message that might clarify the exception
 
 				/**
 				 * set handler for exceptions for specific module
@@ -249,7 +249,7 @@ namespace dodo
 				 */
 				static void unsetErrorHandlers();
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 				/**
 				 * @return information about module
@@ -277,23 +277,23 @@ namespace dodo
 				 */
 				static bool setErrorHandlers(const dodoString &path, void *data, void *toInit = NULL);
 
-	#endif
+#endif
 
 			protected:
 
-				static errorHandler handlersEx[BASEEX_MODULES];                     ///< exception handlers
+				static errorHandler handlersEx[BASEEX_MODULES];                                     ///< exception handlers
 
-				static bool handlerSetEx[BASEEX_MODULES];                           ///< map of set handlers
+				static bool handlerSetEx[BASEEX_MODULES];                                           ///< map of set handlers
 
-				static void *handlerDataEx[BASEEX_MODULES];                         ///< data that will be passed to the handler
+				static void *handlerDataEx[BASEEX_MODULES];                                         ///< data that will be passed to the handler
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
-				static void *handlesEx[BASEEX_MODULES];                             ///< handles to the libraries
+				static void *handlesEx[BASEEX_MODULES];                                             ///< handles to the libraries
 
-				static bool handlesOpenedEx[BASEEX_MODULES];                        //< map of the opened libraries
+				static bool handlesOpenedEx[BASEEX_MODULES];                                        //< map of the opened libraries
 
-	#endif
+#endif
 
 				/**
 				 * @class syncThreadSection performs atomic locks using mutexes
@@ -324,14 +324,14 @@ namespace dodo
 
 					protected:
 
-	#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
-						static pthread_mutex_t keeper;                     ///< mutex
+						static pthread_mutex_t keeper;                                             ///< mutex
 
-	#endif
+#endif
 				};
 
-				static syncThreadSection keeper;             ///< lock
+				static syncThreadSection keeper;                             ///< lock
 
 				/**
 				 * @class syncThreadStack provides thread safe behaviour

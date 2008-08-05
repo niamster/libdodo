@@ -68,7 +68,7 @@ const char *server::environmentStatements[] = { "REQUEST_METHOD",
 												"SERVER_ADMIN",
 												"SERVER_PROTOCOL",
 												"SCRIPT_FILENAME",
-												"SCRIPT_NAME",               };
+												"SCRIPT_NAME",				};
 
 //-------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ const dodoString server::responseHeaderStatements[] = { "Accept-Ranges",
 														"Location",
 														"Server",
 														"WWW-Authenticate",
-														"X-Powered-By",        };
+														"X-Powered-By",       };
 
 const dodoString server::responseStatusStatements[] = { "Status: 100 Continue\r\n",
 														"Status: 101 Switching Protocols\r\n",
@@ -130,7 +130,7 @@ const dodoString server::responseStatusStatements[] = { "Status: 100 Continue\r\
 														"Status: 502 Bad Gateway\r\n",
 														"Status: 503 Service Unavailable\r\n",
 														"Status: 504 Gateway Timeout\r\n",
-														"Status: 505 HTTP Version Not Supported\r\n",      };
+														"Status: 505 HTTP Version Not Supported\r\n",     };
 
 //-------------------------------------------------------------------
 
@@ -279,7 +279,7 @@ server::getCharset()
 	unsigned long temp;
 
 	dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
-	for (;b!=e;++b)
+	for (; b != e; ++b)
 	{
 		temp = tools::string::find(*b, "charset=", true);
 		if (temp == dodoString::npos)
@@ -566,7 +566,7 @@ server::makeEnv()
 		dodoStringArray::iterator first = contentTypeParts.begin();
 
 		ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE] = *first;
-		
+
 		if (size > 1)
 			contenTypeExtensions.insert(contenTypeExtensions.begin(), first + 1, contentTypeParts.end());
 	}
@@ -578,7 +578,7 @@ server::makeEnv()
 			dodoStringArray::iterator first = contentTypeParts.begin();
 
 			ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE] = *first;
-			
+
 			if (size > 1)
 				contenTypeExtensions.insert(contenTypeExtensions.begin(), first + 1, contentTypeParts.end());
 		}
@@ -694,7 +694,7 @@ server::makePost()
 			dodoStringArray postParts;
 
 			dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
-			for (;b!=e;++b)
+			for (; b != e; ++b)
 			{
 				temp0 = tools::string::find(*b, "boundary=", true);
 				if (temp0 == dodoString::npos)

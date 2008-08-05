@@ -71,7 +71,7 @@ event::addChannel(const eventInfo &fl)
 
 dodoArray<bool>
 event::isReadable(const dodoArray<int> &pos,
-							 int timeout) const
+				  int timeout) const
 {
 	protector pg(this);
 
@@ -149,7 +149,7 @@ event::isReadable(const dodoArray<int> &pos,
 
 dodoArray<bool>
 event::isWritable(const dodoArray<int> &pos,
-							 int timeout) const
+				  int timeout) const
 {
 	protector pg(this);
 
@@ -227,7 +227,7 @@ event::isWritable(const dodoArray<int> &pos,
 
 bool
 event::isReadable(int pos,
-							 int timeout) const
+				  int timeout) const
 {
 	protector pg(this);
 
@@ -282,7 +282,7 @@ event::delChannel(int pos)
 
 bool
 event::isWritable(int pos,
-							 int timeout) const
+				  int timeout) const
 {
 	protector pg(this);
 

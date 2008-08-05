@@ -70,11 +70,11 @@ namespace dodo
 			 */
 			__xexecIoChannelCollectedData(int &operType, void *executor);
 
-			dodoString buffer;                          ///< data buffer
+			dodoString buffer;                                      ///< data buffer
 
-			int &operType;                              ///< xexec operation
+			int &operType;                                          ///< xexec operation
 
-			void *executor;                             ///< class that executed hook
+			void *executor;                                         ///< class that executed hook
 		};
 
 #endif
@@ -154,8 +154,8 @@ namespace dodo
 				 */
 				virtual void flush() = 0;
 
-				unsigned long inSize;                   ///< size of data block for read* operations
-				unsigned long outSize;                  ///< size of data block for write* operations
+				unsigned long inSize;                                   ///< size of data block for read* operations
+				unsigned long outSize;                                  ///< size of data block for write* operations
 
 			protected:
 
@@ -183,11 +183,11 @@ namespace dodo
 				 */
 				virtual void _writeStream(const char * const data) = 0;
 
-				bool opened;                 ///< true if I/O *session* is opened
+				bool opened;                                 ///< true if I/O *session* is opened
 
 #ifndef IO_WO_XEXEC
 
-				__xexecIoChannelCollectedData collectedData;                   ///< data collected for xexec
+				__xexecIoChannelCollectedData collectedData;                                   ///< data collected for xexec
 
 #endif
 		};

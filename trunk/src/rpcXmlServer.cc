@@ -49,7 +49,7 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-void 
+void
 server::setResponseEncoding(const dodoString &a_encoding)
 {
 	rpEncoding = a_encoding;
@@ -91,11 +91,11 @@ server::serve()
 	try
 	{
 		rpc::method meth = processCall(receiveTextResponse());
-		
+
 		dodoString encoding = rpEncoding;
 
 		__additionalData idata(rqEncoding);
-		
+
 		__additionalData odata(rpEncoding);
 
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);

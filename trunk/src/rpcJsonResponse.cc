@@ -38,13 +38,13 @@ response::jsonToResponse(dodo::data::format::json::node &node,
 {
 	if (node.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
 		throw exception::basic(exception::ERRMODULE_RPCJSONRESPONSE, RESPONSEEX_JSONTORESPONSE, exception::ERRNO_LIBDODO, RESPONSEEX_ROOTNOTANOBJECT, RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
-	
+
 	dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare> &obj = node.objectValue;
 
 	rpc::response resp;
 
 	version = obj["version"].getString();
-	
+
 	id = obj["id"].getNumeric();
 
 	dodo::data::format::json::node &error = obj["error"];
@@ -62,7 +62,7 @@ response::jsonToResponse(dodo::data::format::json::node &node,
 		if (result.valueDataType == dodo::data::format::json::DATATYPE_ARRAY)
 		{
 			dodoArray<dodo::data::format::json::node>::iterator i = result.arrayValue.begin(), j = result.arrayValue.end();
-			for (;i!=j;++i)
+			for (; i != j; ++i)
 				resp.values.push_back(value::jsonToValue(*i));
 		}
 		else
@@ -109,7 +109,7 @@ response::responseToJson(const rpc::response &data,
 				dodo::data::format::json::node subNode;
 				subNode.valueDataType = dodo::data::format::json::DATATYPE_ARRAY;
 
-				for (;i!=j;++i)
+				for (; i != j; ++i)
 					subNode.arrayValue.push_back(value::valueToJson(*i));
 
 				resp.objectValue.insert(make_pair(dodoString("result"), subNode));

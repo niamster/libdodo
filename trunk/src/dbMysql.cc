@@ -72,11 +72,11 @@ mysql::connectSettings(unsigned long a_type,
 	type = a_type;
 
 	if (mysql_ssl_set(mysqlHandle,
-				  options.key.size() == 0 ? NULL : options.key.c_str(),
-				  options.cert.size() == 0 ? NULL : options.cert.c_str(),
-				  options.ca.size() == 0 ? NULL : options.ca.c_str(),
-				  options.capath.size() == 0 ? NULL : options.capath.c_str(),
-				  options.cipher.size() == 0 ? NULL : options.cipher.c_str()) == 0)
+					  options.key.size() == 0 ? NULL : options.key.c_str(),
+					  options.cert.size() == 0 ? NULL : options.cert.c_str(),
+					  options.ca.size() == 0 ? NULL : options.ca.c_str(),
+					  options.capath.size() == 0 ? NULL : options.capath.c_str(),
+					  options.cipher.size() == 0 ? NULL : options.cipher.c_str()) == 0)
 		type |= CLIENT_SSL;
 }
 

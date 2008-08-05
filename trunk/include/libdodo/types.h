@@ -72,7 +72,7 @@ namespace dodo
 			 * @param second defines second string to compare
 			 */
 			bool operator()(const dodoString &first, const dodoString &second);
-			
+
 			/**
 			 * compares strings
 			 * @param first defines first string to compare
@@ -94,7 +94,7 @@ namespace dodo
 			 * @param second defines second string to compare
 			 */
 			bool operator()(const dodoString &first, const dodoString &second);
-			
+
 			/**
 			 * compares strings
 			 * @param first defines first string to compare
@@ -132,16 +132,16 @@ namespace dodo
 #define dodoArray    std::vector
 #endif
 
-	typedef dodoArray<dodoString> dodoStringArray;                                    ///< array of strings
+	typedef dodoArray<dodoString> dodoStringArray;                                        ///< array of strings
 
 #define dodoList std::list
 
-	typedef dodoList<dodoString> dodoStringList;                                    ///< array of strings
+	typedef dodoList<dodoString> dodoStringList;                                                    ///< array of strings
 
-	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;                ///< hash of strings
-	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;      ///< hash of strings[case insensitive]
+	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;                    ///< hash of strings
+	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;          ///< hash of strings[case insensitive]
 
-	typedef dodoArray<dodoStringMap> dodoStringMapArray;                                        ///< array of hashes of string
+	typedef dodoArray<dodoStringMap> dodoStringMapArray;                                            ///< array of hashes of string
 
 	/**
 	 * predifined constants

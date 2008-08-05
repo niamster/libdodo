@@ -47,7 +47,7 @@ namespace dodo
 	namespace graphics
 	{
 		/**
-		 * @enum transformRotateDirAngEnum defines rotation options
+		 * @enum transformRotateDirectionAngleEnum defines rotation options
 		 */
 		enum transformRotateDirectionAngleEnum
 		{
@@ -117,7 +117,7 @@ namespace dodo
 
 			protected:
 
-				image *im;///< image to perform transformations
+				image *im;                ///< image to perform transformations
 		};
 
 	};

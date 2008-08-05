@@ -39,7 +39,7 @@ const dodoString logger::levels[] = { "INFO",
 									  "ALERT",
 									  "CRITICAL",
 									  "EMERGENCY",
-									  "USER"};
+									  "USER" };
 
 //-------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ const int logger::syslogLevels[] = { LOG_EMERG,
 									 LOG_NOTICE,
 									 LOG_INFO,
 									 LOG_DEBUG,
-									 LOG_USER};
+									 LOG_USER };
 
 //-------------------------------------------------------------------
 

@@ -229,13 +229,13 @@ namespace dodo
 
 					private:
 
-						dodoString stringValue;                                                         ///< string value of node
-						dodoMap<dodoString, node, dodoMapStringCompare> objectValue;                    ///< object value of node
-						dodoArray<node> arrayValue;                                                     ///< array value of node
-						bool booleanValue;                                                              ///< boolean value of node
-						long numericValue;                                                              ///< numeric value of node
+						dodoString stringValue;                                                                                 ///< string value of node
+						dodoMap<dodoString, node, dodoMapStringCompare> objectValue;                                            ///< object value of node
+						dodoArray<node> arrayValue;                                                                             ///< array value of node
+						bool booleanValue;                                                                                      ///< boolean value of node
+						long numericValue;                                                                                      ///< numeric value of node
 
-						short valueDataType;                                                            ///< data type of value
+						short valueDataType;                                                                                    ///< data type of value
 				};
 			};
 		};

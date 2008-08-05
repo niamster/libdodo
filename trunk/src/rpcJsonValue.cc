@@ -45,29 +45,29 @@ value::jsonToValue(dodo::data::format::json::node &node)
 			val.stringValue = node.stringValue;
 
 			break;
-		
+
 		case dodo::data::format::json::DATATYPE_OBJECT:
 		{
 			val.valueDataType = DATATYPE_STRUCT;
 
 			dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>::iterator i = node.objectValue.begin(), j = node.objectValue.end();
-			for (;i!=j;++i)
+			for (; i != j; ++i)
 				val.structValue.insert(make_pair(i->first, jsonToValue(i->second)));
 
 			break;
 		}
-		
+
 		case dodo::data::format::json::DATATYPE_ARRAY:
 		{
 			val.valueDataType = DATATYPE_ARRAY;
 
 			dodoArray<dodo::data::format::json::node>::iterator i = node.arrayValue.begin(), j = node.arrayValue.end();
-			for (;i!=j;++i)
+			for (; i != j; ++i)
 				val.arrayValue.push_back(jsonToValue(*i));
 
 			break;
 		}
-		
+
 		case dodo::data::format::json::DATATYPE_BOOLEAN:
 
 			val.valueDataType = DATATYPE_BOOLEAN;
@@ -75,7 +75,7 @@ value::jsonToValue(dodo::data::format::json::node &node)
 			val.booleanValue = node.booleanValue;
 
 			break;
-		
+
 		case dodo::data::format::json::DATATYPE_NUMERIC:
 
 			val.valueDataType = DATATYPE_INTEGER;
@@ -83,7 +83,7 @@ value::jsonToValue(dodo::data::format::json::node &node)
 			val.integerValue = node.numericValue;
 
 			break;
-		
+
 		case dodo::data::format::json::DATATYPE_NULL:
 
 			val.valueDataType = DATATYPE_BOOLEAN;

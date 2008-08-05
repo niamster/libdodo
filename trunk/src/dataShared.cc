@@ -39,7 +39,7 @@ shared::shared(shared &sts)
 //-------------------------------------------------------------------
 
 shared::shared(const char   *a_key) : mshared(NULL),
-								  size(0)
+									  size(0)
 {
 	if (a_key == NULL)
 	{

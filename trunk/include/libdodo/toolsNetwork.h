@@ -55,13 +55,13 @@ namespace dodo
 		 */
 		struct __interfaceInfo
 		{
-			dodoString address;                 ///< ip address of the interface
-			dodoString broadcast;               ///< broadcast address of the interface
-			dodoString netmask;                 ///< netmask of the interface
-			dodoString hwaddr;                  ///< harware address of the interface(MAC)
+			dodoString address;                             ///< ip address of the interface
+			dodoString broadcast;                           ///< broadcast address of the interface
+			dodoString netmask;                             ///< netmask of the interface
+			dodoString hwaddr;                              ///< harware address of the interface(MAC)
 
-			bool up;                            ///< true if interface is up
-			bool loop;                          ///< true if interface is a loopback
+			bool up;                                        ///< true if interface is up
+			bool loop;                                      ///< true if interface is a loopback
 		};
 
 		/**
@@ -69,9 +69,9 @@ namespace dodo
 		 */
 		struct __hostInfo
 		{
-			dodoString name;                            ///< original name of the host
-			dodoStringArray aliases;                    ///< aliases of the host
-			dodoStringArray addresses;                  ///< addresses of the host
+			dodoString name;                                        ///< original name of the host
+			dodoStringArray aliases;                                ///< aliases of the host
+			dodoStringArray addresses;                              ///< addresses of the host
 		};
 
 		/**
@@ -79,9 +79,9 @@ namespace dodo
 		 */
 		struct __serviceInfo
 		{
-			dodoString name;                            ///< original name of the service
-			dodoStringArray aliases;                    ///< aliases of the service
-			int port;                                   ///< port of the service
+			dodoString name;                                        ///< original name of the service
+			dodoStringArray aliases;                                ///< aliases of the service
+			int port;                                               ///< port of the service
 		};
 
 		/**

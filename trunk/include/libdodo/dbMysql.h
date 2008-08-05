@@ -52,11 +52,11 @@ namespace dodo
 		 */
 		struct __mysqlSslOptions
 		{
-			dodoString key;                     ///< pathname to the key file
-			dodoString cert;                    ///< pathname to the certificate file
-			dodoString ca;                      ///< pathname to the certificate authority file
-			dodoString capath;                  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
-			dodoString cipher;                  ///< allowed SSL ciphers
+			dodoString key;                                 ///< pathname to the key file
+			dodoString cert;                                ///< pathname to the certificate file
+			dodoString ca;                                  ///< pathname to the certificate authority file
+			dodoString capath;                              ///< pathname to a directory that contains trusted SSL CA certificates in pem format
+			dodoString cipher;                              ///< allowed SSL ciphers
 		};
 
 		/**
@@ -171,12 +171,12 @@ namespace dodo
 
 			private:
 
-				bool empty;                                     ///< true id mysqlRes is empty
+				bool empty;                                                     ///< true id mysqlRes is empty
 
-				MYSQL *mysqlHandle;                             ///< DB handle
-				MYSQL_RES *mysqlResult;                         ///< handle to result
+				MYSQL *mysqlHandle;                                             ///< DB handle
+				MYSQL_RES *mysqlResult;                                         ///< handle to result
 
-				unsigned long type;                             ///< connection type
+				unsigned long type;                                             ///< connection type
 		};
 	};
 };

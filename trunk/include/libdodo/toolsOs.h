@@ -78,8 +78,8 @@ namespace dodo
 		 */
 		struct __usage
 		{
-			long time;                  ///< processor time of execution in miliseconds
-			long mem;                   ///< memory usage in bytes
+			long time;                              ///< processor time of execution in miliseconds
+			long mem;                               ///< memory usage in bytes
 		};
 
 		/**
@@ -87,8 +87,8 @@ namespace dodo
 		 */
 		struct __limits
 		{
-			unsigned long current;              ///< current limit
-			unsigned long max;                  ///< max limit
+			unsigned long current;                          ///< current limit
+			unsigned long max;                              ///< max limit
 		};
 
 		/**
@@ -177,13 +177,13 @@ namespace dodo
 		 */
 		struct  __userInfo
 		{
-			dodoString name;                    ///< user name
-			dodoString pass;                    ///< user password
-			int uid;                            ///< user id
-			int gid;                            ///< user group
-			dodoString realName;                ///< user real name
-			dodoString home;                    ///< user home directory
-			dodoString shell;                   ///< user default shell
+			dodoString name;                                ///< user name
+			dodoString pass;                                ///< user password
+			int uid;                                        ///< user id
+			int gid;                                        ///< user group
+			dodoString realName;                            ///< user real name
+			dodoString home;                                ///< user home directory
+			dodoString shell;                               ///< user default shell
 		};
 
 		/**
@@ -191,9 +191,9 @@ namespace dodo
 		 */
 		struct __groupInfo
 		{
-			dodoString name;                            ///< group name
-			int gid;                                    ///< group id
-			dodoStringArray members;                    ///< group members
+			dodoString name;                                        ///< group name
+			int gid;                                                ///< group id
+			dodoStringArray members;                                ///< group members
 		};
 
 #ifdef DL_EXT
@@ -203,11 +203,11 @@ namespace dodo
 		 */
 		struct __signalMod
 		{
-			char name[64];                              ///< name of the library
-			char discription[256];                      ///< discription of the library
-			char hook[64];                              ///< name of function in module that will be as a hook
-			long signal;                                ///< signal to set handler
-			int blockSignals;                           ///< signals to block during signal handling; -1 to ignore
+			char name[64];                                          ///< name of the library
+			char discription[256];                                  ///< discription of the library
+			char hook[64];                                          ///< name of function in module that will be as a hook
+			long signal;                                            ///< signal to set handler
+			int blockSignals;                                       ///< signals to block during signal handling; -1 to ignore
 		};
 
 		/**
@@ -513,8 +513,8 @@ namespace dodo
 
 #ifdef DL_EXT
 
-				static void *handlesSig[OS_SIGNALS];                            ///< handles to modules
-				static bool handlesOpenedSig[OS_SIGNALS];                       ///< map of opened modules
+				static void *handlesSig[OS_SIGNALS];                                            ///< handles to modules
+				static bool handlesOpenedSig[OS_SIGNALS];                                       ///< map of opened modules
 
 #endif
 				/**
@@ -547,11 +547,11 @@ namespace dodo
 					protected:
 
 #ifdef PTHREAD_EXT
-						static pthread_mutex_t keeper;                         ///< mutex
+						static pthread_mutex_t keeper;                                                 ///< mutex
 #endif
 				};
 
-				static syncThreadSection keeper;                 ///< lock
+				static syncThreadSection keeper;                                 ///< lock
 
 				/**
 				 * @class syncThreadStack provides thread safe behaviour

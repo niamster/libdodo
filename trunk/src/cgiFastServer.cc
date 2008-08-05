@@ -126,7 +126,7 @@ server::stackThread(void *data)
 	exchange cfSTD(&request);
 
 	int res = 0;
-	
+
 	while (true)
 	{
 		pthread_mutex_lock(&acceptM);
@@ -139,7 +139,7 @@ server::stackThread(void *data)
 		handler(cfSTD);
 
 		FCGX_Finish_r(&request);
-		
+
 		if (limit != 0)
 		{
 			pthread_mutex_lock(&requestsM);
@@ -152,7 +152,7 @@ server::stackThread(void *data)
 
 				break;
 			}
-			
+
 			pthread_mutex_lock(&requestsM);
 		}
 	}
@@ -195,7 +195,7 @@ server::listen(unsigned long a_limit)
 		FCGX_InitRequest(&request, 0, 0);
 
 		exchange cfSTD(&request);
-	
+
 		while (true)
 		{
 			if (FCGX_Accept_r(&request) == -1)

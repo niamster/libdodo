@@ -138,7 +138,7 @@ processor::isCDATA(xmlNodePtr chNode)
 
 node
 processor::processFile(const __nodeDef &definition,
-					 const dodoString &file)
+					   const dodoString &file)
 {
 #ifdef LIBXML2_EXT
 
@@ -164,7 +164,7 @@ processor::processFile(const __nodeDef &definition,
 
 node
 processor::processBuffer(const __nodeDef &definition,
-					   const dodoString &buffer)
+						 const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
 
@@ -837,8 +837,8 @@ processor::clear()
 
 dodoString
 processor::make(const node &root,
-					 const dodoString &encoding,
-					 const dodoString &version) const
+				const dodoString &encoding,
+				const dodoString &version) const
 {
 	if (root.name.empty())
 		return __dodostring__;

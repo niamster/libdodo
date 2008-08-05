@@ -66,7 +66,7 @@ client::processCallResult(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-void 
+void
 client::setRequestVersion(const dodoString &version)
 {
 	rqVersion = version;
@@ -74,7 +74,7 @@ client::setRequestVersion(const dodoString &version)
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 client::getResponseVersion()
 {
 	return rpVersion;

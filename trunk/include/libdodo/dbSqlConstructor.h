@@ -54,7 +54,7 @@ namespace dodo
 			};
 
 			/**
-			 * @class sqlConstructor provide construction of SQL request
+			 * @class constructor provide construction of SQL request
 			 * @note all data become escaped and framed with '. Names of fields are not framed with ` to prevent cases as `count(*)`, etc.
 			 * If you want to prevent data framing define preventFraming sqlConstructor class propertie as true but remember
 			 */
@@ -100,9 +100,9 @@ namespace dodo
 
 				protected:
 
-					dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare> fieldTypes;    ///< hash of 'db:table' => 'field => 'type''
+					dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare> fieldTypes;                           ///< hash of 'db:table' => 'field => 'type''
 
-					dodoString request;                                                                                     ///< SQL statement
+					dodoString request;                                                                                                                         ///< SQL statement
 
 					/**
 					 * construct `SELECT function` statement
@@ -156,7 +156,7 @@ namespace dodo
 					 */
 					virtual void additionalCollect(unsigned int qTypeToCheck, const dodoString &collectedString);
 
-	#define SQLCONSTRUCTOR_STATEMENTS 21
+#define SQLCONSTRUCTOR_STATEMENTS 21
 
 					/**
 					 * @enum sqlConstructorStatementEnum defines sqlConstructor statements
@@ -186,15 +186,15 @@ namespace dodo
 						SQLCONSTRUCTOR_STATEMENT_NULL,
 					};
 
-					static const dodoString statements[SQLCONSTRUCTOR_STATEMENTS];                 ///< sqlConstructor statements
+					static const dodoString statements[SQLCONSTRUCTOR_STATEMENTS];                                                              ///< sqlConstructor statements
 
-					static const dodoString sqlAddArr[ACCUMULATOR_ADDREQUESTSTATEMENTS];                                    ///< additional statements(`where`, `limit`, ...)
+					static const dodoString sqlAddArr[ACCUMULATOR_ADDREQUESTSTATEMENTS];                                                        ///< additional statements(`where`, `limit`, ...)
 
-					static const dodoString sqlQStArr[SUBREQUESTSTATEMENTS];                                      ///< statements for complex queries(`union`, ...)
+					static const dodoString sqlQStArr[SUBREQUESTSTATEMENTS];                                                                    ///< statements for complex queries(`union`, ...)
 
-					static const dodoString sqlJoinArr[JOINTYPESTSTATEMENTS];                              ///< statements for `join` queries
+					static const dodoString sqlJoinArr[JOINTYPESTSTATEMENTS];                                                                   ///< statements for `join` queries
 			};
-		};	
+		};
 	};
 };
 

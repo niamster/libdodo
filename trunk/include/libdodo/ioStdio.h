@@ -84,7 +84,7 @@ namespace dodo
 				virtual bool isRedirectedToStderr();
 
 			private:
-				
+
 				/**
 				 * do nothing
 				 * @note stdin/stdout/stderr are already available for I/O
@@ -93,11 +93,11 @@ namespace dodo
 
 				/**
 				 * do nothing
-				 * @note stdin/stdout/stderr shouldn't be closed 
+				 * @note stdin/stdout/stderr shouldn't be closed
 				 */
 				virtual void close();
 
-				bool err;                               ///< true if output stream is redirected to stderr
+				bool err;                                               ///< true if output stream is redirected to stderr
 		};
 	};
 };

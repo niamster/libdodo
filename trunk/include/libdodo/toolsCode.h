@@ -83,13 +83,13 @@ namespace dodo
 		 */
 		struct __url
 		{
-			dodoString protocol;                ///< scheme
-			dodoString host;                    ///< host name
-			dodoString path;                    ///< path to CGI
-			dodoString request;                 ///< CGI request
-			dodoString login;                   ///< login
-			dodoString password;                ///< password
-			dodoString port;                    ///< port
+			dodoString protocol;                            ///< scheme
+			dodoString host;                                ///< host name
+			dodoString path;                                ///< path to CGI
+			dodoString request;                             ///< CGI request
+			dodoString login;                               ///< login
+			dodoString password;                            ///< password
+			dodoString port;                                ///< port
 		};
 
 #ifdef ZLIB_EXT
@@ -284,9 +284,9 @@ namespace dodo
 				 */
 				struct MD5_CTX
 				{
-					unsigned int state[4];                              ///< state[A,B,C,D]
-					unsigned int count[2];                              ///< number of bits, modulo 2^64 (lsb first)
-					unsigned char buffer[64];                           ///< input buffer
+					unsigned int state[4];                                                  ///< state[A,B,C,D]
+					unsigned int count[2];                                                  ///< number of bits, modulo 2^64 (lsb first)
+					unsigned char buffer[64];                                               ///< input buffer
 				};
 
 				/**

@@ -97,11 +97,11 @@ namespace dodo
 
 			protected:
 
-				int shm;                                    ///< shared data descriptor
-				void *mshared;                                ///< shared data
-				unsigned long size;                         ///< size of shared data
+				int shm;                                                        ///< shared data descriptor
+				void *mshared;                                                  ///< shared data
+				unsigned long size;                                             ///< size of shared data
 
-				char *key;                                  ///< key for the shared data
+				char *key;                                                      ///< key for the shared data
 		};
 	};
 };

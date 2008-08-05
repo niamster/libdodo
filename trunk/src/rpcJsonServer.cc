@@ -33,7 +33,7 @@ using namespace dodo::rpc::json;
 
 __additionalData::__additionalData(dodoString &version,
 								   long &id) : version(version),
-								   			   id(id)
+											   id(id)
 {
 }
 
@@ -75,7 +75,7 @@ server::processCallResult(const rpc::response &resp)
 
 //-------------------------------------------------------------------
 
-void 
+void
 server::setResponseVersion(const dodoString &version)
 {
 	rpVersion = version;
@@ -119,7 +119,7 @@ server::serve()
 	{
 		rpc::response response;
 		response.fault(dodoString("An unknown error."));
-		
+
 		rpId = rqId;
 
 		sendTextRequest(processCallResult(response));

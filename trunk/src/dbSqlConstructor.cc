@@ -106,8 +106,8 @@ constructor::~constructor()
 
 void
 constructor::setFieldType(const dodoString &table,
-                             const dodoString &field,
-                             short type)
+						  const dodoString &field,
+						  short type)
 {
 	fieldTypes[collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + table][field] = type;
 }
@@ -116,7 +116,7 @@ constructor::setFieldType(const dodoString &table,
 
 void
 constructor::additionalCollect(unsigned int qTypeTocheck,
-								  const dodoString &collectedString)
+							   const dodoString &collectedString)
 {
 	if (collectedData.qShift == ACCUMULATOR_NONE)
 		return ;
@@ -548,7 +548,7 @@ constructor::escapeFields(const dodoString &data)
 
 	unsigned long size = data.size();
 
-	for (unsigned long i=0;i<size;++i)
+	for (unsigned long i = 0; i < size; ++i)
 	{
 		if (data[i] == '\\')
 			temp.append("\\\\");

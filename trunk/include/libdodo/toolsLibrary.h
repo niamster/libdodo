@@ -95,7 +95,7 @@ namespace dodo
 				 */
 				virtual void *operator[](const dodoString &name);
 
-	#ifdef BFD_EXT
+#ifdef BFD_EXT
 
 				/**
 				 * get symbols from the library
@@ -104,11 +104,11 @@ namespace dodo
 				 */
 				static dodoStringArray getSymbols(const dodoString &path);
 
-	#endif
+#endif
 
 			protected:
 
-				void *handle;                ///< handle to library
+				void *handle;                                ///< handle to library
 		};
 	};
 };

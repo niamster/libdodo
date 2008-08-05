@@ -45,7 +45,7 @@ namespace dodo
 			/**
 			 * @class exchange provides interface to  CGI I/O functionality
 			 */
-			class exchange : virtual public cgi::exchange, 
+			class exchange : virtual public cgi::exchange,
 							 virtual public io::stdio
 			{
 				private:

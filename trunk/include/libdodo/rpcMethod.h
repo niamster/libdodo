@@ -45,7 +45,7 @@ namespace dodo
 			class method;
 			class server;
 		};
-		
+
 		namespace json
 		{
 			class method;
@@ -95,8 +95,8 @@ namespace dodo
 
 			private:
 
-				dodoArray<value> arguments;                     ///< method arguments
-				dodoString name;                                ///< method name
+				dodoArray<value> arguments;                                     ///< method arguments
+				dodoString name;                                                ///< method name
 		};
 	};
 };

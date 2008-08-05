@@ -110,7 +110,7 @@ processor::preProcessString(const dodoString &buffer)
 
 dodoString
 processor::_preProcessString(const dodoString &buffer,
-								const dodoString &path)
+							 const dodoString &path)
 {
 	dodoArray<unsigned long> newLinePos = detectNewLines(buffer);
 
@@ -206,7 +206,7 @@ processor::preProcess(const dodoString &path)
 
 unsigned long
 processor::getLineNumber(const dodoArray<unsigned long> &newLinePos,
-							unsigned long pos)
+						 unsigned long pos)
 {
 	dodoArray<unsigned long>::const_iterator o(newLinePos.begin()), p(newLinePos.end());
 

@@ -55,7 +55,7 @@ namespace dodo
 					/**
 					 * explanations for libdodo defined errors
 					 */
-	#define PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR "Share not found."
+#define PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR "Share not found."
 
 					/**
 					 * IDs of functions where exception might be thrown
