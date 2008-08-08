@@ -104,7 +104,7 @@ namespace dodo
 
 				/**
 				 * scale transform
-				 * @param width defines size of the transform
+				 * @param size defines size of the transform
 				 * @note scales transform by reducing size of the greater side saving proportions
 				 */
 				virtual void scale(unsigned long size);
