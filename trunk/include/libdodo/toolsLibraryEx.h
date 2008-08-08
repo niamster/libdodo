@@ -36,7 +36,7 @@
 
 namespace dodo
 {
-	namespace toosl
+	namespace tools
 	{
 		/**
 		 * libdodo defined errors
