@@ -275,7 +275,7 @@ namespace dodo
 		 */
 
 		/**
-		 * @class cgi provides SERVER functionality
+		 * @class server provides SERVER functionality
 		 * @note do not read stdin before contructing object of this class!
 		 * object of this class should be contructed in the early begin
 		 */

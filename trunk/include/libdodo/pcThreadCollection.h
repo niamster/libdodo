@@ -68,7 +68,7 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __thredInfo defines process information
+			 * @struct __threadInfo defines process information
 			 */
 			struct __threadInfo
 			{

@@ -68,7 +68,7 @@ namespace dodo
 		 */
 
 		/**
-		 * @struct __mktime defines time info
+		 * @struct __time defines time info
 		 */
 		struct __time
 		{

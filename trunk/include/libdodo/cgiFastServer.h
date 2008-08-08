@@ -61,7 +61,7 @@ namespace dodo
 			typedef void (*serverHandler)(exchange &ex);
 
 			/**
-			 * @class fast provides fast CGI functionality
+			 * @class server provides fast CGI functionality
 			 */
 			class server
 			{

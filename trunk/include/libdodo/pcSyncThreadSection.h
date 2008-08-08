@@ -51,7 +51,7 @@ namespace dodo
 			namespace thread
 			{
 				/**
-				 * @class mutex performs atomic locks using mutexes
+				 * @class section performs atomic locks using mutexes
 				 */
 				class section : public sync::section
 				{
