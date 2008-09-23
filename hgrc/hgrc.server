@@ -10,6 +10,7 @@ hgext.notify =
 
 [hooks]
 changegroup.notify = python:hgext.notify.hook
+changegroup.mirror = for i in $(< mirrors); do hg push $i; done
 
 [email]
 method = /usr/sbin/sendmail

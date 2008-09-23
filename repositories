@@ -1,2 +1,5 @@
-http://www.bitbucket.org/Niam/libdodo
+main:
 http://libdodo.org/hg/libdodo
+
+mirrors:
+http://www.bitbucket.org/Niam/libdodo
