@@ -1257,6 +1257,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
+  --disable-libwrap       disable libwrap support
   --disable-deque         use std::vector instead of std::deque
   --disable-io-xexec-support
                           compile io:: w/o xexec support
@@ -3449,6 +3450,23 @@ then
 	RESULT="$RESULT\nProfiling\t\t\t\t\t\tenabled"
 else
 	RESULT="$RESULT\nProfiling\t\t\t\t\t\tdisabled"
+fi
+
+# Check whether --enable-libwrap was given.
+if test "${enable_libwrap+set}" = set; then
+  enableval=$enable_libwrap; LIBWRAP="$enableval"
+else
+  LIBWRAP="yes"
+fi
+
+
+if test "$LIBWRAP" = "yes"
+then
+	LDFLAGS="$LDFLAGS -lwrap"
+
+	RESULT="$RESULT\nlibwrap\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nlibwrap\t\t\t\t\t\tdisabled"
 fi
 
 # Check whether --enable-deque was given.
