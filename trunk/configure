@@ -3462,9 +3462,85 @@ fi
 
 if test "$LIBWRAP" = "yes"
 then
-	LDFLAGS="$LDFLAGS -lwrap"
 
-	RESULT="$RESULT\nlibwrap\t\t\t\t\t\tenabled"
+{ echo "$as_me:$LINENO: checking for hosts_access in -lwrap" >&5
+echo $ECHO_N "checking for hosts_access in -lwrap... $ECHO_C" >&6; }
+if test "${ac_cv_lib_wrap_hosts_access+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lwrap  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char hosts_access ();
+int
+main ()
+{
+return hosts_access ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_wrap_hosts_access=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_wrap_hosts_access=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_wrap_hosts_access" >&5
+echo "${ECHO_T}$ac_cv_lib_wrap_hosts_access" >&6; }
+if test $ac_cv_lib_wrap_hosts_access = yes; then
+  LIBWRAP="yes"
+else
+  LIBWRAP="no"; { echo "$as_me:$LINENO: WARNING: libwrap lib was not found" >&5
+echo "$as_me: WARNING: libwrap lib was not found" >&2;}
+fi
+
+
+	if test "$LIBWRAP" = "yes"
+	then
+		LDFLAGS="$LDFLAGS -lwrap"
+
+		RESULT="$RESULT\nlibwrap\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nlibwrap\t\t\t\t\t\tdisabled"
+	fi
+
 else
 	RESULT="$RESULT\nlibwrap\t\t\t\t\t\tdisabled"
 fi
@@ -3541,8 +3617,7 @@ fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib -lsqlite3"
 
-
-{ echo "$as_me:$LINENO: checking for sqlite3_table_column_metadata in -lsqlite3" >&5
+		{ echo "$as_me:$LINENO: checking for sqlite3_table_column_metadata in -lsqlite3" >&5
 echo $ECHO_N "checking for sqlite3_table_column_metadata in -lsqlite3... $ECHO_C" >&6; }
 if test "${ac_cv_lib_sqlite3_sqlite3_table_column_metadata+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
