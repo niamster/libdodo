@@ -45,6 +45,8 @@
 #include <libdodo/toolsNetworkEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
+#include <libdodo/ioNetwork.h>
+#include <libdodo/toolsCode.h>
 
 namespace dodo
 {
@@ -140,6 +142,30 @@ namespace dodo
 				 */
 				static __serviceInfo getServiceInfo(int port, const dodoString &protocol);
 
+				/**
+				 * send mail using sendmail external program
+				 * @param to defines mail address[possible multiply separated with coma]
+				 * @param subject defines a subject of the letter;for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`
+				 * @param message defines a message to send
+				 * @param headers defines extra headers
+				 * @param path defines path to sendmail
+				 */
+				static void mail(const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __dodostring__, const dodoString &path = "/usr/sbin/sendmail");
+
+				/**
+				 * send mail
+				 * @param host defines host of smtp server(ip)
+				 * @param port defines port of smtp server
+				 * @param to defines mail address where to send[possible multiply separated with coma]
+				 * @param from defines mail address of sender
+				 * @param subject defines a subject of the letter;for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`
+				 * @param message defines a message to send
+				 * @param login defines a login for auth
+				 * @param pass defines a password for auth
+				 * @param headers defines extra headers[each must ends with `\r\n`]
+				 * @note if login is emty no auth is performed
+				 */
+				static void mail(const dodoString &host, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __dodostring__, const dodoString &pass = __dodostring__, const dodoString &headers = __dodostring__);
 		};
 	};
 };

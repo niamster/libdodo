@@ -39,6 +39,21 @@ namespace dodo
 	namespace tools
 	{
 		/**
+		 * libdodo defined errors
+		 */
+		enum networkExR
+		{
+			NETWORKEX_BADMAILHELO,
+			NETWORKEX_BADMAILAUTH,
+		};
+
+		/**
+		 * explanations for libdodo defined errors
+		 */
+#define TOOLSNETWORKEX_BADMAILHELO_STR    "Error occurd while sending EHLO."
+#define TOOLSNETWORKEX_BADMAILAUTH_STR    "Error during authentication."
+
+		/**
 		 * IDs of functions where exception might be thrown
 		 */
 		enum networkFunctionsID
@@ -52,6 +67,7 @@ namespace dodo
 			NETWORKEX_SETLOCALDOMAIN,
 			NETWORKEX_GETINTERFACEINFO,
 			NETWORKEX_GETINTERFACESNAMES,
+			NETWORKEX_MAIL,
 		};
 	};
 };

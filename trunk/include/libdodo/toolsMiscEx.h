@@ -43,28 +43,23 @@ namespace dodo
 		 */
 		enum miscExR
 		{
-			MISCEX_BADMAILHELO,
-			MISCEX_BADMAILAUTH,
+			MISCEX_WRONGSTRENGTH,
 			MISCEX_EMPTYARRAY,
-			MISCEX_WRONGSTRENGTH
 		};
 
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define TOOLSMISCEX_BADMAILHELO_STR    "Error occurd while sending EHLO."
-#define TOOLSMISCEX_BADMAILAUTH_STR    "Error during authentication."
-#define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty."
 #define TOOLSMISCEX_WRONGSTRENGTH_STR  "Wrong strength argument."
+#define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty."
 
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
 		enum miscFunctionsID
 		{
-			MISCEX_MAIL,
+			MISCEX_RANDOM,
 			MISCEX_IMPLODE,
-			MISCEX_RANDOM
 		};
 	};
 };

@@ -37,6 +37,7 @@
 #include <libdodo/toolsMisc.h>
 #include <libdodo/cgiFastServer.h>
 #include <libdodo/cgiServer.h>
+#include <libdodo/toolsFilesystem.h>
 
 namespace dodo
 {

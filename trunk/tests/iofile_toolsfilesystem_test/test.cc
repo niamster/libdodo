@@ -7,6 +7,7 @@
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/ioFile.h>
 #include <libdodo/toolsFilesystem.h>
+#include <libdodo/toolsCode.h>
 
 #include <iostream>
 

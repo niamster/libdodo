@@ -56,9 +56,6 @@ int main(int argc, char **argv)
 
 		dodoString rnd = tools::misc::stringRandom(12);
 		cout << tools::code::MD5Hex(rnd) << endl;
-
-		//tools::misc::mail("niam", "test", "test");
-		//tools::misc::mail("127.0.0.1", 25, "niam@niam.mu", "niam@niam.mu", "test", "test", "niam", "niam");
 	}
 	catch (dodo::exception::basic ex)
 	{

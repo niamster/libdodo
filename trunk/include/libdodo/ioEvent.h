@@ -38,6 +38,7 @@
 #include <libdodo/ioEventEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
+#include <libdodo/ioEventInfo.h>
 #include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo

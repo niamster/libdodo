@@ -61,6 +61,9 @@ int main(int argc, char **argv)
 		for (; i != j; ++i)
 			cout << *i << endl;
 
+		//tools::misc::mail("niam", "test", "test");
+		//tools::misc::mail("127.0.0.1", 25, "niam@niam.mu", "niam@niam.mu", "test", "test", "niam", "niam");
+
 	}
 	catch (dodo::exception::basic ex)
 	{

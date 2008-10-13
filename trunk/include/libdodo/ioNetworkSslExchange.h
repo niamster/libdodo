@@ -60,6 +60,8 @@ namespace dodo
 	{
 		namespace network
 		{
+			class http;
+
 			namespace ssl
 			{
 				/**

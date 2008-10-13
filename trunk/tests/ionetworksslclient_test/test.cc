@@ -7,6 +7,7 @@
 
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetworkSslClient.h>
+#include <libdodo/toolsNetwork.h>
 #include <libdodo/types.h>
 
 #include <iostream>

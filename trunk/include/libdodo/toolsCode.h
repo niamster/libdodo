@@ -114,7 +114,7 @@ namespace dodo
 		{
 			friend class io::network::http;
 			friend class cgi::dialogue;
-			friend class misc;
+			friend class network;
 
 			public:
 
