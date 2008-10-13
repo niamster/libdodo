@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioFifoEx.h
+ *            ioPipeEx.h
  *
  *  Tue Jul 1 15:34:57 2008
  *  Copyright  2008  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOFIFOEX_H_
-#define _IOFIFOEX_H_
+#ifndef _IOPIPEEX_H_
+#define _IOPIPEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -41,32 +41,32 @@ namespace dodo
 		/**
 		 * libdodo defined errors
 		 */
-		enum fifoExR
+		enum pipeExR
 		{
-			FIFOEX_FIFONOTOPENED,
+			PIPEEX_PIPENOTOPENED,
 		};
 
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define IOFIFOEX_FIFONOTOPENED_STR                  "FIFO was not opened or assigned."
+#define IOPIPEEX_PIPENOTOPENED_STR                  "PIPE was not opened or assigned."
 
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum fifoFunctionsID
+		enum pipeFunctionsID
 		{
-			FIFOEX_CLOSE,
-			FIFOEX_CLONE,
-			FIFOEX_OPEN,
-			FIFOEX__READ,
-			FIFOEX__WRITE,
-			FIFOEX__READSTREAM,
-			FIFOEX_FLUSH,
-			FIFOEX_PEERINFO,
-			FIFOEX_BLOCK,
-			FIFOEX_GETINDESCRIPTOR,
-			FIFOEX_GETOUTDESCRIPTOR,
+			PIPEEX_CLOSE,
+			PIPEEX_CLONE,
+			PIPEEX_OPEN,
+			PIPEEX__READ,
+			PIPEEX__WRITE,
+			PIPEEX__READSTREAM,
+			PIPEEX_FLUSH,
+			PIPEEX_PEERINFO,
+			PIPEEX_BLOCK,
+			PIPEEX_GETINDESCRIPTOR,
+			PIPEEX_GETOUTDESCRIPTOR,
 		};
 	};
 };

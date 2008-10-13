@@ -6,7 +6,7 @@
 
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/pcThreadCollection.h>
-#include <libdodo/ioFifo.h>
+#include <libdodo/ioPipe.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsMisc.h>
@@ -28,8 +28,8 @@ threadRead(void *data)
 	{
 		dodoString str;
 
-		io::fifo *fifo = (io::fifo *)data;
-		fifo->readStreamString(str);
+		io::pipe *pipe = (io::pipe *)data;
+		pipe->readStreamString(str);
 		
 		cout << str;
 		cout.flush();
@@ -55,9 +55,9 @@ threadWrite(void *data)
 	{
 		dodoString str;
 
-		io::fifo *fifo = (io::fifo *)data;
-		fifo->writeStreamString(tools::time::byFormat("%H:%M:%S\n", tools::time::now()));
-		fifo->flush();
+		io::pipe *pipe = (io::pipe *)data;
+		pipe->writeStreamString(tools::time::byFormat("%H:%M:%S\n", tools::time::now()));
+		pipe->flush();
 
 	}
 	catch (dodo::exception::basic ex)
@@ -79,23 +79,23 @@ int main(int argc, char **argv)
 
 		collection j;
 
-		io::fifo fifo1;
-		fifo1.open();
+		io::pipe pipe1;
+		pipe1.open();
 
-		///< write first to avoid deadlock due to io::fifo is threadsafe and here one object is used
-		j.addNRun(&threadWrite, (void *)&fifo1);
+		///< write first to avoid deadlock due to io::pipe is threadsafe and here one object is used
+		j.addNRun(&threadWrite, (void *)&pipe1);
 		tools::os::sleep(1);
-		j.addNRun(&threadRead, (void *)&fifo1);
+		j.addNRun(&threadRead, (void *)&pipe1);
 
 		j.wait();
 
-		io::fifo fifo2 = fifo1;
+		io::pipe pipe2 = pipe1;
 		//or clone
-		//fifo2.clone(fifo1);
+		//pipe2.clone(pipe1);
 
 		///< use a copy, so no need to keep an order
-		j.addNRun(&threadRead, (void *)&fifo1);
-		j.addNRun(&threadWrite, (void *)&fifo2);
+		j.addNRun(&threadRead, (void *)&pipe1);
+		j.addNRun(&threadWrite, (void *)&pipe2);
 		
 		j.wait();
 

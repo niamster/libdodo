@@ -44,7 +44,7 @@ OBJECTS:=dbAccumulator.o \
 	ioEvent.o \
 	ioEventInfo.o \
 	ioStdio.o \
-	ioFifo.o \
+	ioPipe.o \
 	ioSsl.o \
 	ioNetworkHttp.o \
 	ioNetworkConnection.o \

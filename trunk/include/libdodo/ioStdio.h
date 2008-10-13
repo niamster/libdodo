@@ -40,7 +40,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/ioFifo.h>
+#include <libdodo/ioPipe.h>
 #include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo
@@ -50,7 +50,7 @@ namespace dodo
 		/**
 		 * @class stdio provides interface for stdin/stdout/stderr I/O operations
 		 */
-		class stdio : virtual public fifo
+		class stdio : virtual public pipe
 		{
 			private:
 

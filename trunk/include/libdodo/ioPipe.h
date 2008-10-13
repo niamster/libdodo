@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioFifo.h
+ *            ioPipe.h
  *
  *  Tue Jul 1 15:33:57 2008
  *  Copyright  2008  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOFIFO_H_
-#define _IOFIFO_H_
+#ifndef _IOPIPE_H_
+#define _IOPIPE_H_
 
 #include <fcntl.h>
 #include <sys/un.h>
@@ -40,7 +40,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/toolsMisc.h>
-#include <libdodo/ioFifoEx.h>
+#include <libdodo/ioPipeEx.h>
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioNetwork.h>
@@ -51,18 +51,18 @@ namespace dodo
 	namespace io
 	{
 		/**
-		 * @enum fifoOperationTypeEnum defines type of operation for hook
+		 * @enum pipeOperationTypeEnum defines type of operation for hook
 		 */
-		enum fifoOperationTypeEnum
+		enum pipeOperationTypeEnum
 		{
-			FIFO_OPERATION_OPEN = 128,
-			FIFO_OPERATION_CLOSE
+			PIPE_OPERATION_OPEN = 128,
+			PIPE_OPERATION_CLOSE
 		};
 
 		/**
-		 * @class fifo provides interface for FIFO I/O operations
+		 * @class pipe provides interface for PIPE I/O operations
 		 */
-		class fifo : virtual public channel
+		class pipe : virtual public channel
 		{
 			public:
 
@@ -70,24 +70,24 @@ namespace dodo
 				 * copy constructor
 				 * @note xexec object is not copied
 				 */
-				fifo(const fifo &fd);
+				pipe(const pipe &fd);
 
 				/**
 				 * constructor
 				 */
-				fifo();
+				pipe();
 
 				/**
 				 * destructor
 				 */
-				virtual ~fifo();
+				virtual ~pipe();
 
 				/**
-				 * clone fifo object
+				 * clone pipe object
 				 * @param fd defines object to clone
 				 * @note xexec object is not copied
 				 */
-				virtual void clone(const fifo &fd);
+				virtual void clone(const pipe &fd);
 
 				/**
 				 * @return info about source of inputting
@@ -96,12 +96,12 @@ namespace dodo
 				network::__peerInfo peerInfo();
 
 				/**
-				 * open fifo
+				 * open pipe
 				 */
 				virtual void open();
 
 				/**
-				 * close fifo
+				 * close pipe
 				 */
 				virtual void close();
 
@@ -121,8 +121,8 @@ namespace dodo
 				 */
 				virtual void block(bool flag);
 
-				int inFifoBuffer;                                           ///< input buffer
-				int outFifoBuffer;                                          ///< output buffer
+				int inPipeBuffer;                                           ///< input buffer
+				int outPipeBuffer;                                          ///< output buffer
 
 			protected:
 
