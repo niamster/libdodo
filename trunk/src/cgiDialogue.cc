@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiServer.cc
+ *            cgiDialogue.cc
  *
  *  Sat Sep  18 17:18:19 2005
  *  Copyright  2005  Ni@m
@@ -27,11 +27,11 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/cgiServer.h>
+#include <libdodo/cgiDialogue.h>
 
 using namespace dodo::cgi;
 
-const char *server::environmentStatements[] = { "REQUEST_METHOD",
+const char *dialogue::environmentStatements[] = { "REQUEST_METHOD",
 												"REQUEST_URI",
 												"QUERY_STRING",
 												"CONTENT_TYPE",
@@ -60,19 +60,19 @@ const char *server::environmentStatements[] = { "REQUEST_METHOD",
 												"REDIRECT_URL",
 												"GATEWAY_INTERFACE",
 												"PATH",
-												"SERVER_SIGNATURE",
-												"SERVER_SOFTWARE",
-												"SERVER_NAME",
-												"SERVER_ADDR",
-												"SERVER_PORT",
-												"SERVER_ADMIN",
-												"SERVER_PROTOCOL",
+												"DIALOGUE_SIGNATURE",
+												"DIALOGUE_SOFTWARE",
+												"DIALOGUE_NAME",
+												"DIALOGUE_ADDR",
+												"DIALOGUE_PORT",
+												"DIALOGUE_ADMIN",
+												"DIALOGUE_PROTOCOL",
 												"SCRIPT_FILENAME",
 												"SCRIPT_NAME",				};
 
 //-------------------------------------------------------------------
 
-const dodoString server::responseHeaderStatements[] = { "Accept-Ranges",
+const dodoString dialogue::responseHeaderStatements[] = { "Accept-Ranges",
 														"Age",
 														"Allow",
 														"Cache-Control",
@@ -91,7 +91,7 @@ const dodoString server::responseHeaderStatements[] = { "Accept-Ranges",
 														"WWW-Authenticate",
 														"X-Powered-By",       };
 
-const dodoString server::responseStatusStatements[] = { "Status: 100 Continue\r\n",
+const dodoString dialogue::responseStatusStatements[] = { "Status: 100 Continue\r\n",
 														"Status: 101 Switching Protocols\r\n",
 														"Status: 200 OK\r\n",
 														"Status: 201 Created\r\n",
@@ -134,48 +134,13 @@ const dodoString server::responseStatusStatements[] = { "Status: 100 Continue\r\
 
 //-------------------------------------------------------------------
 
-__serverFile::__serverFile() : size(0),
-							   error(SERVER_POSTFILEERR_NO_FILE)
+dialogue::dialogue(dialogue &ct) : cgiIO(ct.cgiIO)
 {
 }
 
 //-------------------------------------------------------------------
 
-__serverCookie::__serverCookie(const dodoString &a_name,
-							   const dodoString &a_value,
-							   const dodoString &a_expires,
-							   const dodoString &a_path,
-							   const dodoString &a_domain,
-							   bool a_secure) : name(a_name),
-												value(a_value),
-												expires(a_expires),
-												path(a_path),
-												domain(a_domain),
-												secure(a_secure)
-{
-}
-
-//-------------------------------------------------------------------
-
-__serverCookie::__serverCookie() : secure(false)
-{
-}
-
-//-------------------------------------------------------------------
-
-__serverCookie::__serverCookie(bool a_secure) : secure(a_secure)
-{
-}
-
-//-------------------------------------------------------------------
-
-server::server(server &ct) : cgiIO(ct.cgiIO)
-{
-}
-
-//-------------------------------------------------------------------
-
-server::server(exchange    &a_cf,
+dialogue::dialogue(exchange    &a_cf,
 			   bool silent,
 			   bool a_autocleanFiles,
 			   bool a_postFilesInMem,
@@ -184,10 +149,10 @@ server::server(exchange    &a_cf,
 											   cgiIO(a_cf),
 											   autocleanFiles(a_autocleanFiles),
 											   headersPrinted(false),
-											   returnCode(SERVER_STATUSCODE_OK)
+											   returnCode(CGI_STATUSCODE_OK)
 
 {
-	authInfo.type = SERVER_AUTHTYPE_NONE;
+	authInfo.type = CGI_AUTHTYPE_NONE;
 
 	dodoMap<short, dodoString> headers;
 	initHeaders(headers);
@@ -204,13 +169,13 @@ server::server(exchange    &a_cf,
 	makeContent();
 	makePost();
 
-	make(COOKIES, ENVIRONMENT[SERVER_ENVIRONMENT_HTTPCOOKIE], "; ");
-	make(GET, ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING]);
+	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 //-------------------------------------------------------------------
 
-server::server(exchange    &a_cf,
+dialogue::dialogue(exchange    &a_cf,
 			   dodoMap<short, dodoString> &headers,
 			   bool silent,
 			   bool a_autocleanFiles,
@@ -220,10 +185,10 @@ server::server(exchange    &a_cf,
 											   cgiIO(a_cf),
 											   autocleanFiles(a_autocleanFiles),
 											   headersPrinted(false),
-											   returnCode(SERVER_STATUSCODE_OK)
+											   returnCode(CGI_STATUSCODE_OK)
 
 {
-	authInfo.type = SERVER_AUTHTYPE_NONE;
+	authInfo.type = CGI_AUTHTYPE_NONE;
 
 	initHeaders(headers);
 
@@ -239,13 +204,13 @@ server::server(exchange    &a_cf,
 	makeContent();
 	makePost();
 
-	make(COOKIES, ENVIRONMENT[SERVER_ENVIRONMENT_HTTPCOOKIE], "; ");
-	make(GET, ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING]);
+	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 //-------------------------------------------------------------------
 
-server::~server()
+dialogue::~dialogue()
 {
 	printHeaders();
 
@@ -256,7 +221,7 @@ server::~server()
 //-------------------------------------------------------------------
 
 void
-server::flush()
+dialogue::flush()
 {
 	cgiIO.flush();
 }
@@ -264,7 +229,7 @@ server::flush()
 //-------------------------------------------------------------------
 
 void
-server::printStream(const dodoString &buf)
+dialogue::printStream(const dodoString &buf)
 {
 	printHeaders();
 
@@ -274,7 +239,7 @@ server::printStream(const dodoString &buf)
 //-------------------------------------------------------------------
 
 dodoString
-server::getCharset()
+dialogue::getCharset()
 {
 	unsigned long temp;
 
@@ -292,7 +257,7 @@ server::getCharset()
 }
 
 void
-server::print(const dodoString &buf)
+dialogue::print(const dodoString &buf)
 {
 	printHeaders();
 
@@ -303,15 +268,15 @@ server::print(const dodoString &buf)
 //-------------------------------------------------------------------
 
 void
-server::makeAuth()
+dialogue::makeAuth()
 {
-	dodoString &httpAuthorization = ENVIRONMENT[SERVER_ENVIRONMENT_HTTPAUTHORIZATION];
+	dodoString &httpAuthorization = ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION];
 
 	if (tools::string::contains(httpAuthorization, "Basic"))
 	{
 		dodoStringArray arr = tools::misc::explode(tools::code::decodeBase64(tools::string::trim(httpAuthorization.substr(6), ' ')), ":", 2);
 
-		authInfo.type = SERVER_AUTHTYPE_BASIC;
+		authInfo.type = CGI_AUTHTYPE_BASIC;
 		authInfo.user = arr[0];
 		if (arr.size() == 2)
 			authInfo.password = arr[1];
@@ -320,7 +285,7 @@ server::makeAuth()
 	{
 		if (tools::string::contains(httpAuthorization, "Digest"))
 		{
-			authInfo.type = SERVER_AUTHTYPE_DIGEST;
+			authInfo.type = CGI_AUTHTYPE_DIGEST;
 
 			dodoStringArray parts = tools::misc::explode(httpAuthorization.substr(7), &trim, ",");
 
@@ -380,23 +345,23 @@ server::makeAuth()
 			}
 		}
 		else
-			authInfo.type = SERVER_AUTHTYPE_NONE;
+			authInfo.type = CGI_AUTHTYPE_NONE;
 	}
 }
 
 //-------------------------------------------------------------------
 
 void
-server::requestAuthentication(const dodoString &realm,
+dialogue::requestAuthentication(const dodoString &realm,
 							  short type)
 {
-	returnCode = SERVER_STATUSCODE_UNAUTHORIZED;
+	returnCode = CGI_STATUSCODE_UNAUTHORIZED;
 
-	if (type == SERVER_AUTHTYPE_BASIC)
-		HEADERS.insert(make_pair(SERVER_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
+	if (type == CGI_AUTHTYPE_BASIC)
+		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
 	else
-	if (type == SERVER_AUTHTYPE_DIGEST)
-		HEADERS.insert(make_pair(SERVER_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") +
+	if (type == CGI_AUTHTYPE_DIGEST)
+		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") +
 								 realm +
 								 "\", qop=\"auth\", nonce=\"" +
 								 tools::code::MD5Hex(tools::misc::stringRandom(16)) +
@@ -406,10 +371,10 @@ server::requestAuthentication(const dodoString &realm,
 
 //-------------------------------------------------------------------
 
-__serverAuthInfo
-server::getAuthenticationInfo()
+__cgiAuthInfo
+dialogue::getAuthenticationInfo()
 {
-	__serverAuthInfo info = { authInfo.user, authInfo.type };
+	__cgiAuthInfo info = { authInfo.user, authInfo.type };
 
 	return info;
 }
@@ -417,14 +382,14 @@ server::getAuthenticationInfo()
 //-------------------------------------------------------------------
 
 bool
-server::isAuthenticated(const dodoString &user,
+dialogue::isAuthenticated(const dodoString &user,
 						const dodoString &password)
 {
-	if (authInfo.type == SERVER_AUTHTYPE_BASIC)
+	if (authInfo.type == CGI_AUTHTYPE_BASIC)
 		return(tools::string::equal(user, authInfo.user) && tools::string::equal(password, authInfo.password));
 	else
 	{
-		if (authInfo.type == SERVER_AUTHTYPE_DIGEST)
+		if (authInfo.type == CGI_AUTHTYPE_DIGEST)
 		{
 
 			unsigned char HA[16];
@@ -440,7 +405,7 @@ server::isAuthenticated(const dodoString &user,
 
 			dodoString HA1 = tools::code::binToHex(dodoString((char *)&HA, 16));
 
-			dodoString &methodForAuth = ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD];
+			dodoString &methodForAuth = ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD];
 
 			tools::code::MD5Init(&context);
 			tools::code::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
@@ -474,7 +439,7 @@ server::isAuthenticated(const dodoString &user,
 //-------------------------------------------------------------------
 
 dodoString
-server::getContent()
+dialogue::getContent()
 {
 	return content;
 }
@@ -482,7 +447,7 @@ server::getContent()
 //-------------------------------------------------------------------
 
 void
-server::clearContent()
+dialogue::clearContent()
 {
 	content.clear();
 }
@@ -490,9 +455,9 @@ server::clearContent()
 //-------------------------------------------------------------------
 
 void
-server::cleanTmp()
+dialogue::cleanTmp()
 {
-	dodoMap<dodoString, __serverFile>::iterator i(FILES.begin()), j(FILES.end());
+	dodoMap<dodoString, __cgiFile>::iterator i(FILES.begin()), j(FILES.end());
 	for (; i != j; ++i)
 	{
 		if (!postFilesInMem)
@@ -503,23 +468,23 @@ server::cleanTmp()
 //-------------------------------------------------------------------
 
 void
-server::detectMethod()
+dialogue::detectMethod()
 {
-	if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD], "GET"))
-		method = SERVER_REQUESTMETHOD_GET;
+	if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "GET"))
+		method = CGI_REQUESTMETHOD_GET;
 	else
 	{
-		if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD].empty())
-			method = SERVER_REQUESTMETHOD_POST;
+		if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD].empty())
+			method = CGI_REQUESTMETHOD_POST;
 		else
-			method = SERVER_REQUESTMETHOD_GET_POST;
+			method = CGI_REQUESTMETHOD_GET_POST;
 	}
 }
 
 //-------------------------------------------------------------------
 
 int
-server::getMethod() const
+dialogue::getMethod() const
 {
 	return method;
 }
@@ -527,7 +492,7 @@ server::getMethod() const
 //-------------------------------------------------------------------
 
 void
-server::make(dodoStringMap &val,
+dialogue::make(dodoStringMap &val,
 			 const dodoString &string,
 			 const char       *delim)
 {
@@ -548,36 +513,36 @@ server::make(dodoStringMap &val,
 //-------------------------------------------------------------------
 
 void
-server::makeEnv()
+dialogue::makeEnv()
 {
 	char *env;
 
-	for (int i = 0; i < SERVER_ENVIRONMENTSTATEMENTS; ++i)
+	for (int i = 0; i < CGI_ENVIRONMENTSTATEMENTS; ++i)
 	{
 		env = cgiIO.getenv(environmentStatements[i]);
 
 		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
 	}
 
-	dodoStringArray contentTypeParts = tools::misc::explode(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], &trim, ";");
+	dodoStringArray contentTypeParts = tools::misc::explode(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], &trim, ";");
 	unsigned long size = contentTypeParts.size();
 	if (size > 0)
 	{
 		dodoStringArray::iterator first = contentTypeParts.begin();
 
-		ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE] = *first;
+		ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE] = *first;
 
 		if (size > 1)
 			contenTypeExtensions.insert(contenTypeExtensions.begin(), first + 1, contentTypeParts.end());
 	}
 	else
 	{
-		contentTypeParts = tools::misc::explode(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], &trim, ",");
+		contentTypeParts = tools::misc::explode(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], &trim, ",");
 		if (size > 0)
 		{
 			dodoStringArray::iterator first = contentTypeParts.begin();
 
-			ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE] = *first;
+			ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE] = *first;
 
 			if (size > 1)
 				contenTypeExtensions.insert(contenTypeExtensions.begin(), first + 1, contentTypeParts.end());
@@ -588,7 +553,7 @@ server::makeEnv()
 //-------------------------------------------------------------------
 
 void
-server::initHeaders(dodoMap<short, dodoString> &headers)
+dialogue::initHeaders(dodoMap<short, dodoString> &headers)
 {
 	if (headers.size() > 0)
 	{
@@ -596,26 +561,26 @@ server::initHeaders(dodoMap<short, dodoString> &headers)
 	}
 	else
 	{
-		HEADERS.insert(make_pair(SERVER_RESPONSEHEADER_CONTENTTYPE, dodoString("text/html")));
-		HEADERS.insert(make_pair(SERVER_RESPONSEHEADER_XPOWEREDBY, dodoString(PACKAGE_NAME "/" PACKAGE_VERSION)));
+		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_CONTENTTYPE, dodoString("text/html")));
+		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_XPOWEREDBY, dodoString(PACKAGE_NAME "/" PACKAGE_VERSION)));
 	}
 }
 
 //-------------------------------------------------------------------
 
 void
-server::setResponseStatus(short code)
+dialogue::setResponseStatus(short code)
 {
-	if (code <= SERVER_STATUSCODE_HTTPVERSIONNOTSUPPORTED)
+	if (code <= CGI_STATUSCODE_HTTPVERSIONNOTSUPPORTED)
 		returnCode = code;
 	else
-		throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_SETRESPONSESTATUS, exception::ERRNO_LIBDODO, SERVEREX_WRONGSTATUSCODE, CGISERVEREX_WRONGSTATUSCODE_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_SETRESPONSESTATUS, exception::ERRNO_LIBDODO, DIALOGUEEX_WRONGSTATUSCODE, CGIDIALOGUEEX_WRONGSTATUSCODE_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-server::printHeaders() const
+dialogue::printHeaders() const
 {
 	if (headersPrinted)
 		return;
@@ -630,7 +595,7 @@ server::printHeaders() const
 
 	if (cookies.size() > 0)
 	{
-		dodoList<__serverCookie>::const_iterator i(cookies.begin()), j(cookies.end());
+		dodoList<__cgiCookie>::const_iterator i(cookies.begin()), j(cookies.end());
 		for (; i != j; ++i)
 		{
 			cgiIO.writeStreamString("Set-Cookie: ");
@@ -654,9 +619,9 @@ server::printHeaders() const
 //-------------------------------------------------------------------
 
 void
-server::makeContent()
+dialogue::makeContent()
 {
-	unsigned long inSize = tools::string::stringToUL(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTLENGTH]);
+	unsigned long inSize = tools::string::stringToUL(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTLENGTH]);
 
 	if (inSize <= 0)
 		return ;
@@ -669,15 +634,15 @@ server::makeContent()
 //-------------------------------------------------------------------
 
 void
-server::makePost()
+dialogue::makePost()
 {
 	if (content.size() == 0)
 		return ;
 
-	if (!tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD], "POST"))
+	if (!tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST"))
 		return ;
 
-	if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
+	if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
 	{
 		make(POST, content);
 
@@ -685,9 +650,9 @@ server::makePost()
 	}
 	else
 	{
-		if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
+		if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
 		{
-			if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
+			if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
 				content = tools::code::decodeBase64(content);
 
 			unsigned long temp0;
@@ -728,7 +693,7 @@ server::makePost()
 
 							dodoString post_name = i->substr(temp0, temp1 - temp0);
 
-							__serverFile file;
+							__cgiFile file;
 
 							temp0 = i->find("filename=\"", temp1);
 							temp0 += 10;
@@ -750,7 +715,7 @@ server::makePost()
 								file.data.assign(i->c_str() + temp1, file.size);
 							else
 							{
-								file.error = SERVER_POSTFILEERR_NONE;
+								file.error = CGI_POSTFILEERR_NONE;
 
 								ptr = new char[pathLength];
 								strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
@@ -759,7 +724,7 @@ server::makePost()
 								{
 									delete [] ptr;
 
-									file.error = SERVER_POSTFILEERR_BAD_FILE_NAME;
+									file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
 									FILES.insert(make_pair(post_name, file));
 
 									continue;
@@ -777,26 +742,26 @@ server::makePost()
 										case EACCES:
 										case EISDIR:
 
-											file.error = SERVER_POSTFILEERR_ACCESS_DENY;
+											file.error = CGI_POSTFILEERR_ACCESS_DENY;
 
 											break;
 
 										case ENAMETOOLONG:
 										case ENOTDIR:
 
-											file.error = SERVER_POSTFILEERR_BAD_FILE_NAME;
+											file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
 
 											break;
 
 										case ENOMEM:
 
-											file.error = SERVER_POSTFILEERR_NO_SPACE;
+											file.error = CGI_POSTFILEERR_NO_SPACE;
 
 											break;
 
 										default:
 
-											throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+											throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 									}
 								}
 								else
@@ -804,18 +769,18 @@ server::makePost()
 									if (fwrite(i->c_str() + temp1, file.size, 1, fp) == 0)
 									{
 										if (errno == ENOMEM)
-											file.error = SERVER_POSTFILEERR_NO_SPACE;
+											file.error = CGI_POSTFILEERR_NO_SPACE;
 										else
 										{
 											if (fclose(fp) != 0)
-												throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+												throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-											throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+											throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 										}
 									}
 
 									if (fclose(fp) != 0)
-										throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+										throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 								}
 							}
 
@@ -843,9 +808,9 @@ server::makePost()
 //-------------------------------------------------------------------
 
 const dodo::dodoStringMap &
-server::operator[](short method)
+dialogue::operator[](short method)
 {
-	if (method == SERVER_REQUESTMETHOD_POST)
+	if (method == CGI_REQUESTMETHOD_POST)
 		return POST;
 	else
 		return GET;
@@ -854,13 +819,13 @@ server::operator[](short method)
 //-------------------------------------------------------------------
 
 dodoString
-server::request(const dodoString &varName,
+dialogue::request(const dodoString &varName,
 				short first)
 {
 	dodoString met0 = GET[varName];
 	dodoString met1 = POST[varName];
 
-	if (first == SERVER_REQUESTMETHOD_GET)
+	if (first == CGI_REQUESTMETHOD_GET)
 		if (met0.size() != 0)
 			return met0;
 		else
@@ -876,14 +841,14 @@ server::request(const dodoString &varName,
 //-------------------------------------------------------------------
 
 void
-server::setCookie(const dodoString &name,
+dialogue::setCookie(const dodoString &name,
 				  const dodoString &value,
 				  const dodoString &expires,
 				  const dodoString &path,
 				  const dodoString &domain,
 				  bool secure)
 {
-	__serverCookie temp(secure);
+	__cgiCookie temp(secure);
 	temp.name = name;
 	temp.value = tools::code::encodeUrl(value);
 	temp.expires = expires;
@@ -895,7 +860,7 @@ server::setCookie(const dodoString &name,
 //-------------------------------------------------------------------
 
 void
-server::setCookie(const __serverCookie &cookie)
+dialogue::setCookie(const __cgiCookie &cookie)
 {
 	cookies.push_back(cookie);
 }
@@ -903,7 +868,7 @@ server::setCookie(const __serverCookie &cookie)
 //-------------------------------------------------------------------
 
 dodoString
-server::trim(const dodoString &data)
+dialogue::trim(const dodoString &data)
 {
 	return tools::string::trim(data, ' ');
 }

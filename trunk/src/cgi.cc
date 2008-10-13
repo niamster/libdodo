@@ -1,8 +1,8 @@
 /***************************************************************************
- *            rpcXmlCgiServer.cc
+ *            cgi.cc
  *
- *  Sat Apr 12 23:06:55 2008
- *  Copyright  2008  Ni@m
+ *  Sat Sep  18 17:18:19 2005
+ *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,19 +27,41 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/rpcXmlCgiServer.h>
+#include <libdodo/cgi.h>
 
-using namespace dodo::rpc::xml::cgi;
+using namespace dodo::cgi;
 
-server::server(dodo::cgi::dialogue &a_provider) : rpc::cgi::server(a_provider, "text/xml")
+__cgiFile::__cgiFile() : size(0),
+							   error(CGI_POSTFILEERR_NO_FILE)
 {
 }
 
 //-------------------------------------------------------------------
 
-server::~server()
+__cgiCookie::__cgiCookie(const dodoString &a_name,
+							   const dodoString &a_value,
+							   const dodoString &a_expires,
+							   const dodoString &a_path,
+							   const dodoString &a_domain,
+							   bool a_secure) : name(a_name),
+												value(a_value),
+												expires(a_expires),
+												path(a_path),
+												domain(a_domain),
+												secure(a_secure)
 {
 }
 
 //-------------------------------------------------------------------
 
+__cgiCookie::__cgiCookie() : secure(false)
+{
+}
+
+//-------------------------------------------------------------------
+
+__cgiCookie::__cgiCookie(bool a_secure) : secure(a_secure)
+{
+}
+
+//-------------------------------------------------------------------

@@ -43,7 +43,7 @@
 #include <libdodo/ioNetworkHttpEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsRegexp.h>
-#include <libdodo/cgiServer.h>
+#include <libdodo/cgiDialogue.h>
 
 namespace dodo
 {
@@ -111,7 +111,7 @@ namespace dodo
 				__httpResponse();
 
 				dodoMap<short, dodoString> headers;                                     ///< response headers[see httpResponseHeaderEnum]
-				dodoArray<cgi::__serverCookie> cookies;                                 ///< cookies from the server
+				dodoArray<cgi::__cgiCookie> cookies;                                 ///< cookies from the server
 				dodoString data;                                                        ///< response data
 				short code;                                                             ///< response code
 				bool redirected;                                                        ///< true if redirection was performeed
@@ -290,7 +290,7 @@ namespace dodo
 					 * @return cookie parse from the header
 					 * @param header defines `Set-Cookie` value
 					 */
-					virtual cgi::__serverCookie parseCookie(const dodoString &header);
+					virtual cgi::__cgiCookie parseCookie(const dodoString &header);
 
 					/**
 					 * @enum getContentStatusEnum defines status of getContent routine

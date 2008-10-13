@@ -5,7 +5,7 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/cgiServer.h>
+#include <libdodo/cgiDialogue.h>
 #include <libdodo/dataTplProcessor.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/cgiFastServer.h>
@@ -19,7 +19,7 @@ using namespace std;
 
 using namespace dodo;
 using namespace data::tpl;
-using cgi::fast::exchange;
+using cgi::exchange;
 using dodo::pc::sync::thread::data::single;
 
 single sh;
@@ -29,7 +29,7 @@ cgif(exchange &fcgi)
 {
 	using namespace cgi;
 
-	server cgit(fcgi, true);
+	dialogue cgit(fcgi, true);
 
 	cgit.setCookie("test", "Ni@m");
 
@@ -46,7 +46,7 @@ cgif(exchange &fcgi)
 	fcgi.writeStreamString(cgit.GET["a"] + "<br>");
 	fcgi.writeStreamString(cgit.POST["hidden"] + "<br>");
 	fcgi.writeStreamString(cgit.POST["test"] + "<br>");
-	fcgi.writeStreamString(cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
+	fcgi.writeStreamString(cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
 	fcgi.writeStreamString(cgit.COOKIES["test"] + "<br>");
 	fcgi.writeStreamString(tools::string::iToString(cgit.FILES["file"].size) + "<br>");
 	fcgi.writeStreamString("<br>");
@@ -100,16 +100,14 @@ int main(int argc, char **argv)
 
 		using namespace cgi::fast;
 
-		server cf;
+		server cf(true, 10, 5);
 		if (!cf.isFastCgi())
 		{
 			cout << "Not a fastCGI.";
 			cout.flush();
 		}
 
-		cf.setHandler(&cgif);
-
-		cf.listen(5);
+		cf.listen(&cgif);
 
 		delete shared;
 	}

@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 		dodoString o;
 
 		st.inSize = 33;
-		st.inFifoBuffer = 20;
+		st.inPipeBuffer = 20;
 
 		st.readString(o);
 

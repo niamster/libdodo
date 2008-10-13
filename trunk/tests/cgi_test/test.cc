@@ -5,47 +5,49 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/cgiServer.h>
+#include <libdodo/cgiDialogue.h>
+#include <libdodo/cgiBasicServer.h>
 #include <libdodo/cgiBasicExchange.h>
 #include <libdodo/dataTplProcessor.h>
 
 #include <iostream>
 
 using namespace dodo;
-using namespace cgi;
 using namespace data::tpl;
+using cgi::exchange;
 
 using namespace std;
 
-int main(int argc, char **argv)
+void
+cgif(exchange &cgiio)
 {
-	basic::exchange cgiio;
+	using namespace cgi;
 
 	///first type: pass headers and print them immediately
 	//	dodoStringMap head;
-	//	head[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
+	//	head[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 	//	server cgit(&cgiio, head, false);
 
 	///second type: use default headers and do not print them immediately
-	server cgit(cgiio, true);
+	dialogue cgit(cgiio, true);
 
 	dodoString user = cgit.getAuthenticationInfo().user;
 
 	if (cgit.GET["a"] == "forbidden")
 	{
-		cgit.setResponseStatus(SERVER_STATUSCODE_FORBIDDEN);
+		cgit.setResponseStatus(CGI_STATUSCODE_FORBIDDEN);
 
 		cgit.printStream("FORBIDDEN");
 
-		return 0;
+		return ;
 	}
 	else if (cgit.GET["a"] == "notfound")
 	{
-		cgit.setResponseStatus(SERVER_STATUSCODE_NOTFOUND);
+		cgit.setResponseStatus(CGI_STATUSCODE_NOTFOUND);
 
 		cgit.printStream("NOT FOUND");
 
-		return 0;
+		return ;
 	}
 	/**
 	 * A workaround for apache web server to get auth headers:
@@ -59,22 +61,22 @@ int main(int argc, char **argv)
 	{
 		if (user.size() == 0 || !cgit.isAuthenticated("libdodo", "password"))
 		{
-			cgit.requestAuthentication("libdodo", SERVER_AUTHTYPE_BASIC);
+			cgit.requestAuthentication("libdodo", CGI_AUTHTYPE_BASIC);
 
-			return 0;
+			return ;
 		}
 	}
 	else if (cgit.GET["a"] == "digest_auth")
 	{
 		if (user.size() == 0 || !cgit.isAuthenticated("libdodo", "password"))
 		{
-			cgit.requestAuthentication("libdodo", SERVER_AUTHTYPE_DIGEST);
+			cgit.requestAuthentication("libdodo", CGI_AUTHTYPE_DIGEST);
 
-			return 0;
+			return ;
 		}
 	}
 
-	cgit.HEADERS[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
+	cgit.HEADERS[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 
 	cgit.setCookie("test", "Ni@m");
 
@@ -87,7 +89,7 @@ int main(int argc, char **argv)
 	cgit.printStream(cgit.GET["a"] + "<br>");
 	cgit.printStream(cgit.POST["hidden"] + "<br>");
 	cgit.printStream(cgit.POST["text"] + "<br>");
-	cgit.printStream(cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
+	cgit.printStream(cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
 	cgit.printStream(cgit.COOKIES["test"] + "<br>");
 	cgit.printStream(tools::string::ulToString(cgit.FILES["file"].size) + "<br>");
 	cgit.printStream(cgit.FILES["file"].mime + "<br>");
@@ -127,6 +129,15 @@ int main(int argc, char **argv)
 	{
 		cgit.printStream((dodoString)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
 	}
+}
+
+int main(int argc, char **argv)
+{
+	using namespace cgi::basic;
+
+	server c;
+
+	c.listen(&cgif);
 
 	return 0;
 }

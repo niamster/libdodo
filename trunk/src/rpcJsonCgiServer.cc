@@ -31,7 +31,7 @@
 
 using namespace dodo::rpc::json::cgi;
 
-server::server(dodo::cgi::server &a_provider) : rpc::cgi::server(a_provider, "application/json")
+server::server(dodo::cgi::dialogue &a_provider) : rpc::cgi::server(a_provider, "application/json")
 {
 }
 

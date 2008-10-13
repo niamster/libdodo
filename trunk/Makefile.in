@@ -98,8 +98,11 @@ OBJECTS:=dbAccumulator.o \
 	pcSyncThreadDataCollection.o \
 	pcSyncProcessDataCollection.o \
 	pcSyncDataCollection.o \
-	cgiServer.o \
+	cgi.o \
+	cgiDialogue.o \
 	cgiExchange.o \
+	cgiServer.o \
+	cgiBasicServer.o \
 	cgiBasicExchange.o \
 	cgiFastServer.o \
 	cgiFastExchange.o

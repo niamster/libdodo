@@ -29,7 +29,7 @@ handler(const dodoString &method, const dodoArray<value> &values, const void *id
 int main(int argc, char **argv)
 {
 	dodo::cgi::basic::exchange cgiio;
-	dodo::cgi::server provider(cgiio, true);
+	dodo::cgi::dialogue provider(cgiio, true);
 
 	rpc::json::cgi::server srv(provider);
 

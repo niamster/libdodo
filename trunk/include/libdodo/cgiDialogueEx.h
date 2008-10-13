@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiServerEx.h
+ *            cgiDialogueEx.h
  *
  *  Wed Mar 12 01:01:14 2008
  *  Copyright  2008  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _CGISERVEREX_H_
-#define _CGISERVEREX_H_
+#ifndef _CGIDIALOGUEEX_H_
+#define _CGIDIALOGUEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -41,23 +41,23 @@ namespace dodo
 		/**
 		 * libdodo defined errors
 		 */
-		enum serverExR
+		enum dialogueExR
 		{
-			SERVEREX_WRONGSTATUSCODE,
+			DIALOGUEEX_WRONGSTATUSCODE,
 		};
 
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define CGISERVEREX_WRONGSTATUSCODE_STR "Wrong status code."
+#define CGIDIALOGUEEX_WRONGSTATUSCODE_STR "Wrong status code."
 
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum serverFunctionsID
+		enum dialogueFunctionsID
 		{
-			SERVEREX_MAKEPOST,
-			SERVEREX_SETRESPONSESTATUS,
+			DIALOGUEEX_MAKEPOST,
+			DIALOGUEEX_SETRESPONSESTATUS,
 		};
 	};
 };

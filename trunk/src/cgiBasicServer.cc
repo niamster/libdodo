@@ -1,8 +1,8 @@
 /***************************************************************************
- *            rpcJsonCgiServer.h
+ *            cgiBasicServer.cc
  *
- *  Mon Jul 07 11:29:55 2008
- *  Copyright  2008  Ni@m
+ *  Sat Aug  5 03:37:19 2006
+ *  Copyright  2006  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,46 +27,34 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCJSONCGISERVER_H_
-#define _RPCJSONCGISERVER_H_
+#include <libdodo/cgiBasicServer.h>
 
-#include <libdodo/directives.h>
+using namespace dodo::cgi::basic;
 
-#include <libdodo/types.h>
-#include <libdodo/cgiDialogue.h>
-#include <libdodo/rpcCgiServer.h>
-#include <libdodo/rpcJsonServer.h>
-
-namespace dodo
+server::server(server &cf)
 {
-	namespace rpc
-	{
-		namespace json
-		{
-			namespace cgi
-			{
-				/**
-				 * @class server defines server-side RPC instrument
-				 */
-				class server : public json::server,
-							   public rpc::cgi::server
-				{
-					public:
+}
 
-						/**
-						 * constructor
-						 * @param provider defines cgi I/O provider
-						 */
-						server(dodo::cgi::dialogue &provider);
+//-------------------------------------------------------------------
 
-						/**
-						 * destructor
-						 */
-						virtual ~server();
-				};
-			};
-		};
-	};
-};
+server::server()
+{
+}
 
-#endif
+//-------------------------------------------------------------------
+
+server::~server()
+{
+}
+
+//-------------------------------------------------------------------
+
+void
+server::listen(serverHandler func)
+{
+	exchange cSTD;
+
+	func(cSTD);
+}
+
+//-------------------------------------------------------------------

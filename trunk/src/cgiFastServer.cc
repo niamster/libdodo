@@ -37,6 +37,8 @@ using namespace dodo::cgi::fast;
 
 pthread_mutex_t server::acceptM = PTHREAD_MUTEX_INITIALIZER;
 
+//-------------------------------------------------------------------
+
 pthread_mutex_t server::requestsM = PTHREAD_MUTEX_INITIALIZER;
 
 #endif
@@ -52,13 +54,13 @@ unsigned long server::requests = 0;
 //-------------------------------------------------------------------
 
 void
-dummyStackThread(exchange &data)
+dummyStackThread(dodo::cgi::exchange &data)
 {
 }
 
 //-------------------------------------------------------------------
 
-serverHandler server::handler = &dummyStackThread;
+dodo::cgi::serverHandler server::handler = &dummyStackThread;
 
 //-------------------------------------------------------------------
 
@@ -70,10 +72,13 @@ server::server(server &cf)
 
 #ifdef PTHREAD_EXT
 
-server::server(bool a_threading,
-			   unsigned int a_threadsNum) : threading(a_threading),
-											threadsNum(a_threadsNum)
+server::server(bool threading,
+			   unsigned int threadsNum,
+			   unsigned long a_limit) : threading(threading),
+									  threadsNum(threadsNum)
 {
+	limit = a_limit;
+
 	pthread_mutexattr_t attr;
 
 	pthread_mutexattr_init(&attr);
@@ -103,14 +108,6 @@ server::server()
 server::~server()
 {
 	FCGX_Finish();
-}
-
-//-------------------------------------------------------------------
-
-void
-server::setHandler(serverHandler func)
-{
-	handler = func;
 }
 
 //-------------------------------------------------------------------
@@ -165,12 +162,13 @@ server::stackThread(void *data)
 //-------------------------------------------------------------------
 
 void
-server::listen(unsigned long a_limit)
+server::listen(serverHandler func)
 {
 	if (!isFastCgi())
 		throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ISCGI, CGIFASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);
 
-	limit = a_limit;
+	handler = func;
+
 	requests = 0;
 
 #ifdef PTHREAD_EXT

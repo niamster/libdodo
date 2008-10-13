@@ -33,7 +33,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/cgiServer.h>
+#include <libdodo/cgiDialogue.h>
 #include <libdodo/rpcCgiServer.h>
 #include <libdodo/rpcXmlServer.h>
 
@@ -57,7 +57,7 @@ namespace dodo
 						 * constructor
 						 * @param provider defines cgi I/O provider
 						 */
-						server(dodo::cgi::server &provider);
+						server(dodo::cgi::dialogue &provider);
 
 						/**
 						 * destructor

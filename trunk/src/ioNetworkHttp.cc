@@ -1593,7 +1593,7 @@ http::setAuthInfo(const dodoString &user,
 
 //-------------------------------------------------------------------
 
-dodo::cgi::__serverCookie
+dodo::cgi::__cgiCookie
 http::parseCookie(const dodoString &header)
 {
 	dodoStringArray parts = tools::misc::explode(header, &trim, ";");
@@ -1603,9 +1603,9 @@ http::parseCookie(const dodoString &header)
 
 	tuple = tools::misc::explode(*i, "=", 2);
 	if (tuple.size() != 2)
-		return cgi::__serverCookie();
+		return cgi::__cgiCookie();
 
-	cgi::__serverCookie cookie;
+	cgi::__cgiCookie cookie;
 	cookie.name = tuple[0];
 	cookie.value = tools::code::decodeUrl(tuple[1]);
 

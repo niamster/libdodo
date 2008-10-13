@@ -31,10 +31,10 @@
 
 using namespace dodo::rpc::cgi;
 
-server::server(dodo::cgi::server &a_provider,
+server::server(dodo::cgi::dialogue &a_provider,
 			   const dodoString &ct) : provider(a_provider)
 {
-	provider.HEADERS[dodo::cgi::SERVER_RESPONSEHEADER_CONTENTTYPE] =  ct;
+	provider.HEADERS[dodo::cgi::CGI_RESPONSEHEADER_CONTENTTYPE] =  ct;
 
 	provider.printHeaders();
 }

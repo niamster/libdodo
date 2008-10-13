@@ -43,6 +43,7 @@
 #include <fcgiapp.h>
 
 #include <libdodo/types.h>
+#include <libdodo/cgiServer.h>
 #include <libdodo/cgiFastServerEx.h>
 #include <libdodo/cgiFastExchange.h>
 #include <libdodo/ioChannel.h>
@@ -55,15 +56,9 @@ namespace dodo
 		namespace fast
 		{
 			/**
-			 * @typedef serverHandler defines type of function that will be called on new cgi request
-			 * @param ex defines fast::exchange object for I/O
-			 */
-			typedef void (*serverHandler)(exchange &ex);
-
-			/**
 			 * @class server provides fast CGI functionality
 			 */
-			class server
+			class server : public cgi::server
 			{
 				private:
 
@@ -81,8 +76,11 @@ namespace dodo
 					 * constructor
 					 * @param threading defines if to use threads on new CGI requests
 					 * @param threadsNum defines amount of threads for processing fast CGI queue
+					 * @param limit defines limit of incoming requests
+					 * @note if limit is exhausted `listen` will return
+					 * if limit is 0 `listen` never returns
 					 */
-					server(bool threading = true, unsigned int threadsNum = 10);
+					server(bool threading = true, unsigned int threadsNum = 10, unsigned long limit = 0);
 
 #else
 
@@ -99,18 +97,10 @@ namespace dodo
 					virtual ~server();
 
 					/**
-					 * set function that will be called on new CGI request
-					 * @param func define function handler
-					 */
-					virtual void setHandler(serverHandler func);
-
-					/**
 					 * listen for incoming requests
-					 * @param limit defines limit of incoming requests
-					 * @note if limit is exhausted `listen` will return
-					 * if limit is 0 `listen` never returns
+					 * @param func define request handler
 					 */
-					virtual void listen(unsigned long limit = 0);
+					virtual void listen(serverHandler func);
 
 					/**
 					 * @return true if called as a fast CGI[not as a CGI]
