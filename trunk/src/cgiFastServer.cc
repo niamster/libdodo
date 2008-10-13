@@ -49,7 +49,7 @@ unsigned long server::limit = 0;
 
 //-------------------------------------------------------------------
 
-unsigned long server::requests = 0;
+unsigned long server::requests = -1;
 
 //-------------------------------------------------------------------
 
@@ -126,16 +126,6 @@ server::stackThread(void *data)
 
 	while (true)
 	{
-		pthread_mutex_lock(&acceptM);
-		res = FCGX_Accept_r(&request);
-		pthread_mutex_unlock(&acceptM);
-
-		if (res == -1)
-			throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
-
-		handler(cfSTD);
-
-		FCGX_Finish_r(&request);
 
 		if (limit != 0)
 		{
@@ -152,6 +142,17 @@ server::stackThread(void *data)
 
 			pthread_mutex_lock(&requestsM);
 		}
+
+		pthread_mutex_lock(&acceptM);
+		res = FCGX_Accept_r(&request);
+		pthread_mutex_unlock(&acceptM);
+
+		if (res == -1)
+			throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+
+		handler(cfSTD);
+
+		FCGX_Finish_r(&request);
 	}
 
 	return NULL;
