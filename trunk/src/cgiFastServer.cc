@@ -72,9 +72,9 @@ server::server(server &cf)
 
 #ifdef PTHREAD_EXT
 
-server::server(bool threading,
-			   unsigned int threadsNum,
-			   unsigned long a_limit) : threading(threading),
+server::server(unsigned long a_limit,
+               bool threading,
+			   unsigned int threadsNum) : threading(threading),
 									  threadsNum(threadsNum)
 {
 	limit = a_limit;

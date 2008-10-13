@@ -74,13 +74,13 @@ namespace dodo
 
 					/**
 					 * constructor
+					 * @param limit defines limit of incoming requests
 					 * @param threading defines if to use threads on new CGI requests
 					 * @param threadsNum defines amount of threads for processing fast CGI queue
-					 * @param limit defines limit of incoming requests
 					 * @note if limit is exhausted `listen` will return
 					 * if limit is 0 `listen` never returns
 					 */
-					server(bool threading = true, unsigned int threadsNum = 10, unsigned long limit = 0);
+					server(unsigned long limit = 0, bool threading = true, unsigned int threadsNum = 10);
 
 #else
 
