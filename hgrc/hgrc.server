@@ -4,6 +4,7 @@ username = <user>
 [web]
 allow_archive = zip gz bz2
 style = gitweb
+baseurl = <ulr to repository>
 
 [extensions]
 hgext.notify =
@@ -20,7 +21,7 @@ from = <from>
 sources = serve push pull bundle
 test = False
 config = <path to config>
-template = \ndetails:   {baseurl}{webroot}/rev/{node|short}\nchangeset: {rev}:{node|short}\nuser:      {author}\ndate:
+template = \ndetails:   {baseurl}/rev/{node|short}\nchangeset: {rev}:{node|short}\nuser:      {author}\ndate:
   {date|date}\ndescription:\n{desc}\n\nDo not forget to update meta and docs!\n
-maxdiff = -1
+maxdiff = 0
 
