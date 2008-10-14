@@ -199,13 +199,6 @@ server::listen(serverHandler func)
 
 		while (true)
 		{
-			if (FCGX_Accept_r(&request) == -1)
-				throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
-
-			handler(cfSTD);
-
-			FCGX_Finish_r(&request);
-
 			if (limit != 0)
 			{
 				++requests;
@@ -213,6 +206,13 @@ server::listen(serverHandler func)
 				if (requests >= limit)
 					break;
 			}
+
+			if (FCGX_Accept_r(&request) == -1)
+				throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+
+			handler(cfSTD);
+
+			FCGX_Finish_r(&request);
 		}
 	}
 }
