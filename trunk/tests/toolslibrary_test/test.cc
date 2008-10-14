@@ -11,11 +11,12 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace tools;
 
 using namespace std;
 
 #ifdef DL_EXT
+using namespace tools;
+
 typedef void (*print)(const dodoString &data);
 #endif
 

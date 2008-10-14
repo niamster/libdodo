@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 
 		using namespace cgi::fast;
 
-		server cf(5, true, 10);
+		server cf(5);
 		if (!cf.isFastCgi())
 		{
 			cout << "Not a fastCGI.";
