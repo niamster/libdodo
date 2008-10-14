@@ -86,8 +86,11 @@ namespace dodo
 
 					/**
 					 * constructor
+					 * @param limit defines limit of incoming requests
+					 * @note if limit is exhausted `listen` will return
+					 * if limit is 0 `listen` never returns
 					 */
-					server();
+					server(unsigned long limit = 0);
 
 #endif
 

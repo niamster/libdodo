@@ -96,8 +96,10 @@ server::server(unsigned long a_limit,
 
 #else
 
-server::server()
+server::server(unsigned long a_limit)
 {
+	limit = a_limit;
+
 	FCGX_Init();
 }
 
