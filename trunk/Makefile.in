@@ -40,7 +40,9 @@ OBJECTS:=dbAccumulator.o \
 	xexec.o \
 	exceptionBasic.o \
 	ioChannel.o \
-	ioFile.o \
+	ioFileFifo.o \
+	ioFileGeneral.o \
+	ioFileTemp.o \
 	ioEvent.o \
 	ioEventInfo.o \
 	ioStdio.o \

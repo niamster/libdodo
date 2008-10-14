@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		dodo::exception::basic::setErrorHandler(dodo::exception::ERRMODULE_IOFILE, &baseHandler, NULL);
+		dodo::exception::basic::setErrorHandler(dodo::exception::ERRMODULE_IOFILEGENERAL, &baseHandler, NULL);
 #ifdef DL_EXT
 		if (!dodo::exception::basic::setErrorHandler("./module", NULL))
 			cout << "WTF";
@@ -44,7 +44,8 @@ int main(int argc, char **argv)
 		
 		try
 		{
-			file f("some.file", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_READ_ONLY);
+			file::general f;
+			f.open("some.file", file::GENERAL_OPENMODE_READ_ONLY);
 		}
 		catch(...)
 		{

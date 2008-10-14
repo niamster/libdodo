@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioFileEx.h
+ *            ioFileFifoEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOFILEEX_H_
-#define _IOFILEEX_H_
+#ifndef _IOFILEFIFOEX_H_
+#define _IOFILEFIFOEX_H_
 
 #include <libdodo/directives.h>
 
@@ -38,40 +38,39 @@ namespace dodo
 {
 	namespace io
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum fileExR
+		namespace file
 		{
-			FILEEX_WRONGFILENAME,
-			FILEEX_CANNOTOVEWRITE,
-			FILEEX_FILEISSHORTERTHANGIVENPOSITION,
-			FILEEX_FILENOTOPENED
-		};
+			/**
+			 * libdodo defined errors
+			 */
+			enum fifoExR
+			{
+				FIFOEX_WRONGFILENAME,
+				FIFOEX_NOTOPENED
+			};
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
-#define IOFILEEX_WRONGFILENAME_STR                  "Probably wrong filename, type of file is wrong or `path` is empty!"
-#define IOFILEEX_CANNOTOVEWRITE_STR                 "You set option not to overwrite, but try to do that =)"
-#define IOFILEEX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
-#define IOFILEEX_FILENOTOPENED_STR "File was not opened."
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define IOFILEFIFOEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty."
+#define IOFILEFIFOEX_NOTOPENED_STR "Fifo was not opened."
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum fileFunctionsID
-		{
-			FILEEX_CLOSE,
-			FILEEX_CLONE,
-			FILEEX_OPEN,
-			FILEEX__READ,
-			FILEEX__WRITE,
-			FILEEX__READSTREAM,
-			FILEEX__WRITESTREAM,
-			FILEEX_FLUSH,
-			FILEEX_GETINDESCRIPTOR,
-			FILEEX_GETOUTDESCRIPTOR,
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum fifoFunctionsID
+			{
+				FIFOEX_CLOSE,
+				FIFOEX_CLONE,
+				FIFOEX_OPEN,
+				FIFOEX__READ,
+				FIFOEX__WRITE,
+				FIFOEX__READSTREAM,
+				FIFOEX__WRITESTREAM,
+				FIFOEX_FLUSH,
+				FIFOEX_GETINDESCRIPTOR,
+				FIFOEX_GETOUTDESCRIPTOR,
+			};
 		};
 	};
 };

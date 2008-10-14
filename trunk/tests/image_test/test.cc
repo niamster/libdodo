@@ -80,8 +80,8 @@ int main(int argc, char **argv)
 		im.setQuality(4);
 		im.write(&img, size);
 
-		file io;
-		io.open("my.png", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_READ_WRITE_TRUNCATE);
+		file::general io;
+		io.open("my.png", file::GENERAL_OPENMODE_READ_WRITE_TRUNCATE);
 		io.outSize = size;
 		io.write((char *)img);
 		im.destroyImageData(&img);

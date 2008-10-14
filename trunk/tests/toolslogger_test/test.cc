@@ -21,7 +21,8 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		file *disk = new file("./test.log", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_APPEND);
+		file::general *disk = new file::general;
+		disk->open("./test.log", file::GENERAL_OPENMODE_APPEND);
 
 		stdio *std = new stdio;
 		std->redirectToStderr(true);
