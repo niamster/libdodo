@@ -41,7 +41,7 @@ OBJECTS:=dbAccumulator.o \
 	exceptionBasic.o \
 	ioChannel.o \
 	ioFileFifo.o \
-	ioFileGeneral.o \
+	ioFileRegular.o \
 	ioFileTemp.o \
 	ioEvent.o \
 	ioEventInfo.o \

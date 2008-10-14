@@ -30,7 +30,7 @@
 #ifndef _IOFILE_H_
 #define _IOFILE_H_
 
-#include <libdodo/ioFileGeneral.h>
+#include <libdodo/ioFileRegular.h>
 #include <libdodo/ioFileTemp.h>
 #include <libdodo/ioFileFifo.h>
 

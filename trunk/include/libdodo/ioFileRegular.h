@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioFileGeneral.h
+ *            ioFileRegular.h
  *
  *  Tue Oct 8 08:19:57 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOFILEGENERAL_H_
-#define _IOFILEGENERAL_H_
+#ifndef _IOFILEREGULAR_H_
+#define _IOFILEREGULAR_H_
 
 #include <libdodo/directives.h>
 
@@ -38,7 +38,7 @@
 
 #include <libdodo/toolsMisc.h>
 #include <libdodo/toolsFilesystem.h>
-#include <libdodo/ioFileGeneralEx.h>
+#include <libdodo/ioFileRegularEx.h>
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 
@@ -51,61 +51,61 @@ namespace dodo
 #ifndef IO_WO_XEXEC
 
 			/**
-			 * @enum generalOperationTypeEnum defines type of operation for hook
+			 * @enum regularOperationTypeEnum defines type of operation for hook
 			 */
-			enum generalOperationTypeEnum
+			enum regularOperationTypeEnum
 			{
-				GENERAL_OPERATION_OPEN = 128,
-				GENERAL_OPERATION_CLOSE
+				REGULAR_OPERATION_OPEN = 128,
+				REGULAR_OPERATION_CLOSE
 			};
 
 #endif
 
 			/**
-			 * @enum generalOpenmodeEnum defines modes to open file
+			 * @enum regularOpenmodeEnum defines modes to open file
 			 */
-			enum generalOpenmodeEnum
+			enum regularOpenmodeEnum
 			{
-				GENERAL_OPENMODE_READ_ONLY,                                        ///< reading from the file
-				GENERAL_OPENMODE_READ_WRITE,                                       ///< reading and writing[creates if not exists]
-				GENERAL_OPENMODE_READ_WRITE_TRUNCATE,                              ///< file will be truncated if exists
-				GENERAL_OPENMODE_APPEND                                            ///< writing to the end[creates if not exists]
+				REGULAR_OPENMODE_READ_ONLY,                                        ///< reading from the file
+				REGULAR_OPENMODE_READ_WRITE,                                       ///< reading and writing[creates if not exists]
+				REGULAR_OPENMODE_READ_WRITE_TRUNCATE,                              ///< file will be truncated if exists
+				REGULAR_OPENMODE_APPEND                                            ///< writing to the end[creates if not exists]
 			};
 
 			/**
-			 * @class general provides file I/O manipulations
+			 * @class regular provides file I/O manipulations
 			 */
-			class general : virtual public channel
+			class regular : virtual public channel
 			{
 				public:
 
 					/**
 					 * constructor
 					 */
-					general();
+					regular();
 
 					/**
 					 * copy constructor
 					 * @note xexec object is not copied
 					 */
-					general(const general &fd);
+					regular(const regular &fd);
 
 					/**
 					 * destructor
 					 */
-					virtual ~general();
+					virtual ~regular();
 
 					/**
 					 * clone file object
 					 * @param fd defines object to clone
 					 * @note xexec object is not copied
 					 */
-					virtual void clone(const general &fd);
+					virtual void clone(const regular &fd);
 
 					/**
 					 * open file
 					 * @param path defines path to the file
-					 * @param mode defines mode to open file[see generalOpenmodeEnum]
+					 * @param mode defines mode to open file[see regularOpenmodeEnum]
 					 */
 					virtual void open(const dodoString &path, short mode);
 

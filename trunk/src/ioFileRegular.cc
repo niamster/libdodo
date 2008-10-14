@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioFileGeneral.cc
+ *            ioFileRegular.cc
  *
  *  Wed Oct 8 01:44:18 2005
  *  Copyright  2005  Ni@m
@@ -27,17 +27,17 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/ioFileGeneral.h>
+#include <libdodo/ioFileRegular.h>
 
 using namespace dodo::io::file;
 
-general::general() : overwrite(false),
+regular::regular() : overwrite(false),
 			 pos(0),
 			 handler(NULL)
 {
 #ifndef IO_WO_XEXEC
 
-	execObject = XEXEC_OBJECT_IOFILEGENERAL;
+	execObject = XEXEC_OBJECT_IOFILEREGULAR;
 	execObjectData = (void *)&collectedData;
 
 #endif
@@ -45,7 +45,7 @@ general::general() : overwrite(false),
 
 //-------------------------------------------------------------------
 
-general::general(const general &fd) : overwrite(fd.overwrite),
+regular::regular(const regular &fd) : overwrite(fd.overwrite),
 							 path(fd.path),
 							 pos(fd.pos),
 							 mode(fd.mode),
@@ -54,7 +54,7 @@ general::general(const general &fd) : overwrite(fd.overwrite),
 {
 #ifndef IO_WO_XEXEC
 
-	execObject = XEXEC_OBJECT_IOFILEGENERAL;
+	execObject = XEXEC_OBJECT_IOFILEREGULAR;
 	execObjectData = (void *)&collectedData;
 
 #endif
@@ -72,20 +72,20 @@ general::general(const general &fd) : overwrite(fd.overwrite),
 
 		switch (mode)
 		{
-			case GENERAL_OPENMODE_READ_WRITE:
-			case GENERAL_OPENMODE_READ_WRITE_TRUNCATE:
+			case REGULAR_OPENMODE_READ_WRITE:
+			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
 				handler = fdopen(newDesc, "r+");
 
 				break;
 
-			case GENERAL_OPENMODE_APPEND:
+			case REGULAR_OPENMODE_APPEND:
 
 				handler = fdopen(newDesc, "a");
 
 				break;
 
-			case GENERAL_OPENMODE_READ_ONLY:
+			case REGULAR_OPENMODE_READ_ONLY:
 			default:
 
 				handler = fdopen(newDesc, "r");
@@ -98,7 +98,7 @@ general::general(const general &fd) : overwrite(fd.overwrite),
 
 //-------------------------------------------------------------------
 
-general::~general()
+regular::~regular()
 {
 	if (opened)
 		fclose(handler);
@@ -107,12 +107,12 @@ general::~general()
 //-------------------------------------------------------------------
 
 int
-general::getInDescriptor() const
+regular::getInDescriptor() const
 {
 	protector pg(this);
 
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, GENERALEX_NOTOPENED, IOFILEGENERALEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	return fileno(handler);
 }
@@ -120,12 +120,12 @@ general::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-general::getOutDescriptor() const
+regular::getOutDescriptor() const
 {
 	protector pg(this);
 
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, GENERALEX_NOTOPENED, IOFILEGENERALEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	return fileno(handler);
 }
@@ -133,14 +133,14 @@ general::getOutDescriptor() const
 //-------------------------------------------------------------------
 
 void
-general::clone(const general &fd)
+regular::clone(const regular &fd)
 {
 	protector pg(this);
 
 	if (opened)
 	{
 		if (fclose(handler) != 0)
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		handler = NULL;
 
@@ -160,35 +160,35 @@ general::clone(const general &fd)
 
 		oldDesc = fileno(fd.handler);
 		if (oldDesc == -1)
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		switch (mode)
 		{
-			case GENERAL_OPENMODE_READ_WRITE:
-			case GENERAL_OPENMODE_READ_WRITE_TRUNCATE:
+			case REGULAR_OPENMODE_READ_WRITE:
+			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
 				handler = fdopen(newDesc, "r+");
 
 				break;
 
-			case GENERAL_OPENMODE_APPEND:
+			case REGULAR_OPENMODE_APPEND:
 
 				handler = fdopen(newDesc, "a");
 
 				break;
 
-			case GENERAL_OPENMODE_READ_ONLY:
+			case REGULAR_OPENMODE_READ_ONLY:
 			default:
 
 				handler = fdopen(newDesc, "r");
 		}
 
 		if (handler == NULL)
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		opened = true;
 	}
@@ -197,19 +197,19 @@ general::clone(const general &fd)
 //-------------------------------------------------------------------
 
 void
-general::close()
+regular::close()
 {
 	protector pg(this);
 
 #ifndef IO_WO_XEXEC
-	operType = GENERAL_OPERATION_CLOSE;
+	operType = REGULAR_OPERATION_CLOSE;
 	performXExec(preExec);
 #endif
 
 	if (opened)
 	{
 		if (fclose(handler) != 0)
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		handler = NULL;
 
@@ -224,13 +224,13 @@ general::close()
 //-------------------------------------------------------------------
 
 void
-general::open(const dodoString &a_path,
+regular::open(const dodoString &a_path,
 		   short a_mode)
 {
 	protector pg(this);
 
 #ifndef IO_WO_XEXEC
-	operType = GENERAL_OPERATION_OPEN;
+	operType = REGULAR_OPERATION_OPEN;
 	performXExec(preExec);
 #endif
 
@@ -240,7 +240,7 @@ general::open(const dodoString &a_path,
 	if (opened)
 	{
 		if (fclose(handler) != 0)
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		opened = false;
 	}
@@ -248,7 +248,7 @@ general::open(const dodoString &a_path,
 	bool exists(false);
 
 	if (path.size() == 0)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_OPEN, exception::ERRNO_LIBDODO, GENERALEX_WRONGFILENAME, IOFILEGENERALEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 	else
 	{
 		struct stat st;
@@ -256,17 +256,17 @@ general::open(const dodoString &a_path,
 		if (::lstat(path.c_str(), &st) == -1)
 		{
 			if (errno != ENOENT)
-				throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 		else
 			exists = true;
 
 		if (exists && !S_ISREG(st.st_mode) && !S_ISBLK(st.st_mode))
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_OPEN, exception::ERRNO_LIBDODO, GENERALEX_WRONGFILENAME, IOFILEGENERALEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 
 		switch (mode)
 		{
-			case GENERAL_OPENMODE_READ_WRITE:
+			case REGULAR_OPENMODE_READ_WRITE:
 
 				handler = fopen(path.c_str(), "r+");
 				if (handler == NULL)
@@ -274,19 +274,19 @@ general::open(const dodoString &a_path,
 
 				break;
 
-			case GENERAL_OPENMODE_READ_WRITE_TRUNCATE:
+			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
 				handler = fopen(path.c_str(), "w+");
 
 				break;
 
-			case GENERAL_OPENMODE_APPEND:
+			case REGULAR_OPENMODE_APPEND:
 
 				handler = fopen(path.c_str(), "a");
 
 				break;
 
-			case GENERAL_OPENMODE_READ_ONLY:
+			case REGULAR_OPENMODE_READ_ONLY:
 			default:
 
 				handler = fopen(path.c_str(), "r");
@@ -294,7 +294,7 @@ general::open(const dodoString &a_path,
 	}
 
 	if (handler == NULL)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (!exists)
 		tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
@@ -309,13 +309,13 @@ general::open(const dodoString &a_path,
 //-------------------------------------------------------------------
 
 void
-general::_read(char * const a_void)
+regular::_read(char * const a_void)
 {
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__READ, exception::ERRNO_LIBDODO, GENERALEX_NOTOPENED, IOFILEGENERALEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fseek(handler, pos * inSize, SEEK_SET) == -1)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	memset(a_void, '\0', inSize);
 
@@ -330,7 +330,7 @@ general::_read(char * const a_void)
 				continue;
 
 			if (ferror(handler) != 0)
-				throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -340,15 +340,15 @@ general::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-general::_write(const char *const a_buf)
+regular::_write(const char *const a_buf)
 {
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__WRITE, exception::ERRNO_LIBDODO, GENERALEX_NOTOPENED, IOFILEGENERALEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	if (mode == GENERAL_OPENMODE_APPEND || pos == -1)
+	if (mode == REGULAR_OPENMODE_APPEND || pos == -1)
 	{
 		if (fseek(handler, 0, SEEK_END) == -1)
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 	else
 	{
@@ -362,7 +362,7 @@ general::_write(const char *const a_buf)
 			{
 				delete [] t_buf;
 
-				throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
 			read = fread(t_buf, outSize, 1, handler);
@@ -370,11 +370,11 @@ general::_write(const char *const a_buf)
 			delete [] t_buf;
 
 			if (read != 0)
-				throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__WRITE, exception::ERRNO_LIBDODO, GENERALEX_CANNOTOVEWRITE, IOFILEGENERALEX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_CANNOTOVEWRITE, IOFILEREGULAREX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
 		}
 
 		if (fseek(handler, pos, SEEK_SET) == -1)
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	while (true)
@@ -388,7 +388,7 @@ general::_write(const char *const a_buf)
 				break;
 
 			if (ferror(handler) != 0)
-				throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -398,7 +398,7 @@ general::_write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-general::erase()
+regular::erase()
 {
 	protector pg(this);
 
@@ -424,27 +424,27 @@ general::erase()
 //-------------------------------------------------------------------
 
 void
-general::flush()
+regular::flush()
 {
 	protector pg(this);
 
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_FLUSH, exception::ERRNO_LIBDODO, GENERALEX_NOTOPENED, IOFILEGENERALEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fflush(handler) != 0)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-general::_readStream(char * const a_void)
+regular::_readStream(char * const a_void)
 {
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__READSTREAM, exception::ERRNO_LIBDODO, GENERALEX_NOTOPENED, IOFILEGENERALEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fseek(handler, 0, SEEK_SET) == -1)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	for (unsigned long i(0); i < pos; ++i)
 	{
@@ -459,10 +459,10 @@ general::_readStream(char * const a_void)
 				case ENOMEM:
 				case ENXIO:
 
-					throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
-			throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__READSTREAM, exception::ERRNO_LIBDODO, GENERALEX_FILEISSHORTERTHANGIVENPOSITION, IOFILEGENERALEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_FILEISSHORTERTHANGIVENPOSITION, IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
 		}
 	}
 
@@ -479,7 +479,7 @@ general::_readStream(char * const a_void)
 				break;
 
 			if (ferror(handler) != 0)
-				throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -491,13 +491,13 @@ general::_readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-general::_writeStream(const char *const a_buf)
+regular::_writeStream(const char *const a_buf)
 {
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__WRITESTREAM, exception::ERRNO_LIBDODO, GENERALEX_NOTOPENED, IOFILEGENERALEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fseek(handler, 0, SEEK_END) == -1)
-		throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	unsigned long sent_received = 0;
 
@@ -513,7 +513,7 @@ general::_writeStream(const char *const a_buf)
 					continue;
 
 				if (ferror(handler) != 0)
-					throw exception::basic(exception::ERRMODULE_IOFILEGENERAL, GENERALEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;

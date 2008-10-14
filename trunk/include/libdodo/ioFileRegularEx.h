@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioFileGeneralEx.h
+ *            ioFileRegularEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOFILEGENERALEX_H_
-#define _IOFILEGENERALEX_H_
+#ifndef _IOFILEREGULAREX_H_
+#define _IOFILEREGULAREX_H_
 
 #include <libdodo/directives.h>
 
@@ -43,37 +43,37 @@ namespace dodo
 			/**
 			 * libdodo defined errors
 			 */
-			enum generalExR
+			enum regularExR
 			{
-				GENERALEX_WRONGFILENAME,
-				GENERALEX_CANNOTOVEWRITE,
-				GENERALEX_FILEISSHORTERTHANGIVENPOSITION,
-				GENERALEX_NOTOPENED
+				REGULAREX_WRONGFILENAME,
+				REGULAREX_CANNOTOVEWRITE,
+				REGULAREX_FILEISSHORTERTHANGIVENPOSITION,
+				REGULAREX_NOTOPENED
 			};
 
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define IOFILEGENERALEX_WRONGFILENAME_STR                  "Probably wrong filename, type of file is wrong or `path` is empty."
-#define IOFILEGENERALEX_CANNOTOVEWRITE_STR                 "You set option not to overwrite but tried to do that."
-#define IOFILEGENERALEX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
-#define IOFILEGENERALEX_NOTOPENED_STR 						"File was not opened."
+#define IOFILEREGULAREX_WRONGFILENAME_STR                  "Probably wrong filename, type of file is wrong or `path` is empty."
+#define IOFILEREGULAREX_CANNOTOVEWRITE_STR                 "You set option not to overwrite but tried to do that."
+#define IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
+#define IOFILEREGULAREX_NOTOPENED_STR 						"File was not opened."
 
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum generalFunctionsID
+			enum regularFunctionsID
 			{
-				GENERALEX_CLOSE,
-				GENERALEX_CLONE,
-				GENERALEX_OPEN,
-				GENERALEX__READ,
-				GENERALEX__WRITE,
-				GENERALEX__READSTREAM,
-				GENERALEX__WRITESTREAM,
-				GENERALEX_FLUSH,
-				GENERALEX_GETINDESCRIPTOR,
-				GENERALEX_GETOUTDESCRIPTOR,
+				REGULAREX_CLOSE,
+				REGULAREX_CLONE,
+				REGULAREX_OPEN,
+				REGULAREX__READ,
+				REGULAREX__WRITE,
+				REGULAREX__READSTREAM,
+				REGULAREX__WRITESTREAM,
+				REGULAREX_FLUSH,
+				REGULAREX_GETINDESCRIPTOR,
+				REGULAREX_GETOUTDESCRIPTOR,
 			};
 		};
 	};

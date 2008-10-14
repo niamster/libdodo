@@ -66,8 +66,8 @@ int main(int argc, char **argv)
 
 		filesystem::unlink("my.dat");
 
-		file::general io;
-		io.open("my.dat", file::GENERAL_OPENMODE_READ_WRITE_TRUNCATE);
+		file::regular io;
+		io.open("my.dat", file::REGULAR_OPENMODE_READ_WRITE_TRUNCATE);
 		filesystem::chmod("my.dat", FILESYSTEM_PERMISSION_ALL_ALL_ACCESS);
 
 		io.inSize = io.outSize = 14;
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 		io.writeStreamString("!12345890$!!@\n");
 		io.pos = 1;
 
-		file::general io2 = io;
+		file::regular io2 = io;
 		io.close();
 
 		io2.writeString("!12345890$!~@\n");
