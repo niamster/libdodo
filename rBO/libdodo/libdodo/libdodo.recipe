@@ -2,7 +2,7 @@ class Libdodo(CPackageRecipe):
     name = 'libdodo'
     version = '0.11.0'
  
-    buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user']
+    buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user', 'tcp_wrappers:devellib']
  
     def setup(r):
         r.addArchive('mirror://sourceforge/libdodo/')

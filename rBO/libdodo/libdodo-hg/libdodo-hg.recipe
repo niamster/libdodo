@@ -1,13 +1,12 @@
 class LibdodoHg(CPackageRecipe):
 
     name = 'libdodo-hg'
-    version = ''
-	tagversion = ''
+    version = 'c50c9d390253'
  
-    buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user']
+    buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user', 'tcp_wrappers:devellib']
  
     def setup(r):
-        r.addArchive('http://libdodo.sourceforge.net/hg/libdodo/archive/%(version)s.tar.bz2')
+        r.addArchive('http://libdodo.org/hg/libdodo/archive/%(version)s.tar.bz2')
 
         extraconfig = ''	
 	
@@ -84,7 +83,7 @@ class LibdodoHg(CPackageRecipe):
             r.buildRequires += ['binutils:devel']
 	    extraconfig +=' --with-bfd'
 
-        r.Replace(r.tagversion, '%s' % r.version, 'trunk/configure.in')
+        r.Replace('0.11.0', '%s' % r.version, 'trunk/configure.in')
         r.Run('autoconf', dir='trunk')
 
         r.Configure(extraconfig, dir='trunk')
