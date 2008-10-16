@@ -39,21 +39,6 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * libdodo defined errors
-		 */
-		enum sqliteExR
-		{
-			SQLITEEX_WRONGHINTUSAGE,
-			SQLITEEX_SQLITEWOMETADATA,
-		};
-
-		/**
-		 * explanations for libdodo defined errors
-		 */
-#define DBSQLITEEX_WRONGHINTUSAGE_STR "Wrong hint usage. You used hint where it's not needed."
-#define DBSQLITEEX_SQLITEWOMETADATA_STR "SQLite was compiled w/o SQLITE_ENABLE_COLUMN_METADATA."
-
-		/**
 		 * IDs of functions where exception might be thrown
 		 */
 		enum sqliteFunctionsID

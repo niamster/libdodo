@@ -345,14 +345,14 @@ sqlite::affectedRowsCount() const
 void
 sqlite::getFieldsTypes(const dodoString &table)
 {
-#ifdef SQLITE_ENABLE_COLUMN_METADATA
-
 	dodoString temp = collectedData.dbInfo.db + ":" + table;
 
 	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
 
 	if (types == fieldTypes.end())
 		types = fieldTypes.insert(make_pair(temp, dodoMap<dodoString, short, dodoMapICaseStringCompare>())).first;
+
+#ifdef SQLITE_ENABLE_COLUMN_METADATA
 
 	request = "select * from " + table + " limit 1";
 
@@ -445,9 +445,101 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 #else
 
-	throw exception::basic(exception::ERRMODULE_DBSQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_SQLITEWOMETADATA, DBSQLITEEX_SQLITEWOMETADATA_STR, __LINE__, __FILE__);
+	request = "pragma table_info(" + table + ")";
+
+	if (!empty)
+	{
+		sqlite3_finalize(sqliteResult);
+		empty = true;
+	}
+
+	if (sqlite3_prepare(sqliteHandle, request.c_str(), request.size(), &sqliteResult, NULL) != SQLITE_OK)
+		throw exception::basic(exception::ERRMODULE_DBSQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
+
+	if (sqliteResult == NULL)
+		throw exception::basic(exception::ERRMODULE_DBSQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+
+	empty = false;
+
+	bool iterate = true;
+
+	const char *columnType, *columnName;
+
+	dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
+
+	while (iterate)
+	{
+		switch (sqlite3_step(sqliteResult))
+		{
+			case SQLITE_BUSY:
+
+				continue;
+
+			case SQLITE_DONE:
+
+				iterate = false;
+
+				break;
+
+			case SQLITE_ERROR:
+
+				throw exception::basic(exception::ERRMODULE_DBSQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+
+			case SQLITE_ROW:
+
+				columnName = (const char *)sqlite3_column_text(sqliteResult, 1);
+				columnType = (const char *)sqlite3_column_text(sqliteResult, 2);
+
+				field = types->second.find(columnName);
+
+				if (field == fieldsEnd)
+				{
+					if (strcasestr(columnType, "char") != NULL ||
+						strcasestr(columnType, "date") != NULL ||
+						strcasestr(columnType, "time") != NULL ||
+						strcasestr(columnType, "text") != NULL ||
+						strcasestr(columnType, "enum") != NULL ||
+						strcasestr(columnType, "set") != NULL)
+						types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_TEXT));
+					else
+					{
+						if (strcasestr(columnType, "blob") != NULL)
+							types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_BINARY));
+						else
+							types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_NUMERIC));
+					}
+				}
+				else
+				{
+					if (strcasestr(columnType, "char") != NULL ||
+						strcasestr(columnType, "date") != NULL ||
+						strcasestr(columnType, "time") != NULL ||
+						strcasestr(columnType, "text") != NULL ||
+						strcasestr(columnType, "enum") != NULL ||
+						strcasestr(columnType, "set") != NULL)
+						field->second = sql::FIELDTYPE_TEXT;
+					else
+					{
+						if (strcasestr(columnType, "blob") != NULL)
+							field->second = sql::FIELDTYPE_BINARY;
+						else
+							field->second = sql::FIELDTYPE_NUMERIC;
+					}
+				}
+
+				break;
+		}
+	}
+
+	if (!empty)
+	{
+		sqlite3_finalize(sqliteResult);
+		empty = true;
+	}
 
 #endif
+
+	request.clear();
 }
 
 //-------------------------------------------------------------------
