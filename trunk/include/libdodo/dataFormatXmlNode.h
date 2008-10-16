@@ -68,8 +68,7 @@ namespace dodo
 						dodoString nsDef;                                                                                                       ///< namespace
 						dodoString nsDefHref;                                                                                                   ///< namespace URI
 
-						bool CDATA;                                                                                                             ///< true if CDATA
-						bool empty;                                                                                                             ///< true if node doesn't have contents : `<node />`
+						bool CDATA;                                                                                                           ///< true if node doesn't have contents : `<node />`
 				};
 			};
 		};

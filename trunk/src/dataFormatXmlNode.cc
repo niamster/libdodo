@@ -32,8 +32,7 @@
 
 using namespace dodo::data::format::xml;
 
-node::node() : CDATA(false),
-			   empty(false)
+node::node() : CDATA(false)
 {
 }
 

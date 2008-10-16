@@ -216,11 +216,7 @@ processor::parse(const __nodeDef &definition)
 	getAttributes(definition, xnode, sample.attributes);
 
 	if (xnode->children == NULL)
-	{
-		sample.empty = true;
-
 		return sample;
-	}
 
 	sample.CDATA = isCDATA(xnode);
 
@@ -255,9 +251,7 @@ processor::parse(const __nodeDef &definition)
 
 				one.CDATA = isCDATA(xnode);
 
-				if (xnode->children == NULL)
-					one.empty = true;
-				else
+				if (xnode->children != NULL)
 				{
 					children = parse(xnode->children);
 					i = children.begin();
@@ -349,9 +343,6 @@ processor::parse(const __nodeDef &definition,
 		getNodeInfo(xnode, sample);
 		getAttributes(definition, xnode, sample.attributes);
 
-		if (xnode->children == NULL)
-			sample.empty = true;
-
 		sample.CDATA = isCDATA(xnode);
 
 		if (definition.children.size() > 0)
@@ -385,9 +376,7 @@ processor::parse(const __nodeDef &definition,
 
 					one.CDATA = isCDATA(subNode);
 
-					if (xnode->children == NULL)
-						one.empty = true;
-					else
+					if (xnode->children != NULL)
 					{
 						chldrn = parse(xnode->children);
 						i = chldrn.begin();
@@ -638,9 +627,7 @@ processor::parse(xmlNodePtr xnode)
 
 		one.CDATA = isCDATA(xnode);
 
-		if (xnode->children == NULL)
-			one.empty = true;
-		else
+		if (xnode->children != NULL)
 		{
 			children = parse(xnode->children);
 			i = children.begin();
@@ -843,7 +830,7 @@ processor::make(const node &root,
 	if (root.name.empty())
 		return __dodostring__;
 
-	dodoString processor = "<?processor version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
+	dodoString processor = "<?xml version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
 
 	processor.append(make(root));
 
@@ -886,7 +873,7 @@ processor::make(const node &xnode) const
 		data.append(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
 	}
 
-	if (xnode.empty)
+	if (xnode.value.empty() && xnode.children.empty())
 	{
 		data.append(statements[PROCESSOR_STATEMENT_SLASHGT]);
 
