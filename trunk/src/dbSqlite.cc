@@ -141,8 +141,10 @@ sqlite::fetchRows() const
 	performXExec(preExec);
 #endif
 
+	dodoArray<dodoStringArray> rows;
+
 	if (!show)
-		return __dodostringarrayarray__;
+		return rows;
 
 	sqlite3_reset(sqliteResult);
 
@@ -150,8 +152,6 @@ sqlite::fetchRows() const
 
 	bool iterate = true;
 	unsigned int i = 0;
-
-	dodoArray<dodoStringArray> rows;
 
 #ifndef USE_DEQUE
 	rows.reserve(sqlite3_data_count(sqliteResult));
@@ -243,12 +243,12 @@ sqlite::fetchFields() const
 	performXExec(preExec);
 #endif
 
+	dodoStringArray fields;
+
 	if (!show)
-		return __dodostringarray__;
+		return fields;
 
 	unsigned int numFields = sqlite3_column_count(sqliteResult);
-
-	dodoStringArray fields;
 
 #ifndef USE_DEQUE
 	fields.reserve(numFields);
@@ -905,8 +905,10 @@ sqlite::insertCollect()
 dodo::dodoStringMapArray
 sqlite::fetchFieldsToRows() const
 {
+	dodoStringMapArray rowsFields;
+
 	if (!show)
-		return __dodostringmaparray__;
+		return rowsFields;
 
 	sqlite3_reset(sqliteResult);
 
@@ -915,7 +917,6 @@ sqlite::fetchFieldsToRows() const
 	bool iterate = true;
 	unsigned int i = 0;
 
-	dodoStringMapArray rowsFields;
 	dodoStringMap rowFieldsPart;
 	dodoString rowPart;
 

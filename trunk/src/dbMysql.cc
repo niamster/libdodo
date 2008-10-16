@@ -173,14 +173,14 @@ mysql::fetchRows() const
 	performXExec(preExec);
 #endif
 
+	dodoArray<dodoStringArray> rows;
+
 	if (empty || !show)
-		return __dodostringarrayarray__;
+		return rows;
 
 	mysql_data_seek(mysqlResult, 0);
 
 	unsigned int numFields = mysql_num_fields(mysqlResult);
-
-	dodoArray<dodoStringArray> rows;
 
 #ifndef USE_DEQUE
 	rows.reserve(mysql_num_rows(mysqlResult));
@@ -230,15 +230,15 @@ mysql::fetchFields() const
 	performXExec(preExec);
 #endif
 
+	dodoStringArray fields;
+
 	if (empty || !show)
-		return __dodostringarray__;
+		return fields;
 
 	mysql_field_seek(mysqlResult, 0);
 
 	unsigned int numFields = mysql_num_fields(mysqlResult);
 	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlResult);
-
-	dodoStringArray fields;
 
 #ifndef USE_DEQUE
 	fields.reserve(numFields);
@@ -461,16 +461,16 @@ mysql::getCharset() const
 dodo::dodoStringMapArray
 mysql::fetchFieldsToRows() const
 {
+	dodoStringMapArray rowsFields;
+
 	if (empty || !show)
-		return __dodostringmaparray__;
+		return rowsFields;
 
 	mysql_data_seek(mysqlResult, 0);
 	mysql_field_seek(mysqlResult, 0);
 
 	unsigned int numFields = mysql_num_fields(mysqlResult);
 	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlResult);
-
-	dodoStringMapArray rowsFields;
 
 #ifndef USE_DEQUE
 	rowsFields.reserve(mysql_num_rows(mysqlResult));

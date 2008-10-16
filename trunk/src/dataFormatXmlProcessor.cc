@@ -834,7 +834,7 @@ processor::make(const node &root,
 dodoString
 processor::make(const node &xnode) const
 {
-	if (root.name.empty())
+	if (xnode.name.empty())
 		throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
 
 	dodoString data = statements[PROCESSOR_STATEMENT_LT];

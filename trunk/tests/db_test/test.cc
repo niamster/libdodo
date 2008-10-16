@@ -125,16 +125,15 @@ int main(int argc, char **argv)
 		{
 			pp->exec("DROP TABLE test");
 		}
-		catch (...)
+		catch (dodo::exception::basic &ex)
 		{
+			cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 		}
 
 		if (strcasecmp(argv[1], "postgresql") == 0)
 			pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b bytea)");
-
 		else
 			pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b longblob)");
-
 		
 		try
 		{

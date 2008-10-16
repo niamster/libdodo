@@ -194,13 +194,13 @@ postgresql::fetchRows() const
 	performXExec(preExec);
 #endif
 
+	dodoArray<dodoStringArray> rows;
+
 	if (empty || !show)
-		return __dodostringarrayarray__;
+		return rows;
 
 	int rowsNum = PQntuples(pgResult);
 	int fieldsNum = PQnfields(pgResult);
-
-	dodoArray<dodoStringArray> rows;
 
 #ifndef USE_DEQUE
 	rows.reserve(rowsNum);
@@ -245,12 +245,12 @@ postgresql::fetchFields() const
 	performXExec(preExec);
 #endif
 
+	dodoStringArray fields;
+
 	if (empty || !show)
-		return __dodostringarray__;
+		return fields;
 
 	int fieldsNum = PQnfields(pgResult);
-
-	dodoStringArray fields;
 
 #ifndef USE_DEQUE
 	fields.reserve(fieldsNum);
@@ -312,7 +312,6 @@ postgresql::affectedRowsCount() const
 void
 postgresql::getFieldsTypes(const dodoString &table)
 {
-
 	dodoString temp = collectedData.dbInfo.db + ":" + table;
 
 	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
@@ -785,13 +784,13 @@ postgresql::insertCollect()
 dodo::dodoStringMapArray
 postgresql::fetchFieldsToRows() const
 {
+	dodoStringMapArray rowsFields;
+
 	if (empty || !show)
-		return __dodostringmaparray__;
+		return rowsFields;
 
 	int rowsNum = PQntuples(pgResult);
 	int fieldsNum = PQnfields(pgResult);
-
-	dodoStringMapArray rowsFields;
 
 #ifndef USE_DEQUE
 	rowsFields.reserve(rowsNum);

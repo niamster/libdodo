@@ -513,9 +513,6 @@ constructor::queryCollect()
 			additionalActions = false;
 	}
 
-	if (request.size() == 0)
-		throw exception::basic(exception::ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_QUERYCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_EMPTYREQUEST, DBSQLCONSTRUCTOREX_EMPTYREQUEST_STR, __LINE__, __FILE__);
-
 	if (additionalActions)
 	{
 		if (selectAction && isSetFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_JOIN))
