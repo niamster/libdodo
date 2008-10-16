@@ -205,10 +205,10 @@ processor::parse(const __nodeDef &definition)
 
 	xnode = findNode(definition, xnode);
 
-	if (xnode == NULL)
-		return node();
-
 	node sample;
+
+	if (xnode == NULL)
+		return sample;
 
 	getNodeInfo(xnode, sample);
 
@@ -819,8 +819,12 @@ processor::make(const node &root,
 				const dodoString &encoding,
 				const dodoString &version) const
 {
+#ifndef FAST
+
 	if (root.name.empty())
-		return __dodostring__;
+		throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
+
+#endif
 
 	dodoString processor = "<?xml version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
 
@@ -834,8 +838,12 @@ processor::make(const node &root,
 dodoString
 processor::make(const node &xnode) const
 {
-	if (xnode.name.empty())
-		return __dodostring__;
+#ifndef FAST
+
+	if (root.name.empty())
+		throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
+
+#endif
 
 	dodoString data = statements[PROCESSOR_STATEMENT_LT];
 

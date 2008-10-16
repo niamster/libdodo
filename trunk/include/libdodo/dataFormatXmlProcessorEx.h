@@ -49,6 +49,7 @@ namespace dodo
 				{
 					PROCESSOREX_EMPTYDOCUMENT,
 					PROCESSOREX_NOROOTNODE,
+					PROCESSOREX_NONAME,
 				};
 
 				/**
@@ -56,6 +57,7 @@ namespace dodo
 				 */
 #define DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR "File or buffer doesn't contain XML document."
 #define DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR    "XML document doesn't have root node."
+#define DATAFORMATXMLPROCESSOREX_NONAME_STR    "Node does not have any name."
 
 				/**
 				 * IDs of functions where exception might be thrown
@@ -70,6 +72,7 @@ namespace dodo
 					PROCESSOREX_GETFILEINFO,
 					PROCESSOREX_PARSEBUFFERINT,
 					PROCESSOREX_PARSEFILEINT,
+					PROCESSOREX_MAKE,
 				};
 			};
 		};
