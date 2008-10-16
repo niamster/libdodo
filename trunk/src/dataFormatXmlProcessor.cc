@@ -242,6 +242,7 @@ processor::parse(const __nodeDef &definition)
 				if (xnode->type != XML_ELEMENT_NODE)
 				{
 					xnode = xnode->next;
+
 					continue;
 				}
 
@@ -367,6 +368,7 @@ processor::parse(const __nodeDef &definition,
 					if (subNode->type != XML_ELEMENT_NODE)
 					{
 						subNode = subNode->next;
+
 						continue;
 					}
 
@@ -376,9 +378,9 @@ processor::parse(const __nodeDef &definition,
 
 					one.CDATA = isCDATA(subNode);
 
-					if (xnode->children != NULL)
+					if (subNode->children != NULL)
 					{
-						chldrn = parse(xnode->children);
+						chldrn = parse(subNode->children);
 						i = chldrn.begin();
 						j = chldrn.end();
 						for (; i != j; ++i)
@@ -776,6 +778,7 @@ processor::findNode(const __nodeDef &definition,
 		if (xnode->type != XML_ELEMENT_NODE)
 		{
 			xnode = xnode->next;
+
 			continue;
 		}
 
