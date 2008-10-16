@@ -103,7 +103,7 @@ processor::detectNewLines(const dodoString &tpl)
 dodoString
 processor::preProcessString(const dodoString &buffer)
 {
-	_preProcessString(buffer, "memory");
+	return _preProcessString(buffer, "memory");
 }
 
 //-------------------------------------------------------------------

@@ -854,6 +854,7 @@ dialogue::setCookie(const dodoString &name,
 	temp.expires = expires;
 	temp.path = path;
 	temp.domain = domain;
+
 	cookies.push_back(temp);
 }
 
