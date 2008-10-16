@@ -82,11 +82,6 @@
 #define FILE_DELIM    '/'
 
 /**
- * remove some checks
- */
-#define FAST
-
-/**
  * socket default timeouts
  */
 #define IONETWORK_RECIEVE_TIMEOUT          1000

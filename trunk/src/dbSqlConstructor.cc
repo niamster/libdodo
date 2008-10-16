@@ -513,12 +513,8 @@ constructor::queryCollect()
 			additionalActions = false;
 	}
 
-#ifndef FAST
-
 	if (request.size() == 0)
 		throw exception::basic(exception::ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_QUERYCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_EMPTYREQUEST, DBSQLCONSTRUCTOREX_EMPTYREQUEST_STR, __LINE__, __FILE__);
-
-#endif
 
 	if (additionalActions)
 	{
