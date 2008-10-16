@@ -50,9 +50,8 @@ __info::__info()
 
 //-------------------------------------------------------------------
 
-__nodeDef::__nodeDef() : chLimit(-1),
-						 ignoreChildrenDef(false),
-						 ignoreAttributesDef(true)
+__nodeDef::__nodeDef() : allChildren(false),
+						 allAttributes(true)
 {
 }
 
@@ -220,53 +219,53 @@ processor::parse(const __nodeDef &definition)
 
 	sample.CDATA = isCDATA(xnode);
 
-	if (definition.children.size() > 0)
+	if (definition.allChildren)
 	{
-		dodoMap<dodoString, __nodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
-		for (; i != j; ++i)
-			sample.children.insert(make_pair(i->first, parse(i->second, xnode->children, definition.chLimit)));
+		xnode = xnode->children;
+
+		node one;
+
+		dodoArray<node> children;
+		dodoArray<node>::iterator i, j;
+
+		while (xnode != NULL)
+		{
+			if (xnode->type != XML_ELEMENT_NODE)
+			{
+				xnode = xnode->next;
+
+				continue;
+			}
+
+			getNodeInfo(xnode, one);
+
+			getAttributes(xnode, one.attributes);
+
+			one.CDATA = isCDATA(xnode);
+
+			if (xnode->children != NULL)
+			{
+				children = parse(xnode->children);
+				i = children.begin();
+				j = children.end();
+				for (; i != j; ++i)
+					one.children[i->name].push_back(*i);
+			}
+
+			sample.children[(char *)xnode->name].push_back(one);
+
+			initNode(one);
+
+			xnode = xnode->next;
+		}
 	}
 	else
 	{
-		if (definition.ignoreChildrenDef)
+		if (definition.children.size() > 0)
 		{
-			xnode = xnode->children;
-
-			node one;
-
-			dodoArray<node> children;
-			dodoArray<node>::iterator i, j;
-
-			while (xnode != NULL)
-			{
-				if (xnode->type != XML_ELEMENT_NODE)
-				{
-					xnode = xnode->next;
-
-					continue;
-				}
-
-				getNodeInfo(xnode, one);
-
-				getAttributes(xnode, one.attributes);
-
-				one.CDATA = isCDATA(xnode);
-
-				if (xnode->children != NULL)
-				{
-					children = parse(xnode->children);
-					i = children.begin();
-					j = children.end();
-					for (; i != j; ++i)
-						one.children[i->name].push_back(*i);
-				}
-
-				sample.children[(char *)xnode->name].push_back(one);
-
-				initNode(one);
-
-				xnode = xnode->next;
-			}
+			dodoMap<dodoString, __nodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
+			for (; i != j; ++i)
+				sample.children.insert(make_pair(i->first, parse(i->second, xnode->children)));
 		}
 	}
 
@@ -285,8 +284,7 @@ processor::parse(const __nodeDef &definition)
 
 dodoArray<node>
 processor::parse(const __nodeDef &definition,
-				 const xmlNodePtr chNode,
-				 long chLimit)
+				 const xmlNodePtr chNode)
 {
 	xmlNodePtr xnode = chNode, subNode;
 
@@ -305,14 +303,6 @@ processor::parse(const __nodeDef &definition,
 			xnode = xnode->next;
 
 			continue;
-		}
-
-		if (chLimit != -1)
-		{
-			if (chLimit <= 0)
-				return sampleArr;
-
-			--chLimit;
 		}
 
 		if (definition.ns.size() > 0)
@@ -346,53 +336,53 @@ processor::parse(const __nodeDef &definition,
 
 		sample.CDATA = isCDATA(xnode);
 
-		if (definition.children.size() > 0)
+		if (definition.allChildren)
 		{
-			dodoMap<dodoString, __nodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
-			for (; i != j; ++i)
-				sample.children.insert(make_pair(i->first, parse(i->second, xnode->children, definition.chLimit)));
+			subNode = xnode->children;
+
+			node one;
+
+			dodoArray<node> chldrn;
+			dodoArray<node>::iterator i, j;
+
+			while (subNode != NULL)
+			{
+				if (subNode->type != XML_ELEMENT_NODE)
+				{
+					subNode = subNode->next;
+
+					continue;
+				}
+
+				getNodeInfo(subNode, one);
+
+				getAttributes(subNode, one.attributes);
+
+				one.CDATA = isCDATA(subNode);
+
+				if (subNode->children != NULL)
+				{
+					chldrn = parse(subNode->children);
+					i = chldrn.begin();
+					j = chldrn.end();
+					for (; i != j; ++i)
+						one.children[i->name].push_back(*i);
+				}
+
+				sample.children[(char *)subNode->name].push_back(one);
+
+				initNode(one);
+
+				subNode = subNode->next;
+			}
 		}
 		else
 		{
-			if (definition.ignoreChildrenDef)
+			if (definition.children.size() > 0)
 			{
-				subNode = xnode->children;
-
-				node one;
-
-				dodoArray<node> chldrn;
-				dodoArray<node>::iterator i, j;
-
-				while (subNode != NULL)
-				{
-					if (subNode->type != XML_ELEMENT_NODE)
-					{
-						subNode = subNode->next;
-
-						continue;
-					}
-
-					getNodeInfo(subNode, one);
-
-					getAttributes(subNode, one.attributes);
-
-					one.CDATA = isCDATA(subNode);
-
-					if (subNode->children != NULL)
-					{
-						chldrn = parse(subNode->children);
-						i = chldrn.begin();
-						j = chldrn.end();
-						for (; i != j; ++i)
-							one.children[i->name].push_back(*i);
-					}
-
-					sample.children[(char *)subNode->name].push_back(one);
-
-					initNode(one);
-
-					subNode = subNode->next;
-				}
+				dodoMap<dodoString, __nodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
+				for (; i != j; ++i)
+					sample.children.insert(make_pair(i->first, parse(i->second, xnode->children)));
 			}
 		}
 
@@ -427,58 +417,58 @@ processor::getAttributes(const __nodeDef &definition,
 {
 	attribute = xnode->properties;
 
-	if (definition.attributes.size() > 0)
+	if (definition.allAttributes)
 	{
-		dodoStringArray::const_iterator jAttr = definition.attributes.end();
-		if (icaseNames)
+		while (attribute != NULL)
 		{
-			while (attribute != NULL)
+			xmlChar *xChar = xmlGetProp(xnode, attribute->name);
+			if (xChar != NULL)
 			{
-				dodoStringArray::const_iterator iAttr = definition.attributes.begin();
-				for (; iAttr != jAttr; ++iAttr)
-				{
-					if (xmlStrcmp(attribute->name, (xmlChar *)iAttr->c_str()) == 0)
-					{
-						xmlChar *xChar = xmlGetProp(xnode, attribute->name);
-						if (xChar != NULL)
-						{
-							attributes[*iAttr] = (char *)xChar;
-							xmlFree(xChar);
-						}
-					}
-				}
+				attributes[(char *)attribute->name] = (char *)xChar;
+				xmlFree(xChar);
+			}
 
-				attribute = attribute->next;
-			}
-		}
-		else
-		{
-			dodoStringArray::const_iterator iAttr = definition.attributes.begin();
-			for (; iAttr != jAttr; ++iAttr)
-			{
-				xmlChar *xChar = xmlGetProp(xnode, (xmlChar *)iAttr->c_str());
-				if (xChar != NULL)
-				{
-					attributes[*iAttr] = (char *)xChar;
-					xmlFree(xChar);
-				}
-			}
+			attribute = attribute->next;
 		}
 	}
 	else
 	{
-		if (definition.ignoreAttributesDef)
+		if (definition.attributes.size() > 0)
 		{
-			while (attribute != NULL)
+			dodoStringArray::const_iterator jAttr = definition.attributes.end();
+			if (icaseNames)
 			{
-				xmlChar *xChar = xmlGetProp(xnode, attribute->name);
-				if (xChar != NULL)
+				while (attribute != NULL)
 				{
-					attributes[(char *)attribute->name] = (char *)xChar;
-					xmlFree(xChar);
-				}
+					dodoStringArray::const_iterator iAttr = definition.attributes.begin();
+					for (; iAttr != jAttr; ++iAttr)
+					{
+						if (xmlStrcmp(attribute->name, (xmlChar *)iAttr->c_str()) == 0)
+						{
+							xmlChar *xChar = xmlGetProp(xnode, attribute->name);
+							if (xChar != NULL)
+							{
+								attributes[*iAttr] = (char *)xChar;
+								xmlFree(xChar);
+							}
+						}
+					}
 
-				attribute = attribute->next;
+					attribute = attribute->next;
+				}
+			}
+			else
+			{
+				dodoStringArray::const_iterator iAttr = definition.attributes.begin();
+				for (; iAttr != jAttr; ++iAttr)
+				{
+					xmlChar *xChar = xmlGetProp(xnode, (xmlChar *)iAttr->c_str());
+					if (xChar != NULL)
+					{
+						attributes[*iAttr] = (char *)xChar;
+						xmlFree(xChar);
+					}
+				}
 			}
 		}
 	}
@@ -754,7 +744,6 @@ processor::initNodeDef(__nodeDef &xnode)
 	xnode.children.clear();
 	xnode.name.clear();
 	xnode.ns.clear();
-	xnode.chLimit = -1;
 }
 
 //-------------------------------------------------------------------

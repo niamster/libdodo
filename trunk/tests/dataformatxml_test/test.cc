@@ -31,12 +31,11 @@ int main(int argc, char **argv)
 		attr.push_back("id");
 		def.attributes = attr;
 		def.name = "div";
-		//def.chLimit = 1;
 		def.ns = "cns";
 
 		__nodeDef def1;
 		def1.name = "span";
-		def1.ignoreChildrenDef = true;
+		def1.allChildren = true;
 		def.children["span"] = def1;
 
 		node xnode = xmlp.processFile(def, "./test.xml");

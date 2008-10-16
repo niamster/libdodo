@@ -64,12 +64,10 @@ namespace dodo
 					dodoString name;                                                                        ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
 					dodoMap<dodoString, __nodeDef> children;                                                ///< children definitions
-
-					long chLimit;                                                                           ///< limit of children to search for[-1 for unlimit, default]
-					bool ignoreChildrenDef;                                                                 ///< if true - parse all children tree if no children definition is given; false by default
+					bool allChildren;                                                                 ///< if true - get all children tree[false by default]
 
 					dodoStringArray attributes;                                                             ///< node attrributes; if empty - take all
-					bool ignoreAttributesDef;                                                               ///< if true - parse all attributes if no attributes definition is given; true by default
+					bool allAttributes;                                                               ///< if true - get all attributes[true by default]
 
 					dodoString ns;                                                                          ///< node namespace; if empty parser skips namespace specification
 				};
@@ -226,9 +224,8 @@ namespace dodo
 						 * @return parsed XML nodes in node structures
 						 * @param definition defines structure of XML
 						 * @param chNode defines XML tree node
-						 * @param chLimit defines limit of children
 						 */
-						virtual dodoArray<node> parse(const __nodeDef &definition, const xmlNodePtr chNode, long chLimit);
+						virtual dodoArray<node> parse(const __nodeDef &definition, const xmlNodePtr chNode);
 
 						/**
 						 * get node attributes

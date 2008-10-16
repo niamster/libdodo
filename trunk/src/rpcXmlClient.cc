@@ -78,7 +78,7 @@ client::processCallResult(const dodoString &data)
 
 	dodo::data::format::xml::__nodeDef xmlMethodResponse;
 	xmlMethodResponse.name = "methodResponse";
-	xmlMethodResponse.ignoreChildrenDef = true;
+	xmlMethodResponse.allChildren = true;
 
 	dodo::data::format::xml::node node = xmlValue.processString(xmlMethodResponse, data);
 
