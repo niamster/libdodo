@@ -23,12 +23,12 @@ int main(int argc, char **argv)
 		processor xmlp;
 		xmlp.icaseNames = true;
 
-		cout << xmlp.getFileInfo("./test.xml").version;
+		cout << xmlp.getFileInfo("./test.xml").version << endl;
 
 		__nodeDef def;
 
 		dodoStringArray attr;
-		attr.push_back("iD");
+		attr.push_back("id");
 		def.attributes = attr;
 		def.name = "div";
 		//def.chLimit = 1;
@@ -37,32 +37,33 @@ int main(int argc, char **argv)
 		__nodeDef def1;
 		def1.name = "span";
 		def1.ignoreChildrenDef = true;
-
 		def.children["span"] = def1;
 
 		node xnode = xmlp.processFile(def, "./test.xml");
 		//node xnode = xmlp.processFile("./test.xml");
 
-		cout << xnode.attributes["iD"] << endl;
+		cout << xnode.attributes["id"] << endl;
 		cout << xnode.name << endl;
-		cout << tools::string::trim(xnode.value, " \n\t\r", 4) << endl;
-		cout << xnode.children.size() << endl;
+		cout << tools::string::trim(xnode.getValue(), " \n\t\r", 4) << endl;
 
-		if (xnode.children.size() > 0)
+		dodoStringArray names = xnode.getChildrenNames(true);
+		cout << "Names(" << names.size() << "):" << endl;
+		dodoStringArray::iterator i = names.begin(), j = names.end();
+		for (;i!=j;++i)
+			cout << "\t" << *i << endl;
+
+		dodoArray<node> span = xnode.getChildren("span");
+
+		if (span.size() > 0)
 		{
-			cout << xnode.children.begin()->first << endl;
-			cout << xnode.children.begin()->second.size() << endl;
-		}
+			dodoArray<node> subspan = span[0].getChildren("span");
+			if (subspan.size() > 0)
+				cout << subspan[0].getValue() << endl;
 
-		if (xnode.children["span"].size() > 0)
-		{
-			if (xnode.children["span"][0].children["span"].size() > 0)
-				cout << xnode.children["span"][0].children["span"][0].value << endl;
+			cout << span[0].attributes["id"] << endl;
 
-			cout << xnode.children["span"][0].attributes["id"] << endl;
-
-			if (xnode.children["span"].size() > 1)
-				cout << xnode.children["span"][1].attributes["id"] << endl;
+			if (span.size() > 1)
+				cout << span[1]["id"] << endl;
 		}
 
 		xmlp.clear();

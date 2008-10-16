@@ -38,3 +38,114 @@ node::node() : CDATA(false)
 
 //-------------------------------------------------------------------
 
+void
+node::addChild(const node &child)
+{
+	children[child.name].push_back(child);
+}
+
+//-------------------------------------------------------------------
+
+void
+node::setChildren(const dodoArray<node> &a_children)
+{
+	dodoArray<node>::const_iterator i = a_children.begin(), j = a_children.end();
+	for (;i!=j;++i)
+		children[i->name].push_back(*i);
+}
+
+//-------------------------------------------------------------------
+
+dodoArray<node>
+node::getChildren(const dodoString &name,
+                  bool recursive)
+{
+	dodoArray<node> nodes = children[name];
+
+	if (recursive)
+	{
+		dodoArray<node> subnodes;
+
+		dodoArray<node>::iterator i = nodes.begin(), j = nodes.end();
+		for (;i!=j;++i)
+		{
+			subnodes = i->getChildren(name, true);
+
+			nodes.insert(nodes.end(), subnodes.begin(), subnodes.end());
+		}
+	}
+
+	return nodes;
+}
+
+//-------------------------------------------------------------------
+
+dodo::dodoStringArray
+node::getChildrenNames(bool recursive)
+{
+	dodoStringArray names;
+
+	if (recursive)
+	{
+		dodoStringArray subnames;
+		dodoStringArray::iterator x, y;
+
+		dodoArray<node>::iterator o, p;
+
+		dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::iterator i = children.begin(), j = children.end();
+		for (;i!=j;++i)
+		{
+			o = i->second.begin();
+			p = i->second.end();
+			for (;o!=p;++o)
+			{
+				if (!tools::misc::isInArray(names, o->name))
+					names.push_back(o->name);
+
+				subnames = o->getChildrenNames(true);
+
+				x = subnames.begin();
+				y = subnames.end();
+				for (;x!=y;++x)
+					if (!tools::misc::isInArray(names, *x))
+						names.push_back(*x);
+			}
+		}
+	}
+	else
+	{
+		dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::iterator i = children.begin(), j = children.end();
+		for (;i!=j;++i)
+			names.push_back(i->first);
+	}
+
+	return names;
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+node::operator[](const dodoString &name)
+{
+	return attributes[name];
+}
+
+//-------------------------------------------------------------------
+
+void
+node::setValue(const dodoString &a_value,
+               bool a_CDATA)
+{
+	CDATA = a_CDATA;
+	value = a_value;
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+node::getValue()
+{
+	return value;
+}
+
+//-------------------------------------------------------------------

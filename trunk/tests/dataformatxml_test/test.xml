@@ -6,7 +6,7 @@
 	</test>
 	<node0>
 		<node1>
-			<cns:div id="$ID$">
+			<cns:div id="ID">
 				<![CDATA[ CDATA  ]]>
 				<span id="%ID%">text 1
 					<span id="1">text 2</span>
@@ -15,6 +15,7 @@
 				<span id="*ID*">text 4
 					<span id="3">text 5</span>
 					<span id="4">test 6</span>	
+					<div>div here</div>
 				</span>
 			</cns:div>
 		</node1>	
