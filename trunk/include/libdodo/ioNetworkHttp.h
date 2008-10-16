@@ -220,11 +220,6 @@ namespace dodo
 					virtual __httpResponse GET(const dodoString &url);
 
 					/**
-					 * perform GET request
-					 */
-					virtual void GET();
-
-					/**
 					 * perform POST request
 					 * @return server response
 					 * @param url defines Url
@@ -284,6 +279,11 @@ namespace dodo
 
 					bool cacheAuthentification;                                                         ///< if true cache authentification HTTP and proxy info; true by default
 
+					/**
+					 * clear response data
+					 */
+					virtual void clearResponse();
+
 				private:
 
 					/**
@@ -306,6 +306,11 @@ namespace dodo
 						GETCONTENTSTATUS_PROXYBASICAUTH,
 						GETCONTENTSTATUS_PROXYDIGESTAUTH,
 					};
+
+					/**
+					 * perform GET request
+					 */
+					virtual void GET();
 
 					/**
 					 * get response data and fetch headers

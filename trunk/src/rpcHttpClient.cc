@@ -58,6 +58,8 @@ client::receiveTextResponse()
 {
 	io::network::__httpResponse response = http.getResponse();
 
+	http.clearResponse();
+
 	return response.data;
 }
 

@@ -59,7 +59,11 @@ server::sendTextRequest(const dodoString &response)
 dodoString
 server::receiveTextResponse()
 {
-	return provider.content;
+	dodoString content = provider.getContent();
+
+	provider.clearContent();
+
+	return content;
 }
 
 //-------------------------------------------------------------------

@@ -1638,3 +1638,15 @@ http::parseCookie(const dodoString &header)
 }
 
 //-------------------------------------------------------------------
+
+void
+http::clearResponse()
+{
+	response.headers.clear();
+	response.cookies.clear();
+	response.data.clear();
+	response.code = 0;
+	response.redirected = false;
+}
+
+//-------------------------------------------------------------------
