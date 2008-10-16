@@ -503,14 +503,14 @@ processor::getNodeInfo(const xmlNodePtr xnode,
 {
 	if (xnode->ns != NULL)
 	{
-		resNode.ns = (char *)xnode->ns->prefix;
-		resNode.nsHref = (char *)xnode->ns->href;
+		resNode.ns.prefix = (char *)xnode->ns->prefix;
+		resNode.ns.href = (char *)xnode->ns->href;
 	}
 
 	if (xnode->nsDef != NULL)
 	{
-		resNode.nsDef = (char *)xnode->nsDef->prefix;
-		resNode.nsDefHref = (char *)xnode->nsDef->href;
+		resNode.nsDef.prefix = (char *)xnode->nsDef->prefix;
+		resNode.nsDef.href = (char *)xnode->nsDef->href;
 	}
 
 	if (xnode->name != NULL)
@@ -648,10 +648,10 @@ processor::initNode(node &xnode)
 	xnode.attributes.clear();
 	xnode.children.clear();
 	xnode.name.clear();
-	xnode.ns.clear();
-	xnode.nsDef.clear();
-	xnode.nsDefHref.clear();
-	xnode.nsHref.clear();
+	xnode.ns.prefix.clear();
+	xnode.ns.href.clear();
+	xnode.nsDef.prefix.clear();
+	xnode.nsDef.href.clear();
 	xnode.value.clear();
 }
 
@@ -839,20 +839,20 @@ processor::make(const node &xnode) const
 
 	dodoString data = statements[PROCESSOR_STATEMENT_LT];
 
-	if (!xnode.ns.empty())
+	if (!xnode.ns.prefix.empty())
 	{
-		data.append(xnode.ns);
+		data.append(xnode.ns.prefix);
 		data.append(statements[PROCESSOR_STATEMENT_COLON]);
 	}
 	data.append(xnode.name);
 	data.append(statements[PROCESSOR_STATEMENT_SPACE]);
 
-	if (!xnode.nsDef.empty())
+	if (!xnode.nsDef.prefix.empty())
 	{
 		data.append(statements[PROCESSOR_STATEMENT_XMLNS]);
-		data.append(xnode.nsDef);
+		data.append(xnode.nsDef.prefix);
 		data.append(statements[PROCESSOR_STATEMENT_EQUALDQUOTE]);
-		data.append(xnode.nsDefHref);
+		data.append(xnode.nsDef.href);
 		data.append(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
 	}
 
@@ -900,9 +900,9 @@ processor::make(const node &xnode) const
 
 	data.append(statements[PROCESSOR_STATEMENT_LTSLASH]);
 
-	if (!xnode.ns.empty())
+	if (!xnode.ns.prefix.empty())
 	{
-		data.append(xnode.ns);
+		data.append(xnode.ns.prefix);
 		data.append(statements[PROCESSOR_STATEMENT_COLON]);
 	}
 

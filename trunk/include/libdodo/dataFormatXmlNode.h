@@ -58,6 +58,15 @@ namespace dodo
 				class processor;
 
 				/**
+				 * @struct __nodeNamespace defines node namespace
+				 */
+				struct __nodeNamespace
+				{
+					dodoString prefix; ///< prefix for the namespace
+					dodoString href; ///< URL for the namespace
+				};
+
+				/**
 				 * @class node defines xml tree
 				 * @note children is a map of vectors of xml nodes where map key is node name and vector contains nodes with name given in key
 				 */
@@ -122,16 +131,14 @@ namespace dodo
 
 						dodoString name;                                                                                                        ///< name of the node [[tag]]
 
+						__nodeNamespace ns;///< namespace of the node
+						__nodeNamespace nsDef;///< namespace definition of the node
+
 					protected:
 
 						dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> children;                                                    ///< children
 
 						dodoString value;                                                                                                       ///< value of the node
-
-						dodoString ns;                                                                                                          ///< namespace of the node
-						dodoString nsHref;                                                                                                      ///< uri "value"
-						dodoString nsDef;                                                                                                       ///< namespace
-						dodoString nsDefHref;                                                                                                   ///< namespace URI
 
 						bool CDATA;                                                                                                           ///< true if node doesn't have contents : `<node />`
 				};
