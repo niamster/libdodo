@@ -453,12 +453,25 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
 //-------------------------------------------------------------------
 
 node
-processor::process(const dodoString &root)
+processor::processString(const dodoString &root)
 {
 	node node;
 
 	node.valueDataType = DATATYPE_OBJECT;
 	processObject(node.objectValue, root, 0);
+
+	return node;
+}
+
+//-------------------------------------------------------------------
+
+node
+processor::processFile(const dodoString &path)
+{
+	node node;
+
+	node.valueDataType = DATATYPE_OBJECT;
+	processObject(node.objectValue, tools::filesystem::getFileContents(path), 0);
 
 	return node;
 }
@@ -489,7 +502,7 @@ processor::fromMap(const dodoStringMap &root)
 dodo::dodoStringMap
 processor::toMap(const dodoString &jnode)
 {
-	node JSON = process(jnode);
+	node JSON = processString(jnode);
 
 	dodoStringMap map;
 

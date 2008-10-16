@@ -136,7 +136,7 @@ namespace dodo
 						 * @param definition defines structure of XML
 						 * @param buffer defines XML buffer
 						 */
-						virtual node processBuffer(const __nodeDef &definition, const dodoString &buffer);
+						virtual node processString(const __nodeDef &definition, const dodoString &buffer);
 
 						/**
 						 * parse XML file
@@ -150,7 +150,7 @@ namespace dodo
 						 * @return parsed XML in node structure
 						 * @param buffer defines XML buffer
 						 */
-						virtual node processBuffer(const dodoString &buffer);
+						virtual node processString(const dodoString &buffer);
 
 						bool icaseNames;                                            ///< if true ignore case of names[false by default]
 

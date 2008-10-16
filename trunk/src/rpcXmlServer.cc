@@ -68,7 +68,7 @@ server::processCall(const dodoString &data)
 	xmlMethodCall.name = "methodCall";
 	xmlMethodCall.ignoreChildrenDef = true;
 
-	dodo::data::format::xml::node node = xmlValue.processBuffer(xmlMethodCall, data);
+	dodo::data::format::xml::node node = xmlValue.processString(xmlMethodCall, data);
 
 	return method::xmlToMethod(node);
 }

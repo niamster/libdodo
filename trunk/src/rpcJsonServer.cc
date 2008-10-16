@@ -58,7 +58,7 @@ server::processCall(const dodoString &data)
 {
 	dodo::data::format::json::processor jsonValue;
 
-	dodo::data::format::json::node node = jsonValue.process(data);
+	dodo::data::format::json::node node = jsonValue.processString(data);
 
 	return method::jsonToMethod(node, rqVersion, rqId);
 }

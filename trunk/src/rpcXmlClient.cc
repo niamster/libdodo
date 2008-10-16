@@ -80,7 +80,7 @@ client::processCallResult(const dodoString &data)
 	xmlMethodResponse.name = "methodResponse";
 	xmlMethodResponse.ignoreChildrenDef = true;
 
-	dodo::data::format::xml::node node = xmlValue.processBuffer(xmlMethodResponse, data);
+	dodo::data::format::xml::node node = xmlValue.processString(xmlMethodResponse, data);
 
 	return response::xmlToResponse(node);
 }

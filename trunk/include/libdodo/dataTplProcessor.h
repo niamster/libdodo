@@ -222,7 +222,7 @@ namespace dodo
 					 * @return parsed template
 					 * @param path defines path of template
 					 */
-					virtual dodoString process(const dodoString &path);
+					virtual dodoString processFile(const dodoString &path);
 
 					/**
 					 * @return parsed template
@@ -271,7 +271,7 @@ namespace dodo
 					 * @return preprocessed template
 					 * @param path defines path of template
 					 */
-					virtual dodoString preProcess(const dodoString &path);
+					virtual dodoString preProcessFile(const dodoString &path);
 
 					/**
 					 * @return preprocessed template

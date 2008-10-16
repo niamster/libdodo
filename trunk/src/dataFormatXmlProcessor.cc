@@ -163,7 +163,7 @@ processor::processFile(const __nodeDef &definition,
 //-------------------------------------------------------------------
 
 node
-processor::processBuffer(const __nodeDef &definition,
+processor::processString(const __nodeDef &definition,
 						 const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
@@ -719,7 +719,7 @@ processor::processFile(const dodoString &file)
 //-------------------------------------------------------------------
 
 node
-processor::processBuffer(const dodoString &buffer)
+processor::processString(const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
 

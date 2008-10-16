@@ -123,7 +123,7 @@ cgif(exchange &cgiio)
 		arr2.push_back(arr1);
 		cgip.assign("arr2", arr2);
 
-		cgit.printStream(cgip.process("test.tpl"));
+		cgit.printStream(cgip.processFile("test.tpl"));
 	}
 	catch (dodo::exception::basic ex)
 	{

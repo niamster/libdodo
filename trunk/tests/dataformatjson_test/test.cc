@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
 		cout << js.make(node0) << endl;
 
-		node jsN = js.process(js.make(node0));
+		node jsN = js.processString(js.make(node0));
 
 		switch (jsN.getType())
 		{

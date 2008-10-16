@@ -59,7 +59,7 @@ client::processCallResult(const dodoString &data)
 {
 	dodo::data::format::json::processor jsonValue;
 
-	dodo::data::format::json::node node = jsonValue.process(data);
+	dodo::data::format::json::node node = jsonValue.processString(data);
 
 	return response::jsonToResponse(node, rpVersion, rpId);
 }

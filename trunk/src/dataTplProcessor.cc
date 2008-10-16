@@ -194,7 +194,7 @@ processor::_preProcessString(const dodoString &buffer,
 //-------------------------------------------------------------------
 
 dodoString
-processor::preProcess(const dodoString &path)
+processor::preProcessFile(const dodoString &path)
 {
 	if (tplBasePath.empty())
 		return _preProcessString(tools::filesystem::getFileContents(path), path);
@@ -234,9 +234,9 @@ processor::processString(const dodoString &tpl)
 //-------------------------------------------------------------------
 
 dodoString
-processor::process(const dodoString &path)
+processor::processFile(const dodoString &path)
 {
-	dodoString tmp = _processString(preProcess(path), path);
+	dodoString tmp = _processString(preProcessFile(path), path);
 
 	newLinePositions.pop_back();
 
@@ -764,7 +764,7 @@ processor::_include(unsigned long start,
 		{
 			processed.push_back(path);
 
-			tpl.append(process(temp1));
+			tpl.append(processFile(temp1));
 
 			processed.pop_back();
 		}

@@ -34,6 +34,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
+#include <libdodo/toolsFilesystem.h>
 #include <libdodo/dataFormatJsonProcessorEx.h>
 #include <libdodo/dataFormatJsonNode.h>
 
@@ -72,7 +73,13 @@ namespace dodo
 						 * @return root of unserialized JSON object
 						 * @param root defines string that contains serialized JSON object
 						 */
-						virtual node process(const dodoString &root);
+						virtual node processString(const dodoString &root);
+
+						/**
+						 * @return root of unserialized JSON object
+						 * @param path defines path to file that contains serialized JSON object
+						 */
+						virtual node processFile(const dodoString &path);
 
 						/**
 						 * @return string that contains serialized JSON object
