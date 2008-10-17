@@ -43,7 +43,8 @@ namespace dodo
 	namespace rpc
 	{
 		/**
-		 * @typedef handler defines type of rpc method handler
+		 * @typedef handler
+		 * @brief defines type of rpc method handler
 		 * @param method defines method name
 		 * @param arguments defines arguments of the method
 		 * @param idata defines additional incoming data
@@ -52,7 +53,8 @@ namespace dodo
 		typedef response (*handler)(const dodoString &method, const dodoArray<value> &arguments, const void *idata, void *odata);
 
 		/**
-		 * @class server defines server-side RPC instrument
+		 * @class server
+		 * @brief defines server-side RPC instrument
 		 */
 		class server
 		{

@@ -79,7 +79,8 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @struct __url defines Url parts
+		 * @struct __url
+		 * @brief defines Url parts
 		 */
 		struct __url
 		{
@@ -95,7 +96,8 @@ namespace dodo
 #ifdef ZLIB_EXT
 
 		/**
-		 * @enum codeZlibCompressionStrategyEnum defines type of compression for zlib
+		 * @enum codeZlibCompressionStrategyEnum
+		 * @brief defines type of compression for zlib
 		 */
 		enum codeZlibCompressionStrategyEnum
 		{
@@ -108,7 +110,8 @@ namespace dodo
 #endif
 
 		/**
-		 * @class code provides code functionality
+		 * @class code
+		 * @brief provides code functionality
 		 */
 		class code
 		{
@@ -170,9 +173,9 @@ namespace dodo
 
 				/**
 				 * @param result defines converted to HEX
-				 * @param first defines char to convert
+				 * @param character defines char to convert
 				 */
-				static void charToHex(char result[3], char first);
+				static void charToHex(char result[3], char character);
 
 				/**
 				 * @return encoded string with ASCII85 method

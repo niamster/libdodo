@@ -41,7 +41,8 @@ namespace dodo
 		namespace sync
 		{
 			/**
-			 * @class section performs atomic locks
+			 * @class section
+			 * @brief performs atomic locks
 			 */
 			class section
 			{

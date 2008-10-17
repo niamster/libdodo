@@ -73,7 +73,8 @@ namespace dodo
 			};
 
 			/**
-			 * @class regular provides file I/O manipulations
+			 * @class regular
+			 * @brief provides file I/O manipulations
 			 */
 			class regular : virtual public channel
 			{

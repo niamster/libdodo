@@ -50,7 +50,8 @@ namespace dodo
 				namespace data
 				{
 					/**
-					 * @class single provides shared data management functionality for threads
+					 * @class single
+					 * @brief provides shared data management functionality for threads
 					 */
 					class single : public sync::data::single
 					{

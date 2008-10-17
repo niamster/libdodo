@@ -78,7 +78,8 @@ namespace dodo
 #ifndef IO_WO_XEXEC
 
 			/**
-			 * @struct __xexecIoNetworkClientCollectedData defines data that could be retrieved from class(to modificate)[contains references]
+			 * @struct __xexecIoNetworkClientCollectedData
+			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
 			 */
 			struct __xexecIoNetworkClientCollectedData
 			{
@@ -96,7 +97,8 @@ namespace dodo
 #endif
 
 			/**
-			 * @class client provides network connection interface
+			 * @class client
+			 * @brief provides network connection interface
 			 */
 			class client : public connection
 #ifndef IO_WO_XEXEC

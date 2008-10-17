@@ -44,7 +44,8 @@ namespace dodo
 			namespace data
 			{
 				/**
-				 * @struct __info defines shared data
+				 * @struct __info
+				 * @brief defines shared data
 				 */
 				struct __info
 				{
@@ -53,7 +54,8 @@ namespace dodo
 				};
 
 				/**
-				 * @class collection implements collection of shared data
+				 * @class collection
+				 * @brief implements collection of shared data
 				 */
 				class collection
 				{

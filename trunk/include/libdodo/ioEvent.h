@@ -46,7 +46,8 @@ namespace dodo
 	namespace io
 	{
 		/**
-		 * @struct __eventInOutDescriptors defines input and output descriptors of the io::* classes
+		 * @struct __eventInOutDescriptors
+		 * @brief defines input and output descriptors of the io::* classes
 		 */
 		struct __eventInOutDescriptors
 		{
@@ -57,7 +58,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class event provides information if in/output stream is readable/writable
+		 * @class event
+		 * @brief provides information if in/output stream is readable/writable
 		 */
 		class event : virtual public pc::sync::thread::stack
 		{

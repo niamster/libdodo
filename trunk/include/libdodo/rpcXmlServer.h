@@ -45,7 +45,8 @@ namespace dodo
 		namespace xml
 		{
 			/**
-			 * @struct __additionalData defines response/request additional data
+			 * @struct __additionalData
+			 * @brief defines response/request additional data
 			 */
 			struct __additionalData
 			{
@@ -57,8 +58,10 @@ namespace dodo
 
 				dodoString &encoding;                 ///< response/request encoding
 			};
+
 			/**
-			 * @class server defines server-side XML-RPC instrument
+			 * @class server
+			 * @brief defines server-side XML-RPC instrument
 			 */
 			class server : virtual public rpc::server
 			{

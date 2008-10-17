@@ -59,7 +59,8 @@ namespace dodo
 #ifndef IO_WO_XEXEC
 
 		/**
-		 * @struct __xexecIoChannelCollectedData defines data that could be retrieved from io::channel(to modificate)
+		 * @struct __xexecIoChannelCollectedData
+		 * @brief defines data that could be retrieved from io::channel(to modificate)
 		 */
 		struct __xexecIoChannelCollectedData
 		{
@@ -80,7 +81,8 @@ namespace dodo
 #endif
 
 		/**
-		 * @class channel implements an interface for I/O operations
+		 * @class channel
+		 * @brief implements an interface for I/O operations
 		 */
 		class channel : virtual public eventInfo,
 						virtual public pc::sync::thread::stack

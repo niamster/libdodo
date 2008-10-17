@@ -96,7 +96,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __fileInfo defines file info
+		 * @struct __fileInfo
+		 * @brief defines file info
 		 */
 		struct __fileInfo
 		{
@@ -111,7 +112,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class filesystem provides disk I/O manipulations
+		 * @class filesystem
+		 * @brief provides disk I/O manipulations
 		 */
 		class filesystem
 		{

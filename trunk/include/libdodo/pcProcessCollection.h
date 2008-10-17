@@ -63,7 +63,8 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __processInfo defines process information
+			 * @struct __processInfo
+			 * @brief defines process information
 			 */
 			struct __processInfo
 			{
@@ -89,7 +90,8 @@ namespace dodo
 #ifdef DL_EXT
 
 			/**
-			 * @struct __processMod defines data that is returned from initIpcProcessCollectionModule in the library
+			 * @struct __processMod
+			 * @brief defines data that is returned from initIpcProcessCollectionModule in the library
 			 */
 			struct __processMod
 			{
@@ -101,20 +103,23 @@ namespace dodo
 			};
 
 			/**
-			 * @typedef initIpcProcessCollectionModule defines type of init function for library
+			 * @typedef initIpcProcessCollectionModule
+			 * @brief defines type of init function for library
 			 * @param data defines user data
 			 */
 			typedef __processMod (*initIpcProcessCollectionModule)(void *data);
 
 			/**
-			 * @typedef deinitIpcProcessCollectionModule defines type of deinit function for library
+			 * @typedef deinitIpcProcessCollectionModule
+			 * @brief defines type of deinit function for library
 			 */
 			typedef void (*deinitIpcProcessCollectionModule)();
 
 #endif
 
 			/**
-			 * @class collection provides processes management functionality
+			 * @class collection
+			 * @brief provides processes management functionality
 			 */
 			class collection : public job::collection
 			{

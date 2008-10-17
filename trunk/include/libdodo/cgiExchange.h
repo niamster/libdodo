@@ -40,7 +40,8 @@ namespace dodo
 	namespace cgi
 	{
 		/**
-		 * @class exchange provides interface to  CGI I/O functionality
+		 * @class exchange
+		 * @brief provides interface to  CGI I/O functionality
 		 */
 		class exchange : virtual public io::channel
 		{

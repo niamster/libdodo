@@ -40,13 +40,15 @@ namespace dodo
 	namespace cgi
 	{
 		/**
-		 * @typedef serverHandler defines type of function that will be called on new cgi request
+		 * @typedef serverHandler
+		 * @brief defines type of function that will be called on new cgi request
 		 * @param ex defines cgi::exchange object for I/O
 		 */
 		typedef void (*serverHandler)(exchange &ex);
 
 		/**
-		 * @class server provides CGI server functionality
+		 * @class server
+		 * @brief provides CGI server functionality
 		 */
 		class server
 		{

@@ -46,7 +46,8 @@ namespace dodo
 			namespace http
 			{
 				/**
-				 * @class client defines client-side RPC instrument
+				 * @class client
+				 * @brief defines client-side RPC instrument
 				 */
 				class client : public json::client,
 							   public rpc::http::client

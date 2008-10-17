@@ -44,7 +44,8 @@ namespace dodo
 		namespace xml
 		{
 			/**
-			 * @class value defines RPC value in XML representation
+			 * @class value
+			 * @brief defines RPC value in XML representation
 			 */
 			class value
 			{

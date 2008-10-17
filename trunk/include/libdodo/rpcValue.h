@@ -66,7 +66,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class value defines RPC value
+		 * @class value
+		 * @brief defines RPC value
 		 */
 		class value
 		{

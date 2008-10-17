@@ -64,7 +64,8 @@ namespace dodo
 			namespace ssl
 			{
 				/**
-				 * @class client provides network connection interface
+				 * @class client
+				 * @brief provides network SSL connection interface
 				 */
 				class client : public network::client
 				{

@@ -47,7 +47,8 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @class postgresql provides an interface to postgresql db
+		 * @class postgresql
+		 * @brief provides an interface to postgresql db
 		 */
 		class postgresql : public sql::constructor
 		{
@@ -212,7 +213,8 @@ namespace dodo
 #endif
 
 				/**
-				 * @struct __blob defines blob value
+				 * @struct __blob
+				 * @brief defines blob value
 				 */
 				struct __blob
 				{

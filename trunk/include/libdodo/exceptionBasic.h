@@ -135,7 +135,8 @@ namespace dodo
 #ifdef DL_EXT
 
 		/**
-		 * @struct __basicMod is returned from initBaseExModule in the library
+		 * @struct __basicMod
+		 * @brief is returned from initBaseExModule in the library
 		 */
 		struct __basicMod
 		{
@@ -146,13 +147,15 @@ namespace dodo
 		};
 
 		/**
-		 * @typedef initBaseExModule defines type of init function for library
+		 * @typedef initBaseExModule
+		 * @brief defines type of init function for library
 		 * @param data defines user data
 		 */
 		typedef __basicMod (*initBaseExModule)(void *data);
 
 		/**
-		 * @typedef deinitBaseExModule defines type of deinit function for library
+		 * @typedef deinitBaseExModule
+		 * @brief defines type of deinit function for library
 		 */
 		typedef void (*deinitBaseExModule)();
 
@@ -161,7 +164,8 @@ namespace dodo
 		class basic;
 
 		/**
-		 * @typedef errorHandler defines type of hook function
+		 * @typedef errorHandler
+		 * @brief defines type of hook function
 		 * @param module defines module where exception occured[see errorModuleEnum]
 		 * @param ex defines pointer to basic object with exception information
 		 * @param data defines user data
@@ -169,7 +173,8 @@ namespace dodo
 		typedef void (*errorHandler)(int module, basic *ex, void *data);
 
 		/**
-		 * @class basic describes exception that has been thrown
+		 * @class basic
+		 * @brief describes exception that has been thrown
 		 */
 		class basic : public std::exception,
 					  public singleton<basic>
@@ -298,7 +303,8 @@ namespace dodo
 #endif
 
 				/**
-				 * @class syncThreadSection performs atomic locks using mutexes
+				 * @class syncThreadSection
+				 * @brief performs atomic locks using mutexes
 				 */
 				class syncThreadSection
 				{
@@ -336,7 +342,8 @@ namespace dodo
 				static syncThreadSection keeper;                             ///< lock
 
 				/**
-				 * @class syncThreadStack provides thread safe behaviour
+				 * @class syncThreadStack
+				 * @brief provides thread safe behaviour
 				 * @note it locks in constructor and unlocks in destructor
 				 */
 				class syncThreadStack

@@ -68,7 +68,8 @@ namespace dodo
 				};
 
 				/**
-				 * @class node defines JSON object reprasentation
+				 * @class node
+				 * @brief defines JSON object reprasentation
 				 */
 				class node
 				{

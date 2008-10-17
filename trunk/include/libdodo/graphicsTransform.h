@@ -59,7 +59,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class transform provides simple image transformations
+		 * @class transform
+		 * @brief provides simple image transformations
 		 */
 		class transform
 		{

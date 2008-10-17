@@ -71,7 +71,8 @@ namespace dodo
 			};
 
 			/**
-			 * @class fifo provides I/O manipulations with fifo files
+			 * @class fifo
+			 * @brief provides I/O manipulations with fifo files
 			 */
 			class fifo : virtual public channel
 			{

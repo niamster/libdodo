@@ -41,7 +41,8 @@ namespace dodo
 			namespace data
 			{
 				/**
-				 * @class single provides shared data management functionality
+				 * @class single
+				 * @brief provides shared data management functionality
 				 */
 				class single
 				{

@@ -65,7 +65,8 @@ namespace dodo
 			};
 
 			/**
-			 * @class __initialAccept holds info that passes to accept call, and then inits exchange;
+			 * @class __initialAccept
+			 * @brief holds info that passes to accept call, and then inits exchange;
 			 */
 			class __initialAccept
 			{
@@ -95,7 +96,8 @@ namespace dodo
 			};
 
 			/**
-			 * @class exchange provides communication interface[send/receive data]
+			 * @class exchange
+			 * @brief provides communication interface[send/receive data]
 			 * @note readStreamString: if length of read data is inSize, data will contain exact inSize, no '\0' will be set in the end - this is specific only for network sessions
 			 */
 			class exchange : public connection,

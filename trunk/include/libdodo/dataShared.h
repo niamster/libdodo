@@ -44,7 +44,8 @@ namespace dodo
 	namespace data
 	{
 		/**
-		 * @class shared provides shared data functionality
+		 * @class shared
+		 * @brief provides shared data functionality
 		 */
 		class shared
 		{

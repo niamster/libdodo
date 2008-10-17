@@ -46,7 +46,8 @@ namespace dodo
 			namespace process
 			{
 				/**
-				 * @class stack provides concurrent lock for processes interconnection
+				 * @class stack
+				 * @brief provides concurrent lock for processes interconnection
 				 */
 				class stack : virtual public sync::stack
 				{

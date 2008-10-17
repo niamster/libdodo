@@ -65,7 +65,8 @@ namespace dodo
 		 */
 
 		/**
-		 * @class dialogue provides DIALOGUE functionality
+		 * @class dialogue
+		 * @brief provides CGI request-response functionality
 		 * @note do not read stdin before contructing object of this class!
 		 * object of this class should be contructed in the early begin
 		 */

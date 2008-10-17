@@ -62,7 +62,8 @@ namespace dodo
 #endif
 
 			/**
-			 * @class temp provides I/O manipulations with temporary file
+			 * @class temp
+			 * @brief provides I/O manipulations with temporary file
 			 */
 			class temp : virtual public channel
 			{

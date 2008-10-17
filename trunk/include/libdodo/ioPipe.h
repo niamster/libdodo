@@ -60,7 +60,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class pipe provides interface for PIPE I/O operations
+		 * @class pipe
+		 * @brief provides interface for PIPE I/O operations
 		 */
 		class pipe : virtual public channel
 		{

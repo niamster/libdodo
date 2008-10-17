@@ -64,7 +64,8 @@ namespace dodo
 			namespace ssl
 			{
 				/**
-				 * @class server provides network connection interface
+				 * @class server
+				 * @brief provides SSL network connection interface
 				 */
 				class server : public network::server
 				{

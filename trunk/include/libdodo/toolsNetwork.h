@@ -53,7 +53,8 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @struct __interfaceInfo defines interface information
+		 * @struct __interfaceInfo
+		 * @brief defines interface information
 		 */
 		struct __interfaceInfo
 		{
@@ -67,7 +68,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __hostInfo defines information about host
+		 * @struct __hostInfo
+		 * @brief defines information about host
 		 */
 		struct __hostInfo
 		{
@@ -77,7 +79,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __serviceInfo defines info about service
+		 * @struct __serviceInfo
+		 * @brief defines info about service
 		 */
 		struct __serviceInfo
 		{
@@ -87,7 +90,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class network provides information about network environment
+		 * @class network
+		 * @brief provides information about network environment
 		 */
 		class network
 		{

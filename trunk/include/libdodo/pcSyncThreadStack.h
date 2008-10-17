@@ -45,7 +45,8 @@ namespace dodo
 			namespace thread
 			{
 				/**
-				 * @class stack provides mutex lock
+				 * @class stack
+				 * @brief provides mutex lock
 				 */
 				class stack : virtual public sync::stack
 				{

@@ -68,7 +68,8 @@ namespace dodo
 		 */
 
 		/**
-		 * @struct __time defines time info
+		 * @struct __time
+		 * @brief defines time information
 		 */
 		struct __time
 		{
@@ -100,7 +101,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class time provides time functionality
+		 * @class time
+		 * @brief provides time functionality
 		 */
 		class time
 		{

@@ -52,7 +52,8 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @typedef escape defines escape function for explode/implode
+		 * @typedef escape
+		 * @brief defines escape function for explode/implode
 		 * @param dta defines data to escape
 		 */
 		typedef dodoString (*escape)(const dodoString &data);
@@ -67,7 +68,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class misc provides misc functionality
+		 * @class misc
+		 * @brief provides misc functionality
 		 */
 		class misc
 		{

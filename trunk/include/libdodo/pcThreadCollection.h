@@ -68,7 +68,8 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __threadInfo defines process information
+			 * @struct __threadInfo
+			 * @brief defines process information
 			 */
 			struct __threadInfo
 			{
@@ -101,7 +102,8 @@ namespace dodo
 #ifdef DL_EXT
 
 			/**
-			 * @struct __threadMod defines data that is returned from initIpcThreadCollectionModule in the library
+			 * @struct __threadMod
+			 * @brief defines data that is returned from initIpcThreadCollectionModule in the library
 			 */
 			struct __threadMod
 			{
@@ -115,20 +117,23 @@ namespace dodo
 			};
 
 			/**
-			 * @typedef initIpcThreadCollectionModule defines type of init function for library
+			 * @typedef initIpcThreadCollectionModule
+			 * @brief defines type of init function for library
 			 * @param data defines user data
 			 */
 			typedef __threadMod (*initIpcThreadCollectionModule)(void *data);
 
 			/**
-			 * @typedef deinitIpcThreadCollectionModule defines type of deinit function for library
+			 * @typedef deinitIpcThreadCollectionModule
+			 * @brief defines type of deinit function for library
 			 */
 			typedef void (*deinitIpcThreadCollectionModule)();
 
 #endif
 
 			/**
-			 * @class collection provides threads management functionality
+			 * @class collection
+			 * @brief provides threads management functionality
 			 */
 			class collection : public job::collection
 			{

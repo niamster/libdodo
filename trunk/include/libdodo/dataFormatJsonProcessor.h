@@ -47,7 +47,8 @@ namespace dodo
 			namespace json
 			{
 				/**
-				 * @class processor provides JSON operations
+				 * @class processor
+				 * @brief provides JSON operations
 				 */
 				class processor
 				{

@@ -49,7 +49,8 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @class library provides handling object from static and dynamic libraries
+		 * @class library
+		 * @brief provides handling object from static and dynamic libraries
 		 */
 		class library
 		{

@@ -68,7 +68,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __tuples defines fetched data from db
+		 * @struct __tuples
+		 * @brief defines fetched data from db
 		 */
 		struct __tuples
 		{
@@ -89,7 +90,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __connectionInfo defines connection options for the server
+		 * @struct __connectionInfo
+		 * @brief defines connection options for the server
 		 */
 		struct __connectionInfo
 		{
@@ -130,7 +132,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class connector implements an interface to db through sql and database independent interfaces
+		 * @class connector
+		 * @brief implements an interface to db through sql and database independent interfaces
 		 */
 		class connector
 #ifndef DB_WO_XEXEC

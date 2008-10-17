@@ -55,7 +55,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __xexecImageCollectedData defines data that could be retrieved from the image object
+		 * @struct __xexecImageCollectedData
+		 * @brief defines data that could be retrieved from the image object
 		 */
 		struct __xexecImageCollectedData
 		{
@@ -135,7 +136,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __imageInfo defines image information
+		 * @struct __imageInfo
+		 * @brief defines image information
 		 */
 		struct __imageInfo
 		{
@@ -147,7 +149,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __imageSize defines image dimensions
+		 * @struct __imageSize
+		 * @brief defines image dimensions
 		 */
 		struct __imageSize
 		{
@@ -156,7 +159,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class image provides simple image manipulations
+		 * @class image
+		 * @brief provides simple image manipulations
 		 */
 		class image : public xexec
 		{
@@ -278,7 +282,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class __image_init__ initializes image evironment
+		 * @class __image_init__
+		 * @brief initializes image evironment
 		 */
 		class __image_init__
 		{

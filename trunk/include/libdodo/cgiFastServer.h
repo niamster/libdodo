@@ -56,7 +56,8 @@ namespace dodo
 		namespace fast
 		{
 			/**
-			 * @class server provides fast CGI functionality
+			 * @class server
+			 * @brief provides fast CGI functionality
 			 */
 			class server : public cgi::server
 			{

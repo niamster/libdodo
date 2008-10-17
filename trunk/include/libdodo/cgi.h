@@ -174,7 +174,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __cgiFile defines node about uploaded POST file
+		 * @struct __cgiFile
+		 * @brief defines node about uploaded POST file
 		 */
 		struct __cgiFile
 		{
@@ -192,7 +193,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __cgiCookie describes cookie that would be sent to the dialogue browser
+		 * @struct __cgiCookie
+		 * @brief describes cookie that would be sent to the dialogue browser
 		 */
 		struct __cgiCookie
 		{
@@ -242,7 +244,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __cgiAuthInfo defines authenfication information
+		 * @struct __cgiAuthInfo
+		 * @brief defines authenfication information
 		 */
 		struct __cgiAuthInfo
 		{

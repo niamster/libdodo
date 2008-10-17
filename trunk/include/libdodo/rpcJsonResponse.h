@@ -46,7 +46,8 @@ namespace dodo
 		namespace json
 		{
 			/**
-			 * @class response defines RPC response in JSON representation
+			 * @class response
+			 * @brief defines RPC response in JSON representation
 			 */
 			class response
 			{

@@ -62,7 +62,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __logMap defines map between log level and log handler
+		 * @struct __logMap
+		 * @brief defines map between log level and log handler
 		 */
 		struct __logMap
 		{
@@ -72,7 +73,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class logger provides logging function
+		 * @class logger
+		 * @brief provides logging function
 		 */
 		class logger : virtual public pc::sync::thread::stack,
 					   public singleton<logger>

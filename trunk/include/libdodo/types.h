@@ -43,24 +43,28 @@
 namespace dodo
 {
 	/**
-	 * @def addFlag add bit flag to the statement
+	 * @def addFlag
+	 * @brief add bit flag to the statement
 	 */
 #define addFlag(statement, flag)       (statement) |= (flag)
 
 	/**
-	 * @def removeFlag remove bit flag from the statement
+	 * @def removeFlag
+	 * @brief remove bit flag from the statement
 	 */
 #define removeFlag(statement, flag)    (statement) &= (~(flag))
 
 	/**
-	 * @def isSetFlag return true if bit flag is set
+	 * @def isSetFlag
+	 * @brief return true if bit flag is set
 	 */
 #define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
 
 #define dodoString std::string
 
 	/**
-	 * @class dodoMapStringCompare defines compare functor
+	 * @class dodoMapStringCompare
+	 * @brief defines compare functor
 	 */
 	class dodoMapStringCompare
 	{
@@ -82,7 +86,8 @@ namespace dodo
 	};
 
 	/**
-	 * @class dodoMapStringCompare defines compare functor
+	 * @class dodoMapStringCompare
+	 * @brief defines compare functor
 	 */
 	class dodoMapICaseStringCompare
 	{
@@ -104,7 +109,8 @@ namespace dodo
 	};
 
 	/**
-	 * @class singleton defines singleton base class for derived class
+	 * @class singleton
+	 * @brief defines singleton base class for derived class
 	 * @note not threadsafe
 	 */
 	template<typename T>

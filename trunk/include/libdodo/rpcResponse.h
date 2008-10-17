@@ -52,7 +52,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class response defines RPC response reprasentation
+		 * @class response
+		 * @brief defines RPC response reprasentation
 		 */
 		class response
 		{

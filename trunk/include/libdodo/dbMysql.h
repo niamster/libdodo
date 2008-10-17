@@ -48,7 +48,8 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @struct __mysqlSslOptions defines SSL mySQL options
+		 * @struct __mysqlSslOptions
+		 * @brief defines SSL mySQL options
 		 */
 		struct __mysqlSslOptions
 		{
@@ -60,7 +61,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class mysql provides an interface to mySQL db
+		 * @class mysql
+		 * @brief provides an interface to MySQL db
 		 */
 		class mysql : public sql::constructor
 		{

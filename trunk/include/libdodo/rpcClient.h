@@ -42,7 +42,8 @@ namespace dodo
 	namespace rpc
 	{
 		/**
-		 * @class client defines client-side RPC instrument
+		 * @class client
+		 * @brief defines client-side RPC instrument
 		 */
 		class client
 		{

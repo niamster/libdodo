@@ -45,7 +45,8 @@ namespace dodo
 		namespace xml
 		{
 			/**
-			 * @class method defines RPC method in XML representation
+			 * @class method
+			 * @brief defines RPC method in XML representation
 			 */
 			class method
 			{

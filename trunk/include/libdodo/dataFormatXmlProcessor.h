@@ -52,7 +52,8 @@ namespace dodo
 			namespace xml
 			{
 				/**
-				 * @struct __nodeDef defines processor tree definition
+				 * @struct __nodeDef
+				 * @brief defines processor tree definition
 				 */
 				struct __nodeDef
 				{
@@ -79,7 +80,8 @@ namespace dodo
 				};
 
 				/**
-				 * @struct __info desribes info got about given XML document
+				 * @struct __info
+				 * @brief desribes info got about given XML document
 				 */
 				struct __info
 				{
@@ -102,7 +104,8 @@ namespace dodo
 				};
 
 				/**
-				 * @class processor provides XML parsing
+				 * @class processor
+				 * @brief provides XML parsing
 				 */
 				class processor
 				{
@@ -262,7 +265,8 @@ namespace dodo
 #ifdef LIBXML2_EXT
 
 						/**
-						 * @typedef xcharCmp defines name compare function
+						 * @typedef xcharCmp
+						 * @brief defines name compare function
 						 * @param one defines string to compare
 						 * @param two defines string to compare
 						 */

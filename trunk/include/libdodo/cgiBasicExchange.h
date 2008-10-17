@@ -43,7 +43,8 @@ namespace dodo
 		namespace basic
 		{
 			/**
-			 * @class exchange provides interface to  CGI I/O functionality
+			 * @class exchange
+			 * @brief provides interface to CGI I/O functionality
 			 */
 			class exchange : virtual public cgi::exchange,
 							 virtual public io::stdio

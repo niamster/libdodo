@@ -74,7 +74,8 @@ namespace dodo
 	{
 
 		/**
-		 * @struct __usage defines process information
+		 * @struct __usage
+		 * @brief defines process information
 		 */
 		struct __usage
 		{
@@ -83,7 +84,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __limits defines os limits
+		 * @struct __limits
+		 * @brief defines os limits
 		 */
 		struct __limits
 		{
@@ -105,7 +107,8 @@ namespace dodo
 		};
 
 		/**
-		 * @typedef signalHandler defines handler function on signal
+		 * @typedef signalHandler
+		 * @brief defines handler function on signal
 		 * @param signal defines received signal
 		 * @param info defines signal info
 		 * @param context defines signal context
@@ -173,7 +176,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __userInfo defines user info
+		 * @struct __userInfo
+		 * @brief defines user info
 		 */
 		struct  __userInfo
 		{
@@ -187,7 +191,8 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __groupInfo defines group info
+		 * @struct __groupInfo
+		 * @brief defines group info
 		 */
 		struct __groupInfo
 		{
@@ -199,7 +204,8 @@ namespace dodo
 #ifdef DL_EXT
 
 		/**
-		 * @struct __signalMod is returned from initOsSignalModule in the library
+		 * @struct __signalMod
+		 * @brief is returned from initOsSignalModule in the library
 		 */
 		struct __signalMod
 		{
@@ -211,20 +217,23 @@ namespace dodo
 		};
 
 		/**
-		 * @typedef initOsSignalModule defines type of init function for library
+		 * @typedef initOsSignalModule
+		 * @brief defines type of init function for library
 		 * @param data defines user data
 		 */
 		typedef __signalMod (*initOsSignalModule)(void *data);
 
 		/**
-		 * @typedef deinitOsSignalModule defines type of deinit function for library
+		 * @typedef deinitOsSignalModule
+		 * @brief defines type of deinit function for library
 		 */
 		typedef void (*deinitOsSignalModule)();
 
 #endif
 
 		/**
-		 * @class os provides os operations
+		 * @class os
+		 * @brief provides os operations
 		 */
 		class os
 		{
@@ -518,7 +527,8 @@ namespace dodo
 
 #endif
 				/**
-				 * @class syncThreadSection performs atomic locks using mutexes
+				 * @class syncThreadSection
+				 * @brief performs atomic locks using mutexes
 				 */
 				class syncThreadSection
 				{
@@ -554,7 +564,8 @@ namespace dodo
 				static syncThreadSection keeper;                                 ///< lock
 
 				/**
-				 * @class syncThreadStack provides thread safe behaviour
+				 * @class syncThreadStack
+				 * @brief provides thread safe behaviour
 				 * @note it locks in constructor and unlocks in destructor
 				 */
 				class syncThreadStack

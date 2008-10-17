@@ -43,7 +43,8 @@ namespace dodo
 		namespace cgi
 		{
 			/**
-			 * @class server defines server-side RPC instrument
+			 * @class server
+			 * @brief defines server-side RPC instrument
 			 */
 			class server : virtual public rpc::server
 			{

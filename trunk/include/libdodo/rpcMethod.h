@@ -53,7 +53,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class method defines RPC method reprasentation
+		 * @class method
+		 * @brief defines RPC method reprasentation
 		 */
 		class method
 		{

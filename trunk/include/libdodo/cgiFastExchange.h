@@ -49,7 +49,8 @@ namespace dodo
 		namespace fast
 		{
 			/**
-			 * @class exchange provides interface to fast CGI I/O functionality
+			 * @class exchange
+			 * @brief provides interface to fast CGI I/O functionality
 			 */
 			class exchange : virtual public cgi::exchange
 			{

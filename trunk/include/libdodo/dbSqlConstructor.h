@@ -54,7 +54,8 @@ namespace dodo
 			};
 
 			/**
-			 * @class constructor provide construction of SQL request
+			 * @class constructor
+			 * @brief provide construction of SQL request
 			 * @note all data become escaped and framed with '. Names of fields are not framed with ` to prevent cases as `count(*)`, etc.
 			 * If you want to prevent data framing define preventFraming sqlConstructor class propertie as true but remember
 			 */

@@ -27,7 +27,6 @@
  * set shiftwidth=4
  */
 
-
 #ifndef _TOOLSREGEXP_H_
 #define _TOOLSREGEXP_H_
 
@@ -52,7 +51,8 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @class regexp provides REGEXP support
+		 * @class regexp
+		 * @brief provides REGEXP support
 		 * @note PCRE is much faster
 		 * both POSIX and PCRE don't support binary patterns
 		 * POSIX doesn't support binary match sting
@@ -140,7 +140,8 @@ namespace dodo
 			protected:
 
 				/**
-				 * @struct __regexMatch defines begin and end of matched substring
+				 * @struct __regexMatch
+				 * @brief defines begin and end of matched substring
 				 */
 				struct __regexMatch
 				{

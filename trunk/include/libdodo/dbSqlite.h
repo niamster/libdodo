@@ -46,8 +46,8 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @class sqlite provides an interface to sqlite db
-		 * @note for field type autodetection sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
+		 * @class sqlite
+		 * @brief provides an interface to sqlite db
 		 */
 		class sqlite : public sql::constructor
 		{
@@ -142,7 +142,8 @@ namespace dodo
 				virtual void updateCollect();
 
 				/**
-				 * @struct __blob defines blob value
+				 * @struct __blob
+				 * @brief defines blob value
 				 */
 				struct __blob
 				{

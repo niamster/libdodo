@@ -69,7 +69,8 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef inExec defines function that will be called as hook
+	 * @typedef inExec
+	 * @brief defines function that will be called as hook
 	 * @param odata defines object data
 	 * @param object defines type of object that called hook[see xexecObjectTypeEnum]
 	 * @param udata defines user data
@@ -77,7 +78,8 @@ namespace dodo
 	typedef void (*inExec)(void *odata, short object, void *udata);
 
 	/**
-	 * @struct __xexecItem defines xexec node
+	 * @struct __xexecItem
+	 * @brief defines xexec node
 	 */
 	struct __xexecItem
 	{
@@ -92,7 +94,8 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __xexecItemList defines collection of hooks
+	 * @struct __xexecItemList
+	 * @brief defines collection of hooks
 	 */
 	struct __xexecItemList
 	{
@@ -121,7 +124,8 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __xexecExMod is returned from initXexecModule in the library
+	 * @struct __xexecExMod
+	 * @brief is returned from initXexecModule in the library
 	 */
 	struct __xexecMod
 	{
@@ -132,18 +136,21 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef initXexecModule defines type of init function for library
+	 * @typedef initXexecModule
+	 * @brief defines type of init function for library
 	 * @param data defines user data
 	 */
 	typedef __xexecMod (*initXexecModule)(void *data);
 
 	/**
-	 * @typedef deinitXexecModule defines type of deinit function for library
+	 * @typedef deinitXexecModule
+	 * @brief defines type of deinit function for library
 	 */
 	typedef void (*deinitXexecModule)();
 
 	/**
-	 * @struct __xexecCounts defines identificator of pre or/and post exec
+	 * @struct __xexecCounts
+	 * @brief defines identificator of pre or/and post exec
 	 * @note -1 if not set
 	 */
 	struct __xexecCounts
@@ -172,7 +179,8 @@ namespace dodo
 	 */
 
 	/**
-	 * @class xexec provides pre/post exec actions for defrived classes
+	 * @class xexec
+	 * @brief provides pre/post exec actions for defrived classes
 	 */
 	class xexec
 	{

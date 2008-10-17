@@ -46,7 +46,8 @@ namespace dodo
 		namespace tpl
 		{
 			/**
-			 * @class processor parses template
+			 * @class processor
+			 * @brief parses template
 			 * @note brief reference on usage:
 			 * syntax:
 			 *

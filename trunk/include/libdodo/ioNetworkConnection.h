@@ -92,7 +92,8 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __peerInfo defines peer information
+			 * @struct __peerInfo
+			 * @brief defines peer information
 			 */
 			struct __peerInfo
 			{
@@ -101,7 +102,8 @@ namespace dodo
 			};
 
 			/**
-			 * @class connection provides option manipulation for network connections
+			 * @class connection
+			 * @brief provides option manipulation for network connections
 			 */
 			class connection
 			{

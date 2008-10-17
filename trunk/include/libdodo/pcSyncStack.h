@@ -43,7 +43,8 @@ namespace dodo
 		namespace sync
 		{
 			/**
-			 * @class stack provides mutex lock and guard class
+			 * @class stack
+			 * @brief provides mutex lock and guard class
 			 */
 			class stack
 			{
@@ -57,7 +58,8 @@ namespace dodo
 					virtual ~stack() = 0;
 
 					/**
-					 * @class protector provides thread safe behaviour
+					 * @class protector
+					 * @brief provides thread safe behaviour
 					 * @note it locks in constructor and unlocks in destructor
 					 */
 					class protector

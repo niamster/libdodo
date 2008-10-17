@@ -45,7 +45,8 @@ namespace dodo
 		namespace xml
 		{
 			/**
-			 * @class response defines RPC response in XML representation
+			 * @class response
+			 * @brief defines RPC response in XML representation
 			 */
 			class response
 			{

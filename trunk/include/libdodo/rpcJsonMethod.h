@@ -46,7 +46,8 @@ namespace dodo
 		namespace json
 		{
 			/**
-			 * @class method defines RPC method in JSON representation
+			 * @class method
+			 * @brief defines RPC method in JSON representation
 			 */
 			class method
 			{

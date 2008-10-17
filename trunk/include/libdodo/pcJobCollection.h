@@ -40,13 +40,15 @@ namespace dodo
 		namespace job
 		{
 			/**
-			 * @typedef func defines job function
+			 * @typedef routine
+			 * @brief defines job function
 			 * @param data defines user data
 			 */
 			typedef void *(*routine)(void *data);
 
 			/**
-			 * @class collection provides interface for jobs management
+			 * @class collection
+			 * @brief provides interface for jobs management
 			 */
 			class collection
 			{

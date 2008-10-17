@@ -44,7 +44,8 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @class string provides various string tools
+		 * @class string
+		 * @brief provides various string tools
 		 */
 		class string
 		{

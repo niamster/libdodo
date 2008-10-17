@@ -45,7 +45,8 @@ namespace dodo
 		namespace json
 		{
 			/**
-			 * @struct __additionalData defines response/request additional data
+			 * @struct __additionalData
+			 * @brief defines response/request additional data
 			 */
 			struct __additionalData
 			{
@@ -61,7 +62,8 @@ namespace dodo
 			};
 
 			/**
-			 * @class server defines server-side JSON-RPC instrument
+			 * @class server
+			 * @brief defines server-side JSON-RPC instrument
 			 */
 			class server : virtual public rpc::server
 			{

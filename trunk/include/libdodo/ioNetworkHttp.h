@@ -101,7 +101,8 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __httpResponse defines HTTP response
+			 * @struct __httpResponse
+			 * @brief defines HTTP response
 			 */
 			struct __httpResponse
 			{
@@ -118,7 +119,8 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __httpPostFile defines file for POST request
+			 * @struct __httpPostFile
+			 * @brief defines file for POST request
 			 */
 			struct __httpPostFile
 			{
@@ -139,7 +141,8 @@ namespace dodo
 			};
 
 			/**
-			 * @class http provides disk I/O manipulations
+			 * @class http
+			 * @brief provides disk I/O manipulations
 			 * FIXME: fetch with HTTP/1.1 for non-proxy mode and correctly parse chanked requests
 			 */
 			class http

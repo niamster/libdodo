@@ -65,7 +65,8 @@ namespace dodo
 			namespace ssl
 			{
 				/**
-				 * @class __initialAccept holds info that passes to accept call, and then inits exchange;
+				 * @class __initialAccept
+				 * @brief holds info that passes to accept call, and then inits exchange;
 				 */
 				class __initialAccept
 				{
@@ -97,7 +98,8 @@ namespace dodo
 				};
 
 				/**
-				 * @class exchange provides communication interface[send/receive data]
+				 * @class exchange
+				 * @brief provides SSL communication interface[send/receive data]
 				 */
 				class exchange : public network::exchange
 				{

@@ -51,8 +51,9 @@ namespace dodo
 				namespace data
 				{
 					/**
-					 * @class single provides shared data management functionality for processes
-					 * @note you should use data
+					 * @class single
+					 * @brief provides shared data management functionality for processes
+					 * @note you should use data::shared
 					 */
 					class single : public sync::data::single
 					{

@@ -42,7 +42,8 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @struct __xexecDbAccumulatorCollectedData defines data that could be retrieved from the db object
+		 * @struct __xexecDbAccumulatorCollectedData
+		 * @brief defines data that could be retrieved from the db object
 		 */
 		struct __xexecDbAccumulatorCollectedData
 		{
@@ -88,7 +89,8 @@ namespace dodo
 		};
 
 		/**
-		 * @class accumulator provides wide abilities for db manipulations
+		 * @class accumulator
+		 * @brief provides wide abilities for db manipulations
 		 */
 		class accumulator : public connector
 		{

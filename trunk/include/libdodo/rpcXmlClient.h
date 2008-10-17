@@ -45,7 +45,8 @@ namespace dodo
 		namespace xml
 		{
 			/**
-			 * @class client defines client-side XML-RPC instrument
+			 * @class client
+			 * @brief defines client-side XML-RPC instrument
 			 */
 			class client : virtual public rpc::client
 			{

@@ -58,7 +58,8 @@ namespace dodo
 				class processor;
 
 				/**
-				 * @struct __nodeNamespace defines node namespace
+				 * @struct __nodeNamespace
+				 * @brief defines node namespace
 				 */
 				struct __nodeNamespace
 				{
@@ -67,7 +68,8 @@ namespace dodo
 				};
 
 				/**
-				 * @class node defines xml tree
+				 * @class node
+				 * @brief defines xml tree
 				 * @note children is a map of vectors of xml nodes where map key is node name and vector contains nodes with name given in key
 				 */
 				class node

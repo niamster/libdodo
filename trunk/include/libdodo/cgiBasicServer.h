@@ -43,7 +43,8 @@ namespace dodo
 		namespace basic
 		{
 			/**
-			 * @class server provides basic CGI server functionality
+			 * @class server
+			 * @brief provides basic CGI server functionality
 			 */
 			class server : public cgi::server
 			{

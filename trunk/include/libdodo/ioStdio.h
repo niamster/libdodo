@@ -48,7 +48,8 @@ namespace dodo
 	namespace io
 	{
 		/**
-		 * @class stdio provides interface for stdin/stdout/stderr I/O operations
+		 * @class stdio
+		 * @brief provides interface for stdin/stdout/stderr I/O operations
 		 */
 		class stdio : virtual public pipe
 		{

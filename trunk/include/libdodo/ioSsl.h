@@ -57,7 +57,8 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __certificates defines SSL options
+			 * @struct __certificates
+			 * @brief defines SSL options
 			 * @note key, certificate or CA should be in PEM format
 			 * allowed ciphers you can list by `openssl ciphers -v` command
 			 * ciphers should be separated with ':'
@@ -90,7 +91,8 @@ namespace dodo
 			};
 
 			/**
-			 * @class __openssl_init__ initializes openssl evironment
+			 * @class __openssl_init__
+			 * @brief initializes openssl evironment
 			 */
 			class __openssl_init__
 			{

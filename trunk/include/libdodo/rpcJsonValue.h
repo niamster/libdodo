@@ -44,7 +44,8 @@ namespace dodo
 		namespace json
 		{
 			/**
-			 * @class value defines RPC value in JSON representation
+			 * @class value
+			 * @brief defines RPC value in JSON representation
 			 */
 			class value
 			{

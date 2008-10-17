@@ -78,7 +78,8 @@ namespace dodo
 #ifndef IO_WO_XEXEC
 
 			/**
-			 * @struct __xexecIoNetworkServerCollectedData defines data that could be retrieved from class(to modificate)[contains references]
+			 * @struct __xexecIoNetworkServerCollectedData
+			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
 			 */
 			struct __xexecIoNetworkServerCollectedData
 			{
@@ -96,7 +97,8 @@ namespace dodo
 #endif
 
 			/**
-			 * @class server provides network connection interface
+			 * @class server
+			 * @brief provides network connection interface
 			 */
 			class server : public connection,
 						   virtual public eventInfo

@@ -48,7 +48,8 @@ namespace dodo
 				namespace data
 				{
 					/**
-					 * @class collection implements collection of shared data for processes
+					 * @class collection
+					 * @brief implements collection of shared data for processes
 					 */
 					class collection : public sync::data::collection,
 									   virtual public sync::stack

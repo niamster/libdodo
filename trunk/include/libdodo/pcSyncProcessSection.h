@@ -48,7 +48,8 @@ namespace dodo
 			namespace process
 			{
 				/**
-				 * @class section performs atomic locks using semaphores
+				 * @class section
+				 * @brief performs atomic locks using semaphores
 				 */
 				class section : public sync::section
 				{
