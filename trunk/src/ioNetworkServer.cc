@@ -178,7 +178,7 @@ server::makeSocket()
 //-------------------------------------------------------------------
 
 void
-server::bindNListen(const dodoString &host,
+server::serve(const dodoString &host,
 					int port,
 					int numberOfConnections)
 {
@@ -240,7 +240,7 @@ server::bindNListen(const dodoString &host,
 //-------------------------------------------------------------------
 
 void
-server::bindNListen(const dodoString &path,
+server::serve(const dodoString &path,
 					int numberOfConnections,
 					bool force)
 {

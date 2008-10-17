@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 		io::network::__peerInfo info;
 		__initialAccept fake;
 
-		sock.bindNListen("127.0.0.1",7778,3);
+		sock.serve("127.0.0.1",7778,3);
 		
 		io::ssl::__certificates certs;
 		certs.ca = "host.pem";

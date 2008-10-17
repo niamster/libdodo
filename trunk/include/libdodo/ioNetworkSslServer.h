@@ -110,7 +110,7 @@ namespace dodo
 						 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
 						 * @note host can be '*' to specify all interfaces on the box
 						 */
-						virtual void bindNListen(const dodoString &host, int port, int numberOfConnections);
+						virtual void serve(const dodoString &host, int port, int numberOfConnections);
 
 						/**
 						 * bind to unix socket and start to listen
@@ -119,7 +119,7 @@ namespace dodo
 						 * @param force defines if unix socket should be deleted if it exists
 						 * @note host can be '*' to specify all interfaces on the box
 						 */
-						virtual void bindNListen(const dodoString &path, int numberOfConnections, bool force = false);
+						virtual void serve(const dodoString &path, int numberOfConnections, bool force = false);
 
 						/**
 						 * accept incoming connections

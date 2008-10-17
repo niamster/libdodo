@@ -77,9 +77,9 @@ int main(int argc, char **argv)
 		__peerInfo info;
 		__initialAccept fake;
 
-		sock.bindNListen("127.0.0.1",7778,3);
-		//sock.bindNListen("::",7777);
-		//sock.bindNListen("./sock",10,true);
+		sock.serve("127.0.0.1",7778,3);
+		//sock.serve("::",7777);
+		//sock.serve("./sock",10,true);
 		
 		sock.blockInherited = false;
 		sock.block(false);

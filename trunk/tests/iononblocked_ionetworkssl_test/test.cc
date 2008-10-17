@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 
 		__initialAccept fake;
 
-		sock.bindNListen("127.0.0.1", 7778, 1);
+		sock.serve("127.0.0.1", 7778, 1);
 		sock.setOption(io::network::CONNECTION_OPTION_REUSE_ADDRESS, true);
 		sock.setLingerOption(io::network::CONNECTION_LINGEROPTION_HARD_CLOSE);
 		sock.blockInherited = true;

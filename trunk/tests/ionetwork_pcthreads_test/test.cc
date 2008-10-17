@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 		__peerInfo info;
 		__initialAccept fake;
 
-		sock.bindNListen("127.0.0.1", 7778, 3);
+		sock.serve("127.0.0.1", 7778, 3);
 		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
 		sock.blockInherited = false;
 		sock.block(false);
