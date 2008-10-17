@@ -70,15 +70,10 @@ namespace dodo
 
 					/**
 					 * send request
+					 * @return rpc response result
 					 * @param method defines rpc method call
 					 */
-					virtual void sendTextRequest(const dodoString &method);
-
-					/**
-					 * get response
-					 * @return rpc response result
-					 */
-					virtual dodoString receiveTextResponse();
+					virtual dodoString sendTextRequest(const dodoString &method);
 
 					io::network::http http;                    ///< http handler
 

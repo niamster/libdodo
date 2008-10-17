@@ -45,7 +45,7 @@ client::~client()
 //-------------------------------------------------------------------
 
 dodoString
-client::processCall(const rpc::method &meth)
+client::processCallRequest(const rpc::method &meth)
 {
 	dodo::data::format::json::processor jsonValue;
 

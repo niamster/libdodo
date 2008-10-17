@@ -182,11 +182,6 @@ namespace dodo
 					dodoMap<short, dodoString> requestHeaders;                                         ///< headers that will be sent with request[see httpRequestHeaderEnum]
 
 					/**
-					 * @return server response
-					 */
-					virtual __httpResponse getResponse();
-
-					/**
 					 * @param url defines Url
 					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
@@ -220,6 +215,11 @@ namespace dodo
 					virtual __httpResponse GET(const dodoString &url);
 
 					/**
+					 * perform GET request
+					 */
+					virtual __httpResponse GET();
+
+					/**
 					 * perform POST request
 					 * @return server response
 					 * @param url defines Url
@@ -234,7 +234,7 @@ namespace dodo
 					 * @param data defines POST data
 					 * @param type defines content type of the POST request
 					 */
-					virtual void POST(const dodoString &data, const dodoString &type);
+					virtual __httpResponse POST(const dodoString &data, const dodoString &type);
 
 					/**
 					 * perform POST request
@@ -249,7 +249,7 @@ namespace dodo
 					 * perform POST request
 					 * @param arguments defines request arguments
 					 */
-					virtual void POST(const dodoStringMap &arguments);
+					virtual __httpResponse POST(const dodoStringMap &arguments);
 
 					/**
 					 * perform POST request
@@ -266,7 +266,7 @@ namespace dodo
 					 * @param arguments defines request arguments
 					 * @param files defines files for POST request
 					 */
-					virtual void POST(const dodoStringMap &arguments, const dodoMap<dodoString, __httpPostFile> &files);
+					virtual __httpResponse POST(const dodoStringMap &arguments, const dodoMap<dodoString, __httpPostFile> &files);
 
 					/**
 					 * set HTTP authentification information
@@ -278,11 +278,6 @@ namespace dodo
 					bool followRedirection;                                                             ///< if true follow the `Location` header; true by default
 
 					bool cacheAuthentification;                                                         ///< if true cache authentification HTTP and proxy info; true by default
-
-					/**
-					 * clear response data
-					 */
-					virtual void clearResponse();
 
 				private:
 
@@ -306,11 +301,6 @@ namespace dodo
 						GETCONTENTSTATUS_PROXYBASICAUTH,
 						GETCONTENTSTATUS_PROXYDIGESTAUTH,
 					};
-
-					/**
-					 * perform GET request
-					 */
-					virtual void GET();
 
 					/**
 					 * get response data and fetch headers

@@ -45,22 +45,10 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-void
+dodoString
 client::sendTextRequest(const dodoString &method)
 {
-	http.POST(method, ct);
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-client::receiveTextResponse()
-{
-	io::network::__httpResponse response = http.getResponse();
-
-	http.clearResponse();
-
-	return response.data;
+	return http.POST(method, ct).data;
 }
 
 //-------------------------------------------------------------------

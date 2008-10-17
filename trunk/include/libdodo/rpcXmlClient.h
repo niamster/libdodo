@@ -78,7 +78,7 @@ namespace dodo
 					 * @return RPC method
 					 * @param meth defines RPC method representation
 					 */
-					virtual dodoString processCall(const rpc::method &meth);
+					virtual dodoString processCallRequest(const rpc::method &meth);
 
 					/**
 					 * process RPC call

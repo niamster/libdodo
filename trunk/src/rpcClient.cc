@@ -48,9 +48,7 @@ client::~client()
 response
 client::call(const method &method)
 {
-	sendTextRequest(processCall(method));
-
-	return processCallResult(receiveTextResponse());
+	return processCallResult(sendTextRequest(processCallRequest(method)));
 }
 
 //-------------------------------------------------------------------

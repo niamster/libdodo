@@ -143,20 +143,18 @@ http::setSertificates(const io::ssl::__certificates &a_certs)
 void
 http::removeSertificates()
 {
-	certs = io::ssl::__certificates();
+	certs.ca.clear();
+	certs.caPath.clear();
+	certs.cert.clear();
+	certs.cipher.clear();
+	certs.key.clear();
+	certs.keyPassword.clear();
+	certs.keyType = -1;
 
 	certsSet = false;
 }
 
 #endif
-
-//-------------------------------------------------------------------
-
-__httpResponse
-http::getResponse()
-{
-	return response;
-}
 
 //-------------------------------------------------------------------
 
@@ -248,11 +246,9 @@ http::setCookies(const dodoStringMap &cookies)
 
 //-------------------------------------------------------------------
 
-void
+__httpResponse
 http::GET()
 {
-	response = __httpResponse();
-
 	exchange *ex;
 	client *net;
 
@@ -298,8 +294,10 @@ http::GET()
 			}
 			data.append("\r\n");
 
+			unsigned long outSize = ex->outSize;
 			ex->outSize = data.size();
 			ex->exchange::_write(data.c_str());
+			ex->outSize = outSize;
 
 			char proxyData[512];
 			ex->setInBufferSize(512);
@@ -326,14 +324,8 @@ http::GET()
 
 						delete ex;
 						delete net;
-						ex = NULL;
-						net = NULL;
 
-						GET();
-
-						clear();
-
-						return;
+						return GET();
 
 					case GETCONTENTSTATUS_PROXYDIGESTAUTH:
 
@@ -348,14 +340,8 @@ http::GET()
 
 						delete ex;
 						delete net;
-						ex = NULL;
-						net = NULL;
 
-						GET();
-
-						clear();
-
-						return;
+						return GET();
 				}
 			}
 			catch (...)
@@ -497,9 +483,9 @@ http::GET()
 
 				setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
 
-				GET();
+				delete ex;
 
-				break;
+				return GET();
 
 			case GETCONTENTSTATUS_PROXYBASICAUTH:
 
@@ -512,9 +498,9 @@ http::GET()
 
 				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 
-				GET();
+				delete ex;
 
-				break;
+				return GET();
 
 			case GETCONTENTSTATUS_WWWBASICAUTH:
 
@@ -527,9 +513,9 @@ http::GET()
 
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 
-				GET();
+				delete ex;
 
-				break;
+				return GET();
 
 			case GETCONTENTSTATUS_PROXYDIGESTAUTH:
 
@@ -542,9 +528,9 @@ http::GET()
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 
-				GET();
+				delete ex;
 
-				break;
+				return GET();
 
 			case GETCONTENTSTATUS_WWWDIGESTAUTH:
 
@@ -557,9 +543,9 @@ http::GET()
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
 
-				GET();
+				delete ex;
 
-				break;
+				return GET();
 
 			case GETCONTENTSTATUS_WWWPROXYBASICAUTH:
 
@@ -577,9 +563,9 @@ http::GET()
 				else
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 
-				GET();
+				delete ex;
 
-				break;
+				return GET();
 
 			case GETCONTENTSTATUS_WWWPROXYDIGESTAUTH:
 
@@ -597,9 +583,9 @@ http::GET()
 				else
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 
-				GET();
+				delete ex;
 
-				break;
+				return GET();
 		}
 	}
 	catch (...)
@@ -613,7 +599,11 @@ http::GET()
 
 	delete ex;
 
+	__httpResponse response = this->response;
+
 	clear();
+
+	return response;
 }
 
 //-------------------------------------------------------------------
@@ -623,9 +613,7 @@ http::GET(const dodoString &a_url)
 {
 	setUrl(a_url);
 
-	GET();
-
-	return response;
+	return GET();
 }
 
 //-------------------------------------------------------------------
@@ -637,14 +625,12 @@ http::POST(const dodoString &a_url,
 {
 	setUrl(a_url);
 
-	POST(arguments, files);
-
-	return response;
+	return POST(arguments, files);
 }
 
 //-------------------------------------------------------------------
 
-void
+__httpResponse
 http::POST(const dodoStringMap &arguments,
 		   const dodoMap<dodoString, __httpPostFile> &files)
 {
@@ -686,7 +672,7 @@ http::POST(const dodoStringMap &arguments,
 	data.append(boundary);
 	data.append("--");
 
-	POST(data, type);
+	return POST(data, type);
 }
 
 //-------------------------------------------------------------------
@@ -697,14 +683,12 @@ http::POST(const dodoString &a_url,
 {
 	setUrl(a_url);
 
-	POST(arguments);
-
-	return response;
+	return POST(arguments);
 }
 
 //-------------------------------------------------------------------
 
-void
+__httpResponse
 http::POST(const dodoStringMap &arguments)
 {
 	dodoString data;
@@ -723,7 +707,7 @@ http::POST(const dodoStringMap &arguments)
 	data.append("=");
 	data.append(tools::code::encodeUrl(i->second));
 
-	POST(data, "application/x-www-form-urlencoded");
+	return POST(data, "application/x-www-form-urlencoded");
 }
 
 //-------------------------------------------------------------------
@@ -735,19 +719,15 @@ http::POST(const dodoString &a_url,
 {
 	setUrl(a_url);
 
-	POST(data, type);
-
-	return response;
+	return POST(data, type);
 }
 
 //-------------------------------------------------------------------
 
-void
+__httpResponse
 http::POST(const dodoString &a_data,
 		   const dodoString &type)
 {
-	response = __httpResponse();
-
 	exchange *ex;
 	client *net;
 
@@ -793,8 +773,10 @@ http::POST(const dodoString &a_data,
 			}
 			data.append("\r\n");
 
+			unsigned long outSize = ex->outSize;
 			ex->outSize = data.size();
 			ex->exchange::_write(data.c_str());
+			ex->outSize = outSize;
 
 			char proxyData[512];
 			ex->setInBufferSize(512);
@@ -821,14 +803,8 @@ http::POST(const dodoString &a_data,
 
 						delete ex;
 						delete net;
-						ex = NULL;
-						net = NULL;
 
-						POST(data, type);
-
-						clear();
-
-						return;
+						return POST(data, type);
 
 					case GETCONTENTSTATUS_PROXYDIGESTAUTH:
 
@@ -843,14 +819,8 @@ http::POST(const dodoString &a_data,
 
 						delete ex;
 						delete net;
-						ex = NULL;
-						net = NULL;
 
-						POST(data, type);
-
-						clear();
-
-						return;
+						return POST(data, type);
 				}
 			}
 			catch (...)
@@ -986,8 +956,10 @@ http::POST(const dodoString &a_data,
 
 	ex->writeStreamString(data);
 
+	unsigned long outSize = ex->outSize;
 	ex->outSize = a_data.size();
 	ex->writeString(a_data);
+	ex->outSize = outSize;
 
 	try
 	{
@@ -1001,9 +973,7 @@ http::POST(const dodoString &a_data,
 
 				setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
 
-				POST(data, type);
-
-				break;
+				return POST(data, type);
 
 			case GETCONTENTSTATUS_PROXYBASICAUTH:
 
@@ -1016,9 +986,7 @@ http::POST(const dodoString &a_data,
 
 				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 
-				POST(data, type);
-
-				break;
+				return POST(data, type);
 
 			case GETCONTENTSTATUS_WWWBASICAUTH:
 
@@ -1031,9 +999,7 @@ http::POST(const dodoString &a_data,
 
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 
-				POST(data, type);
-
-				break;
+				return POST(data, type);
 
 			case GETCONTENTSTATUS_PROXYDIGESTAUTH:
 
@@ -1046,9 +1012,7 @@ http::POST(const dodoString &a_data,
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
 
-				POST(data, type);
-
-				break;
+				return POST(data, type);
 
 			case GETCONTENTSTATUS_WWWDIGESTAUTH:
 
@@ -1061,9 +1025,7 @@ http::POST(const dodoString &a_data,
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
 
-				POST(data, type);
-
-				break;
+				return POST(data, type);
 
 			case GETCONTENTSTATUS_WWWPROXYBASICAUTH:
 
@@ -1081,9 +1043,7 @@ http::POST(const dodoString &a_data,
 				else
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
 
-				POST(data, type);
-
-				break;
+				return POST(data, type);
 
 			case GETCONTENTSTATUS_WWWPROXYDIGESTAUTH:
 
@@ -1101,9 +1061,7 @@ http::POST(const dodoString &a_data,
 				else
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
 
-				POST(data, type);
-
-				break;
+				return POST(data, type);
 		}
 	}
 	catch (...)
@@ -1117,7 +1075,11 @@ http::POST(const dodoString &a_data,
 
 	delete ex;
 
+	__httpResponse response = this->response;
+
 	clear();
+
+	return response;
 }
 
 //-------------------------------------------------------------------
@@ -1328,6 +1290,8 @@ http::getContent(dodoString &data,
 	dodoString headers;
 
 	response.data.clear();
+	response.headers.clear();
+	response.code = 0;
 
 	while (true)
 	{
@@ -1579,6 +1543,12 @@ http::clear()
 	}
 
 	requestHeaders.erase(HTTP_REQUESTHEADER_AUTHORIZATION);
+
+	response.headers.clear();
+	response.cookies.clear();
+	response.data.clear();
+	response.code = 0;
+	response.redirected = false;
 }
 
 //-------------------------------------------------------------------
@@ -1635,18 +1605,6 @@ http::parseCookie(const dodoString &header)
 	}
 
 	return cookie;
-}
-
-//-------------------------------------------------------------------
-
-void
-http::clearResponse()
-{
-	response.headers.clear();
-	response.cookies.clear();
-	response.data.clear();
-	response.code = 0;
-	response.redirected = false;
 }
 
 //-------------------------------------------------------------------

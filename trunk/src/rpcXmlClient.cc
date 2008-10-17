@@ -60,7 +60,7 @@ client::getResponseEncoding()
 //-------------------------------------------------------------------
 
 dodoString
-client::processCall(const rpc::method &meth)
+client::processCallRequest(const rpc::method &meth)
 {
 	dodo::data::format::xml::processor xmlValue;
 
