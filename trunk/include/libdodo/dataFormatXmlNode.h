@@ -85,6 +85,15 @@ namespace dodo
 						node();
 
 						/**
+						 * constructor
+						 * @param name defines name of the node
+						 * @param attributes defines node attributes
+						 * @param value devines node value
+						 * @param ns defines node namespace
+						 */
+						node(const dodoString &name, const dodoStringMap &attributes, const dodoString &value, const dodoString &ns=__dodostring__);
+
+						/**
 						 * add child to the node
 						 * @param child defines child to be appended
 						 */

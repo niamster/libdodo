@@ -61,10 +61,16 @@ namespace dodo
 					 */
 					__nodeDef();
 
+					/**
+					 * @param name defines node name
+					 * @param ns defines namespace of the node
+					 */
+					__nodeDef(const dodoString &name, const dodoString &ns=__dodostring__);
+
 					dodoString name;                                                                        ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
 					dodoMap<dodoString, __nodeDef> children;                                                ///< children definitions
-					bool allChildren;                                                                 ///< if true - get all children tree[false by default]
+					bool allChildren;                                                                 ///< if true - get all children tree[true by default]
 
 					dodoStringArray attributes;                                                             ///< node attrributes; if empty - take all
 					bool allAttributes;                                                               ///< if true - get all attributes[true by default]

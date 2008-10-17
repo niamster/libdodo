@@ -35,6 +35,18 @@ using namespace dodo::data::format::xml;
 node::node() : CDATA(false)
 {
 }
+//-------------------------------------------------------------------
+
+node::node(const dodoString &name,
+           const dodoStringMap &attributes,
+           const dodoString &value,
+           const dodoString &a_ns) : CDATA(false),
+								   name(name),
+								   attributes(attributes),
+								   value(value)
+{
+	ns.prefix = a_ns;
+}
 
 //-------------------------------------------------------------------
 

@@ -25,18 +25,11 @@ int main(int argc, char **argv)
 
 		cout << xmlp.getFileInfo("./test.xml").version << endl;
 
-		__nodeDef def;
+		__nodeDef def("div", "cns");
+		def.attributes = dodoStringArray(1, "id");
+		def.allChildren = false;
 
-		dodoStringArray attr;
-		attr.push_back("id");
-		def.attributes = attr;
-		def.name = "div";
-		def.ns = "cns";
-
-		__nodeDef def1;
-		def1.name = "span";
-		def1.allChildren = true;
-		def.children["span"] = def1;
+		def.children["span"] = __nodeDef("span");
 
 		node xnode = xmlp.processFile(def, "./test.xml");
 		//node xnode = xmlp.processFile("./test.xml");

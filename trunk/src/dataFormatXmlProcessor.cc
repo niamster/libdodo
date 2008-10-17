@@ -50,8 +50,18 @@ __info::__info()
 
 //-------------------------------------------------------------------
 
-__nodeDef::__nodeDef() : allChildren(false),
+__nodeDef::__nodeDef() : allChildren(true),
 						 allAttributes(true)
+{
+}
+
+//-------------------------------------------------------------------
+
+__nodeDef::__nodeDef(const dodoString &name,
+                     const dodoString &ns) : allChildren(true),
+											 allAttributes(true),
+											 name(name),
+											 ns(ns)
 {
 }
 
