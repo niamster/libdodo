@@ -59,14 +59,10 @@ namespace dodo
 				virtual ~client();
 
 				/**
+				 * @return rpc response result
 				 * @param method defines rpc method call
 				 */
-				virtual void sendRequest(const method &method);
-
-				/**
-				 * @return rpc response result
-				 */
-				virtual response receiveResponse();
+				virtual response call(const method &method);
 
 			protected:
 

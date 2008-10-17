@@ -44,9 +44,7 @@ int main(int argc, char **argv)
 		argument.addArrayElement((double)10.0);
 		method.addArgument(argument);
 
-		client.sendRequest(method);
-
-		response resp = client.receiveResponse();
+		response resp = client.call(method);
 
 		cout << "Amount of values: " << resp.getValues().size() << endl;
 		cout << "First value: " << resp.getValue().getString() << endl;

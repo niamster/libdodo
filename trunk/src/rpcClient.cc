@@ -45,17 +45,11 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-void
-client::sendRequest(const method &method)
+response
+client::call(const method &method)
 {
 	sendTextRequest(processCall(method));
-}
 
-//-------------------------------------------------------------------
-
-response
-client::receiveResponse()
-{
 	return processCallResult(receiveTextResponse());
 }
 
