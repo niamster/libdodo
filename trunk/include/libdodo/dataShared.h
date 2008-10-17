@@ -88,7 +88,7 @@ namespace dodo
 				/**
 				 * @return shared data
 				 */
-				virtual void *getMapped();
+				virtual void *get();
 
 				/**
 				 * @return size of shared data

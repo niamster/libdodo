@@ -105,7 +105,7 @@ shared::unmap()
 //-------------------------------------------------------------------
 
 void *
-shared::getMapped()
+shared::get()
 {
 	return mshared;
 }
