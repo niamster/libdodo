@@ -137,7 +137,7 @@ int main(int argc, char **argv)
 
 	server c;
 
-	c.listen(&cgif);
+	c.serve(&cgif);
 
 	return 0;
 }

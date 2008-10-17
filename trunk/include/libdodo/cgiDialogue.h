@@ -130,23 +130,13 @@ namespace dodo
 				virtual bool isAuthenticated(const dodoString &user, const dodoString &password);
 
 				/**
-				 * @return contents of stdin got for the POST request
-				 */
-				virtual dodoString getContent();
-
-				/**
-				 * clears contents of stdin got for the POST request
-				 */
-				virtual void clearContent();
-
-				/**
 				 * set response code and message
 				 * @param code defines return code[see cgiStatusCodeEnum]
 				 */
 				virtual void setResponseStatus(short code);
 
 				/**
-				 * @return method type
+				 * @return method type[see cgiRequestMethodEnum]
 				 */
 				virtual int getMethod() const;
 
@@ -167,12 +157,14 @@ namespace dodo
 				dodoMap<dodoString, __cgiFile, dodoMapStringCompare> FILES;                                          ///< POST files
 				dodoMap<short, dodoString> HEADERS;                                                                     ///< headers that will be printed with printHeaders method
 
+				dodoString content;                                                                                     ///< contents of the stdin for the POST request
+
 				/**
-				 * @return value of the requested variable from POST or GET
+				 * @return value of the requested variable from POST and GET
 				 * @param varName defines name of the variable
-				 * @param first defines what array will be used first to search for the variable[see requestMethodEnum]
+				 * @note searches in GET first
 				 */
-				virtual dodoString request(const dodoString &varName, short first = CGI_REQUESTMETHOD_GET);
+				virtual dodoString request(const dodoString &varName);
 
 				/**
 				 * print cgi headers
@@ -279,8 +271,6 @@ namespace dodo
 
 				dodoList<__cgiCookie> cookies;                                                                       ///< cookies
 				int method;                                                                                             ///< request method
-
-				dodoString content;                                                                                     ///< contents of the stdin for the POST request
 
 				dodoStringArray contenTypeExtensions;                                                                   ///< contains contentype extension[boundary, modification-date, etc]
 

@@ -165,7 +165,7 @@ server::stackThread(void *data)
 //-------------------------------------------------------------------
 
 void
-server::listen(serverHandler func)
+server::serve(serverHandler func)
 {
 	if (!isFastCgi())
 		throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ISCGI, CGIFASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);

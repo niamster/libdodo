@@ -12,4 +12,4 @@ test: test.cc
 clean:
 	rm -fr test
 
-force: clean test module
+force: clean test

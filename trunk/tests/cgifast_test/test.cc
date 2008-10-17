@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 			cout.flush();
 		}
 
-		cf.listen(&cgif);
+		cf.serve(&cgif);
 
 		delete shared;
 	}

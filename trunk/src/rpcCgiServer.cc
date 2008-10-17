@@ -59,9 +59,9 @@ server::sendTextRequest(const dodoString &response)
 dodoString
 server::receiveTextResponse()
 {
-	dodoString content = provider.getContent();
+	dodoString content = provider.content;
 
-	provider.clearContent();
+	provider.content.clear();
 
 	return content;
 }

@@ -50,7 +50,7 @@ server::~server()
 //-------------------------------------------------------------------
 
 void
-server::listen(serverHandler func)
+server::serve(serverHandler func)
 {
 	exchange cSTD;
 

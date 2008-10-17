@@ -61,7 +61,7 @@ namespace dodo
 				 * listen for incoming requests
 				 * @param func define request handler
 				 */
-				virtual void listen(serverHandler func) = 0;
+				virtual void serve(serverHandler func) = 0;
 		};
 	};
 };

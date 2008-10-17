@@ -438,22 +438,6 @@ dialogue::isAuthenticated(const dodoString &user,
 
 //-------------------------------------------------------------------
 
-dodoString
-dialogue::getContent()
-{
-	return content;
-}
-
-//-------------------------------------------------------------------
-
-void
-dialogue::clearContent()
-{
-	content.clear();
-}
-
-//-------------------------------------------------------------------
-
 void
 dialogue::cleanTmp()
 {
@@ -819,23 +803,17 @@ dialogue::operator[](short method)
 //-------------------------------------------------------------------
 
 dodoString
-dialogue::request(const dodoString &varName,
-				short first)
+dialogue::request(const dodoString &varName)
 {
-	dodoString met0 = GET[varName];
-	dodoString met1 = POST[varName];
+	dodoStringMap::iterator item = GET.find(varName);
+	if (item != GET.end())
+		return item->second;
 
-	if (first == CGI_REQUESTMETHOD_GET)
-		if (met0.size() != 0)
-			return met0;
-		else
-			return met1;
-	else
-	if (met0.size() != 0)
-		return met1;
-	else
-		return met0;
+	item = POST.find(varName);
+	if (item != POST.end())
+		return item->second;
 
+	return __dodostring__;
 }
 
 //-------------------------------------------------------------------
