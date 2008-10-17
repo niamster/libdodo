@@ -576,7 +576,7 @@ collection::add(const dodoString &module,
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>
-collection::getJobsIds()
+collection::getIds()
 {
 	dodoList<unsigned long> ids;
 

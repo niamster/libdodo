@@ -103,7 +103,7 @@ namespace dodo
 							/**
 							 * @return list of shared data in object
 							 */
-							virtual dodoList<unsigned long> getSharedDataIds();
+							virtual dodoList<unsigned long> getIds();
 
 						protected:
 

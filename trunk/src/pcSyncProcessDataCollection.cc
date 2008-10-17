@@ -125,7 +125,7 @@ collection::getShare(unsigned long position)
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>
-collection::getSharedDataIds()
+collection::getIds()
 {
 	dodoList<unsigned long> ids;
 

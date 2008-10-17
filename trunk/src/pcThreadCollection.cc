@@ -685,7 +685,7 @@ collection::addNRun(job::routine func,
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>
-collection::getJobsIds()
+collection::getIds()
 {
 	dodoList<unsigned long> ids;
 

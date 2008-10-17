@@ -94,7 +94,7 @@ namespace dodo
 						/**
 						 * @return list of shared data in object
 						 */
-						virtual dodoList<unsigned long> getSharedDataIds() = 0;
+						virtual dodoList<unsigned long> getIds() = 0;
 				};
 			};
 		};

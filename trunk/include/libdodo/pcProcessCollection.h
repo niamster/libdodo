@@ -247,7 +247,7 @@ namespace dodo
 					/**
 					 * @return list of processes in object
 					 */
-					virtual dodoList<unsigned long> getJobsIds();
+					virtual dodoList<unsigned long> getIds();
 
 					/**
 					 * set maximum execution time

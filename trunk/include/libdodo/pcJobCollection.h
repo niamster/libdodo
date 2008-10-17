@@ -129,7 +129,7 @@ namespace dodo
 					/**
 					 * @return list of jobs in object
 					 */
-					virtual dodoList<unsigned long> getJobsIds() = 0;
+					virtual dodoList<unsigned long> getIds() = 0;
 
 					/**
 					 * set maximum execution time
