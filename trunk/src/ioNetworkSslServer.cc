@@ -46,6 +46,7 @@ server::server(short a_family,
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IONETWORKSSLSERVER;
 
 #endif

@@ -37,8 +37,8 @@ regular::regular() : overwrite(false),
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IOFILEREGULAR;
-	execObjectData = (void *)&collectedData;
 
 #endif
 }
@@ -54,8 +54,8 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IOFILEREGULAR;
-	execObjectData = (void *)&collectedData;
 
 #endif
 

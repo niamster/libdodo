@@ -53,6 +53,7 @@ exchange::exchange(exchange &fse) : network::exchange(fse)
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IONETWORKSSLEXCHANGE;
 
 #endif
@@ -68,6 +69,7 @@ exchange::exchange() : sslHandle(NULL)
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IONETWORKSSLEXCHANGE;
 
 #endif
@@ -80,6 +82,7 @@ exchange::exchange(__initialAccept &a_init)
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IONETWORKSSLEXCHANGE;
 
 #endif

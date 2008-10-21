@@ -37,8 +37,8 @@ temp::temp() : overwrite(false),
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IOFILETEMP;
-	execObjectData = (void *)&collectedData;
 
 #endif
 }
@@ -52,8 +52,8 @@ temp::temp(const temp &fd) : overwrite(fd.overwrite),
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IOFILETEMP;
-	execObjectData = (void *)&collectedData;
 
 #endif
 

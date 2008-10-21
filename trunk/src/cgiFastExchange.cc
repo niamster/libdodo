@@ -43,8 +43,8 @@ exchange::exchange(FCGX_Request *a_request) : request(a_request)
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_CGIFASTEXCHANGE;
-	execObjectData = (void *)&collectedData;
 
 #endif
 }

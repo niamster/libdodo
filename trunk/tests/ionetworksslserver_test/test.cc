@@ -32,6 +32,7 @@ hook(void *odata,
 	__xexecIoChannelCollectedData *st = (__xexecIoChannelCollectedData *)odata;
 
 	cout << st->buffer << endl;
+	cout << ((exchange *)st->executor)->isAlive() << endl;
 }
 
 #endif

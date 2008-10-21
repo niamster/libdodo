@@ -55,6 +55,11 @@ channel::channel() : inSize(IO_INSIZE),
 
 #endif
 {
+#ifndef IO_WO_XEXEC
+
+	execObjectData = (void *)&collectedData;
+
+#endif
 }
 
 //-------------------------------------------------------------------

@@ -60,6 +60,9 @@ namespace dodo
 		 */
 		struct __xexecImageCollectedData
 		{
+
+#ifndef GRAPHICS_WO_XEXEC
+
 			/**
 			 * constructor
 			 * @param operType defines xexec operation
@@ -68,12 +71,18 @@ namespace dodo
 			__xexecImageCollectedData(int &operType,
 									  void *executor);
 
+#endif
+
 			ImageInfo *imInfo;                                                          ///< image info handler
 			Image *imHandle;                                                            ///< image handler
+
+#ifndef GRAPHICS_WO_XEXEC
 
 			int &operType;                                                              ///< xexec operation
 
 			void *executor;                                                             ///< class that executed hook
+
+#endif
 		};
 
 #define IMAGE_MAPPINGSTATEMENTS 3
@@ -162,7 +171,13 @@ namespace dodo
 		 * @class image
 		 * @brief provides simple image manipulations
 		 */
-		class image : public xexec
+		class image
+
+#ifndef GRAPHICS_WO_XEXEC
+
+		: public xexec
+
+#endif
 		{
 			friend class transform;
 

@@ -35,8 +35,8 @@ fifo::fifo() : handler(NULL)
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IOFILEFIFO;
-	execObjectData = (void *)&collectedData;
 
 #endif
 }
@@ -50,8 +50,8 @@ fifo::fifo(const fifo &fd) : mode(fd.mode),
 {
 #ifndef IO_WO_XEXEC
 
+	collectedData.executor = (void *)this;
 	execObject = XEXEC_OBJECT_IOFILEFIFO;
-	execObjectData = (void *)&collectedData;
 
 #endif
 

@@ -43,11 +43,15 @@ namespace dodo
 
 using namespace dodo::graphics;
 
+#ifndef GRAPHICS_WO_XEXEC
+
 __xexecImageCollectedData::__xexecImageCollectedData(int &a_operType,
 													 void *a_executor) : operType(a_operType),
 																		 executor(a_executor)
 {
 }
+
+#endif
 
 //-------------------------------------------------------------------
 
@@ -117,19 +121,31 @@ const CompressionType image::compressionStArr[] =
 
 //-------------------------------------------------------------------
 
-image::image(image &a_image) : collectedData(operType,
+image::image(image &a_image)
+
+#ifndef GRAPHICS_WO_XEXEC
+
+: collectedData(operType,
 											 (void *) this)
+
+#endif
 {
 }
 
 //-------------------------------------------------------------------
 
-image::image() : collectedData(operType,
+image::image()
+
+#ifndef GRAPHICS_WO_XEXEC
+
+: collectedData(operType,
 							   (void *) this)
+
+#endif
 {
 #ifndef GRAPHICS_WO_XEXEC
 
-	execObject = XEXEC_OBJECT_IMAGE;
+	execObject = XEXEC_OBJECT_GRAPHICSIMAGE;
 	execObjectData = (void *)&collectedData;
 
 #endif

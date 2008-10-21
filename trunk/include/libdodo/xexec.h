@@ -65,7 +65,7 @@ namespace dodo
 		XEXEC_OBJECT_IONETWORKSSLEXCHANGE,
 		XEXEC_OBJECT_CGIFASTEXCHANGE,
 		XEXEC_OBJECT_CGIBASICEXCHANGE,
-		XEXEC_OBJECT_IMAGE,
+		XEXEC_OBJECT_GRAPHICSIMAGE,
 	};
 
 	/**
@@ -345,6 +345,7 @@ namespace dodo
 			/**
 			 * enable/disable other hooks during hook execution
 			 * @note this prevents recursive hooks calls
+			 * true by default
 			 */
 			bool safeHooks;
 
