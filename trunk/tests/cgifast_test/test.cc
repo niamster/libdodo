@@ -33,14 +33,13 @@ cgif(exchange &fcgi)
 
 	cgit.setCookie("test", "Ni@m");
 
-	/// will print headers if they haven't been printed before
-	/// headers are printed also if print was called but headers hadn't been called before
-	cgit.printHeaders();
-
 	///increment counter in shared memory
 	int *inc = (int *)sh.acquire();
 	(*inc)++;
 	sh.release();
+
+	exchange *io = cgit;
+	io->writeStreamString("The headers thould be already printed successfully.<br>");
 
 	fcgi.writeStreamString(tools::string::iToString(*inc) + "<br>");
 	fcgi.writeStreamString(cgit.GET["a"] + "<br>");

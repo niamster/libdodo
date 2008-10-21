@@ -168,12 +168,6 @@ namespace dodo
 				virtual dodoString request(const dodoString &varName);
 
 				/**
-				 * print cgi headers
-				 * @note print cookies also
-				 */
-				virtual void printHeaders() const;
-
-				/**
 				 * print data to the output
 				 * @param data defines data that would be printed
 				 */
@@ -214,6 +208,13 @@ namespace dodo
 				 * @return charset of the request
 				 */
 				virtual dodoString getCharset();
+
+				/**
+				 * cast to exchange *
+				 * @return I/O interface
+				 * @note headers are printed before the cast
+				 */
+				virtual operator exchange *();
 
 			protected:
 
@@ -258,6 +259,12 @@ namespace dodo
 				 * to : val["name1"]=value1; val["name2"]=value2;
 				 */
 				virtual void make(dodoStringMap &val, const dodoString &string, const char *delim = "&");
+
+				/**
+				 * print cgi headers
+				 * @note print cookies also
+				 */
+				virtual void printHeaders() const;
 
 			private:
 

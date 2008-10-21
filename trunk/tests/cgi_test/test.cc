@@ -80,10 +80,8 @@ cgif(exchange &cgiio)
 
 	cgit.setCookie("test", "Ni@m");
 
-	///print HTTP headers
-	/// will print headers if they haven't been printed before
-	/// headers are printed also if print was called but headers hadn't been called before
-	cgit.printHeaders();
+	exchange *io = cgit;
+	io->writeStreamString("The headers thould be already printed successfully.<br>");
 
 	cgit.printStream("User: " + user + "<br>");
 	cgit.printStream(cgit.GET["a"] + "<br>");
