@@ -11,7 +11,7 @@ hgext.notify =
 
 [hooks]
 changegroup.notify = python:hgext.notify.hook
-changegroup.mirror = for i in $(hg cat mirrors); do hg push $i; done
+changegroup.mirror = for i in $(cat <path to list with mirrors>); do hg push $i; done
 
 [email]
 method = /usr/sbin/sendmail
