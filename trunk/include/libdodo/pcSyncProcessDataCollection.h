@@ -52,7 +52,7 @@ namespace dodo
 					 * @brief implements collection of shared data for processes
 					 */
 					class collection : public sync::data::collection,
-									   virtual public sync::stack
+									   virtual public sync::process::stack
 					{
 						private:
 
