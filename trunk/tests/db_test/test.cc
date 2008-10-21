@@ -5,30 +5,30 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/dbConnector.h>
-#include <libdodo/dbSqlConstructor.h>
-#include <libdodo/dbPostgresql.h>
-#include <libdodo/dbMysql.h>
-#include <libdodo/dbSqlite.h>
+#include <libdodo/dataBaseConnector.h>
+#include <libdodo/dataBaseSqlConstructor.h>
+#include <libdodo/dataBasePostgresql.h>
+#include <libdodo/dataBaseMysql.h>
+#include <libdodo/dataBaseSqlite.h>
 #include <libdodo/toolsFilesystem.h>
 
 #include <iostream>
 
 using namespace dodo;
-using namespace db;
+using namespace data::base;
 
 using namespace std;
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 void
 hook(void *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecDbAccumulatorCollectedData *sql = (__xexecDbAccumulatorCollectedData *)odata;
+	__xexecDataBaseAccumulatorCollectedData *sql = (__xexecDataBaseAccumulatorCollectedData *)odata;
 
-	if (sql->operType == DB_OPERATION_EXEC)
+	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
 		cout << endl << endl << "request: " << ((sql::constructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 	try
 	{
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 		int pos = pp->addPreExec(hook, (void *)"id");
 
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
 			pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b bytea)");
 		else
 			pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b longblob)");
-		
+
 		try
 		{
 			((sql::constructor *)pp)->getFieldsTypes("test");
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 			arr["operation"] = "um";
 			pp->update("test", arr);
 			pp->exec();
-			
+
 			arr["operation"] = "mu";
 			arr["d"] = "1";
 		}
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
 			cout << endl;
 		}
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 		pp->disablePreExec(pos);
 

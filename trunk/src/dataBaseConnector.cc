@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbConnector.cc
+ *            dataBaseConnector.cc
  *
  *  Sun Jan  15 19:45:19 2005
  *  Copyright  2005  Ni@m
@@ -27,9 +27,9 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/dbConnector.h>
+#include <libdodo/dataBaseConnector.h>
 
-using namespace dodo::db;
+using namespace dodo::data::base;
 
 __connectionInfo::__connectionInfo(const dodoString &a_db,
 								   const dodoString &a_host,

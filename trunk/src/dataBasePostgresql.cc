@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbPostgresql.cc
+ *            dataBasePostgresql.cc
  *
  *  Fri Jan  13 19:25:19 2006
  *  Copyright  2005  Ni@m
@@ -27,11 +27,11 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/dbPostgresql.h>
+#include <libdodo/dataBasePostgresql.h>
 
 #ifdef POSTGRESQL_EXT
 
-using namespace dodo::db;
+using namespace dodo::data::base;
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
 
@@ -83,9 +83,9 @@ const dodoString postgresql::encodingStatements[] = {
 
 postgresql::postgresql() : empty(true)
 {
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
-	execObject = XEXEC_OBJECT_DBPOSTGRESQL;
+	execObject = XEXEC_OBJECT_DATABASEPOSTGRESQL;
 
 #endif
 }
@@ -116,8 +116,8 @@ postgresql::connect(const __connectionInfo &info)
 {
 	collectedData.dbInfo = info;
 
-#ifndef DB_WO_XEXEC
-	operType = DB_OPERATION_CONNECT;
+#ifndef DATABASE_WO_XEXEC
+	operType = DATABASE_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
 
@@ -146,9 +146,9 @@ postgresql::connect(const __connectionInfo &info)
 	int status = PQstatus(pgHandle);
 
 	if (status != CONNECTION_OK)
-		throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_CONNECT, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_CONNECT, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -162,8 +162,8 @@ postgresql::disconnect()
 {
 	if (connected)
 	{
-#ifndef DB_WO_XEXEC
-		operType = DB_OPERATION_DISCONNECT;
+#ifndef DATABASE_WO_XEXEC
+		operType = DATABASE_OPERATION_DISCONNECT;
 		performXExec(preExec);
 #endif
 
@@ -175,7 +175,7 @@ postgresql::disconnect()
 
 		PQfinish(pgHandle);
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 		performXExec(postExec);
 #endif
 
@@ -189,8 +189,8 @@ dodoArray<dodo::dodoStringArray>
 postgresql::fetchRows() const
 {
 
-#ifndef DB_WO_XEXEC
-	operType = DB_OPERATION_FETCHROW;
+#ifndef DATABASE_WO_XEXEC
+	operType = DATABASE_OPERATION_FETCHROW;
 	performXExec(preExec);
 #endif
 
@@ -228,7 +228,7 @@ postgresql::fetchRows() const
 		rows.push_back(rowsPart);
 	}
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -240,8 +240,8 @@ postgresql::fetchRows() const
 dodo::dodoStringArray
 postgresql::fetchFields() const
 {
-#ifndef DB_WO_XEXEC
-	operType = DB_OPERATION_FETCHFIELD;
+#ifndef DATABASE_WO_XEXEC
+	operType = DATABASE_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 #endif
 
@@ -259,7 +259,7 @@ postgresql::fetchFields() const
 	for (int i(0); i < fieldsNum; ++i)
 		fields.push_back(PQfname(pgResult, i));
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -329,7 +329,7 @@ postgresql::getFieldsTypes(const dodoString &table)
 
 	pgResult = PQexecParams(pgHandle, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 	if (pgResult == NULL)
-		throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__, request);
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__, request);
 
 	int status = PQresultStatus(pgResult);
 
@@ -340,7 +340,7 @@ postgresql::getFieldsTypes(const dodoString &table)
 		case PGRES_NONFATAL_ERROR:
 		case PGRES_FATAL_ERROR:
 
-			throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 	}
 
 	empty = false;
@@ -411,8 +411,8 @@ void
 postgresql::exec(const dodoString &query,
 				 bool result)
 {
-#ifndef DB_WO_XEXEC
-	operType = DB_OPERATION_EXEC;
+#ifndef DATABASE_WO_XEXEC
+	operType = DATABASE_OPERATION_EXEC;
 	performXExec(preExec);
 #endif
 
@@ -456,7 +456,7 @@ postgresql::exec(const dodoString &query,
 		pgResult = PQexecParams(pgHandle, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 
 	if (pgResult == NULL)
-		throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 
 	status = PQresultStatus(pgResult);
 	switch (status)
@@ -466,12 +466,12 @@ postgresql::exec(const dodoString &query,
 		case PGRES_NONFATAL_ERROR:
 		case PGRES_FATAL_ERROR:
 
-			throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 	}
 
 	empty = false;
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -824,7 +824,7 @@ postgresql::setCharset(const dodoString &charset)
 {
 	int status = PQsetClientEncoding(pgHandle, charset.c_str());
 	if (status == -1)
-		throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

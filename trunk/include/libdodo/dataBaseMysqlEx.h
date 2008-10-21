@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbMysqlEx.h
+ *            dataBaseMysqlEx.h
  *
  *  Thu Jul  7 00:25:19 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _DBMYSQLEX_H_
-#define _DBMYSQLEX_H_
+#ifndef _DATABASEMYSQLEX_H_
+#define _DATABASEMYSQLEX_H_
 
 #include <libdodo/directives.h>
 
@@ -36,16 +36,19 @@
 
 namespace dodo
 {
-	namespace db
+	namespace data
 	{
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum mysqlFunctionsID
+		namespace base
 		{
-			MYSQLEX_CONNECT,
-			MYSQLEX_EXEC,
-			MYSQLEX_GETFIELDSTYPES,
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum mysqlFunctionsID
+			{
+				MYSQLEX_CONNECT,
+				MYSQLEX_EXEC,
+				MYSQLEX_GETFIELDSTYPES,
+			};
 		};
 	};
 };

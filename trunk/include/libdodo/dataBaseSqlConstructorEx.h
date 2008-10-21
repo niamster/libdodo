@@ -1,7 +1,7 @@
 /***************************************************************************
- *            dbSqliteEx.h
+ *            dataBaseSqlConstructorEx.h
  *
- *  Sat Dec 10 06:45:19 2005
+ *  Mon Jul 18 20:25:14 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,28 +27,46 @@
  * set shiftwidth=4
  */
 
-#ifndef _DBSQLITEEX_H_
-#define _DBSQLITEEX_H_
+#ifndef _DATABASESQLCONSTRUCTOREX_H_
+#define _DATABASESQLCONSTRUCTOREX_H_
 
 #include <libdodo/directives.h>
 
+#include <libdodo/types.h>
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo
 {
-	namespace db
+	namespace data
 	{
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum sqliteFunctionsID
+		namespace base
 		{
-			SQLITEEX_DISCONNECT,
-			SQLITEEX_CONNECT,
-			SQLITEEX_EXEC,
-			SQLITEEX_FETCHROWS,
-			SQLITEEX_FETCHFIELDSTOROWS,
-			SQLITEEX_GETFIELDSTYPES,
+			namespace sql
+			{
+				/**
+				 * libdodo defined errors
+				 */
+				enum sqlConstructorExR
+				{
+					SQLCONSTRUCTOREX_EMPTYREQUEST,
+					SQLCONSTRUCTOREX_UNKNOWNJOINTYPE,
+				};
+
+				/**
+				 * explanations for libdodo defined errors
+				 */
+#define DATABASESQLCONSTRUCTOREX_EMPTYREQUEST_STR    "Query is empty. Are you sure?"
+#define DATABASESQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR "Unknown join type."
+
+				/**
+				 * IDs of functions where exception might be thrown
+				 */
+				enum sqlConstructorFunctionsID
+				{
+					SQLCONSTRUCTOREX_QUERYCOLLECT,
+					SQLCONSTRUCTOREX_JOINCOLLECT,
+				};
+			};
 		};
 	};
 };

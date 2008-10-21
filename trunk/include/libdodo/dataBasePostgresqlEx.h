@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbPostgresqlEx.h
+ *            dataBasePostgresqlEx.h
  *
  *  Fri Jan  13 19:25:19 2006
  *  Copyright  2006  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _DBPOSTGRESQLEX_H_
-#define _DBPOSTGRESQLEX_H_
+#ifndef _DATABASEPOSTGRESQLEX_H_
+#define _DATABASEPOSTGRESQLEX_H_
 
 #include <libdodo/directives.h>
 
@@ -36,17 +36,20 @@
 
 namespace dodo
 {
-	namespace db
+	namespace data
 	{
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum postgresqlFunctionsID
+		namespace base
 		{
-			POSTGRESQLEX_CONNECT,
-			POSTGRESQLEX_EXEC,
-			POSTGRESQLEX_SETCHARSET,
-			POSTGRESQLEX_GETFIELDSTYPES,
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum postgresqlFunctionsID
+			{
+				POSTGRESQLEX_CONNECT,
+				POSTGRESQLEX_EXEC,
+				POSTGRESQLEX_SETCHARSET,
+				POSTGRESQLEX_GETFIELDSTYPES,
+			};
 		};
 	};
 };

@@ -5,7 +5,7 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/dbMysql.h>
+#include <libdodo/dataBaseMysql.h>
 #include <libdodo/toolsTime.h>
 
 #include <iostream>
@@ -16,18 +16,18 @@ using namespace std;
 
 #ifdef MYSQL_EXT
 
-using namespace db;
+using namespace data::base;
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 void
 hook(void *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecDbAccumulatorCollectedData *sql = (__xexecDbAccumulatorCollectedData *)odata;
+	__xexecDataBaseAccumulatorCollectedData *sql = (__xexecDataBaseAccumulatorCollectedData *)odata;
 
-	if (sql->operType == DB_OPERATION_EXEC)
+	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
 		cout << endl << endl << "request: " << ((sql::constructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 	try
 	{
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 		int pos = pp.addPreExec(hook, NULL);
 
@@ -114,8 +114,8 @@ int main(int argc, char **argv)
 		pp.insert("test", values, fields);
 		pp.exec();
 
-#ifndef DB_WO_XEXEC
-		
+#ifndef DATABASE_WO_XEXEC
+
 		pp.disablePreExec(pos);
 
 #endif
@@ -126,12 +126,12 @@ int main(int argc, char **argv)
 			pp.exec();
 		}
 
-#ifndef DB_WO_XEXEC
-		
+#ifndef DATABASE_WO_XEXEC
+
 		pp.enablePreExec(pos);
 
 #endif
-		
+
 		dodoStringArray uni;
 
 		pp.selectAll("test", "id>1");
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 		uni.push_back(sub);
 		pp.subquery(uni);
 		sub = pp.queryCollect();
-		
+
 		pp.selectAll("test", "id<100");
 
 		uni.clear();
@@ -158,9 +158,9 @@ int main(int argc, char **argv)
 		pp.selectAll("test");
 		pp.limit(10);
 		pp.exec();
-		
+
 		storage = pp.fetch();
-		
+
 		dodoArray<dodoStringArray>::iterator o(storage.rows.begin()), p(storage.rows.end());
 		dodoStringArray::iterator m, n;
 		for (; o != p; o++)

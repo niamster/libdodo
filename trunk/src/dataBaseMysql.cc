@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbMysql.cc
+ *            dataBaseMysql.cc
  *
  *  Thu Apr  30 13:45:19 2005
  *  Copyright  2005  Ni@m
@@ -27,19 +27,19 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/dbMysql.h>
+#include <libdodo/dataBaseMysql.h>
 
 #ifdef MYSQL_EXT
 
-using namespace dodo::db;
+using namespace dodo::data::base;
 
 mysql::mysql() : empty(true),
 				 type(CLIENT_MULTI_STATEMENTS)
 
 {
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
-	execObject = XEXEC_OBJECT_DBMYSQL;
+	execObject = XEXEC_OBJECT_DATABASEMYSQL;
 
 #endif
 }
@@ -87,8 +87,8 @@ mysql::connect(const __connectionInfo &info)
 {
 	collectedData.dbInfo = info;
 
-#ifndef DB_WO_XEXEC
-	operType = DB_OPERATION_CONNECT;
+#ifndef DATABASE_WO_XEXEC
+	operType = DATABASE_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
 
@@ -115,7 +115,7 @@ mysql::connect(const __connectionInfo &info)
 							collectedData.dbInfo.port,
 							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
 							type))
-		throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_CONNECT, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 #ifndef MYSQL_NO_OPT_RECONNECT
 
@@ -128,7 +128,7 @@ mysql::connect(const __connectionInfo &info)
 
 #endif
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -142,8 +142,8 @@ mysql::disconnect()
 {
 	if (connected)
 	{
-#ifndef DB_WO_XEXEC
-		operType = DB_OPERATION_DISCONNECT;
+#ifndef DATABASE_WO_XEXEC
+		operType = DATABASE_OPERATION_DISCONNECT;
 		performXExec(preExec);
 #endif
 
@@ -155,7 +155,7 @@ mysql::disconnect()
 
 		mysql_close(mysqlHandle);
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 		performXExec(postExec);
 #endif
 
@@ -168,8 +168,8 @@ mysql::disconnect()
 dodoArray<dodo::dodoStringArray>
 mysql::fetchRows() const
 {
-#ifndef DB_WO_XEXEC
-	operType = DB_OPERATION_FETCHROW;
+#ifndef DATABASE_WO_XEXEC
+	operType = DATABASE_OPERATION_FETCHROW;
 	performXExec(preExec);
 #endif
 
@@ -213,7 +213,7 @@ mysql::fetchRows() const
 		rows.push_back(rowsPart);
 	}
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -225,8 +225,8 @@ mysql::fetchRows() const
 dodo::dodoStringArray
 mysql::fetchFields() const
 {
-#ifndef DB_WO_XEXEC
-	operType = DB_OPERATION_FETCHFIELD;
+#ifndef DATABASE_WO_XEXEC
+	operType = DATABASE_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 #endif
 
@@ -247,7 +247,7 @@ mysql::fetchFields() const
 	for (unsigned int i(0); i < numFields; ++i)
 		fields.push_back(mysqlFields[i].name);
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -316,15 +316,15 @@ mysql::getFieldsTypes(const dodoString &table)
 		{
 			connect(collectedData.dbInfo);
 			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-				throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+				throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 		}
 		else
-			throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+			throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 	}
 
 	mysqlResult = mysql_store_result(mysqlHandle);
 	if (mysqlResult == NULL)
-		throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 	empty = false;
 
@@ -383,8 +383,8 @@ void
 mysql::exec(const dodoString &query,
 			bool result)
 {
-#ifndef DB_WO_XEXEC
-	operType = DB_OPERATION_EXEC;
+#ifndef DATABASE_WO_XEXEC
+	operType = DATABASE_OPERATION_EXEC;
 	performXExec(preExec);
 #endif
 
@@ -403,10 +403,10 @@ mysql::exec(const dodoString &query,
 		{
 			connect(collectedData.dbInfo);
 			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-				throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+				throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 		}
 		else
-			throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+			throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 	}
 
 	if (show)
@@ -419,12 +419,12 @@ mysql::exec(const dodoString &query,
 
 		mysqlResult = mysql_store_result(mysqlHandle);
 		if (mysqlResult == NULL)
-			throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 		empty = false;
 	}
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
 

@@ -5,7 +5,7 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/dbPostgresql.h>
+#include <libdodo/dataBasePostgresql.h>
 
 #include <iostream>
 
@@ -15,16 +15,16 @@ using namespace std;
 
 #ifdef POSTGRESQL_EXT
 
-using namespace db;
+using namespace data::base;
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 void
 hook(void *odata, short int type, void *udata)
 {
-	__xexecDbAccumulatorCollectedData *sql = (__xexecDbAccumulatorCollectedData *)odata;
+	__xexecDataBaseAccumulatorCollectedData *sql = (__xexecDataBaseAccumulatorCollectedData *)odata;
 
-	if (sql->operType == DB_OPERATION_EXEC)
+	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
 		cout << endl << endl << "request: " << ((sql::constructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 		pp.addPreExec(&hook, NULL);
 
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 		info.host = "localhost";
 		info.port = 5432;
 		info.user = "postgres";
-		
+
 		pp.connect(info);
 
 		try

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbAccumulator.cc
+ *            dataBaseAccumulator.cc
  *
  *  Thu Aug 25 22:03:07 2005
  *  Copyright  2005  Ni@m
@@ -27,13 +27,13 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/dbAccumulator.h>
+#include <libdodo/dataBaseAccumulator.h>
 
-using namespace dodo::db;
+using namespace dodo::data::base;
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
-__xexecDbAccumulatorCollectedData::__xexecDbAccumulatorCollectedData(int &a_operType,
+__xexecDataBaseAccumulatorCollectedData::__xexecDataBaseAccumulatorCollectedData(int &a_operType,
 																	 void *a_executor) : operType(a_operType),
 																						 executor(a_executor)
 {
@@ -44,7 +44,7 @@ __xexecDbAccumulatorCollectedData::__xexecDbAccumulatorCollectedData(int &a_oper
 //-------------------------------------------------------------------
 
 accumulator::accumulator() : show(false)
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 							 ,
 							 collectedData(operType,
@@ -52,7 +52,7 @@ accumulator::accumulator() : show(false)
 
 #endif
 {
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 	execObjectData = (void *)&collectedData;
 

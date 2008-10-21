@@ -5,7 +5,7 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/dbSqlite.h>
+#include <libdodo/dataBaseSqlite.h>
 #include <libdodo/toolsFilesystem.h>
 
 #include <iostream>
@@ -16,18 +16,18 @@ using namespace dodo;
 
 #ifdef SQLITE_EXT
 
-using namespace db;
+using namespace data::base;
 
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 void
 hook(void *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecDbAccumulatorCollectedData *sql = (__xexecDbAccumulatorCollectedData *)odata;
+	__xexecDataBaseAccumulatorCollectedData *sql = (__xexecDataBaseAccumulatorCollectedData *)odata;
 
-	if (sql->operType == DB_OPERATION_EXEC)
+	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
 		cout << endl << endl << "request: " << ((sql::constructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	sqlite pp;
 	try
 	{
-#ifndef DB_WO_XEXEC
+#ifndef DATABASE_WO_XEXEC
 
 		int pos = pp.addPreExec(hook, (void *)"id");
 
@@ -54,9 +54,9 @@ int main(int argc, char **argv)
 
 		__connectionInfo info;
 		info.path = "test.lite";
-		
+
 		pp.connect(info);
-		
+
 		try
 		{
 			pp.exec("DROP TABLE test");
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 		{
 			pp.select("test", select, "`id`<20 or `operation`='um'");
 			pp.exec();
-			
+
 			cout << "Selected: " << pp.rowsCount() << endl;
 			cout << "Selected2: " << pp.fetch().rows.size() << endl;
 			cout << "Selected3: " << pp.fetch().rows.size() << endl;
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 			pp.exec();
 
 			cout << "Updated: " << pp.affectedRowsCount() << endl;
-			
+
 			arr["operation"] = "mu";
 		}
 

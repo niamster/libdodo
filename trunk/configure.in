@@ -110,11 +110,11 @@ fi
 
 AC_ARG_ENABLE(db-xexec-support,
 	AS_HELP_STRING([--disable-db-xexec-support],[compile db:: w/o xexec support]),
-	[DB_W_XEXEC="$enableval"], [DB_W_XEXEC="yes"])
+	[DATABASE_W_XEXEC="$enableval"], [DATABASE_W_XEXEC="yes"])
 
-if test "$DB_W_XEXEC" = "no"
+if test "$DATABASE_W_XEXEC" = "no"
 then
-	echo -n -e "#define DB_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define DATABASE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 fi
 
 # Check for libraries.
@@ -138,7 +138,7 @@ fi
 		
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
 
-		if test "$DB_W_XEXEC" = "no"
+		if test "$DATABASE_W_XEXEC" = "no"
 		then
 			RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\t\tdisabled"
 		else
@@ -240,7 +240,7 @@ fi
 
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
 
-		if test "$DB_W_XEXEC" = "no"
+		if test "$DATABASE_W_XEXEC" = "no"
 		then
 			RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\t\tdisabled"
 		else
@@ -281,7 +281,7 @@ fi
 		
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
 
-		if test "$DB_W_XEXEC" = "no"
+		if test "$DATABASE_W_XEXEC" = "no"
 		then
 			RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tdisabled"
 		else

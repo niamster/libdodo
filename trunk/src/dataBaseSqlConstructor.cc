@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbSqlConstructor.cc
+ *            dataBaseSqlConstructor.cc
  *
  *  Mon Jul 18 19:30:55 2005
  *  Copyright  2005  Ni@m
@@ -27,9 +27,9 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/dbSqlConstructor.h>
+#include <libdodo/dataBaseSqlConstructor.h>
 
-using namespace dodo::db::sql;
+using namespace dodo::data::base::sql;
 
 const dodoString constructor::sqlQStArr[] =
 {
@@ -430,7 +430,7 @@ constructor::joinCollect()
 		if (*m >= 0 && *m < JOINTYPESTSTATEMENTS)
 			request.append(sqlJoinArr[*m]);
 		else
-			throw exception::basic(exception::ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASESQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DATABASESQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
 
 		request.append(*i);
 
