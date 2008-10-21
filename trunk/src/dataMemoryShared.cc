@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dataShared.cc
+ *            dataMemoryShared.cc
  *
  *  Wed Nov 21 01:25:14 2007
  *  Copyright  2007  Ni@m
@@ -28,9 +28,9 @@
  */
 
 
-#include <libdodo/dataShared.h>
+#include <libdodo/dataMemoryShared.h>
 
-using namespace dodo::data;
+using namespace dodo::data::memory;
 
 shared::shared(shared &sts)
 {
@@ -76,15 +76,15 @@ shared::map(unsigned long size)
 	unmap();
 
 	if (shm <= 0)
-		throw exception::basic(exception::ERRMODULE_DATASHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (ftruncate(shm, sizeof(size)) != 0)
-		throw exception::basic(exception::ERRMODULE_DATASHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	mshared = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm, 0);
 
 	if (mshared == MAP_FAILED)
-		throw exception::basic(exception::ERRMODULE_DATASHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return mshared;
 }
@@ -96,7 +96,7 @@ shared::unmap()
 {
 	if (mshared != NULL)
 		if (munmap(mshared, size) == -1)
-			throw exception::basic(exception::ERRMODULE_DATASHARED, SHAREDEX_UNMAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_UNMAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	mshared = NULL;
 	size = 0;

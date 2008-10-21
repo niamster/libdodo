@@ -26,6 +26,12 @@ OBJECTS:=dataBaseAccumulator.o \
 	dataBasePostgresql.o \
 	dataBaseMysql.o \
 	dataBaseSqlite.o \
+	dataFormatJsonProcessor.o \
+	dataFormatJsonNode.o \
+	dataFormatXmlProcessor.o \
+	dataFormatXmlNode.o \
+	dataTplProcessor.o \
+	dataMemoryShared.o \
 	toolsMisc.o \
 	toolsCode.o \
 	toolsFilesystem.o \
@@ -56,12 +62,6 @@ OBJECTS:=dataBaseAccumulator.o \
 	ioNetworkExchange.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
-	dataFormatJsonProcessor.o \
-	dataFormatJsonNode.o \
-	dataFormatXmlProcessor.o \
-	dataFormatXmlNode.o \
-	dataTplProcessor.o \
-	dataShared.o \
 	rpcValue.o \
 	rpcMethod.o \
 	rpcResponse.o \

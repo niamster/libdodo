@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dataSharedEx.h
+ *            dataMemorySharedEx.h
  *
  *  Wed Nov 21 01:05:14 2007
  *  Copyright  2007  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _DATASHAREDEX_H_
-#define _DATASHAREDEX_H_
+#ifndef _DATAMEMORYSHAREDEX_H_
+#define _DATAMEMORYSHAREDEX_H_
 
 #include <libdodo/directives.h>
 
@@ -38,13 +38,16 @@ namespace dodo
 {
 	namespace data
 	{
-		/**
-		 * ID of function where exception was thrown
-		 */
-		enum sharedFunctionsID
+		namespace memory
 		{
-			SHAREDEX_MAP,
-			SHAREDEX_UNMAP,
+			/**
+			 * ID of function where exception was thrown
+			 */
+			enum sharedFunctionsID
+			{
+				SHAREDEX_MAP,
+				SHAREDEX_UNMAP,
+			};
 		};
 	};
 };

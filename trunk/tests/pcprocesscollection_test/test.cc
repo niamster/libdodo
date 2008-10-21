@@ -9,7 +9,7 @@
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/dataShared.h>
+#include <libdodo/dataMemoryShared.h>
 #include <libdodo/pcSyncProcessDataSingle.h>
 #include <libdodo/pcSyncProcessDataCollection.h>
 
@@ -31,7 +31,7 @@ process(void *ud)
 {
 	try
 	{
-		dodo::data::shared shD("dodo");
+		dodo::data::memory::shared shD("dodo");
 		char *dt = (char *)shD.map(100);
 		cout << dt << endl;
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		dodo::data::shared shD("dodo");
+		dodo::data::memory::shared shD("dodo");
 		char *data = (char *)shD.map(100);
 		strcpy(data, "test");
 
