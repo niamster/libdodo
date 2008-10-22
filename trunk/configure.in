@@ -2,6 +2,8 @@
 AC_PREREQ(2.60)
 AC_INIT(libdodo, 0.11.0, libdodo.sf.net)
 
+AC_PREFIX_DEFAULT(/usr)
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC

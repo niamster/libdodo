@@ -129,15 +129,16 @@ all: @PACKAGE_NAME@
 	if test "@DEBUG@" = "no"; then strip -d --strip-unneeded $@; fi
 
 install: @PACKAGE_NAME@ 
-	${INSTALL} -m 755 -d $(libdir)
-	${INSTALL} -m 755 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(libdir)/
-	${INSTALL} -m 755 -d $(includedir)/libdodo
-	cd include/libdodo; for i in ./*; do ${INSTALL} -m 755 $$i $(includedir)/libdodo; done; cd ..
+	${INSTALL} -m 755 -d ${DESTDIR}$(libdir)
+	${INSTALL} -m 755 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ ${DESTDIR}$(libdir)/
 
-	${INSTALL} -m 755 -d $(bindir)
-	${INSTALL} -m 755 bin/dodo-config $(bindir)/
+	${INSTALL} -m 755 -d ${DESTDIR}$(includedir)/libdodo
+	${INSTALL} -m 755 include/libdodo/* ${DESTDIR}$(includedir)/libdodo/
+
+	${INSTALL} -m 755 -d ${DESTDIR}$(bindir)
+	${INSTALL} -m 755 bin/dodo-config ${DESTDIR}$(bindir)/
 	
-	$(LN_S) -f $(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(libdir)/@PACKAGE_NAME@.so
+	$(LN_S) -f ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so
 	
 	@echo ""
 	@echo ""
@@ -146,18 +147,17 @@ install: @PACKAGE_NAME@
 	@echo ""
 
 uninstall:
-	rm -f $(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@
-	rm -f $(libdir)/@PACKAGE_NAME@.so
-	rmdir $(libdir)
+	rm -f ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@
+	rm -f ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so
+	rmdir ${DESTDIR}$(libdir)
 	
-	cd i$(ncludedir)/libdodo; for i in ./*; do rm -f $(includedir)/$$i; done; cd ..
-	rmdir $(includedir)/libdodo
-	rmdir $(includedir)
+	rm -rf ${DESTDIR}$(includedir)/libdodo
+	rmdir ${DESTDIR}$(includedir)
 
-	rm -f $(bindir)/dodo-config
-	rmdir $(bindir)/dodo-config
-	
-	rmdir $(prefix)
+	rm -f ${DESTDIR}$(bindir)/dodo-config
+	rmdir ${DESTDIR}$(bindir)
+
+	rmdir ${DESTDIR}$(prefix)
 clean:
 	rm -rf *.o *.so* *.a*
 
