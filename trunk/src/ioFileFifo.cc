@@ -35,8 +35,7 @@ fifo::fifo() : handler(NULL)
 {
 #ifndef IO_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_IOFILEFIFO;
+	collectedData.setExecObject(XEXEC_OBJECT_IOFILEFIFO);
 
 #endif
 }
@@ -50,8 +49,7 @@ fifo::fifo(const fifo &fd) : mode(fd.mode),
 {
 #ifndef IO_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_IOFILEFIFO;
+	collectedData.setExecObject(XEXEC_OBJECT_IOFILEFIFO);
 
 #endif
 

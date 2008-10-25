@@ -20,8 +20,8 @@ extern "C"
 {
 
 void
-hook(void *odata,
-	 xexecObjectTypeEnum type,
+hook(__xexecCollectedData *odata,
+     short int type,
 	 void *udata)
 {
 #ifndef IO_WO_XEXEC
@@ -43,8 +43,8 @@ hook(void *odata,
 }
 
 void
-empty(void *odata,
-	  xexecObjectTypeEnum type,
+empty(__xexecCollectedData *odata,
+      short int type,
 	  void *udata)
 {
 

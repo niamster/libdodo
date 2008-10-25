@@ -23,7 +23,7 @@ using namespace graphics;
 #ifndef GRAPHICS_WO_XEXEC
 
 void
-hook(void *odata,
+hook(__xexecCollectedData *odata,
 	 short int type,
 	 void *udata)
 {
@@ -33,7 +33,7 @@ hook(void *odata,
 	{
 		try
 		{
-			image *img = (image *)imData->executor;
+			image *img = dynamic_cast<image *>(imData->executor);
 			img->disableAll();
 			graphics::transform tr(img);
 			tr.rotate(TRANSFORM_ROTATEDIRECTIONANGLE_180);

@@ -33,9 +33,8 @@ using namespace dodo::io::network;
 
 #ifndef IO_WO_XEXEC
 
-__xexecIoNetworkClientCollectedData::__xexecIoNetworkClientCollectedData(int &a_operType,
-																		 void *a_executor) : operType(a_operType),
-																							 executor(a_executor)
+__xexecIoNetworkClientCollectedData::__xexecIoNetworkClientCollectedData(xexec *executor,
+                                                                         short execObject) : __xexecCollectedData(executor, execObject)
 {
 }
 
@@ -47,8 +46,7 @@ client::client(client &fs)
 
 #ifndef IO_WO_XEXEC
 
-	: collectedData(operType,
-					(void *) this)
+	: collectedData(this, XEXEC_OBJECT_IONETWORKCLIENT)
 
 #endif
 
@@ -64,17 +62,10 @@ client::client(short a_family,
 #ifndef IO_WO_XEXEC
 
 							   ,
-							   collectedData(operType,
-											 (void *) this)
+							   collectedData(this, XEXEC_OBJECT_IONETWORKCLIENT)
 
 #endif
 {
-#ifndef IO_WO_XEXEC
-
-	execObject = XEXEC_OBJECT_IONETWORKCLIENT;
-	execObjectData = (void *)&collectedData;
-
-#endif
 }
 
 

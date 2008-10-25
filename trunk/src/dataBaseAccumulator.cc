@@ -33,9 +33,8 @@ using namespace dodo::data::base;
 
 #ifndef DATABASE_WO_XEXEC
 
-__xexecDataBaseAccumulatorCollectedData::__xexecDataBaseAccumulatorCollectedData(int &a_operType,
-																	 void *a_executor) : operType(a_operType),
-																						 executor(a_executor)
+__xexecDataBaseAccumulatorCollectedData::__xexecDataBaseAccumulatorCollectedData(xexec *a_executor,
+                                                                                 short execObject) : __xexecCollectedData(a_executor, execObject)
 {
 }
 
@@ -45,19 +44,11 @@ __xexecDataBaseAccumulatorCollectedData::__xexecDataBaseAccumulatorCollectedData
 
 accumulator::accumulator() : show(false)
 #ifndef DATABASE_WO_XEXEC
-
 							 ,
-							 collectedData(operType,
-										   (void *) this)
+							 collectedData(this, XEXEC_OBJECT_XEXEC)
 
 #endif
 {
-#ifndef DATABASE_WO_XEXEC
-
-	execObjectData = (void *)&collectedData;
-
-#endif
-
 	collectedData.qType = -1;
 
 	collectedData.qShift = ACCUMULATOR_NONE;

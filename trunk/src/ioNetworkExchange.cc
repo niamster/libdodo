@@ -48,8 +48,7 @@ exchange::exchange(exchange &fse)
 {
 #ifndef IO_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_IONETWORKEXCHANGE;
+	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
 
 #endif
 
@@ -76,8 +75,7 @@ exchange::exchange()
 {
 #ifndef IO_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_IONETWORKEXCHANGE;
+	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
 
 #endif
 }
@@ -88,8 +86,7 @@ exchange::exchange(__initialAccept &a_init)
 {
 #ifndef IO_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_IONETWORKEXCHANGE;
+	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
 
 #endif
 

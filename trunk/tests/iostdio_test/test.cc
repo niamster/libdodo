@@ -18,7 +18,7 @@ using namespace std;
 #ifndef IO_WO_XEXEC
 
 void
-hook(void *odata,
+hook(__xexecCollectedData *odata,
 	 short int type,
 	 void *udata)
 {
@@ -27,7 +27,7 @@ hook(void *odata,
 	{
 		int a = *(int *)(st->buffer.c_str());
 
-		stdio *io = (stdio *)st->executor;
+		stdio *io = dynamic_cast<stdio *>(st->executor);
 		io->disableAll();
 		io->outSize = 100;
 		io->writeStreamString("\nhook\n");

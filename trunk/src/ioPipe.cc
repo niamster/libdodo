@@ -39,8 +39,7 @@ io::pipe::pipe() : inPipeBuffer(IOPIPE_INSIZE),
 {
 #ifndef IO_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_IOPIPE;
+	collectedData.setExecObject(XEXEC_OBJECT_IOPIPE);
 
 #endif
 }
@@ -55,8 +54,7 @@ io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 {
 #ifndef IO_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_IOPIPE;
+	collectedData.setExecObject(XEXEC_OBJECT_IOPIPE);
 
 #endif
 

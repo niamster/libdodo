@@ -85,8 +85,7 @@ postgresql::postgresql() : empty(true)
 {
 #ifndef DATABASE_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_DATABASEPOSTGRESQL;
+	collectedData.setExecObject(XEXEC_OBJECT_DATABASEPOSTGRESQL);
 
 #endif
 }
@@ -118,7 +117,6 @@ postgresql::connect(const __connectionInfo &info)
 	collectedData.dbInfo = info;
 
 #ifndef DATABASE_WO_XEXEC
-	collectedData.executor = (void *)this;
 	operType = DATABASE_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif

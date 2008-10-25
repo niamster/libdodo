@@ -22,7 +22,7 @@ using namespace std;
 #ifndef DATABASE_WO_XEXEC
 
 void
-hook(void *odata,
+hook(__xexecCollectedData *odata,
 	 short int type,
 	 void *udata)
 {
@@ -30,7 +30,7 @@ hook(void *odata,
 
 	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
-		cout << endl << endl << "request: " << ((sql::constructor *)(sql->executor))->queryCollect() << endl << endl;
+		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->queryCollect() << endl << endl;
 	}
 }
 

@@ -45,9 +45,8 @@ using namespace dodo::graphics;
 
 #ifndef GRAPHICS_WO_XEXEC
 
-__xexecImageCollectedData::__xexecImageCollectedData(int &a_operType,
-													 void *a_executor) : operType(a_operType),
-																		 executor(a_executor)
+__xexecImageCollectedData::__xexecImageCollectedData(xexec *executor,
+                                                     short execObject) : __xexecCollectedData(executor, execObject)
 {
 }
 
@@ -125,8 +124,7 @@ image::image(image &a_image)
 
 #ifndef GRAPHICS_WO_XEXEC
 
-: collectedData(operType,
-											 (void *) this)
+: collectedData(this, XEXEC_OBJECT_GRAPHICSIMAGE)
 
 #endif
 {
@@ -138,18 +136,10 @@ image::image()
 
 #ifndef GRAPHICS_WO_XEXEC
 
-: collectedData(operType,
-							   (void *) this)
+: collectedData(this, XEXEC_OBJECT_GRAPHICSIMAGE)
 
 #endif
 {
-#ifndef GRAPHICS_WO_XEXEC
-
-	execObject = XEXEC_OBJECT_GRAPHICSIMAGE;
-	execObjectData = (void *)&collectedData;
-
-#endif
-
 	collectedData.imHandle = NULL;
 
 	collectedData.imInfo = AcquireImageInfo();

@@ -38,8 +38,7 @@ sqlite::sqlite() : empty(true)
 {
 #ifndef DATABASE_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_DATABASESQLITE;
+	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
 
 #endif
 }

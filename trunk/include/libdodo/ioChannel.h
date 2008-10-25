@@ -59,23 +59,21 @@ namespace dodo
 #ifndef IO_WO_XEXEC
 
 		/**
-		 * @struct __xexecIoChannelCollectedData
+		 * @class __xexecIoChannelCollectedData
 		 * @brief defines data that could be retrieved from io::channel(to modificate)
 		 */
-		struct __xexecIoChannelCollectedData
+		class __xexecIoChannelCollectedData : public __xexecCollectedData
 		{
-			/**
-			 * constructor
-			 * @param operType defines xexec operation
-			 * @param executor defines class that executed hook
-			 */
-			__xexecIoChannelCollectedData(int &operType, void *executor);
+			public:
 
-			dodoString buffer;                                      ///< data buffer
+				/**
+				 * constructor
+				 * @param executor defines class that executed hook
+				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
+				 */
+				__xexecIoChannelCollectedData(xexec *executor, short execObject);
 
-			int &operType;                                          ///< xexec operation
-
-			void *executor;                                         ///< class that executed hook
+				dodoString buffer;                                      ///< data buffer
 		};
 
 #endif

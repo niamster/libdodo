@@ -33,9 +33,8 @@ using namespace dodo::io;
 
 #ifndef IO_WO_XEXEC
 
-__xexecIoChannelCollectedData::__xexecIoChannelCollectedData(int &a_operType,
-															 void *a_executor) : operType(a_operType),
-																				 executor(a_executor)
+__xexecIoChannelCollectedData::__xexecIoChannelCollectedData(xexec *a_executor,
+                                                             short execObject) : __xexecCollectedData(a_executor, execObject)
 {
 }
 
@@ -50,16 +49,10 @@ channel::channel() : inSize(IO_INSIZE),
 #ifndef IO_WO_XEXEC
 
 					 ,
-					 collectedData(operType,
-								   (void *) this)
+					 collectedData(this, XEXEC_OBJECT_XEXEC)
 
 #endif
 {
-#ifndef IO_WO_XEXEC
-
-	execObjectData = (void *)&collectedData;
-
-#endif
 }
 
 //-------------------------------------------------------------------

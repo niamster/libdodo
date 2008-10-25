@@ -39,8 +39,7 @@ mysql::mysql() : empty(true),
 {
 #ifndef DATABASE_WO_XEXEC
 
-	collectedData.executor = (void *)this;
-	execObject = XEXEC_OBJECT_DATABASEMYSQL;
+	collectedData.setExecObject(XEXEC_OBJECT_DATABASEMYSQL);
 
 #endif
 }

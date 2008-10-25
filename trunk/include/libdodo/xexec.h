@@ -68,6 +68,8 @@ namespace dodo
 		XEXEC_OBJECT_GRAPHICSIMAGE,
 	};
 
+	class __xexecCollectedData;
+
 	/**
 	 * @typedef inExec
 	 * @brief defines function that will be called as hook
@@ -75,7 +77,8 @@ namespace dodo
 	 * @param object defines type of object that called hook[see xexecObjectTypeEnum]
 	 * @param udata defines user data
 	 */
-	typedef void (*inExec)(void *odata, short object, void *udata);
+	typedef void (*inExec)(__xexecCollectedData *odata, short object, void *udata);
+
 
 	/**
 	 * @struct __xexecItem
@@ -166,6 +169,33 @@ namespace dodo
 
 #endif
 
+	class xexec;
+
+	/**
+	 * @class __xexecCollectedData
+	 * @brief defines data that could be retrieved from the object where xexec action raised
+	 */
+	class __xexecCollectedData
+	{
+		public:
+
+			/**
+			 * constructor
+			 * @param executor defines class that executed hook
+			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
+			 */
+			__xexecCollectedData(xexec *executor, short execObject);
+
+			/**
+			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
+			 */
+			void setExecObject(short execObject);
+
+			int &operType;                                                          ///< xexec operation
+
+			xexec *executor;                                                         ///< class that executed hook
+	};
+
 	/**
 	 * example of exec function that performs xexec
 	 *
@@ -184,6 +214,8 @@ namespace dodo
 	 */
 	class xexec
 	{
+		friend class __xexecCollectedData;
+
 		private:
 
 			/*
@@ -454,7 +486,7 @@ namespace dodo
 			mutable int operType;                                                   ///< operation type set by main action
 
 			short execObject;                                                       ///< type of object[see xexecObjectTypeEnum]
-			void *execObjectData;                                                   ///< object data
+			__xexecCollectedData *execObjectData;                                    ///< object data
 	};
 
 };

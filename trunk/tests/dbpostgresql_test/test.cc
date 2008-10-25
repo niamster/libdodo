@@ -20,13 +20,13 @@ using namespace data::base;
 #ifndef DATABASE_WO_XEXEC
 
 void
-hook(void *odata, short int type, void *udata)
+hook(__xexecCollectedData *odata, short int type, void *udata)
 {
 	__xexecDataBaseAccumulatorCollectedData *sql = (__xexecDataBaseAccumulatorCollectedData *)odata;
 
 	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
-		cout << endl << endl << "request: " << ((sql::constructor *)(sql->executor))->queryCollect() << endl << endl;
+		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->queryCollect() << endl << endl;
 	}
 }
 

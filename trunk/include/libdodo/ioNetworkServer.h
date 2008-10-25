@@ -78,20 +78,19 @@ namespace dodo
 #ifndef IO_WO_XEXEC
 
 			/**
-			 * @struct __xexecIoNetworkServerCollectedData
+			 * @class __xexecIoNetworkServerCollectedData
 			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
 			 */
-			struct __xexecIoNetworkServerCollectedData
+			class __xexecIoNetworkServerCollectedData : public __xexecCollectedData
 			{
-				/**
-				 * constructor
-				 */
-				__xexecIoNetworkServerCollectedData(int &operType,
-													void *executor);
+				public:
 
-				int &operType;                                                  ///< xexec operation
-
-				void *executor;                                                 ///< class that executed hook
+					/**
+					 * constructor
+					 * @param executor defines class that executed hook
+					 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
+					 */
+					__xexecIoNetworkServerCollectedData(xexec *executor, short execObject);
 			};
 
 #endif

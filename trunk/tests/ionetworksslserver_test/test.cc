@@ -23,7 +23,7 @@ using namespace io::network::ssl;
 #ifndef IO_WO_XEXEC
 
 void
-hook(void *odata,
+hook(__xexecCollectedData *odata,
 	 short int type,
 	 void *udata)
 {
@@ -32,7 +32,7 @@ hook(void *odata,
 	__xexecIoChannelCollectedData *st = (__xexecIoChannelCollectedData *)odata;
 
 	cout << st->buffer << endl;
-	cout << ((exchange *)st->executor)->isAlive() << endl;
+	cout << dynamic_cast<exchange *>(st->executor)->isAlive() << endl;
 }
 
 #endif
@@ -75,7 +75,7 @@ process(exchange fse)
 		if (rec.compare("exit") == 0)
 		{
 			fse.close();
-			
+
 			exit(0);
 		}
 	}
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 		__initialAccept fake;
 
 		sock.serve("127.0.0.1",7778,3);
-		
+
 		io::ssl::__certificates certs;
 		certs.ca = "host.pem";
 		certs.cipher = "RC4-MD5";

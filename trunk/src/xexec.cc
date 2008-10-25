@@ -31,6 +31,22 @@
 
 using namespace dodo;
 
+__xexecCollectedData::__xexecCollectedData(xexec *executor,
+                                           short execObject) : operType(executor->operType),
+															   executor(executor)
+{
+	executor->execObjectData = this;
+	executor->execObject = execObject;
+}
+
+void
+__xexecCollectedData::setExecObject(short execObject)
+{
+	executor->execObject = execObject;
+}
+
+//-------------------------------------------------------------------
+
 xexec::xexec(const xexec &exec)
 {
 }

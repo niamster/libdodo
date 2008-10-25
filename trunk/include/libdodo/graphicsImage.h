@@ -55,34 +55,32 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __xexecImageCollectedData
+		 * @class __xexecImageCollectedData
 		 * @brief defines data that could be retrieved from the image object
 		 */
-		struct __xexecImageCollectedData
+		class __xexecImageCollectedData
+
+#ifndef DATABASE_WO_XEXEC
+
+			: public __xexecCollectedData
+
+#endif
 		{
+			public:
 
 #ifndef GRAPHICS_WO_XEXEC
 
-			/**
-			 * constructor
-			 * @param operType defines xexec operation
-			 * @param executor defines class that executed hook
-			 */
-			__xexecImageCollectedData(int &operType,
-									  void *executor);
+				/**
+				 * constructor
+				 * @param executor defines class that executed hook
+				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
+				 */
+				__xexecImageCollectedData(xexec *executor, short execObject);
 
 #endif
 
-			ImageInfo *imInfo;                                                          ///< image info handler
-			Image *imHandle;                                                            ///< image handler
-
-#ifndef GRAPHICS_WO_XEXEC
-
-			int &operType;                                                              ///< xexec operation
-
-			void *executor;                                                             ///< class that executed hook
-
-#endif
+				ImageInfo *imInfo;                                                          ///< image info handler
+				Image *imHandle;                                                            ///< image handler
 		};
 
 #define IMAGE_MAPPINGSTATEMENTS 3

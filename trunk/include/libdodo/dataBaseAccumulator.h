@@ -44,50 +44,49 @@ namespace dodo
 		namespace base
 		{
 			/**
-			 * @struct __xexecDataBaseAccumulatorCollectedData
+			 * @class __xexecDataBaseAccumulatorCollectedData
 			 * @brief defines data that could be retrieved from the db object
 			 */
-			struct __xexecDataBaseAccumulatorCollectedData
+			class __xexecDataBaseAccumulatorCollectedData
+
+#ifndef DATABASE_WO_XEXEC
+
+			: public __xexecCollectedData
+
+#endif
 			{
+				public:
 
 #ifndef DATABASE_WO_XEXEC
 
-				/**
-				 * constructor
-				 * @param operType defines xexec operation
-				 * @param executor defines class that executed hook
-				 */
-				__xexecDataBaseAccumulatorCollectedData(int &operType, void *executor);
+					/**
+					 * constructor
+					 * @param executor defines class that executed hook
+					 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
+					 */
+					__xexecDataBaseAccumulatorCollectedData(xexec *executor, short execObject);
 
 #endif
 
-				dodoString where;                                                           ///< `where` for the request(can be used as `as` for `callFunction`)
-				dodoStringArray fields;                                                     ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
-				dodoArray<dodoStringArray> values;                                          ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
-				dodoString table;                                                           ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-				dodoString tableTo;                                                         ///< `tableTo` for the request
-				dodoString order;                                                           ///< `order` for the request
-				dodoString having;                                                          ///< `having` for the request
-				dodoString group;                                                           ///< `group` for the request
-				dodoString limit;                                                           ///< `limit` for the result
-				dodoString offset;                                                          ///< `offset` for the result
-				dodoStringArray subQueries;                                                 ///< `subquery`
-				dodoStringArray joinTables;                                                 ///< join tables
-				dodoStringArray joinConds;                                                  ///< join conditions
-				dodoArray<int> joinTypes;                                                   ///< join types
+					dodoString where;                                                           ///< `where` for the request(can be used as `as` for `callFunction`)
+					dodoStringArray fields;                                                     ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
+					dodoArray<dodoStringArray> values;                                          ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
+					dodoString table;                                                           ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
+					dodoString tableTo;                                                         ///< `tableTo` for the request
+					dodoString order;                                                           ///< `order` for the request
+					dodoString having;                                                          ///< `having` for the request
+					dodoString group;                                                           ///< `group` for the request
+					dodoString limit;                                                           ///< `limit` for the result
+					dodoString offset;                                                          ///< `offset` for the result
+					dodoStringArray subQueries;                                                 ///< `subquery`
+					dodoStringArray joinTables;                                                 ///< join tables
+					dodoStringArray joinConds;                                                  ///< join conditions
+					dodoArray<int> joinTypes;                                                   ///< join types
 
-				__connectionInfo dbInfo;                                                    ///< data info to connect to the server
+					__connectionInfo dbInfo;                                                    ///< data info to connect to the server
 
-				int qType;                                                                  ///< type of operation
-				int qShift;                                                                 ///< additional actions[see accumulatorAddEnum]
-
-#ifndef DATABASE_WO_XEXEC
-
-				int &operType;                                                          ///< xexec operation
-
-				void *executor;                                                         ///< class that executed hook
-
-#endif
+					int qType;                                                                  ///< type of operation
+					int qShift;                                                                 ///< additional actions[see accumulatorAddEnum]
 			};
 
 			/**
