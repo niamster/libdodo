@@ -1133,7 +1133,7 @@ http::getHeaders(const dodoString &headers)
 
 		piece = tools::string::trim(headers.substr(j, i - j), '\r');
 
-		arr = tools::misc::explode(piece, ":", 2);
+		arr = tools::misc::split(piece, ":", 2);
 		if (arr.size() != 2)
 		{
 			if (!statusCode)
@@ -1435,7 +1435,7 @@ http::makeDigestAuth(short requestHeader,
 {
 	dodoString nonce, opaque, realm;
 
-	dodoStringArray parts = tools::misc::explode(response.headers[requestHeader].substr(7), &trim, ",");
+	dodoStringArray parts = tools::misc::split(response.headers[requestHeader].substr(7), &trim, ",");
 
 	dodoString HA1;
 
@@ -1447,7 +1447,7 @@ http::makeDigestAuth(short requestHeader,
 	dodoStringArray::iterator i = parts.begin(), j = parts.end();
 	for (; i != j; ++i)
 	{
-		tuple = tools::misc::explode(*i, "=");
+		tuple = tools::misc::split(*i, "=");
 		if (tuple.size() != 2)
 			continue;
 
@@ -1566,12 +1566,12 @@ http::setAuthInfo(const dodoString &user,
 dodo::cgi::__cgiCookie
 http::parseCookie(const dodoString &header)
 {
-	dodoStringArray parts = tools::misc::explode(header, &trim, ";");
+	dodoStringArray parts = tools::misc::split(header, &trim, ";");
 	dodoStringArray tuple;
 
 	dodoStringArray::iterator i = parts.begin(), j = parts.end();
 
-	tuple = tools::misc::explode(*i, "=", 2);
+	tuple = tools::misc::split(*i, "=", 2);
 	if (tuple.size() != 2)
 		return cgi::__cgiCookie();
 
@@ -1583,7 +1583,7 @@ http::parseCookie(const dodoString &header)
 
 	for (; i != j; ++i)
 	{
-		tuple = tools::misc::explode(*i, "=");
+		tuple = tools::misc::split(*i, "=");
 
 		if (tools::string::iequal(tuple[0], "path"))
 			cookie.path = tuple[1];

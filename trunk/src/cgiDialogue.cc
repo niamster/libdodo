@@ -283,7 +283,7 @@ dialogue::makeAuth()
 
 	if (tools::string::contains(httpAuthorization, "Basic"))
 	{
-		dodoStringArray arr = tools::misc::explode(tools::code::decodeBase64(tools::string::trim(httpAuthorization.substr(6), ' ')), ":", 2);
+		dodoStringArray arr = tools::misc::split(tools::code::decodeBase64(tools::string::trim(httpAuthorization.substr(6), ' ')), ":", 2);
 
 		authInfo.type = CGI_AUTHTYPE_BASIC;
 		authInfo.user = arr[0];
@@ -296,14 +296,14 @@ dialogue::makeAuth()
 		{
 			authInfo.type = CGI_AUTHTYPE_DIGEST;
 
-			dodoStringArray parts = tools::misc::explode(httpAuthorization.substr(7), &trim, ",");
+			dodoStringArray parts = tools::misc::split(httpAuthorization.substr(7), &trim, ",");
 
 			dodoStringArray tuple;
 
 			dodoStringArray::iterator i = parts.begin(), j = parts.end();
 			for (; i != j; ++i)
 			{
-				tuple = tools::misc::explode(*i, "=", 2);
+				tuple = tools::misc::split(*i, "=", 2);
 				if (tuple.size() != 2)
 					continue;
 
@@ -489,7 +489,7 @@ dialogue::make(dodoStringMap &val,
 			 const dodoString &string,
 			 const char       *delim)
 {
-	dodoStringArray getPair = tools::misc::explode(tools::code::decodeUrl(string), delim);
+	dodoStringArray getPair = tools::misc::split(tools::code::decodeUrl(string), delim);
 
 	dodoStringArray::iterator l(getPair.begin()), m(getPair.end());
 
@@ -497,7 +497,7 @@ dialogue::make(dodoStringMap &val,
 
 	for (; l != m; ++l)
 	{
-		temp = tools::misc::explode(*l, "=");
+		temp = tools::misc::split(*l, "=");
 		if (temp.size() > 1)
 			val.insert(make_pair(temp[0], temp[1]));
 	}
@@ -517,7 +517,7 @@ dialogue::makeEnv()
 		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
 	}
 
-	dodoStringArray contentTypeParts = tools::misc::explode(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], &trim, ";");
+	dodoStringArray contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], &trim, ";");
 	unsigned long size = contentTypeParts.size();
 	if (size > 0)
 	{
@@ -530,7 +530,7 @@ dialogue::makeEnv()
 	}
 	else
 	{
-		contentTypeParts = tools::misc::explode(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], &trim, ",");
+		contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], &trim, ",");
 		if (size > 0)
 		{
 			dodoStringArray::iterator first = contentTypeParts.begin();
@@ -658,7 +658,7 @@ dialogue::makePost()
 				if (temp0 == dodoString::npos)
 					continue;
 
-				postParts = tools::misc::explode(content, "--" + b->substr(temp0 + 9));
+				postParts = tools::misc::split(content, "--" + b->substr(temp0 + 9));
 			}
 
 			if (postParts.size() > 0)
@@ -699,7 +699,7 @@ dialogue::makePost()
 							temp0 = tools::string::find(*i, "Content-Type: ", temp1, true);
 							temp0 += 14;
 							temp1 = i->find("\n", temp0);
-							file.mime = tools::misc::explode(i->substr(temp0, temp1 - temp0), ";")[0];
+							file.mime = tools::misc::split(i->substr(temp0, temp1 - temp0), ";")[0];
 							temp1 += 3;
 
 							file.size = i->size() - temp1 - 2;

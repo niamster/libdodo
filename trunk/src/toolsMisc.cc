@@ -267,7 +267,7 @@ misc::isInList(const dodoStringList &arr,
 //-------------------------------------------------------------------
 
 dodo::dodoStringArray
-misc::explode(const dodoString &fields,
+misc::split(const dodoString &fields,
 			  escape escapeF,
 			  const dodoString &separator,
 			  int limit)
@@ -304,17 +304,17 @@ misc::explode(const dodoString &fields,
 //-------------------------------------------------------------------
 
 dodo::dodoStringArray
-misc::explode(const dodoString &fields,
+misc::split(const dodoString &fields,
 			  const dodoString &separator,
 			  int limit)
 {
-	return explode(fields, &dummyEscape, separator, limit);
+	return split(fields, &dummyEscape, separator, limit);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-misc::implode(const dodoStringArray &fields,
+misc::join(const dodoStringArray &fields,
 			  escape escapeF,
 			  const dodoString &separator,
 			  const dodoString &frame,
@@ -349,28 +349,28 @@ misc::implode(const dodoStringArray &fields,
 //-------------------------------------------------------------------
 
 dodoString
-misc::implode(const dodoStringArray &fields,
+misc::join(const dodoStringArray &fields,
 			  const dodoString &separator,
 			  const dodoString &frame,
 			  int limit)
 {
-	return implode(fields, &dummyEscape, separator, frame, limit);
+	return join(fields, &dummyEscape, separator, frame, limit);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-misc::implode(const dodoStringArray &fields,
+misc::join(const dodoStringArray &fields,
 			  const dodoString &separator,
 			  int limit)
 {
-	return implode(fields, &dummyEscape, separator, limit);
+	return join(fields, &dummyEscape, separator, limit);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-misc::implode(const dodoStringArray &fields,
+misc::join(const dodoStringArray &fields,
 			  escape escapeF,
 			  const dodoString &separator,
 			  int limit)

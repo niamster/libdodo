@@ -781,7 +781,7 @@ processor::_print(unsigned long start,
 				  dodoString &tpl,
 				  const dodoString &path)
 {
-	dodoStringArray temp = tools::misc::explode(statement, statements[PROCESSOR_STATEMENT_COMA]);
+	dodoStringArray temp = tools::misc::split(statement, statements[PROCESSOR_STATEMENT_COMA]);
 	if (temp.size() <= 1)
 		tpl.append(getVar(statement, start, path));
 	else
@@ -824,7 +824,7 @@ processor::_assign(unsigned long start,
 				   const dodoString &statement,
 				   const dodoString &path)
 {
-	dodoStringArray temp = tools::misc::explode(statement, statements[PROCESSOR_STATEMENT_ASSIGN_OP], 2);
+	dodoStringArray temp = tools::misc::split(statement, statements[PROCESSOR_STATEMENT_ASSIGN_OP], 2);
 
 	if (temp.size() == 0)
 		throw exception::basic(exception::ERRMODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
@@ -920,7 +920,7 @@ processor::_for(const dodoString &buffer,
 	{
 		targetVar = targetVar.substr(1);
 
-		dodoStringArray temp = tools::misc::explode(targetVar, statements[PROCESSOR_STATEMENT_DOT]);
+		dodoStringArray temp = tools::misc::split(targetVar, statements[PROCESSOR_STATEMENT_DOT]);
 
 		if (temp.size() == 1)
 		{
@@ -1467,7 +1467,7 @@ processor::getVar(const dodoString &a_varName,
 	else
 		varName.erase(0, 1);
 
-	dodoStringArray temp = tools::misc::explode(varName, statements[PROCESSOR_STATEMENT_DOT]);
+	dodoStringArray temp = tools::misc::split(varName, statements[PROCESSOR_STATEMENT_DOT]);
 
 	if (temp.size() == 1)
 	{

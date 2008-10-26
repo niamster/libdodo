@@ -136,7 +136,7 @@ constructor::callFunctionCollect()
 	request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
 	request.append(collectedData.table);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-	request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+	request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 }
 
@@ -148,7 +148,7 @@ constructor::callProcedureCollect()
 	request = statements[SQLCONSTRUCTOR_STATEMENT_CALL];
 	request.append(collectedData.table);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-	request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+	request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 }
 
@@ -160,14 +160,14 @@ constructor::selectCollect()
 	if (collectedData.table.size() > 0)
 	{
 		request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
-		request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+		request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
 		request.append(collectedData.table);
 	}
 	else
 	{
 		request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
-		request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+		request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 	}
 }
 
@@ -182,7 +182,7 @@ constructor::insertCollect()
 	if (collectedData.fields.size() != 0)
 	{
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-		request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+		request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 	}
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_VALUES]);
@@ -269,11 +269,11 @@ constructor::insertCollect()
 			for (; k != l; ++k)
 			{
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-				request.append(tools::misc::implode(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+				request.append(tools::misc::join(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
 			}
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-			request.append(tools::misc::implode(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+			request.append(tools::misc::join(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 		}
 	}
@@ -284,13 +284,13 @@ constructor::insertCollect()
 void
 constructor::insertSelectCollect()
 {
-	dodoString fieldsPartTo = tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+	dodoString fieldsPartTo = tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 
 	dodoString fieldsPartFrom;
 
 	dodoArray<dodoStringArray>::iterator i = collectedData.values.begin();
 	if (i != collectedData.values.end())
-		fieldsPartFrom = tools::misc::implode(*i, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+		fieldsPartFrom = tools::misc::join(*i, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
@@ -414,7 +414,7 @@ constructor::delCollect()
 void
 constructor::subCollect()
 {
-	request = tools::misc::implode(collectedData.subQueries, sqlQStArr[collectedData.qType - 1]);
+	request = tools::misc::join(collectedData.subQueries, sqlQStArr[collectedData.qType - 1]);
 }
 
 //-------------------------------------------------------------------

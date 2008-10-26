@@ -616,7 +616,7 @@ postgresql::insertCollect()
 	if (collectedData.fields.size() != 0)
 	{
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-		request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+		request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 	}
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_VALUES]);
@@ -769,11 +769,11 @@ postgresql::insertCollect()
 			for (; k != l; ++k)
 			{
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-				request.append(tools::misc::implode(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+				request.append(tools::misc::join(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
 			}
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-			request.append(tools::misc::implode(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+			request.append(tools::misc::join(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 		}
 	}

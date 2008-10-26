@@ -487,7 +487,7 @@ network::mail(const dodoString &host,
 	ex.writeStreamString("MAIL FROM: <" + from + ">\r\n");
 	ex.readStreamString(mess);
 
-	dodoStringArray pock = misc::explode(to, ",");
+	dodoStringArray pock = misc::split(to, ",");
 
 	dodoStringArray::iterator i = pock.begin(), j = pock.end();
 	for (; i != j; ++i)
