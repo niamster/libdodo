@@ -1310,6 +1310,9 @@ os::daemonize()
 			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		if (close(2) == -1)
 			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		if (chdir("/") == -1)
+			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
