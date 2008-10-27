@@ -152,6 +152,30 @@ static const char base64DecodeTr[] = "|$$$}rstuvwxyz{$$$$$$$>?@ABCDEFGHIJKLMNOPQ
 
 //-------------------------------------------------------------------
 
+/**
+ * for SHA-1
+ */
+
+/**
+ *  Define the SHA1 circular left shift macro
+ */
+#define SHA1_ROTL(bits,word) \
+                (((word) << (bits)) | ((word) >> (32-(bits))))
+
+//-------------------------------------------------------------------\
+
+/**
+ * add "length" to the length
+ */
+#define SHA1AddLength(context, length)						\
+    unsigned long addTemp									\
+    (addTemp = (context)->Length_Low,						\
+     (context)->Corrupted =									\
+        (((context)->Length_Low += (length)) < addTemp) &&	\
+        (++(context)->Length_High == 0) ? 1 : 0)
+
+//-------------------------------------------------------------------
+
 #ifdef ICONV_EXT
 
 dodoString
@@ -1030,7 +1054,7 @@ code::bzDecompress(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 void
-code::MD5Init(MD5_CTX *context)
+code::MD5Init(__MD5Context *context)
 {
 	context->count[0] = context->count[1] = 0;
 
@@ -1129,7 +1153,7 @@ code::MD5Transform(unsigned int state[4],
 
 void
 code::MD5Final(unsigned char digest[16],
-			   MD5_CTX       *context)
+			   __MD5Context       *context)
 {
 	unsigned char bits[8];
 	unsigned int index, padLen;
@@ -1158,13 +1182,13 @@ code::MD5Final(unsigned char digest[16],
 		digest[j + 3] = (unsigned char)((context->state[i] >> 24) & 0xff);
 	}
 
-	memset(context, 0, sizeof(MD5_CTX));
+	memset(context, 0, sizeof(__MD5Context));
 }
 
 //-------------------------------------------------------------------
 
 void
-code::MD5Update(MD5_CTX       *context,
+code::MD5Update(__MD5Context       *context,
 				unsigned char *input,
 				unsigned int inputLen)
 {
@@ -1201,7 +1225,7 @@ code::MD5Update(MD5_CTX       *context,
 dodoString
 code::MD5(const dodoString &string)
 {
-	MD5_CTX context;
+	__MD5Context context;
 	unsigned char digest[16];
 
 	MD5Init(&context);
@@ -1235,6 +1259,79 @@ code::binToHex(const dodoString &string)
 	}
 
 	return hex;
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA1Init(__SHA1Context *context)
+{
+    context->lengthLow = 0;
+    context->lengthHigh = 0;
+    context->messageBlockIndex = 0;
+
+    /* Initial Hash Values: FIPS-180-2 section 5.3.1 */
+    context->intermediateHash[0] = 0x67452301;
+    context->intermediateHash[1] = 0xEFCDAB89;
+    context->intermediateHash[2] = 0x98BADCFE;
+    context->intermediateHash[3] = 0x10325476;
+    context->intermediateHash[4] = 0xC3D2E1F0;
+
+    context->computed = 0;
+    context->corrupted = 0;
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA1Input(__SHA1Context *context, const unsigned char *bytes, unsigned int bytecount)
+{
+
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA1FinalBits(__SHA1Context *context,
+                    const unsigned char bits,
+                    unsigned int bitcount)
+{
+
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA1Result(__SHA1Context *context,
+                 unsigned char digest[20])
+{
+
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA1Finalize(__SHA1Context *context,
+                   unsigned char padByte)
+{
+
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA1PadMessage(__SHA1Context *context,
+                     unsigned char padByte)
+{
+
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA1ProcessMessageBlock(__SHA1Context *context)
+{
+
 }
 
 //-------------------------------------------------------------------

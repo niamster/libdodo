@@ -1440,7 +1440,7 @@ http::makeDigestAuth(short requestHeader,
 	dodoString HA1;
 
 	unsigned char HA[16];
-	tools::code::MD5_CTX context;
+	tools::code::__MD5Context context;
 
 	dodoStringArray tuple;
 

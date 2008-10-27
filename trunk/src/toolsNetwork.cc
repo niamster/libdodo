@@ -427,7 +427,7 @@ network::mail(const dodoString &host,
 				opad[i] ^= 0x5c;
 			}
 
-			code::MD5_CTX context;
+			code::__MD5Context context;
 			unsigned char digest[16];
 
 			code::MD5Init(&context);

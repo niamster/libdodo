@@ -111,7 +111,7 @@ namespace dodo
 
 		/**
 		 * @class code
-		 * @brief provides code functionality
+		 * @brief provides encode/decode functionality
 		 */
 		class code
 		{
@@ -283,9 +283,10 @@ namespace dodo
 				static void _decodeASCII85(dodoString &result, unsigned long tuple, int count);
 
 				/**
-				 * MD5 structure
+				 * @struct __MD5Context
+				 * @brief defines states for MD5 computations
 				 */
-				struct MD5_CTX
+				struct __MD5Context
 				{
 					unsigned int state[4];                                                  ///< state[A,B,C,D]
 					unsigned int count[2];                                                  ///< number of bits, modulo 2^64 (lsb first)
@@ -293,19 +294,19 @@ namespace dodo
 				};
 
 				/**
-				 * init MD5 structure
+				 * init MD5 context
 				 * @param context defines MD5 structure
 				 */
-				static void MD5Init(MD5_CTX *context);
+				static void MD5Init(__MD5Context *context);
 
 				/**
 				 * MD5 block update operation
-				 * @param context defines MD5 structure
+				 * @param context defines MD5 context
 				 * @param input defines input data
 				 * @param inputLen defines size of input data
 				 * @note continues an MD5 message-digest operation, processing another message block, and updating the context.
 				 */
-				static void MD5Update(MD5_CTX *context, unsigned char *input, unsigned int inputLen);
+				static void MD5Update(__MD5Context *context, unsigned char *input, unsigned int inputLen);
 				/**
 				 * MD5 basic transformation
 				 * @param state defines state of transformation[A,B,C,D]
@@ -317,10 +318,81 @@ namespace dodo
 				/**
 				 * MD5 finalization
 				 * @param digest defines digest
-				 * @param context defines MD5 structure
+				 * @param context defines MD5 context
 				 * @note ends an MD5 message-digest operation, writing the the message digest and zeroizing the context
 				 */
-				static void MD5Final(unsigned char digest[16], MD5_CTX * context);
+				static void MD5Final(unsigned char digest[16], __MD5Context * context);
+
+				/**
+				 * @struct __SHA1Context
+				 * @brief defines states for SHA-1 computations
+				 */
+				struct __SHA1Context
+				{
+					unsigned long intermediateHash[5]; ///< message digest
+
+					unsigned long lengthLow; ///< message length in bits
+					unsigned long lengthHigh; ///< message length in bits
+
+					unsigned int messageBlockIndex; ///< index of messageBlock
+
+					unsigned char messageBlock[64]; ///< 512-bit message blocks
+
+					bool computed; ///< true if the digest computed
+					bool corrupted; ///< true if the digest corrupted
+				};
+
+				/**
+				 * init SHA-1
+				 * @param context defines SHA-1 context
+				 */
+				static void SHA1Init(__SHA1Context *context);
+
+				/**
+				 * accepts an array of octets as the next portion of the message
+				 * @param context defines SHA-1 context
+				 * @param bytes defines input data
+				 * @param bytecount defines size of input data
+				 */
+				static void SHA1Input(__SHA1Context *context, const unsigned char *bytes, unsigned int bytecount);
+
+				/**
+				 * adds in any final bits of the message
+				 * @param context defines SHA-1 context
+				 * @param bits defines the final bits of the message, in the upper portion of the byte[use 0b###00000 instead of 0b00000### to input the three bits ###]
+				 * @param bitcount defines the number of bits in bits, between 1 and 7
+				 */
+				static void SHA1FinalBits(__SHA1Context *context, const unsigned char bits, unsigned int bitcount);
+
+				/**
+				 * SHA-1 finalization
+				 * @param context defines SHA-1 context
+				 * @param digest defines digest
+				 */
+				static void SHA1Result(__SHA1Context *context, unsigned char digest[20]);
+
+				/**
+				 * finishes off the digest calculations
+				 * @param context defines SHA-1 context
+				 * @param padByte defines the last byte to add to the digest before the 0-padding and length. This will contain the last bits of the message followed by another single bit. If the message was an exact multiple of 8-bits long, padByte will be 0x80
+				 */
+				static void SHA1Finalize(__SHA1Context *context, unsigned char padByte);
+
+				/**
+				 * @param context defines SHA-1 context
+				 * @param padByte defines the last byte to add to the digest before the 0-padding and length. This will contain the last bits of the message followed by another single bit. If the message was an exact multiple of 8-bits long, padByte will be 0x80
+				 * @note according to the standard, the message must be padded to an even 512 bits.
+				 * The first padding bit must be a '1'. The last 64 bits represent the length of the original message.
+				 * All bits in between should be 0. This helper function will pad the message according to those rules by filling the messageBlock
+				 * array accordingly. When it returns, it can be assumed that the message digest has been computed.
+				 */
+				static void SHA1PadMessage(__SHA1Context *context, unsigned char padByte);
+
+				/**
+				 * processes the next 512 bits of the message stored in the messageBlock array in context
+				 * @param context defines SHA-1 context
+				 */
+				static void SHA1ProcessMessageBlock(__SHA1Context *context);
 		};
 	};
 };

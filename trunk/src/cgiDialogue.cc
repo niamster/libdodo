@@ -402,7 +402,7 @@ dialogue::isAuthenticated(const dodoString &user,
 		{
 
 			unsigned char HA[16];
-			tools::code::MD5_CTX context;
+			tools::code::__MD5Context context;
 
 			tools::code::MD5Init(&context);
 			tools::code::MD5Update(&context, (unsigned char *)authInfo.user.c_str(), authInfo.user.size());
