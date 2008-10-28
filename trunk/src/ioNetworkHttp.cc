@@ -62,6 +62,7 @@ const dodoString http::responseHeaderStatements[] = { "Accept-Ranges",
 													  "Last-Modified",
 													  "Location",
 													  "Server",
+													  "Transfer-Encoding",
 													  "WWW-Authenticate",
 													  "Proxy-Authenticate",
 													  "X-Powered-By",		};
@@ -284,7 +285,7 @@ http::GET()
 			data.append(urlComponents.host);
 			data.append(":");
 			data.append(urlComponents.port);
-			data.append(" HTTP/1.0\r\n");
+			data.append(" HTTP/1.1\r\n");
 			if (requestHeaders.find(HTTP_REQUESTHEADER_PROXYAUTHORIZATION) != requestHeaders.end())
 			{
 				data.append(requestHeaderStatements[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
@@ -437,10 +438,7 @@ http::GET()
 	data.append("GET ");
 	data.append(urlBasePath);
 	data.append(urlQuery);
-	if (proxyAuthInfo.enabled)
-		data.append(" HTTP/1.1\r\n");
-	else
-		data.append(" HTTP/1.0\r\n");
+	data.append(" HTTP/1.1\r\n");
 
 	if (cacheAuthentification)
 	{
@@ -763,7 +761,7 @@ http::POST(const dodoString &a_data,
 			data.append(urlComponents.host);
 			data.append(":");
 			data.append(urlComponents.port);
-			data.append(" HTTP/1.0\r\n");
+			data.append(" HTTP/1.1\r\n");
 			if (requestHeaders.find(HTTP_REQUESTHEADER_PROXYAUTHORIZATION) != requestHeaders.end())
 			{
 				data.append(requestHeaderStatements[HTTP_REQUESTHEADER_PROXYAUTHORIZATION]);
@@ -915,10 +913,7 @@ http::POST(const dodoString &a_data,
 	data.append("POST ");
 	data.append(urlBasePath);
 	data.append(urlQuery);
-	if (proxyAuthInfo.enabled)
-		data.append(" HTTP/1.1\r\n");
-	else
-		data.append(" HTTP/1.0\r\n");
+	data.append(" HTTP/1.1\r\n");
 
 	if (cacheAuthentification)
 	{
@@ -1285,7 +1280,14 @@ http::getContent(dodoString &data,
 				 exchange *ex)
 {
 	unsigned long contentSize = 0;
+
+	unsigned long chunkSize = 0;
+	dodoString chunkSizeHex;
+
+	unsigned long eoc;
+
 	bool endOfHeaders = false;
+	bool chunked = false;
 
 	dodoString headers;
 
@@ -1297,97 +1299,180 @@ http::getContent(dodoString &data,
 	{
 		try
 		{
-			ex->readStreamString(data);
-
-			if (data.size() == 0 && contentSize <= 0)
+			if (chunked)
 			{
-				if (!endOfHeaders && headers.size() > 0)
-					response.data.assign(headers);
-
-				break;
-			}
-
-			if (endOfHeaders)
+				ex->readString(data);
 				response.data.append(data);
+				response.data.resize(response.data.size() - 2);
+
+				ex->readStreamString(data);
+
+				eoc = data.find("\r\n");
+				if (eoc == dodoString::npos)
+				{
+					eoc = data.find('\n');
+					if (eoc != dodoString::npos)
+						++eoc;
+				}
+				else
+					eoc += 2;
+
+				if (eoc != dodoString::npos)
+				{
+					chunkSizeHex.clear();
+
+					for (unsigned long i=0;i<eoc;++i)
+					{
+						if (data[i] == '\r' || data[i] == ';' || data[i] == '\n')
+							break;
+
+						chunkSizeHex.append(1, data[i]);
+					}
+
+					chunkSize = tools::code::hexToLong(chunkSizeHex);
+
+					if (chunkSize == 0)
+						break;
+
+					data.erase(0, eoc);
+					response.data.append(data);
+
+					chunkSize -= data.size() - 2;
+				}
+
+				ex->inSize = chunkSize;
+			}
 			else
 			{
-				endOfHeaders = extractHeaders(data, headers);
+				ex->readStreamString(data);
+
+				if (data.size() == 0 && contentSize <= 0)
+				{
+					if (!endOfHeaders && headers.size() > 0)
+						response.data.assign(headers);
+
+					break;
+				}
 
 				if (endOfHeaders)
+					response.data.append(data);
+				else
 				{
-					getHeaders(headers);
-					headers.clear();
+					endOfHeaders = extractHeaders(data, headers);
 
-					contentSize = tools::string::stringToUL(response.headers[HTTP_RESPONSEHEADER_CONTENTLENGTH]);
-
-					if (followRedirection && (response.code / 100) == 3 && response.code != 304)
+					if (endOfHeaders)
 					{
-						response.redirected = true;
+						getHeaders(headers);
+						headers.clear();
 
-						return GETCONTENTSTATUS_REDIRECT;
-					}
-
-					if (response.code == 401)
-					{
-						++authTries;
-
-						if (proxyAuthInfo.authType != PROXYAUTHTYPE_NONE)
+						if (followRedirection && (response.code / 100) == 3 && response.code != 304)
 						{
-							if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
-								return GETCONTENTSTATUS_WWWPROXYBASICAUTH;
+							response.redirected = true;
+
+							return GETCONTENTSTATUS_REDIRECT;
+						}
+
+						if (response.code == 401)
+						{
+							++authTries;
+
+							if (proxyAuthInfo.authType != PROXYAUTHTYPE_NONE)
+							{
+								if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
+									return GETCONTENTSTATUS_WWWPROXYBASICAUTH;
+								else
+								{
+									if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
+										return GETCONTENTSTATUS_WWWPROXYDIGESTAUTH;
+									else
+										throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
+								}
+							}
 							else
 							{
-								if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
-									return GETCONTENTSTATUS_WWWPROXYDIGESTAUTH;
+								if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
+									return GETCONTENTSTATUS_WWWBASICAUTH;
 								else
-									throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
+								{
+									if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
+										return GETCONTENTSTATUS_WWWDIGESTAUTH;
+									else
+										throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
+								}
 							}
+						}
+
+						if (response.code == 407)
+						{
+							++authTries;
+
+							if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
+							{
+								proxyAuthInfo.authType = PROXYAUTHTYPE_BASIC;
+
+								return GETCONTENTSTATUS_PROXYBASICAUTH;
+							}
+							else
+							{
+								if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
+								{
+									proxyAuthInfo.authType = PROXYAUTHTYPE_DIGEST;
+
+									return GETCONTENTSTATUS_PROXYDIGESTAUTH;
+								}
+								else
+									throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
+							}
+						}
+
+						chunked = tools::string::equal(response.headers[HTTP_RESPONSEHEADER_TRANSFERENCODING], "chunked");
+
+						if (chunked)
+						{
+							eoc = response.data.find("\r\n");
+							if (eoc == dodoString::npos)
+							{
+								eoc = response.data.find('\n');
+								if (eoc != dodoString::npos)
+									++eoc;
+							}
+							else
+								eoc += 2;
+
+							if (eoc != dodoString::npos)
+							{
+								chunkSizeHex.clear();
+
+								for (unsigned long i=0;i<eoc;++i)
+								{
+									if (response.data[i] == '\r' || response.data[i] == ';' || response.data[i] == '\n')
+										break;
+
+									chunkSizeHex.append(1, response.data[i]);
+								}
+
+								response.data.erase(0, eoc);
+
+								chunkSize = tools::code::hexToLong(chunkSizeHex) - response.data.size() + 2;
+							}
+
+							ex->setInBufferSize(chunkSize);
+							ex->inSize = chunkSize;
 						}
 						else
 						{
-							if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
-								return GETCONTENTSTATUS_WWWBASICAUTH;
-							else
-							{
-								if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
-									return GETCONTENTSTATUS_WWWDIGESTAUTH;
-								else
-									throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
-							}
+							contentSize = tools::string::stringToUL(response.headers[HTTP_RESPONSEHEADER_CONTENTLENGTH]);
+
+							ex->inSize = 16384;
 						}
+
+						ex->setInBufferSize(16384);
 					}
-
-					if (response.code == 407)
-					{
-						++authTries;
-
-						if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
-						{
-							proxyAuthInfo.authType = PROXYAUTHTYPE_BASIC;
-
-							return GETCONTENTSTATUS_PROXYBASICAUTH;
-						}
-						else
-						{
-							if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
-							{
-								proxyAuthInfo.authType = PROXYAUTHTYPE_DIGEST;
-
-								return GETCONTENTSTATUS_PROXYDIGESTAUTH;
-							}
-							else
-								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
-						}
-					}
-
-
-					ex->setInBufferSize(16384);
-					ex->inSize = 16384;
 				}
-			}
 
-			if (contentSize > 0 && response.data.size() == contentSize)
-				break;
+				if (contentSize > 0 && response.data.size() == contentSize)
+					break;
+			}
 		}
 		catch (exception::basic &ex)
 		{

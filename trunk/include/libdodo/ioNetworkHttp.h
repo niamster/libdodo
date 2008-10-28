@@ -72,7 +72,7 @@ namespace dodo
 				HTTP_REQUESTHEADER_COOKIE,                                              ///< the user agent string of the user agent
 			};
 
-#define HTTP_RESPONSEHEADERSTATEMENTS 19
+#define HTTP_RESPONSEHEADERSTATEMENTS 20
 
 			/**
 			 * @enum httpResponseHeaderEnum defines HTTP response headers
@@ -95,6 +95,7 @@ namespace dodo
 				HTTP_RESPONSEHEADER_LASTMODIFIED,                                       ///< the last modified date for the requested object
 				HTTP_RESPONSEHEADER_LOCATION,                                           ///< used in redirection
 				HTTP_RESPONSEHEADER_SERVER,                                             ///< a name for the server
+				HTTP_RESPONSEHEADER_TRANSFERENCODING,                                   ///< encoding of the response
 				HTTP_RESPONSEHEADER_WWWAUTHENTICATE,                                    ///< authentication request
 				HTTP_RESPONSEHEADER_PROXYAUTHENTICATE,                                  ///< proxy authentication request
 				HTTP_RESPONSEHEADER_XPOWEREDBY,                                         ///< cgi provider

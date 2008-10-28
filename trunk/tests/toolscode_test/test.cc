@@ -30,6 +30,9 @@ int main(int argc, char **argv)
 		cout << "MD5 of \"\"" << endl;
 		cout << tools::code::MD5Hex("") <<  endl;
 
+		cout << "tools::code::hexToLong(tools::code::longToHex(3564569432))" << endl;
+		cout << tools::code::hexToLong(tools::code::longToHex(3564569432)) << endl;
+
 #ifdef ICONV_EXT
 		tools::code::codesetConversion(tools::filesystem::getFileContents("test.cc"), "cp1251", "utf-8");
 #endif

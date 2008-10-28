@@ -41,6 +41,7 @@ int main(int argc, char **argv)
 		//HTTP.cacheAuthentification = false;
 
 		//HTTP.setProxy("127.0.0.1");
+		//HTTP.setProxy(tools::network::getHostPrimaryIp("localhost"));
 
 		res =  HTTP.GET("http://google.com");
 		//res =  HTTP.GET("https://sourceforge.net");
