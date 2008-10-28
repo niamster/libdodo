@@ -250,8 +250,8 @@ http::setCookies(const dodoStringMap &cookies)
 __httpResponse
 http::GET()
 {
-	exchange *ex;
-	client *net;
+	exchange *ex = NULL;
+	client *net = NULL;
 
 	dodoString data;
 
@@ -324,7 +324,9 @@ http::GET()
 						makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 
 						delete ex;
+						ex = NULL;
 						delete net;
+						net = NULL;
 
 						return GET();
 
@@ -340,7 +342,9 @@ http::GET()
 						makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 
 						delete ex;
+						ex = NULL;
 						delete net;
+						net = NULL;
 
 						return GET();
 				}
@@ -482,6 +486,7 @@ http::GET()
 				setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
 
 				delete ex;
+				ex = NULL;
 
 				return GET();
 
@@ -497,6 +502,7 @@ http::GET()
 				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 
 				delete ex;
+				ex = NULL;
 
 				return GET();
 
@@ -512,6 +518,7 @@ http::GET()
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 
 				delete ex;
+				ex = NULL;
 
 				return GET();
 
@@ -527,6 +534,7 @@ http::GET()
 				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 
 				delete ex;
+				ex = NULL;
 
 				return GET();
 
@@ -542,6 +550,7 @@ http::GET()
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
 
 				delete ex;
+				ex = NULL;
 
 				return GET();
 
@@ -562,6 +571,7 @@ http::GET()
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 
 				delete ex;
+				ex = NULL;
 
 				return GET();
 
@@ -582,6 +592,7 @@ http::GET()
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 
 				delete ex;
+				ex = NULL;
 
 				return GET();
 		}
@@ -726,8 +737,8 @@ __httpResponse
 http::POST(const dodoString &a_data,
 		   const dodoString &type)
 {
-	exchange *ex;
-	client *net;
+	exchange *ex = NULL;
+	client *net = NULL;
 
 	dodoString data;
 
@@ -800,7 +811,9 @@ http::POST(const dodoString &a_data,
 						makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 
 						delete ex;
+						ex = NULL;
 						delete net;
+						net = NULL;
 
 						return POST(data, type);
 
@@ -816,7 +829,9 @@ http::POST(const dodoString &a_data,
 						makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
 
 						delete ex;
+						ex = NULL;
 						delete net;
+						net = NULL;
 
 						return POST(data, type);
 				}
@@ -1307,6 +1322,9 @@ http::getContent(dodoString &data,
 
 				ex->readStreamString(data);
 
+				if (data.size() == 0)
+					break;
+
 				eoc = data.find("\r\n");
 				if (eoc == dodoString::npos)
 				{
@@ -1441,8 +1459,6 @@ http::getContent(dodoString &data,
 
 							if (eoc != dodoString::npos)
 							{
-								chunkSizeHex.clear();
-
 								for (unsigned long i=0;i<eoc;++i)
 								{
 									if (response.data[i] == '\r' || response.data[i] == ';' || response.data[i] == '\n')
@@ -1456,7 +1472,6 @@ http::getContent(dodoString &data,
 								chunkSize = tools::code::hexToLong(chunkSizeHex) - response.data.size() + 2;
 							}
 
-							ex->setInBufferSize(chunkSize);
 							ex->inSize = chunkSize;
 						}
 						else
