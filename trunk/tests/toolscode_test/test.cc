@@ -30,6 +30,9 @@ int main(int argc, char **argv)
 		cout << "MD5 of \"\"" << endl;
 		cout << tools::code::MD5Hex("") <<  endl;
 
+		cout << "SHA1 of \"\"" << endl;
+		cout << tools::code::SHA1Hex("") <<  endl;
+
 #ifdef ICONV_EXT
 		tools::code::codesetConversion(tools::filesystem::getFileContents("test.cc"), "cp1251", "utf-8");
 #endif

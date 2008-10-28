@@ -226,6 +226,18 @@ namespace dodo
 				static dodoString MD5Hex(const dodoString &string);
 
 				/**
+				 * @return SHA1 hash of string
+				 * @param string defines string for what generate hash
+				 */
+				static dodoString SHA1(const dodoString &string);
+
+				/**
+				 * @return SHA1 hash of string in 'hex' representation(e.g. 'da39a3ee5e6b4b0d3255bfef95601890afd80709')
+				 * @param string defines string to convert
+				 */
+				static dodoString SHA1Hex(const dodoString &string);
+
+				/**
 				 * @return binary string represented in 'hex'
 				 * @param string defines string to convert
 				 */
@@ -355,14 +367,6 @@ namespace dodo
 				 * @param bytecount defines size of input data
 				 */
 				static void SHA1Input(__SHA1Context *context, const unsigned char *bytes, unsigned int bytecount);
-
-				/**
-				 * adds in any final bits of the message
-				 * @param context defines SHA-1 context
-				 * @param bits defines the final bits of the message, in the upper portion of the byte[use 0b###00000 instead of 0b00000### to input the three bits ###]
-				 * @param bitcount defines the number of bits in bits, between 1 and 7
-				 */
-				static void SHA1FinalBits(__SHA1Context *context, const unsigned char bits, unsigned int bitcount);
 
 				/**
 				 * SHA-1 finalization
