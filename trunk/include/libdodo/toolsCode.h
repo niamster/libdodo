@@ -172,6 +172,18 @@ namespace dodo
 				static char hexToChar(char first, char second);
 
 				/**
+				 * @return numeric converted from HEX
+				 * @param first defines numeric in HEX
+				 */
+				static unsigned long hexToLong(const dodoString &string);
+
+				/**
+				 * @return numeric converted to HEX
+				 * @param first defines numeric
+				 */
+				static dodoString longToHex(unsigned long numeric);
+
+				/**
 				 * @param result defines converted to HEX
 				 * @param character defines char to convert
 				 */

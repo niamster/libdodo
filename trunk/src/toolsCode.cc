@@ -152,6 +152,13 @@ static const char base64DecodeTr[] = "|$$$}rstuvwxyz{$$$$$$$>?@ABCDEFGHIJKLMNOPQ
 
 //-------------------------------------------------------------------
 
+/**
+ * for HEX convertions
+ */
+static const char hexEncode[] = "0123456789abcdef";
+
+//-------------------------------------------------------------------
+
 #ifdef ICONV_EXT
 
 dodoString
@@ -315,7 +322,7 @@ code::hexToChar(char first,
 		case '8':
 		case '9':
 
-			val = (16 * (int(first) - 48));
+			val = 16 * (int(first) - 48);
 
 			break;
 
@@ -324,7 +331,7 @@ code::hexToChar(char first,
 			if (first > 90)
 				first -= 32;
 
-			val = (16 * (int(first) - 55));
+			val = 16 * int(first) - 55;
 	}
 
 	switch (second)
@@ -340,7 +347,7 @@ code::hexToChar(char first,
 		case '8':
 		case '9':
 
-			val += (int(second) - 48);
+			val += int(second) - 48;
 
 			break;
 
@@ -349,10 +356,80 @@ code::hexToChar(char first,
 			if (second > 90)
 				second -= 32;
 
-			val += (int(second) - 55);
+			val += int(second) - 55;
 	}
 
 	return char(val);
+}
+
+//-------------------------------------------------------------------
+
+unsigned long
+code::hexToLong(const dodoString &string)
+{
+	long i = string.size() - 1;
+	if (i < 0)
+		return 0;
+
+	unsigned long val = 0;
+
+	char first = string[i];
+	switch (first)
+	{
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+
+			val = int(first) - 48;
+
+			break;
+
+		default:
+
+			if (first > 90)
+				first -= 32;
+
+			val = int(first) - 55;
+	}
+	--i;
+
+	for (long j=1;i>=0;--i,++j)
+	{
+		first = string[i];
+		switch (first)
+		{
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+
+				val += (2 << ((4 * j) - 1)) * (int(first) - 48);
+
+				break;
+
+			default:
+
+				if (first > 90)
+					first -= 32;
+
+				val += (2 << ((4 * j) - 1)) * (int(first) - 55);
+		}
+	}
+
+	return val;
 }
 
 //-------------------------------------------------------------------
@@ -361,21 +438,23 @@ void
 code::charToHex(char result[3],
 				char first)
 {
-	unsigned char j;
-
-	j = (first >> 4) & 0xf;
-	if (j <= 9)
-		result[0] = (j + '0');
-	else
-		result[0] = (j + 'a' - 10);
-
-	j = first & 0xf;
-	if (j <= 9)
-		result[1] = (j + '0');
-	else
-		result[1] = (j + 'a' - 10);
+    result[0] = hexEncode[(first >> 4) & 0xf];
+    result[1] = hexEncode[first & 0xf];
 
 	result[2] = '\0';
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+code::longToHex(unsigned long numeric)
+{
+	dodoString hex;
+
+    for (long i=2*sizeof(unsigned long)-1;i>=0;--i)
+        hex.append(1, hexEncode[(numeric >> i*4) & 0xf]);
+
+    return hex;
 }
 
 //-------------------------------------------------------------------
