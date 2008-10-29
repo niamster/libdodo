@@ -249,88 +249,71 @@ exchange::_write(const char * const data)
 
 	unsigned long sent_received = 0;
 
-	unsigned long batch;
 	long n;
 
 	for (unsigned long i = 0; i < iter; ++i)
 	{
-		batch = 0;
-		while (batch < outSocketBuffer)
+		while (true)
 		{
-			while (true)
+			if ((n = SSL_write(sslHandle, data + sent_received, outSocketBuffer)) <= 0)
 			{
-				if ((n = SSL_write(sslHandle, data + sent_received, outSocketBuffer)) <= 0)
+				switch (SSL_get_error(sslHandle, n))
 				{
-					switch (SSL_get_error(sslHandle, n))
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+					case SSL_ERROR_WANT_X509_LOOKUP:
+
+						continue;
+
+					case SSL_ERROR_SYSCALL:
+
+						if (errno == 0)
+							continue;
+
+					default:
 					{
-						case SSL_ERROR_WANT_READ:
-						case SSL_ERROR_WANT_WRITE:
-						case SSL_ERROR_WANT_X509_LOOKUP:
-
-							n = 0;
-
-							break;
-
-						case SSL_ERROR_SYSCALL:
-
-							if (errno == 0)
-								break;
-
-						default:
-						{
-							unsigned long nerr = ERR_get_error();
-							throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-						}
-
+						unsigned long nerr = ERR_get_error();
+						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 					}
-				}
 
-				break;
+				}
 			}
 
-			batch += n;
-			sent_received += n;
+			break;
 		}
+
+		sent_received += n;
 	}
 
 	if (rest > 0)
 	{
-		batch = 0;
-		while (batch < rest)
+		while (true)
 		{
-			while (true)
+			if ((n = SSL_write(sslHandle, data + sent_received, rest)) <= 0)
 			{
-				if ((n = SSL_write(sslHandle, data + sent_received, rest)) <= 0)
+				switch (SSL_get_error(sslHandle, n))
 				{
-					switch (SSL_get_error(sslHandle, n))
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+					case SSL_ERROR_WANT_X509_LOOKUP:
+
+						continue;
+
+					case SSL_ERROR_SYSCALL:
+
+						if (errno == 0)
+							continue;
+
+					default:
 					{
-						case SSL_ERROR_WANT_READ:
-						case SSL_ERROR_WANT_WRITE:
-						case SSL_ERROR_WANT_X509_LOOKUP:
-
-							n = 0;
-
-							break;
-
-						case SSL_ERROR_SYSCALL:
-
-							if (errno == 0)
-								break;
-
-						default:
-						{
-							unsigned long nerr = ERR_get_error();
-							throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-						}
-
+						unsigned long nerr = ERR_get_error();
+						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 					}
-				}
 
-				break;
+				}
 			}
 
-			batch += n;
-			sent_received += n;
+			break;
 		}
 	}
 }
@@ -350,94 +333,71 @@ exchange::_read(char * const data)
 
 	unsigned long sent_received = 0;
 
-	unsigned long batch;
 	long n;
 
 	for (unsigned long i = 0; i < iter; ++i)
 	{
-		batch = 0;
-		while (batch < inSocketBuffer)
+		while (true)
 		{
-			while (true)
+			if ((n = SSL_read(sslHandle, data + sent_received, inSocketBuffer)) <= 0)
 			{
-				if ((n = SSL_read(sslHandle, data + sent_received, inSocketBuffer)) <= 0)
+				switch (SSL_get_error(sslHandle, n))
 				{
-					switch (SSL_get_error(sslHandle, n))
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+					case SSL_ERROR_WANT_X509_LOOKUP:
+
+						continue;
+
+					case SSL_ERROR_SYSCALL:
+
+						if (errno == 0)
+							continue;
+
+					default:
 					{
-						case SSL_ERROR_WANT_READ:
-						case SSL_ERROR_WANT_WRITE:
-						case SSL_ERROR_WANT_X509_LOOKUP:
-
-							n = 0;
-
-							break;
-
-						case SSL_ERROR_SYSCALL:
-
-							if (errno == 0)
-								break;
-
-						default:
-						{
-							unsigned long nerr = ERR_get_error();
-							throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-						}
-
+						unsigned long nerr = ERR_get_error();
+						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 					}
-				}
 
-				break;
+				}
 			}
 
-			if (n == 0)
-				break;
-
-			batch += n;
-			sent_received += n;
+			break;
 		}
+
+		sent_received += n;
 	}
 
 	if (rest > 0)
 	{
-		batch = 0;
-		while (batch < rest)
+		while (true)
 		{
-			while (true)
+			if ((n = SSL_read(sslHandle, data + sent_received, rest)) <= 0)
 			{
-				if ((n = SSL_read(sslHandle, data + sent_received, rest)) <= 0)
+				switch (SSL_get_error(sslHandle, n))
 				{
-					switch (SSL_get_error(sslHandle, n))
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+					case SSL_ERROR_WANT_X509_LOOKUP:
+
+						continue;
+
+					case SSL_ERROR_SYSCALL:
+
+						if (errno == 0)
+							continue;
+
+					default:
 					{
-						case SSL_ERROR_WANT_READ:
-						case SSL_ERROR_WANT_WRITE:
-						case SSL_ERROR_WANT_X509_LOOKUP:
-
-							n = 0;
-
-							break;
-
-						case SSL_ERROR_SYSCALL:
-
-							if (errno == 0)
-								break;
-
-						default:
-						{
-							unsigned long nerr = ERR_get_error();
-							throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-						}
-
+						unsigned long nerr = ERR_get_error();
+						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 					}
-				}
 
-				break;
+				}
 			}
 
-			if (n == 0)
-				break;
-
-			batch += n;
-			sent_received += n;
+			break;
 		}
 	}
 }
@@ -452,7 +412,7 @@ exchange::_readStream(char * const data)
 
 	memset(data, '\0', inSize);
 
-	long n = 0;
+	long n;
 
 	while (true)
 	{
@@ -465,14 +425,12 @@ exchange::_readStream(char * const data)
 				case SSL_ERROR_WANT_X509_LOOKUP:
 				case SSL_ERROR_ZERO_RETURN:
 
-					n = 0;
-
-					break;
+					continue;
 
 				case SSL_ERROR_SYSCALL:
 
 					if (errno == 0)
-						break;
+						continue;
 
 				default:
 				{
