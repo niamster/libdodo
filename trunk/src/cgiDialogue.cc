@@ -700,6 +700,9 @@ dialogue::makePost()
 							temp0 += 14;
 							temp1 = i->find("\n", temp0);
 							file.mime = tools::misc::split(i->substr(temp0, temp1 - temp0), ";")[0];
+							unsigned long lIndex = file.mime.size() - 1;
+							if (file.mime[lIndex] == '\r')
+								file.mime.erase(lIndex);
 							temp1 += 3;
 
 							file.size = i->size() - temp1 - 2;
