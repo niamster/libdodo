@@ -1296,7 +1296,7 @@ http::getContent(dodoString &data,
 {
 	unsigned long contentSize = 0;
 
-	unsigned long chunkSize = 0;
+	long chunkSize = 0;
 	dodoString chunkSizeHex;
 
 	unsigned long eoc;
@@ -1355,7 +1355,12 @@ http::getContent(dodoString &data,
 					data.erase(0, eoc);
 					response.data.append(data);
 
+					std::cout << "%" << chunkSize << "%\n";
+
 					chunkSize -= data.size() - 2;
+
+					if (chunkSize < 0)
+						break;
 				}
 
 				ex->inSize = chunkSize;
@@ -1470,6 +1475,9 @@ http::getContent(dodoString &data,
 								response.data.erase(0, eoc);
 
 								chunkSize = tools::code::hexToLong(chunkSizeHex) - response.data.size() + 2;
+
+								if (chunkSize < 0)
+									break;
 							}
 
 							ex->inSize = chunkSize;

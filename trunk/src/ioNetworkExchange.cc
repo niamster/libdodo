@@ -227,12 +227,12 @@ exchange::_write(const char * const data)
 
 	for (unsigned long i = 0; i < iter; ++i)
 	{
-		batch = 0;
-		while (batch < outSocketBuffer)
+		batch = outSocketBuffer;
+		while (batch > 0)
 		{
 			while (true)
 			{
-				if ((n = ::send(socket, data + sent_received, outSocketBuffer, 0)) == -1)
+				if ((n = ::send(socket, data + sent_received, batch, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -246,19 +246,19 @@ exchange::_write(const char * const data)
 				break;
 			}
 
-			batch += n;
+			batch -= n;
 			sent_received += n;
 		}
 	}
 
 	if (rest > 0)
 	{
-		batch = 0;
-		while (batch < rest)
+		batch = rest;
+		while (batch > 0)
 		{
 			while (true)
 			{
-				if ((n = ::send(socket, data + sent_received, rest, 0)) == -1)
+				if ((n = ::send(socket, data + sent_received, batch, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -272,7 +272,7 @@ exchange::_write(const char * const data)
 				break;
 			}
 
-			batch += n;
+			batch -= n;
 			sent_received += n;
 		}
 	}
@@ -297,12 +297,12 @@ exchange::_read(char * const data)
 
 	for (unsigned long i = 0; i < iter; ++i)
 	{
-		batch = 0;
-		while (batch < inSocketBuffer)
+		batch = inSocketBuffer;
+		while (batch > 0)
 		{
 			while (true)
 			{
-				if ((n = ::recv(socket, data + sent_received, inSocketBuffer, 0)) == -1)
+				if ((n = ::recv(socket, data + sent_received, batch, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -319,19 +319,19 @@ exchange::_read(char * const data)
 			if (n == 0)
 				break;
 
-			batch += n;
+			batch -= n;
 			sent_received += n;
 		}
 	}
 
 	if (rest > 0)
 	{
-		batch = 0;
-		while (batch < rest)
+		batch = rest;
+		while (batch > 0)
 		{
 			while (true)
 			{
-				if ((n = ::recv(socket, data + sent_received, rest, 0)) == -1)
+				if ((n = ::recv(socket, data + sent_received, batch, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -348,7 +348,7 @@ exchange::_read(char * const data)
 			if (n == 0)
 				break;
 
-			batch += n;
+			batch -= n;
 			sent_received += n;
 		}
 	}
