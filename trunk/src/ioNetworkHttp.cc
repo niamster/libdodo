@@ -1320,7 +1320,7 @@ http::getContent(dodoString &data,
 				{
 					ex->inSize = chunkSize;
 					ex->readString(data);
-					response.data.append(data, 0, ex->inSize - 2);
+					response.data.append(data, 0, ex->inSize - 2);///< remove 2 bytes of CRLF after chunk
 				}
 
 				ex->inSize = 512;
@@ -1367,7 +1367,7 @@ http::getContent(dodoString &data,
 					if (dataSize > eoc)
 						response.data.append(data.data() + eoc);
 
-					chunkSize -= dataSize - 2 - eoc;
+					chunkSize -= dataSize - 2 - eoc;///< 2 bytes for CRLF after chunk
 				}
 			}
 			else
@@ -1479,7 +1479,7 @@ http::getContent(dodoString &data,
 
 								response.data.erase(0, eoc);
 
-								chunkSize = tools::code::hexToLong(chunkSizeHex) - response.data.size() + 2;
+								chunkSize = tools::code::hexToLong(chunkSizeHex) - response.data.size() + 2;///< 2 bytes for CRLF after chunk
 							}
 						}
 						else

@@ -673,7 +673,7 @@ dialogue::makePost()
 
 				for (; i != j; ++i)
 				{
-					if (tools::string::iequal(i->substr(0, 2), "--"))
+					if (tools::string::iequal(i->substr(0, 2), "--"))///< '--' in the last portion
 						break;
 					else
 					{

@@ -144,7 +144,6 @@ namespace dodo
 			/**
 			 * @class http
 			 * @brief provides disk I/O manipulations
-			 * FIXME: fetch with HTTP/1.1 for non-proxy mode and correctly parse chanked requests
 			 */
 			class http
 			{
