@@ -1316,10 +1316,14 @@ http::getContent(dodoString &data,
 		{
 			if (chunked)
 			{
-				ex->readString(data);
-				response.data.append(data);
-				response.data.resize(response.data.size() - 2);
+				if (chunkSize > 0)
+				{
+					ex->inSize = chunkSize;
+					ex->readString(data);
+					response.data.append(data, 0, ex->inSize - 2);
+				}
 
+				ex->inSize = 512;
 				ex->readStreamString(data);
 
 				if (data.size() == 0)
@@ -1347,6 +1351,13 @@ http::getContent(dodoString &data,
 						chunkSizeHex.append(1, data[i]);
 					}
 
+					if (chunkSizeHex.size() == 0)
+					{
+						chunkSize = 0;
+
+						continue;
+					}
+
 					chunkSize = tools::code::hexToLong(chunkSizeHex);
 
 					if (chunkSize == 0)
@@ -1357,12 +1368,7 @@ http::getContent(dodoString &data,
 						response.data.append(data.data() + eoc);
 
 					chunkSize -= dataSize - 2 - eoc;
-
-					if (chunkSize <= 0)
-						break;
 				}
-
-				ex->inSize = chunkSize;
 			}
 			else
 			{
@@ -1474,12 +1480,7 @@ http::getContent(dodoString &data,
 								response.data.erase(0, eoc);
 
 								chunkSize = tools::code::hexToLong(chunkSizeHex) - response.data.size() + 2;
-
-								if (chunkSize <= 0)
-									break;
 							}
-
-							ex->inSize = chunkSize;
 						}
 						else
 						{

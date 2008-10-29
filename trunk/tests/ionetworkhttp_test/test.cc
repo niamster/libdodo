@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 		//HTTP.setProxy(tools::network::getHostPrimaryIp("localhost"));
 
 		res =  HTTP.GET("http://google.com");
-		//res =  HTTP.GET("https://sourceforge.net");
+		//res =  HTTP.GET("https://kernel.org/");
 		//res =  HTTP.GET("http://libdodo:password@localhost/libdodo/cgi_test/test.cgi?a=digest_auth");
 		//res =  HTTP.GET("http://niam:niam@localhost/auth/libdodo/cgi_test/test.cgi");
 		//res =  HTTP.POST("http://localhost/libdodo/cgi_test/test.cgi", map);
