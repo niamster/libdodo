@@ -259,7 +259,7 @@ dialogue::getCharset()
 		if (temp == dodoString::npos)
 			continue;
 
-		return b->substr(temp + 8);
+		return dodoString(b->data() + temp + 8, b->size() - temp - 8);
 	}
 
 	return __dodostring__;
@@ -283,7 +283,7 @@ dialogue::makeAuth()
 
 	if (tools::string::contains(httpAuthorization, "Basic"))
 	{
-		dodoStringArray arr = tools::misc::split(tools::code::decodeBase64(tools::string::trim(httpAuthorization.substr(6), ' ')), ":", 2);
+		dodoStringArray arr = tools::misc::split(tools::code::decodeBase64(tools::string::trim(dodoString(httpAuthorization.data() + 6, httpAuthorization.size() - 6), ' ')), ":", 2);
 
 		authInfo.type = CGI_AUTHTYPE_BASIC;
 		authInfo.user = arr[0];
@@ -296,13 +296,15 @@ dialogue::makeAuth()
 		{
 			authInfo.type = CGI_AUTHTYPE_DIGEST;
 
-			dodoStringArray parts = tools::misc::split(httpAuthorization.substr(7), &trim, ",");
+			dodoStringArray parts = tools::misc::split(dodoString(httpAuthorization.data() + 7, httpAuthorization.size() - 7), ",");
+
 
 			dodoStringArray tuple;
 
 			dodoStringArray::iterator i = parts.begin(), j = parts.end();
 			for (; i != j; ++i)
 			{
+				*i = tools::string::trim(*i, ' ');
 				tuple = tools::misc::split(*i, "=", 2);
 				if (tuple.size() != 2)
 					continue;
@@ -517,7 +519,11 @@ dialogue::makeEnv()
 		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
 	}
 
-	dodoStringArray contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], &trim, ";");
+	dodoStringArray contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], ";");
+	dodoStringArray::iterator i = contentTypeParts.begin(), j = contentTypeParts.end();
+	for (; i != j; ++i)
+		*i = tools::string::trim(*i, ' ');
+
 	unsigned long size = contentTypeParts.size();
 	if (size > 0)
 	{
@@ -530,7 +536,12 @@ dialogue::makeEnv()
 	}
 	else
 	{
-		contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], &trim, ",");
+		contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], ",");
+		i = contentTypeParts.begin();
+		j = contentTypeParts.end();
+		for (; i != j; ++i)
+			*i = tools::string::trim(*i, ' ');
+
 		if (size > 0)
 		{
 			dodoStringArray::iterator first = contentTypeParts.begin();
@@ -658,7 +669,10 @@ dialogue::makePost()
 				if (temp0 == dodoString::npos)
 					continue;
 
-				postParts = tools::misc::split(content, "--" + b->substr(temp0 + 9));
+				dodoString delimiter = "--";
+				delimiter.append(b->data() + temp0 + 9, b->size() - temp0 - 9);
+
+				postParts = tools::misc::split(content, delimiter);
 			}
 
 			if (postParts.size() > 0)
@@ -670,10 +684,11 @@ dialogue::makePost()
 				int fd;
 				unsigned short pathLength = postFilesTmpDir.size() + 18;
 				FILE *fp;
+				const char *argument;
 
 				for (; i != j; ++i)
 				{
-					if (tools::string::iequal(i->substr(0, 2), "--"))///< '--' in the last portion
+					if (i->size() == 2 && (*i)[0] == '-' && (*i)[1] == '-')///< '--' in the last portion
 						break;
 					else
 					{
@@ -681,10 +696,13 @@ dialogue::makePost()
 						{
 							if ((temp0 = i->find("name=\"")) == dodoString::npos)
 								continue;
-							temp0 += 6;
-							temp1 = i->find("\"", temp0);
 
-							dodoString post_name = i->substr(temp0, temp1 - temp0);
+							temp0 += 6;
+
+							if ((temp1 = i->find("\"", temp0)) == dodoString::npos)
+								continue;
+
+							dodoString post_name = dodoString(i->data() + temp0, temp1 - temp0);
 
 							__cgiFile file;
 
@@ -694,12 +712,13 @@ dialogue::makePost()
 							if (temp0 == temp1)
 								continue;
 
-							file.name = i->substr(temp0, temp1 - temp0);
+							file.name = dodoString(i->data() + temp0, temp1 - temp0);
 
 							temp0 = tools::string::find(*i, "Content-Type: ", temp1, true);
 							temp0 += 14;
 							temp1 = i->find("\n", temp0);
-							file.mime = tools::misc::split(i->substr(temp0, temp1 - temp0), ";")[0];
+							file.mime = tools::misc::split(dodoString(i->data() + temp0, temp1 - temp0), ";")[0];
+
 							unsigned long lIndex = file.mime.size() - 1;
 							if (file.mime[lIndex] == '\r')
 								file.mime.erase(lIndex);
@@ -788,9 +807,13 @@ dialogue::makePost()
 								continue;
 
 							temp0 += 6;
-							temp1 = i->find("\"", temp0);
 
-							POST.insert(make_pair(i->substr(temp0, temp1 - temp0), i->substr(temp1 + 5, i->size() - temp1 - 7)));
+							if ((temp1 = i->find("\"", temp0)) == dodoString::npos)
+								continue;
+
+							argument = i->data();
+
+							POST.insert(make_pair(dodoString(argument + temp0, temp1 - temp0), dodoString(argument + temp1 + 5, i->size() - temp1 - 7)));
 						}
 					}
 				}
@@ -854,14 +877,6 @@ void
 dialogue::setCookie(const __cgiCookie &cookie)
 {
 	cookies.push_back(cookie);
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-dialogue::trim(const dodoString &data)
-{
-	return tools::string::trim(data, ' ');
 }
 
 //-------------------------------------------------------------------

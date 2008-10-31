@@ -159,6 +159,15 @@ namespace dodo
 						 */
 						virtual void additionalCollect(unsigned int qTypeToCheck, const dodoString &collectedString);
 
+						/**
+						 * @return string of substrings, separated with separator, framed with frame and applied escapeFields to each
+						 * @param fields defines substrings to join
+						 * @param separator defines separator string
+						 * @param frame defines frame string[frame='; substring => 'substring']
+						 * @param limit defines maximum number of parts to divide string; -1 for unlimit
+						 */
+						static dodoString joinFields(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit = -1);
+
 	#define SQLCONSTRUCTOR_STATEMENTS 21
 
 						/**

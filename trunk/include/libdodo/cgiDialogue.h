@@ -287,13 +287,6 @@ namespace dodo
 				 */
 				virtual void cleanTmp();
 
-				/**
-				 * @return trimmed string
-				 * @param data defines string to trim
-				 * @note uses trimSymbols to trim
-				 */
-				static dodoString trim(const dodoString &data);
-
 				exchange &cgiIO;                                                                                                        ///< CGI I/O instance
 
 				mutable bool headersPrinted;                                                                                            ///< true if headers have been printed

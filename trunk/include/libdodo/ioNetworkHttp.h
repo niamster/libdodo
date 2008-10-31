@@ -347,13 +347,6 @@ namespace dodo
 					virtual void getHeaders(const dodoString &headers);
 
 					/**
-					 * @return trimmed string
-					 * @param data defines string to trim
-					 * @note uses trimSymbols to trim
-					 */
-					static dodoString trim(const dodoString &data);
-
-					/**
 					 * @param responseHeader defines what header create[HTTP_REQUESTHEADER_AUTHORIZATION or HTTP_REQUESTHEADER_PROXYAUTHORIZATION]
 					 * @param user defines user name
 					 * @param password defines user password

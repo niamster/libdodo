@@ -1141,7 +1141,7 @@ http::getHeaders(const dodoString &headers)
 		if (i == dodoString::npos)
 			return;
 
-		piece = tools::string::trim(headers.substr(j, i - j), '\r');
+		piece = tools::string::trim(dodoString(headers.data() + j, i - j), '\r');
 
 		arr = tools::misc::split(piece, ":", 2);
 		if (arr.size() != 2)
@@ -1185,18 +1185,18 @@ http::extractHeaders(const dodoString &data,
 			return false;
 		else
 		{
-			response.data.append(headers.substr(i + 2));
+			response.data.append(dodoString(headers.data() + i + 2, headers.size() - i - 2));
 
-			headers.resize(i + 1);
+			headers.erase(i + 1);
 
 			return true;
 		}
 	}
 	else
 	{
-		response.data.append(headers.substr(i + 4));
+		response.data.append(dodoString(headers.data() + i + 4, headers.size() - i - 4));
 
-		headers.resize(i + 2);
+		headers.erase(i + 2);
 
 		return true;
 	}
@@ -1232,14 +1232,14 @@ http::getProxyConnectResponse(char *data,
 				i = headers.find("\n\n");
 				if (i != dodoString::npos)
 				{
-					headers.resize(i + 1);
+					headers.erase(i + 1);
 
 					endOfHeaders = true;
 				}
 			}
 			else
 			{
-				headers.resize(i + 2);
+				headers.erase(i + 2);
 
 				endOfHeaders = true;
 			}
@@ -1477,9 +1477,11 @@ http::getContent(dodoString &data,
 									chunkSizeHex.append(1, response.data[i]);
 								}
 
-								response.data.erase(0, eoc);
+								unsigned long dataSize = response.data.size() - eoc;
 
-								chunkSize = tools::code::hexToLong(chunkSizeHex) - response.data.size() + 2;///< 2 bytes for CRLF after chunk
+								response.data.assign(response.data.data(), dataSize);
+
+								chunkSize = tools::code::hexToLong(chunkSizeHex) - dataSize + 2;///< 2 bytes for CRLF after chunk
 							}
 						}
 						else
@@ -1526,14 +1528,6 @@ http::getContent(dodoString &data,
 
 //-------------------------------------------------------------------
 
-dodoString
-http::trim(const dodoString &data)
-{
-	return tools::string::trim(data, ' ');
-}
-
-//-------------------------------------------------------------------
-
 void
 http::makeDigestAuth(short requestHeader,
 					 short responseHeader,
@@ -1543,7 +1537,8 @@ http::makeDigestAuth(short requestHeader,
 {
 	dodoString nonce, opaque, realm;
 
-	dodoStringArray parts = tools::misc::split(response.headers[requestHeader].substr(7), &trim, ",");
+	dodoString &rh = response.headers[requestHeader];
+	dodoStringArray parts = tools::misc::split(dodoString(rh.data() + 7, rh.size() - 7), ",");
 
 	dodoString HA1;
 
@@ -1555,7 +1550,7 @@ http::makeDigestAuth(short requestHeader,
 	dodoStringArray::iterator i = parts.begin(), j = parts.end();
 	for (; i != j; ++i)
 	{
-		tuple = tools::misc::split(*i, "=");
+		tuple = tools::misc::split(tools::string::trim(*i, ' '), "=");
 		if (tuple.size() != 2)
 			continue;
 
@@ -1674,7 +1669,8 @@ http::setAuthInfo(const dodoString &user,
 dodo::cgi::__cgiCookie
 http::parseCookie(const dodoString &header)
 {
-	dodoStringArray parts = tools::misc::split(header, &trim, ";");
+	dodoStringArray parts = tools::misc::split(header, ";");
+
 	dodoStringArray tuple;
 
 	dodoStringArray::iterator i = parts.begin(), j = parts.end();
@@ -1691,7 +1687,7 @@ http::parseCookie(const dodoString &header)
 
 	for (; i != j; ++i)
 	{
-		tuple = tools::misc::split(*i, "=");
+		tuple = tools::misc::split(tools::string::trim(*i, ' '), "=");
 
 		if (tools::string::iequal(tuple[0], "path"))
 			cookie.path = tuple[1];

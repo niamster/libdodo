@@ -120,7 +120,7 @@ regexp::match(const dodoString &sample,
 
 	dodoArray<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
 	for (; i != j; ++i)
-		pockets.push_back(sample.substr(i->begin, i->end - i->begin));
+		pockets.push_back(dodoString(sample.data() + i->begin, i->end - i->begin));
 
 	return true;
 }

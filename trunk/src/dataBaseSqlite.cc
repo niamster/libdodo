@@ -890,11 +890,11 @@ sqlite::insertCollect()
 			for (; k != l; ++k)
 			{
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-				request.append(tools::misc::join(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+				request.append(joinFields(*k, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
 			}
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-			request.append(tools::misc::join(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+			request.append(joinFields(*k, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 		}
 	}

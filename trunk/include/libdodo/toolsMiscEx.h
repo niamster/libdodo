@@ -59,7 +59,7 @@ namespace dodo
 		enum miscFunctionsID
 		{
 			MISCEX_RANDOM,
-			MISCEX_IMPLODE,
+			MISCEX_JOIN,
 		};
 	};
 };

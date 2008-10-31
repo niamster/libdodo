@@ -935,7 +935,7 @@ code::parseUrl(const dodoString &url)
 
 	if ((pos = url.find("://", 0)) != dodoString::npos)
 	{
-		temp.protocol = url.substr(0, pos);
+		temp.protocol.assign(url.data(), pos);
 
 		begin = pos + 3;
 	}
@@ -944,14 +944,14 @@ code::parseUrl(const dodoString &url)
 	{
 		if ((pos1 = url.find(':', begin)) < pos)
 		{
-			temp.login = url.substr(begin, pos1 - begin);
+			temp.login.assign(url.data() + begin, pos1 - begin);
 
 			++pos1;
 
-			temp.password = url.substr(pos1, pos - pos1);
+			temp.password.assign(url.data() + pos1, pos - pos1);
 		}
 		else
-			temp.login = url.substr(begin, pos - begin);
+			temp.login.assign(url.data() + begin, pos - begin);
 
 		begin = pos + 1;
 	}
@@ -960,37 +960,37 @@ code::parseUrl(const dodoString &url)
 	{
 		if ((pos1 = url.find(':', begin)) < pos)
 		{
-			temp.host = url.substr(begin, pos1 - begin);
+			temp.host.assign(url.data() + begin, pos1 - begin);
 
 			++pos1;
 
-			temp.port = url.substr(pos1, pos - pos1);
+			temp.port.assign(url.data() + pos1, pos - pos1);
 		}
 		else
-			temp.host = url.substr(begin, pos - begin);
+			temp.host.assign(url.data() + begin, pos - begin);
 
 		begin = pos + 1;
 
 		if ((pos = url.find('?', begin)) != dodoString::npos)
 		{
-			temp.path = url.substr(begin, pos - begin);
-			temp.request = url.substr(pos + 1);
+			temp.path.assign(url.data() + begin, pos - begin);
+			temp.request.assign(url.data() + pos + 1, url.size() - pos - 1);
 		}
 		else
-			temp.path = url.substr(begin);
+			temp.path.assign(url.data() + begin, url.size() - begin);
 	}
 	else
 	{
-		if ((pos1 = url.find(':', begin)) < pos)
+		if ((pos1 = url.find(':', begin)) != dodoString::npos)
 		{
-			temp.host = url.substr(begin, pos1 - begin);
+			temp.host.assign(url.data() + begin, pos1 - begin);
 
 			++pos1;
 
-			temp.port = url.substr(pos1, pos - pos1);
+			temp.port.assign(url.data() + pos1, url.size() - pos1);
 		}
 		else
-			temp.host = url.substr(begin, pos - begin);
+			temp.host.assign(url.data() + begin, url.size() - begin);
 	}
 
 	return temp;

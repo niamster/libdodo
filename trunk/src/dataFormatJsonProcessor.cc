@@ -254,7 +254,7 @@ processor::processBoolean(bool &node,
 	if ((root.size() - pos) < 4)
 		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
 
-	if (root.substr(pos, 4) == "true")
+	if (root[pos] == 't' && root[pos + 1] == 'r' && root[pos + 2] == 'u' && root[pos + 3] == 'e')
 	{
 		node = true;
 
@@ -262,7 +262,7 @@ processor::processBoolean(bool &node,
 	}
 	else
 	{
-		if (root.substr(pos, 5) == "false")
+		if (root[pos] == 'f' && root[pos + 1] == 'a' && root[pos + 2] == 'l' && root[pos + 3] == 's' && root[pos + 4] == 'e')
 		{
 			node = false;
 
@@ -284,7 +284,7 @@ processor::processNull(const dodoString &root,
 	if ((root.size() - pos) < 4)
 		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSNULL, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
 
-	if (root.substr(pos, 4) == "null")
+	if (root[pos] == 'n' && root[pos + 1] == 'u' && root[pos + 2] == 'l' && root[pos + 3] == 'l')
 		return pos + 3;
 	else
 		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSNULL, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);

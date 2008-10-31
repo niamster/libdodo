@@ -31,12 +31,6 @@
 
 using namespace dodo::tools;
 
-dodoString
-dummyEscape(const dodoString &data)
-{
-	return data;
-}
-
 //-------------------------------------------------------------------
 
 void
@@ -268,7 +262,6 @@ misc::isInList(const dodoStringList &arr,
 
 dodo::dodoStringArray
 misc::split(const dodoString &fields,
-			  escape escapeF,
 			  const dodoString &separator,
 			  int limit)
 {
@@ -282,7 +275,7 @@ misc::split(const dodoString &fields,
 		{
 			if (k > limit)
 			{
-				arr.back().append(escapeF(fields.substr(j - sep_size)));
+				arr.back().append(fields.data() + j - sep_size);
 
 				break;
 			}
@@ -290,9 +283,14 @@ misc::split(const dodoString &fields,
 		}
 
 		i = fields.find(separator, i);
-		arr.push_back(escapeF(fields.substr(j, i - j)));
 		if (i == dodoString::npos)
+		{
+			arr.push_back(dodoString(fields.data() + j, fields.size() - j));
+
 			break;
+		}
+		else
+			arr.push_back(dodoString(fields.data() + j, i - j));
 
 		i += sep_size;
 		j = i;
@@ -303,80 +301,13 @@ misc::split(const dodoString &fields,
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringArray
-misc::split(const dodoString &fields,
-			  const dodoString &separator,
-			  int limit)
-{
-	return split(fields, &dummyEscape, separator, limit);
-}
-
-//-------------------------------------------------------------------
-
 dodoString
 misc::join(const dodoStringArray &fields,
-			  escape escapeF,
-			  const dodoString &separator,
-			  const dodoString &frame,
-			  int limit)
-{
-	if (fields.size() == 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
-
-	int k(0);
-
-	dodoString temp, fs(frame + separator);
-	dodoStringArray::const_iterator i(fields.begin()), j(fields.end());
-	if (i != j)
-	{
-		--j;
-		for (; i != j; ++i)
-		{
-			if (limit != -1)
-			{
-				if (k > limit)
-					return temp;
-				++k;
-			}
-			temp.append(frame + escapeF(*i) + fs);
-		}
-		temp.append(frame + escapeF(*i) + frame);
-	}
-
-	return temp;
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-misc::join(const dodoStringArray &fields,
-			  const dodoString &separator,
-			  const dodoString &frame,
-			  int limit)
-{
-	return join(fields, &dummyEscape, separator, frame, limit);
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-misc::join(const dodoStringArray &fields,
-			  const dodoString &separator,
-			  int limit)
-{
-	return join(fields, &dummyEscape, separator, limit);
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-misc::join(const dodoStringArray &fields,
-			  escape escapeF,
 			  const dodoString &separator,
 			  int limit)
 {
 	if (fields.size() == 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_JOIN, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
 
 	int k(0);
 
@@ -391,11 +322,13 @@ misc::join(const dodoStringArray &fields,
 			{
 				if (k > limit)
 					return temp;
+
 				++k;
 			}
-			temp.append(escapeF(*i) + separator);
+			temp.append(*i);
+			temp.append(separator);
 		}
-		temp.append(escapeF(*i));
+		temp.append(*i);
 	}
 
 	return temp;

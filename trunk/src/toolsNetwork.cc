@@ -379,7 +379,7 @@ network::mail(const dodoString &host,
 	ex.writeStreamString("EHLO " + network::getLocalName() + "\r\n");
 	ex.readStreamString(mess);
 
-	if (string::stringToI(mess.substr(0, 3)) != 250)
+	if (string::stringToI(dodoString(mess.data(), 3)) != 250)
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_LIBDODO, NETWORKEX_BADMAILHELO, TOOLSNETWORKEX_BADMAILHELO_STR, __LINE__, __FILE__);
 
 	if (auth)
@@ -401,10 +401,10 @@ network::mail(const dodoString &host,
 			ex.writeStreamString("AUTH CRAM-MD5\r\n");
 			ex.readStreamString(mess);
 
-			if (string::stringToI(mess.substr(0, 3)) != 334)
+			if (string::stringToI(dodoString(mess.data(), 3)) != 334)
 				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
-			dodoString ticket = code::decodeBase64(mess.substr(4));
+			dodoString ticket = code::decodeBase64(dodoString(mess.data() + 4, mess.size() - 4));
 
 			dodoString md5pass;
 			if (pass.size() > 64)
@@ -445,7 +445,7 @@ network::mail(const dodoString &host,
 			ex.writeStreamString(code::encodeBase64(login + " " + md5pass) + "\r\n");
 			ex.readStreamString(mess);
 
-			if (string::stringToI(mess.substr(0, 3)) != 235)
+			if (string::stringToI(dodoString(mess.data(), 3)) != 235)
 				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 		}
 		else
@@ -455,19 +455,19 @@ network::mail(const dodoString &host,
 				ex.writeStreamString("AUTH LOGIN\r\n");
 				ex.readStreamString(mess);
 
-				if (string::stringToI(mess.substr(0, 3)) != 334)
+				if (string::stringToI(dodoString(mess.data(), 3)) != 334)
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(code::encodeBase64(login) + "\r\n");
 				ex.readStreamString(mess);
 
-				if (string::stringToI(mess.substr(0, 3)) != 334)
+				if (string::stringToI(dodoString(mess.data(), 3)) != 334)
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(code::encodeBase64(pass) + "\r\n");
 				ex.readStreamString(mess);
 
-				if (string::stringToI(mess.substr(0, 3)) != 235)
+				if (string::stringToI(dodoString(mess.data(), 3)) != 235)
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 			}
 			else
@@ -477,7 +477,7 @@ network::mail(const dodoString &host,
 					ex.writeStreamString("AUTH PLAIN" + code::encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
 					ex.readStreamString(mess);
 
-					if (string::stringToI(mess.substr(0, 3)) != 334)
+					if (string::stringToI(dodoString(mess.data(), 3)) != 334)
 						throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 				}
 			}

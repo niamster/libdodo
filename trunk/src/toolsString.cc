@@ -256,7 +256,7 @@ string::lTrim(const dodoString &data,
 		if (data[i] != symbol)
 			break;
 
-	return data.substr(i, size - i);
+	return dodoString(data.data() + i, size - i);
 }
 
 //-------------------------------------------------------------------
@@ -271,7 +271,7 @@ string::rTrim(const dodoString &data,
 		if (data[i] != symbol)
 			break;
 
-	return data.substr(0, i + 1);
+	return dodoString(data.data(), i + 1);
 }
 
 //-------------------------------------------------------------------
@@ -292,7 +292,7 @@ string::rTrim(const dodoString &data,
 			break;
 	}
 
-	return data.substr(0, i + 1);
+	return dodoString(data.data(), i + 1);
 }
 
 //-------------------------------------------------------------------
@@ -313,7 +313,7 @@ string::lTrim(const dodoString &data,
 			break;
 	}
 
-	return data.substr(i, size - i);
+	return dodoString(data.data() + i, size - i);
 }
 
 //-------------------------------------------------------------------

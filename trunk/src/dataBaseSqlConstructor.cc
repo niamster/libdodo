@@ -269,11 +269,11 @@ constructor::insertCollect()
 			for (; k != l; ++k)
 			{
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-				request.append(tools::misc::join(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+				request.append(joinFields(*k, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
 			}
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-			request.append(tools::misc::join(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+			request.append(joinFields(*k, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 		}
 	}
@@ -559,3 +559,37 @@ constructor::escapeFields(const dodoString &data)
 
 //-------------------------------------------------------------------
 
+dodoString
+constructor::joinFields(const dodoStringArray &fields,
+						const dodoString &separator,
+						const dodoString &frame,
+						int limit)
+{
+	int k(0);
+
+	dodoString temp, fs(frame + separator);
+	dodoStringArray::const_iterator i(fields.begin()), j(fields.end());
+	if (i != j)
+	{
+		--j;
+		for (; i != j; ++i)
+		{
+			if (limit != -1)
+			{
+				if (k > limit)
+					return temp;
+				++k;
+			}
+			temp.append(frame);
+			temp.append(escapeFields(*i));
+			temp.append(fs);
+		}
+		temp.append(frame);
+		temp.append(escapeFields(*i));
+		temp.append(frame);
+	}
+
+	return temp;
+}
+
+//-------------------------------------------------------------------

@@ -100,7 +100,7 @@ channel::read(char * const a_void)
 	performXExec(postExec);
 
 	if (collectedData.buffer.size() > inSize)
-		collectedData.buffer.resize(inSize);
+		collectedData.buffer.erase(inSize);
 
 	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size());
 
@@ -147,7 +147,7 @@ channel::readString(dodoString &a_str)
 	performXExec(postExec);
 
 	if (collectedData.buffer.size() > inSize)
-		collectedData.buffer.resize(inSize);
+		collectedData.buffer.erase(inSize);
 
 	a_str = collectedData.buffer;
 
@@ -183,7 +183,7 @@ channel::readStream(char * const a_void)
 	performXExec(postExec);
 
 	if (collectedData.buffer.size() > inSize)
-		collectedData.buffer.resize(inSize);
+		collectedData.buffer.erase(inSize);
 
 	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size());
 
@@ -230,7 +230,7 @@ channel::readStreamString(dodoString &a_str)
 	performXExec(postExec);
 
 	if (collectedData.buffer.size() > inSize)
-		collectedData.buffer.resize(inSize);
+		collectedData.buffer.erase(inSize);
 
 	a_str = collectedData.buffer;
 
