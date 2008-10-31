@@ -393,6 +393,8 @@ basic::basic() throw ()
 
 //-------------------------------------------------------------------
 
+#undef DL_EXT
+
 basic::basic(int a_errModule,
 			 int functionID,
 			 int errnoSource,
@@ -439,7 +441,7 @@ basic::basic(int a_errModule,
 	{
 #ifdef DL_EXT
 
-		if(!dladdr(trace[i], &dlinfo))
+		if(dladdr(trace[i], &dlinfo) == 0)
 			continue;
 
 		symname = dlinfo.dli_sname;
@@ -449,8 +451,8 @@ basic::basic(int a_errModule,
 			symname = demangled;
 
 		call.address = trace[i];
-		call.symbol = (symname != NULL)?symname:"NULL";
-		call.object = (dlinfo.dli_fname != NULL)?dlinfo.dli_fname:"NULL";
+		call.symbol = (symname != NULL)?symname:"undefined";
+		call.object = (dlinfo.dli_fname != NULL)?dlinfo.dli_fname:"undefined";
 
 		callStack.push_back(call);
 
@@ -465,6 +467,12 @@ basic::basic(int a_errModule,
 
 #endif
 	}
+
+#ifndef DL_EXT
+
+	free(symbols);
+
+#endif
 
 	getInstance();
 
@@ -515,12 +523,19 @@ basic::getCallStack()
 {
 	dodoString stack;
 
+#ifdef DL_EXT
+
+	char str[32];
+
+#endif
+
 	dodoArray<__call>::iterator i = callStack.begin(), j = callStack.end();
 	for (;i!=j;++i)
 	{
 #ifdef DL_EXT
 
-		stack.append(i->object + ": " + i->symbol + "(" + tools::code::longToHex((long)i->address) + ")");
+		snprintf(str, 32, " [0x%x]", (long)i->address);
+		stack.append(i->object + ": " + i->symbol + dodoString(str));
 
 #else
 

@@ -33,7 +33,6 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/toolsCode.h>
 
 #include <exception>
 
@@ -51,7 +50,7 @@
 
 #include <execinfo.h>
 #include <cxxabi.h>
-
+#include <stdlib.h>
 
 namespace dodo
 {

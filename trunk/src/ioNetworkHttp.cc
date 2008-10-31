@@ -1479,7 +1479,7 @@ http::getContent(dodoString &data,
 
 								unsigned long dataSize = response.data.size() - eoc;
 
-								response.data.assign(response.data.data(), dataSize);
+								response.data.assign(response.data.data() + eoc, dataSize);
 
 								chunkSize = tools::code::hexToLong(chunkSizeHex) - dataSize + 2;///< 2 bytes for CRLF after chunk
 							}
