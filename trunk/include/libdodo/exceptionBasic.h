@@ -33,6 +33,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
+#include <libdodo/toolsCode.h>
 
 #include <exception>
 
@@ -47,6 +48,10 @@
 #include <pthread.h>
 
 #endif
+
+#include <execinfo.h>
+#include <cxxabi.h>
+
 
 namespace dodo
 {
@@ -173,6 +178,25 @@ namespace dodo
 		typedef void (*errorHandler)(int module, basic *ex, void *data);
 
 		/**
+		 * @struct __call
+		 * @brief describes function call in call stack
+		 */
+		struct __call
+		{
+#ifdef DL_EXT
+
+			dodoString object; ///< name of the object where call was found
+			dodoString symbol; ///< name of the call
+			void *address; ///< address of the call
+
+#else
+
+			dodoString symbol; ///< the symbolic representation of each address consists of the function name, a hexadecimal offset into the function, and the actual return address
+
+#endif
+		};
+
+		/**
 		 * @class basic
 		 * @brief describes exception that has been thrown
 		 */
@@ -218,6 +242,11 @@ namespace dodo
 				 */
 				virtual const char *what() const throw ();
 
+				/**
+				 * @return call stack to the exception point
+				 */
+				virtual dodoString getCallStack();
+
 				int errModule;                                              ///< module where exception has been thrown
 				int funcID;                                                 ///< function where exception has been thrown[see *Ex.h headers for IDs]
 				int errnoSource;                                            ///< the source of the error code and of the error string
@@ -229,6 +258,8 @@ namespace dodo
 				dodoString file;                                            ///< file where exception has been thrown
 
 				dodoString message;                                         ///< custom message that might clarify the exception
+
+				dodoArray<__call> callStack; 								///< call stack of the raised exception
 
 				/**
 				 * set handler for exceptions for specific module

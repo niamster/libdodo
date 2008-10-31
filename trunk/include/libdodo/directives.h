@@ -121,4 +121,10 @@
  */
 #define MAXPATHLEN               FILENAME_MAX
 
+/**
+ * max depth of calls for stack trace
+ */
+#define MAXCALLSTACKLEN 128
+
+
 #endif

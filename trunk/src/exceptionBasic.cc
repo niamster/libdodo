@@ -411,6 +411,61 @@ basic::basic(int a_errModule,
 {
 	syncThreadStack tg;
 
+	void *trace[MAXCALLSTACKLEN];
+
+#ifdef DL_EXT
+
+	using namespace abi;
+
+	Dl_info dlinfo;
+
+	int status;
+	const char *symname;
+	char *demangled;
+
+#endif
+
+	__call call;
+
+	int trace_size = backtrace(trace, MAXCALLSTACKLEN);
+
+#ifndef DL_EXT
+
+	char **symbols = backtrace_symbols(trace, trace_size);
+
+#endif
+
+	for (int i=0; i<trace_size; ++i)
+	{
+#ifdef DL_EXT
+
+		if(!dladdr(trace[i], &dlinfo))
+			continue;
+
+		symname = dlinfo.dli_sname;
+
+		demangled = __cxa_demangle(symname, NULL, 0, &status);
+		if(status == 0 && demangled != NULL)
+			symname = demangled;
+
+		call.address = trace[i];
+		call.symbol = (symname != NULL)?symname:"NULL";
+		call.object = (dlinfo.dli_fname != NULL)?dlinfo.dli_fname:"NULL";
+
+		callStack.push_back(call);
+
+		if (demangled)
+			free(demangled);
+
+#else
+
+		call.symbol = symbols[i];
+
+		callStack.push_back(call);
+
+#endif
+	}
+
 	getInstance();
 
 	++instances;
@@ -451,6 +506,32 @@ basic::~basic() throw ()
 
 #endif
 	}
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+basic::getCallStack()
+{
+	dodoString stack;
+
+	dodoArray<__call>::iterator i = callStack.begin(), j = callStack.end();
+	for (;i!=j;++i)
+	{
+#ifdef DL_EXT
+
+		stack.append(i->object + ": " + i->symbol + "(" + tools::code::longToHex((long)i->address) + ")");
+
+#else
+
+		stack.append(i->symbol);
+
+#endif
+
+		stack.append("\n");
+	}
+
+	return stack;
 }
 
 //-------------------------------------------------------------------
