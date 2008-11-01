@@ -9,6 +9,7 @@
 #include <libdodo/ioPipe.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsOs.h>
+#include <libdodo/toolsFilesystem.h>
 #include <libdodo/toolsMisc.h>
 
 #include <iostream>
@@ -29,9 +30,18 @@ threadRead(void *data)
 		dodoString str;
 
 		io::pipe *pipe = (io::pipe *)data;
+
 		pipe->readStreamString(str);
-		
-		cout << str;
+		cout << "%" << str << "%\n";
+		cout.flush();
+
+		pipe->readStreamString(str);
+		cout << "%" << str << "%\n";
+		cout.flush();
+
+		pipe->inSize = tools::string::stringToUL(str);
+		pipe->readString(str);
+		cout << "%" << str << "%\n";
 		cout.flush();
 	}
 	catch (dodo::exception::basic ex)
@@ -56,9 +66,20 @@ threadWrite(void *data)
 		dodoString str;
 
 		io::pipe *pipe = (io::pipe *)data;
-		pipe->writeStreamString(tools::time::byFormat("%H:%M:%S\n", tools::time::now()));
+
+		pipe->writeStreamString(tools::time::byFormat("%H:%M:%S", tools::time::now()));
+		pipe->writeStreamString("\n");
+		pipe->flush();
+		
+		str = tools::filesystem::getFileContents("test.cc");
+		
+		pipe->writeStreamString(tools::string::ulToString(str.size()));
+		pipe->writeStreamString("\n");
 		pipe->flush();
 
+		pipe->outSize = str.size();
+		pipe->writeString(str);
+		pipe->flush();
 	}
 	catch (dodo::exception::basic ex)
 	{

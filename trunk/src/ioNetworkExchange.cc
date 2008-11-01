@@ -213,7 +213,7 @@ exchange::isAlive()
 //-------------------------------------------------------------------
 
 void
-exchange::_write(const char * const data)
+exchange::_write(const char * const a_void)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
@@ -221,7 +221,7 @@ exchange::_write(const char * const data)
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
 
-	unsigned long sent_received = 0;
+	const char *data = a_void;
 
 	unsigned long batch, n;
 
@@ -232,7 +232,7 @@ exchange::_write(const char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::send(socket, data + sent_received, batch, 0)) == -1)
+				if ((n = ::send(socket, data, batch, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -247,7 +247,7 @@ exchange::_write(const char * const data)
 			}
 
 			batch -= n;
-			sent_received += n;
+			data += n;
 		}
 	}
 
@@ -258,7 +258,7 @@ exchange::_write(const char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::send(socket, data + sent_received, batch, 0)) == -1)
+				if ((n = ::send(socket, data, batch, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -273,7 +273,7 @@ exchange::_write(const char * const data)
 			}
 
 			batch -= n;
-			sent_received += n;
+			data += n;
 		}
 	}
 }
@@ -281,17 +281,17 @@ exchange::_write(const char * const data)
 //-------------------------------------------------------------------
 
 void
-exchange::_read(char * const data)
+exchange::_read(char * const a_void)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	memset(data, '\0', inSize);
+	memset(a_void, '\0', inSize);
 
 	unsigned long iter = inSize / inSocketBuffer;
 	unsigned long rest = inSize % inSocketBuffer;
 
-	unsigned long sent_received = 0;
+	char *data = a_void;
 
 	unsigned long batch, n;
 
@@ -302,7 +302,7 @@ exchange::_read(char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::recv(socket, data + sent_received, batch, 0)) == -1)
+				if ((n = ::recv(socket, data, batch, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -320,7 +320,7 @@ exchange::_read(char * const data)
 				break;
 
 			batch -= n;
-			sent_received += n;
+			data += n;
 		}
 	}
 
@@ -331,7 +331,7 @@ exchange::_read(char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::recv(socket, data + sent_received, batch, 0)) == -1)
+				if ((n = ::recv(socket, data, batch, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -349,7 +349,7 @@ exchange::_read(char * const data)
 				break;
 
 			batch -= n;
-			sent_received += n;
+			data += n;
 		}
 	}
 }

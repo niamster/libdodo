@@ -239,7 +239,7 @@ exchange::isAlive()
 //-------------------------------------------------------------------
 
 void
-exchange::_write(const char * const data)
+exchange::_write(const char * const a_void)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
@@ -247,7 +247,7 @@ exchange::_write(const char * const data)
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
 
-	unsigned long sent_received = 0;
+	const char *data = a_void;
 
 	long n;
 
@@ -255,7 +255,7 @@ exchange::_write(const char * const data)
 	{
 		while (true)
 		{
-			if ((n = SSL_write(sslHandle, data + sent_received, outSocketBuffer)) <= 0)
+			if ((n = SSL_write(sslHandle, data, outSocketBuffer)) <= 0)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
@@ -282,14 +282,14 @@ exchange::_write(const char * const data)
 			break;
 		}
 
-		sent_received += n;
+		data += outSocketBuffer;
 	}
 
 	if (rest > 0)
 	{
 		while (true)
 		{
-			if ((n = SSL_write(sslHandle, data + sent_received, rest)) <= 0)
+			if ((n = SSL_write(sslHandle, data, rest)) <= 0)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
@@ -321,17 +321,17 @@ exchange::_write(const char * const data)
 //-------------------------------------------------------------------
 
 void
-exchange::_read(char * const data)
+exchange::_read(char * const a_void)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	memset(data, '\0', inSize);
+	memset(a_void, '\0', inSize);
 
 	unsigned long iter = inSize / inSocketBuffer;
 	unsigned long rest = inSize % inSocketBuffer;
 
-	unsigned long sent_received = 0;
+	char *data = a_void;
 
 	long n;
 
@@ -339,7 +339,7 @@ exchange::_read(char * const data)
 	{
 		while (true)
 		{
-			if ((n = SSL_read(sslHandle, data + sent_received, inSocketBuffer)) <= 0)
+			if ((n = SSL_read(sslHandle, data, inSocketBuffer)) <= 0)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
@@ -366,14 +366,14 @@ exchange::_read(char * const data)
 			break;
 		}
 
-		sent_received += n;
+		data += inSocketBuffer;
 	}
 
 	if (rest > 0)
 	{
 		while (true)
 		{
-			if ((n = SSL_read(sslHandle, data + sent_received, rest)) <= 0)
+			if ((n = SSL_read(sslHandle, data, rest)) <= 0)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
