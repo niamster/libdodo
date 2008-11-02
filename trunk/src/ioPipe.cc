@@ -576,7 +576,25 @@ io::pipe::_readStream(char * const a_void)
 void
 io::pipe::_writeStream(const char * const data)
 {
-	_write(data);
+	unsigned long _outSize = outSize;
+
+	try
+	{
+		unsigned int bufSize = strlen(data) + 1;
+
+		if (bufSize < outSize)
+			outSize = bufSize;
+
+		_write(data);
+
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+
+		throw;
+	}
 }
 
 //-------------------------------------------------------------------

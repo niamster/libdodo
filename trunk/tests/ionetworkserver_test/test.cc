@@ -37,7 +37,7 @@ process(exchange fse)
 	fse.setOutBufferSize(1);
 
 	fse.outSize = 7;
-	fse.writeString("session");
+	fse.writeStreamString("session");
 
 	dodoString rec = "";
 	try

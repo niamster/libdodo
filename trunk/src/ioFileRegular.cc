@@ -497,31 +497,49 @@ regular::_writeStream(const char *const a_buf)
 	if (fseek(handler, 0, SEEK_END) == -1)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	unsigned long sent_received = 0;
+	unsigned long _outSize = outSize;
 
-	unsigned long batch = 0, n;
-
-	while (batch < outSize)
+	try
 	{
-		while (true)
-		{
-			if ((n = fwrite(a_buf + sent_received, 1, outSize, handler)) == 0)
-			{
-				if (errno == EINTR)
-					continue;
+		unsigned int bufSize = strlen(a_buf) + 1;
 
-				if (ferror(handler) != 0)
-					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		if (bufSize < outSize)
+			outSize = bufSize;
+
+		unsigned long sent_received = 0;
+
+		unsigned long batch = 0, n;
+
+		while (batch < outSize)
+		{
+			while (true)
+			{
+				if ((n = fwrite(a_buf + sent_received, 1, outSize, handler)) == 0)
+				{
+					if (errno == EINTR)
+						continue;
+
+					if (ferror(handler) != 0)
+						throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
+
+				break;
 			}
 
-			break;
+			if (n == 0)
+				break;
+
+			batch += n;
+			sent_received += n;
 		}
 
-		if (n == 0)
-			break;
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
 
-		batch += n;
-		sent_received += n;
+		throw;
 	}
 }
 

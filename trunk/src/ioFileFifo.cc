@@ -372,34 +372,24 @@ fifo::_readStream(char * const a_void)
 void
 fifo::_writeStream(const char *const a_buf)
 {
-	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITESTREAM, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+	unsigned long _outSize = outSize;
 
-	unsigned long sent_received = 0;
-
-	unsigned long batch = 0, n;
-
-	while (batch < outSize)
+	try
 	{
-		while (true)
-		{
-			if ((n = fwrite(a_buf + sent_received, 1, outSize, handler)) == 0)
-			{
-				if (errno == EINTR)
-					continue;
+		unsigned int bufSize = strlen(a_buf) + 1;
 
-				if (ferror(handler) != 0)
-					throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
+		if (bufSize < outSize)
+			outSize = bufSize;
 
-			break;
-		}
+		_write(a_buf);
 
-		if (n == 0)
-			break;
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
 
-		batch += n;
-		sent_received += n;
+		throw;
 	}
 }
 

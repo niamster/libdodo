@@ -52,15 +52,12 @@ int main(int argc, char **argv)
 
 		exch.writeStreamString("GET / HTTP/1.0\r\n");
 		exch.writeStreamString("Host: " + host + "\r\n");
+		exch.writeStreamString("Connection: close\r\n");
 		exch.writeStreamString("\r\n");
 
-		while (true)
-		{
-			exch.readStreamString(str);
-			if (str.size() == 0)
-				break;
-			cout << str;
-		}
+		exch.readStreamString(str);
+
+		cout << str;
 
 #endif
 	}

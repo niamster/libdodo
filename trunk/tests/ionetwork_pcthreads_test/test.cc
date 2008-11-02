@@ -50,7 +50,7 @@ process(void *data)
 		fse->setOutBufferSize(1);
 
 		fse->outSize = 7;
-		fse->writeString("test");
+		fse->writeStreamString("test");
 
 		dodoString rec = "";
 		try

@@ -34,10 +34,8 @@ hook(__xexecCollectedData *odata,
 		try
 		{
 			image *img = dynamic_cast<image *>(imData->executor);
-			img->disableAll();
 			graphics::transform tr(img);
 			tr.rotate(TRANSFORM_ROTATEDIRECTIONANGLE_180);
-			img->enableAll();
 		}
 		catch (dodo::exception::basic ex)
 		{

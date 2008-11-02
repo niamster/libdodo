@@ -129,23 +129,27 @@ namespace dodo
 
 				/**
 				 * @param data defines data that will be written
+				 * @note not more then outSize(including '\0')
 				 */
 				virtual void writeString(const dodoString &data);
 
 				/**
 				 * @param data defines data that will be written
+				 * @note not more then outSize(including '\0')
 				 */
 				virtual void write(const char * const data);
 
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
+				 * @note not more then outSize(including '\0')
 				 */
 				virtual void writeStreamString(const dodoString &data);
 
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
+				 * @note not more then outSize(including '\0')
 				 */
 				virtual void writeStream(const char * const data);
 
@@ -174,12 +178,14 @@ namespace dodo
 
 				/**
 				 * @param data defines data that will be written
+				 * @note not more then outSize(including '\0')
 				 */
 				virtual void _write(const char * const data) = 0;
 
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
+				 * @note not more then outSize(including '\0')
 				 */
 				virtual void _writeStream(const char * const data) = 0;
 
