@@ -393,8 +393,6 @@ basic::basic() throw ()
 
 //-------------------------------------------------------------------
 
-#undef DL_EXT
-
 basic::basic(int a_errModule,
 			 int functionID,
 			 int errnoSource,

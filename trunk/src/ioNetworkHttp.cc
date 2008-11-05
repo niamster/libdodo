@@ -471,7 +471,12 @@ http::GET()
 
 	data.append("\r\n\r\n");
 
-	ex->writeStreamString(data);
+	unsigned long outSize = ex->outSize;
+
+	ex->outSize = data.size();
+	ex->writeString(data);
+
+	ex->outSize = outSize;
 
 	try
 	{
@@ -963,12 +968,15 @@ http::POST(const dodoString &a_data,
 	data.append("Content-type: ");
 	data.append(type);
 	data.append("\r\n\r\n");
-
-	ex->writeStreamString(data);
-
+	
 	unsigned long outSize = ex->outSize;
+
+	ex->outSize = data.size();
+	ex->writeString(data);
+
 	ex->outSize = a_data.size();
 	ex->writeString(a_data);
+
 	ex->outSize = outSize;
 
 	try

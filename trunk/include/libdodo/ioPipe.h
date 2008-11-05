@@ -62,6 +62,7 @@ namespace dodo
 		/**
 		 * @class pipe
 		 * @brief provides interface for PIPE I/O operations
+		 * @note writeStream* put extra '\n' to the end of the string, so no need to add it manually
 		 */
 		class pipe : virtual public channel
 		{
@@ -158,6 +159,7 @@ namespace dodo
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
+				 * @note puts extra '\n' to the end of the string
 				 */
 				virtual void _writeStream(const char * const data);
 

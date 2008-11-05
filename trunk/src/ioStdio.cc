@@ -97,3 +97,29 @@ stdio::isRedirectedToStderr()
 }
 
 //-------------------------------------------------------------------
+
+void
+stdio::_writeStream(const char * const data)
+{
+	unsigned long _outSize = outSize;
+
+	try
+	{
+		unsigned int bufSize = strlen(data);
+
+		if (bufSize < outSize)
+			outSize = bufSize;
+
+		_write(data);
+
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+
+		throw;
+	}
+}
+
+//-------------------------------------------------------------------

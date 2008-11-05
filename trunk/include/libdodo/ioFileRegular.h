@@ -75,6 +75,7 @@ namespace dodo
 			/**
 			 * @class regular
 			 * @brief provides file I/O manipulations
+			 * @note writeString* write only to the end of the file(appends)
 			 */
 			class regular : virtual public channel
 			{
@@ -162,6 +163,7 @@ namespace dodo
 					/**
 					 * write to stream - '\0' - terminated string
 					 * @param data defines data that will be written
+					 * @note writes only to the end of the file(appends)
 					 */
 					virtual void _writeStream(const char * const data);
 

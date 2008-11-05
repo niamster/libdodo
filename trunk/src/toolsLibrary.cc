@@ -89,7 +89,7 @@ void *
 library::get(const dodoString &name)
 {
 	if (handle == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_GET, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_GET, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
@@ -102,7 +102,7 @@ void *
 library::operator[](const dodoString &name)
 {
 	if (handle == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)

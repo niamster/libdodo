@@ -64,6 +64,7 @@ namespace dodo
 			/**
 			 * @class temp
 			 * @brief provides I/O manipulations with temporary file
+			 * @note writeString* write only to the end of the file(appends)
 			 */
 			class temp : virtual public channel
 			{
@@ -149,6 +150,7 @@ namespace dodo
 					/**
 					 * write to stream - '\0' - terminated string
 					 * @param data defines data that will be written
+					 * @note writes only to the end of the file(appends)
 					 */
 					virtual void _writeStream(const char * const data);
 

@@ -165,7 +165,7 @@ io::pipe::getInDescriptor() const
 	protector pg(this);
 
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_PIPENOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	return fileno(inHandle);
 }
@@ -178,7 +178,7 @@ io::pipe::getOutDescriptor() const
 	protector pg(this);
 
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_PIPENOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 
 	return fileno(outHandle);
@@ -267,7 +267,7 @@ void
 io::pipe::_read(char * const a_void)
 {
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_PIPENOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	char *data = a_void;
 
@@ -339,7 +339,7 @@ void
 io::pipe::_write(const char *const buf)
 {
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_PIPENOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	const char *data = buf;
 
@@ -411,7 +411,7 @@ io::pipe::flush()
 	protector pg(this);
 
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_PIPENOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (fflush(outHandle) != 0)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -425,7 +425,7 @@ io::pipe::peerInfo()
 	protector pg(this);
 
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_PIPENOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	network::__peerInfo info;
 
@@ -489,7 +489,6 @@ io::pipe::isBlocked()
 	return blocked;
 }
 
-
 //-------------------------------------------------------------------
 
 void
@@ -498,7 +497,7 @@ io::pipe::block(bool flag)
 	protector pg(this);
 
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_PIPENOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (blocked == flag)
 		return;
@@ -547,7 +546,7 @@ unsigned long
 io::pipe::_readStream(char * const a_void)
 {
 	if (!opened)
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_PIPENOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	memset(a_void, '\0', inSize);
 
@@ -580,12 +579,29 @@ io::pipe::_writeStream(const char * const data)
 
 	try
 	{
-		unsigned int bufSize = strlen(data) + 1;
+		unsigned int bufSize = strlen(data);
 
 		if (bufSize < outSize)
 			outSize = bufSize;
 
 		_write(data);
+
+		while (true)
+		{
+			if (fputc('\n', outHandle) == EOF)
+			{
+				if (errno == EINTR)
+					continue;
+
+				if (errno == EAGAIN)
+					break;
+
+				if (ferror(outHandle) != 0)
+					throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
+
+			break;
+		}
 
 		outSize = _outSize;
 	}

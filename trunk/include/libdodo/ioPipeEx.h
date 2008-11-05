@@ -49,7 +49,7 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define IOPIPEEX_PIPENOTOPENED_STR                  "PIPE was not opened or assigned."
+#define IOPIPEEX_NOTOPENED_STR                  "PIPE was not opened or assigned."
 
 		/**
 		 * IDs of functions where exception might be thrown
@@ -62,6 +62,7 @@ namespace dodo
 			PIPEEX__READ,
 			PIPEEX__WRITE,
 			PIPEEX__READSTREAM,
+			PIPEEX__WRITESTREAM,
 			PIPEEX_FLUSH,
 			PIPEEX_PEERINFO,
 			PIPEEX_BLOCK,

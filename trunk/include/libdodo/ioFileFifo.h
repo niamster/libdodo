@@ -66,13 +66,15 @@ namespace dodo
 			 */
 			enum fifoOpenmodeEnum
 			{
-				FIFO_OPENMODE_READ,                                        ///< error if not exists file
-				FIFO_OPENMODE_WRITE,                                       ///< creates if not exists
+				FIFO_OPENMODE_READ,                                        ///< normaly blocks until some other process opens the same FIFO for writing
+				FIFO_OPENMODE_READ_OPENNONBLOCK,                           ///< normaly does't block until some other process opens the same FIFO for writing, further I/O is in blocked mode
+				FIFO_OPENMODE_WRITE,                                       ///< normaly blocks until some other process opens the same FIFO for reading
 			};
 
 			/**
 			 * @class fifo
 			 * @brief provides I/O manipulations with fifo files
+			 * @note writeStream* put extra '\n' to the end of the string, so no need to add it manually
 			 */
 			class fifo : virtual public channel
 			{
@@ -118,6 +120,20 @@ namespace dodo
 					 */
 					virtual void flush();
 
+					/**
+					 * @return true if stream is blocked
+					 */
+					virtual bool isBlocked();
+
+					/**
+					 * blocks/unblocks stream
+					 * @param flag indicates whether to block or unblock stream
+					 */
+					virtual void block(bool flag);
+
+					int inFileFifoBuffer;                                           ///< input buffer
+					int outFileFifoBuffer;                                          ///< output buffer
+
 				protected:
 
 					/**
@@ -151,6 +167,7 @@ namespace dodo
 					/**
 					 * write to stream - '\0' - terminated string
 					 * @param data defines data that will be written
+					 * @note puts extra '\n' to the end of the string
 					 */
 					virtual void _writeStream(const char * const data);
 
@@ -160,6 +177,8 @@ namespace dodo
 					short mode;                                                                             ///< file open mode[see fileOpenmodeEnum]
 
 					FILE *handler;                                                                          ///< file handler
+
+					bool blocked;                                           ///< true if stream is blocked
 			};
 		};
 	};

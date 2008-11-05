@@ -115,7 +115,7 @@ exchange::_writeStream(const char * const data)
 
 	try
 	{
-		unsigned int bufSize = strlen(data) + 1;
+		unsigned int bufSize = strlen(data);
 
 		if (bufSize < outSize)
 			outSize = bufSize;

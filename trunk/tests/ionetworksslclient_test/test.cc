@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 	{
 #ifdef OPENSSL_EXT
 
-		dodoString host = "sourceforge.net";
+		dodoString host = "kernel.org";
 
 		cout << tools::network::getHostPrimaryIp(host) << endl;
 
@@ -50,10 +50,21 @@ int main(int argc, char **argv)
 
 		st.connect(tools::network::getHostPrimaryIp(host), 443, exch);
 
-		exch.writeStreamString("GET / HTTP/1.0\r\n");
-		exch.writeStreamString("Host: " + host + "\r\n");
-		exch.writeStreamString("Connection: close\r\n");
-		exch.writeStreamString("\r\n");
+		str = "GET / HTTP/1.1\r\n";
+		exch.outSize = str.size();
+		exch.writeString(str);
+
+		str = "Host: " + host + "\r\n";
+		exch.outSize = str.size();
+		exch.writeString(str);
+
+		str = "Connection: Close\r\n";
+		exch.outSize = str.size();
+		exch.writeString(str);
+
+		str = "User-Agent: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n\r\n";
+		exch.outSize = str.size();
+		exch.writeString(str);
 
 		exch.readStreamString(str);
 

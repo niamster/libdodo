@@ -257,17 +257,12 @@ temp::_write(const char *const a_buf)
 		unsigned long pos = this->pos * outSize;
 		if (!overwrite)
 		{
-			size_t read = 0;
+			if (fseek(handler, pos, SEEK_SET) == -1)
+				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
 			char *t_buf = new char[outSize];
 
-			if (fseek(handler, pos, SEEK_SET) == -1)
-			{
-				delete [] t_buf;
-
-				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
-
-			read = fread(t_buf, outSize, 1, handler);
+			size_t read = fread(t_buf, outSize, 1, handler);
 
 			delete [] t_buf;
 
@@ -308,12 +303,19 @@ temp::erase()
 
 	memset(empty, 0, outSize);
 
+	bool _overwrite = overwrite;
+	overwrite = true;
+
 	try
 	{
 		_write(empty);
+
+		overwrite = _overwrite;
 	}
 	catch (...)
 	{
+		overwrite = _overwrite;
+
 		delete [] empty;
 
 		throw;
@@ -347,7 +349,7 @@ temp::_readStream(char * const a_void)
 	if (fseek(handler, 0, SEEK_SET) == -1)
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	for (unsigned long i(0); i < pos; ++i)
+	for (long i = -1; i < pos; ++i)
 	{
 		if (fgets(a_void, inSize, handler) == NULL)
 		{
@@ -404,36 +406,23 @@ temp::_writeStream(const char *const a_buf)
 
 	try
 	{
-		unsigned int bufSize = strlen(a_buf) + 1;
+		unsigned int bufSize = strlen(a_buf);
 
 		if (bufSize < outSize)
 			outSize = bufSize;
 
-		unsigned long sent_received = 0;
-
-		unsigned long batch = 0, n;
-
-		while (batch < outSize)
+		while (true)
 		{
-			while (true)
+			if (fwrite(a_buf, outSize, 1, handler) == 0)
 			{
-				if ((n = fwrite(a_buf + sent_received, 1, outSize, handler)) == 0)
-				{
-					if (errno == EINTR)
-						continue;
+				if (errno == EINTR)
+					continue;
 
-					if (ferror(handler) != 0)
-						throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
+				if (ferror(handler) != 0)
+					throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
-			if (n == 0)
-				break;
-
-			batch += n;
-			sent_received += n;
+			break;
 		}
 
 		outSize = _outSize;

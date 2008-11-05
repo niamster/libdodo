@@ -111,6 +111,12 @@
 #define IOPIPE_OUTSIZE              102400
 
 /**
+ * default values of stdin/out buffer for io operations(stdio)
+ */
+#define IOFILEFIFO_INSIZE               102400
+#define IOFILEFIFO_OUTSIZE              102400
+
+/**
  * linger options
  */
 #define IONETWORKCONNECTION_SOCKET_LINGER_PERIOD     1

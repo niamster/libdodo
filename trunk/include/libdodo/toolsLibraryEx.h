@@ -49,7 +49,7 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-	#define TOOLSLIBRARYEX_LIBRARYNOTOPENED_STR "Library was not opened."
+	#define TOOLSLIBRARYEX_NOTOPENED_STR "Library was not opened."
 		/**
 		 * IDs of functions where exception might be thrown
 		 */

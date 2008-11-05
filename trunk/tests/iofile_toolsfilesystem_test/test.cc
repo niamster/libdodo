@@ -64,13 +64,12 @@ int main(int argc, char **argv)
 				cout << i->size << "!" << i->name << endl;
 		}
 
-		filesystem::unlink("my.dat");
+		filesystem::unlink("test.dat");
 
 		file::regular io;
-		io.open("my.dat", file::REGULAR_OPENMODE_READ_WRITE_TRUNCATE);
-		filesystem::chmod("my.dat", FILESYSTEM_PERMISSION_ALL_ALL_ACCESS);
+		io.open("test.dat", file::REGULAR_OPENMODE_READ_WRITE_TRUNCATE);
+		filesystem::chmod("test.dat", FILESYSTEM_PERMISSION_ALL_ALL_ACCESS);
 
-		io.inSize = io.outSize = 14;
 		io.overwrite = true;
 
 		io.writeStreamString("!12345890#!!@\n");
@@ -78,13 +77,15 @@ int main(int argc, char **argv)
 		io.writeStreamString("!12345890@!!@\n");
 		io.writeStreamString("!12345890$!!@\n");
 		io.pos = 1;
+		io.outSize = 14;
+		io.inSize = 14;
 
 		file::regular io2 = io;
 		io.close();
 
 		io2.writeString("!12345890$!~@\n");
 		/**
-		 * my.dat should contain
+		 * test.dat should contain
 		 !12345890#!!@
 		 !12345890$!~@
 		 !12345890@!!@
@@ -93,13 +94,13 @@ int main(int argc, char **argv)
 
 		dodoString str;
 
-		io2.pos = 0;
+		io2.pos = 2;
 		io2.readStreamString(str);
-		cout << "\n\n" << str << "\n\n";
+		cout << "\n\n~~" << str << "~~\n\n";
 
-		io2.pos = 0;
+		io2.pos = 2;
 		io2.readString(str);
-		cout << "\n\n" << str << "\n\n";
+		cout << "\n\n~~" << str << "~~\n\n";
 	}
 	catch (dodo::exception::basic ex)
 	{

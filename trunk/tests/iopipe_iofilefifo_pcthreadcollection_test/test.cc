@@ -7,6 +7,7 @@
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/pcThreadCollection.h>
 #include <libdodo/ioPipe.h>
+#include <libdodo/ioFileFifo.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsFilesystem.h>
@@ -29,7 +30,7 @@ threadRead(void *data)
 	{
 		dodoString str;
 
-		io::pipe *pipe = (io::pipe *)data;
+		io::channel *pipe = (io::channel *)data;
 
 		pipe->readStreamString(str);
 		cout << "%" << str << "%\n";
@@ -65,16 +66,14 @@ threadWrite(void *data)
 	{
 		dodoString str;
 
-		io::pipe *pipe = (io::pipe *)data;
+		io::channel *pipe = (io::channel *)data;
 
 		pipe->writeStreamString(tools::time::byFormat("%H:%M:%S", tools::time::now()));
-		pipe->writeStreamString("\n");
 		pipe->flush();
 		
 		str = tools::filesystem::getFileContents("test.cc");
 		
 		pipe->writeStreamString(tools::string::ulToString(str.size()));
-		pipe->writeStreamString("\n");
 		pipe->flush();
 
 		pipe->outSize = str.size();
@@ -99,27 +98,43 @@ int main(int argc, char **argv)
 #ifdef PTHREAD_EXT
 
 		collection j;
+		
+		cout << "\n~~using one pipe for the thread~~\n";
 
 		io::pipe pipe1;
 		pipe1.open();
 
 		///< write first to avoid deadlock due to io::pipe is threadsafe and here one object is used
-		j.addNRun(&threadWrite, (void *)&pipe1);
+		j.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&pipe1));
 		tools::os::sleep(1);
-		j.addNRun(&threadRead, (void *)&pipe1);
+		j.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&pipe1));
 
 		j.wait();
+
+		cout << "\n~~using original cloned pipe for one thread and copy for the second~~\n";
 
 		io::pipe pipe2 = pipe1;
 		//or clone
 		//pipe2.clone(pipe1);
 
 		///< use a copy, so no need to keep an order
-		j.addNRun(&threadRead, (void *)&pipe1);
-		j.addNRun(&threadWrite, (void *)&pipe2);
+		j.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&pipe1));
+		j.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&pipe2));
 		
 		j.wait();
+		
+		cout << "\n~~using FIFO file, opened to read for one thread and to write for the second~~\n";
 
+		io::file::fifo fifo1;
+		fifo1.open("fifo.file", io::file::FIFO_OPENMODE_READ_OPENNONBLOCK);
+		io::file::fifo fifo2;
+		fifo2.open("fifo.file", io::file::FIFO_OPENMODE_WRITE);
+
+		///< use a copy, so no need to keep an order
+		j.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&fifo2));
+		j.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&fifo1));
+		
+		j.wait();
 #endif
 	}
 	catch (dodo::exception::basic ex)

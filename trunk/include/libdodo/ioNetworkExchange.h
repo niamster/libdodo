@@ -98,7 +98,8 @@ namespace dodo
 			/**
 			 * @class exchange
 			 * @brief provides communication interface[send/receive data]
-			 * @note readStreamString: if length of read data is inSize, data will contain exact inSize, no '\0' will be set in the end - this is specific only for network sessions
+			 * @note readStream*: if length of read data is inSize, data will contain exact inSize, no '\0' will be set in the end - this is specific only for network sessions
+			 * writesStream* put extra '\0' in the end of the string
 			 */
 			class exchange : public connection,
 							 virtual public channel
@@ -196,6 +197,7 @@ namespace dodo
 					/**
 					 * write to stream - '\0' - terminated string
 					 * @param data defines data that will be written
+					 * @note puts extra '\0' in the end of the string
 					 */
 					virtual void _writeStream(const char * const data);
 			};

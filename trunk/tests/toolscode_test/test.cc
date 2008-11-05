@@ -33,8 +33,8 @@ int main(int argc, char **argv)
 		cout << "SHA1 of \"\"" << endl;
 		cout << tools::code::SHA1Hex("") <<  endl;
 		
-		cout << "tools::code::hexToLong(tools::code::longToHex(3564569432))" << endl;
-		cout << tools::code::hexToLong(tools::code::longToHex(3564569432)) << endl;
+		cout << "tools::code::hexToLong(tools::code::longToHex(356456942))" << endl;
+		cout << tools::code::hexToLong(tools::code::longToHex(356456942)) << endl;
 
 #ifdef ICONV_EXT
 		tools::code::codesetConversion(tools::filesystem::getFileContents("test.cc"), "cp1251", "utf-8");
