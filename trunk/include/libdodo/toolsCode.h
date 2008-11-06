@@ -238,16 +238,40 @@ namespace dodo
 				static dodoString MD5Hex(const dodoString &string);
 
 				/**
-				 * @return SHA1 hash of string
+				 * @return SHA-1 hash of string
 				 * @param string defines string for what generate hash
 				 */
 				static dodoString SHA1(const dodoString &string);
 
 				/**
-				 * @return SHA1 hash of string in 'hex' representation(e.g. 'da39a3ee5e6b4b0d3255bfef95601890afd80709')
+				 * @return SHA-1 hash of string in 'hex' representation(e.g. 'da39a3ee5e6b4b0d3255bfef95601890afd80709')
 				 * @param string defines string to convert
 				 */
 				static dodoString SHA1Hex(const dodoString &string);
+
+				/**
+				 * @return SHA-256 hash of string
+				 * @param string defines string for what generate hash
+				 */
+				static dodoString SHA256(const dodoString &string);
+
+				/**
+				 * @return SHA-256 hash of string in 'hex' representation(e.g. 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
+				 * @param string defines string to convert
+				 */
+				static dodoString SHA256Hex(const dodoString &string);
+
+				/**
+				 * @return SHA-512 hash of string
+				 * @param string defines string for what generate hash
+				 */
+				static dodoString SHA512(const dodoString &string);
+
+				/**
+				 * @return SHA-512 hash of string in 'hex' representation(e.g. 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e')
+				 * @param string defines string to convert
+				 */
+				static dodoString SHA512Hex(const dodoString &string);
 
 				/**
 				 * @return binary string represented in 'hex'
@@ -290,6 +314,9 @@ namespace dodo
 				 */
 				static void _encodeBase64(unsigned char in[3], unsigned char out[4], int len);
 
+				static const char base64EncodeChars[65];///< base64 encoding characters
+				static const char base64DecodeChars[81];///< base64 decoding characters
+
 				/**
 				 * encode tuple to ASCII85 and stores to result string
 				 * @param result defines storage for encoded symbol[append]
@@ -305,6 +332,8 @@ namespace dodo
 				 * @param count defines size of encoded data
 				 */
 				static void _decodeASCII85(dodoString &result, unsigned long tuple, int count);
+
+				static const unsigned long powASCII85[5];///< power values for ASCII85 encoding/decoding
 
 				/**
 				 * @struct __MD5Context
@@ -330,14 +359,14 @@ namespace dodo
 				 * @param inputLen defines size of input data
 				 * @note continues an MD5 message-digest operation, processing another message block, and updating the context.
 				 */
-				static void MD5Update(__MD5Context *context, unsigned char *input, unsigned int inputLen);
+				static void MD5Update(__MD5Context *context, const unsigned char *input, unsigned int inputLen);
 				/**
 				 * MD5 basic transformation
 				 * @param state defines state of transformation[A,B,C,D]
 				 * @param block defines transformation block
 				 * @note transforms state based on block
 				 */
-				static void MD5Transform(unsigned int state[4], unsigned char block[64]);
+				static void MD5Transform(unsigned int state[4], const unsigned char block[64]);
 
 				/**
 				 * MD5 finalization
@@ -347,22 +376,26 @@ namespace dodo
 				 */
 				static void MD5Final(unsigned char digest[16], __MD5Context * context);
 
-				/**
-				 * @struct __SHA1Context
-				 * @brief defines states for SHA-1 computations
-				 */
-				struct __SHA1Context
-				{
-					unsigned long intermediateHash[5]; ///< message digest
+				static const unsigned char MD5Padding[64];///< MD5 padding for finalization stage
 
-					unsigned long lengthLow; ///< message length in bits
-					unsigned long lengthHigh; ///< message length in bits
+				static const char hexEncodeChars[17];///< characters for hex conversion
+
+				/**
+				 * @struct __SHAContext
+				 * @brief defines states for SHA-1, SHA-256, SHA-512 computations
+				 */
+				struct __SHAContext
+				{
+					unsigned long intermediateHash[16]; ///< message digest[5 for SHA-1, 8 for SHA-256, 16 for SHA-512]
+
+					unsigned long lengthLow; ///< message length in bits for SHA-1 and SHA-256
+					unsigned long lengthHigh; ///< message length in bits for SHA-1 and SHA-256
+					unsigned long length[4]; ///< message length in bits for SHA-512
 
 					unsigned int messageBlockIndex; ///< index of messageBlock
 
-					unsigned char messageBlock[64]; ///< 512-bit message blocks
+					unsigned char messageBlock[128]; ///< 512-bit message blocks for SHA-1 and SHA-256, 1024-bit message blocks for SHA-512
 
-					bool computed; ///< true if the digest computed
 					bool corrupted; ///< true if the digest corrupted
 				};
 
@@ -370,7 +403,7 @@ namespace dodo
 				 * init SHA-1
 				 * @param context defines SHA-1 context
 				 */
-				static void SHA1Init(__SHA1Context *context);
+				static void SHA1Init(__SHAContext *context);
 
 				/**
 				 * accepts an array of octets as the next portion of the message
@@ -378,21 +411,14 @@ namespace dodo
 				 * @param bytes defines input data
 				 * @param bytecount defines size of input data
 				 */
-				static void SHA1Input(__SHA1Context *context, const unsigned char *bytes, unsigned int bytecount);
+				static void SHA1Input(__SHAContext *context, const unsigned char *bytes, unsigned int bytecount);
 
 				/**
 				 * SHA-1 finalization
 				 * @param context defines SHA-1 context
 				 * @param digest defines digest
 				 */
-				static void SHA1Result(__SHA1Context *context, unsigned char digest[20]);
-
-				/**
-				 * finishes off the digest calculations
-				 * @param context defines SHA-1 context
-				 * @param padByte defines the last byte to add to the digest before the 0-padding and length. This will contain the last bits of the message followed by another single bit. If the message was an exact multiple of 8-bits long, padByte will be 0x80
-				 */
-				static void SHA1Finalize(__SHA1Context *context, unsigned char padByte);
+				static void SHA1Result(__SHAContext *context, unsigned char digest[20]);
 
 				/**
 				 * @param context defines SHA-1 context
@@ -402,13 +428,87 @@ namespace dodo
 				 * All bits in between should be 0. This helper function will pad the message according to those rules by filling the messageBlock
 				 * array accordingly. When it returns, it can be assumed that the message digest has been computed.
 				 */
-				static void SHA1PadMessage(__SHA1Context *context, unsigned char padByte);
+				static void SHA1PadMessage(__SHAContext *context, unsigned char padByte);
 
 				/**
 				 * processes the next 512 bits of the message stored in the messageBlock array in context
 				 * @param context defines SHA-1 context
 				 */
-				static void SHA1ProcessMessageBlock(__SHA1Context *context);
+				static void SHA1ProcessMessageBlock(__SHAContext *context);
+
+				/**
+				 * init SHA-256
+				 * @param context defines SHA-256 context
+				 */
+				static void SHA256Init(__SHAContext *context);
+
+				/**
+				 * accepts an array of octets as the next portion of the message
+				 * @param context defines SHA-256 context
+				 * @param bytes defines input data
+				 * @param bytecount defines size of input data
+				 */
+				static void SHA256Input(__SHAContext *context, const unsigned char *bytes, unsigned int bytecount);
+
+				/**
+				 * SHA-256 finalization
+				 * @param context defines SHA-256 context
+				 * @param digest defines digest
+				 */
+				static void SHA256Result(__SHAContext *context, unsigned char digest[32]);
+
+				/**
+				 * @param context defines SHA-256 context
+				 * @param padByte defines the last byte to add to the digest before the 0-padding and length. This will contain the last bits of the message followed by another single bit. If the message was an exact multiple of 8-bits long, padByte will be 0x80
+				 * @note according to the standard, the message must be padded to an even 512 bits.
+				 * The first padding bit must be a '1'. The last 64 bits represent the length of the original message.
+				 * All bits in between should be 0. This helper function will pad the message according to those rules by filling the messageBlock
+				 * array accordingly. When it returns, it can be assumed that the message digest has been computed.
+				 */
+				static void SHA256PadMessage(__SHAContext *context, unsigned char padByte);
+
+				/**
+				 * processes the next 512 bits of the message stored in the messageBlock array in context
+				 * @param context defines SHA-256 context
+				 */
+				static void SHA256ProcessMessageBlock(__SHAContext *context);
+
+				/**
+				 * init SHA-512
+				 * @param context defines SHA-512 context
+				 */
+				static void SHA512Init(__SHAContext *context);
+
+				/**
+				 * accepts an array of octets as the next portion of the message
+				 * @param context defines SHA-512 context
+				 * @param bytes defines input data
+				 * @param bytecount defines size of input data
+				 */
+				static void SHA512Input(__SHAContext *context, const unsigned char *bytes, unsigned int bytecount);
+
+				/**
+				 * SHA-512 finalization
+				 * @param context defines SHA-512 context
+				 * @param digest defines digest
+				 */
+				static void SHA512Result(__SHAContext *context, unsigned char digest[64]);
+
+				/**
+				 * @param context defines SHA-512 context
+				 * @param padByte defines the last byte to add to the digest before the 0-padding and length. This will contain the last bits of the message followed by another single bit. If the message was an exact multiple of 8-bits long, padByte will be 0x80
+				 * @note according to the standard, the message must be padded to an even 512 bits.
+				 * The first padding bit must be a '1'. The last 64 bits represent the length of the original message.
+				 * All bits in between should be 0. This helper function will pad the message according to those rules by filling the messageBlock
+				 * array accordingly. When it returns, it can be assumed that the message digest has been computed.
+				 */
+				static void SHA512PadMessage(__SHAContext *context, unsigned char padByte);
+
+				/**
+				 * processes the next 512 bits of the message stored in the messageBlock array in context
+				 * @param context defines SHA-512 context
+				 */
+				static void SHA512ProcessMessageBlock(__SHAContext *context);
 		};
 	};
 };

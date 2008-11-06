@@ -36,7 +36,7 @@ using namespace dodo::tools;
  */
 
 /**
- * magic numbers =)
+ * MD5 magic numbers
  */
 #define S11    7
 #define S12    12
@@ -57,7 +57,7 @@ using namespace dodo::tools;
 
 //-------------------------------------------------------------------
 
-static unsigned char PADDING[] = {
+const unsigned char code::MD5Padding[] = {
 	0x80, 0,	0,        0,	0,        0,		0,    0,		0,    0,		0,    0,		0,    0,		0,    0,		0, 0, 0, 0, 0, 0,
 	0,    0,	0,        0,	0,        0,		0,    0,		0,    0,		0,    0,		0,    0,		0,    0,		0, 0, 0, 0, 0, 0,0,
 	0,    0,	0,        0,	0,        0,		0,    0,		0,    0,		0,    0,		0,    0,		0,    0,		0, 0, 0
@@ -128,7 +128,7 @@ static unsigned char PADDING[] = {
 /**
  * for ASCII85 decode
  */
-static unsigned long powASCII85[] = {
+const unsigned long code::powASCII85[] = {
 	85 * 85 * 85 * 85,
 	85 * 85 * 85,
 	85 * 85,
@@ -139,16 +139,23 @@ static unsigned long powASCII85[] = {
 //-------------------------------------------------------------------
 
 /**
- * for base64 encoding
+ * for base64 decode
  */
-static const char base64EncodeTr[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const char code::base64EncodeChars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+//-------------------------------------------------------------------
+
+const char code::base64DecodeChars[] = "|$$$}rstuvwxyz{$$$$$$$>?@ABCDEFGHIJKLMNOPQRSTUVW$$$$$$XYZ[\\]^_`abcdefghijklmnopq";
 
 //-------------------------------------------------------------------
 
 /**
- * for base64 decoding
+ * for SHA
  */
-static const char base64DecodeTr[] = "|$$$}rstuvwxyz{$$$$$$$>?@ABCDEFGHIJKLMNOPQRSTUVW$$$$$$XYZ[\\]^_`abcdefghijklmnopq";
+
+#define SHA_Ch(x, y, z) (((x) & ((y) ^ (z))) ^ (z))
+#define SHA_Maj(x, y, z) (((x) & ((y) | (z))) | ((y) & (z)))
+#define SHA_Parity(x, y, z) ((x) ^ (y) ^ (z))
 
 //-------------------------------------------------------------------
 
@@ -157,16 +164,119 @@ static const char base64DecodeTr[] = "|$$$}rstuvwxyz{$$$$$$$>?@ABCDEFGHIJKLMNOPQ
  */
 
 /**
- *  Define the SHA1 circular left shift macro
+ *  SHA-1 circular left shift macro
  */
 #define SHA1_ROTL(bits,word) (((word) << (bits)) | ((word) >> (32-(bits))))
 
 //-------------------------------------------------------------------
 
 /**
+ * for SHA-256
+ */
+
+/**
+ * SHA-256 shift, rotate left and rotate right macro
+ */
+#define SHA256_SHR(bits,word) ((word) >> (bits))
+#define SHA256_ROTL(bits,word) (((word) << (bits)) | ((word) >> (32-(bits))))
+#define SHA256_ROTR(bits,word) (((word) >> (bits)) | ((word) << (32-(bits))))
+
+//-------------------------------------------------------------------
+
+/**
+ * SHA-256 SIGMA and sigma macros
+ */
+#define SHA256_SIGMA0(word) (SHA256_ROTR( 2,word) ^ SHA256_ROTR(13,word) ^ SHA256_ROTR(22,word))
+#define SHA256_SIGMA1(word) (SHA256_ROTR( 6,word) ^ SHA256_ROTR(11,word) ^ SHA256_ROTR(25,word))
+#define SHA256_sigma0(word) (SHA256_ROTR( 7,word) ^ SHA256_ROTR(18,word) ^ SHA256_SHR( 3,word))
+#define SHA256_sigma1(word) (SHA256_ROTR(17,word) ^ SHA256_ROTR(19,word) ^ SHA256_SHR(10,word))
+
+//-------------------------------------------------------------------
+
+/**
+ * for SHA-512
+ */
+
+/*
+ * Define 64-bit arithmetic in terms of 32-bit arithmetic.
+ * Each 64-bit number is represented in a 2-word array.
+ * All macros are defined such that the result is the last parameter.
+ */
+
+/*
+ * SHA-512 shift, rotate left and rotate right functions
+ */
+#define SHA512_SHR(bits, word, ret) ( \
+	/* (((uint64_t)((word))) >> (bits)) */ \
+	(ret)[0] = (((bits) < 32) && ((bits) >= 0)) ? ((word)[0] >> (bits)) : 0, (ret)[1] = ((bits) > 32) ? ((word)[0] >> ((bits) - 32)) : \
+	((bits) == 32) ? (word)[0] : ((bits) >= 0) ? (((word)[0] << (32 - (bits))) | ((word)[1] >> (bits))) : 0 )
+
+//-------------------------------------------------------------------
+
+#define SHA512_SHL(bits, word, ret) ( \
+	/* (((uint64_t)(word)) << (bits)) */ \
+	(ret)[0] = ((bits) > 32) ? ((word)[1] << ((bits) - 32)) : ((bits) == 32) ? (word)[1] : ((bits) >= 0) ? (((word)[0] << (bits)) | \
+			((word)[1] >> (32 - (bits)))) : 0, (ret)[1] = (((bits) < 32) && ((bits) >= 0)) ? ((word)[1] << (bits)) : 0 )
+
+//-------------------------------------------------------------------
+
+/*
+* 64-bit OR
+*/
+#define SHA512_OR(word1, word2, ret) ( (ret)[0] = (word1)[0] | (word2)[0], (ret)[1] = (word1)[1] | (word2)[1] )
+
+//-------------------------------------------------------------------
+
+/*
+* 64-bit XOR
+*/
+#define SHA512_XOR(word1, word2, ret) ( (ret)[0] = (word1)[0] ^ (word2)[0], (ret)[1] = (word1)[1] ^ (word2)[1] )
+
+//-------------------------------------------------------------------
+
+/*
+* 64-bit AND
+*/
+#define SHA512_AND(word1, word2, ret) ( (ret)[0] = (word1)[0] & (word2)[0], (ret)[1] = (word1)[1] & (word2)[1] )
+
+//-------------------------------------------------------------------
+
+/*
+* 64-bit TILDA
+*/
+#define SHA512_TILDA(word, ret) ( (ret)[0] = ~(word)[0], (ret)[1] = ~(word)[1] )
+
+//-------------------------------------------------------------------
+
+/*
+* 64-bit ADD
+*/
+#define SHA512_ADD(word1, word2, ret) ( (ret)[1] = (word1)[1], (ret)[1] += (word2)[1], (ret)[0] = (word1)[0] + (word2)[0] + ((ret)[1] < (word1)[1]) )
+
+//-------------------------------------------------------------------
+
+/*
+* These definitions are potentially faster equivalents for the ones
+* used in FIPS-180-2, section 4.1.3.
+*   ((x & y) ^ (~x & z)) becomes
+*   ((x & (y ^ z)) ^ z)
+*/
+#define SHA512_Ch(x, y, z, ret) ( (ret)[0] = (((x)[0] & ((y)[0] ^ (z)[0])) ^ (z)[0]), (ret)[1] = (((x)[1] & ((y)[1] ^ (z)[1])) ^ (z)[1]) )
+
+//-------------------------------------------------------------------
+
+/*
+*   ((x & y) ^ (x & z) ^ (y & z)) becomes
+*   ((x & (y | z)) | (y & z))
+*/
+#define SHA512_Maj(x, y, z, ret) ( ret[0] = (((x)[0] & ((y)[0] | (z)[0])) | ((y)[0] & (z)[0])), ret[1] = (((x)[1] & ((y)[1] | (z)[1])) | ((y)[1] & (z)[1])) )
+
+//-------------------------------------------------------------------
+
+/**
  * for HEX convertions
  */
-static const char hexEncode[] = "0123456789abcdef";
+const char code::hexEncodeChars[] = "0123456789abcdef";
 
 //-------------------------------------------------------------------
 
@@ -449,8 +559,8 @@ void
 code::charToHex(char result[3],
 				char first)
 {
-    result[0] = hexEncode[(first >> 4) & 0xf];
-    result[1] = hexEncode[first & 0xf];
+    result[0] = hexEncodeChars[(first >> 4) & 0xf];
+    result[1] = hexEncodeChars[first & 0xf];
 
 	result[2] = '\0';
 }
@@ -463,7 +573,7 @@ code::longToHex(unsigned long numeric)
 	dodoString hex;
 
     for (long i=2*sizeof(unsigned long)-1;i>=0;--i)
-        hex.append(1, hexEncode[(numeric >> i*4) & 0xf]);
+        hex.append(1, hexEncodeChars[(numeric >> i*4) & 0xf]);
 
     return hex;
 }
@@ -826,10 +936,10 @@ code::_encodeBase64(unsigned char in[3],
 					unsigned char out[4],
 					int len)
 {
-	out[0] = base64EncodeTr[in[0] >> 2];
-	out[1] = base64EncodeTr[((in[0] & 0x03) << 4) | ((in[1] & 0xf0) >> 4)];
-	out[2] = (unsigned char)(len > 1 ? base64EncodeTr[((in[1] & 0x0f) << 2) | ((in[2] & 0xc0) >> 6) ] : '=');
-	out[3] = (unsigned char)(len > 2 ? base64EncodeTr[in[2] & 0x3f ] : '=');
+	out[0] = base64EncodeChars[in[0] >> 2];
+	out[1] = base64EncodeChars[((in[0] & 0x03) << 4) | ((in[1] & 0xf0) >> 4)];
+	out[2] = (unsigned char)(len > 1 ? base64EncodeChars[((in[1] & 0x0f) << 2) | ((in[2] & 0xc0) >> 6) ] : '=');
+	out[3] = (unsigned char)(len > 2 ? base64EncodeChars[in[2] & 0x3f ] : '=');
 }
 
 //-------------------------------------------------------------------
@@ -898,7 +1008,7 @@ code::decodeBase64(const dodoString &string)
 			while (k < j && v == 0)
 			{
 				v = string[k++];
-				v = (unsigned char)((v < 43 || v > 122) ? 0 : base64DecodeTr[v - 43]);
+				v = (unsigned char)((v < 43 || v > 122) ? 0 : base64DecodeChars[v - 43]);
 				if (v)
 					v = (unsigned char)(v == '$' ? 0 : v - 61);
 			}
@@ -1134,7 +1244,7 @@ code::MD5Init(__MD5Context *context)
 
 void
 code::MD5Transform(unsigned int state[4],
-				   unsigned char block[64])
+				   const unsigned char block[64])
 {
 	unsigned int a = state[0], b = state[1], c = state[2], d = state[3], x[16];
 
@@ -1236,7 +1346,7 @@ code::MD5Final(unsigned char digest[16],
 
 	index = (unsigned int)((context->count[0] >> 3) & 0x3f);
 	padLen = index < 56 ? 56 - index : 120 - index;
-	MD5Update(context, PADDING, padLen);
+	MD5Update(context, MD5Padding, padLen);
 
 	MD5Update(context, bits, 8);
 
@@ -1255,7 +1365,7 @@ code::MD5Final(unsigned char digest[16],
 
 void
 code::MD5Update(__MD5Context       *context,
-				unsigned char *input,
+				const unsigned char *input,
 				unsigned int inputLen)
 {
 	unsigned int i, index, partLen;
@@ -1330,7 +1440,7 @@ code::binToHex(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-code::SHA1Init(__SHA1Context *context)
+code::SHA1Init(__SHAContext *context)
 {
     context->lengthLow = 0;
     context->lengthHigh = 0;
@@ -1343,22 +1453,22 @@ code::SHA1Init(__SHA1Context *context)
     context->intermediateHash[3] = 0x10325476;
     context->intermediateHash[4] = 0xC3D2E1F0;
 
-    context->computed = false;
     context->corrupted = false;
 }
 
 //-------------------------------------------------------------------
 
 void
-code::SHA1Input(__SHA1Context *context,
+code::SHA1Input(__SHAContext *context,
 				const unsigned char *bytes,
 				unsigned int bytecount)
 {
+	if (bytecount == 0)
+		return;
+
 	unsigned long addTemp;
 
-#define SHA1AddLength(context, length)						\
-	(addTemp = (context)->lengthLow,						\
-    (context)->corrupted = ((context)->lengthLow += (length)) < addTemp) && (++(context)->lengthHigh == 0)
+#define SHA1AddLength(context, length) (addTemp = (context)->lengthLow, (context)->corrupted = (((context)->lengthLow += (length)) < addTemp) && (++(context)->lengthHigh == 0))
 
 	while (bytecount-- && !context->corrupted)
 	{
@@ -1376,11 +1486,10 @@ code::SHA1Input(__SHA1Context *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA1Result(__SHA1Context *context,
+code::SHA1Result(__SHAContext *context,
                  unsigned char digest[20])
 {
-	if (!context->computed)
-		SHA1Finalize(context, 0x80);
+	SHA1PadMessage(context, 0x80);
 
 	for (int i=0;i<20;++i)
 		digest[i] = context->intermediateHash[i >> 2] >> 8 * ( 3 - ( i & 0x03 ) );
@@ -1389,23 +1498,7 @@ code::SHA1Result(__SHA1Context *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA1Finalize(__SHA1Context *context,
-                   unsigned char padByte)
-{
-	SHA1PadMessage(context, padByte);
-
-	for (int i=0;i<64;++i)
-		context->messageBlock[i] = 0;
-
-	context->lengthLow = 0;
-	context->lengthHigh = 0;
-	context->computed = true;
-}
-
-//-------------------------------------------------------------------
-
-void
-code::SHA1PadMessage(__SHA1Context *context,
+code::SHA1PadMessage(__SHAContext *context,
                      unsigned char padByte)
 {
 	if (context->messageBlockIndex >= 56)
@@ -1439,7 +1532,7 @@ code::SHA1PadMessage(__SHA1Context *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA1ProcessMessageBlock(__SHA1Context *context)
+code::SHA1ProcessMessageBlock(__SHAContext *context)
 {
 	/* Constants defined in FIPS-180-2, section 4.2.1 */
 	const static unsigned long K[4] = {0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xCA62C1D6};
@@ -1449,16 +1542,12 @@ code::SHA1ProcessMessageBlock(__SHA1Context *context)
 	unsigned long W[80];
 	unsigned long A, B, C, D, E;
 
-#define SHA_Ch(x, y, z) (((x) & ((y) ^ (z))) ^ (z))
-#define SHA_Maj(x, y, z) (((x) & ((y) | (z))) | ((y) & (z)))
-#define SHA_Parity(x, y, z) ((x) ^ (y) ^ (z))
-
 	for (t=0;t<16;++t)
 	{
-		W[t]  = (context->messageBlock[t * 4]) << 24;
-		W[t] |= (context->messageBlock[t * 4 + 1]) << 16;
-		W[t] |= (context->messageBlock[t * 4 + 2]) << 8;
-		W[t] |= (context->messageBlock[t * 4 + 3]);
+		W[t]  = (unsigned long)context->messageBlock[t * 4] << 24;
+		W[t] |= (unsigned long)context->messageBlock[t * 4 + 1] << 16;
+		W[t] |= (unsigned long)context->messageBlock[t * 4 + 2] << 8;
+		W[t] |= (unsigned long)context->messageBlock[t * 4 + 3];
 	}
 
 	for (t=16;t<80;++t)
@@ -1518,10 +1607,6 @@ code::SHA1ProcessMessageBlock(__SHA1Context *context)
 	context->intermediateHash[4] += E;
 
 	context->messageBlockIndex = 0;
-
-#undef SHA_Ch
-#undef SHA_Maj
-#undef SHA_Parity
 }
 
 
@@ -1530,7 +1615,7 @@ code::SHA1ProcessMessageBlock(__SHA1Context *context)
 dodoString
 code::SHA1(const dodoString &string)
 {
-	__SHA1Context context;
+	__SHAContext context;
 	unsigned char digest[20];
 
 	SHA1Init(&context);
@@ -1546,6 +1631,533 @@ dodoString
 code::SHA1Hex(const dodoString &string)
 {
 	return binToHex(SHA1(string));
+}
+//-------------------------------------------------------------------
+
+void
+code::SHA256Init(__SHAContext *context)
+{
+	context->lengthLow = 0;
+	context->lengthHigh = 0;
+	context->messageBlockIndex = 0;
+
+	/* Initial Hash Values: FIPS-180-2 section 5.3.2 */
+	context->intermediateHash[0] = 0x6A09E667;
+	context->intermediateHash[1] = 0xBB67AE85;
+	context->intermediateHash[2] = 0x3C6EF372;
+	context->intermediateHash[3] = 0xA54FF53A;
+	context->intermediateHash[4] = 0x510E527F;
+	context->intermediateHash[5] = 0x9B05688C;
+	context->intermediateHash[6] = 0x1F83D9AB;
+	context->intermediateHash[7] = 0x5BE0CD19;
+
+	context->corrupted = false;
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA256Input(__SHAContext *context,
+				const unsigned char *bytes,
+				unsigned int bytecount)
+{
+	if (bytecount == 0)
+		return;
+
+	unsigned long addTemp;
+
+#define SHA256AddLength(context, length) (addTemp = (context)->lengthLow, (context)->corrupted = (((context)->lengthLow += (length)) < addTemp) && (++(context)->lengthHigh == 0))
+
+	while (bytecount-- && !context->corrupted)
+	{
+		context->messageBlock[context->messageBlockIndex++] = (*bytes & 0xFF);
+
+		if (!SHA256AddLength(context, 8) && (context->messageBlockIndex == 64))
+			SHA256ProcessMessageBlock(context);
+
+		bytes++;
+	}
+
+#undef SHA256AddLength
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA256Result(__SHAContext *context,
+                 unsigned char digest[32])
+{
+	SHA256PadMessage(context, 0x80);
+
+	for (int i = 0; i < 32; ++i)
+		digest[i] = (unsigned char)(context->intermediateHash[i>>2] >> 8 * ( 3 - ( i & 0x03 ) ));
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA256PadMessage(__SHAContext *context,
+                     unsigned char padByte)
+{
+	if (context->messageBlockIndex >= 56)
+	{
+		context->messageBlock[context->messageBlockIndex++] = padByte;
+
+		while (context->messageBlockIndex < 64)
+			context->messageBlock[context->messageBlockIndex++] = 0;
+
+		SHA256ProcessMessageBlock(context);
+	}
+	else
+		context->messageBlock[context->messageBlockIndex++] = padByte;
+
+	while (context->messageBlockIndex < 56)
+		context->messageBlock[context->messageBlockIndex++] = 0;
+
+	context->messageBlock[56] = context->lengthHigh >> 24;
+	context->messageBlock[57] = context->lengthHigh >> 16;
+	context->messageBlock[58] = context->lengthHigh >> 8;
+	context->messageBlock[59] = context->lengthHigh;
+	context->messageBlock[60] = context->lengthLow >> 24;
+	context->messageBlock[61] = context->lengthLow >> 16;
+	context->messageBlock[62] = context->lengthLow >> 8;
+	context->messageBlock[63] = context->lengthLow;
+
+	SHA256ProcessMessageBlock(context);
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA256ProcessMessageBlock(__SHAContext *context)
+{
+	/* Constants defined in FIPS-180-2, section 4.2.2 */
+	static const uint32_t K[64] = {
+		0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b,
+		0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01,
+		0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7,
+		0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc,
+		0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152,
+		0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147,
+		0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc,
+		0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+		0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819,
+		0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08,
+		0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f,
+		0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
+		0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+		};
+
+	int t, t4;
+	unsigned long temp1, temp2;
+	unsigned long W[64];
+	unsigned long A, B, C, D, E, F, G, H;
+
+	/*
+	* Initialize the first 16 words in the array W
+	*/
+	for (t = t4 = 0; t < 16; t++, t4 += 4)
+		W[t] = ((unsigned long)context->messageBlock[t4] << 24) |
+			((unsigned long)context->messageBlock[t4 + 1] << 16) |
+			((unsigned long)context->messageBlock[t4 + 2] << 8) |
+			((unsigned long)context->messageBlock[t4 + 3]);
+
+	for (t = 16; t < 64; t++)
+		W[t] = SHA256_sigma1(W[t-2]) + W[t-7] + SHA256_sigma0(W[t-15]) + W[t-16];
+
+	A = context->intermediateHash[0];
+	B = context->intermediateHash[1];
+	C = context->intermediateHash[2];
+	D = context->intermediateHash[3];
+	E = context->intermediateHash[4];
+	F = context->intermediateHash[5];
+	G = context->intermediateHash[6];
+	H = context->intermediateHash[7];
+
+	for (t = 0; t < 64; t++)
+	{
+		temp1 = H + SHA256_SIGMA1(E) + SHA_Ch(E, F, G) + K[t] + W[t];
+		temp2 = SHA256_SIGMA0(A) + SHA_Maj(A, B, C);
+		H = G;
+		G = F;
+		F = E;
+		E = D + temp1;
+		D = C;
+		C = B;
+		B = A;
+		A = temp1 + temp2;
+	}
+
+	context->intermediateHash[0] += A;
+	context->intermediateHash[1] += B;
+	context->intermediateHash[2] += C;
+	context->intermediateHash[3] += D;
+	context->intermediateHash[4] += E;
+	context->intermediateHash[5] += F;
+	context->intermediateHash[6] += G;
+	context->intermediateHash[7] += H;
+
+	context->messageBlockIndex = 0;
+}
+
+
+//-------------------------------------------------------------------
+
+dodoString
+code::SHA256(const dodoString &string)
+{
+	__SHAContext context;
+	unsigned char digest[32];
+
+	SHA256Init(&context);
+	SHA256Input(&context, (unsigned char *)string.c_str(), string.size());
+	SHA256Result(&context, digest);
+
+	return dodoString((char *)digest, 32);
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+code::SHA256Hex(const dodoString &string)
+{
+	return binToHex(SHA256(string));
+}
+//-------------------------------------------------------------------
+
+void
+code::SHA512Init(__SHAContext *context)
+{
+	context->messageBlockIndex = 0;
+
+	context->length[0] = context->length[1] = 0;
+	context->length[2] = context->length[3] = 0;
+
+    context->intermediateHash[0] = 0x6A09E667;
+    context->intermediateHash[1] = 0xF3BCC908;
+    context->intermediateHash[2] = 0xBB67AE85;
+    context->intermediateHash[3] = 0x84CAA73B;
+    context->intermediateHash[4] = 0x3C6EF372;
+    context->intermediateHash[5] = 0xFE94F82B;
+    context->intermediateHash[6] = 0xA54FF53A;
+    context->intermediateHash[7] = 0x5F1D36F1;
+    context->intermediateHash[8] = 0x510E527F;
+    context->intermediateHash[9] = 0xADE682D1;
+    context->intermediateHash[10] = 0x9B05688C;
+    context->intermediateHash[11] = 0x2B3E6C1F;
+    context->intermediateHash[12] = 0x1F83D9AB;
+    context->intermediateHash[13] = 0xFB41BD6B;
+    context->intermediateHash[14] = 0x5BE0CD19;
+    context->intermediateHash[15] = 0x137E2179;
+
+	context->corrupted = false;
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA512Input(__SHAContext *context,
+				const unsigned char *bytes,
+				unsigned int bytecount)
+{
+	if (bytecount == 0)
+		return;
+
+	unsigned long ADDTO4_temp, ADDTO4_temp2;
+	unsigned long addTemp[4] = { 0, 0, 0, 0 };
+
+#define SHA512_ADDTO4(word1, word2) ( \
+	ADDTO4_temp = (word1)[3], (word1)[3] += (word2)[3], ADDTO4_temp2 = (word1)[2], (word1)[2] += (word2)[2] + ((word1)[3] < ADDTO4_temp), \
+	ADDTO4_temp = (word1)[1], (word1)[1] += (word2)[1] + ((word1)[2] < ADDTO4_temp2), (word1)[0] += (word2)[0] + ((word1)[1] < ADDTO4_temp) )
+
+	while (bytecount-- && !context->corrupted)
+	{
+		context->messageBlock[context->messageBlockIndex++] = (*bytes & 0xFF);
+
+		addTemp[3] = 8;
+		SHA512_ADDTO4(context->length, addTemp);
+		context->corrupted = ((context->length[3] == 0) && (context->length[2] == 0) && (context->length[1] == 0) && (context->length[0] < 8));
+
+		if (!context->corrupted && (context->messageBlockIndex == 128))
+			SHA512ProcessMessageBlock(context);
+
+		bytes++;
+	}
+
+#undef SHA512_ADDTO4
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA512Result(__SHAContext *context,
+                 unsigned char digest[64])
+{
+	SHA512PadMessage(context, 0x80);
+
+	for (int i = 0, j = 0; i < 64; )
+	{
+		digest[i++] = context->intermediateHash[j] >> 24;
+		digest[i++] = context->intermediateHash[j] >> 16;
+		digest[i++] = context->intermediateHash[j] >> 8;
+		digest[i++] = context->intermediateHash[j++];
+		digest[i++] = context->intermediateHash[j] >> 24;
+		digest[i++] = context->intermediateHash[j] >> 16;
+		digest[i++] = context->intermediateHash[j] >> 8;
+		digest[i++] = context->intermediateHash[j++];
+	}
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA512PadMessage(__SHAContext *context,
+                     unsigned char padByte)
+{
+	if (context->messageBlockIndex >= 112)
+	{
+		context->messageBlock[context->messageBlockIndex++] = padByte;
+
+		while (context->messageBlockIndex < 128)
+			context->messageBlock[context->messageBlockIndex++] = 0;
+
+		SHA512ProcessMessageBlock(context);
+	}
+	else
+		context->messageBlock[context->messageBlockIndex++] = padByte;
+
+	while (context->messageBlockIndex < 112)
+		context->messageBlock[context->messageBlockIndex++] = 0;
+
+	context->messageBlock[112] = context->length[0] >> 24;
+	context->messageBlock[113] = context->length[0] >> 16;
+	context->messageBlock[114] = context->length[0] >> 8;
+	context->messageBlock[115] = context->length[0];
+	context->messageBlock[116] = context->length[1] >> 24;
+	context->messageBlock[117] = context->length[1] >> 16;
+	context->messageBlock[118] = context->length[1] >> 8;
+	context->messageBlock[119] = context->length[1];
+
+	context->messageBlock[120] = context->length[2] >> 24;
+	context->messageBlock[121] = context->length[2] >> 16;
+	context->messageBlock[122] = context->length[2] >> 8;
+	context->messageBlock[123] = context->length[2];
+	context->messageBlock[124] = context->length[3] >> 24;
+	context->messageBlock[125] = context->length[3] >> 16;
+	context->messageBlock[126] = context->length[3] >> 8;
+	context->messageBlock[127] = context->length[3];
+
+	SHA512ProcessMessageBlock(context);
+}
+
+//-------------------------------------------------------------------
+
+void
+code::SHA512ProcessMessageBlock(__SHAContext *context)
+{
+	/* Constants defined in FIPS-180-2, section 4.2.3 */
+	const unsigned long K[80*2] = {
+		0x428A2F98, 0xD728AE22, 0x71374491, 0x23EF65CD, 0xB5C0FBCF,
+		0xEC4D3B2F, 0xE9B5DBA5, 0x8189DBBC, 0x3956C25B, 0xF348B538,
+		0x59F111F1, 0xB605D019, 0x923F82A4, 0xAF194F9B, 0xAB1C5ED5,
+		0xDA6D8118, 0xD807AA98, 0xA3030242, 0x12835B01, 0x45706FBE,
+		0x243185BE, 0x4EE4B28C, 0x550C7DC3, 0xD5FFB4E2, 0x72BE5D74,
+		0xF27B896F, 0x80DEB1FE, 0x3B1696B1, 0x9BDC06A7, 0x25C71235,
+		0xC19BF174, 0xCF692694, 0xE49B69C1, 0x9EF14AD2, 0xEFBE4786,
+		0x384F25E3, 0x0FC19DC6, 0x8B8CD5B5, 0x240CA1CC, 0x77AC9C65,
+		0x2DE92C6F, 0x592B0275, 0x4A7484AA, 0x6EA6E483, 0x5CB0A9DC,
+		0xBD41FBD4, 0x76F988DA, 0x831153B5, 0x983E5152, 0xEE66DFAB,
+		0xA831C66D, 0x2DB43210, 0xB00327C8, 0x98FB213F, 0xBF597FC7,
+		0xBEEF0EE4, 0xC6E00BF3, 0x3DA88FC2, 0xD5A79147, 0x930AA725,
+		0x06CA6351, 0xE003826F, 0x14292967, 0x0A0E6E70, 0x27B70A85,
+		0x46D22FFC, 0x2E1B2138, 0x5C26C926, 0x4D2C6DFC, 0x5AC42AED,
+		0x53380D13, 0x9D95B3DF, 0x650A7354, 0x8BAF63DE, 0x766A0ABB,
+		0x3C77B2A8, 0x81C2C92E, 0x47EDAEE6, 0x92722C85, 0x1482353B,
+		0xA2BFE8A1, 0x4CF10364, 0xA81A664B, 0xBC423001, 0xC24B8B70,
+		0xD0F89791, 0xC76C51A3, 0x0654BE30, 0xD192E819, 0xD6EF5218,
+		0xD6990624, 0x5565A910, 0xF40E3585, 0x5771202A, 0x106AA070,
+
+		0x32BBD1B8, 0x19A4C116, 0xB8D2D0C8, 0x1E376C08, 0x5141AB53,
+		0x2748774C, 0xDF8EEB99, 0x34B0BCB5, 0xE19B48A8, 0x391C0CB3,
+		0xC5C95A63, 0x4ED8AA4A, 0xE3418ACB, 0x5B9CCA4F, 0x7763E373,
+		0x682E6FF3, 0xD6B2B8A3, 0x748F82EE, 0x5DEFB2FC, 0x78A5636F,
+		0x43172F60, 0x84C87814, 0xA1F0AB72, 0x8CC70208, 0x1A6439EC,
+		0x90BEFFFA, 0x23631E28, 0xA4506CEB, 0xDE82BDE9, 0xBEF9A3F7,
+		0xB2C67915, 0xC67178F2, 0xE372532B, 0xCA273ECE, 0xEA26619C,
+		0xD186B8C7, 0x21C0C207, 0xEADA7DD6, 0xCDE0EB1E, 0xF57D4F7F,
+		0xEE6ED178, 0x06F067AA, 0x72176FBA, 0x0A637DC5, 0xA2C898A6,
+		0x113F9804, 0xBEF90DAE, 0x1B710B35, 0x131C471B, 0x28DB77F5,
+		0x23047D84, 0x32CAAB7B, 0x40C72493, 0x3C9EBE0A, 0x15C9BEBC,
+		0x431D67C4, 0x9C100D4C, 0x4CC5D4BE, 0xCB3E42B6, 0x597F299C,
+		0xFC657E2A, 0x5FCB6FAB, 0x3AD6FAEC, 0x6C44198C, 0x4A475817
+		};
+
+	/*
+	 * Add the 2word value in word2 to word1.
+	 */
+	unsigned long ADDTO2_temp;
+#define SHA512_ADDTO2(word1, word2) ( ADDTO2_temp = (word1)[1], (word1)[1] += (word2)[1], (word1)[0] += (word2)[0] + ((word1)[1] < ADDTO2_temp) )
+
+	/*
+	 * SHA rotate ((word >> bits) | (word << (64-bits)))
+	 */
+	unsigned long ROTR_temp1[2], ROTR_temp2[2];
+#define SHA512_ROTR(bits, word, ret) ( SHA512_SHR((bits), (word), ROTR_temp1), SHA512_SHL(64-(bits), (word), ROTR_temp2), SHA512_OR(ROTR_temp1, ROTR_temp2, (ret)) )
+
+	/*
+	 * SHA SIGMA and sigma macros SHA512_ROTR(28,word) ^ SHA512_ROTR(34,word) ^ SHA512_ROTR(39,word)
+	 */
+	unsigned long SIGMA0_temp1[2], SIGMA0_temp2[2], SIGMA0_temp3[2], SIGMA0_temp4[2];
+#define SHA512_SIGMA0(word, ret) ( SHA512_ROTR(28, (word), SIGMA0_temp1), SHA512_ROTR(34, (word), SIGMA0_temp2), \
+	SHA512_ROTR(39, (word), SIGMA0_temp3), SHA512_XOR(SIGMA0_temp2, SIGMA0_temp3, SIGMA0_temp4), SHA512_XOR(SIGMA0_temp1, SIGMA0_temp4, (ret)) )
+
+	/*
+	 * SHA512_ROTR(14,word) ^ SHA512_ROTR(18,word) ^ SHA512_ROTR(41,word)
+	 */
+	unsigned long SIGMA1_temp1[2], SIGMA1_temp2[2], SIGMA1_temp3[2], SIGMA1_temp4[2];
+#define SHA512_SIGMA1(word, ret) ( SHA512_ROTR(14, (word), SIGMA1_temp1), SHA512_ROTR(18, (word), SIGMA1_temp2), \
+	SHA512_ROTR(41, (word), SIGMA1_temp3), SHA512_XOR(SIGMA1_temp2, SIGMA1_temp3, SIGMA1_temp4), SHA512_XOR(SIGMA1_temp1, SIGMA1_temp4, (ret)) )
+
+	/*
+	 * (SHA512_ROTR( 1,word) ^ SHA512_ROTR( 8,word) ^ SHA512_SHR( 7,word))
+	 */
+	unsigned long sigma0_temp1[2], sigma0_temp2[2], sigma0_temp3[2], sigma0_temp4[2];
+#define SHA512_sigma0(word, ret) ( SHA512_ROTR( 1, (word), sigma0_temp1), SHA512_ROTR( 8, (word), sigma0_temp2), \
+	SHA512_SHR( 7, (word), sigma0_temp3), SHA512_XOR(sigma0_temp2, sigma0_temp3, sigma0_temp4), SHA512_XOR(sigma0_temp1, sigma0_temp4, (ret)) )
+
+	/*
+	 * (SHA512_ROTR(19,word) ^ SHA512_ROTR(61,word) ^ SHA512_SHR( 6,word))
+	 */
+	unsigned long sigma1_temp1[2], sigma1_temp2[2], sigma1_temp3[2], sigma1_temp4[2];
+#define SHA512_sigma1(word, ret) ( SHA512_ROTR(19, (word), sigma1_temp1), SHA512_ROTR(61, (word), sigma1_temp2), \
+	SHA512_SHR( 6, (word), sigma1_temp3), SHA512_XOR(sigma1_temp2, sigma1_temp3, sigma1_temp4), SHA512_XOR(sigma1_temp1, sigma1_temp4, (ret)) )
+
+	int t, t2, t8;
+	unsigned long  temp1[2], temp2[2], temp3[2], temp4[2], temp5[2];
+	unsigned long  W[160];
+	unsigned long  A[2], B[2], C[2], D[2], E[2], F[2], G[2], H[2];
+
+	for (t = t2 = t8 = 0; t < 16; t++, t8 += 8)
+	{
+		W[t2++] = ((unsigned long)context->messageBlock[t8] << 24) |
+			((unsigned long)context->messageBlock[t8 + 1] << 16) |
+			((unsigned long)context->messageBlock[t8 + 2] << 8) |
+			((unsigned long)context->messageBlock[t8 + 3]);
+
+		W[t2++] = ((unsigned long)context->messageBlock[t8 + 4] << 24) |
+			((unsigned long)context->messageBlock[t8 + 5] << 16) |
+			((unsigned long)context->messageBlock[t8 + 6] << 8) |
+			((unsigned long)context->messageBlock[t8 + 7]);
+	}
+
+	unsigned long *Wt2, *Wt7, *Wt15, *Wt16;
+
+	for (t = 16; t < 80; t++, t2 += 2)
+	{
+		/* W[t] = SHA512_sigma1(W[t-2]) + W[t-7] + SHA512_sigma0(W[t-15]) + W[t-16]; */
+		Wt2 = &W[t2 - 4];
+		Wt7 = &W[t2 - 14];
+		Wt15 = &W[t2 - 30];
+		Wt16 = &W[t2 - 32];
+		SHA512_sigma1(Wt2, temp1);
+		SHA512_ADD(temp1, Wt7, temp2);
+		SHA512_sigma0(Wt15, temp1);
+		SHA512_ADD(temp1, Wt16, temp3);
+		SHA512_ADD(temp2, temp3, &W[t2]);
+	}
+
+	A[0] = context->intermediateHash[0];
+	A[1] = context->intermediateHash[1];
+	B[0] = context->intermediateHash[2];
+	B[1] = context->intermediateHash[3];
+	C[0] = context->intermediateHash[4];
+	C[1] = context->intermediateHash[5];
+	D[0] = context->intermediateHash[6];
+	D[1] = context->intermediateHash[7];
+	E[0] = context->intermediateHash[8];
+	E[1] = context->intermediateHash[9];
+	F[0] = context->intermediateHash[10];
+	F[1] = context->intermediateHash[11];
+	G[0] = context->intermediateHash[12];
+	G[1] = context->intermediateHash[13];
+	H[0] = context->intermediateHash[14];
+	H[1] = context->intermediateHash[15];
+
+	for (t = t2 = 0; t < 80; t++, t2 += 2)
+	{
+		/*
+		* temp1 = H + SHA512_SIGMA1(E) + SHA512_Ch(E,F,G) + K[t] + W[t];
+		*/
+		SHA512_SIGMA1(E, temp1);
+		SHA512_ADD(H, temp1, temp2);
+		SHA512_Ch(E, F, G, temp3);
+		SHA512_ADD(temp2, temp3, temp4);
+		SHA512_ADD(&K[t2], &W[t2], temp5);
+		SHA512_ADD(temp4, temp5, temp1);
+
+		/*
+		* temp2 = SHA512_SIGMA0(A) + SHA512_Maj(A,B,C);
+		*/
+		SHA512_SIGMA0(A, temp3);
+		SHA512_Maj(A, B, C, temp4);
+		SHA512_ADD(temp3, temp4, temp2);
+		H[0] = G[0];
+		H[1] = G[1];
+		G[0] = F[0];
+		G[1] = F[1];
+		F[0] = E[0];
+		F[1] = E[1];
+		SHA512_ADD(D, temp1, E);
+		D[0] = C[0];
+		D[1] = C[1];
+		C[0] = B[0];
+		C[1] = B[1];
+		B[0] = A[0];
+		B[1] = A[1];
+		SHA512_ADD(temp1, temp2, A);
+	}
+
+	SHA512_ADDTO2(&context->intermediateHash[0], A);
+	SHA512_ADDTO2(&context->intermediateHash[2], B);
+	SHA512_ADDTO2(&context->intermediateHash[4], C);
+	SHA512_ADDTO2(&context->intermediateHash[6], D);
+	SHA512_ADDTO2(&context->intermediateHash[8], E);
+	SHA512_ADDTO2(&context->intermediateHash[10], F);
+	SHA512_ADDTO2(&context->intermediateHash[12], G);
+	SHA512_ADDTO2(&context->intermediateHash[14], H);
+
+	context->messageBlockIndex = 0;
+
+#undef SHA512_ADDTO2
+#undef SHA512_ROTR
+#undef SHA512_SIGMA0
+#undef SHA512_SIGMA1
+#undef SHA512_sigma0
+#undef SHA512_sigma1
+}
+
+
+//-------------------------------------------------------------------
+
+dodoString
+code::SHA512(const dodoString &string)
+{
+	__SHAContext context;
+	unsigned char digest[64];
+
+	SHA512Init(&context);
+	SHA512Input(&context, (unsigned char *)string.c_str(), string.size());
+	SHA512Result(&context, digest);
+
+	return dodoString((char *)digest, 64);
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+code::SHA512Hex(const dodoString &string)
+{
+	return binToHex(SHA512(string));
 }
 
 //-------------------------------------------------------------------
