@@ -242,6 +242,7 @@ collection::getProcess(unsigned long position) const
 		if (i->position == position)
 		{
 			current = i;
+
 			return true;
 		}
 
@@ -392,7 +393,6 @@ collection::stop()
 	{
 		if (!_isRunning(i))
 			continue;
-
 
 		if (kill(i->pid, 9) == -1)
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

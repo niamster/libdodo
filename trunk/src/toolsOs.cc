@@ -625,12 +625,17 @@ os::getGroups()
 
 void
 os::die(const dodoString &message,
+        short type,
 		int status)
 {
 	fwrite(message.c_str(), message.size(), 1, stderr);
 	fflush(stderr);
 
-	_exit(status);
+	kill(0, SIGTERM);
+
+	wait(NULL);
+
+	exit(status);
 }
 
 //-------------------------------------------------------------------
@@ -1288,20 +1293,13 @@ os::blockSignal(long signals,
 //-------------------------------------------------------------------
 
 void
-os::daemonize()
+os::becomeDaemon()
 {
 	pid_t pid = fork();
 
 	if (pid == 0)
 	{
-		int tty = open("/dev/tty", O_RDWR);
-		if (tty == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		if (ioctl(tty, TIOCNOTTY, (char *)0) == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		if (close(tty) == -1)
+		if (setsid() == -1)
 			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (close(0) == -1)
@@ -1325,3 +1323,38 @@ os::daemonize()
 
 //-------------------------------------------------------------------
 
+void
+os::releaseDaemon(daemon func,
+                  void *data)
+{
+	pid_t pid = fork();
+
+	if (pid == 0)
+	{
+		if (setsid() == -1)
+			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		if (close(0) == -1)
+			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		if (close(1) == -1)
+			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		if (close(2) == -1)
+			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		if (chdir("/") == -1)
+			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		func(data);
+
+		exit(0);
+	}
+	else
+	{
+		if (pid == -1)
+			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		else
+			_exit(0);
+	}
+}
+
+//-------------------------------------------------------------------

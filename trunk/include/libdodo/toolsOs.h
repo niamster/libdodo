@@ -167,6 +167,13 @@ namespace dodo
 		};
 
 		/**
+		 * @typedef daemon
+		 * @brief defines daemon function
+		 * @param data defines user data
+		 */
+		typedef void (*daemon)(void *data);
+
+		/**
 		 * @enum osIdTypeEnum defines type of UID
 		 */
 		enum osIdTypeEnum
@@ -260,14 +267,24 @@ namespace dodo
 				static void sleep(long period);
 
 				/**
-				 * daemonize application
+				 * daemonize function call
+				 * @param func defines function that would be executed as a daemon
+				 * @param data defines daemon data
+				 * @note the code after the call to releaseDaemon would never be executed
 				 */
-				static void daemonize();
+				static void releaseDaemon(daemon func, void *data);
 
 				/**
-				 * print message to stderr end exit the program
+				 * daemonize application
+				 * @note the code after the call to becomeDaemon would run in background as a daemon
+				 */
+				static void becomeDaemon();
+
+				/**
+				 * print message to stderr and terminate the program and all child processes
 				 * @param message defines message
 				 * @param status defines exit status
+				 * @note OS_SIGNAL_TERMINATION is sent to the child processes
 				 */
 				static void die(const dodoString &message, int status = 1);
 
