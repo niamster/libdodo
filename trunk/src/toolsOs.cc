@@ -625,7 +625,6 @@ os::getGroups()
 
 void
 os::die(const dodoString &message,
-        short type,
 		int status)
 {
 	fwrite(message.c_str(), message.size(), 1, stderr);

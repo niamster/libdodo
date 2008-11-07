@@ -40,6 +40,7 @@
 #include <sys/types.h>
 #include <sys/resource.h>
 #include <sys/ioctl.h>
+#include <sys/wait.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
