@@ -497,8 +497,8 @@ namespace dodo
 				/**
 				 * @param context defines SHA-512 context
 				 * @param padByte defines the last byte to add to the digest before the 0-padding and length. This will contain the last bits of the message followed by another single bit. If the message was an exact multiple of 8-bits long, padByte will be 0x80
-				 * @note according to the standard, the message must be padded to an even 512 bits.
-				 * The first padding bit must be a '1'. The last 64 bits represent the length of the original message.
+				 * @note according to the standard, the message must be padded to an even 1024 bits.
+				 * The first padding bit must be a '1'. The last 128 bits represent the length of the original message.
 				 * All bits in between should be 0. This helper function will pad the message according to those rules by filling the messageBlock
 				 * array accordingly. When it returns, it can be assumed that the message digest has been computed.
 				 */
