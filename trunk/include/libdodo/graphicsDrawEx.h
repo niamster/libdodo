@@ -1,5 +1,5 @@
 /***************************************************************************
- *            graphicsImageEx.h
+ *            graphicsDrawEx.h
  *
  *  Thu Nov 23 00:19:57 2007
  *  Copyright  2007  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _GRAPHICSIMAGEEX_H_
-#define _GRAPHICSIMAGEEX_H_
+#ifndef _GRAPHICSDRAWEX_H_
+#define _GRAPHICSDRAWEX_H_
 
 #include <libdodo/directives.h>
 
@@ -41,29 +41,22 @@ namespace dodo
 		/**
 		 * libdodo defined errors
 		 */
-		enum imageExR
+		enum drawExR
 		{
-			IMAGEEX_BADINFO,
-			IMAGEEX_EMPTYIMAGE,
-			IMAGEEX_LONGPATH
+			DRAWEX_EMPTYIMAGE,
 		};
 
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define GRAPHICSIMAGEEX_BADINFO_STR    "Bad information for image was provided."
-#define GRAPHICSIMAGEEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
-#define GRAPHICSIMAGEEX_LONGPATH_STR "Path to image is too long."
+#define GRAPHICSDRAWEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
 
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum imageFunctionsID
+		enum drawFunctionsID
 		{
-			IMAGEEX_READ,
-			IMAGEEX_CREATE,
-			IMAGEEX_WRITE,
-			IMAGEEX_SETENCODER,
+			DRAWEX_CIRCLE,
 		};
 	};
 };

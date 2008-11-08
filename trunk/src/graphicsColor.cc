@@ -1,5 +1,5 @@
 /***************************************************************************
- *            graphicsImageEx.h
+ *            graphicsColor.cc
  *
  *  Thu Nov 23 00:19:57 2007
  *  Copyright  2007  Ni@m
@@ -27,45 +27,31 @@
  * set shiftwidth=4
  */
 
-#ifndef _GRAPHICSIMAGEEX_H_
-#define _GRAPHICSIMAGEEX_H_
+#include <libdodo/graphicsColor.h>
 
-#include <libdodo/directives.h>
+using namespace dodo::graphics;
 
-#include <libdodo/exceptionBasic.h>
+__color color::red = {65535, 0, 0, 0};
 
-namespace dodo
-{
-	namespace graphics
-	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum imageExR
-		{
-			IMAGEEX_BADINFO,
-			IMAGEEX_EMPTYIMAGE,
-			IMAGEEX_LONGPATH
-		};
+//-------------------------------------------------------------------
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
-#define GRAPHICSIMAGEEX_BADINFO_STR    "Bad information for image was provided."
-#define GRAPHICSIMAGEEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
-#define GRAPHICSIMAGEEX_LONGPATH_STR "Path to image is too long."
+__color color::green = {0, 65535, 0, 0};
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum imageFunctionsID
-		{
-			IMAGEEX_READ,
-			IMAGEEX_CREATE,
-			IMAGEEX_WRITE,
-			IMAGEEX_SETENCODER,
-		};
-	};
-};
+//-------------------------------------------------------------------
 
-#endif
+__color color::blue = {0, 0, 65535, 0};
+
+//-------------------------------------------------------------------
+
+__color color::white = {65535, 65535, 65535, 0};
+
+//-------------------------------------------------------------------
+
+__color color::black = {0, 0, 0, 0};
+
+//-------------------------------------------------------------------
+
+__color color::transparent = {65535, 65535, 65535, 65535};
+
+//-------------------------------------------------------------------
+

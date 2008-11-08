@@ -38,6 +38,7 @@
 #include <math.h>
 
 #include <libdodo/types.h>
+#include <libdodo/graphicsColor.h>
 #include <libdodo/graphicsImageEx.h>
 #include <libdodo/xexec.h>
 
@@ -52,6 +53,7 @@ namespace dodo
 		{
 			IMAGE_OPERATION_WRITE,
 			IMAGE_OPERATION_READ,
+			IMAGE_OPERATION_CREATE,
 		};
 
 		/**
@@ -178,6 +180,7 @@ namespace dodo
 #endif
 		{
 			friend class transform;
+			friend class draw;
 
 			private:
 
@@ -198,6 +201,14 @@ namespace dodo
 				 * destructor
 				 */
 				virtual ~image();
+
+				/**
+				 * create image
+				 * @param width defines image width
+				 * @param height defines image height
+				 * @param background defines image background
+				 */
+				virtual void create(unsigned long width, unsigned long height, const __color &background = color::transparent);
 
 				/**
 				 * read image

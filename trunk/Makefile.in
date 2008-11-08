@@ -85,6 +85,8 @@ OBJECTS:=dataBaseAccumulator.o \
 	rpcJsonValue.o \
 	graphicsTransform.o \
 	graphicsImage.o \
+	graphicsDraw.o \
+	graphicsColor.o \
 	pcSyncStack.o \
 	pcSyncSection.o \
 	pcSyncThreadSection.o \

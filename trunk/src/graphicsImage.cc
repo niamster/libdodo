@@ -248,6 +248,47 @@ image::read(const __imageInfo &info)
 #endif
 }
 
+void
+image::create(unsigned long width,
+              unsigned long height,
+              const __color &background)
+{
+#ifndef GRAPHICS_WO_XEXEC
+	operType = IMAGE_OPERATION_CREATE;
+	performXExec(preExec);
+#endif
+
+	if (collectedData.imHandle != NULL)
+		DestroyImage(collectedData.imHandle);
+
+	MagickPixelPacket bg;
+
+	bg.colorspace = RGBColorspace;
+	bg.matte = MagickTrue;
+	bg.fuzz = 0;
+	bg.depth = 32;
+
+	bg.red = background.red;
+	bg.green = background.green;
+	bg.blue = background.blue;
+	bg.opacity = background.opacity;
+    bg.index = 0;
+
+	collectedData.imHandle = NewMagickImage(collectedData.imInfo, width, height, &bg);
+	if (collectedData.imHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_CREATE, exception::ERRNO_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
+
+	collectedData.imInfo->compression = collectedData.imHandle->compression;
+	collectedData.imInfo->quality = collectedData.imHandle->quality;
+
+	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
+
+#ifndef GRAPHICS_WO_XEXEC
+	performXExec(postExec);
+#endif
+
+}
+
 //-------------------------------------------------------------------
 
 void
@@ -274,7 +315,7 @@ image::write(const dodoString &str)
 	if (collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	unsigned long size = str.size();
+	unsigned long size = str.size() + 1;
 
 	if (size >= MaxTextExtent)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_LIBDODO, IMAGEEX_LONGPATH, GRAPHICSIMAGEEX_LONGPATH_STR, __LINE__, __FILE__);

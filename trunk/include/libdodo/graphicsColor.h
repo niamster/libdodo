@@ -1,5 +1,5 @@
 /***************************************************************************
- *            graphicsImageEx.h
+ *            graphicsColor.h
  *
  *  Thu Nov 23 00:19:57 2007
  *  Copyright  2007  Ni@m
@@ -27,43 +27,41 @@
  * set shiftwidth=4
  */
 
-#ifndef _GRAPHICSIMAGEEX_H_
-#define _GRAPHICSIMAGEEX_H_
+#ifndef _GRAPHICSCOLOR_H_
+#define _GRAPHICSCOLOR_H_
 
 #include <libdodo/directives.h>
-
-#include <libdodo/exceptionBasic.h>
 
 namespace dodo
 {
 	namespace graphics
 	{
 		/**
-		 * libdodo defined errors
+		 * @struct __color
+		 * @brief defines color of the primitive
 		 */
-		enum imageExR
+		struct __color
 		{
-			IMAGEEX_BADINFO,
-			IMAGEEX_EMPTYIMAGE,
-			IMAGEEX_LONGPATH
+				unsigned short red;
+				unsigned short green;
+				unsigned short blue;
+				unsigned short opacity;
 		};
 
 		/**
-		 * explanations for libdodo defined errors
+		 * @class color
+		 * @brief defines default colors
 		 */
-#define GRAPHICSIMAGEEX_BADINFO_STR    "Bad information for image was provided."
-#define GRAPHICSIMAGEEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
-#define GRAPHICSIMAGEEX_LONGPATH_STR "Path to image is too long."
-
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum imageFunctionsID
+		class color
 		{
-			IMAGEEX_READ,
-			IMAGEEX_CREATE,
-			IMAGEEX_WRITE,
-			IMAGEEX_SETENCODER,
+			public:
+
+				static __color red;
+				static __color green;
+				static __color blue;
+				static __color white;
+				static __color black;
+				static __color transparent;
 		};
 	};
 };

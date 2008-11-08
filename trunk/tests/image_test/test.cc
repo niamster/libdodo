@@ -7,6 +7,7 @@
 #include <libdodo/toolsMisc.h>
 #include <libdodo/graphicsImage.h>
 #include <libdodo/graphicsTransform.h>
+#include <libdodo/graphicsDraw.h>
 #include <libdodo/ioFile.h>
 
 #include <iostream>
@@ -33,6 +34,8 @@ hook(__xexecCollectedData *odata,
 	{
 		try
 		{
+			cout << "Rotating" << endl;
+
 			image *img = dynamic_cast<image *>(imData->executor);
 			graphics::transform tr(img);
 			tr.rotate(TRANSFORM_ROTATEDIRECTIONANGLE_180);
@@ -55,13 +58,14 @@ int main(int argc, char **argv)
 #ifdef IMAGEMAGICK_EXT
 		image im;
 		graphics::transform tr(&im);
+		graphics::draw dr(&im);
 
 #ifndef GRAPHICS_WO_XEXEC
 
-		im.addPreExec(hook, NULL);
+		int prewrite = im.addPreExec(hook, NULL);
 
 		///another one to revert
-		im.addPostExec(hook, NULL);
+		int postwrite = im.addPostExec(hook, NULL);
 
 #endif
 
@@ -70,7 +74,17 @@ int main(int argc, char **argv)
 
 		tr.scale(1000, 1000);
 
+		dr.circle(300, 300, 100, graphics::color::red, graphics::color::green, 5);
+		dr.circle(300, 300, 50, graphics::color::blue, graphics::color::white, 5);
+
 		im.write("test.jpg");
+
+#ifndef GRAPHICS_WO_XEXEC
+
+		im.delPreExec(prewrite);
+		im.delPostExec(postwrite);
+
+#endif
 
 		unsigned char *img; unsigned int size;
 		im.setEncoder(IMAGE_ENCODER_PNG);
@@ -85,6 +99,11 @@ int main(int argc, char **argv)
 		im.destroyImageData(&img);
 
 		cout << size << endl;
+
+		im.create(400, 400);
+		dr.circle(200, 200, 100, graphics::color::red, graphics::color::green, 5);
+		dr.circle(200, 200, 50, graphics::color::blue, graphics::color::white, 5);
+		im.write("new.png");
 #endif
 	}
 	catch (dodo::exception::basic ex)
