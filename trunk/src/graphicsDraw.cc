@@ -33,6 +33,13 @@
 
 using namespace dodo::graphics;
 
+point::point(unsigned long x, unsigned long y) : x(x),
+													y(y)
+{
+}
+
+//-------------------------------------------------------------------
+
 draw::draw(draw &a_draw)
 {
 }
@@ -63,48 +70,98 @@ draw::setImage(image *a_im)
 	im = a_im;
 }
 
+
 //-------------------------------------------------------------------
 
 void
-draw::circle(unsigned long x,
-			unsigned long y,
-			unsigned long radius,
-			const __color &fillColor,
-			const __color &borderColor,
-			double lineWidth)
+draw::primitive(char *description,
+                const __color &fillColor,
+                const __color &borderColor,
+                double borderWidth)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_CIRCLE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
 	DrawInfo *di = AcquireDrawInfo();
 
-	char primitive[256];
-	snprintf(primitive, 256,"circle %d,%d %d,%d", x, y, x + radius, y);
-
-	di->primitive = primitive;
+	di->primitive = description;
 
 	di->stroke.red = borderColor.red;
 	di->stroke.green = borderColor.green;
 	di->stroke.blue = borderColor.blue;
 	di->stroke.opacity = borderColor.opacity;
 
+	di->stroke_width = borderWidth;
+
 	di->fill.red = fillColor.red;
 	di->fill.green = fillColor.green;
 	di->fill.blue = fillColor.blue;
 	di->fill.opacity = fillColor.opacity;
-
-	di->stroke_width = lineWidth;
 
 	if (DrawImage(im->collectedData.imHandle, di) == MagickFalse)
 	{
 		di->primitive =  NULL;
 		DestroyDrawInfo(di);
 
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_CIRCLE, exception::ERRNO_IMAGEMAGICK, im->exInfo->error_number, im->exInfo->reason, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
 	}
 
 	di->primitive =  NULL;
 	DestroyDrawInfo(di);
+
+}
+
+//-------------------------------------------------------------------
+
+void
+draw::circle(const point &center,
+			unsigned long radius,
+			const __color &fillColor,
+			const __color &borderColor,
+			double borderWidth)
+{
+	char description[128];
+	snprintf(description, 128,"circle %d,%d %d,%d", center.x, center.y, center.x + radius, center.y);
+
+	primitive(description, fillColor, borderColor, borderWidth);
+}
+
+
+//-------------------------------------------------------------------
+
+void
+draw::line(const dodoArray<point> &points,
+           const __color &lineColor,
+           double lineWidth)
+{
+	char pointDesc[128];
+
+	dodoString description = "polyline";
+
+	dodoArray<point>::const_iterator i = points.begin(), j = points.end();
+	for (;i!=j;++i)
+	{
+		snprintf(pointDesc, 128," %d,%d", i->x, i->y);
+
+		description.append(pointDesc);
+	}
+
+	primitive((char *)description.c_str(), color::transparent, lineColor, lineWidth);
+}
+
+//-------------------------------------------------------------------
+
+void
+draw::rectangle(const point &tl,
+                const point &br,
+				const __color &fillColor,
+				const __color &borderColor,
+				double borderWidth)
+{
+	char description[128];
+	snprintf(description, 128,"rectangle %d,%d %d,%d", tl.x, tl.y, br.x, br.y);
+
+	primitive(description, fillColor, borderColor, borderWidth);
 }
 
 #endif

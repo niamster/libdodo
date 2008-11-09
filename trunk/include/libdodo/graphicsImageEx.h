@@ -45,7 +45,8 @@ namespace dodo
 		{
 			IMAGEEX_BADINFO,
 			IMAGEEX_EMPTYIMAGE,
-			IMAGEEX_LONGPATH
+			IMAGEEX_LONGPATH,
+			IMAGEEX_CANNOTSETTYPE,
 		};
 
 		/**
@@ -54,6 +55,7 @@ namespace dodo
 #define GRAPHICSIMAGEEX_BADINFO_STR    "Bad information for image was provided."
 #define GRAPHICSIMAGEEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
 #define GRAPHICSIMAGEEX_LONGPATH_STR "Path to image is too long."
+#define GRAPHICSIMAGEEX_CANNOTSETTYPE_STR "Can not set image type."
 
 		/**
 		 * IDs of functions where exception might be thrown
@@ -64,6 +66,11 @@ namespace dodo
 			IMAGEEX_CREATE,
 			IMAGEEX_WRITE,
 			IMAGEEX_SETENCODER,
+			IMAGEEX_SETTYPE,
+			IMAGEEX_SETALPHA,
+			IMAGEEX_REMOVEALPHA,
+			IMAGEEX_SETOPACITY,
+			IMAGEEX_SETBACKGROUNDCOLOR,
 		};
 	};
 };

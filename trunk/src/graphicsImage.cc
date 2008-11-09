@@ -59,6 +59,7 @@ __image_init__::__image_init__() : initialized(false)
 	if (IsMagickInstantiated() == MagickFalse)
 	{
 		initialized = true;
+
 		MagickCoreGenesis(NULL, MagickFalse);
 	}
 }
@@ -77,7 +78,14 @@ const char *image::mappingStArr[] =
 {
 	"RGB",
 	"RGBA",
-	"CMYK"
+};
+
+//-------------------------------------------------------------------
+
+const ImageType image::typeStArr[] =
+{
+	TrueColorMatteType,
+	GrayscaleMatteType,
 };
 
 //-------------------------------------------------------------------
@@ -152,6 +160,7 @@ image::~image()
 {
 	if (collectedData.imHandle != NULL)
 		DestroyImage(collectedData.imHandle);
+
 	DestroyImageInfo(collectedData.imInfo);
 	DestroyExceptionInfo(exInfo);
 }
@@ -166,10 +175,12 @@ image::read(const dodoString &str)
 	performXExec(preExec);
 #endif
 
-	unsigned long size = str.size();
+	unsigned long size = str.size() + 1;
 
 	if (size >= MaxTextExtent)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_LIBDODO, IMAGEEX_LONGPATH, GRAPHICSIMAGEEX_LONGPATH_STR, __LINE__, __FILE__);
+
+	GetImageInfo(collectedData.imInfo);
 
 	strncpy(collectedData.imInfo->filename, str.c_str(), size);
 
@@ -201,6 +212,8 @@ image::read(const unsigned char * const data,
 	performXExec(preExec);
 #endif
 
+	GetImageInfo(collectedData.imInfo);
+
 	if (collectedData.imHandle != NULL)
 		DestroyImage(collectedData.imHandle);
 
@@ -231,6 +244,8 @@ image::read(const __imageInfo &info)
 	if (info.mapping < 0 || info.mapping >= IMAGE_MAPPINGSTATEMENTS || info.pixelSize < 0 || info.pixelSize >= IMAGE_PIXELSIZESTATEMENTS)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
+	GetImageInfo(collectedData.imInfo);
+
 	if (collectedData.imHandle != NULL)
 		DestroyImage(collectedData.imHandle);
 
@@ -248,15 +263,20 @@ image::read(const __imageInfo &info)
 #endif
 }
 
+//-------------------------------------------------------------------
+
 void
 image::create(unsigned long width,
               unsigned long height,
-              const __color &background)
+              const __color &background,
+              unsigned short backgroundDepth)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_CREATE;
 	performXExec(preExec);
 #endif
+
+	GetImageInfo(collectedData.imInfo);
 
 	if (collectedData.imHandle != NULL)
 		DestroyImage(collectedData.imHandle);
@@ -266,7 +286,7 @@ image::create(unsigned long width,
 	bg.colorspace = RGBColorspace;
 	bg.matte = MagickTrue;
 	bg.fuzz = 0;
-	bg.depth = 32;
+	bg.depth = backgroundDepth;
 
 	bg.red = background.red;
 	bg.green = background.green;
@@ -287,6 +307,71 @@ image::create(unsigned long width,
 	performXExec(postExec);
 #endif
 
+}
+
+//-------------------------------------------------------------------
+
+void
+image::setType(short type)
+{
+	if (type < 0 || type >= IMAGE_TYPESTATEMENTS)
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_SETTYPE, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
+
+	if (collectedData.imHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_SETTYPE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+
+	if (SetImageType(collectedData.imHandle, typeStArr[type]) == MagickFalse)
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_SETTYPE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_CANNOTSETTYPE, GRAPHICSIMAGEEX_CANNOTSETTYPE_STR, __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+void
+image::setAlpha()
+{
+	if (collectedData.imHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_SETALPHA, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+
+	SetImageAlphaChannel(collectedData.imHandle, ActivateAlphaChannel);
+}
+
+//-------------------------------------------------------------------
+
+void
+image::removeAlpha()
+{
+	if (collectedData.imHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_REMOVEALPHA, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+
+	SetImageAlphaChannel(collectedData.imHandle, DeactivateAlphaChannel);
+}
+
+//-------------------------------------------------------------------
+
+void
+image::setOpacity(unsigned short opacity)
+{
+	if (collectedData.imHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_SETOPACITY, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+
+	SetImageOpacity(collectedData.imHandle, opacity);
+}
+
+
+//-------------------------------------------------------------------
+
+void
+image::setBackgroundColor(__color background)
+{
+	if (collectedData.imHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_SETBACKGROUNDCOLOR, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+
+	collectedData.imHandle->background_color.red = background.red;
+	collectedData.imHandle->background_color.green = background.green;
+	collectedData.imHandle->background_color.blue = background.blue;
+	collectedData.imHandle->background_color.opacity = background.opacity;
+
+	SetImageBackgroundColor(collectedData.imHandle);
 }
 
 //-------------------------------------------------------------------

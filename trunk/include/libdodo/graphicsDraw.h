@@ -48,8 +48,28 @@ namespace dodo
 	namespace graphics
 	{
 		/**
+		 * class point
+		 * @brief defines x and y position of the point
+		 */
+		class point
+		{
+			public:
+
+				/**
+				 * constructor
+				 * @param x defines x position of the point
+				 * @param y defines y position of the point
+				 */
+				point(unsigned long x, unsigned long y);
+
+				unsigned long x;///< x position of the point
+				unsigned long y;///< y position of the point
+		};
+
+		/**
 		 * @class draw
 		 * @brief provides simple image drawing
+		 * @note for (x;y) == (0;0) it's left upper corner
 		 */
 		class draw
 		{
@@ -87,16 +107,42 @@ namespace dodo
 
 				/**
 				 * draw circle
-				 * @param x	defines x position of circle center
-				 * @param y	defines y position of circle center
+				 * @param center defines x and y position of circle center
 				 * @param radius defines circle radius
 				 * @param fillColor defines circle fill color
 				 * @param borderColor defines circle border color
-				 * @param lineWidth defines the width of the line of the circle
+				 * @param borderWidth defines the width of the border of the circle
 				 */
-				virtual void circle(unsigned long x, unsigned long y, unsigned long radius, const __color &fillColor, const __color &borderColor, double lineWidth = 1);
+				virtual void circle(const point &center, unsigned long radius, const __color &fillColor, const __color &borderColor, double borderWidth = 1);
+
+				/**
+				 * draw rectangle
+				 * @param tl defines x and y position of rectangle top left corner
+				 * @param br defines x and y position of rectangle bottom right corner
+				 * @param fillColor defines rectangle fill color
+				 * @param borderColor defines rectangle border color
+				 * @param borderWidth defines the width of the border of the rectangle
+				 */
+				virtual void rectangle(const point &tl, const point &br, const __color &fillColor, const __color &borderColor, double borderWidth = 1);
+
+				/**
+				 * draw line
+				 * @param points defines vector of points of teh line
+				 * @param lineColor defines line color
+				 * @param lineWidth defines the width of the line
+				 */
+				virtual void line(const dodoArray<point> &points, const __color &lineColor, double lineWidth = 1);
 
 			protected:
+
+				/**
+				 * draw primitive by description
+				 * @param description defines primitive description
+				 * @param fillColor defines primitive fill color
+				 * @param borderColor defines primitive border color
+				 * @param borderWidth defines the width of the border of the primitive
+				 */
+				virtual void primitive(char *description, const __color &fillColor, const __color &borderColor, double borderWidth);
 
 				image *im;                ///< image to perform drawing
 		};

@@ -42,10 +42,10 @@ namespace dodo
 		 */
 		struct __color
 		{
-				unsigned short red;
-				unsigned short green;
-				unsigned short blue;
-				unsigned short opacity;
+				unsigned short red;///< in range [0; 65535]
+				unsigned short green;///< in range [0; 65535]
+				unsigned short blue;///< in range [0; 65535]
+				unsigned short opacity;///< 0 is fully opaque and 65535 is fully transparent
 		};
 
 		/**

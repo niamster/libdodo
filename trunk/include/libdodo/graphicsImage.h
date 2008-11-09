@@ -85,16 +85,26 @@ namespace dodo
 				Image *imHandle;                                                            ///< image handler
 		};
 
-#define IMAGE_MAPPINGSTATEMENTS 3
+#define IMAGE_MAPPINGSTATEMENTS 2
 
 		/**
 		 * @enum imageMappingEnum defines the order of pixels
 		 */
 		enum imageMappingEnum
 		{
-			IMAGE_MAP_RGB,
-			IMAGE_MAP_RGBA,
-			IMAGE_MAP_CMYK
+			IMAGE_MAPPING_RGB,
+			IMAGE_MAPPING_RGBA,
+		};
+
+#define IMAGE_TYPESTATEMENTS 2
+
+		/**
+		 * @enum imageTypeEnum defines the type of the image
+		 */
+		enum imageTypeEnum
+		{
+			IMAGE_TYPE_TRUECOLOR,
+			IMAGE_TYPE_GRAYSCALE
 		};
 
 #define IMAGE_PIXELSIZESTATEMENTS 6
@@ -207,8 +217,9 @@ namespace dodo
 				 * @param width defines image width
 				 * @param height defines image height
 				 * @param background defines image background
+				 * @param backgroundDepth defines the color depth of the image background in bits
 				 */
-				virtual void create(unsigned long width, unsigned long height, const __color &background = color::transparent);
+				virtual void create(unsigned long width, unsigned long height, const __color &background = color::transparent, unsigned short backgroundDepth = 32);
 
 				/**
 				 * read image
@@ -251,6 +262,35 @@ namespace dodo
 				 * @return info about image
 				 */
 				virtual __imageSize getImageSize();
+
+				/**
+				 * set image type
+				 * @param type defines image type[see imageTypeEnum]
+				 */
+				virtual void setType(short type);
+
+				/**
+				 * set image alpha channel
+				 */
+				virtual void setAlpha();
+
+				/**
+				 * remove image alpha channel
+				 */
+				virtual void removeAlpha();
+
+				/**
+				 * set image opacity
+				 * @param opacity define image opacity
+				 * @note 0 is fully opaque and 65535 is fully transparent
+				 */
+				virtual void setOpacity(unsigned short opacity);
+
+				/**
+				 * set image background
+				 * @param background define image background color
+				 */
+				virtual void setBackgroundColor(__color background);
 
 				/**
 				 * set image output encoder
@@ -301,6 +341,7 @@ namespace dodo
 
 				static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                                                       ///< image mapping statements
 				static const StorageType pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];                                             ///< pixel type statements
+				static const ImageType typeStArr[IMAGE_TYPESTATEMENTS];                                        ///< color space statements
 				static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                                                       ///< image encoder
 				static const CompressionType compressionStArr[IMAGE_COMPRESSIONSTATEMENTS];                                     ///< image compression
 		};
