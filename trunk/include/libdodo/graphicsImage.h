@@ -208,6 +208,13 @@ namespace dodo
 				image();
 
 				/**
+				 * contructor
+				 * @param path defines path to image
+				 * @note doesn't check if the read failed
+				 */
+				image(const dodoString &path);
+
+				/**
 				 * destructor
 				 */
 				virtual ~image();

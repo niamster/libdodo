@@ -37,7 +37,7 @@ hook(__xexecCollectedData *odata,
 			cout << "Rotating" << endl;
 
 			image *img = dynamic_cast<image *>(imData->executor);
-			graphics::transform tr(img);
+			transform tr(img);
 			tr.rotate(TRANSFORM_ROTATEDIRECTIONANGLE_180);
 		}
 		catch (dodo::exception::basic ex)
@@ -57,8 +57,8 @@ int main(int argc, char **argv)
 	{
 #ifdef IMAGEMAGICK_EXT
 		image im;
-		graphics::transform tr(&im);
-		graphics::draw dr(&im);
+		transform tr(&im);
+		draw dr(&im);
 
 #ifndef GRAPHICS_WO_XEXEC
 
@@ -74,8 +74,8 @@ int main(int argc, char **argv)
 
 		tr.scale(1000, 1000);
 
-		dr.circle(point(300, 300), 100, graphics::color::red, graphics::color::green, 5);
-		dr.circle(point(300, 300), 50, graphics::color::blue, graphics::color::white, 5);
+		dr.circle(point(300, 300), 100, color::red, color::green, 5);
+		dr.circle(point(300, 300), 50, color::blue, color::white, 5);
 
 		im.write("test.jpg");
 
@@ -101,12 +101,10 @@ int main(int argc, char **argv)
 
 		cout << size << endl;
 
-		using graphics::point;
-
 		im.create(400, 400);
-		dr.circle(point(200, 200), 100, graphics::color::red, graphics::color::green, 5);
-		dr.circle(point(200, 200), 50, graphics::color::blue, graphics::color::white, 5);
-		dr.rectangle(point(200, 200), point(300, 300), graphics::color::green, graphics::color::red, 15);
+		dr.circle(point(200, 200), 100, color::red, color::green, 5);
+		dr.circle(point(200, 200), 50, color::blue, color::white, 5);
+		dr.rectangle(point(200, 200), point(300, 300), color::green, color::red, 15);
 		im.write("new.png");
 
 		im.read("new.png");
@@ -114,25 +112,40 @@ int main(int argc, char **argv)
 		im.write("new-1.png");
 
 		im.read("new-1.png");
-		im.setBackgroundColor(graphics::color::transparent);
-		dr.circle(point(200, 200), 100, graphics::color::red, graphics::color::green, 5);
+		im.setBackgroundColor(color::transparent);
+		dr.circle(point(200, 200), 100, color::red, color::green, 5);
 		im.setType(IMAGE_TYPE_GRAYSCALE);
-		dr.circle(point(200, 200), 50, graphics::color::blue, graphics::color::white, 5);
+		dr.circle(point(200, 200), 50, color::blue, color::white, 5);
 		im.setOpacity(65535/2);
-		graphics::__color mygreen = graphics::color::green;
+		__color mygreen = color::green;
 		mygreen.opacity = 65535/2;
-		dr.circle(point(250, 250), 50, mygreen, graphics::color::white, 5);
+		dr.circle(point(250, 250), 50, mygreen, color::white, 5);
 		im.write("new-2.png");
 		
 		im.create(400, 400);
-
+		dr.circle(point(200, 200), 100, color::red, color::green, 5);
 		dodoArray<point> points;
 		for (int i=0;i<10;++i)
-			points.push_back(point(i*20, 400 - pow(i, 2)*5));
-
-		dr.circle(point(200, 200), 100, graphics::color::red, graphics::color::green, 5);
-		dr.line(points, graphics::color::black, 1);
+			points.push_back(point(i*20, 390 - pow(i, 2)*5));
+		dr.line(points, color::black, 1);
+		for (int i=0;i<10;++i)
+			dr.point(point(i*20+100, 390 - pow(i, 2)*5), color::blue, 5);
+		for (int i=0;i<360;++i)
+			dr.point(point(cos(i)*100+150, 200 - sin(i)*100), color::black);
 		im.write("new-3.png");
+		
+		im.create(400, 400);
+		dr.circle(point(200, 200), 100, color::red, color::green, 5);
+		dr.text(point(100, 200), "libdodo", "Arial", 70, color::blue, color::green);
+		dr.text(point(100, 100), "libdodo", "Arial", 30);
+		dr.text(point(150, 150), "libdodo", "Arial", 50, color::blue, color::green, 2, 180);
+		dr.text(point(150, 200), "libdodo", "Arial", 50, color::blue, color::green, 2, 90);
+		im.write("new-4.png");
+
+		im.create(600, 600);
+		dr.image(point(100, 100), image("new-4.png"), 45);
+		im.setOpacity(65535/2);
+		im.write("new-5.png");
 #endif
 	}
 	catch (dodo::exception::basic ex)

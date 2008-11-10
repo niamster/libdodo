@@ -59,6 +59,9 @@ namespace dodo
 		enum drawFunctionsID
 		{
 			DRAWEX_PRIMITIVE,
+			DRAWEX_POINT,
+			DRAWEX_TEXT,
+			DRAWEX_IMAGE,
 		};
 	};
 };

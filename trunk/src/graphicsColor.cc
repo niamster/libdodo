@@ -29,6 +29,8 @@
 
 #include <libdodo/graphicsColor.h>
 
+#ifdef IMAGEMAGICK_EXT
+
 using namespace dodo::graphics;
 
 __color color::red = {65535, 0, 0, 0};
@@ -53,5 +55,6 @@ __color color::black = {0, 0, 0, 0};
 
 __color color::transparent = {65535, 65535, 65535, 65535};
 
-//-------------------------------------------------------------------
+#endif
 
+//-------------------------------------------------------------------

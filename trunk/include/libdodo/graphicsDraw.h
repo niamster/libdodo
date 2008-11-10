@@ -92,7 +92,7 @@ namespace dodo
 				 * contructor
 				 * @param im defines image for drawations
 				 */
-				draw(image *im);
+				draw(graphics::image *im);
 
 				/**
 				 * destructor
@@ -103,7 +103,7 @@ namespace dodo
 				 * set image for drawations
 				 * @param im defines image for drawations
 				 */
-				virtual void setImage(image *im);
+				virtual void setImage(graphics::image *im);
 
 				/**
 				 * draw circle
@@ -113,7 +113,7 @@ namespace dodo
 				 * @param borderColor defines circle border color
 				 * @param borderWidth defines the width of the border of the circle
 				 */
-				virtual void circle(const point &center, unsigned long radius, const __color &fillColor, const __color &borderColor, double borderWidth = 1);
+				virtual void circle(const graphics::point &center, unsigned long radius, const __color &fillColor, const __color &borderColor, unsigned short borderWidth = 1);
 
 				/**
 				 * draw rectangle
@@ -123,15 +123,45 @@ namespace dodo
 				 * @param borderColor defines rectangle border color
 				 * @param borderWidth defines the width of the border of the rectangle
 				 */
-				virtual void rectangle(const point &tl, const point &br, const __color &fillColor, const __color &borderColor, double borderWidth = 1);
+				virtual void rectangle(const graphics::point &tl, const graphics::point &br, const __color &fillColor, const __color &borderColor, unsigned short borderWidth = 1);
+
+				/**
+				 * draw text
+				 * @param position defines x and y position of text top left corner
+				 * @param text defines text to render
+				 * @param font defines font of the text
+				 * @param fontWidth defines font width
+				 * @param fillColor defines text fill color
+				 * @param borderColor defines text border color
+				 * @param borderWidth defines the width of the border of the text
+				 * @param angle defines the deflection angle in degrees of the text relatively to horison
+				 */
+				virtual void text(const graphics::point &position, const dodoString &text, const dodoString &font, unsigned short fontWidth, const __color &fillColor = color::black, const __color &borderColor = color::black, unsigned short borderWidth = 1, double angle = 0);
+
+				/**
+				 * put image
+				 * @param position defines x and y position of text top left corner
+				 * @param im defines image to render
+				 * @param angle defines the deflection angle in degrees of the image relatively to horison
+				 */
+				virtual void image(const graphics::point &position, const graphics::image &im, double angle = 0);
 
 				/**
 				 * draw line
-				 * @param points defines vector of points of teh line
+				 * @param points defines vector of points of the line
 				 * @param lineColor defines line color
 				 * @param lineWidth defines the width of the line
 				 */
-				virtual void line(const dodoArray<point> &points, const __color &lineColor, double lineWidth = 1);
+				virtual void line(const dodoArray<graphics::point> &points, const __color &lineColor, unsigned short lineWidth = 1);
+
+				/**
+				 * draw dot
+				 * @param position defines coordinate of the point
+				 * @param pointColor defines poiny color
+				 * @param pointWidth defines the width of the point
+				 * @note for point width > 1 point is emulated as a circle, it's possible to get some side-effects
+				 */
+				virtual void point(const graphics::point &position, const __color &pointColor, unsigned short pointWidth = 1);
 
 			protected:
 
@@ -142,9 +172,9 @@ namespace dodo
 				 * @param borderColor defines primitive border color
 				 * @param borderWidth defines the width of the border of the primitive
 				 */
-				virtual void primitive(char *description, const __color &fillColor, const __color &borderColor, double borderWidth);
+				virtual void primitive(char *description, const __color &fillColor, const __color &borderColor, unsigned short borderWidth);
 
-				image *im;                ///< image to perform drawing
+				graphics::image *im;                ///< image to perform drawing
 		};
 	};
 };

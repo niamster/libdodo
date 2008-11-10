@@ -32,6 +32,8 @@
 
 #include <libdodo/directives.h>
 
+#ifdef IMAGEMAGICK_EXT
+
 namespace dodo
 {
 	namespace graphics
@@ -65,5 +67,7 @@ namespace dodo
 		};
 	};
 };
+
+#endif
 
 #endif

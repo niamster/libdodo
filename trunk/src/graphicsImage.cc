@@ -156,6 +156,40 @@ image::image()
 
 //-------------------------------------------------------------------
 
+image::image(const dodoString &str)
+
+#ifndef GRAPHICS_WO_XEXEC
+
+: collectedData(this, XEXEC_OBJECT_GRAPHICSIMAGE)
+
+#endif
+{
+	collectedData.imHandle = NULL;
+
+	collectedData.imInfo = AcquireImageInfo();
+	exInfo = AcquireExceptionInfo();
+
+	unsigned long size = str.size() + 1;
+
+	if (size < MaxTextExtent)
+	{
+		GetImageInfo(collectedData.imInfo);
+
+		strncpy(collectedData.imInfo->filename, str.c_str(), size);
+
+		collectedData.imHandle = ReadImage(collectedData.imInfo, exInfo);
+		if (collectedData.imHandle != NULL)
+		{
+			collectedData.imInfo->compression = collectedData.imHandle->compression;
+			collectedData.imInfo->quality = collectedData.imHandle->quality;
+
+			strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
+		}
+	}
+}
+
+//-------------------------------------------------------------------
+
 image::~image()
 {
 	if (collectedData.imHandle != NULL)
