@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCSYNCTHREADSECTIONEX_H_
-#define _PCSYNCTHREADSECTIONEX_H_
+#define _PCSYNCTHREADSECTIONEX_H_ 1
 
 #include <libdodo/directives.h>
 

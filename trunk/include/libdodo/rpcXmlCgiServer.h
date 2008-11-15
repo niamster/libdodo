@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCXMLCGISERVER_H_
-#define _RPCXMLCGISERVER_H_
+#define _RPCXMLCGISERVER_H_ 1
 
 #include <libdodo/directives.h>
 

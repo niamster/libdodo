@@ -28,7 +28,7 @@
  */
 
 #ifndef _GRAPHICSIMAGE_H_
-#define _GRAPHICSIMAGE_H_
+#define _GRAPHICSIMAGE_H_ 1
 
 #include <libdodo/directives.h>
 

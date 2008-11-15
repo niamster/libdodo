@@ -29,7 +29,7 @@
 
 
 #ifndef _IOEVENT_H_
-#define _IOEVENT_H_
+#define _IOEVENT_H_ 1
 
 #include <libdodo/directives.h>
 

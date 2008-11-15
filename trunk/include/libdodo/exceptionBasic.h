@@ -28,7 +28,7 @@
  */
 
 #ifndef _EXCEPTIONBASIC_H_
-#define _EXCEPTIONBASIC_H_
+#define _EXCEPTIONBASIC_H_ 1
 
 #include <libdodo/directives.h>
 

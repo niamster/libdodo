@@ -28,7 +28,7 @@
  */
 
 #ifndef _GRAPHICSDRAWEX_H_
-#define _GRAPHICSDRAWEX_H_
+#define _GRAPHICSDRAWEX_H_ 1
 
 #include <libdodo/directives.h>
 

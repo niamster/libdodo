@@ -28,7 +28,7 @@
  */
 
 #ifndef _IONETWORK_H_
-#define _IONETWORK_H_
+#define _IONETWORK_H_ 1
 
 #include <libdodo/ioNetworkClient.h>
 #include <libdodo/ioNetworkServer.h>

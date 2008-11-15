@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATABASESQLITE_H_
-#define _DATABASESQLITE_H_
+#define _DATABASESQLITE_H_ 1
 
 #include <libdodo/directives.h>
 

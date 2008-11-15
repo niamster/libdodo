@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATABASEACCUMULATOR_H_
-#define _DATABASEACCUMULATOR_H_
+#define _DATABASEACCUMULATOR_H_ 1
 
 #include <libdodo/directives.h>
 

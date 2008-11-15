@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCSYNCPROCESSDATACOLLECTION_H_
-#define _PCSYNCPROCESSDATACOLLECTION_H_
+#define _PCSYNCPROCESSDATACOLLECTION_H_ 1
 
 #include <libdodo/directives.h>
 

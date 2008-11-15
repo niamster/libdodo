@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCXMLSERVER_H_
-#define _RPCXMLSERVER_H_
+#define _RPCXMLSERVER_H_ 1
 
 #include <libdodo/directives.h>
 

@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSTIMEEX_H_
-#define _TOOLSTIMEEX_H_
+#define _TOOLSTIMEEX_H_ 1
 
 #include <libdodo/directives.h>
 

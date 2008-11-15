@@ -28,7 +28,7 @@
  */
 
 #ifndef _IONETWORKCLIENTEX_H_
-#define _IONETWORKCLIENTEX_H_
+#define _IONETWORKCLIENTEX_H_ 1
 
 #include <libdodo/directives.h>
 

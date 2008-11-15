@@ -28,7 +28,7 @@
  */
 
 #ifndef _GRAPHICSCOLOR_H_
-#define _GRAPHICSCOLOR_H_
+#define _GRAPHICSCOLOR_H_ 1
 
 #include <libdodo/directives.h>
 

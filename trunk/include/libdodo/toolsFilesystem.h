@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSFILESYSTEM_H_
-#define _TOOLSFILESYSTEM_H_
+#define _TOOLSFILESYSTEM_H_ 1
 
 #include <libdodo/directives.h>
 

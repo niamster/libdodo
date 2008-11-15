@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCTHREADCOLLECTION_H_
-#define _PCTHREADCOLLECTION_H_
+#define _PCTHREADCOLLECTION_H_ 1
 
 #include <libdodo/directives.h>
 

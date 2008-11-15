@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCJSONRESPONSEEX_H_
-#define _RPCJSONRESPONSEEX_H_
+#define _RPCJSONRESPONSEEX_H_ 1
 
 #include <libdodo/directives.h>
 

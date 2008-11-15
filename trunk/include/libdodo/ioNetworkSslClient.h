@@ -28,7 +28,7 @@
  */
 
 #ifndef _IONETWORKSSLCLIENT_H_
-#define _IONETWORKSSLCLIENT_H_
+#define _IONETWORKSSLCLIENT_H_ 1
 
 #include <libdodo/directives.h>
 

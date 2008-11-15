@@ -28,7 +28,7 @@
  */
 
 #ifndef _IOPIPE_H_
-#define _IOPIPE_H_
+#define _IOPIPE_H_ 1
 
 #include <fcntl.h>
 #include <sys/un.h>

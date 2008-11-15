@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSTIME_H_
-#define _TOOLSTIME_H_
+#define _TOOLSTIME_H_ 1
 
 #include <libdodo/directives.h>
 

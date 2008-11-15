@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCSYNCSTACK_H_
-#define _PCSYNCSTACK_H_
+#define _PCSYNCSTACK_H_ 1
 
 #include <libdodo/directives.h>
 

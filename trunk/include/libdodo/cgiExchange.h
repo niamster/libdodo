@@ -28,7 +28,7 @@
  */
 
 #ifndef _CGIEXCHANGE_H_
-#define _CGIEXCHANGE_H_
+#define _CGIEXCHANGE_H_ 1
 
 #include <libdodo/directives.h>
 

@@ -28,7 +28,7 @@
  */
 
 #ifndef _IOEVENTEX_H_
-#define _IOEVENTEX_H_
+#define _IOEVENTEX_H_ 1
 
 #include <libdodo/directives.h>
 

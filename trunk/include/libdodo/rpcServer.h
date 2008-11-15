@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCSERVER_H_
-#define _RPCSERVER_H_
+#define _RPCSERVER_H_ 1
 
 #include <libdodo/directives.h>
 

@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCSYNCPROCESSDATASINGLEEX_H_
-#define _PCSYNCPROCESSDATASINGLEEX_H_
+#define _PCSYNCPROCESSDATASINGLEEX_H_ 1
 
 #include <libdodo/directives.h>
 

@@ -28,7 +28,7 @@
  */
 
 #ifndef _DIRECTIVES_H_
-#define _DIRECTIVES_H_
+#define _DIRECTIVES_H_ 1
 
 #include <libdodo/directives.runtime.h>
 

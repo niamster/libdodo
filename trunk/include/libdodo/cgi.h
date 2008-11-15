@@ -28,7 +28,7 @@
  */
 
 #ifndef _CGI_H_
-#define _CGI_H_
+#define _CGI_H_ 1
 
 #include <libdodo/directives.h>
 

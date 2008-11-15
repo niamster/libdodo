@@ -28,7 +28,7 @@
  */
 
 #ifndef _IOFILETEMP_H_
-#define _IOFILETEMP_H_
+#define _IOFILETEMP_H_ 1
 
 #include <libdodo/directives.h>
 

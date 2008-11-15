@@ -28,7 +28,7 @@
  */
 
 #ifndef _XEXECEX_H_
-#define _XEXECEX_H_
+#define _XEXECEX_H_ 1
 
 #include <libdodo/directives.h>
 

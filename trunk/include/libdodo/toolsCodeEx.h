@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSCODEEX_H_
-#define _TOOLSCODEEX_H_
+#define _TOOLSCODEEX_H_ 1
 
 #include <libdodo/directives.h>
 

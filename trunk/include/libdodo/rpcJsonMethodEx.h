@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCJSONMETHODEX_H_
-#define _RPCJSONMETHODEX_H_
+#define _RPCJSONMETHODEX_H_ 1
 
 #include <libdodo/directives.h>
 

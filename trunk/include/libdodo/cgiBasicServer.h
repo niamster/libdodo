@@ -28,7 +28,7 @@
  */
 
 #ifndef _CGIBASICSERVER_H_
-#define _CGIBASICSERVER_H_
+#define _CGIBASICSERVER_H_ 1
 
 #include <libdodo/directives.h>
 

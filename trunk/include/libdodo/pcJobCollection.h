@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCJOBCOLLECTION_H_
-#define _PCJOBCOLLECTION_H_
+#define _PCJOBCOLLECTION_H_ 1
 
 #include <libdodo/directives.h>
 #include <libdodo/types.h>

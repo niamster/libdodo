@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATAFORMATJSONNODEEX_H_
-#define _DATAFORMATJSONNODEEX_H_
+#define _DATAFORMATJSONNODEEX_H_ 1
 
 #include <libdodo/directives.h>
 

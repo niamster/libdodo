@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCRESPONSEEX_H_
-#define _RPCRESPONSEEX_H_
+#define _RPCRESPONSEEX_H_ 1
 
 #include <libdodo/directives.h>
 

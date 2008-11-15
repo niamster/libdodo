@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCPROCESSCOLLECTIONEX_H_
-#define _PCPROCESSCOLLECTIONEX_H_
+#define _PCPROCESSCOLLECTIONEX_H_ 1
 
 #include <libdodo/directives.h>
 

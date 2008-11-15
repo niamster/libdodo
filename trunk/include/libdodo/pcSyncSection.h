@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCSYNCSECTION_H_
-#define _PCSYNCSECTION_H_
+#define _PCSYNCSECTION_H_ 1
 
 #include <libdodo/directives.h>
 

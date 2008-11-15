@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCJSONVALUE_H_
-#define _RPCJSONVALUE_H_
+#define _RPCJSONVALUE_H_ 1
 
 #include <libdodo/directives.h>
 

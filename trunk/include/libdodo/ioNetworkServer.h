@@ -28,7 +28,7 @@
  */
 
 #ifndef _IONETWORKSERVER_H_
-#define _IONETWORKSERVER_H_
+#define _IONETWORKSERVER_H_ 1
 
 #include <libdodo/directives.h>
 

@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATABASECONNECTOR_H_
-#define _DATABASECONNECTOR_H_
+#define _DATABASECONNECTOR_H_ 1
 
 #include <libdodo/directives.h>
 

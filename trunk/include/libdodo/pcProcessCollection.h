@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCPROCESSCOLLECTION_H_
-#define _PCPROCESSCOLLECTION_H_
+#define _PCPROCESSCOLLECTION_H_ 1
 
 #ifdef DL_EXT
 

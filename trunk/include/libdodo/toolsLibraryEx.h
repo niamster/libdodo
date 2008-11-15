@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSLIBRARYEX_H_
-#define _TOOLSLIBRARYEX_H_
+#define _TOOLSLIBRARYEX_H_ 1
 
 #include <libdodo/directives.h>
 

@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCSYNCTHREADDATASINGLE_H_
-#define _PCSYNCTHREADDATASINGLE_H_
+#define _PCSYNCTHREADDATASINGLE_H_ 1
 
 #include <libdodo/directives.h>
 

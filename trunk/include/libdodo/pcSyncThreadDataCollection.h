@@ -28,7 +28,7 @@
  */
 
 #ifndef _PCSYNCTHREADDATACOLLECTION_H_
-#define _PCSYNCTHREADDATACOLLECTION_H_
+#define _PCSYNCTHREADDATACOLLECTION_H_ 1
 
 #include <libdodo/directives.h>
 

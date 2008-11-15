@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATAMEMORYSHAREDEX_H_
-#define _DATAMEMORYSHAREDEX_H_
+#define _DATAMEMORYSHAREDEX_H_ 1
 
 #include <libdodo/directives.h>
 

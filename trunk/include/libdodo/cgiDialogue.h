@@ -28,7 +28,7 @@
  */
 
 #ifndef _CGIDIALOGUE_H_
-#define _CGIDIALOGUE_H_
+#define _CGIDIALOGUE_H_ 1
 
 #include <libdodo/directives.h>
 

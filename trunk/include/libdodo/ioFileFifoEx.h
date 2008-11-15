@@ -28,7 +28,7 @@
  */
 
 #ifndef _IOFILEFIFOEX_H_
-#define _IOFILEFIFOEX_H_
+#define _IOFILEFIFOEX_H_ 1
 
 #include <libdodo/directives.h>
 

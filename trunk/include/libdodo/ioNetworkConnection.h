@@ -28,7 +28,7 @@
  */
 
 #ifndef _IONETWORKCONNECTION_H_
-#define _IONETWORKCONNECTION_H_
+#define _IONETWORKCONNECTION_H_ 1
 
 #include <libdodo/directives.h>
 

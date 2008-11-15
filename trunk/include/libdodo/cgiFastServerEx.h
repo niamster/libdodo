@@ -28,7 +28,7 @@
  */
 
 #ifndef _CGIFASTSERVEREX_H_
-#define _CGIFASTSERVEREX_H_
+#define _CGIFASTSERVEREX_H_ 1
 
 #include <libdodo/directives.h>
 

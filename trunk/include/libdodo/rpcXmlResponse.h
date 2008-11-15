@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCXMLRESPONSE_H_
-#define _RPCXMLRESPONSE_H_
+#define _RPCXMLRESPONSE_H_ 1
 
 #include <libdodo/directives.h>
 

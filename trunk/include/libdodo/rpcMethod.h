@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCMETHOD_H_
-#define _RPCMETHOD_H_
+#define _RPCMETHOD_H_ 1
 
 #include <libdodo/directives.h>
 

@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATABASEMYSQL_H_
-#define _DATABASEMYSQL_H_
+#define _DATABASEMYSQL_H_ 1
 
 #include <libdodo/directives.h>
 

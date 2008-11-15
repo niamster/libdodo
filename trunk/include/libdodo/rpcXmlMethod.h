@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCXMLMETHOD_H_
-#define _RPCXMLMETHOD_H_
+#define _RPCXMLMETHOD_H_ 1
 
 #include <libdodo/directives.h>
 

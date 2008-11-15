@@ -28,7 +28,7 @@
  */
 
 #ifndef _IONETWORKEXCHANGEEX_H_
-#define _IONETWORKEXCHANGEEX_H_
+#define _IONETWORKEXCHANGEEX_H_ 1
 
 #include <libdodo/directives.h>
 

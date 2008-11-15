@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCVALUEEX_H_
-#define _RPCVALUEEX_H_
+#define _RPCVALUEEX_H_ 1
 
 #include <libdodo/directives.h>
 

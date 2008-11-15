@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCXMLHTTPCLIENT_H_
-#define _RPCXMLHTTPCLIENT_H_
+#define _RPCXMLHTTPCLIENT_H_ 1
 
 #include <libdodo/directives.h>
 

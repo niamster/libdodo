@@ -28,7 +28,7 @@
  */
 
 #ifndef _IOFILE_H_
-#define _IOFILE_H_
+#define _IOFILE_H_ 1
 
 #include <libdodo/ioFileRegular.h>
 #include <libdodo/ioFileTemp.h>

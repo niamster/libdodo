@@ -28,7 +28,7 @@
  */
 
 #ifndef _IONETWORKSSLSERVER_H_
-#define _IONETWORKSSLSERVER_H_
+#define _IONETWORKSSLSERVER_H_ 1
 
 #include <libdodo/directives.h>
 

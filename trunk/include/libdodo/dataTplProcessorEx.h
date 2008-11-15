@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATATPLPROCESSOREX_H_
-#define _DATATPLPROCESSOREX_H_
+#define _DATATPLPROCESSOREX_H_ 1
 
 #include <libdodo/directives.h>
 

@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATAFORMATXMLPROCESSOREX_H_
-#define _DATAFORMATXMLPROCESSOREX_H_
+#define _DATAFORMATXMLPROCESSOREX_H_ 1
 
 #include <libdodo/directives.h>
 

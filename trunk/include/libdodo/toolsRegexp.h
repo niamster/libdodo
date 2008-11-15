@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSREGEXP_H_
-#define _TOOLSREGEXP_H_
+#define _TOOLSREGEXP_H_ 1
 
 #include <libdodo/directives.h>
 

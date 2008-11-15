@@ -28,7 +28,7 @@
  */
 
 #ifndef _IONETWORKSERVEREX_H_
-#define _IONETWORKSERVEREX_H_
+#define _IONETWORKSERVEREX_H_ 1
 
 #include <libdodo/directives.h>
 

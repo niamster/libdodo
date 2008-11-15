@@ -28,7 +28,7 @@
  */
 
 #ifndef _CGIBASICEXCHANGE_H_
-#define _CGIBASICEXCHANGE_H_
+#define _CGIBASICEXCHANGE_H_ 1
 
 #include <libdodo/directives.h>
 

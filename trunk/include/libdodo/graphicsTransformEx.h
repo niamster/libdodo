@@ -28,7 +28,7 @@
  */
 
 #ifndef _GRAPHICSTRANSFORMEX_H_
-#define _GRAPHICSTRANSFORMEX_H_
+#define _GRAPHICSTRANSFORMEX_H_ 1
 
 #include <libdodo/directives.h>
 

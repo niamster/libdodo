@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSLOGGER_H_
-#define _TOOLSLOGGER_H_
+#define _TOOLSLOGGER_H_ 1
 
 #include <libdodo/directives.h>
 

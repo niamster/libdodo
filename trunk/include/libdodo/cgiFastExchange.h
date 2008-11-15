@@ -28,7 +28,7 @@
  */
 
 #ifndef _CGIFASTEXCHANGE_H_
-#define _CGIFASTEXCHANGE_H_
+#define _CGIFASTEXCHANGE_H_ 1
 
 #include <libdodo/directives.h>
 

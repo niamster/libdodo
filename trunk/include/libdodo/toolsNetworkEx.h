@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSNETWORKEX_H_
-#define _TOOLSNETWORKEX_H_
+#define _TOOLSNETWORKEX_H_ 1
 
 #include <libdodo/directives.h>
 

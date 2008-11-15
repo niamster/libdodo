@@ -28,7 +28,7 @@
  */
 
 #ifndef _IOFILEREGULAREX_H_
-#define _IOFILEREGULAREX_H_
+#define _IOFILEREGULAREX_H_ 1
 
 #include <libdodo/directives.h>
 

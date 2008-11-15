@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSMISCEX_H_
-#define _TOOLSMISCEX_H_
+#define _TOOLSMISCEX_H_ 1
 
 #include <libdodo/directives.h>
 

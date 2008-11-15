@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATABASESQLCONSTRUCTOREX_H_
-#define _DATABASESQLCONSTRUCTOREX_H_
+#define _DATABASESQLCONSTRUCTOREX_H_ 1
 
 #include <libdodo/directives.h>
 

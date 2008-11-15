@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCCGISERVER_H_
-#define _RPCCGISERVER_H_
+#define _RPCCGISERVER_H_ 1
 
 #include <libdodo/directives.h>
 

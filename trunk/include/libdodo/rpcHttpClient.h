@@ -28,7 +28,7 @@
  */
 
 #ifndef _RPCHTTPCLIENT_H_
-#define _RPCHTTPCLIENT_H_
+#define _RPCHTTPCLIENT_H_ 1
 
 #include <libdodo/directives.h>
 

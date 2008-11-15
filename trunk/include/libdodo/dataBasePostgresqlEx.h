@@ -28,7 +28,7 @@
  */
 
 #ifndef _DATABASEPOSTGRESQLEX_H_
-#define _DATABASEPOSTGRESQLEX_H_
+#define _DATABASEPOSTGRESQLEX_H_ 1
 
 #include <libdodo/directives.h>
 

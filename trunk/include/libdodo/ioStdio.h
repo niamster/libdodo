@@ -28,7 +28,7 @@
  */
 
 #ifndef _IOSTDIO_H_
-#define _IOSTDIO_H_
+#define _IOSTDIO_H_ 1
 
 #include <fcntl.h>
 #include <sys/un.h>
