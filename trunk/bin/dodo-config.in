@@ -8,12 +8,12 @@ libdir=@libdir@
 usage()
 {
     cat <<EOF
-Usage: dodo2-config [OPTION]
+Usage: dodo-config [OPTION]
 
 Known values for OPTION are:
 
-  --prefix=DIR		change libdodo prefix [default $prefix]
-  --exec-prefix=DIR	change libdodo exec prefix [default $exec_prefix]
+  --prefix		print libdodo prefix
+  --exec-prefix	print libdodo exec prefix
   --libs		print library linking information
   --cflags		print pre-processor and compiler flags
   --modules		module support enabled
@@ -28,77 +28,42 @@ if test $# -eq 0; then
     usage 1
 fi
 
-cflags=false
-libs=false
-
 while test $# -gt 0; do
-    case "$1" in
-    -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
-    *) optarg= ;;
-    esac
 
     case "$1" in
-    --prefix=*)
-	prefix=$optarg
-	includedir=$prefix/include
-	libdir=$prefix/lib
-	;;
 
-    --prefix)
-	echo $prefix
-	;;
+		--prefix)
+			echo $prefix
+			;;
 
-    --exec-prefix=*)
-      exec_prefix=$optarg
-      libdir=$exec_prefix/lib
-      ;;
+		--exec-prefix)
+			echo $exec_prefix
+			;;
 
-    --exec-prefix)
-      echo $exec_prefix
-      ;;
+		--version)
+			echo @PACKAGE_STRING@
+			exit 0
+			;;
 
-    --version)
-	echo @PACKAGE_STRING@
-	exit 0
-	;;
+		--help)
+			usage 0
+			;;
 
-    --help)
-	usage 0
-	;;
+		--cflags)
+			echo -I$includedir @CFLAGS@ @CPPFLAGS@
+			;;
 
-    --cflags)
-       	echo -I@includedir@ @CFLAGS@ @CPPFLAGS@
-       	;;
+		--modules)
+			echo @MODULES@
+			;;
 
-    --libtool-libs)
-	if [ -r ${libdir}/@LIBTOOLLIBS@ ]
-	then
-	    echo ${libdir}/@LIBTOOLLIBS@
-	fi
-        ;;
+		--libs)
+				echo -L$libdir -ldodo
+			;;
 
-    --modules)
-       	echo @MODULES@
-       	;;
-
-    --libs)
-        if [ "`uname`" = "Linux" ]
-	then
-	    if [ "-L@libdir@" = "-L/usr/lib64" ]
-	    then
-		echo -L@LIBS@ @LDFLAGS@ -ldodo
-	    else
-		echo -L@libdir@ @LIBS@ @LDFLAGS@ -ldodo
-	    fi
-	else
-	    echo -L@libdir@ @LIBS@ @LDFLAGS@ -ldodo
-	fi
-       	;;
-
-    *)
-	usage
-	exit 1
-	;;
+		*)
+			usage 1
+			;;
     esac
     shift
 done
