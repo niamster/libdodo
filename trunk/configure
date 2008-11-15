@@ -5480,7 +5480,7 @@ then
 	echo -n -e "#define DATABASE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 fi
 
-# Check for libraries.
+
 
 # Check whether --with-sqlite3 was given.
 if test "${with_sqlite3+set}" = set; then
@@ -5489,14 +5489,14 @@ else
   MOD_SQLITE="no"
 fi
 
-	if test "$MOD_SQLITE" != "no" -a "$MOD_SQLITE_DIR" != "no"
+if test "$MOD_SQLITE" != "no" -a "$MOD_SQLITE_DIR" != "no"
+then
+	if test "$MOD_SQLITE_DIR" = "yes"
 	then
-		if test "$MOD_SQLITE_DIR" = "yes"
-		then
-			MOD_SQLITE_DIR=/usr
-		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib -lsqlite3"
+		MOD_SQLITE_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib -lsqlite3"
 
 
 { $as_echo "$as_me:$LINENO: checking for sqlite3_exec in -lsqlite3" >&5
@@ -5577,7 +5577,7 @@ $as_echo "$as_me: error: sqlite3 lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_sqlite3_h+set}" = set; then
+	if test "${ac_cv_header_sqlite3_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for sqlite3.h" >&5
 $as_echo_n "checking for sqlite3.h... " >&6; }
 if test "${ac_cv_header_sqlite3_h+set}" = set; then
@@ -5718,19 +5718,19 @@ $as_echo "$as_me: error: sqlite3 header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		RESULT="$RESULT\nSQLite\t\t\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nSQLite\t\t\t\t\t\t\t\tenabled"
 
-		if test "$DATABASE_W_XEXEC" = "no"
-		then
-			RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\tdisabled"
-		else
-			RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\tenabled"
-		fi
+	if test "$DATABASE_W_XEXEC" = "no"
+	then
+		RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\tdisabled"
 	else
-		RESULT="$RESULT\nSQLite\t\t\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\tenabled"
 	fi
+else
+	RESULT="$RESULT\nSQLite\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-openssl was given.
@@ -5740,14 +5740,14 @@ else
   MOD_OPENSSL="no"
 fi
 
-	if test "$MOD_OPENSSL" != "no" -a "$MOD_OPENSSL_DIR" != "no"
+if test "$MOD_OPENSSL" != "no" -a "$MOD_OPENSSL_DIR" != "no"
+then
+	if test "$MOD_OPENSSL_DIR" = "yes"
 	then
-		if test "$MOD_OPENSSL_DIR" = "yes"
-		then
-			MOD_OPENSSL_DIR=/usr
-		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_OPENSSL_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_OPENSSL_DIR/lib -lssl"
+		MOD_OPENSSL_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_OPENSSL_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_OPENSSL_DIR/lib -lssl"
 
 { $as_echo "$as_me:$LINENO: checking for SSL_library_init in -lssl" >&5
 $as_echo_n "checking for SSL_library_init in -lssl... " >&6; }
@@ -5827,7 +5827,7 @@ $as_echo "$as_me: error: openssl lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_openssl_ssl_h+set}" = set; then
+	if test "${ac_cv_header_openssl_ssl_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for openssl/ssl.h" >&5
 $as_echo_n "checking for openssl/ssl.h... " >&6; }
 if test "${ac_cv_header_openssl_ssl_h+set}" = set; then
@@ -5968,33 +5968,33 @@ $as_echo "$as_me: error: openssl header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define OPENSSL_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define OPENSSL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		if test "$IO_W_XEXEC" = "no"
-		then
-			RESULT="$RESULT\nio::network::ssl::exchange xexec support\t\t\tdisabled"
-		else
-			RESULT="$RESULT\nio::network::ssl::exchange xexec support\t\t\tenabled"
-		fi
-
-		if test "$IO_W_XEXEC" = "no"
-		then
-			RESULT="$RESULT\nio::network::ssl::client xexec support\t\t\t\tdisabled"
-		else
-			RESULT="$RESULT\nio::network::ssl::client xexec support\t\t\t\tenabled"
-		fi
-
-		if test "$IO_W_XEXEC" = "no"
-		then
-			RESULT="$RESULT\nio::network::ssl::server xexec support\t\t\t\tdisabled"
-		else
-			RESULT="$RESULT\nio::network::ssl::server xexec support\t\t\t\tenabled"
-		fi
-
-		RESULT="$RESULT\nOpenSSL\t\t\t\t\t\t\t\tenabled"
+	if test "$IO_W_XEXEC" = "no"
+	then
+		RESULT="$RESULT\nio::network::ssl::exchange xexec support\t\t\tdisabled"
 	else
-		RESULT="$RESULT\nOpenSSL\t\t\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\nio::network::ssl::exchange xexec support\t\t\tenabled"
 	fi
+
+	if test "$IO_W_XEXEC" = "no"
+	then
+		RESULT="$RESULT\nio::network::ssl::client xexec support\t\t\t\tdisabled"
+	else
+		RESULT="$RESULT\nio::network::ssl::client xexec support\t\t\t\tenabled"
+	fi
+
+	if test "$IO_W_XEXEC" = "no"
+	then
+		RESULT="$RESULT\nio::network::ssl::server xexec support\t\t\t\tdisabled"
+	else
+		RESULT="$RESULT\nio::network::ssl::server xexec support\t\t\t\tenabled"
+	fi
+
+	RESULT="$RESULT\nOpenSSL\t\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nOpenSSL\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-bfd was given.
@@ -6004,14 +6004,14 @@ else
   MOD_BFD="no"
 fi
 
-	if test "$MOD_BFD" != "no" -a "$MOD_BFD_DIR" != "no"
+if test "$MOD_BFD" != "no" -a "$MOD_BFD_DIR" != "no"
+then
+	if test "$MOD_BFD_DIR" = "yes"
 	then
-		if test "$MOD_BFD_DIR" = "yes"
-		then
-			MOD_BFD_DIR=/usr
-		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_BFD_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_BFD_DIR/lib -lbfd"
+		MOD_BFD_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_BFD_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_BFD_DIR/lib -lbfd"
 
 { $as_echo "$as_me:$LINENO: checking for bfd_fopen in -lbfd" >&5
 $as_echo_n "checking for bfd_fopen in -lbfd... " >&6; }
@@ -6091,7 +6091,7 @@ $as_echo "$as_me: error: bfd lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_bfd_h+set}" = set; then
+	if test "${ac_cv_header_bfd_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for bfd.h" >&5
 $as_echo_n "checking for bfd.h... " >&6; }
 if test "${ac_cv_header_bfd_h+set}" = set; then
@@ -6232,12 +6232,12 @@ $as_echo "$as_me: error: bfd header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define BFD_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define BFD_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		RESULT="$RESULT\nLibrary name resolution\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\nLibrary name resolution\t\t\t\t\t\tdisabled"
-	fi
+	RESULT="$RESULT\nLibrary name resolution\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nLibrary name resolution\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-postgresql was given.
@@ -6247,23 +6247,23 @@ else
   MOD_POSTGRESQL="no"
 fi
 
-	if test "$MOD_POSTGRESQL" != "no" -a "$MOD_POSTGRESQL_DIR" != "no"
+if test "$MOD_POSTGRESQL" != "no" -a "$MOD_POSTGRESQL_DIR" != "no"
+then
+	if test "$MOD_POSTGRESQL_DIR" = "yes"
 	then
-		if test "$MOD_POSTGRESQL_DIR" = "yes"
+		if test "$(which pg_config 2>/dev/null)" != ""
 		then
-			if test "$(which pg_config 2>/dev/null)" != ""
-			then
-				CPPFLAGS="$CPPFLAGS -I$(pg_config --includedir) -I$(pg_config --includedir-server)"
-				LDFLAGS="$LDFLAGS -L$(pg_config --libdir) -lpq"
-			else
-				MOD_POSTGRESQL_DIR=/usr
-				CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql/server -I$MOD_POSTGRESQL_DIR/include/postgresql/libpq"
-				LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
-			fi
+			CPPFLAGS="$CPPFLAGS -I$(pg_config --includedir) -I$(pg_config --includedir-server)"
+			LDFLAGS="$LDFLAGS -L$(pg_config --libdir) -lpq"
 		else
+			MOD_POSTGRESQL_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql/server -I$MOD_POSTGRESQL_DIR/include/postgresql/libpq"
 			LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
 		fi
+	else
+		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql/server -I$MOD_POSTGRESQL_DIR/include/postgresql/libpq"
+		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
+	fi
 
 { $as_echo "$as_me:$LINENO: checking for PQclear in -lpq" >&5
 $as_echo_n "checking for PQclear in -lpq... " >&6; }
@@ -6343,7 +6343,7 @@ $as_echo "$as_me: error: postgresql lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_libpq_fe_h+set}" = set; then
+	if test "${ac_cv_header_libpq_fe_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for libpq-fe.h" >&5
 $as_echo_n "checking for libpq-fe.h... " >&6; }
 if test "${ac_cv_header_libpq_fe_h+set}" = set; then
@@ -6485,7 +6485,7 @@ fi
 
 
 
-		ac_ext=cpp
+	ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -6534,26 +6534,26 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-		ac_ext=c
+	ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		if test "$DATABASE_W_XEXEC" = "no"
-		then
-			RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\tdisabled"
-		else
-			RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\tenabled"
-		fi
-
-		RESULT="$RESULT\nPostgresql\t\t\t\t\t\t\tenabled"
+	if test "$DATABASE_W_XEXEC" = "no"
+	then
+		RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\tdisabled"
 	else
-		RESULT="$RESULT\nPostgresql\t\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\tenabled"
 	fi
+
+	RESULT="$RESULT\nPostgresql\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nPostgresql\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-mysql was given.
@@ -6563,23 +6563,23 @@ else
   MOD_MYSQL="no"
 fi
 
-	if test "$MOD_MYSQL" != "no" -a "$MOD_MYSQL_DIR" != "no"
+if test "$MOD_MYSQL" != "no" -a "$MOD_MYSQL_DIR" != "no"
+then
+	if test "$MOD_MYSQL_DIR" = "yes"
 	then
-		if test "$MOD_MYSQL_DIR" = "yes"
+		if test "$(which mysql_config 2>/dev/null)" != ""
 		then
-			if test "$(which mysql_config 2>/dev/null)" != ""
-			then
-				CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
-				LDFLAGS="$LDFLAGS $(mysql_config --libs)"
-			else
-				MOD_MYSQL_DIR=/usr
-				CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
-				LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib -lmysqlclient"
-			fi
+			CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
+			LDFLAGS="$LDFLAGS $(mysql_config --libs)"
 		else
+			MOD_MYSQL_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
 			LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib -lmysqlclient"
 		fi
+	else
+		CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib -lmysqlclient"
+	fi
 
 { $as_echo "$as_me:$LINENO: checking for mysql_init in -lmysqlclient" >&5
 $as_echo_n "checking for mysql_init in -lmysqlclient... " >&6; }
@@ -6659,7 +6659,7 @@ $as_echo "$as_me: error: mySQL lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_mysql_h+set}" = set; then
+	if test "${ac_cv_header_mysql_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for mysql.h" >&5
 $as_echo_n "checking for mysql.h... " >&6; }
 if test "${ac_cv_header_mysql_h+set}" = set; then
@@ -6801,13 +6801,13 @@ fi
 
 
 
-		ac_ext=cpp
+	ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-		cat >conftest.$ac_ext <<_ACEOF
+	cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -6849,26 +6849,26 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-		ac_ext=c
+	ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-		echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		if test "$DATABASE_W_XEXEC" = "no"
-		then
-			RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tdisabled"
-		else
-			RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tenabled"
-		fi
-
-		RESULT="$RESULT\nMySQL\t\t\t\t\t\t\t\tenabled"
+	if test "$DATABASE_W_XEXEC" = "no"
+	then
+		RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tdisabled"
 	else
-		RESULT="$RESULT\nMySQL\t\t\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tenabled"
 	fi
+
+	RESULT="$RESULT\nMySQL\t\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nMySQL\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-fcgi was given.
@@ -6878,14 +6878,14 @@ else
   MOD_FASTCGI="no"
 fi
 
-	if test "$MOD_FASTCGI" != "no" -a "$MOD_FASTCGI_DIR" != "no"
+if test "$MOD_FASTCGI" != "no" -a "$MOD_FASTCGI_DIR" != "no"
+then
+	if test "$MOD_FASTCGI_DIR" = "yes"
 	then
-		if test "$MOD_FASTCGI_DIR" = "yes"
-		then
-			MOD_FASTCGI_DIR=/usr
-		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_FASTCGI_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_FASTCGI_DIR/lib -lfcgi"
+		MOD_FASTCGI_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_FASTCGI_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_FASTCGI_DIR/lib -lfcgi"
 
 { $as_echo "$as_me:$LINENO: checking for FCGX_Init in -lfcgi" >&5
 $as_echo_n "checking for FCGX_Init in -lfcgi... " >&6; }
@@ -6965,7 +6965,7 @@ $as_echo "$as_me: error: fcgi lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_fcgiapp_h+set}" = set; then
+	if test "${ac_cv_header_fcgiapp_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for fcgiapp.h" >&5
 $as_echo_n "checking for fcgiapp.h... " >&6; }
 if test "${ac_cv_header_fcgiapp_h+set}" = set; then
@@ -7106,19 +7106,19 @@ $as_echo "$as_me: error: fcgi header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define FASTCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define FASTCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		if test "$IO_W_XEXEC" = "no"
-		then
-			RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\tdisabled"
-		else
-			RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\tenabled"
-		fi
-
-		RESULT="$RESULT\nFastCGI\t\t\t\t\t\t\t\tenabled"
+	if test "$IO_W_XEXEC" = "no"
+	then
+		RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\tdisabled"
 	else
-		RESULT="$RESULT\nFastCGI\t\t\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\tenabled"
 	fi
+
+	RESULT="$RESULT\nFastCGI\t\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nFastCGI\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-pcre was given.
@@ -7128,17 +7128,17 @@ else
   MOD_PCRE="no"
 fi
 
-	if test "$MOD_PCRE" != "no" -a "$MOD_PCRE_DIR" != "no"
+if test "$MOD_PCRE" != "no" -a "$MOD_PCRE_DIR" != "no"
+then
+	if test "$MOD_PCRE_DIR" = "yes"
 	then
-		if test "$MOD_PCRE_DIR" = "yes"
-		then
-			CPPFLAGS="$CPPFLAGS $(pcre-config --cflags)"
-			LDFLAGS="$LDFLAGS $(pcre-config --libs)"
-		else
-			MOD_PCRE_DIR=/usr
-			CPPFLAGS="$CPPFLAGS -I$MOD_PCRE_DIR/include"
-			LDFLAGS="$LDFLAGS -L$MOD_PCRE_DIR/lib -lpcre"
-		fi
+		CPPFLAGS="$CPPFLAGS $(pcre-config --cflags)"
+		LDFLAGS="$LDFLAGS $(pcre-config --libs)"
+	else
+		MOD_PCRE_DIR=/usr
+		CPPFLAGS="$CPPFLAGS -I$MOD_PCRE_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_PCRE_DIR/lib -lpcre"
+	fi
 
 { $as_echo "$as_me:$LINENO: checking for pcre_exec in -lpcre" >&5
 $as_echo_n "checking for pcre_exec in -lpcre... " >&6; }
@@ -7218,7 +7218,7 @@ $as_echo "$as_me: error: pcre lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_pcre_h+set}" = set; then
+	if test "${ac_cv_header_pcre_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for pcre.h" >&5
 $as_echo_n "checking for pcre.h... " >&6; }
 if test "${ac_cv_header_pcre_h+set}" = set; then
@@ -7359,12 +7359,12 @@ $as_echo "$as_me: error: pcre header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define PCRE_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define PCRE_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		RESULT="$RESULT\nPCRE\t\t\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\nPCRE\t\t\t\t\t\t\t\tdisabled"
-	fi
+	RESULT="$RESULT\nPCRE\t\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nPCRE\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-dl was given.
@@ -7374,15 +7374,15 @@ else
   MOD_DL="no"
 fi
 
-	if test "$MOD_DL" != "no" -a "$MOD_DL_DIR" != "no"
+if test "$MOD_DL" != "no" -a "$MOD_DL_DIR" != "no"
+then
+	if test "$MOD_DL_DIR" = "yes"
 	then
-		if test "$MOD_DL_DIR" = "yes"
-		then
-			MOD_DL_DIR=/usr
-		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_DL_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_DL_DIR/lib"
-		if test "${ac_cv_header_dlfcn_h+set}" = set; then
+		MOD_DL_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_DL_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_DL_DIR/lib"
+	if test "${ac_cv_header_dlfcn_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for dlfcn.h" >&5
 $as_echo_n "checking for dlfcn.h... " >&6; }
 if test "${ac_cv_header_dlfcn_h+set}" = set; then
@@ -7516,15 +7516,15 @@ $as_echo "$ac_cv_header_dlfcn_h" >&6; }
 fi
 
 
-                # Check whether --enable-dl-lib was given.
+			# Check whether --enable-dl-lib was given.
 if test "${enable_dl_lib+set}" = set; then
   enableval=$enable_dl_lib; MOD_DL_LIB="$enableval"
 else
   MOD_DL_LIB="no"
 fi
 
-                if test "$MOD_DL_LIB" = "yes"
-                then
+			if test "$MOD_DL_LIB" = "yes"
+			then
 
 { $as_echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
 $as_echo_n "checking for dlopen in -ldl... " >&6; }
@@ -7604,11 +7604,11 @@ $as_echo "$as_me: error: dl lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-			LDFLAGS="$LDFLAGS -ldl"
-		fi
-		echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
+		LDFLAGS="$LDFLAGS -ldl"
+	fi
+	echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		# Check whether --enable-fast-dynamic-loading was given.
+	# Check whether --enable-fast-dynamic-loading was given.
 if test "${enable_fast_dynamic_loading+set}" = set; then
   enableval=$enable_fast_dynamic_loading; DL_FAST="$enableval"
 else
@@ -7616,19 +7616,19 @@ else
 fi
 
 
-		if test "$DL_FAST" = "yes"
-		then
-			echo -n -e "#define DL_FAST\n\n" >> include/libdodo/directives.runtime.h
+	if test "$DL_FAST" = "yes"
+	then
+		echo -n -e "#define DL_FAST\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tenabled"
-		else
-			RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tdisabled"
-		fi
-
-		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\t\tenabled"
+		RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tenabled"
 	else
-		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tdisabled"
 	fi
+
+	RESULT="$RESULT\nDynamic linking\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nDynamic linking\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-libxml2 was given.
@@ -7638,23 +7638,23 @@ else
   MOD_LIBXML2="no"
 fi
 
-	if test "$MOD_LIBXML2" != "no" -a "$MOD_LIBXML2_DIR" != "no"
+if test "$MOD_LIBXML2" != "no" -a "$MOD_LIBXML2_DIR" != "no"
+then
+	if test "$MOD_LIBXML2_DIR" = "yes"
 	then
-		if test "$MOD_LIBXML2_DIR" = "yes"
+		if test "$(which xml2-config 2>/dev/null)" != ""
 		then
-			if test "$(which xml2-config 2>/dev/null)" != ""
-			then
-				CPPFLAGS="$CPPFLAGS $(xml2-config --cflags)"
-				LDFLAGS="$LDFLAGS $(xml2-config --libs)"
-			else
-				MOD_LIBXML2_DIR=/usr
-				CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
-				LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
-			fi
+			CPPFLAGS="$CPPFLAGS $(xml2-config --cflags)"
+			LDFLAGS="$LDFLAGS $(xml2-config --libs)"
 		else
+			MOD_LIBXML2_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
 			LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
 		fi
+	else
+		CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
+		LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
+	fi
 
 { $as_echo "$as_me:$LINENO: checking for xmlInitParser in -lxml2" >&5
 $as_echo_n "checking for xmlInitParser in -lxml2... " >&6; }
@@ -7734,7 +7734,7 @@ $as_echo "$as_me: error: libxml2 lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_libxml_xmlmemory_h+set}" = set; then
+	if test "${ac_cv_header_libxml_xmlmemory_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for libxml/xmlmemory.h" >&5
 $as_echo_n "checking for libxml/xmlmemory.h... " >&6; }
 if test "${ac_cv_header_libxml_xmlmemory_h+set}" = set; then
@@ -7875,12 +7875,12 @@ $as_echo "$as_me: error: libxml2 header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define LIBXML2_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define LIBXML2_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		RESULT="$RESULT\nlibxml2\t\t\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\nlibxml2\t\t\t\t\t\t\t\tdisabled"
-	fi
+	RESULT="$RESULT\nlibxml2\t\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nlibxml2\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-pthread was given.
@@ -7890,12 +7890,12 @@ else
   MOD_PTHREAD="no"
 fi
 
-	if test "$MOD_PTHREAD" != "no" -a "$MOD_PTHREAD_DIR" != "no"
+if test "$MOD_PTHREAD" != "no" -a "$MOD_PTHREAD_DIR" != "no"
+then
+	if test "$MOD_PTHREAD_DIR" = "yes"
 	then
-		if test "$MOD_PTHREAD_DIR" = "yes"
-		then
-			MOD_PTHREAD_DIR=/usr
-		fi
+		MOD_PTHREAD_DIR=/usr
+	fi
 
 # Check whether --with-pthread-lib was given.
 if test "${with_pthread_lib+set}" = set; then
@@ -7904,8 +7904,8 @@ else
   MOD_PTHREAD_LIB="pthread"
 fi
 
-		CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib -l$MOD_PTHREAD_LIB"
+	CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib -l$MOD_PTHREAD_LIB"
 
 as_ac_Lib=`$as_echo "ac_cv_lib_$MOD_PTHREAD_LIB''_pthread_create" | $as_tr_sh`
 { $as_echo "$as_me:$LINENO: checking for pthread_create in -l$MOD_PTHREAD_LIB" >&5
@@ -7990,7 +7990,7 @@ $as_echo "$as_me: error: $MOD_PTHREAD_LIB lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_pthread_h+set}" = set; then
+	if test "${ac_cv_header_pthread_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for pthread.h" >&5
 $as_echo_n "checking for pthread.h... " >&6; }
 if test "${ac_cv_header_pthread_h+set}" = set; then
@@ -8131,12 +8131,12 @@ $as_echo "$as_me: error: pthread header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		RESULT="$RESULT\npthread\t\t\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
-	else
-		RESULT="$RESULT\npthread\t\t\t\t\t\t\t\tdisabled"
-	fi
+	RESULT="$RESULT\npthread\t\t\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
+else
+	RESULT="$RESULT\npthread\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-bzip2 was given.
@@ -8146,14 +8146,14 @@ else
   MOD_BZIP2="no"
 fi
 
-	if test "$MOD_BZIP2" != "no" -a "$MOD_BZIP2_DIR" != "no"
+if test "$MOD_BZIP2" != "no" -a "$MOD_BZIP2_DIR" != "no"
+then
+	if test "$MOD_BZIP2_DIR" = "yes"
 	then
-		if test "$MOD_BZIP2_DIR" = "yes"
-		then
-			MOD_BZIP2_DIR=/usr
-		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_BZIP2_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_BZIP2_DIR/lib -lbz2"
+		MOD_BZIP2_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_BZIP2_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_BZIP2_DIR/lib -lbz2"
 
 { $as_echo "$as_me:$LINENO: checking for BZ2_bzBuffToBuffCompress in -lbz2" >&5
 $as_echo_n "checking for BZ2_bzBuffToBuffCompress in -lbz2... " >&6; }
@@ -8233,7 +8233,7 @@ $as_echo "$as_me: error: bz2 lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		if test "${ac_cv_header_bzlib_h+set}" = set; then
+	if test "${ac_cv_header_bzlib_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for bzlib.h" >&5
 $as_echo_n "checking for bzlib.h... " >&6; }
 if test "${ac_cv_header_bzlib_h+set}" = set; then
@@ -8374,12 +8374,12 @@ $as_echo "$as_me: error: bz2 header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define BZIP2_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define BZIP2_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		RESULT="$RESULT\nBZIP2\t\t\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\nBZIP2\t\t\t\t\t\t\t\tdisabled"
-	fi
+	RESULT="$RESULT\nBZIP2\t\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nBZIP2\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-zlib was given.
@@ -8389,15 +8389,15 @@ else
   MOD_ZLIB="no"
 fi
 
-	if test "$MOD_ZLIB" != "no" -a "$MOD_ZLIB_DIR" != "no"
+if test "$MOD_ZLIB" != "no" -a "$MOD_ZLIB_DIR" != "no"
+then
+	if test "$MOD_ZLIB_DIR" = "yes"
 	then
-		if test "$MOD_ZLIB_DIR" = "yes"
-		then
-			MOD_ZLIB_DIR=/usr
-		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_ZLIB_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_ZLIB_DIR/lib"
-		if test "${ac_cv_header_zlib_h+set}" = set; then
+		MOD_ZLIB_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_ZLIB_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_ZLIB_DIR/lib"
+	if test "${ac_cv_header_zlib_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for zlib.h" >&5
 $as_echo_n "checking for zlib.h... " >&6; }
 if test "${ac_cv_header_zlib_h+set}" = set; then
@@ -8531,13 +8531,13 @@ $as_echo "$ac_cv_header_zlib_h" >&6; }
 fi
 
 
-		# Check whether --enable-zlib-lib was given.
+	# Check whether --enable-zlib-lib was given.
 if test "${enable_zlib_lib+set}" = set; then
   enableval=$enable_zlib_lib; MOD_ZLIB_LIB="yes"
 fi
 
-	        if test "$MOD_ZLIB_LIB" = "yes"
-		then
+		if test "$MOD_ZLIB_LIB" = "yes"
+	then
 
 { $as_echo "$as_me:$LINENO: checking for deflateInit2 in -lz" >&5
 $as_echo_n "checking for deflateInit2 in -lz... " >&6; }
@@ -8617,14 +8617,14 @@ $as_echo "$as_me: error: zlib lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-			LDFLAGS="$LDFLAGS -lz"
-		fi
-		echo -n -e "#define ZLIB_EXT\n\n" >> include/libdodo/directives.runtime.h
-
-		RESULT="$RESULT\nZLIB\t\t\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\nZLIB\t\t\t\t\t\t\t\tdisabled"
+		LDFLAGS="$LDFLAGS -lz"
 	fi
+	echo -n -e "#define ZLIB_EXT\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\nZLIB\t\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nZLIB\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-iconv was given.
@@ -8634,15 +8634,15 @@ else
   MOD_ICONV="no"
 fi
 
-	if test "$MOD_ICONV" != "no" -a "$MOD_ICONV_DIR" != "no"
+if test "$MOD_ICONV" != "no" -a "$MOD_ICONV_DIR" != "no"
+then
+	if test "$MOD_ICONV_DIR" = "yes"
 	then
-		if test "$MOD_ICONV_DIR" = "yes"
-		then
-			MOD_ICONV_DIR=/usr
-		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_ICONV_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_ICONV_DIR/lib"
-		if test "${ac_cv_header_iconv_h+set}" = set; then
+		MOD_ICONV_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_ICONV_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_ICONV_DIR/lib"
+	if test "${ac_cv_header_iconv_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for iconv.h" >&5
 $as_echo_n "checking for iconv.h... " >&6; }
 if test "${ac_cv_header_iconv_h+set}" = set; then
@@ -8776,13 +8776,13 @@ $as_echo "$ac_cv_header_iconv_h" >&6; }
 fi
 
 
-		# Check whether --enable-iconv-lib was given.
+	# Check whether --enable-iconv-lib was given.
 if test "${enable_iconv_lib+set}" = set; then
   enableval=$enable_iconv_lib; MOD_ICONV_LIB="yes"
 fi
 
-	        if test "$MOD_ICONV_LIB" = "yes"
-		then
+		if test "$MOD_ICONV_LIB" = "yes"
+	then
 
 { $as_echo "$as_me:$LINENO: checking for iconv in -liconv" >&5
 $as_echo_n "checking for iconv in -liconv... " >&6; }
@@ -8862,14 +8862,14 @@ $as_echo "$as_me: error: iconv lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-			LDFLAGS="$LDFLAGS -liconv"
-		fi
-		echo -n -e "#define ICONV_EXT\n\n" >> include/libdodo/directives.runtime.h
-
-		RESULT="$RESULT\niconv\t\t\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\niconv\t\t\t\t\t\t\t\tdisabled"
+		LDFLAGS="$LDFLAGS -liconv"
 	fi
+	echo -n -e "#define ICONV_EXT\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\niconv\t\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\niconv\t\t\t\t\t\t\t\tdisabled"
+fi
 
 
 # Check whether --with-imagemagick was given.
@@ -8879,24 +8879,24 @@ else
   MOD_IMAGEMAGICK="no"
 fi
 
-	if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
+if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
+then
+	ORIGINAL_LDFLAGS=$LDFLAGS
+	if test "$MOD_IMAGEMAGICK_DIR" = "yes"
 	then
-		ORIGINAL_LDFLAGS=$LDFLAGS
-		if test "$MOD_IMAGEMAGICK_DIR" = "yes"
+		if test "$(which Magick-config 2>/dev/null)" != ""
 		then
-			if test "$(which Magick-config 2>/dev/null)" != ""
-			then
-				CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
-				LDFLAGS="$LDFLAGS $(Magick-config --libs)"
-			else
-				MOD_IMAGEMAGICK_DIR=/usr
-				CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
-				LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
-			fi
+			CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
+			LDFLAGS="$LDFLAGS $(Magick-config --libs)"
 		else
+			MOD_IMAGEMAGICK_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
 			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 		fi
+	else
+		CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
+	fi
 
 { $as_echo "$as_me:$LINENO: checking for MagickCoreGenesis in -lMagickCore" >&5
 $as_echo_n "checking for MagickCoreGenesis in -lMagickCore... " >&6; }
@@ -8974,9 +8974,9 @@ else
   OLD_MAGICK_LIB="yes"
 fi
 
-		if test "$OLD_MAGICK_LIB" == "yes"
-		then
-			LDFLAGS="$ORIGINAL_LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
+	if test "$OLD_MAGICK_LIB" == "yes"
+	then
+		LDFLAGS="$ORIGINAL_LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
 
 
 { $as_echo "$as_me:$LINENO: checking for MagickCoreGenesis in -lMagick" >&5
@@ -9057,8 +9057,8 @@ $as_echo "$as_me: error: Magick lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		fi
-		if test "${ac_cv_header_magick_MagickCore_h+set}" = set; then
+	fi
+	if test "${ac_cv_header_magick_MagickCore_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for magick/MagickCore.h" >&5
 $as_echo_n "checking for magick/MagickCore.h... " >&6; }
 if test "${ac_cv_header_magick_MagickCore_h+set}" = set; then
@@ -9199,28 +9199,28 @@ $as_echo "$as_me: error: Magick header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		# Check whether --enable-graphics-xexec was given.
+	# Check whether --enable-graphics-xexec was given.
 if test "${enable_graphics_xexec+set}" = set; then
   enableval=$enable_graphics_xexec; GRAPHICS_W_XEXEC="$enableval"
 else
   GRAPHICS_W_XEXEC="yes"
 fi
 
-		if test "$GRAPHICS_W_XEXEC" = "no"
-		then
-			echo -n -e "#define GRAPHICS_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+	if test "$GRAPHICS_W_XEXEC" = "no"
+	then
+		echo -n -e "#define GRAPHICS_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tdisabled"
-		else
-			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tenabled"
-		fi
-
-		RESULT="$RESULT\nImageMagick\t\t\t\t\t\t\tenabled"
+		RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tdisabled"
 	else
-		RESULT="$RESULT\nImageMagick\t\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tenabled"
 	fi
+
+	RESULT="$RESULT\nImageMagick\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nImageMagick\t\t\t\t\t\t\tdisabled"
+fi
 
 echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
 
@@ -9624,6 +9624,8 @@ fi
 
 done
 
+
+##
 
 ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/cgifast_test/Makefile tests/cgi_test/Makefile tests/dbmysql_test/Makefile tests/dbpostgresql_test/Makefile tests/dbsqlite_test/Makefile tests/db_test/Makefile tests/iononblocked_ionetwork_test/Makefile tests/iononblocked_ionetworkssl_test/Makefile tests/iostdio_test/Makefile tests/iofile_toolsfilesystem_test/Makefile tests/iopipe_iofilefifo_pcthreadcollection_test/Makefile tests/ionetwork_pcthreads_test/Makefile tests/ionetworkclient_test/Makefile tests/ionetworkserver_test/Makefile tests/ionetworksslserver_test/Makefile tests/ionetworksslclient_test/Makefile tests/ionetworkhttp_test/Makefile tests/pcthreadcollection_test/Makefile tests/pcprocesscollection_test/Makefile tests/pcjobcollection_test/Makefile tests/toolsnetwork_test/Makefile tests/toolsos_test/Makefile tests/toolstime_test/Makefile tests/toolsmisc_test/Makefile tests/toolscode_test/Makefile tests/toolslogger_test/Makefile tests/toolslibrary_test/Makefile tests/toolsregexp_test/Makefile tests/xexec_test/Makefile tests/rpcxmlhttpclient_test/Makefile tests/rpcxmlcgiserver_test/Makefile tests/rpcjsonhttpclient_test/Makefile tests/rpcjsoncgiserver_test/Makefile tests/dataformatjson_test/Makefile tests/dataformatxml_test/Makefile"
 
