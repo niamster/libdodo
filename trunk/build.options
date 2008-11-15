@@ -7,7 +7,7 @@
 ./configure --prefix=/opt/libdodo
 
 #everything enabled except xexec actions
-./configure --with-sqlite3 --with-postgresql --with-mysql --with-fcgi --with-dl --with-libxml2 --with-pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre --with-bfd --with-openssl --prefix=/opt/libdodo --disable-image-xexec-support --disable-db-xexec-support --disable-io-xexec-support
+./configure --with-sqlite3 --with-postgresql --with-mysql --with-fcgi --with-dl --with-libxml2 --with-pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre --with-bfd --with-openssl --prefix=/opt/libdodo --disable-image-xexec --disable-db-xexec --disable-io-xexec
 
 #everything enabled except pcre
 ./configure --with-sqlite3 --with-postgresql --with-mysql --with-fcgi --with-dl --with-libxml2 --with-pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-bfd --with-openssl --prefix=/opt/libdodo
