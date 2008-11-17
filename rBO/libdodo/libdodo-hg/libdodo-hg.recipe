@@ -66,7 +66,7 @@ class LibdodoHg(CPackageRecipe):
 
 		if Use.bzip2:
 			r.buildRequires += ['bzip2:devel']
-		extraconfig +=' --with-bzip2'
+			extraconfig +=' --with-bzip2'
 
 		if Use.zlib:
 			r.buildRequires += ['zlib:devel']
