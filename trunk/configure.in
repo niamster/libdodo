@@ -147,8 +147,8 @@ then
 fi
 
 
-AC_ARG_WITH([sqlite3],
-	AS_HELP_STRING([--with-sqlite3(=/path)],[use sqlite3]),
+AC_ARG_WITH([sqlite],
+	AS_HELP_STRING([--with-sqlite(=/path)],[use sqlite]),
 	[MOD_SQLITE_DIR="$withval"], [MOD_SQLITE="no"])
 if test "$MOD_SQLITE" != "no" -a "$MOD_SQLITE_DIR" != "no"
 then
@@ -245,15 +245,15 @@ then
 	then
 		if test "$(which pg_config 2>/dev/null)" != ""
 		then
-			CPPFLAGS="$CPPFLAGS -I$(pg_config --includedir) -I$(pg_config --includedir-server)"
+			CPPFLAGS="$CPPFLAGS -I$(pg_config --includedir)"
 			LDFLAGS="$LDFLAGS -L$(pg_config --libdir) -lpq"
 		else
 			MOD_POSTGRESQL_DIR=/usr
-			CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql/server -I$MOD_POSTGRESQL_DIR/include/postgresql/libpq"
+			CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql"
 			LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
 		fi
 	else
-		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql/server -I$MOD_POSTGRESQL_DIR/include/postgresql/libpq"
+		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql"
 		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
 	fi
 	AC_CHECK_LIB([pq], [PQclear], [], AC_MSG_ERROR(postgresql lib was not found))

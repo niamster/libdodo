@@ -704,7 +704,7 @@ enable_libwrap
 enable_deque
 enable_io_xexec
 enable_db_xexec
-with_sqlite3
+with_sqlite
 with_openssl
 with_bfd
 with_postgresql
@@ -1375,7 +1375,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-sqlite3(=/path)  use sqlite3
+  --with-sqlite(=/path)   use sqlite
   --with-openssl(=/path)  use openssl
   --with-bfd(=/path)      support library name resolution
   --with-postgresql(=/path)
@@ -5482,9 +5482,9 @@ fi
 
 
 
-# Check whether --with-sqlite3 was given.
-if test "${with_sqlite3+set}" = set; then
-  withval=$with_sqlite3; MOD_SQLITE_DIR="$withval"
+# Check whether --with-sqlite was given.
+if test "${with_sqlite+set}" = set; then
+  withval=$with_sqlite; MOD_SQLITE_DIR="$withval"
 else
   MOD_SQLITE="no"
 fi
@@ -6253,15 +6253,15 @@ then
 	then
 		if test "$(which pg_config 2>/dev/null)" != ""
 		then
-			CPPFLAGS="$CPPFLAGS -I$(pg_config --includedir) -I$(pg_config --includedir-server)"
+			CPPFLAGS="$CPPFLAGS -I$(pg_config --includedir)"
 			LDFLAGS="$LDFLAGS -L$(pg_config --libdir) -lpq"
 		else
 			MOD_POSTGRESQL_DIR=/usr
-			CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql/server -I$MOD_POSTGRESQL_DIR/include/postgresql/libpq"
+			CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql"
 			LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
 		fi
 	else
-		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql/server -I$MOD_POSTGRESQL_DIR/include/postgresql/libpq"
+		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql"
 		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
 	fi
 

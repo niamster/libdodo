@@ -1,6 +1,13 @@
-To configure run `./configure` [to see configuration settings run `./configure --help` and edit include/directives.h] 
 
-**NOTE** if you have installed required for libdodo package into /usr/local you have to indicate it
+It's possible to use autotools or cmake to configure libdodo's build options.
 
-To compile use `gmake`
-To install `gmake install`
+[Autotools]
+	To configure run ./configure with additional options you can find running './configure --help' or some of them you can find in build.options file.
+
+[CMake]
+	To configure run 'cmake .' with additional options you can find in build.options file.
+
+You may edit include/libdodo/directives.h to tune some options.
+
+To compile use 'gmake'
+To install 'gmake install'
