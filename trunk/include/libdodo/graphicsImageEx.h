@@ -43,6 +43,7 @@ namespace dodo
 		 */
 		enum imageExR
 		{
+			IMAGEEX_IMERROR,
 			IMAGEEX_BADINFO,
 			IMAGEEX_EMPTYIMAGE,
 			IMAGEEX_LONGPATH,
@@ -62,6 +63,7 @@ namespace dodo
 		 */
 		enum imageFunctionsID
 		{
+			IMAGEEX_IMERRORHANDLER,
 			IMAGEEX_READ,
 			IMAGEEX_CREATE,
 			IMAGEEX_WRITE,

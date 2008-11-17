@@ -62,7 +62,7 @@ namespace dodo
 		 */
 		class __xexecImageCollectedData
 
-#ifndef DATABASE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 
 			: public __xexecCollectedData
 
@@ -206,13 +206,6 @@ namespace dodo
 				 * contructor
 				 */
 				image();
-
-				/**
-				 * contructor
-				 * @param path defines path to image
-				 * @note doesn't check if the read failed
-				 */
-				image(const dodoString &path);
 
 				/**
 				 * destructor
@@ -373,7 +366,21 @@ namespace dodo
 
 			private:
 
-				bool initialized;                             ///< true if environment was initialized in the object
+				/**
+				 * ImageMagic error handler
+				 * @param et defines error category
+				 * @param reason defines the reason of the error
+				 * @param description defines description to the reason
+				 */
+				static void imErrorHandler(const ExceptionType et, const char *reason, const char *description);
+
+				/**
+				 * ImageMagic warning handler
+				 * @param et defines warning category
+				 * @param reason defines the reason of the warning
+				 * @param description defines description to the reason
+				 */
+				static void imWarningHandler(const ExceptionType et, const char *reason, const char *description);
 		};
 
 		extern __image_init__ __image_init_object__;
