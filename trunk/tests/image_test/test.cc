@@ -37,7 +37,7 @@ hook(__xexecCollectedData *odata,
 			cout << "Rotating" << endl;
 
 			image *img = dynamic_cast<image *>(imData->executor);
-			transform tr(img);
+			graphics::transform tr(img);
 			tr.rotate(TRANSFORM_ROTATEDIRECTIONANGLE_180);
 		}
 		catch (dodo::exception::basic ex)
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	{
 #ifdef IMAGEMAGICK_EXT
 		image im;
-		transform tr(&im);
+		graphics::transform tr(&im);
 		draw dr(&im);
 
 #ifndef GRAPHICS_WO_XEXEC

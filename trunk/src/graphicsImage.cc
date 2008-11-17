@@ -366,7 +366,7 @@ image::setAlpha()
 	if (collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_SETALPHA, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	SetImageAlphaChannel(collectedData.imHandle, ActivateAlphaChannel);
+	collectedData.imHandle->matte = MagickTrue;
 }
 
 //-------------------------------------------------------------------
@@ -377,7 +377,7 @@ image::removeAlpha()
 	if (collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_REMOVEALPHA, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	SetImageAlphaChannel(collectedData.imHandle, DeactivateAlphaChannel);
+	collectedData.imHandle->matte = MagickFalse;
 }
 
 //-------------------------------------------------------------------
