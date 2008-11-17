@@ -1,6 +1,6 @@
 class LibdodoHg(CPackageRecipe):
 
-	name = 'libdodo-hg'
+	name = 'libdodo-cmake-hg'
 	version = '497ad5b71d24'
 
 	buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user', 'tcp_wrappers:devellib']
@@ -11,29 +11,31 @@ class LibdodoHg(CPackageRecipe):
 		extraconfig = ''	
 
 		if Use.deque:
-			extraconfig +=' --enable-deque'
+			extraconfig +=' -DENABLE_DEQUE=ON'
 		else:
-			extraconfig +=' --disable-deque'
+			extraconfig +=' -DENABLE_DEQUE=OFF'
 
 		if Use.ioXexec:
-			extraconfig +=' --enable-io-xexec-support'
+			extraconfig +=' -DENABLE_IO_EXEC=ON'
 		else:
-			extraconfig +=' --disable-io-xexec-support'
+			extraconfig +=' -DENABLE_IO_EXEC=OFF'
 
+		"""
 		if Use.graphicsXexec:
 			extraconfig +=' --enable-graphics-xexec-support'
 		else:
 			extraconfig +=' --disable-graphics-xexec-support'
-
+		"""
 		if Use.dbXexec:
-			extraconfig +=' --enable-db-xexec-support'
+			extraconfig +=' -DENABLE_DB_EXEC=ON'
 		else:
-			extraconfig +=' --disable-db-xexec-support'
+			extraconfig +=' -DENABLE_DB_EXEC=OFF'
 
 		if Use.sqlite3:
 			r.buildRequires += ['sqlite:devel']
-			extraconfig +=' --with-sqlite3'
+			extraconfig +=' -DWITH_SQLITE=ON'
 
+		"""
 		if Use.postgresql:
 			r.buildRequires += ['postgresql:devel']
 			extraconfig +=' --with-postgresql'
@@ -66,7 +68,7 @@ class LibdodoHg(CPackageRecipe):
 
 		if Use.bzip2:
 			r.buildRequires += ['bzip2:devel']
-		extraconfig +=' --with-bzip2'
+			extraconfig +=' --with-bzip2'
 
 		if Use.zlib:
 			r.buildRequires += ['zlib:devel']
@@ -82,11 +84,10 @@ class LibdodoHg(CPackageRecipe):
 		if Use.bfd:
 			r.buildRequires += ['binutils:devel']
 			extraconfig +=' --with-bfd'
+		"""
+		r.Replace('0.11.0', '%s' % r.version, 'trunk/CMakeLists.txt')
 
-		r.Replace('0.11.0', '%s' % r.version, 'trunk/configure.in')
-		r.Run('autoconf', dir='trunk')
-
-		r.Configure(extraconfig, dir='trunk')
+		r.CMake(extraconfig, dir='trunk')
 
 		r.Make(dir='trunk')
 		r.Make(dir='trunk/tests')
