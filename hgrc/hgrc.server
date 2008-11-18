@@ -1,6 +1,10 @@
 [ui]
 username = <user>
 
+[trusted]
+users = <user1, user1>
+groups = <group1, group2>
+
 [web]
 allow_archive = zip gz bz2
 style = gitweb

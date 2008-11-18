@@ -119,7 +119,6 @@ all: @PACKAGE_NAME@
 
 @PACKAGE_NAME@: $(OBJECTS)
 	$(CXX) $(LDFLAGS) -shared -Wl,-soname,$@.so.@PACKAGE_VERSION@ -o $@.so.@PACKAGE_VERSION@ $(OBJECTS)
-	if test "@DEBUG@" = "no"; then strip -d --strip-unneeded @PACKAGE_NAME@.so.@PACKAGE_VERSION@; fi
 	ln -sf @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $@.so
 	
 	@echo ""
@@ -128,7 +127,6 @@ all: @PACKAGE_NAME@
 
 .cc.o:
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -fPIC -c $^
-	if test "@DEBUG@" = "no"; then strip -d --strip-unneeded $@; fi
 
 install: @PACKAGE_NAME@ 
 	${INSTALL} -m 755 -d ${DESTDIR}$(libdir)

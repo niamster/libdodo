@@ -75,7 +75,7 @@ transform::scale(unsigned long width,
 	Image *image = ScaleImage(im->collectedData.imHandle, width, height, im->exInfo);
 
 	if (image == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, im->exInfo->error_number, im->exInfo->reason, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, im->exInfo->error_number, im->exInfo->reason, __LINE__, __FILE__, im->exInfo->description);
 
 	DestroyImage(im->collectedData.imHandle);
 
@@ -95,7 +95,7 @@ transform::scale(unsigned long size)
 	Image *image = ScaleImage(im->collectedData.imHandle, (unsigned long)floor(im->collectedData.imHandle->columns * mult), (unsigned long)floor(im->collectedData.imHandle->rows * mult), im->exInfo);
 
 	if (image == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, im->exInfo->error_number, im->exInfo->reason, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, im->exInfo->error_number, im->exInfo->reason, __LINE__, __FILE__, im->exInfo->description);
 
 	DestroyImage(im->collectedData.imHandle);
 
@@ -113,7 +113,7 @@ transform::rotate(double angle)
 	Image *image = RotateImage(im->collectedData.imHandle, angle, im->exInfo);
 
 	if (image == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, im->exInfo->error_number, im->exInfo->reason, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, im->exInfo->error_number, im->exInfo->reason, __LINE__, __FILE__, im->exInfo->description);
 
 	DestroyImage(im->collectedData.imHandle);
 

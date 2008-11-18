@@ -37,7 +37,7 @@ hook(__xexecCollectedData *odata,
 			cout << "Rotating" << endl;
 
 			image *img = dynamic_cast<image *>(imData->executor);
-			transform tr(img);
+			graphics::transform tr(img);
 			tr.rotate(TRANSFORM_ROTATEDIRECTIONANGLE_180);
 		}
 		catch (dodo::exception::basic ex)
@@ -57,7 +57,8 @@ int main(int argc, char **argv)
 	{
 #ifdef IMAGEMAGICK_EXT
 		image im;
-		transform tr(&im);
+
+		graphics::transform tr(&im);
 		draw dr(&im);
 
 #ifndef GRAPHICS_WO_XEXEC
@@ -126,12 +127,12 @@ int main(int argc, char **argv)
 		dr.circle(point(200, 200), 100, color::red, color::green, 5);
 		dodoArray<point> points;
 		for (int i=0;i<10;++i)
-			points.push_back(point(i*20, 390 - pow(i, 2)*5));
+			points.push_back(point(i*20, (unsigned long)(390 - pow(i, 2)*5)));
 		dr.line(points, color::black, 1);
 		for (int i=0;i<10;++i)
-			dr.point(point(i*20+100, 390 - pow(i, 2)*5), color::blue, 5);
+			dr.point(point(i*20+100, (unsigned long)(390 - pow(i, 2)*5)), color::blue, 5);
 		for (int i=0;i<360;++i)
-			dr.point(point(cos(i)*100+150, 200 - sin(i)*100), color::black);
+			dr.point(point((unsigned long)(cos(i)*100 + 150), (unsigned long)(200 - sin(i)*100)), color::black);
 		im.write("new-3.png");
 		
 		im.create(400, 400);
@@ -142,8 +143,11 @@ int main(int argc, char **argv)
 		dr.text(point(150, 200), "libdodo", "Arial", 50, color::blue, color::green, 2, 90);
 		im.write("new-4.png");
 
+		image wm;
+		wm.read("new-4.png");
+
 		im.create(600, 600);
-		dr.image(point(100, 100), image("new-4.png"), 45);
+		dr.image(point(100, 100), wm, 45);
 		im.setOpacity(65535/2);
 		im.write("new-5.png");
 #endif
