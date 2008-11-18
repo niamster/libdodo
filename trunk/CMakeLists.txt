@@ -19,7 +19,8 @@ ADD_DEFINITIONS("-DPACKAGE_STRING=\"${PACKAGE_STRING}\"")
 # default options
 ##
 
-SET(CMAKE_INSTALL_PREFIX "/usr")
+SET(LIBDODO_INSTALL_PREFIX "/usr" CACHE PATH "Prefix prepended to install directories")
+SET(CMAKE_INSTALL_PREFIX "${LIBDODO_INSTALL_PREFIX}" CACHE PATH "Prefix prepended to install directories" FORCE)
 
 ENABLE_LANGUAGE(CXX)
 
