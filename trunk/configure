@@ -715,7 +715,7 @@ with_dl
 enable_dl_lib
 enable_fast_dynamic_loading
 with_libxml2
-with_pthread
+with_threading_lib
 with_pthread_lib
 with_bzip2
 with_zlib
@@ -1385,9 +1385,11 @@ Optional Packages:
   --with-pcre(=/path)     use pcre
   --with-dl(=/path)       use dl
   --with-libxml2(=/path)  use libxml2
-  --with-pthread(=/path)  use pthread
-  --with-pthread-lib      use pthread lib(pthread, thr, lthread, c_r)
-                          (default=pthread)
+  --with-threading-lib(=lib)
+                          specify threading library(supported: pthread;
+                          default=pthread)
+  --with-pthread-lib      use pthread library(supported: pthread, thr,
+                          lthread, c_r) (default=pthread)
   --with-bzip2(=/path)    use bzip2
   --with-zlib(=/path)     use zlib
   --with-iconv(=/path)    use iconv
@@ -5298,7 +5300,6 @@ if test "${enable_debug+set}" = set; then
   enableval=$enable_debug; DEBUG="$enableval"
 fi
 
-
 if test "$DEBUG" = "yes"
 then
 	CFLAGS="$CFLAGS -g -DDEBUG"
@@ -5313,7 +5314,6 @@ PROFILING="no"
 if test "${enable_profiling+set}" = set; then
   enableval=$enable_profiling; PROFILING="$enableval"
 fi
-
 
 if test "$PROFILING" = "yes"
 then
@@ -5406,7 +5406,6 @@ else
 $as_echo "$as_me: WARNING: libwrap lib was not found" >&2;}
 fi
 
-
 	if test "$LIBWRAP" = "yes"
 	then
 		LDFLAGS="$LDFLAGS -lwrap"
@@ -5415,7 +5414,6 @@ fi
 	else
 		RESULT="$RESULT\nlibwrap\t\t\t\t\t\t\t\tdisabled"
 	fi
-
 else
 	RESULT="$RESULT\nlibwrap\t\t\t\t\t\t\t\tdisabled"
 fi
@@ -5426,7 +5424,6 @@ if test "${enable_deque+set}" = set; then
 else
   DEQUE="yes"
 fi
-
 
 if test "$DEQUE" = "yes"
 then
@@ -5443,7 +5440,6 @@ if test "${enable_io_xexec+set}" = set; then
 else
   IO_W_XEXEC="yes"
 fi
-
 
 if test "$IO_W_XEXEC" = "no"
 then
@@ -5473,7 +5469,6 @@ if test "${enable_db_xexec+set}" = set; then
 else
   DATABASE_W_XEXEC="yes"
 fi
-
 
 if test "$DATABASE_W_XEXEC" = "no"
 then
@@ -7883,19 +7878,19 @@ else
 fi
 
 
-# Check whether --with-pthread was given.
-if test "${with_pthread+set}" = set; then
-  withval=$with_pthread; MOD_PTHREAD_DIR="$withval"
+# Check whether --with-threading-lib was given.
+if test "${with_threading_lib+set}" = set; then
+  withval=$with_threading_lib; MOD_THREAD="$withval"
 else
-  MOD_PTHREAD="no"
+  MOD_THREAD="pthread"
 fi
 
-if test "$MOD_PTHREAD" != "no" -a "$MOD_PTHREAD_DIR" != "no"
-then
-	if test "$MOD_PTHREAD_DIR" = "yes"
-	then
-		MOD_PTHREAD_DIR=/usr
-	fi
+case "$MOD_THREAD" in
+	pthread)
+		if test "$MOD_PTHREAD_DIR" = "yes"
+		then
+			MOD_PTHREAD_DIR=/usr
+		fi
 
 # Check whether --with-pthread-lib was given.
 if test "${with_pthread_lib+set}" = set; then
@@ -7904,8 +7899,7 @@ else
   MOD_PTHREAD_LIB="pthread"
 fi
 
-	CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
-	LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib -l$MOD_PTHREAD_LIB"
+		LDFLAGS="$LDFLAGS -l$MOD_PTHREAD_LIB"
 
 as_ac_Lib=`$as_echo "ac_cv_lib_$MOD_PTHREAD_LIB''_pthread_create" | $as_tr_sh`
 { $as_echo "$as_me:$LINENO: checking for pthread_create in -l$MOD_PTHREAD_LIB" >&5
@@ -7990,7 +7984,7 @@ $as_echo "$as_me: error: $MOD_PTHREAD_LIB lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-	if test "${ac_cv_header_pthread_h+set}" = set; then
+		if test "${ac_cv_header_pthread_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for pthread.h" >&5
 $as_echo_n "checking for pthread.h... " >&6; }
 if test "${ac_cv_header_pthread_h+set}" = set; then
@@ -8131,12 +8125,15 @@ $as_echo "$as_me: error: pthread header was not found" >&2;}
 fi
 
 
-	echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\npthread\t\t\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
-else
-	RESULT="$RESULT\npthread\t\t\t\t\t\t\t\tdisabled"
-fi
+		echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
+		;;
+	*)
+		{ { $as_echo "$as_me:$LINENO: error: Unsuported threading library specified" >&5
+$as_echo "$as_me: error: Unsuported threading library specified" >&2;}
+   { (exit 1); exit 1; }; }
+		;;
+esac
+RESULT="$RESULT\nthreading-library\t\t\t\t\t\t${MOD_THREAD}($MOD_PTHREAD_LIB)"
 
 
 # Check whether --with-bzip2 was given.
