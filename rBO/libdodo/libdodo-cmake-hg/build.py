@@ -46,7 +46,7 @@ def useNotOneOtherAll(uses):
 
 rmake = ["rmake", "build"]
 
-uses = ("!bfd", "bzip2", "dl", "fcgi", "iconv", "imagemagick", "libxml2", "mysql", "pcre", "postgresql", "pthread", "sqlite3", "zlib", "ssl")
+uses = ("!bfd", "bzip2", "dl", "fcgi", "iconv", "imagemagick", "libxml2", "mysql", "pcre", "postgresql", "sqlite3", "zlib", "ssl")
 
 xexecFlags = ("dbXexec", "graphicsXexec", "ioXexec")
 
@@ -55,7 +55,7 @@ rmake += [ "'%(trove)s[" + ",".join([x for x in uses]) + "]'" ]
 rmake += [ "'%(trove)s[" + ",".join([x for x in uses] + ["!" + x for x in xexecFlags]) + "]'" ]
 rmake += [ "'%(trove)s[" + ",".join(["!bfd"] + ["!" + x for x in uses if x != "!bfd"]) + "]'" ]
 
-for i in ("pthread", "libxml2", "deque", "dl", "ssl"):
+for i in ("libxml2", "deque", "dl", "ssl"):
     rmake += [ "'%(trove)s[" + ",".join(["!" + i] + [x for x in uses if x != i]) + "]'" ]
 
 #general

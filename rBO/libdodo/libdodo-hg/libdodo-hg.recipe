@@ -61,9 +61,6 @@ class LibdodoHg(CPackageRecipe):
 			r.buildRequires += ['libxml2:devel']
 			extraconfig +=' --with-libxml2'
 
-		if Use.pthread:
-			extraconfig +=' --with-pthread'
-
 		if Use.bzip2:
 			r.buildRequires += ['bzip2:devel']
 			extraconfig +=' --with-bzip2'
