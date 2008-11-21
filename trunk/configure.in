@@ -345,7 +345,8 @@ then
 	
 	RESULT="$RESULT\nPCRE\t\t\t\t\t\t\t\tenabled"
 else
-	RESULT="$RESULT\nPCRE\t\t\t\t\t\t\t\tdisabled"
+	AC_CHECK_HEADER([regex.h], [], AC_MSG_ERROR(posix regex header was not found))
+	RESULT="$RESULT\nPosix regex\t\t\t\t\t\t\tenabled"
 fi
 
 AC_ARG_WITH([dl],
