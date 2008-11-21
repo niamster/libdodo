@@ -135,7 +135,7 @@ fi
 
 
 AC_ARG_WITH([sqlite],
-	AS_HELP_STRING([--with-sqlite(=/path)], [use sqlite]), [MOD_SQLITE_DIR="$withval"], [MOD_SQLITE="no"])
+	AS_HELP_STRING([--with-sqlite@<:@=DIR@:>@], [use sqlite]), [MOD_SQLITE_DIR="$withval"], [MOD_SQLITE="no"])
 if test "$MOD_SQLITE" != "no" -a "$MOD_SQLITE_DIR" != "no"
 then
 	if test "$MOD_SQLITE_DIR" = "yes"
@@ -162,7 +162,7 @@ else
 fi
 
 AC_ARG_WITH([openssl],
-	AS_HELP_STRING([--with-openssl(=/path)], [use openssl]), [MOD_OPENSSL_DIR="$withval"], [MOD_OPENSSL="no"])
+	AS_HELP_STRING([--with-openssl@<:@=DIR@:>@], [use openssl]), [MOD_OPENSSL_DIR="$withval"], [MOD_OPENSSL="no"])
 if test "$MOD_OPENSSL" != "no" -a "$MOD_OPENSSL_DIR" != "no"
 then
 	if test "$MOD_OPENSSL_DIR" = "yes"
@@ -202,7 +202,7 @@ else
 fi
 
 AC_ARG_WITH([bfd],
-	AS_HELP_STRING([--with-bfd(=/path)], [support library name resolution]), [MOD_BFD_DIR="$withval"], [MOD_BFD="no"])
+	AS_HELP_STRING([--with-bfd@<:@=DIR@:>@], [support library name resolution]), [MOD_BFD_DIR="$withval"], [MOD_BFD="no"])
 if test "$MOD_BFD" != "no" -a "$MOD_BFD_DIR" != "no"
 then
 	if test "$MOD_BFD_DIR" = "yes"
@@ -221,7 +221,7 @@ else
 fi
 
 AC_ARG_WITH([postgresql],
-	AS_HELP_STRING([--with-postgresql(=/path)], [use postgresql]), [MOD_POSTGRESQL_DIR="$withval"], [MOD_POSTGRESQL="no"])
+	AS_HELP_STRING([--with-postgresql@<:@=DIR@:>@], [use postgresql]), [MOD_POSTGRESQL_DIR="$withval"], [MOD_POSTGRESQL="no"])
 if test "$MOD_POSTGRESQL" != "no" -a "$MOD_POSTGRESQL_DIR" != "no"
 then
 	if test "$MOD_POSTGRESQL_DIR" = "yes"
@@ -261,7 +261,7 @@ else
 fi
 
 AC_ARG_WITH([mysql],
-	AS_HELP_STRING([--with-mysql(=/path)], [use mysql]), [MOD_MYSQL_DIR="$withval"], [MOD_MYSQL="no"])
+	AS_HELP_STRING([--with-mysql@<:@=DIR@:>@], [use mysql]), [MOD_MYSQL_DIR="$withval"], [MOD_MYSQL="no"])
 if test "$MOD_MYSQL" != "no" -a "$MOD_MYSQL_DIR" != "no"
 then
 	if test "$MOD_MYSQL_DIR" = "yes"
@@ -301,7 +301,7 @@ else
 fi
 
 AC_ARG_WITH([fcgi],
-	AS_HELP_STRING([--with-fcgi(=/path)], [use fast CGI]), [MOD_FASTCGI_DIR="$withval"], [MOD_FASTCGI="no"])
+	AS_HELP_STRING([--with-fcgi@<:@=DIR@:>@], [use fast CGI]), [MOD_FASTCGI_DIR="$withval"], [MOD_FASTCGI="no"])
 if test "$MOD_FASTCGI" != "no" -a "$MOD_FASTCGI_DIR" != "no"
 then
 	if test "$MOD_FASTCGI_DIR" = "yes"
@@ -327,7 +327,7 @@ else
 fi
 
 AC_ARG_WITH([pcre],
-	AS_HELP_STRING([--with-pcre(=/path)], [use pcre]), [MOD_PCRE_DIR="$withval"], [MOD_PCRE="no"])
+	AS_HELP_STRING([--with-pcre@<:@=DIR@:>@], [use pcre]), [MOD_PCRE_DIR="$withval"], [MOD_PCRE="no"])
 if test "$MOD_PCRE" != "no" -a "$MOD_PCRE_DIR" != "no"
 then
 	if test "$MOD_PCRE_DIR" = "yes"
@@ -350,7 +350,7 @@ else
 fi
 
 AC_ARG_WITH([dl],
-	AS_HELP_STRING([--with-dl(=/path)], [use dl]), [MOD_DL_DIR="$withval"], [MOD_DL="no"])
+	AS_HELP_STRING([--with-dl@<:@=DIR@:>@], [use dl]), [MOD_DL_DIR="$withval"], [MOD_DL="no"])
 if test "$MOD_DL" != "no" -a "$MOD_DL_DIR" != "no"
 then
 	if test "$MOD_DL_DIR" = "yes"
@@ -387,7 +387,7 @@ else
 fi
 
 AC_ARG_WITH([libxml2],
-	AS_HELP_STRING([--with-libxml2(=/path)], [use libxml2]), [MOD_LIBXML2_DIR="$withval"], [MOD_LIBXML2="no"])
+	AS_HELP_STRING([--with-libxml2@<:@=DIR@:>@], [use libxml2]), [MOD_LIBXML2_DIR="$withval"], [MOD_LIBXML2="no"])
 if test "$MOD_LIBXML2" != "no" -a "$MOD_LIBXML2_DIR" != "no"
 then
 	if test "$MOD_LIBXML2_DIR" = "yes"
@@ -415,7 +415,7 @@ else
 fi
 
 AC_ARG_WITH([threading-lib],
-	AS_HELP_STRING([--with-threading-lib(=lib)], [specify threading library(supported: pthread; default=pthread)]), [MOD_THREAD="$withval"], [MOD_THREAD="pthread"])
+	AS_HELP_STRING([--with-threading-lib@<:@=lib@:>@], [specify threading library(supported: pthread; default=pthread)]), [MOD_THREAD="$withval"], [MOD_THREAD="pthread"])
 case "$MOD_THREAD" in
 	pthread)
 		if test "$MOD_PTHREAD_DIR" = "yes"
@@ -423,7 +423,7 @@ case "$MOD_THREAD" in
 			MOD_PTHREAD_DIR=/usr
 		fi
 			AC_ARG_WITH([pthread-lib],
-		AS_HELP_STRING([--with-pthread-lib], [use pthread library(supported: pthread, thr, lthread, c_r) (default=pthread)]), [MOD_PTHREAD_LIB="$withval"], [MOD_PTHREAD_LIB="pthread"])
+		AS_HELP_STRING([--with-pthread-lib@<:@=lib@:>@], [use pthread library(supported: pthread, thr, lthread, c_r) (default=pthread)]), [MOD_PTHREAD_LIB="$withval"], [MOD_PTHREAD_LIB="pthread"])
 		LDFLAGS="$LDFLAGS -l$MOD_PTHREAD_LIB"
 		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create], [], AC_MSG_ERROR($MOD_PTHREAD_LIB lib was not found))
 		AC_CHECK_HEADER([pthread.h], [], AC_MSG_ERROR(pthread header was not found))
@@ -436,7 +436,7 @@ esac
 RESULT="$RESULT\nthreading-library\t\t\t\t\t\t${MOD_THREAD}($MOD_PTHREAD_LIB)"
 
 AC_ARG_WITH([bzip2],
-	AS_HELP_STRING([--with-bzip2(=/path)], [use bzip2]), [MOD_BZIP2_DIR="$withval"], [MOD_BZIP2="no"])
+	AS_HELP_STRING([--with-bzip2@<:@=DIR@:>@], [use bzip2]), [MOD_BZIP2_DIR="$withval"], [MOD_BZIP2="no"])
 if test "$MOD_BZIP2" != "no" -a "$MOD_BZIP2_DIR" != "no"
 then
 	if test "$MOD_BZIP2_DIR" = "yes"
@@ -455,7 +455,7 @@ else
 fi
 
 AC_ARG_WITH([zlib],
-	AS_HELP_STRING([--with-zlib(=/path)], [use zlib]), [MOD_ZLIB_DIR="$withval"], [MOD_ZLIB="no"])
+	AS_HELP_STRING([--with-zlib@<:@=DIR@:>@], [use zlib]), [MOD_ZLIB_DIR="$withval"], [MOD_ZLIB="no"])
 if test "$MOD_ZLIB" != "no" -a "$MOD_ZLIB_DIR" != "no"
 then
 	if test "$MOD_ZLIB_DIR" = "yes"
@@ -480,7 +480,7 @@ else
 fi
 
 AC_ARG_WITH([iconv],
-	AS_HELP_STRING([--with-iconv(=/path)], [use iconv]), [MOD_ICONV_DIR="$withval"], [MOD_ICONV="no"])
+	AS_HELP_STRING([--with-iconv@<:@=DIR@:>@], [use iconv]), [MOD_ICONV_DIR="$withval"], [MOD_ICONV="no"])
 if test "$MOD_ICONV" != "no" -a "$MOD_ICONV_DIR" != "no"
 then
 	if test "$MOD_ICONV_DIR" = "yes"
@@ -505,7 +505,7 @@ else
 fi
 
 AC_ARG_WITH([imagemagick],
-	AS_HELP_STRING([--with-imagemagick(=/path)], [use ImageMagick]), [MOD_IMAGEMAGICK_DIR="$withval"], [MOD_IMAGEMAGICK="no"])
+	AS_HELP_STRING([--with-imagemagick@<:@=DIR@:>@], [use ImageMagick]), [MOD_IMAGEMAGICK_DIR="$withval"], [MOD_IMAGEMAGICK="no"])
 if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
 then
 	ORIGINAL_LDFLAGS=$LDFLAGS
