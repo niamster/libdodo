@@ -5090,8 +5090,8 @@ cat > include/libdodo/directives.runtime.h  <<EOF
 
 EOF
 
-CPPFLAGS="$CPPFLAGS -I/usr/local/include"
-LDFLAGS="$LDFLAGS -L/usr/local/lib"
+CPPFLAGS="$CPPFLAGS -I/usr/include -I/usr/local/include"
+LDFLAGS="$LDFLAGS -L/usr/lib -L/usr/local/lib"
 
 RESULT="\n\n"
 
@@ -8735,19 +8735,19 @@ then
 	ORIGINAL_LDFLAGS=$LDFLAGS
 	if test "$MOD_IMAGEMAGICK_DIR" = "yes"
 	then
+		MOD_IMAGEMAGICK_DIR=/usr
 		if test "$(which Magick-config 2>/dev/null)" != ""
 		then
 			CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
-			LDFLAGS="$LDFLAGS $(Magick-config --libs)"
 		else
-			MOD_IMAGEMAGICK_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
-			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 		fi
+		LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 	else
 		CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 	fi
+
 
 { echo "$as_me:$LINENO: checking for MagickCoreGenesis in -lMagickCore" >&5
 echo $ECHO_N "checking for MagickCoreGenesis in -lMagickCore... $ECHO_C" >&6; }
@@ -8821,7 +8821,7 @@ else
   OLD_MAGICK_LIB="yes"
 fi
 
-	if test "$OLD_MAGICK_LIB" == "yes"
+	if test "$OLD_MAGICK_LIB" = "yes"
 	then
 		LDFLAGS="$ORIGINAL_LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
 
@@ -9064,6 +9064,64 @@ else
 fi
 
 echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
+
+##
+# filter LDFLAGS and CPPLAGS
+##
+
+NEW_LDFLAGS=
+for i in $LDFLAGS
+do
+	case $i in
+	-L*)
+		SET_FLAG=0
+		for j in $NEW_LDFLAGS
+		do
+			case $j in
+				$i)
+					SET_FLAG=1
+					break;
+					;;
+			esac
+		done
+		if test $SET_FLAG -eq 0
+		then
+			NEW_LDFLAGS="$NEW_LDFLAGS $i"
+		fi
+		;;
+	*)
+		NEW_LDFLAGS="$NEW_LDFLAGS $i"
+		;;
+	esac
+done
+LDFLAGS=$NEW_LDFLAGS
+
+NEW_CPPFLAGS=
+for i in $CPPFLAGS
+do
+	case $i in
+	-I*)
+		SET_FLAG=0
+		for j in $NEW_CPPFLAGS
+		do
+			case $j in
+				$i)
+					SET_FLAG=1
+					break;
+					;;
+			esac
+		done
+		if test $SET_FLAG -eq 0
+		then
+			NEW_CPPFLAGS="$NEW_CPPFLAGS $i"
+		fi
+		;;
+	*)
+		NEW_CPPFLAGS="$NEW_CPPFLAGS $i"
+		;;
+	esac
+done
+CPPFLAGS=$NEW_CPPFLAGS
 
 { echo "$as_me:$LINENO: checking for ANSI C header files" >&5
 echo $ECHO_N "checking for ANSI C header files... $ECHO_C" >&6; }
