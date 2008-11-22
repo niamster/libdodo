@@ -5275,6 +5275,21 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 
 ##
+# functions
+##
+function add_ldflag_libdir()
+{
+	for i in $*
+	do
+		case $i in
+			-L*)
+				LDFLAGS="$LDFLAGS $i"
+				;;
+		esac
+	done
+}
+
+##
 # checking dependencies/build options
 ##
 
@@ -6565,7 +6580,8 @@ then
 		if test "$(which mysql_config 2>/dev/null)" != ""
 		then
 			CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
-			LDFLAGS="$LDFLAGS $(mysql_config --libs)"
+			add_ldflag_libdir $(mysql_config --libs)
+			LDFLAGS="$LDFLAGS -lmysqlclient"
 		else
 			MOD_MYSQL_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
@@ -7128,7 +7144,8 @@ then
 	if test "$MOD_PCRE_DIR" = "yes"
 	then
 		CPPFLAGS="$CPPFLAGS $(pcre-config --cflags)"
-		LDFLAGS="$LDFLAGS $(pcre-config --libs)"
+		add_ldflag_libdir $(pcre-config --libs)
+		LDFLAGS="$LDFLAGS -lpcre"
 	else
 		MOD_PCRE_DIR=/usr
 		CPPFLAGS="$CPPFLAGS -I$MOD_PCRE_DIR/include"
@@ -7781,7 +7798,8 @@ then
 		if test "$(which xml2-config 2>/dev/null)" != ""
 		then
 			CPPFLAGS="$CPPFLAGS $(xml2-config --cflags)"
-			LDFLAGS="$LDFLAGS $(xml2-config --libs)"
+			add_ldflag_libdir $(xml2-config --libs)
+			LDFLAGS="$LDFLAGS -lxml2"
 		else
 			MOD_LIBXML2_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
@@ -9022,14 +9040,16 @@ then
 	ORIGINAL_LDFLAGS=$LDFLAGS
 	if test "$MOD_IMAGEMAGICK_DIR" = "yes"
 	then
-		MOD_IMAGEMAGICK_DIR=/usr
 		if test "$(which Magick-config 2>/dev/null)" != ""
 		then
 			CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
+			add_ldflag_libdir $(Magick-config --ldflags)
+			LDFLAGS="$LDFLAGS -lMagickCore"
 		else
+			MOD_IMAGEMAGICK_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
+			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 		fi
-		LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 	else
 		CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
