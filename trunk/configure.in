@@ -317,8 +317,8 @@ else
 	RESULT="$RESULT\nMySQL\t\t\t\t\t\t\t\tdisabled"
 fi
 
-AC_ARG_WITH([fcgi],
-	AS_HELP_STRING([--with-fcgi@<:@=DIR@:>@], [use fast CGI]), [MOD_FASTCGI_DIR="$withval"], [MOD_FASTCGI="no"])
+AC_ARG_WITH([fast-cgi],
+	AS_HELP_STRING([--with-fast-cgi@<:@=DIR@:>@], [use fast CGI]), [MOD_FASTCGI_DIR="$withval"], [MOD_FASTCGI="no"])
 if test "$MOD_FASTCGI" != "no" -a "$MOD_FASTCGI_DIR" != "no"
 then
 	if test "$MOD_FASTCGI_DIR" = "yes"
@@ -327,8 +327,8 @@ then
 	fi
 	CPPFLAGS="$CPPFLAGS -I$MOD_FASTCGI_DIR/include"
 	LDFLAGS="$LDFLAGS -L$MOD_FASTCGI_DIR/lib -lfcgi"
-	AC_CHECK_LIB([fcgi], [FCGX_Init], [], AC_MSG_ERROR(fcgi lib was not found))
-	AC_CHECK_HEADER([fcgiapp.h], [], AC_MSG_ERROR(fcgi header was not found))
+	AC_CHECK_LIB([fcgi], [FCGX_Init], [], AC_MSG_ERROR(fast-cgi lib was not found))
+	AC_CHECK_HEADER([fcgiapp.h], [], AC_MSG_ERROR(fast-cgi header was not found))
 	echo -n -e "#define FASTCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 	if test "$IO_W_XEXEC" = "no"
@@ -382,9 +382,9 @@ then
 					AS_HELP_STRING([--disable-dl-lib], [disable dl as lib]), [MOD_DL_LIB="$enableval"], [MOD_DL_LIB="no"])
 			if test "$MOD_DL_LIB" = "yes"
 			then
-		AC_CHECK_LIB([dl], [dlopen], [], AC_MSG_ERROR(dl lib was not found))
-		LDFLAGS="$LDFLAGS -ldl"
-	fi
+				AC_CHECK_LIB([dl], [dlopen], [], AC_MSG_ERROR(dl lib was not found))
+				LDFLAGS="$LDFLAGS -ldl"
+			fi
 	echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
 	
 	AC_ARG_ENABLE(fast-dynamic-loading,

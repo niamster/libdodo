@@ -22,6 +22,70 @@ ADD_DEFINITIONS("-DPACKAGE_STRING=\"${PACKAGE_STRING}\"")
 SET(LIBDODO_INSTALL_PREFIX "/usr" CACHE PATH "Prefix prepended to install directories")
 SET(CMAKE_INSTALL_PREFIX "${LIBDODO_INSTALL_PREFIX}" CACHE PATH "Prefix prepended to install directories" FORCE)
 
+##
+# build options help
+##
+OPTION(HELP "Enable profiling(ON/OFF)" OFF)
+IF(HELP)
+	SET(HELP OFF CACHE BOOL "Display build options" FORCE)
+	MESSAGE(STATUS "
+	CMake configures ${PACKAGE_STRING} to adapt to many kinds of systems.
+
+	Usage: cmake [OPTION]... [VAR=VALUE]...
+	Configuration:
+		-DHELP=ON				display this help and exit
+	
+	Installation directories:
+		-DLIBDODO_INSTALL_PREFIX=PREFIX		install architecture-independent 
+							files in PREFIX[${LIBDODO_INSTALL_PREFIX}]
+	
+	By default, `make install' will install all the files in
+	`${LIBDODO_INSTALL_PREFIX}/bin', `${LIBDODO_INSTALL_PREFIX}/lib' etc.
+	You can specify	an installation prefix other than `${LIBDODO_INSTALL_PREFIX}' 
+	using `-DLIBDODO_INSTALL_PREFIX', for instance `-DLIBDODO_INSTALL_PREFIX:PATH=$HOME'.
+
+	Optional Features:
+		-DFEATURE=OFF				do not include FEATURE
+		-DFEATURE=ON				include FEATURE
+
+		-DDEBUG=[ON|OFF]			Enable debug info, OFF by default
+		-DPROFILING=[ON|OFF]			Enable profiling, OFF by default
+		-DLIBWRAP=[ON|OFF]			Enable libwrap, ON by default
+		-DDEQUE=[ON|OFF]			Use std::deque instead of std::vector, ON by default
+		-DIO_EXEC=[ON|OFF]			Compile io:: with xexec support, ON by default
+		-DDB_EXEC=[ON|OFF]			Compile db:: with xexec support, ON by default
+
+	
+	Optional Packages:
+		-DSQLITE_PATH:PATH=[DIR]		path to sqlite installation
+		-DWITH_SQLITE=[ON|OFF]			use sqlite
+
+		-DOPENSSL_PATH:PATH=[DIR]		path to openssl installation
+		-DWITH_OPENSSL=[ON|OFF]			use openssl
+
+		-DBFD_PATH:PATH=[DIR]			path to bfd installation
+		-DWITH_BFD=[ON|OFF]			use bfd
+
+		-DPOSTGRESQL_PATH:PATH=[DIR]		path to postgresql installation
+		-DWITH_POSTGRESQL=[ON|OFF]		use postgresql
+
+		-DMYSQL_PATH:PATH=[DIR]			path to mysql installation
+		-DWITH_MYSQL=[ON|OFF]			use mysql
+
+		-DFASTCGI_PATH:PATH=[DIR]		path to fast-cgi installation
+		-DWITH_FASTCGI=[ON|OFF]			use fast-cgi
+
+		-DPCRE_PATH:PATH=[DIR]			path to pcre installation
+		-DWITH_PCRE=[ON|OFF]			use pcre
+		
+	")
+	RETURN()
+ENDIF(HELP)
+
+##
+#
+##
+
 ENABLE_LANGUAGE(CXX)
 
 ##
@@ -58,7 +122,7 @@ ENDFUNCTION(ADD_LINK_DIRECTORIES)
 
 FUNCTION(ADD_INCLUDE_DIRECTORIES DIRS)
 	FOREACH(DIR ${DIRS})
-		LINK_DIRECTORIES("${DIR}")
+		INCLUDE_DIRECTORIES("${DIR}")
 	ENDFOREACH(DIR)
 ENDFUNCTION(ADD_INCLUDE_DIRECTORIES)
 
@@ -117,17 +181,17 @@ IF(ENABLE_LIBWRAP)
 	TARGET_LINK_LIBRARIES(dodo wrap)
 ENDIF(ENABLE_LIBWRAP)
 
-OPTION(ENABLE_DEQUE "Enable deque, use std::deque instead of std::vector(ON/OFF)" ON)
+OPTION(ENABLE_DEQUE "Use std::deque instead of std::vector(ON/OFF)" ON)
 IF(ENABLE_DEQUE)
 	FILE(APPEND "include/libdodo/directives.runtime.h" "#define USE_DEQUE\n\n")
 ENDIF(ENABLE_DEQUE)
 
-OPTION(ENABLE_IO_EXEC "compile io:: with xexec support(ON/OFF)" ON)
+OPTION(ENABLE_IO_EXEC "Compile io:: with xexec support(ON/OFF)" ON)
 IF(NOT ENABLE_IO_EXEC)
 	FILE(APPEND "include/libdodo/directives.runtime.h" "#define IO_WO_XEXEC\n\n")
 ENDIF(NOT ENABLE_IO_EXEC)
 
-OPTION(ENABLE_DB_EXEC "compile db:: with xexec support(ON/OFF)" ON)
+OPTION(ENABLE_DB_EXEC "Compile db:: with xexec support(ON/OFF)" ON)
 IF(NOT ENABLE_DB_EXEC)
 	FILE(APPEND "include/libdodo/directives.runtime.h" "#define DATABASE_WO_XEXEC\n\n")
 ENDIF(NOT ENABLE_DB_EXEC)
@@ -230,12 +294,12 @@ int main(int argc, char **argv)
 	return 0;
 }
 "
-		POSTGRESQL_ENCODINGTOCHAR)
+		POSTGRESQL_HAVE_ENCODINGTOCHAR)
 		SET(CMAKE_REQUIRED_INCLUDES)
 		SET(CMAKE_REQUIRED_LIBRARIES)
-		IF(NOT POSTGRESQL_ENCODINGTOCHAR)
+		IF(NOT POSTGRESQL_HAVE_ENCODINGTOCHAR)
 			FILE(APPEND "include/libdodo/directives.runtime.h" "#define POSTGRESQL_NO_ENCODINGTOCHAR\n\n")
-		ENDIF(NOT POSTGRESQL_ENCODINGTOCHAR)
+		ENDIF(NOT POSTGRESQL_HAVE_ENCODINGTOCHAR)
 	ELSE(POSTGRESQL_INCLUDE_DIR AND POSTGRESQL_LIB)
 		MESSAGE(FATAL_ERROR "Unable to find postgresql")
 	ENDIF(POSTGRESQL_INCLUDE_DIR AND POSTGRESQL_LIB)
@@ -284,16 +348,63 @@ int main(int argc, char **argv)
 	return 0;
 }
 "
-		MYSQL_OPT_RECONNECT)
+		MYSQL_HAVE_OPT_RECONNECT)
 		SET(CMAKE_REQUIRED_INCLUDES)
 		SET(CMAKE_REQUIRED_LIBRARIES)
-		IF(NOT MYSQL_OPT_RECONNECT)
+		IF(NOT MYSQL_HAVE_OPT_RECONNECT)
 			FILE(APPEND "include/libdodo/directives.runtime.h" "#define MYSQL_NO_OPT_RECONNECT\n\n")
-		ENDIF(NOT MYSQL_OPT_RECONNECT)
+		ENDIF(NOT MYSQL_HAVE_OPT_RECONNECT)
 	ELSE(MYSQL_INCLUDE_DIR AND MYSQL_LIB)
 		MESSAGE(FATAL_ERROR "Unable to find mysql")
 	ENDIF(MYSQL_INCLUDE_DIR AND MYSQL_LIB)
 ENDIF(WITH_MYSQL)
+
+SET(FASTCGI_PATH "/usr")
+OPTION(WITH_FASTCGI "use fast-cgi(ON/OFF)" OFF)
+IF(WITH_FASTCGI)
+	FIND_PATH(FASTCGI_INCLUDE_DIR "fcgiapp.h" "${FASTCGI_PATH}/include" "${FASTCGI_PATH}/local/include")
+	CHECK_LIBRARY_EXISTS("fcgi" "FCGX_Init" "-L${FASTCGI_PATH}/lib" FASTCGI_LIB)
+
+	IF(FASTCGI_INCLUDE_DIR AND FASTCGI_LIB)
+		MESSAGE(STATUS "fast-cgi has been successfully found")
+
+		INCLUDE_DIRECTORIES(${FASTCGI_INCLUDE_DIR})
+		LINK_DIRECTORIES("${FASTCGI_PATH}/lib")
+
+		TARGET_LINK_LIBRARIES(dodo fcgi)
+
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define FASTCGI_EXT\n\n")
+	ELSE(FASTCGI_INCLUDE_DIR AND FASTCGI_LIB)
+		MESSAGE(FATAL_ERROR "Unable to find fast-cgi")
+	ENDIF(FASTCGI_INCLUDE_DIR AND FASTCGI_LIB)
+ENDIF(WITH_FASTCGI)
+
+SET(PCRE_PATH "/usr")
+OPTION(WITH_PCRE "use pcre(ON/OFF)" OFF)
+IF(WITH_PCRE)
+	FIND_PATH(PCRE_INCLUDE_DIR "pcre.h" "${PCRE_PATH}/include" "${PCRE_PATH}/local/include")
+	CHECK_LIBRARY_EXISTS("pcre" "pcre_exec" "-L${PCRE_PATH}/lib" PCRE_LIB)
+
+	IF(PCRE_INCLUDE_DIR AND PCRE_LIB)
+		MESSAGE(STATUS "pcre has been successfully found")
+
+		INCLUDE_DIRECTORIES(${PCRE_INCLUDE_DIR})
+		LINK_DIRECTORIES("${PCRE_PATH}/lib")
+
+		TARGET_LINK_LIBRARIES(dodo pcre)
+
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define PCRE_EXT\n\n")
+	ELSE(PCRE_INCLUDE_DIR AND PCRE_LIB)
+		MESSAGE(FATAL_ERROR "Unable to find pcre")
+	ENDIF(PCRE_INCLUDE_DIR AND PCRE_LIB)
+ELSE(WITH_PCRE)
+	FIND_PATH(POSIXRE_INCLUDE_DIR "regex.h")
+	IF(POSIXRE_INCLUDE_DIR)
+		MESSAGE(STATUS "posix regex has been successfully found")
+	ELSE(POSIXRE_INCLUDE_DIR)
+		MESSAGE(FATAL_ERROR "Unable to find posix regex")
+	ENDIF(POSIXRE_INCLUDE_DIR)
+ENDIF(WITH_PCRE)
 
 CHECK_INCLUDE_FILES("arpa/inet.h" HAVE_ARPA_INET_H)
 IF(HAVE_ARPA_INET_H)

@@ -709,7 +709,7 @@ with_openssl
 with_bfd
 with_postgresql
 with_mysql
-with_fcgi
+with_fast_cgi
 with_pcre
 with_dl
 enable_dl_lib
@@ -1380,7 +1380,7 @@ Optional Packages:
   --with-bfd[=DIR]        support library name resolution
   --with-postgresql[=DIR] use postgresql
   --with-mysql[=DIR]      use mysql
-  --with-fcgi[=DIR]       use fast CGI
+  --with-fast-cgi[=DIR]   use fast CGI
   --with-pcre[=DIR]       use pcre
   --with-dl[=DIR]         use dl
   --with-libxml2[=DIR]    use libxml2
@@ -5277,6 +5277,7 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 ##
 # functions
 ##
+
 function add_ldflags_libdir()
 {
 	for i in $*
@@ -6882,9 +6883,9 @@ else
 fi
 
 
-# Check whether --with-fcgi was given.
-if test "${with_fcgi+set}" = set; then
-  withval=$with_fcgi; MOD_FASTCGI_DIR="$withval"
+# Check whether --with-fast-cgi was given.
+if test "${with_fast_cgi+set}" = set; then
+  withval=$with_fast_cgi; MOD_FASTCGI_DIR="$withval"
 else
   MOD_FASTCGI="no"
 fi
@@ -6971,8 +6972,8 @@ _ACEOF
   LIBS="-lfcgi $LIBS"
 
 else
-  { { $as_echo "$as_me:$LINENO: error: fcgi lib was not found" >&5
-$as_echo "$as_me: error: fcgi lib was not found" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: fast-cgi lib was not found" >&5
+$as_echo "$as_me: error: fast-cgi lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -7111,8 +7112,8 @@ fi
 if test "x$ac_cv_header_fcgiapp_h" = x""yes; then
   :
 else
-  { { $as_echo "$as_me:$LINENO: error: fcgi header was not found" >&5
-$as_echo "$as_me: error: fcgi header was not found" >&2;}
+  { { $as_echo "$as_me:$LINENO: error: fast-cgi header was not found" >&5
+$as_echo "$as_me: error: fast-cgi header was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -7757,8 +7758,8 @@ $as_echo "$as_me: error: dl lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-		LDFLAGS="$LDFLAGS -ldl"
-	fi
+				LDFLAGS="$LDFLAGS -ldl"
+			fi
 	echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 	# Check whether --enable-fast-dynamic-loading was given.
