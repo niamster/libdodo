@@ -14,7 +14,7 @@ using namespace std;
 
 using namespace dodo;
 
-#ifdef SQLITE_EXT
+#ifdef SQLITE3_EXT
 
 using namespace data::base;
 
@@ -39,7 +39,7 @@ hook(__xexecCollectedData *odata,
 
 int main(int argc, char **argv)
 {
-#ifdef SQLITE_EXT
+#ifdef SQLITE3_EXT
 
 	sqlite pp;
 	try

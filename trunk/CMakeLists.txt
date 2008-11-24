@@ -55,12 +55,12 @@ IF(HELP)
 		-DIO_EXEC=[ON|OFF]			Compile io:: with xexec support, ON by default
 		-DDB_EXEC=[ON|OFF]			Compile db:: with xexec support, ON by default
 		-DDL_LIB=[ON|OFF]			Enable dl as lib, ON by default
-		-DFAST_DYNAMIC_LINKING[ON|OFF] Do not unload library to produce better performance, ON by default
+		-DFAST_DYNAMIC_LINKING[ON|OFF] 		Do not unload library to produce better performance, ON by default
 
 	
 	Optional Packages:
-		-DSQLITE_PATH:PATH=[DIR]		path to sqlite installation
-		-DWITH_SQLITE=[ON|OFF]			use sqlite
+		-DSQLITE3_PATH:PATH=[DIR]		path to sqlite3 installation
+		-DWITH_SQLITE3=[ON|OFF]			use sqlite3
 
 		-DOPENSSL_PATH:PATH=[DIR]		path to openssl installation
 		-DWITH_OPENSSL=[ON|OFF]			use openssl
@@ -80,8 +80,11 @@ IF(HELP)
 		-DPCRE_PATH:PATH=[DIR]			path to pcre installation
 		-DWITH_PCRE=[ON|OFF]			use pcre
 
-		-DL_PATH:PATH=[DIR]				path to dl installation
-		-DWITH_DL=[ON|OFF]				use dynamic linking
+		-DDL_PATH:PATH=[DIR]			path to dl installation
+		-DWITH_DL=[ON|OFF]			use dynamic linking
+
+		-DLIBXML2_PATH:PATH=[DIR]		path to libxml2 installation
+		-DWITH_LIBXML2=[ON|OFF]			use libxml2
 	")
 	RETURN()
 ENDIF(HELP)
@@ -197,25 +200,25 @@ IF(NOT ENABLE_DB_EXEC)
 ENDIF(NOT ENABLE_DB_EXEC)
 
 
-SET(SQLITE_PATH "/usr")
-OPTION(WITH_SQLITE "use sqlite3(ON/OFF)" OFF)
-IF(WITH_SQLITE)
-	FIND_PATH(SQLITE_INCLUDE_DIR "sqlite3.h" "${SQLITE_PATH}/include" "${SQLITE_PATH}/local/include")
-	CHECK_LIBRARY_EXISTS("sqlite3" "sqlite3_exec" "-L${SQLITE_PATH}/lib" SQLITE_LIB)
+SET(SQLITE3_PATH "/usr")
+OPTION(WITH_SQLITE3 "use sqlite3(ON/OFF)" OFF)
+IF(WITH_SQLITE3)
+	FIND_PATH(SQLITE3_INCLUDE_DIR "sqlite3.h" "${SQLITE3_PATH}/include" "${SQLITE3_PATH}/local/include")
+	CHECK_LIBRARY_EXISTS("sqlite3" "sqlite3_exec" "-L${SQLITE3_PATH}/lib" SQLITE3_LIB)
 
-	IF(SQLITE_INCLUDE_DIR AND SQLITE_LIB)
+	IF(SQLITE3_INCLUDE_DIR AND SQLITE3_LIB)
 		MESSAGE(STATUS "sqlite3 has been successfully found")
 
-		INCLUDE_DIRECTORIES("${SQLITE_INCLUDE_DIR}")
-		LINK_DIRECTORIES("${SQLITE_PATH}/lib")
+		INCLUDE_DIRECTORIES("${SQLITE3_INCLUDE_DIR}")
+		LINK_DIRECTORIES("${SQLITE3_PATH}/lib")
 
 		TARGET_LINK_LIBRARIES(dodo sqlite3)
 
-		FILE(APPEND "include/libdodo/directives.runtime.h" "#define SQLITE_EXT\n\n")
-	ELSE(SQLITE_INCLUDE_DIR AND SQLITE_LIB)
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define SQLITE3_EXT\n\n")
+	ELSE(SQLITE3_INCLUDE_DIR AND SQLITE3_LIB)
 		MESSAGE(FATAL_ERROR "Unable to find sqlite3")
-	ENDIF(SQLITE_INCLUDE_DIR AND SQLITE_LIB)
-ENDIF(WITH_SQLITE)
+	ENDIF(SQLITE3_INCLUDE_DIR AND SQLITE3_LIB)
+ENDIF(WITH_SQLITE3)
 
 SET(OPENSSL_PATH "/usr")
 OPTION(WITH_OPENSSL "use openssl(ON/OFF)" OFF)
@@ -457,6 +460,40 @@ IF(WITH_DL)
 		MESSAGE(FATAL_ERROR "Unable to find dl")
 	ENDIF(DL_INCLUDE_DIR)
 ENDIF(WITH_DL)
+
+SET(LIBXML2_PATH "/usr")
+OPTION(WITH_LIBXML2 "use libxml2(ON/OFF)" OFF)
+IF(WITH_LIBXML2)
+	FIND_PROGRAM(LIBXML2_CONFIG "xml2-config" "/usr/bin" "/usr/local/bin")
+	IF(LIBXML2_CONFIG)
+		EXECUTE_PROCESS(COMMAND "xml2-config" "--cflags" OUTPUT_VARIABLE LIBXML2_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+		EXECUTE_PROCESS(COMMAND "xml2-config" "--libs" OUTPUT_VARIABLE	LIBXML2_LIBS OUTPUT_STRIP_TRAILING_WHITESPACE)
+		GET_INCLUDE_DIRS("${LIBXML2_CFLAGS}" LIBXML2_INCLUDE_PATH)
+		GET_LIB_DIRS("${LIBXML2_LIBS}" LIBXML2_LIB_PATH)
+	ELSE(LIBXML2_CONFIG)
+		SET(LIBXML2_INCLUDE_PATH "${LIBXML2_PATH}/include" "${LIBXML2_PATH}/include/libxml2" "${LIBXML2_PATH}/local/include" "${LIBXML2_PATH}/local/include/libxml2")
+		SET(LIBXML2_LIB_PATH "${LIBXML2_PATH}/lib")
+	ENDIF(LIBXML2_CONFIG)
+
+	FIND_PATH(LIBXML2_INCLUDE_DIR "libxml/xmlmemory.h" ${LIBXML2_INCLUDE_PATH})
+	FOREACH(FLAG ${LIBXML2_LIB_PATH})
+		SET(LIBXML2_LDFLAGS "${LIBXML2_LDFLAGS} -L${FLAG}")
+	ENDFOREACH(FLAG)
+	CHECK_LIBRARY_EXISTS("xml2" "xmlInitParser" "${LIBXML2_LDFLAGS}" LIBXML2_LIB)
+
+	IF(LIBXML2_INCLUDE_DIR AND LIBXML2_LIB)
+		MESSAGE(STATUS "libxml2 has been successfully found")
+
+		ADD_LINK_DIRECTORIES(${LIBXML2_LIB_PATH})
+		ADD_INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_PATH})
+
+		TARGET_LINK_LIBRARIES(dodo xml2)
+
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define LIBXML2_EXT\n\n")
+	ELSE(LIBXML2_INCLUDE_DIR AND LIBXML2_LIB)
+		MESSAGE(FATAL_ERROR "Unable to find libxml2")
+	ENDIF(LIBXML2_INCLUDE_DIR AND LIBXML2_LIB)
+ENDIF(WITH_LIBXML2)
 
 CHECK_INCLUDE_FILES("arpa/inet.h" HAVE_ARPA_INET_H)
 IF(HAVE_ARPA_INET_H)

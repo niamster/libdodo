@@ -32,7 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#ifdef SQLITE_EXT
+#ifdef SQLITE3_EXT
 
 #include <sqlite3.h>
 

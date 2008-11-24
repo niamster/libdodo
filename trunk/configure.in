@@ -150,20 +150,20 @@ then
 fi
 
 
-AC_ARG_WITH([sqlite],
-	AS_HELP_STRING([--with-sqlite@<:@=DIR@:>@], [use sqlite]), [MOD_SQLITE_DIR="$withval"], [MOD_SQLITE="no"])
-if test "$MOD_SQLITE" != "no" -a "$MOD_SQLITE_DIR" != "no"
+AC_ARG_WITH([sqlite3],
+	AS_HELP_STRING([--with-sqlite3@<:@=DIR@:>@], [use sqlite3]), [MOD_SQLITE3_DIR="$withval"], [MOD_SQLITE3="no"])
+if test "$MOD_SQLITE3" != "no" -a "$MOD_SQLITE3_DIR" != "no"
 then
-	if test "$MOD_SQLITE_DIR" = "yes"
+	if test "$MOD_SQLITE3_DIR" = "yes"
 	then
-		MOD_SQLITE_DIR=/usr
+		MOD_SQLITE3_DIR=/usr
 	fi
-	CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
-	LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib -lsqlite3"
+	CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE3_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_SQLITE3_DIR/lib -lsqlite3"
 
 	AC_CHECK_LIB([sqlite3], [sqlite3_exec], [], AC_MSG_ERROR(sqlite3 lib was not found))
 	AC_CHECK_HEADER([sqlite3.h], [], AC_MSG_ERROR(sqlite3 header was not found))
-	echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define SQLITE3_EXT\n\n" >> include/libdodo/directives.runtime.h
 	
 	RESULT="$RESULT\nSQLite\t\t\t\t\t\t\t\tenabled"
 

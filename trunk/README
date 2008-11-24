@@ -5,7 +5,7 @@ It's possible to use autotools or cmake to configure libdodo's build options.
 	To configure run ./configure with additional options you can find running './configure --help' or some of them you can find in build.options file.
 
 [CMake]
-	To configure run 'cmake .' with additional options you can find in build.options file.
+	To configure run 'cmake .' with additional options you can find running 'cmake -DHELP=ON' or some of them you can find in build.options file.
 
 You may edit include/libdodo/directives.h to tune some options.
 

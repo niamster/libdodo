@@ -704,7 +704,7 @@ enable_libwrap
 enable_deque
 enable_io_xexec
 enable_db_xexec
-with_sqlite
+with_sqlite3
 with_openssl
 with_bfd
 with_postgresql
@@ -1375,7 +1375,7 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-sqlite[=DIR]     use sqlite
+  --with-sqlite3[=DIR]    use sqlite3
   --with-openssl[=DIR]    use openssl
   --with-bfd[=DIR]        support library name resolution
   --with-postgresql[=DIR] use postgresql
@@ -5493,21 +5493,21 @@ fi
 
 
 
-# Check whether --with-sqlite was given.
-if test "${with_sqlite+set}" = set; then
-  withval=$with_sqlite; MOD_SQLITE_DIR="$withval"
+# Check whether --with-sqlite3 was given.
+if test "${with_sqlite3+set}" = set; then
+  withval=$with_sqlite3; MOD_SQLITE3_DIR="$withval"
 else
-  MOD_SQLITE="no"
+  MOD_SQLITE3="no"
 fi
 
-if test "$MOD_SQLITE" != "no" -a "$MOD_SQLITE_DIR" != "no"
+if test "$MOD_SQLITE3" != "no" -a "$MOD_SQLITE3_DIR" != "no"
 then
-	if test "$MOD_SQLITE_DIR" = "yes"
+	if test "$MOD_SQLITE3_DIR" = "yes"
 	then
-		MOD_SQLITE_DIR=/usr
+		MOD_SQLITE3_DIR=/usr
 	fi
-	CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
-	LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib -lsqlite3"
+	CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE3_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_SQLITE3_DIR/lib -lsqlite3"
 
 
 { $as_echo "$as_me:$LINENO: checking for sqlite3_exec in -lsqlite3" >&5
@@ -5729,7 +5729,7 @@ $as_echo "$as_me: error: sqlite3 header was not found" >&2;}
 fi
 
 
-	echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define SQLITE3_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 	RESULT="$RESULT\nSQLite\t\t\t\t\t\t\t\tenabled"
 

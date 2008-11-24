@@ -29,7 +29,7 @@
 
 #include <libdodo/dataBaseSqlite.h>
 
-#ifdef SQLITE_EXT
+#ifdef SQLITE3_EXT
 
 using namespace dodo::data::base;
 

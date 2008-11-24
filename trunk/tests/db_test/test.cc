@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 #endif
 
 		else if (strcasecmp(argv[1], "sqlite") == 0)
-#ifdef SQLITE_EXT
+#ifdef SQLITE3_EXT
 			pp = new sqlite;
 #else
 			return 1;
