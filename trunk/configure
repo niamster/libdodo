@@ -5110,7 +5110,8 @@ cat > include/libdodo/directives.runtime.h  <<EOF
 EOF
 
 CPPFLAGS="$CPPFLAGS -I/usr/include -I/usr/local/include"
-LDFLAGS="$LDFLAGS -L/usr/lib -L/usr/local/lib"
+LDFLAGS="$LDFLAGS -L/usr/lib -L/usr/local/lib -lrt"
+CFLAGS="$CFLAGS -D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98 -D_XOPEN_SOURCE=600 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_THREAD_SAFE"
 
 RESULT="\n\n"
 
@@ -8759,22 +8760,21 @@ fi
 
 if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
 then
-	ORIGINAL_LDFLAGS=$LDFLAGS
 	if test "$MOD_IMAGEMAGICK_DIR" = "yes"
 	then
 		if test "$(which Magick-config 2>/dev/null)" != ""
 		then
 			CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
 			add_ldflags_libdir $(Magick-config --ldflags)
-			LDFLAGS="$LDFLAGS -lMagickCore"
+			LDFLAGS="$LDFLAGS"
 		else
 			MOD_IMAGEMAGICK_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include -I$MOD_IMAGEMAGICK_DIR/include/ImageMagick"
-			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
+			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib"
 		fi
 	else
 		CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
+		LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib"
 	fi
 
 
@@ -8847,12 +8847,12 @@ _ACEOF
   LIBS="-lMagickCore $LIBS"
 
 else
-  OLD_MAGICK_LIB="yes"
+  OLD_IMAGEMAGICK_LIB="yes"
 fi
 
-	if test "$OLD_MAGICK_LIB" = "yes"
+	if test "$OLD_IMAGEMAGICK_LIB" = "yes"
 	then
-		LDFLAGS="$ORIGINAL_LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
+		LDFLAGS="$LDFLAGS -lMagick"
 
 
 { echo "$as_me:$LINENO: checking for MagickCoreGenesis in -lMagick" >&5
@@ -8928,6 +8928,9 @@ else
 echo "$as_me: error: Magick lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
+
+	else
+		LDFLAGS="$LDFLAGS -lMagickCore"
 
 	fi
 	if test "${ac_cv_header_magick_MagickCore_h+set}" = set; then

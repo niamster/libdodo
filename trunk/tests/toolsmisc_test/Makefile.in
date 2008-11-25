@@ -1,16 +1,15 @@
 CXX:=@CXX@
 CPPFLAGS:=-I../../include @CPPFLAGS@
-LDFLAGS:= -L../.. @LDFLAGS@
-CFLAGS:=@CFLAGS@
-DEFINES:=-D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @DEFS@
+LDFLAGS:=-L../.. @LDFLAGS@
+CFLAGS:=@CFLAGS@ @DEFS@
 
 all: test module
 
 test: test.cc
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -ldodo $^ -o $@
+	$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@
 
 module: module.cc
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -Wall -shared -ldodo -fPIC $^ -o $@ 
+	$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -Wall -shared -ldodo -fPIC $^ -o $@ 
 
 clean:
 	rm -fr test module

@@ -9,14 +9,11 @@ includedir:=@includedir@
 
 CXX:=@CXX@
 INSTALL:=@INSTALL@
-LN_S = @LN_S@
+LN_S:=@LN_S@
 
 CPPFLAGS:=-I./include @CPPFLAGS@
-LDFLAGS:= -L./ @LDFLAGS@ -lrt
-CFLAGS:=@CFLAGS@
-DEFINES:=-D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98 -D_XOPEN_SOURCE=600 \
-	-D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_THREAD_SAFE \
-	@DEFS@
+LDFLAGS:=-L./ @LDFLAGS@ 
+CFLAGS:=@CFLAGS@ @DEFS@
 
 ###########################################################
 
@@ -128,8 +125,8 @@ all: @PACKAGE_NAME@
 	@echo "Now you can run 'gmake install'."
 
 .cc.o:
-	@echo "-- Compiling $^"
-	@$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -fPIC -c $^
+	@echo "-- Compiling: $^"
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) -fPIC -c $^
 
 install: @PACKAGE_NAME@
 	@echo "" > install_manifest.txt
