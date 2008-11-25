@@ -434,16 +434,15 @@ else
 fi
 
 AC_ARG_WITH([threading-lib],
-	AS_HELP_STRING([--with-threading-lib@<:@=lib@:>@], [specify threading library(supported: pthread; default=pthread)]), [MOD_THREAD="$withval"], [MOD_THREAD="pthread"])
+	AS_HELP_STRING([--with-threading-lib@<:@=lib@:>@], [specify threading library(supported: pthread), pthread by default]), [MOD_THREAD="$withval"], [MOD_THREAD="pthread"])
 case "$MOD_THREAD" in
 	pthread)
-		if test "$MOD_PTHREAD_DIR" = "yes"
-		then
-			MOD_PTHREAD_DIR=/usr
-		fi
-			AC_ARG_WITH([pthread-lib],
-		AS_HELP_STRING([--with-pthread-lib@<:@=lib@:>@], [use pthread library(supported: pthread, thr, lthread, c_r) (default=pthread)]), [MOD_PTHREAD_LIB="$withval"], [MOD_PTHREAD_LIB="pthread"])
-		LDFLAGS="$LDFLAGS -l$MOD_PTHREAD_LIB"
+		AC_ARG_WITH([pthread-lib],
+			AS_HELP_STRING([--with-pthread-lib@<:@=lib@:>@], [use pthread library(supported: pthread, thr, lthread, c_r), pthread by default]), [MOD_PTHREAD_LIB="$withval"], [MOD_PTHREAD_LIB="pthread"])
+		AC_ARG_WITH([pthread-path],
+			AS_HELP_STRING([--with-pthread-path@<:@=DIR@:>@], [path to pthread installation]), [MOD_PTHREAD_DIR="$withval"], [MOD_PTHREAD_LIB="/usr"])
+		CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib -l$MOD_PTHREAD_LIB"
 		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create], [], AC_MSG_ERROR($MOD_PTHREAD_LIB lib was not found))
 		AC_CHECK_HEADER([pthread.h], [], AC_MSG_ERROR(pthread header was not found))
 		echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h

@@ -27,7 +27,7 @@ SET(CMAKE_INSTALL_PREFIX "${LIBDODO_INSTALL_PREFIX}" CACHE PATH "Prefix prepende
 ##
 OPTION(HELP "Enable profiling(ON/OFF)" OFF)
 IF(HELP)
-	SET(HELP OFF CACHE BOOL "Display build options" FORCE)
+	SET(HELP OFF CACHE BOOL "display build options" FORCE)
 	MESSAGE(STATUS "
 	CMake configures ${PACKAGE_STRING} to adapt to many kinds of systems.
 
@@ -48,14 +48,14 @@ IF(HELP)
 		-DFEATURE=OFF				do not include FEATURE
 		-DFEATURE=ON				include FEATURE
 
-		-DDEBUG=[ON|OFF]			Enable debug info, OFF by default
-		-DPROFILING=[ON|OFF]			Enable profiling, OFF by default
-		-DLIBWRAP=[ON|OFF]			Enable libwrap, ON by default
-		-DDEQUE=[ON|OFF]			Use std::deque instead of std::vector, ON by default
-		-DIO_EXEC=[ON|OFF]			Compile io:: with xexec support, ON by default
-		-DDB_EXEC=[ON|OFF]			Compile db:: with xexec support, ON by default
-		-DDL_LIB=[ON|OFF]			Enable dl as lib, ON by default
-		-DFAST_DYNAMIC_LINKING[ON|OFF] 		Do not unload library to produce better performance, ON by default
+		-DDEBUG=[ON|OFF]			enable debug info, OFF by default
+		-DPROFILING=[ON|OFF]			enable profiling, OFF by default
+		-DLIBWRAP=[ON|OFF]			enable libwrap, ON by default
+		-DDEQUE=[ON|OFF]			use std::deque instead of std::vector, ON by default
+		-DIO_EXEC=[ON|OFF]			compile io:: with xexec support, ON by default
+		-DDB_EXEC=[ON|OFF]			compile db:: with xexec support, ON by default
+		-DDL_LIB=[ON|OFF]			enable dl as lib, ON by default
+		-DFAST_DYNAMIC_LINKING=[ON|OFF] 	do not unload library to produce better performance, ON by default
 
 	
 	Optional Packages:
@@ -82,9 +82,25 @@ IF(HELP)
 
 		-DDL_PATH:PATH=[DIR]			path to dl installation
 		-DWITH_DL=[ON|OFF]			use dynamic linking
+		-DWITH_DL_LIB=[ON|OFF]			use dl as lib, ON by default
 
 		-DLIBXML2_PATH:PATH=[DIR]		path to libxml2 installation
 		-DWITH_LIBXML2=[ON|OFF]			use libxml2
+
+		-DWITH_THREADING_LIB:STRING=[lib] 	threading library(supported:pthread). pthread by default
+		-DPTHREAD_LIB:STRING=[lib]		use pthread library(supported:pthread, thr, lthread, c_r), pthread by default
+		-DPTHREAD_PATH:PATH=[DIR]		path to pthread installation
+		
+		-DBZIP2_PATH:PATH=[DIR]			path to bzip2 installation
+		-DWITH_BZIP2=[ON|OFF]			use bzip2
+
+		-DZLIB_PATH:PATH=[DIR]			path to zlib installation
+		-DWITH_ZLIB=[ON|OFF]			use zlib
+		-DWITH_ZLIB_LIB=[ON|OFF]		use zlib as lib, OFF by default
+
+		-DICONV_PATH:PATH=[DIR]			path to iconv installation
+		-DWITH_ICONV=[ON|OFF]			use iconv
+		-DWITH_ICONV_LIB=[ON|OFF]		use iconv as lib, OFF by default
 	")
 	RETURN()
 ENDIF(HELP)
@@ -117,14 +133,14 @@ MACRO(GET_INCLUDE_DIRS FLAGS INCLUDE_DIRS)
 	ENDFOREACH(CFLAG)
 ENDMACRO(GET_INCLUDE_DIRS)
 
-FUNCTION(ADD_LINK_DIRECTORIES DIRS)
-	FOREACH(DIR ${DIRS})
+FUNCTION(ADD_LINK_DIRECTORIES)
+	FOREACH(DIR ${ARGV})
 		LINK_DIRECTORIES("${DIR}")
 	ENDFOREACH(DIR)
 ENDFUNCTION(ADD_LINK_DIRECTORIES)
 
-FUNCTION(ADD_INCLUDE_DIRECTORIES DIRS)
-	FOREACH(DIR ${DIRS})
+FUNCTION(ADD_INCLUDE_DIRECTORIES)
+	FOREACH(DIR ${ARGV})
 		INCLUDE_DIRECTORIES("${DIR}")
 	ENDFOREACH(DIR)
 ENDFUNCTION(ADD_INCLUDE_DIRECTORIES)
@@ -169,38 +185,38 @@ INCLUDE(CheckIncludeFiles)
 INCLUDE(CheckCXXSourceCompiles)
 INCLUDE(CheckLibraryExists)
 
-OPTION(ENABLE_DEBUG "Enable debug info(ON/OFF)" OFF)
+OPTION(ENABLE_DEBUG "enable debug info(ON/OFF)" OFF)
 IF(ENABLE_DEBUG)
 	ADD_DEFINITIONS("-g -DDEBUG")
 ENDIF(ENABLE_DEBUG)
 
-OPTION(ENABLE_PROFILING "Enable profiling(ON/OFF)" OFF)
+OPTION(ENABLE_PROFILING "enable profiling(ON/OFF)" OFF)
 IF(ENABLE_PROFILING)
 	ADD_DEFINITIONS("-pg")
 ENDIF(ENABLE_PROFILING)
 
-OPTION(ENABLE_LIBWRAP "Enable libwrap(ON/OFF)" ON)
+OPTION(ENABLE_LIBWRAP "enable libwrap(ON/OFF)" ON)
 IF(ENABLE_LIBWRAP)
 	TARGET_LINK_LIBRARIES(dodo wrap)
 ENDIF(ENABLE_LIBWRAP)
 
-OPTION(ENABLE_DEQUE "Use std::deque instead of std::vector(ON/OFF)" ON)
+OPTION(ENABLE_DEQUE "use std::deque instead of std::vector(ON/OFF)" ON)
 IF(ENABLE_DEQUE)
 	FILE(APPEND "include/libdodo/directives.runtime.h" "#define USE_DEQUE\n\n")
 ENDIF(ENABLE_DEQUE)
 
-OPTION(ENABLE_IO_EXEC "Compile io:: with xexec support(ON/OFF)" ON)
+OPTION(ENABLE_IO_EXEC "compile io:: with xexec support(ON/OFF)" ON)
 IF(NOT ENABLE_IO_EXEC)
 	FILE(APPEND "include/libdodo/directives.runtime.h" "#define IO_WO_XEXEC\n\n")
 ENDIF(NOT ENABLE_IO_EXEC)
 
-OPTION(ENABLE_DB_EXEC "Compile db:: with xexec support(ON/OFF)" ON)
+OPTION(ENABLE_DB_EXEC "compile db:: with xexec support(ON/OFF)" ON)
 IF(NOT ENABLE_DB_EXEC)
 	FILE(APPEND "include/libdodo/directives.runtime.h" "#define DATABASE_WO_XEXEC\n\n")
 ENDIF(NOT ENABLE_DB_EXEC)
 
 
-SET(SQLITE3_PATH "/usr")
+SET(SQLITE3_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_SQLITE3 "use sqlite3(ON/OFF)" OFF)
 IF(WITH_SQLITE3)
 	FIND_PATH(SQLITE3_INCLUDE_DIR "sqlite3.h" "${SQLITE3_PATH}/include" "${SQLITE3_PATH}/local/include")
@@ -220,7 +236,7 @@ IF(WITH_SQLITE3)
 	ENDIF(SQLITE3_INCLUDE_DIR AND SQLITE3_LIB)
 ENDIF(WITH_SQLITE3)
 
-SET(OPENSSL_PATH "/usr")
+SET(OPENSSL_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_OPENSSL "use openssl(ON/OFF)" OFF)
 IF(WITH_OPENSSL)
 	FIND_PATH(OPENSSL_INCLUDE_DIR "openssl/ssl.h" "${OPENSSL_PATH}/include" "${OPENSSL_PATH}/local/include")
@@ -240,7 +256,7 @@ IF(WITH_OPENSSL)
 	ENDIF(OPENSSL_INCLUDE_DIR AND OPENSSL_LIB)
 ENDIF(WITH_OPENSSL)
 
-SET(BFD_PATH "/usr")
+SET(BFD_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_BFD "use bfd(ON/OFF)" OFF)
 IF(WITH_BFD)
 	FIND_PATH(BFD_INCLUDE_DIR "bfd.h" "${BFD_PATH}/include" "${BFD_PATH}/local/include")
@@ -260,7 +276,7 @@ IF(WITH_BFD)
 	ENDIF(BFD_INCLUDE_DIR AND BFD_LIB)
 ENDIF(WITH_BFD)
 
-SET(POSTGRESQL_PATH "/usr")
+SET(POSTGRESQL_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_POSTGRESQL "use postgresql(ON/OFF)" OFF)
 IF(WITH_POSTGRESQL)
 	FIND_PROGRAM(PG_CONFIG "pg_config" "/usr/bin" "/usr/local/bin")
@@ -308,7 +324,7 @@ int main(int argc, char **argv)
 	ENDIF(POSTGRESQL_INCLUDE_DIR AND POSTGRESQL_LIB)
 ENDIF(WITH_POSTGRESQL)
 
-SET(MYSQL_PATH "/usr")
+SET(MYSQL_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_MYSQL "use mysql(ON/OFF)" OFF)
 IF(WITH_MYSQL)
 	FIND_PROGRAM(MYSQL_CONFIG "mysql_config" "/usr/bin" "/usr/local/bin")
@@ -362,7 +378,7 @@ int main(int argc, char **argv)
 	ENDIF(MYSQL_INCLUDE_DIR AND MYSQL_LIB)
 ENDIF(WITH_MYSQL)
 
-SET(FASTCGI_PATH "/usr")
+SET(FASTCGI_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_FASTCGI "use fast-cgi(ON/OFF)" OFF)
 IF(WITH_FASTCGI)
 	FIND_PATH(FASTCGI_INCLUDE_DIR "fcgiapp.h" "${FASTCGI_PATH}/include" "${FASTCGI_PATH}/local/include")
@@ -382,7 +398,7 @@ IF(WITH_FASTCGI)
 	ENDIF(FASTCGI_INCLUDE_DIR AND FASTCGI_LIB)
 ENDIF(WITH_FASTCGI)
 
-SET(PCRE_PATH "/usr")
+SET(PCRE_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_PCRE "use pcre(ON/OFF)" OFF)
 IF(WITH_PCRE)
 	FIND_PROGRAM(PCRE_CONFIG "pcre-config" "/usr/bin" "/usr/local/bin")
@@ -423,7 +439,7 @@ ELSE(WITH_PCRE)
 	ENDIF(POSIXRE_INCLUDE_DIR)
 ENDIF(WITH_PCRE)
 
-SET(DL_PATH "/usr")
+SET(DL_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_DL "use dynamic linking(ON/OFF)" OFF)
 IF(WITH_DL)
 	FIND_PATH(DL_INCLUDE_DIR "dlfcn.h" "${DL_PATH}/include" "${DL_PATH}/local/include")
@@ -461,7 +477,7 @@ IF(WITH_DL)
 	ENDIF(DL_INCLUDE_DIR)
 ENDIF(WITH_DL)
 
-SET(LIBXML2_PATH "/usr")
+SET(LIBXML2_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_LIBXML2 "use libxml2(ON/OFF)" OFF)
 IF(WITH_LIBXML2)
 	FIND_PROGRAM(LIBXML2_CONFIG "xml2-config" "/usr/bin" "/usr/local/bin")
@@ -494,6 +510,116 @@ IF(WITH_LIBXML2)
 		MESSAGE(FATAL_ERROR "Unable to find libxml2")
 	ENDIF(LIBXML2_INCLUDE_DIR AND LIBXML2_LIB)
 ENDIF(WITH_LIBXML2)
+
+SET(WITH_THREADING_LIB "pthread" CACHE STRING "threading library(supported:pthread; default=pthread)")
+IF(WITH_THREADING_LIB STREQUAL "pthread")
+	SET(PTHREAD_LIB "pthread" CACHE STRING "use pthread library(supported:pthread, thr, lthread, c_r) (default=pthread)")
+	SET(PTHREAD_PATH "/usr" CACHE PATH "installation path")
+
+	FIND_PATH(THREADING_LIB_INCLUDE_DIR "pthread.h" "${PTHREAD_PATH}/include" "${PTHREAD_PATH}/local/include")
+	CHECK_LIBRARY_EXISTS("${PTHREAD_LIB}" "pthread_create" "-L${THREADING_LIB_PATH}/lib" THREADING_LIB_LIB)
+
+	IF(THREADING_LIB_INCLUDE_DIR AND THREADING_LIB_LIB)
+		MESSAGE(STATUS "pthread has been successfully found")
+
+		INCLUDE_DIRECTORIES("${THREADING_LIB_INCLUDE_DIR}")
+		LINK_DIRECTORIES("${PTHREAD_PATH}/lib")
+
+		TARGET_LINK_LIBRARIES(dodo "${PTHREAD_LIB}")
+
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define PTHREAD_EXT\n\n")
+	ELSE(THREADING_LIB_INCLUDE_DIR AND THREADING_LIB_LIB)
+		MESSAGE(FATAL_ERROR "Unable to find pthread")
+	ENDIF(THREADING_LIB_INCLUDE_DIR AND THREADING_LIB_LIB)
+#ELIF(WITH_THREADING_LIB EQUAL "")
+#
+ELSE(WITH_THREADING_LIB STREQUAL "pthread")
+	MESSAGE(FATAL_ERROR "Unsuported threading library specified")
+ENDIF(WITH_THREADING_LIB STREQUAL "pthread")
+
+SET(BZIP2_PATH "/usr" CACHE PATH "installation path")
+OPTION(WITH_BZIP2 "use bzip2(ON/OFF)" OFF)
+IF(WITH_BZIP2)
+	FIND_PATH(BZIP2_INCLUDE_DIR "bzlib.h" "${BZIP2_PATH}/include" "${BZIP2_PATH}/local/include")
+	CHECK_LIBRARY_EXISTS("bz2" "BZ2_bzBuffToBuffCompress" "-L${BZIP2_PATH}/lib" BZIP2_LIB)
+
+	IF(BZIP2_INCLUDE_DIR AND BZIP2_LIB)
+		MESSAGE(STATUS "bz2 has been successfully found")
+
+		INCLUDE_DIRECTORIES("${BZIP2_INCLUDE_DIR}")
+		LINK_DIRECTORIES("${BZIP2_PATH}/lib")
+
+		TARGET_LINK_LIBRARIES(dodo bz2)
+
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define BZIP2_EXT\n\n")
+	ELSE(BZIP2_INCLUDE_DIR AND BZIP2_LIB)
+		MESSAGE(FATAL_ERROR "Unable to find bz2")
+	ENDIF(BZIP2_INCLUDE_DIR AND BZIP2_LIB)
+ENDIF(WITH_BZIP2)
+
+SET(ZLIB_PATH "/usr" CACHE PATH "installation path")
+OPTION(WITH_ZLIB "use zlib(ON/OFF)" OFF)
+IF(WITH_ZLIB)
+	FIND_PATH(ZLIB_INCLUDE_DIR "zlib.h" "${ZLIB_PATH}/include" "${ZLIB_PATH}/local/include")
+
+	OPTION(WITH_ZLIB_LIB "use zlib as lib(ON/OFF)" OFF)
+	IF(WITH_ZLIB_LIB)
+		CHECK_LIBRARY_EXISTS("z" "deflateInit2" "-L${ZLIB_PATH}/lib" ZLIB_LIB)
+		IF(ZLIB_LIB)
+			MESSAGE(STATUS "zlib lib has been successfully found")
+		ELSE(ZLIB_LIB)
+			MESSAGE(STATUS "unable to found zlib lib")
+		ENDIF(ZLIB_LIB)
+	ENDIF(WITH_ZLIB_LIB)
+
+	IF(ZLIB_INCLUDE_DIR)
+		MESSAGE(STATUS "zlib has been successfully found")
+
+		INCLUDE_DIRECTORIES("${ZLIB_INCLUDE_DIR}")
+
+		IF(WITH_ZLIB_LIB)
+			LINK_DIRECTORIES("${ZLIB_PATH}/lib")
+
+			TARGET_LINK_LIBRARIES(dodo z)
+		ENDIF(WITH_ZLIB_LIB)
+
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define ZLIB_EXT\n\n")
+	ELSE(ZLIB_INCLUDE_DIR AND ZLIB_LIB)
+		MESSAGE(FATAL_ERROR "Unable to find zlib")
+	ENDIF(ZLIB_INCLUDE_DIR)
+ENDIF(WITH_ZLIB)
+
+SET(ICONV_PATH "/usr" CACHE PATH "installation path")
+OPTION(WITH_ICONV "use iconv(ON/OFF)" OFF)
+IF(WITH_ICONV)
+	FIND_PATH(ICONV_INCLUDE_DIR "iconv.h" "${ICONV_PATH}/include" "${ICONV_PATH}/local/include")
+
+	OPTION(WITH_ICONV_LIB "use iconv as lib(ON/OFF)" OFF)
+	IF(WITH_ICONV_LIB)
+		CHECK_LIBRARY_EXISTS("iconv" "iconv" "-L${ICONV_PATH}/lib" ICONV_LIB)
+		IF(ICONV_LIB)
+			MESSAGE(STATUS "iconv lib has been successfully found")
+		ELSE(ICONV_LIB)
+			MESSAGE(STATUS "unable to found iconv lib")
+		ENDIF(ICONV_LIB)
+	ENDIF(WITH_ICONV_LIB)
+
+	IF(ICONV_INCLUDE_DIR)
+		MESSAGE(STATUS "iconv has been successfully found")
+
+		INCLUDE_DIRECTORIES("${ICONV_INCLUDE_DIR}")
+
+		IF(WITH_ICONV_LIB)
+			LINK_DIRECTORIES("${ICONV_PATH}/lib")
+
+			TARGET_LINK_LIBRARIES(dodo iconv)
+		ENDIF(WITH_ICONV_LIB)
+
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define ICONV_EXT\n\n")
+	ELSE(ICONV_INCLUDE_DIR AND ICONV_LIB)
+		MESSAGE(FATAL_ERROR "Unable to find iconv")
+	ENDIF(ICONV_INCLUDE_DIR)
+ENDIF(WITH_ICONV)
 
 CHECK_INCLUDE_FILES("arpa/inet.h" HAVE_ARPA_INET_H)
 IF(HAVE_ARPA_INET_H)

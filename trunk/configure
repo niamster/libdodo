@@ -717,6 +717,7 @@ enable_fast_dynamic_loading
 with_libxml2
 with_threading_lib
 with_pthread_lib
+with_pthread_path
 with_bzip2
 with_zlib
 enable_zlib_lib
@@ -1385,11 +1386,13 @@ Optional Packages:
   --with-dl[=DIR]         use dl
   --with-libxml2[=DIR]    use libxml2
   --with-threading-lib[=lib]
-                          specify threading library(supported: pthread;
-                          default=pthread)
+                          specify threading library(supported: pthread),
+                          pthread by default
   --with-pthread-lib[=lib]
                           use pthread library(supported: pthread, thr,
-                          lthread, c_r) (default=pthread)
+                          lthread, c_r), pthread by default
+  --with-pthread-path[=DIR]
+                          path to pthread installation
   --with-bzip2[=DIR]      use bzip2
   --with-zlib[=DIR]       use zlib
   --with-iconv[=DIR]      use iconv
@@ -8047,10 +8050,6 @@ fi
 
 case "$MOD_THREAD" in
 	pthread)
-		if test "$MOD_PTHREAD_DIR" = "yes"
-		then
-			MOD_PTHREAD_DIR=/usr
-		fi
 
 # Check whether --with-pthread-lib was given.
 if test "${with_pthread_lib+set}" = set; then
@@ -8059,7 +8058,16 @@ else
   MOD_PTHREAD_LIB="pthread"
 fi
 
-		LDFLAGS="$LDFLAGS -l$MOD_PTHREAD_LIB"
+
+# Check whether --with-pthread-path was given.
+if test "${with_pthread_path+set}" = set; then
+  withval=$with_pthread_path; MOD_PTHREAD_DIR="$withval"
+else
+  MOD_PTHREAD_LIB="/usr"
+fi
+
+		CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib -l$MOD_PTHREAD_LIB"
 
 as_ac_Lib=`$as_echo "ac_cv_lib_$MOD_PTHREAD_LIB''_pthread_create" | $as_tr_sh`
 { $as_echo "$as_me:$LINENO: checking for pthread_create in -l$MOD_PTHREAD_LIB" >&5
