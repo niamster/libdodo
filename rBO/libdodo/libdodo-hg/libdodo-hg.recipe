@@ -1,7 +1,7 @@
 class LibdodoHg(CPackageRecipe):
 
 	name = 'libdodo-hg'
-	version = '497ad5b71d24'
+	version = '13414e434369'
 
 	buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user', 'tcp_wrappers:devellib']
 
@@ -25,10 +25,10 @@ class LibdodoHg(CPackageRecipe):
 		else:
 			extraconfig +=' --disable-graphics-xexec-support'
 
-		if Use.dbXexec:
-			extraconfig +=' --enable-db-xexec-support'
+		if Use.databaseXexec:
+			extraconfig +=' --enable-database-xexec-support'
 		else:
-			extraconfig +=' --disable-db-xexec-support'
+			extraconfig +=' --disable-database-xexec-support'
 
 		if Use.sqlite3:
 			r.buildRequires += ['sqlite:devel']
@@ -40,15 +40,15 @@ class LibdodoHg(CPackageRecipe):
 
 		if Use.mysql:
 			r.buildRequires += ['mysql:devel']
-			extraconfig +=' --with-mysql CPPFLAGS=-I/usr/include/mysql LDFLAGS=-L/usr/lib/mysql'
+			extraconfig +=' --with-mysql'
 
 		if Use.ssl:
 			r.buildRequires += ['openssl:devel']
 			extraconfig +=' --with-openssl'
 
-		if Use.fcgi:
+		if Use.fast-cgi:
 			r.buildRequires += ['fcgi:devel']
-			extraconfig +=' --with-fcgi'
+			extraconfig +=' --with-fast-cgi'
 
 		if Use.pcre:
 			r.buildRequires += ['pcre:devel']
@@ -74,7 +74,7 @@ class LibdodoHg(CPackageRecipe):
 
 		if Use.imagemagick:
 			r.buildRequires += ['ImageMagick:devel']
-			extraconfig +=' --with-imagemagick CFLAGS="$CFLAGS -I/usr/include/ImageMagick"'
+			extraconfig +=' --with-imagemagick'
 
 		if Use.bfd:
 			r.buildRequires += ['binutils:devel']

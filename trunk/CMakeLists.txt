@@ -48,14 +48,17 @@ IF(HELP)
 		-DFEATURE=OFF				do not include FEATURE
 		-DFEATURE=ON				include FEATURE
 
-		-DDEBUG=[ON|OFF]			enable debug info, OFF by default
-		-DPROFILING=[ON|OFF]			enable profiling, OFF by default
-		-DLIBWRAP=[ON|OFF]			enable libwrap, ON by default
-		-DDEQUE=[ON|OFF]			use std::deque instead of std::vector, ON by default
-		-DIO_EXEC=[ON|OFF]			compile io:: with xexec support, ON by default
-		-DDB_EXEC=[ON|OFF]			compile db:: with xexec support, ON by default
-		-DDL_LIB=[ON|OFF]			enable dl as lib, ON by default
-		-DFAST_DYNAMIC_LINKING=[ON|OFF] 	do not unload library to produce better performance, ON by default
+		-DENABLE_DEBUG=[ON|OFF]			enable debug info, OFF by default
+		-DENABLE_PROFILING=[ON|OFF]		enable profiling, OFF by default
+		-DENABLE_LIBWRAP=[ON|OFF]		enable libwrap, ON by default
+		-DENABLE_DEQUE=[ON|OFF]			use std::deque instead of std::vector, ON by default
+		-DENABLE_IO_XEXEC=[ON|OFF]		compile io:: with xexec support, ON by default
+		-DENABLE_DB_XEXEC=[ON|OFF]		compile db:: with xexec support, ON by default
+		-DENABLE_GRAPHICS_XEXEC=[ON|OFF]		compile graphics:: with xexec support, ON by default
+		-DENABLE_DL_LIB=[ON|OFF]		enable dl as lib, ON by default
+		-DENABLE_FAST_DYNAMIC_LINKING=[ON|OFF] 	do not unload library to produce better performance, ON by default
+		-DENABLE_ZLIB_LIB=[ON|OFF]		use zlib as lib, OFF by default
+		-DENABLE_ICONV_LIB=[ON|OFF]		use iconv as lib, OFF by default
 
 	
 	Optional Packages:
@@ -74,15 +77,14 @@ IF(HELP)
 		-DMYSQL_PATH:PATH=[DIR]			path to mysql installation
 		-DWITH_MYSQL=[ON|OFF]			use mysql
 
-		-DFASTCGI_PATH:PATH=[DIR]		path to fast-cgi installation
-		-DWITH_FASTCGI=[ON|OFF]			use fast-cgi
+		-DFAST_CGI_PATH:PATH=[DIR]		path to fast-cgi installation
+		-DWITH_FAST_CGI=[ON|OFF]			use fast-cgi
 
 		-DPCRE_PATH:PATH=[DIR]			path to pcre installation
 		-DWITH_PCRE=[ON|OFF]			use pcre
 
 		-DDL_PATH:PATH=[DIR]			path to dl installation
 		-DWITH_DL=[ON|OFF]			use dynamic linking
-		-DWITH_DL_LIB=[ON|OFF]			use dl as lib, ON by default
 
 		-DLIBXML2_PATH:PATH=[DIR]		path to libxml2 installation
 		-DWITH_LIBXML2=[ON|OFF]			use libxml2
@@ -96,11 +98,12 @@ IF(HELP)
 
 		-DZLIB_PATH:PATH=[DIR]			path to zlib installation
 		-DWITH_ZLIB=[ON|OFF]			use zlib
-		-DWITH_ZLIB_LIB=[ON|OFF]		use zlib as lib, OFF by default
 
 		-DICONV_PATH:PATH=[DIR]			path to iconv installation
 		-DWITH_ICONV=[ON|OFF]			use iconv
-		-DWITH_ICONV_LIB=[ON|OFF]		use iconv as lib, OFF by default
+		
+		-DIMAGEMAGICK_PATH:PATH=[DIR]		path to imagemagick installation
+		-DWITH_IMAGEMAGICK=[ON|OFF]		use imagemagick
 	")
 	RETURN()
 ENDIF(HELP)
@@ -205,15 +208,15 @@ IF(ENABLE_DEQUE)
 	FILE(APPEND "include/libdodo/directives.runtime.h" "#define USE_DEQUE\n\n")
 ENDIF(ENABLE_DEQUE)
 
-OPTION(ENABLE_IO_EXEC "compile io:: with xexec support(ON/OFF)" ON)
-IF(NOT ENABLE_IO_EXEC)
+OPTION(ENABLE_IO_XEXEC "compile io:: with xexec support(ON/OFF)" ON)
+IF(NOT ENABLE_IO_XEXEC)
 	FILE(APPEND "include/libdodo/directives.runtime.h" "#define IO_WO_XEXEC\n\n")
-ENDIF(NOT ENABLE_IO_EXEC)
+ENDIF(NOT ENABLE_IO_XEXEC)
 
-OPTION(ENABLE_DB_EXEC "compile db:: with xexec support(ON/OFF)" ON)
-IF(NOT ENABLE_DB_EXEC)
+OPTION(ENABLE_DB_XEXEC "compile db:: with xexec support(ON/OFF)" ON)
+IF(NOT ENABLE_DB_XEXEC)
 	FILE(APPEND "include/libdodo/directives.runtime.h" "#define DATABASE_WO_XEXEC\n\n")
-ENDIF(NOT ENABLE_DB_EXEC)
+ENDIF(NOT ENABLE_DB_XEXEC)
 
 
 SET(SQLITE3_PATH "/usr" CACHE PATH "installation path")
@@ -378,25 +381,25 @@ int main(int argc, char **argv)
 	ENDIF(MYSQL_INCLUDE_DIR AND MYSQL_LIB)
 ENDIF(WITH_MYSQL)
 
-SET(FASTCGI_PATH "/usr" CACHE PATH "installation path")
-OPTION(WITH_FASTCGI "use fast-cgi(ON/OFF)" OFF)
-IF(WITH_FASTCGI)
-	FIND_PATH(FASTCGI_INCLUDE_DIR "fcgiapp.h" "${FASTCGI_PATH}/include" "${FASTCGI_PATH}/local/include")
-	CHECK_LIBRARY_EXISTS("fcgi" "FCGX_Init" "-L${FASTCGI_PATH}/lib" FASTCGI_LIB)
+SET(FAST_CGI_PATH "/usr" CACHE PATH "installation path")
+OPTION(WITH_FAST_CGI "use fast-cgi(ON/OFF)" OFF)
+IF(WITH_FAST_CGI)
+	FIND_PATH(FAST_CGI_INCLUDE_DIR "fcgiapp.h" "${FAST_CGI_PATH}/include" "${FAST_CGI_PATH}/local/include")
+	CHECK_LIBRARY_EXISTS("fcgi" "FCGX_Init" "-L${FAST_CGI_PATH}/lib" FAST_CGI_LIB)
 
-	IF(FASTCGI_INCLUDE_DIR AND FASTCGI_LIB)
+	IF(FAST_CGI_INCLUDE_DIR AND FAST_CGI_LIB)
 		MESSAGE(STATUS "fast-cgi has been successfully found")
 
-		INCLUDE_DIRECTORIES("${FASTCGI_INCLUDE_DIR}")
-		LINK_DIRECTORIES("${FASTCGI_PATH}/lib")
+		INCLUDE_DIRECTORIES("${FAST_CGI_INCLUDE_DIR}")
+		LINK_DIRECTORIES("${FAST_CGI_PATH}/lib")
 
 		TARGET_LINK_LIBRARIES(dodo fcgi)
 
-		FILE(APPEND "include/libdodo/directives.runtime.h" "#define FASTCGI_EXT\n\n")
-	ELSE(FASTCGI_INCLUDE_DIR AND FASTCGI_LIB)
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define FAST_CGI_EXT\n\n")
+	ELSE(FAST_CGI_INCLUDE_DIR AND FAST_CGI_LIB)
 		MESSAGE(FATAL_ERROR "Unable to find fast-cgi")
-	ENDIF(FASTCGI_INCLUDE_DIR AND FASTCGI_LIB)
-ENDIF(WITH_FASTCGI)
+	ENDIF(FAST_CGI_INCLUDE_DIR AND FAST_CGI_LIB)
+ENDIF(WITH_FAST_CGI)
 
 SET(PCRE_PATH "/usr" CACHE PATH "installation path")
 OPTION(WITH_PCRE "use pcre(ON/OFF)" OFF)
@@ -444,34 +447,34 @@ OPTION(WITH_DL "use dynamic linking(ON/OFF)" OFF)
 IF(WITH_DL)
 	FIND_PATH(DL_INCLUDE_DIR "dlfcn.h" "${DL_PATH}/include" "${DL_PATH}/local/include")
 
-	OPTION(WITH_DL_LIB "use dl as lib(ON/OFF)" ON)
-	IF(WITH_DL_LIB)
+	OPTION(ENABLE_DL_LIB "use dl as lib(ON/OFF)" ON)
+	IF(ENABLE_DL_LIB)
 		CHECK_LIBRARY_EXISTS("dl" "dlopen" "-L${DL_PATH}/lib" DL_LIB)
 		IF(DL_LIB)
 			MESSAGE(STATUS "dl lib has been successfully found")
 		ELSE(DL_LIB)
 			MESSAGE(STATUS "unable to found dl lib")
 		ENDIF(DL_LIB)
-	ENDIF(WITH_DL_LIB)
+	ENDIF(ENABLE_DL_LIB)
 
-	OPTION(FAST_DYNAMIC_LINKING "Do not unload library to produce better performance(ON/OFF)" ON)
+	OPTION(ENABLE_FAST_DYNAMIC_LINKING "Do not unload library to produce better performance(ON/OFF)" ON)
 
 	IF(DL_INCLUDE_DIR)
 		MESSAGE(STATUS "dl has been successfully found")
 
 		INCLUDE_DIRECTORIES("${DL_INCLUDE_DIR}")
 
-		IF(WITH_DL_LIB)
+		IF(ENABLE_DL_LIB)
 			LINK_DIRECTORIES("${DL_PATH}/lib")
 
 			TARGET_LINK_LIBRARIES(dodo dl)
-		ENDIF(WITH_DL_LIB)
+		ENDIF(ENABLE_DL_LIB)
 
 		FILE(APPEND "include/libdodo/directives.runtime.h" "#define DL_EXT\n\n")
 
-		IF(FAST_DYNAMIC_LINKING)
+		IF(ENABLE_FAST_DYNAMIC_LINKING)
 			FILE(APPEND "include/libdodo/directives.runtime.h" "#define DL_FAST\n\n")
-		ENDIF(FAST_DYNAMIC_LINKING)
+		ENDIF(ENABLE_FAST_DYNAMIC_LINKING)
 	ELSE(DL_INCLUDE_DIR AND DL_LIB)
 		MESSAGE(FATAL_ERROR "Unable to find dl")
 	ENDIF(DL_INCLUDE_DIR)
@@ -562,26 +565,26 @@ OPTION(WITH_ZLIB "use zlib(ON/OFF)" OFF)
 IF(WITH_ZLIB)
 	FIND_PATH(ZLIB_INCLUDE_DIR "zlib.h" "${ZLIB_PATH}/include" "${ZLIB_PATH}/local/include")
 
-	OPTION(WITH_ZLIB_LIB "use zlib as lib(ON/OFF)" OFF)
-	IF(WITH_ZLIB_LIB)
+	OPTION(ENABLE_ZLIB_LIB "use zlib as lib(ON/OFF)" OFF)
+	IF(ENABLE_ZLIB_LIB)
 		CHECK_LIBRARY_EXISTS("z" "deflateInit2" "-L${ZLIB_PATH}/lib" ZLIB_LIB)
 		IF(ZLIB_LIB)
 			MESSAGE(STATUS "zlib lib has been successfully found")
 		ELSE(ZLIB_LIB)
 			MESSAGE(STATUS "unable to found zlib lib")
 		ENDIF(ZLIB_LIB)
-	ENDIF(WITH_ZLIB_LIB)
+	ENDIF(ENABLE_ZLIB_LIB)
 
 	IF(ZLIB_INCLUDE_DIR)
 		MESSAGE(STATUS "zlib has been successfully found")
 
 		INCLUDE_DIRECTORIES("${ZLIB_INCLUDE_DIR}")
 
-		IF(WITH_ZLIB_LIB)
+		IF(ENABLE_ZLIB_LIB)
 			LINK_DIRECTORIES("${ZLIB_PATH}/lib")
 
 			TARGET_LINK_LIBRARIES(dodo z)
-		ENDIF(WITH_ZLIB_LIB)
+		ENDIF(ENABLE_ZLIB_LIB)
 
 		FILE(APPEND "include/libdodo/directives.runtime.h" "#define ZLIB_EXT\n\n")
 	ELSE(ZLIB_INCLUDE_DIR AND ZLIB_LIB)
@@ -594,32 +597,79 @@ OPTION(WITH_ICONV "use iconv(ON/OFF)" OFF)
 IF(WITH_ICONV)
 	FIND_PATH(ICONV_INCLUDE_DIR "iconv.h" "${ICONV_PATH}/include" "${ICONV_PATH}/local/include")
 
-	OPTION(WITH_ICONV_LIB "use iconv as lib(ON/OFF)" OFF)
-	IF(WITH_ICONV_LIB)
+	OPTION(ENABLE_ICONV_LIB "use iconv as lib(ON/OFF)" OFF)
+	IF(ENABLE_ICONV_LIB)
 		CHECK_LIBRARY_EXISTS("iconv" "iconv" "-L${ICONV_PATH}/lib" ICONV_LIB)
 		IF(ICONV_LIB)
 			MESSAGE(STATUS "iconv lib has been successfully found")
 		ELSE(ICONV_LIB)
 			MESSAGE(STATUS "unable to found iconv lib")
 		ENDIF(ICONV_LIB)
-	ENDIF(WITH_ICONV_LIB)
+	ENDIF(ENABLE_ICONV_LIB)
 
 	IF(ICONV_INCLUDE_DIR)
 		MESSAGE(STATUS "iconv has been successfully found")
 
 		INCLUDE_DIRECTORIES("${ICONV_INCLUDE_DIR}")
 
-		IF(WITH_ICONV_LIB)
+		IF(ENABLE_ICONV_LIB)
 			LINK_DIRECTORIES("${ICONV_PATH}/lib")
 
 			TARGET_LINK_LIBRARIES(dodo iconv)
-		ENDIF(WITH_ICONV_LIB)
+		ENDIF(ENABLE_ICONV_LIB)
 
 		FILE(APPEND "include/libdodo/directives.runtime.h" "#define ICONV_EXT\n\n")
 	ELSE(ICONV_INCLUDE_DIR AND ICONV_LIB)
 		MESSAGE(FATAL_ERROR "Unable to find iconv")
 	ENDIF(ICONV_INCLUDE_DIR)
 ENDIF(WITH_ICONV)
+
+SET(IMAGEMAGICK_PATH "/usr" CACHE PATH "installation path")
+OPTION(WITH_IMAGEMAGICK "use imagemagick(ON/OFF)" OFF)
+IF(WITH_IMAGEMAGICK)
+	FIND_PROGRAM(IMAGEMAGICK_CONFIG "Magick-config" "/usr/bin" "/usr/local/bin")
+	IF(IMAGEMAGICK_CONFIG)
+		EXECUTE_PROCESS(COMMAND "Magick-config" "--cppflags" OUTPUT_VARIABLE IMAGEMAGICK_CFLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+		EXECUTE_PROCESS(COMMAND "Magick-config" "--ldflags" OUTPUT_VARIABLE	IMAGEMAGICK_LIBS OUTPUT_STRIP_TRAILING_WHITESPACE)
+		GET_INCLUDE_DIRS("${IMAGEMAGICK_CFLAGS}" IMAGEMAGICK_INCLUDE_PATH)
+		GET_LIB_DIRS("${IMAGEMAGICK_LIBS}" IMAGEMAGICK_LIB_PATH)
+	ELSE(IMAGEMAGICK_CONFIG)
+		SET(IMAGEMAGICK_INCLUDE_PATH "${IMAGEMAGICK_PATH}/include" "${IMAGEMAGICK_PATH}/include/ImageMagick" "${IMAGEMAGICK_PATH}/local/include" "${IMAGEMAGICK_PATH}/local/include/ImageMagick")
+		SET(IMAGEMAGICK_LIB_PATH "${IMAGEMAGICK_PATH}/lib")
+	ENDIF(IMAGEMAGICK_CONFIG)
+
+	FIND_PATH(IMAGEMAGICK_INCLUDE_DIR "magick/MagickCore.h" ${IMAGEMAGICK_INCLUDE_PATH})
+	FOREACH(FLAG ${IMAGEMAGICK_LIB_PATH})
+		SET(IMAGEMAGICK_LDFLAGS "${IMAGEMAGICK_LDFLAGS} -L${FLAG}")
+	ENDFOREACH(FLAG)
+	CHECK_LIBRARY_EXISTS("MagickCore" "MagickCoreGenesis" "${IMAGEMAGICK_LDFLAGS}" IMAGEMAGICK_LIB)
+	IF(NOT IMAGEMAGICK_LIB)
+		CHECK_LIBRARY_EXISTS("Magick" "MagickCoreGenesis" "${IMAGEMAGICK_LDFLAGS}" OLD_IMAGEMAGICK_LIB)
+		SET(IMAGEMAGICK_LIB TRUE)
+	ENDIF(NOT IMAGEMAGICK_LIB)
+
+	IF(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIB)
+		MESSAGE(STATUS "imagemagick has been successfully found")
+
+		ADD_LINK_DIRECTORIES(${IMAGEMAGICK_LIB_PATH})
+		ADD_INCLUDE_DIRECTORIES(${IMAGEMAGICK_INCLUDE_PATH})
+
+		IF(NOT OLD_IMAGEMAGICK_LIB)
+			TARGET_LINK_LIBRARIES(dodo MagickCore)
+		ELSE(NOT OLD_IMAGEMAGICK_LIB)
+			TARGET_LINK_LIBRARIES(dodo Magick)
+		ENDIF(NOT OLD_IMAGEMAGICK_LIB)
+
+		FILE(APPEND "include/libdodo/directives.runtime.h" "#define IMAGEMAGICK_EXT\n\n")
+
+		OPTION(ENABLE_GRAPHICS_XEXEC "compile graphics:: with xexec support(ON/OFF)" ON)
+		IF(NOT ENABLE_GRAPHICS_XEXEC)
+			FILE(APPEND "include/libdodo/directives.runtime.h" "#define GRAPHICS_WO_XEXEC\n\n")
+		ENDIF(NOT ENABLE_GRAPHICS_XEXEC)
+	ELSE(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIB)
+		MESSAGE(FATAL_ERROR "Unable to find imagemagick")
+	ENDIF(IMAGEMAGICK_INCLUDE_DIR AND IMAGEMAGICK_LIB)
+ENDIF(WITH_IMAGEMAGICK)
 
 CHECK_INCLUDE_FILES("arpa/inet.h" HAVE_ARPA_INET_H)
 IF(HAVE_ARPA_INET_H)
@@ -814,5 +864,7 @@ EXECUTE_PROCESS(COMMAND "chmod" "+x" "bin/dodo-config")
 # install options
 ##
 
-INSTALL(FILES "${PROJECT_SOURCE_DIR}/include/libdodo/*" DESTINATION include/libdodo)
-
+INSTALL(DIRECTORY "include/libdodo" DESTINATION include)
+INSTALL(PROGRAMS "bin/dodo-config" DESTINATION bin)
+INSTALL(FILES "libdodo.so.${PROJECT_VERSION}" DESTINATION lib)
+INSTALL(FILES "libdodo.so" DESTINATION lib)

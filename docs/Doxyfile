@@ -1129,10 +1129,10 @@ INCLUDE_FILE_PATTERNS  =
 # instead of the = operator.
 
 PREDEFINED             = USE_DEQUE \
-                         SQLITE_EXT \
+                         SQLITE3_EXT \
                          POSTGRESQL_EXT \
                          MYSQL_EXT \
-                         FASTCGI_EXT \
+                         FAST_CGI_EXT \
                          PCRE_EXT \
                          DL_EXT \
                          LIBXML2_EXT \

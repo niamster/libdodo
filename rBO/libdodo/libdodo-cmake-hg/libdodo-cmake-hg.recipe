@@ -16,72 +16,70 @@ class LibdodoHg(CPackageRecipe):
 			extraconfig +=' -DENABLE_DEQUE=OFF'
 
 		if Use.ioXexec:
-			extraconfig +=' -DENABLE_IO_EXEC=ON'
+			extraconfig +=' -DENABLE_IO_XEXEC=ON'
 		else:
-			extraconfig +=' -DENABLE_IO_EXEC=OFF'
-
-		"""
+			extraconfig +=' -DENABLE_IO_XEXEC=OFF'
+		
 		if Use.graphicsXexec:
-			extraconfig +=' --enable-graphics-xexec-support'
+			extraconfig +=' -DENABLE_GRAPHICS_XEXEC=ON'
 		else:
-			extraconfig +=' --disable-graphics-xexec-support'
-		"""
-		if Use.dbXexec:
-			extraconfig +=' -DENABLE_DB_EXEC=ON'
+			extraconfig +=' -DENABLE_GRAPHICS_XEXEC=OFF'
+	
+		if Use.databaseXexec:
+			extraconfig +=' -DENABLE_DATABASE_XEXEC=ON'
 		else:
-			extraconfig +=' -DENABLE_DB_EXEC=OFF'
+			extraconfig +=' -DENABLE_DATABASE_XEXEC=OFF'
 
 		if Use.sqlite3:
 			r.buildRequires += ['sqlite:devel']
-			extraconfig +=' -DWITH_SQLITE=ON'
+			extraconfig +=' -DWITH_SQLITE3=ON'
 
-		"""
 		if Use.postgresql:
 			r.buildRequires += ['postgresql:devel']
-			extraconfig +=' --with-postgresql'
+			extraconfig +=' -DWITH_POSTGRESQL=ON'
 
 		if Use.mysql:
 			r.buildRequires += ['mysql:devel']
-			extraconfig +=' --with-mysql CPPFLAGS=-I/usr/include/mysql LDFLAGS=-L/usr/lib/mysql'
+			extraconfig +=' -DWITH_MYSQL=ON'
 
 		if Use.ssl:
 			r.buildRequires += ['openssl:devel']
-			extraconfig +=' --with-openssl'
+			extraconfig +=' -DWITH_OPENSSL=ON'
 
-		if Use.fcgi:
+		if Use.fast-cgi:
 			r.buildRequires += ['fcgi:devel']
-			extraconfig +=' --with-fcgi'
+			extraconfig +=' -DWITH_FAST_CGI=ON'
 
 		if Use.pcre:
 			r.buildRequires += ['pcre:devel']
-			extraconfig +=' --with-pcre'
+			extraconfig +=' -DWITH_PCRE=ON'
 
 		if Use.dl:
-			extraconfig +=' --with-dl'
+			extraconfig +=' -DWITH_DL=ON'
 
 		if Use.libxml2:
 			r.buildRequires += ['libxml2:devel']
-			extraconfig +=' --with-libxml2'
-
+			extraconfig +=' -DWITH_LIBXML2=ON'
+		
 		if Use.bzip2:
 			r.buildRequires += ['bzip2:devel']
-			extraconfig +=' --with-bzip2'
+			extraconfig +=' -DWITH_BZIP2=ON'
 
 		if Use.zlib:
 			r.buildRequires += ['zlib:devel']
-			extraconfig +=' --with-zlib'
+			extraconfig +=' -DWITH_ZLIB=ON'
 
 		if Use.iconv:
-			extraconfig +=' --with-iconv'
+			extraconfig +=' -DWITH_ICONV=ON'
 
 		if Use.imagemagick:
 			r.buildRequires += ['ImageMagick:devel']
-			extraconfig +=' --with-imagemagick CFLAGS="$CFLAGS -I/usr/include/ImageMagick"'
+			extraconfig +=' -DWITH_IMAGEMAGICK=ON'
 
 		if Use.bfd:
 			r.buildRequires += ['binutils:devel']
-			extraconfig +=' --with-bfd'
-		"""
+			extraconfig +=' -DWITH_BFD=ON'
+		
 		r.Replace('0.11.0', '%s' % r.version, 'trunk/CMakeLists.txt')
 
 		r.CMake(extraconfig, dir='trunk')

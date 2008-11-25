@@ -11,3 +11,5 @@ You may edit include/libdodo/directives.h to tune some options.
 
 To compile use 'gmake'
 To install 'gmake install'
+
+list of installed files you can find in install_manifest.txt

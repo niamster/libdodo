@@ -142,8 +142,8 @@ else
 	RESULT="$RESULT\nio::file::regular xexec support\t\t\t\t\tenabled"
 fi
 
-AC_ARG_ENABLE(db-xexec,
-	AS_HELP_STRING([--disable-db-xexec], [compile db:: w/o xexec support]), [DATABASE_W_XEXEC="$enableval"], [DATABASE_W_XEXEC="yes"])
+AC_ARG_ENABLE(database-xexec,
+	AS_HELP_STRING([--disable-database-xexec], [compile data::base:: w/o xexec support]), [DATABASE_W_XEXEC="$enableval"], [DATABASE_W_XEXEC="yes"])
 if test "$DATABASE_W_XEXEC" = "no"
 then
 	echo -n -e "#define DATABASE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
@@ -169,9 +169,9 @@ then
 
 	if test "$DATABASE_W_XEXEC" = "no"
 	then
-		RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\tdisabled"
+		RESULT="$RESULT\ndata::base::sqlite xexec support\t\t\t\tdisabled"
 	else
-		RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\tenabled"
+		RESULT="$RESULT\ndata::base::sqlite xexec support\t\t\t\tenabled"
 	fi
 else
 	RESULT="$RESULT\nSQLite\t\t\t\t\t\t\t\tdisabled"
@@ -266,9 +266,9 @@ then
 
 	if test "$DATABASE_W_XEXEC" = "no"
 	then
-		RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\tdisabled"
+		RESULT="$RESULT\ndata::base::postgresql xexec support\t\t\t\tdisabled"
 	else
-		RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\tenabled"
+		RESULT="$RESULT\ndata::base::postgresql xexec support\t\t\t\tenabled"
 	fi
 
 	RESULT="$RESULT\nPostgresql\t\t\t\t\t\t\tenabled"
@@ -307,9 +307,9 @@ then
 
 	if test "$DATABASE_W_XEXEC" = "no"
 	then
-		RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\ndata::base::mysql xexec support\t\t\t\t\t\tdisabled"
 	else
-		RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tenabled"
+		RESULT="$RESULT\ndata::base::mysql xexec support\t\t\t\t\t\tenabled"
 	fi
 	
 	RESULT="$RESULT\nMySQL\t\t\t\t\t\t\t\tenabled"
@@ -440,7 +440,7 @@ case "$MOD_THREAD" in
 		AC_ARG_WITH([pthread-lib],
 			AS_HELP_STRING([--with-pthread-lib@<:@=lib@:>@], [use pthread library(supported: pthread, thr, lthread, c_r), pthread by default]), [MOD_PTHREAD_LIB="$withval"], [MOD_PTHREAD_LIB="pthread"])
 		AC_ARG_WITH([pthread-path],
-			AS_HELP_STRING([--with-pthread-path@<:@=DIR@:>@], [path to pthread installation]), [MOD_PTHREAD_DIR="$withval"], [MOD_PTHREAD_LIB="/usr"])
+			AS_HELP_STRING([--with-pthread-path@<:@=DIR@:>@], [path to pthread installation]), [MOD_PTHREAD_DIR="$withval"], [MOD_PTHREAD_DIR="/usr"])
 		CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib -l$MOD_PTHREAD_LIB"
 		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create], [], AC_MSG_ERROR($MOD_PTHREAD_LIB lib was not found))
@@ -536,7 +536,7 @@ then
 			LDFLAGS="$LDFLAGS -lMagickCore"
 		else
 			MOD_IMAGEMAGICK_DIR=/usr
-			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
+			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include -I$MOD_IMAGEMAGICK_DIR/include/ImageMagick"
 			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 		fi
 	else
@@ -544,8 +544,8 @@ then
 		LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 	fi
 
-	AC_CHECK_LIB([MagickCore], [MagickCoreGenesis], [], OLD_MAGICK_LIB="yes")
-	if test "$OLD_MAGICK_LIB" = "yes"
+	AC_CHECK_LIB([MagickCore], [MagickCoreGenesis], [], OLD_IMAGEMAGICK_LIB="yes")
+	if test "$OLD_IMAGEMAGICK_LIB" = "yes"
 	then
 		LDFLAGS="$ORIGINAL_LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
 		

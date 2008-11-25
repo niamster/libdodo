@@ -118,27 +118,42 @@ VPATH:=src/
 all: @PACKAGE_NAME@
 
 @PACKAGE_NAME@: $(OBJECTS)
-	$(CXX) $(LDFLAGS) -shared -Wl,-soname,$@.so.@PACKAGE_VERSION@ -o $@.so.@PACKAGE_VERSION@ $(OBJECTS)
-	ln -sf @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $@.so
+	@echo "-- Linking dodo"
+	@$(CXX) $(LDFLAGS) -shared -Wl,-soname,$@.so.@PACKAGE_VERSION@ -o $@.so.@PACKAGE_VERSION@ $(OBJECTS)
+	@rm -f $@.so
+	@$(LN_S) @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $@.so
 	
 	@echo ""
 	@echo ""
 	@echo "Now you can run 'gmake install'."
 
 .cc.o:
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -fPIC -c $^
+	@echo "-- Compiling $^"
+	@$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -fPIC -c $^
 
-install: @PACKAGE_NAME@ 
-	${INSTALL} -m 755 -d ${DESTDIR}$(libdir)
-	${INSTALL} -m 755 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ ${DESTDIR}$(libdir)/
+install: @PACKAGE_NAME@
+	@echo "" > install_manifest.txt
 
-	${INSTALL} -m 755 -d ${DESTDIR}$(includedir)/libdodo
-	${INSTALL} -m 755 include/libdodo/* ${DESTDIR}$(includedir)/libdodo/
+	@${INSTALL} -m 755 -d ${DESTDIR}$(libdir)
+	@${INSTALL} -m 755 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ ${DESTDIR}$(libdir)/
+	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@"
+	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ >> install_manifest.txt
+	@${INSTALL} -m 755 @PACKAGE_NAME@.so ${DESTDIR}$(libdir)/
+	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so"
+	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so >> install_manifest.txt
 
-	${INSTALL} -m 755 -d ${DESTDIR}$(bindir)
-	${INSTALL} -m 755 bin/dodo-config ${DESTDIR}$(bindir)/
-	
-	$(LN_S) -f ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so
+	@${INSTALL} -m 755 -d ${DESTDIR}$(includedir)/libdodo
+	@for inc in include/libdodo/*;\
+	do\
+		echo "-- Installing: ${DESTDIR}$(includedir)/libdodo/$${inc#include/libdodo/}";\
+		echo ${DESTDIR}$(includedir)/libdodo/$${inc#include/libdodo/} >> install_manifest.txt;\
+		${INSTALL} -m 755 $$inc ${DESTDIR}$(includedir)/libdodo/;\
+	done
+
+	@${INSTALL} -m 755 -d ${DESTDIR}$(bindir)
+	@${INSTALL} -m 755 bin/dodo-config ${DESTDIR}$(bindir)/
+	@echo "-- Installing: ${DESTDIR}$(bindir)/dodo-config"
+	@echo ${DESTDIR}$(bindir)/dodo-config >> install_manifest.txt
 	
 	@echo ""
 	@echo ""
@@ -146,19 +161,6 @@ install: @PACKAGE_NAME@
 	@echo ""
 	@echo ""
 
-uninstall:
-	rm -f ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@
-	rm -f ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so
-	rmdir ${DESTDIR}$(libdir)
-	
-	rm -rf ${DESTDIR}$(includedir)/libdodo
-	rmdir ${DESTDIR}$(includedir)
-
-	rm -f ${DESTDIR}$(bindir)/dodo-config
-	rmdir ${DESTDIR}$(bindir)
-
-	rmdir ${DESTDIR}$(prefix)
 clean:
-	rm -rf *.o *.so* *.a*
+	@rm -rf *.o *.so* *.a*
 
-force : clean @PACKAGE_NAME@
