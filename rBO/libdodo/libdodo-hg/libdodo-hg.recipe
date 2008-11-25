@@ -1,7 +1,7 @@
 class LibdodoHg(CPackageRecipe):
 
 	name = 'libdodo-hg'
-	version = '13414e434369'
+	version = '74860e2afb30'
 
 	buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user', 'tcp_wrappers:devellib']
 
@@ -46,7 +46,7 @@ class LibdodoHg(CPackageRecipe):
 			r.buildRequires += ['openssl:devel']
 			extraconfig +=' --with-openssl'
 
-		if Use.fast-cgi:
+		if Use.fastcgi:
 			r.buildRequires += ['fcgi:devel']
 			extraconfig +=' --with-fast-cgi'
 

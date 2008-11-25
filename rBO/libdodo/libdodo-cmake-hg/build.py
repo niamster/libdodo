@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-trove = 'libdodo-hg.recipe'
+trove = 'libdodo-cmake-hg.recipe'
 
 def useCombinations(uses, extra=[]):
     builds = []
