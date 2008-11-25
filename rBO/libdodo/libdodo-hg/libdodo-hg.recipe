@@ -16,19 +16,19 @@ class LibdodoHg(CPackageRecipe):
 			extraconfig +=' --disable-deque'
 
 		if Use.ioXexec:
-			extraconfig +=' --enable-io-xexec-support'
+			extraconfig +=' --enable-io-xexec'
 		else:
-			extraconfig +=' --disable-io-xexec-support'
+			extraconfig +=' --disable-io-xexec'
 
 		if Use.graphicsXexec:
-			extraconfig +=' --enable-graphics-xexec-support'
+			extraconfig +=' --enable-graphics-xexec'
 		else:
-			extraconfig +=' --disable-graphics-xexec-support'
+			extraconfig +=' --disable-graphics-xexec'
 
 		if Use.databaseXexec:
-			extraconfig +=' --enable-database-xexec-support'
+			extraconfig +=' --enable-database-xexec'
 		else:
-			extraconfig +=' --disable-database-xexec-support'
+			extraconfig +=' --disable-database-xexec'
 
 		if Use.sqlite3:
 			r.buildRequires += ['sqlite:devel']
