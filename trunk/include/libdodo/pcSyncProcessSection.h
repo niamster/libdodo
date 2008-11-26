@@ -59,6 +59,12 @@ namespace dodo
 
 						/**
 						 * consructor
+						 * @param value defines initial value of the section lock semaphore
+						 * @param key defines shared memory key
+						 * @note if key is empty - key will be generated
+						 * if you want to share semaphore between different instances of process - set own key,
+						 * otherwise(like fork) - it may be generated
+						 * '/' automaticaly prepending to the key to conform sem_overview(7) man page
 						 */
 						section(unsigned int value = 1, const dodoString &key = __dodostring__);
 

@@ -4,10 +4,10 @@ LDFLAGS:=-L../.. @LDFLAGS@
 CFLAGS:=@CFLAGS@ @DEFS@
 
 test: test.cc
-	$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@
-	cp -rf test test.cgi
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@
+	@cp -rf test test.cgi
 
 clean:
-	rm -rf test test.cgi
+	@rm -rf test test.cgi
 
 force: clean test

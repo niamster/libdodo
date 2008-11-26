@@ -39,7 +39,8 @@ shared::shared(shared &sts)
 //-------------------------------------------------------------------
 
 shared::shared(const dodoString &a_key) : mshared(NULL),
-									  size(0)
+									  size(0),
+									  shm(-1)
 {
 	key = '/';
 
@@ -49,22 +50,25 @@ shared::shared(const dodoString &a_key) : mshared(NULL),
 		tools::misc::random(_key, 31);
 		_key[31] = '\0';
 
-		key.append(tools::code::encodeBase64(_key));
+		key.append(tools::code::MD5Hex(_key));
 	}
 	else
 		key.append(a_key);
 
-	shm = shm_open(key.c_str(), O_CREAT | O_RDWR, 0660);
+	shm = shm_open(key.c_str(), O_CREAT | O_RDWR, 0600);
 }
 
 //-------------------------------------------------------------------
 
 shared::~shared()
 {
-	if (mshared != NULL)
-		munmap(mshared, size);
+	if (shm != -1)
+	{
+		if (mshared != NULL)
+			munmap(mshared, size);
 
-	shm_unlink(key.c_str());
+		shm_unlink(key.c_str());
+	}
 }
 
 //-------------------------------------------------------------------
@@ -74,8 +78,8 @@ shared::map(unsigned long size)
 {
 	unmap();
 
-	if (shm <= 0)
-		throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (shm == -1)
+		throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_MAP, exception::ERRNO_LIBDODO, SHAREDEX_SHAREDOBJECTWASNOTOPENED, DATAMEMORYSHAREDEX_SHAREDOBJECTWASNOTOPENED_STR, __LINE__, __FILE__);
 
 	if (ftruncate(shm, sizeof(size)) != 0)
 		throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -94,11 +98,13 @@ void
 shared::unmap()
 {
 	if (mshared != NULL)
+	{
 		if (munmap(mshared, size) == -1)
 			throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_UNMAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	mshared = NULL;
-	size = 0;
+		mshared = NULL;
+		size = 0;
+	}
 }
 
 //-------------------------------------------------------------------

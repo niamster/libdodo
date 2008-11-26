@@ -4,9 +4,9 @@ LDFLAGS:=-L../.. @LDFLAGS@
 CFLAGS:=@CFLAGS@ @DEFS@
 
 test: test.cc
-	$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@ 
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@ 
 
 clean:
-	rm -rf test my.dat TEST DirTest
+	@rm -rf test my.dat TEST DirTest
 
 force: clean test

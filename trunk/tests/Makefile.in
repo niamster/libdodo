@@ -1,6 +1,6 @@
 all:
-	for i in ./*; do if [ -d $$i ]; then pushd $$i; make; if [[ $$? != 0 ]]; then exit $$?; fi; popd; fi; done;
+	@for i in *; do if [ -d $$i ]; then pushd $$i >/dev/null; echo "-- Building test: $${i%_test}"; make; if [[ $$? != 0 ]]; then exit $$?; fi; popd >/dev/null; fi; done;
 
 clean:
-	for i in ./*; do if [ -d $$i ]; then pushd $$i; make clean; popd; fi; done;
+	@for i in *; do if [ -d $$i ]; then pushd $$i >/dev/null; make clean; popd >/dev/null; fi; done;
 

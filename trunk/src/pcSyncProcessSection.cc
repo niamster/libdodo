@@ -32,7 +32,7 @@
 using namespace dodo::pc::sync::process;
 
 section::section(unsigned int value,
-                 const dodoString &a_key)
+                 const dodoString &a_key) : keeper(NULL)
 {
 	key = '/';
 
@@ -42,21 +42,24 @@ section::section(unsigned int value,
 		tools::misc::random(_key, 31);
 		_key[31] = '\0';
 
-		key.append(tools::code::encodeBase64(_key));
+		key.append(tools::code::MD5Hex(_key));
 	}
 	else
 		key.append(a_key);
 
-	keeper = sem_open(key.c_str(), O_CREAT, 0660, value);
+	keeper = sem_open(key.c_str(), O_CREAT, 0600, value);
 }
 
 //-------------------------------------------------------------------
 
 section::~section()
 {
-	sem_close(keeper);
+	if (keeper != NULL)
+	{
+		sem_close(keeper);
 
-	sem_unlink(key.c_str());
+		sem_unlink(key.c_str());
+	}
 }
 
 //-------------------------------------------------------------------
@@ -64,8 +67,11 @@ section::~section()
 void
 section::acquire()
 {
+	if (keeper == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_ACQUIRE, exception::ERRNO_LIBDODO, SECTIONEX_SEMAPHOREWASNOTOPENED, PCSYNCPROCESSSECTIONEX_SEMAPHOREWASNOTOPENED_STR, __LINE__, __FILE__);
+
 	if (sem_wait(keeper) != 0)
-		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -73,8 +79,11 @@ section::acquire()
 void
 section::release()
 {
+	if (keeper == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_RELEASE, exception::ERRNO_LIBDODO, SECTIONEX_SEMAPHOREWASNOTOPENED, PCSYNCPROCESSSECTIONEX_SEMAPHOREWASNOTOPENED_STR, __LINE__, __FILE__);
+
 	if (sem_post(keeper) != 0)
-		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

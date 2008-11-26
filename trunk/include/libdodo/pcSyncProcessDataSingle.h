@@ -72,9 +72,10 @@ namespace dodo
 							 * constructor
 							 * @param value defines initial value of semaphore
 							 * @param key defines semaphore key
-							 * @note if key is NULL - key will be generated
+							 * @note if key is empty - key will be generated
 							 * if you want to share semaphore between different instances of process - set own key,
 							 * otherwise(like fork) - it may be generated
+							 * '/' automaticaly prepending to the key to conform sem_overview(7) man page
 							 */
 							single(unsigned int value = 1, const dodoString &key = __dodostring__);
 

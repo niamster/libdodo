@@ -39,7 +39,8 @@ single::single(single &sts)
 //-------------------------------------------------------------------
 
 single::single(unsigned int value,
-			   const dodoString &a_key) : data(NULL)
+			   const dodoString &a_key) : data(NULL),
+										   semaphore(NULL)
 {
 	key = '/';
 
@@ -49,28 +50,34 @@ single::single(unsigned int value,
 		tools::misc::random(_key, 31);
 		_key[31] = '\0';
 
-		key.append(tools::code::encodeBase64(_key));
+		key.append(tools::code::MD5Hex(_key));
 	}
 	else
 		key.append(a_key);
 
-	semaphore = sem_open(key.c_str(), O_CREAT, 0660, value);
+	semaphore = sem_open(key.c_str(), O_CREAT, 0600, value);
 }
 
 //-------------------------------------------------------------------
 
 single::~single()
 {
-	sem_close(semaphore);
+	if (semaphore != NULL)
+	{
+		sem_close(semaphore);
 
-	sem_unlink(key.c_str());
+		sem_unlink(key.c_str());
+	}
 }
 
 //-------------------------------------------------------------------
 
 void
-single::set(  void *a_data)
+single::set(void *a_data)
 {
+	if (semaphore == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SET, exception::ERRNO_LIBDODO, SINGLEEX_SEMAPHOREWASNOTOPENED, PCSYNCPROCESSDATASINGLEEX_SEMAPHOREWASNOTOPENED_STR, __LINE__, __FILE__);
+
 	if (sem_wait(semaphore) != 0)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
@@ -85,6 +92,9 @@ single::set(  void *a_data)
 void
 single::del()
 {
+	if (semaphore == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_DEL, exception::ERRNO_LIBDODO, SINGLEEX_SEMAPHOREWASNOTOPENED, PCSYNCPROCESSDATASINGLEEX_SEMAPHOREWASNOTOPENED_STR, __LINE__, __FILE__);
+
 	if (sem_wait(semaphore) != 0)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
@@ -99,10 +109,13 @@ single::del()
 void *
 single::acquire(unsigned long microseconds)
 {
+	if (semaphore == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_ACQUIRE, exception::ERRNO_LIBDODO, SINGLEEX_SEMAPHOREWASNOTOPENED, PCSYNCPROCESSDATASINGLEEX_SEMAPHOREWASNOTOPENED_STR, __LINE__, __FILE__);
+
 	if (microseconds == 0)
 	{
 		if (sem_wait(semaphore) != 0)
-			throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
@@ -114,15 +127,15 @@ single::acquire(unsigned long microseconds)
 			if (sem_trywait(semaphore) != 0)
 			{
 				if (errno != EAGAIN)
-					throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 				if (nanosleep(&timeout, NULL) == -1)
-					throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 				slept += 1;
 
 				if (slept > microseconds)
-					throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_LOCK, exception::ERRNO_ERRNO, SINGLEEX_CANNOTLOCK, PCSYNCPROCESSDATASINGLEEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_ACQUIRE, exception::ERRNO_LIBDODO, SINGLEEX_CANNOTLOCK, PCSYNCPROCESSDATASINGLEEX_CANNOTLOCK_STR, __LINE__, __FILE__);
 			}
 			else
 				locked = false;
@@ -137,8 +150,11 @@ single::acquire(unsigned long microseconds)
 void
 single::release()
 {
+	if (semaphore == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_RELEASE, exception::ERRNO_LIBDODO, SINGLEEX_SEMAPHOREWASNOTOPENED, PCSYNCPROCESSDATASINGLEEX_SEMAPHOREWASNOTOPENED_STR, __LINE__, __FILE__);
+
 	if (sem_post(semaphore) != 0)
-		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

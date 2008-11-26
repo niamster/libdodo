@@ -6,12 +6,12 @@ CFLAGS:=@CFLAGS@ @DEFS@
 all: test module
 
 test: test.cc
-	$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@
 
 module: module.cc
-	$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -Wall -shared -ldodo -fPIC $^ -o $@ 
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -Wall -shared -ldodo -fPIC $^ -o $@ 
 
 clean:
-	rm -fr test module
+	@rm -fr test module
 
 force: clean test module

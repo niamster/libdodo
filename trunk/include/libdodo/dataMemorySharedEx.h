@@ -41,6 +41,19 @@ namespace dodo
 		namespace memory
 		{
 			/**
+			 * libdodo defined errors
+			 */
+			enum sharedExR
+			{
+				SHAREDEX_SHAREDOBJECTWASNOTOPENED,
+			};
+
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define DATAMEMORYSHAREDEX_SHAREDOBJECTWASNOTOPENED_STR "The semaphore was not opened properly."
+
+			/**
 			 * ID of function where exception was thrown
 			 */
 			enum sharedFunctionsID

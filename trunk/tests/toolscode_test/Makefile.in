@@ -6,9 +6,9 @@ CFLAGS:=@CFLAGS@ @DEFS@
 all: test
 
 test: test.cc
-	$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@
 
 clean:
-	rm -fr test
+	@rm -fr test
 
 force: clean test
