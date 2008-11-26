@@ -1,25 +1,3 @@
-
-<(assign a = 1)>
-<(assign b = 2)>
-
-included menu.tpl: <(include "menu.tpl")>
-
-<(assign b = $a)>
-
-included $main <(include $main)>
-
-
-
-<(> not )> parsed  <)>
-
-<(* if statement *)>
-
-<(if $test!=test )>
-	<(print $test)>
-<(else)>
-	NULL
-<(fi)>
-
 <form enctype="multipart/form-data" method="POST">
 	<input type="file" name="file">
 	<input type="hidden" name="hidden" value="post">
@@ -32,150 +10,289 @@ included $main <(include $main)>
 	<input type="submit" value="push">
 </form>
 
-<(if $test )>
-	$test
-	<(if $test==test )>
-		$test==test
-	<(fi)>
-	<(if $test==test1 )>
-		<(print $test,"==test1")>
-	<(fi)>	
-	
-	<(if $test )>
-		<(print "is ", $test )>
-		<(if $test==test )>
-			$test==test
-		<(else)>
-			NULL
-		<(fi)>
-	<(else)>	
+<pre>
+
+	<(* test template *)>
+
+	<(assign a = 1)>
+	<(assign b = 2)>
+
+	included menu.tpl: <(include "menu.tpl")>
+
+	<(assign b = $a)>
+
+	included $main <(include $main)>
+
+	**********
+
+	<(> <( not )> parsed area <)>
+
+	**********
+
+	simple 'if' statement
+
+	<(>
+		<(print $test)>
 		<(if $test!=test )>
+			equal
+		<(else)>
+			not equal
+		<(fi)>
+	<)>
+
+	<(print $test)>
+	<(if $test!=test )>
+		equal
+	<(else)>
+		not equal
+	<(fi)>
+
+	**********
+
+	nested 'if' statements
+
+	<(>
+		<(if $test )>
+			$test
+			<(if $test==test )>
+				test
+			<(fi)>
+			<(if $test!=test )>
+				!test
+			<(fi)>	
+			
+			<(if $test )>
+				test
+				<(if $test==test )>
+					<(print $test)>
+				<(else)>
+					NULL
+				<(fi)>
+			<(else)>	
+				<(if $test!=test )>
+					!test
+				<(fi)>	
+				<(if false )>
+					WTF?
+				<(fi)>
+			<(fi)>	
+			
+			<(if 3>2 )>
+				3>2
+			<(fi)>
+
+			<(if 3<2 )>
+				WTF?
+			<(fi)>
+			
+			<(
+				if
+				! `false`
+			)>
+				!false
+			<(fi)>
+			
+			<(if!false)>!false<(fi)>
+			
+			<(if ! 'false' )>
+				!'false'
+			<(fi)>		
+			<(if ! "false" )>
+				! "false"
+			<(fi)>	
+		<(fi)>
+	<)>
+
+	<(if $test )>
+		$test
+		<(if $test==test )>
 			test
+		<(fi)>
+		<(if $test!=test )>
+			!test
 		<(fi)>	
-		<(if false )>
+		
+		<(if $test )>
+			test
+			<(if $test==test )>
+				<(print $test)>
+			<(else)>
+				NULL
+			<(fi)>
+		<(else)>	
+			<(if $test!=test )>
+				!test
+			<(fi)>	
+			<(if false )>
+				WTF?
+			<(fi)>
+		<(fi)>	
+		
+		<(if 3>2 )>
+			3>2
+		<(fi)>
+
+		<(if 3<2 )>
 			WTF?
 		<(fi)>
-	<(fi)>
-	<(if !$test )>
-		<(print "not ", $test )>
-	<(else)>
-		<(print "is ", $test )>
-	<(fi)>
-	
-	<(if 3>2 )>
-		3>2
+		
+		<(
+			if
+			! `false`
+		)>
+			!false
+		<(fi)>
+		
+		<(if!false)>!false<(fi)>
+		
+		<(if ! 'false' )>
+			!'false'
+		<(fi)>		
+		<(if ! "false" )>
+			! "false"
+		<(fi)>	
 	<(fi)>
 
-	<(if 3<2 )>
-		3<2
-	<(fi)>
-	
-	<(if 3!=2 )>
-		3!=2
-	<(fi)>
-	
-	<(if 
-		! `false`)>
-		not false
-	<(fi)>
-	
-	<(if!false)>not false<(fi)>
-	
-	<(if ! 'false' )>
-		not false
-	<(fi)>		
-	<(if ! "false" )>
-		not false
-	<(fi)>	
-<(fi)>
+	**********
 
-<( print bla-bla )>
-<( print $show )>
+	simple 'for' statement
+	
+	<(>
+		<(for $i in $strarr)>
+			<(for $j in $i)><(print $j)><(rof)>
+		<(rof)>
 
-<(for $i in $arr)>
-	<(for $b in $i)>
-		<div class="test"><(print $b)></div>
+		<(for $b in $strmaparr)>
+			<(for $c in $b)>
+				|<(print $c)>|<(print $b.one)>
+			<(rof)>
+		<(rof)>
+
+		<(for $c in $strmaparr.1)>
+			|<(print $c)>
+		<(rof)>
+	<)>
+
+	<(for $i in $strarr)>
+		<(for $j in $i)><(print $j)><(rof)>
 	<(rof)>
-<(rof)>
 
-
-<(print $test )>
-<(print $arr.0.0 )>
-<(print $arr1.one )>
-
-<(print $arr2.0.one )>
-<(print $arr2.1.one )>
-
-
-<(for $b in $arr2)>
-	<(for $c in $b)>
-		|<(print $c)>|<(print $b.one)>
+	<(for $b in $strmaparr)>
+		<(for $c in $b)>
+			|<(print $c)>|<(print $b.one)>
+		<(rof)>
 	<(rof)>
-<(rof)>
 
-<(for $c in $arr2.1)>
-	|<(print $c)>
-<(rof)>
+	<(for $c in $strmaparr.1)>
+		|<(print $c)>
+	<(rof)>
 
-<(print {$arr2.{0}.{$one}} )>
-<(print $arr2.1.{$arr1.{$one}} )>
+	**********
 
-<(print namespace: )>
+	namespace
 
-<(for $b in $arr2)>
-	<(for $b in $b)> <(* HERE : `$b in $b` and it's OK! *)>
-		|<(print $b)>
+	<(>
+		<(for $i in $strmaparr)>
+			<(for $i in $i)> <(* HERE : '$i in $i' is OK because of the namespace scope *)>
+				|<(print $i)>
+				<(print $dodo.iterator)>
+			<(rof)>
+			|<(print $i.one)>
+			<(print $dodo.iterator)>
+		<(rof)>
+	
+		<(assign a = test1)>
+
+		<(if true )>	
+			<(assign a = test2)>
+
+			<(for $i in $strmaparr)>
+				<(for $i => $j in $i)>
+					<(if $i == three)>
+						<(break 3)>
+					<(fi)>
+					<(print $i)> - <(print $j)>
+					
+					<(assign a = test3)>
+					<(print $a," must be test3")>
+				<(rof)>
+				-------
+			<(rof)>	
+			<(print $a," must be test2")>
+		<(fi)>
+		<(print $a," must be test1")>
+		
+		<(ns)>
+				<(ns)>
+					<(assign a = in namespace)>
+					<(print $a," must be `in namespace`")>
+				<(sn)>
+			<(print $a," must be test1")>
+		<(sn)>
+	<)>
+
+	<(for $i in $strmaparr)>
+		<(for $i in $i)> <(* HERE : '$i in $i' is OK because of the namespace scope *)>
+			|<(print $i)>
+			<(print $dodo.iterator)>
+		<(rof)>
+		|<(print $i.one)>
 		<(print $dodo.iterator)>
 	<(rof)>
-	|<(print $b.one)>
-	<(print $dodo.iterator)>
-<(rof)>
 
-<(assign a = test1)>
-<(print $a," must be test1")>
+	<(assign a = test1)>
 
-<(if true )>	
+	<(if true )>	
+		<(assign a = test2)>
 
-	<(assign a = test2)>
-	<(print $a," must be test2")>
-
-	<(for $b in $arr2)>
-		<(for $b => $c in $b)>
-			<(if $b == three)>
-				<(break 3)>
-			<(fi)>
-			<(print $b)> -> <(print $c)>
-			
-			<(assign a = test3)>
-			<(print $a," must be test3")>
-		<(rof)>
-		-------
-	<(rof)>	
-	
-	<(print $a," must be test2")>
-	
-<(fi)>
-
-<(print $a," must be test1")>
-	
-<(ns)>
-		<(ns)>
-			<(assign a = in namespace)>
-			<(print $a," must be `in namespace`")>
-		<(sn)>
+		<(for $i in $strmaparr)>
+			<(for $i => $j in $i)>
+				<(if $i == three)>
+					<(break 3)>
+				<(fi)>
+				<(print $i)> - <(print $j)>
+				
+				<(assign a = test3)>
+				<(print $a," must be test3")>
+			<(rof)>
+			-------
+		<(rof)>	
+		<(print $a," must be test2")>
+	<(fi)>
 	<(print $a," must be test1")>
-<(sn)>
+		
+	<(ns)>
+			<(ns)>
+				<(assign a = in namespace)>
+				<(print $a," must be `in namespace`")>
+			<(sn)>
+		<(print $a," must be test1")>
+	<(sn)>
 
-<(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
+	**********
 
---
-<(for $i in $arr)>
-	<(print $i)>
-<(rof)>
---
+	print statement and variable resolution
 
-<(>
-<(print $dodo.version, " ", $dodo)>
-<)>
+	<(>
+		<(print string literal)>
+		<(print {$strmaparr.{0}.{$one}} )>
+		<(print $strmaparr.1.{$strmap.{$one}} )>
+		<(print $strarr.0.0 )>
+		<(print $strmap.one )>
+		<(print $strmaparr.0.one )>
+		<(print $strmaparr.1.one )>
+		<(print $strmaparr.1.{$strmap.{$one}} , -- , {$strmaparr.{0}.{$one}})>
+		<(print $dodo.version, " ", $dodo)>
+	<)>
 
-<(print $dodo.version, " ", $dodo)>
+	<(print string literal)>
+	<(print {$strmaparr.{0}.{$one}} )>
+	<(print $strmaparr.1.{$strmap.{$one}} )>
+	<(print $strarr.0.0 )>
+	<(print $strmap.one )>
+	<(print $strmaparr.0.one )>
+	<(print $strmaparr.1.one )>
+	<(print $strmaparr.1.{$strmap.{$one}} , -- , {$strmaparr.{0}.{$one}})>
+	<(print $dodo.version, " ", $dodo)>
+
+</pre>

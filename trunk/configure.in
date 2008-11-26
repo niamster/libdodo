@@ -308,9 +308,9 @@ then
 
 	if test "$DATABASE_W_XEXEC" = "no"
 	then
-		RESULT="$RESULT\ndata::base::mysql xexec support\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\ndata::base::mysql xexec support\t\t\t\t\tdisabled"
 	else
-		RESULT="$RESULT\ndata::base::mysql xexec support\t\t\t\t\t\tenabled"
+		RESULT="$RESULT\ndata::base::mysql xexec support\t\t\t\t\tenabled"
 	fi
 	
 	RESULT="$RESULT\nMySQL\t\t\t\t\t\t\t\tenabled"

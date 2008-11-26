@@ -33,7 +33,7 @@ cgif(exchange &cgiio)
 
 	dodoString user = cgit.getAuthenticationInfo().user;
 
-	if (cgit.GET["a"] == "forbidden")
+	if (cgit.GET["status"] == "forbidden")
 	{
 		cgit.setResponseStatus(CGI_STATUSCODE_FORBIDDEN);
 
@@ -41,7 +41,7 @@ cgif(exchange &cgiio)
 
 		return ;
 	}
-	else if (cgit.GET["a"] == "notfound")
+	else if (cgit.GET["status"] == "notfound")
 	{
 		cgit.setResponseStatus(CGI_STATUSCODE_NOTFOUND);
 
@@ -57,7 +57,7 @@ cgif(exchange &cgiio)
 	 * RewriteCond %{HTTP:Authorization}  ^(.*)
 	 * RewriteRule ^(.*)$ $1 [e=HTTP_AUTHORIZATION:%1
 	 */
-	else if (cgit.GET["a"] == "basic_auth")
+	else if (cgit.GET["status"] == "basic_auth")
 	{
 		if (user.size() == 0 || !cgit.isAuthenticated("libdodo", "password"))
 		{
@@ -66,7 +66,7 @@ cgif(exchange &cgiio)
 			return ;
 		}
 	}
-	else if (cgit.GET["a"] == "digest_auth")
+	else if (cgit.GET["status"] == "digest_auth")
 	{
 		if (user.size() == 0 || !cgit.isAuthenticated("libdodo", "password"))
 		{
@@ -84,15 +84,15 @@ cgif(exchange &cgiio)
 	io->writeStreamString("The headers thould be already printed successfully.<br>");
 
 	cgit.printStream("User: " + user + "<br>");
-	cgit.printStream(cgit.GET["a"] + "<br>");
-	cgit.printStream(cgit.POST["hidden"] + "<br>");
-	cgit.printStream(cgit.POST["text"] + "<br>");
-	cgit.printStream(cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
-	cgit.printStream(cgit.COOKIES["test"] + "<br>");
-	cgit.printStream(tools::string::ulToString(cgit.FILES["file"].size) + "<br>");
-	cgit.printStream(cgit.FILES["file"].mime + "<br>");
-	cgit.printStream(cgit.getCharset() + "<br>");
-	cgit.printStream( "<br>" );
+	cgit.printStream("GET[\"argument\"]: " + cgit.GET["argument"] + "<br>");
+	cgit.printStream("POST[\"hidden\"]: " + cgit.POST["hidden"] + "<br>");
+	cgit.printStream("POST[\"text\"]: " + cgit.POST["text"] + "<br>");
+	cgit.printStream("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
+	cgit.printStream("COOKIES[\"test\"]: " + cgit.COOKIES["test"] + "<br>");
+	cgit.printStream("FILES[\"file\"].size: " + tools::string::iToString(cgit.FILES["file"].size) + "<br>");
+	cgit.printStream("FILES[\"file\"].mime: " + cgit.FILES["file"].mime + "<br>");
+	cgit.printStream("charset: " + cgit.getCharset() + "<br>");
+	cgit.printStream("tpl::processor:<br>");
 
 	try
 	{
@@ -103,23 +103,23 @@ cgif(exchange &cgiio)
 		cgip.assign("show", "show");
 		cgip.assign("one", "one");
 
-		dodoStringArray arr;
-		arr.push_back("one");
-		arr.push_back("two");
-		arr.push_back("three");
-		cgip.assign("arr", arr);
+		dodoStringArray strarr;
+		strarr.push_back("one");
+		strarr.push_back("two");
+		strarr.push_back("three");
+		cgip.assign("strarr", strarr);
 
-		dodoStringMap arr1;
-		arr1["one"] = "one";
-		arr1["two"] = "two";
-		arr1["three"] = "three";
-		cgip.assign("arr1", arr1);
+		dodoStringMap strmap;
+		strmap["one"] = "one";
+		strmap["two"] = "two";
+		strmap["three"] = "three";
+		cgip.assign("strmap", strmap);
 
-		dodoArray<dodoStringMap> arr2;
-		arr2.push_back(arr1);
-		arr1["one"] = "three";
-		arr2.push_back(arr1);
-		cgip.assign("arr2", arr2);
+		dodoArray<dodoStringMap> strmaparr;
+		strmaparr.push_back(strmap);
+		strmap["one"] = "three";
+		strmaparr.push_back(strmap);
+		cgip.assign("strmaparr", strmaparr);
 
 		cgit.printStream(cgip.processFile("test.tpl"));
 	}

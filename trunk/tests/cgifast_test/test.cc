@@ -9,13 +9,12 @@
 #include <libdodo/dataTplProcessor.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/cgiFastServer.h>
+#include <libdodo/cgiBasicServer.h>
 #include <libdodo/pcSyncThreadDataSingle.h>
 
 #include <iostream>
 
 using namespace std;
-
-#ifdef FASTCGI_EXT
 
 using namespace dodo;
 using namespace data::tpl;
@@ -35,46 +34,51 @@ cgif(exchange &fcgi)
 
 	///increment counter in shared memory
 	int *inc = (int *)sh.acquire();
-	(*inc)++;
 	sh.release();
 
 	exchange *io = cgit;
 	io->writeStreamString("The headers thould be already printed successfully.<br>");
 
-	fcgi.writeStreamString(tools::string::iToString(*inc) + "<br>");
-	fcgi.writeStreamString(cgit.GET["a"] + "<br>");
-	fcgi.writeStreamString(cgit.POST["hidden"] + "<br>");
-	fcgi.writeStreamString(cgit.POST["test"] + "<br>");
-	fcgi.writeStreamString(cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
-	fcgi.writeStreamString(cgit.COOKIES["test"] + "<br>");
-	fcgi.writeStreamString(tools::string::iToString(cgit.FILES["file"].size) + "<br>");
-	fcgi.writeStreamString("<br>");
+#ifndef FASTCGI_EXT
+
+	io->writeStreamString("No fastCGI extension was compiled!<br>");
+
+#endif
+
+	fcgi.writeStreamString("counter: " + tools::string::iToString(*inc) + "<br>");
+
+	fcgi.writeStreamString("GET[\"argument\"]: " + cgit.GET["argument"] + "<br>");
+	fcgi.writeStreamString("POST[\"hidden\"]: " + cgit.POST["hidden"] + "<br>");
+	fcgi.writeStreamString("POST[\"test\"]: " + cgit.POST["test"] + "<br>");
+	fcgi.writeStreamString("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
+	fcgi.writeStreamString("COOKIES[\"test\"]: " + cgit.COOKIES["test"] + "<br>");
+	fcgi.writeStreamString("FILES[\"file\"].size: " + tools::string::iToString(cgit.FILES["file"].size) + "<br>");
+	fcgi.writeStreamString("tpl::processor:<br>");
 
 	try
 	{
 		processor cgip;
 
 		cgip.assign("test", "hoho");
-		cgip.assign("show", "That's works!");
 		cgip.assign("one", "one");
 
-		dodoStringArray arr;
-		arr.push_back("one");
-		arr.push_back("two");
-		arr.push_back("three");
-		cgip.assign("arr", arr);
+		dodoStringArray strarr;
+		strarr.push_back("one");
+		strarr.push_back("two");
+		strarr.push_back("three");
+		cgip.assign("strarr", strarr);
 
-		dodoStringMap arr1;
-		arr1["one"] = "one";
-		arr1["two"] = "two";
-		arr1["three"] = "three";
-		cgip.assign("arr1", arr1);
+		dodoStringMap strmap;
+		strmap["one"] = "one";
+		strmap["two"] = "two";
+		strmap["three"] = "three";
+		cgip.assign("strmap", strmap);
 
-		dodoArray<dodoStringMap> arr2;
-		arr2.push_back(arr1);
-		arr1["one"] = "three";
-		arr2.push_back(arr1);
-		cgip.assign("arr2", arr2);
+		dodoArray<dodoStringMap> strmaparr;
+		strmaparr.push_back(strmap);
+		strmap["one"] = "three";
+		strmaparr.push_back(strmap);
+		cgip.assign("strmaparr", strmaparr);
 
 		cgit.printStream(cgip.processFile("test.tpl"));
 	}
@@ -84,29 +88,39 @@ cgif(exchange &fcgi)
 	}
 
 	fcgi.writeStreamString("<br>");
+	
+	inc = (int *)sh.acquire();
+	(*inc)++;
+	sh.release();
 }
-
-#endif
 
 int main(int argc, char **argv)
 {
-#ifdef FASTCGI_EXT
 
 	try
 	{
 		int *shared = new int (1);
 		sh.set((void *)shared);
 
+#ifdef FASTCGI_EXT
+
 		using namespace cgi::fast;
 
-		server cf(5);
-		if (!cf.isFastCgi())
+		server c(5);
+		if (!c.isFastCgi())
 		{
 			cout << "Not a fastCGI.";
-			cout.flush();
+			return 1;
 		}
 
-		cf.serve(&cgif);
+#else
+		using namespace cgi::basic;
+
+		server c;
+
+#endif
+
+		c.serve(&cgif);
 
 		delete shared;
 	}
@@ -114,12 +128,6 @@ int main(int argc, char **argv)
 	{
 		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl << endl;
 	}
-
-#else
-
-	cout << "No fastCGI extension was compiled!";
-
-#endif
 
 	return 0;
 }
