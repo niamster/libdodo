@@ -78,7 +78,7 @@ namespace dodo
 
 						protected:
 
-							stack *parent;                                                     ///< lock
+							const stack *parent;                                                     ///< lock
 					};
 			};
 		};

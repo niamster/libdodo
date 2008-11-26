@@ -32,12 +32,22 @@
 using namespace dodo::pc::sync::process;
 
 section::section(unsigned int value,
-				 const char   *a_key)
+                 const dodoString &a_key)
 {
-	key = new char[strlen(a_key) + 1];
-	strcpy(key, a_key);
+	key = '/';
 
-	keeper = sem_open(key, O_CREAT, 0660, value);
+	if (a_key.empty())
+	{
+		char _key[32];
+		tools::misc::random(_key, 31);
+		_key[31] = '\0';
+
+		key.append(tools::code::encodeBase64(_key));
+	}
+	else
+		key.append(a_key);
+
+	keeper = sem_open(key.c_str(), O_CREAT, 0660, value);
 }
 
 //-------------------------------------------------------------------
@@ -46,7 +56,7 @@ section::~section()
 {
 	sem_close(keeper);
 
-	sem_unlink(key);
+	sem_unlink(key.c_str());
 }
 
 //-------------------------------------------------------------------

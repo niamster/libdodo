@@ -20,7 +20,7 @@ using namespace dodo::pc::thread;
 
 using namespace std;
 
-void *
+int
 threadRead(void *data)
 {
 	cout << "READER->\n";
@@ -53,10 +53,10 @@ threadRead(void *data)
 	cout << "<-READER\n";
 	cout.flush();
 
-	return NULL;
+	return 0;
 }
 
-void *
+int
 threadWrite(void *data)
 {
 	cout << "WRITER->\n";
@@ -88,15 +88,13 @@ threadWrite(void *data)
 	cout << "<-WRITER\n";
 	cout.flush();
 
-	return NULL;
+	return 0;
 }
 
 int main(int argc, char **argv)
 {
 	try
 	{
-#ifdef PTHREAD_EXT
-
 		collection j;
 		
 		cout << "\n~~using one pipe for the thread~~\n";
@@ -135,7 +133,6 @@ int main(int argc, char **argv)
 		j.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&fifo1));
 		
 		j.wait();
-#endif
 	}
 	catch (dodo::exception::basic ex)
 	{

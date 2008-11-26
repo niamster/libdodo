@@ -39,21 +39,22 @@ single::single(single &sts)
 //-------------------------------------------------------------------
 
 single::single(unsigned int value,
-			   const char   *a_key) : data(NULL)
+			   const dodoString &a_key) : data(NULL)
 {
-	if (a_key == NULL)
+	key = '/';
+
+	if (a_key.empty())
 	{
-		key = new char[32];
-		tools::misc::random(key, 31);
-		key[31] = '\0';
+		char _key[32];
+		tools::misc::random(_key, 31);
+		_key[31] = '\0';
+
+		key.append(tools::code::encodeBase64(_key));
 	}
 	else
-	{
-		key = new char[strlen(a_key) + 1];
-		strcpy(key, a_key);
-	}
+		key.append(a_key);
 
-	semaphore = sem_open(key, O_CREAT, 0660, value);
+	semaphore = sem_open(key.c_str(), O_CREAT, 0660, value);
 }
 
 //-------------------------------------------------------------------
@@ -62,7 +63,7 @@ single::~single()
 {
 	sem_close(semaphore);
 
-	sem_unlink(key);
+	sem_unlink(key.c_str());
 }
 
 //-------------------------------------------------------------------

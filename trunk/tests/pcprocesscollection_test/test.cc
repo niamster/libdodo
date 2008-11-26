@@ -26,7 +26,7 @@ pc::sync::process::data::collection dgC;
 
 unsigned long dgCI;
 
-void *
+int
 process(void *ud)
 {
 	try
@@ -42,7 +42,7 @@ process(void *ud)
 		cout << endl << (char *)dt << ": " << tools::time::now() << endl;
 		cout.flush();
 
-		tools::os::sleep(10);
+		tools::os::sleep(2);
 
 		cout << endl << (char *)dt << ": " << tools::time::now() << endl;
 		cout.flush();
@@ -52,7 +52,7 @@ process(void *ud)
 		cout << (dodoString)ex << ex.line << endl;
 	}
 
-	return NULL;
+	return 0;
 }
 
 int main(int argc, char **argv)

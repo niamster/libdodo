@@ -38,6 +38,7 @@
 
 #include <libdodo/dataMemorySharedEx.h>
 #include <libdodo/toolsMisc.h>
+#include <libdodo/toolsCode.h>
 
 namespace dodo
 {
@@ -68,7 +69,7 @@ namespace dodo
 					 * if you want to share semaphore between different instances of process - set own key,
 					 * otherwise(like fork) - it may be generated
 					 */
-					shared(const char *key = NULL);
+					shared(const dodoString &key = __dodostring__);
 
 					/**
 					 * destructor
@@ -104,7 +105,7 @@ namespace dodo
 					void *mshared;                                                  ///< shared data
 					unsigned long size;                                             ///< size of shared data
 
-					char *key;                                                      ///< key for the shared data
+					dodoString key;                                                      ///< key for the shared data
 			};
 		};
 	};

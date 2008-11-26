@@ -82,10 +82,18 @@ namespace dodo
 
 				pthread_t thread;                                               ///< thread descriptor
 
+				/**
+				 * @return thread exit status
+				 * @param data defines user data
+				 */
+				static void *routine(void *data);
+
 #endif
 
 				void *data;                                                             ///< thread data
 				bool isRunning;                                                         ///< true if thread is running
+				bool joined;															///< true if the thread was joined
+				int status;																///< thread exit status
 				bool detached;                                                          ///< true if thread is detached
 				unsigned long position;                                                 ///< identificator
 				job::routine func;                                                      ///< function to execute
@@ -245,9 +253,10 @@ namespace dodo
 
 					/**
 					 * wait for thread termination
+					 * @return status of the job
 					 * @param position defines thread identificator
 					 */
-					virtual void wait(unsigned long position);
+					virtual int wait(unsigned long position);
 
 					/**
 					 * wait for all registered threads termination

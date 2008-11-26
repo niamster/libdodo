@@ -42,9 +42,27 @@ __threadInfo::__threadInfo() :
 
 	isRunning(false),
 	executed(0),
-	executeLimit(0)
+	executeLimit(0),
+	joined(false),
+	status(0)
 {
 }
+
+//-------------------------------------------------------------------
+
+#ifdef PTHREAD_EXT
+
+void *
+__threadInfo::routine(void *data)
+{
+	__threadInfo *ti = (__threadInfo *)data;
+
+	ti->status = ti->func(ti->data);
+
+	return NULL;
+}
+
+#endif
 
 //-------------------------------------------------------------------
 
@@ -327,7 +345,7 @@ collection::run(unsigned long position,
 		if (errno != 0)
 			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		errno = pthread_create(&(current->thread), &attr, current->func, current->data);
+		errno = pthread_create(&(current->thread), &attr, __threadInfo::routine, &(*current));
 		if (errno != 0)
 			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
@@ -342,16 +360,18 @@ collection::run(unsigned long position,
 
 //-------------------------------------------------------------------
 
-void
+int
 collection::wait(unsigned long position)
 {
 	if (getThread(position))
 	{
-		if (!_isRunning(current))
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_ISNOTRUNNING, PCTHREADCOLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
-
 		if (current->detached)
 			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_ISDETACHED, PCTHREADCOLLECTIONEX_ISDETACHED_STR, __LINE__, __FILE__);
+
+		if (current->joined)
+			return current->status;
+
+		int status = 0;
 
 #ifdef PTHREAD_EXT
 
@@ -359,9 +379,14 @@ collection::wait(unsigned long position)
 		if (errno != 0)
 			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+		status = current->status;
+
 #endif
 
+		current->joined = true;
 		current->isRunning = false;
+
+		return status;
 	}
 	else
 		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
@@ -375,7 +400,7 @@ collection::wait()
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
 	{
-		if (!_isRunning(i) || i->detached)
+		if (i->joined || i->detached)
 			continue;
 
 #ifdef PTHREAD_EXT
@@ -386,6 +411,7 @@ collection::wait()
 
 #endif
 
+		i->joined = true;
 		i->isRunning = false;
 	}
 }
@@ -397,9 +423,6 @@ collection::stop(unsigned long position)
 {
 	if (getThread(position))
 	{
-		if (!_isRunning(current))
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_LIBDODO, COLLECTIONEX_ISNOTRUNNING, PCTHREADCOLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
-
 #ifdef PTHREAD_EXT
 
 		errno = pthread_cancel(current->thread);
@@ -657,6 +680,9 @@ collection::addNRun(job::routine func,
 	thread.handle = NULL;
 #endif
 
+	threads.push_back(thread);
+	__threadInfo *ti = &(threads.back());
+
 #ifdef PTHREAD_EXT
 
 	if (detached)
@@ -668,7 +694,7 @@ collection::addNRun(job::routine func,
 	if (errno != 0)
 		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	errno = pthread_create(&(thread.thread), &attr, func, data);
+	errno = pthread_create(&(ti->thread), &attr, __threadInfo::routine, ti);
 	if (errno != 0)
 		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
@@ -676,8 +702,6 @@ collection::addNRun(job::routine func,
 
 	thread.isRunning = true;
 	++(thread.executed);
-
-	threads.push_back(thread);
 
 	return thread.position;
 }

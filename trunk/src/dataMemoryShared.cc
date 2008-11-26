@@ -38,24 +38,23 @@ shared::shared(shared &sts)
 
 //-------------------------------------------------------------------
 
-shared::shared(const char   *a_key) : mshared(NULL),
+shared::shared(const dodoString &a_key) : mshared(NULL),
 									  size(0)
 {
-	if (a_key == NULL)
+	key = '/';
+
+	if (a_key.empty())
 	{
-		key = new char[33];
-		key[0] = '/';
-		tools::misc::random(key + 1, 31);
-		key[31] = '\0';
+		char _key[32];
+		tools::misc::random(_key, 31);
+		_key[31] = '\0';
+
+		key.append(tools::code::encodeBase64(_key));
 	}
 	else
-	{
-		key = new char[strlen(a_key) + 2];
-		key[0] = '/';
-		strcpy(key + 1, a_key);
-	}
+		key.append(a_key);
 
-	shm = shm_open(key, O_CREAT | O_RDWR, 0660);
+	shm = shm_open(key.c_str(), O_CREAT | O_RDWR, 0660);
 }
 
 //-------------------------------------------------------------------
@@ -65,7 +64,7 @@ shared::~shared()
 	if (mshared != NULL)
 		munmap(mshared, size);
 
-	shm_unlink(key);
+	shm_unlink(key.c_str());
 }
 
 //-------------------------------------------------------------------

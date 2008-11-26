@@ -25,7 +25,7 @@ data::collection shC;
 
 unsigned long shCI;
 
-void *
+int
 thread(void *data)
 {
 	try
@@ -46,7 +46,7 @@ thread(void *data)
 		cout << (dodoString)ex << ex.line << endl;
 	}
 
-	return NULL;
+	return 0;
 }
 
 int main(int argc, char **argv)
@@ -58,7 +58,6 @@ int main(int argc, char **argv)
 
 		sh.set((void *)shared);
 
-#ifdef PTHREAD_EXT
 		collection th;
 
 		const int amount = 10;
@@ -79,7 +78,6 @@ int main(int argc, char **argv)
 		cout.flush();
 
 		th.wait();
-#endif
 
 		delete shared;
 	}

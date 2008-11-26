@@ -33,10 +33,7 @@ using namespace dodo::pc::sync::process;
 
 stack::stack()
 {
-	tools::misc::random(key, 31);
-	key[31] = '\0';
-
-	keeper = new section(1, key);
+	keeper = new section;
 }
 
 //-------------------------------------------------------------------

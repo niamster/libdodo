@@ -37,7 +37,7 @@ stack::~stack()
 
 //-------------------------------------------------------------------
 
-stack::protector::protector(const stack *a_parent) : parent((stack *)a_parent)
+stack::protector::protector(const stack *a_parent) : parent(a_parent)
 {
 	parent->keeper->acquire();
 }

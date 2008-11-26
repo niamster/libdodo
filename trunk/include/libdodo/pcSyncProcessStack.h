@@ -35,6 +35,7 @@
 #include <libdodo/types.h>
 #include <libdodo/pcSyncStack.h>
 #include <libdodo/toolsMisc.h>
+#include <libdodo/toolsCode.h>
 #include <libdodo/pcSyncProcessSection.h>
 
 namespace dodo
@@ -62,8 +63,6 @@ namespace dodo
 						 * destructor
 						 */
 						virtual ~stack();
-
-						char key[32];                                             ///< key for the semaphore
 				};
 			};
 		};

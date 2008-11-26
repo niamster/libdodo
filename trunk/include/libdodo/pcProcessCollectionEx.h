@@ -48,7 +48,6 @@ namespace dodo
 				COLLECTIONEX_ISALREADYRUNNING,
 				COLLECTIONEX_NOTFOUND,
 				COLLECTIONEX_SWEPT,
-				COLLECTIONEX_ISNOTRUNNING,
 			};
 
 			/**
@@ -57,7 +56,6 @@ namespace dodo
 #define PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR "The process is currently running. Please wait."
 #define PCPROCESSCOLLECTIONEX_NOTFOUND_STR         "Process not found."
 #define PCPROCESSCOLLECTIONEX_SWEPT_STR            "Limit of execution exceeded. Process swept."
-#define PCPROCESSCOLLECTIONEX_ISNOTRUNNING_STR     "The process is currently not running."
 
 			/**
 			 * IDs of functions where exception might be thrown

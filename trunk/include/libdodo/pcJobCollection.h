@@ -44,7 +44,7 @@ namespace dodo
 			 * @brief defines job function
 			 * @param data defines user data
 			 */
-			typedef void *(*routine)(void *data);
+			typedef int (*routine)(void *data);
 
 			/**
 			 * @class collection
@@ -103,9 +103,10 @@ namespace dodo
 
 					/**
 					 * wait for job termination
+					 * @return status of the job
 					 * @param position defines job identificator
 					 */
-					virtual void wait(unsigned long position) = 0;
+					virtual int wait(unsigned long position) = 0;
 
 					/**
 					 * wait for all registered jobs termination

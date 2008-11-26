@@ -39,6 +39,7 @@
 #include <libdodo/pcSyncDataSingle.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
+#include <libdodo/toolsCode.h>
 
 namespace dodo
 {
@@ -75,7 +76,7 @@ namespace dodo
 							 * if you want to share semaphore between different instances of process - set own key,
 							 * otherwise(like fork) - it may be generated
 							 */
-							single(unsigned int value = 1, const char *key = NULL);
+							single(unsigned int value = 1, const dodoString &key = __dodostring__);
 
 							/**
 							 * destructor
@@ -113,7 +114,7 @@ namespace dodo
 
 							timespec timeout;                                                           ///< lock timeout
 
-							char *key;                                                                  ///< key for the semaphore
+							dodoString key;                                                                  ///< key for the semaphore
 					};
 				};
 			};

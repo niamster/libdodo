@@ -46,7 +46,6 @@ namespace dodo
 			enum collectionExR
 			{
 				COLLECTIONEX_ISALREADYRUNNING,
-				COLLECTIONEX_ISNOTRUNNING,
 				COLLECTIONEX_NOTFOUND,
 				COLLECTIONEX_ISDETACHED,
 				COLLECTIONEX_SWEPT,
@@ -56,7 +55,6 @@ namespace dodo
 			 * libdodo defined errors' explanation
 			 */
 #define PCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR    "The thread is currently running. Please wait."
-#define PCTHREADCOLLECTIONEX_ISNOTRUNNING_STR        "The thread is currently not running."
 #define PCTHREADCOLLECTIONEX_NOTFOUND_STR            "Thread not found."
 #define PCTHREADCOLLECTIONEX_ISDETACHED_STR          "Thread is detached. Cannot join."
 #define PCTHREADCOLLECTIONEX_SWEPT_STR               "Limit of execution exceeded. Thread swept."

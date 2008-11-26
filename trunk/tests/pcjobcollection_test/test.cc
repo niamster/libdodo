@@ -19,7 +19,7 @@ using namespace dodo::pc;
 
 using namespace std;
 
-void *
+int
 job(void *data)
 {
 	try
@@ -27,7 +27,7 @@ job(void *data)
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 
-		tools::os::sleep(10);
+		tools::os::sleep(2);
 
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
@@ -37,7 +37,7 @@ job(void *data)
 		cout << (dodoString)ex << ex.line << endl;
 	}
 
-	return NULL;
+	return 10;
 }
 
 int main(int argc, char **argv)
@@ -54,10 +54,8 @@ int main(int argc, char **argv)
 		{
 			if (i % 2 == 0)
 				pr[i] = new thread::collection;
-#ifdef PTHREAD_EXT
 			else
 				pr[i] = new process::collection;
-#endif
 
 			ids[i] = tools::string::lToString(i);
 			pos[i] = pr[i]->add(::job, (void *)ids[i].c_str());
@@ -71,7 +69,7 @@ int main(int argc, char **argv)
 		cout.flush();
 
 		for (int i = 0; i < amount; ++i)
-			pr[i]->wait();
+			std::cout << "status: " << pr[i]->wait(pos[i]) << endl;
 
 		for (int i = 0; i < amount; ++i)
 			delete pr[i];

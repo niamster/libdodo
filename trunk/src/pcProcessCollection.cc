@@ -34,7 +34,9 @@ using namespace dodo::pc::process;
 
 __processInfo::__processInfo() : isRunning(false),
 								 executed(0),
-								 executeLimit(0)
+								 executeLimit(0),
+								joined(false),
+								status(0)
 {
 }
 
@@ -165,14 +167,12 @@ collection::addNRun(job::routine func,
 	process.handle = NULL;
 #endif
 
+	processes.push_back(process);
+
 	pid_t pid = fork();
 
 	if (pid == 0)
-	{
-		func(data);
-
-		_exit(0);
-	}
+		_exit(func(data));
 	else
 	{
 		if (pid == -1)
@@ -183,8 +183,6 @@ collection::addNRun(job::routine func,
 
 	process.isRunning = true;
 	++(process.executed);
-
-	processes.push_back(process);
 
 	return process.position;
 }
@@ -344,11 +342,7 @@ collection::run(unsigned long position,
 		pid_t pid = fork();
 
 		if (pid == 0)
-		{
-			current->func(current->data);
-
-			_exit(0);
-		}
+			_exit(current->func(current->data));
 		else
 		{
 			if (pid == -1)
@@ -371,9 +365,6 @@ collection::stop(unsigned long position)
 {
 	if (getProcess(position))
 	{
-		if (!_isRunning(current))
-			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_LIBDODO, COLLECTIONEX_ISNOTRUNNING, PCPROCESSCOLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
-
 		if (kill(current->pid, 9) == -1)
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
@@ -403,18 +394,25 @@ collection::stop()
 
 //-------------------------------------------------------------------
 
-void
+int
 collection::wait(unsigned long position)
 {
 	if (getProcess(position))
 	{
-		if (!_isRunning(current))
-			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_ISNOTRUNNING, PCPROCESSCOLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
+		if (current->joined)
+			return current->status;
 
-		if (waitpid(current->pid, NULL, 0) == -1)
+		int status;
+
+		if (waitpid(current->pid, &status, 0) == -1)
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+		if (WIFEXITED(status))
+			current->status = WEXITSTATUS(status);
 		current->isRunning = false;
+		current->joined = true;
+
+		return current->status;
 	}
 	else
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
@@ -425,16 +423,21 @@ collection::wait(unsigned long position)
 void
 collection::wait()
 {
+	int status;
+
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
 	{
-		if (!_isRunning(i))
+		if (i->joined)
 			continue;
 
-		if (waitpid(i->pid, NULL, 0) == -1)
+		if (waitpid(i->pid, &status, 0) == -1)
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+		if (WIFEXITED(status))
+			i->status = WEXITSTATUS(status);
 		i->isRunning = false;
+		i->joined = true;
 	}
 }
 

@@ -36,6 +36,8 @@
 #include <semaphore.h>
 
 #include <libdodo/pcSyncSection.h>
+#include <libdodo/toolsMisc.h>
+#include <libdodo/toolsCode.h>
 #include <libdodo/pcSyncProcessSectionEx.h>
 #include <libdodo/types.h>
 
@@ -58,7 +60,7 @@ namespace dodo
 						/**
 						 * consructor
 						 */
-						section(unsigned int value, const char *key);
+						section(unsigned int value = 1, const dodoString &key = __dodostring__);
 
 						/**
 						 * destructor
@@ -78,7 +80,7 @@ namespace dodo
 					protected:
 
 						sem_t *keeper;                                                      ///< section
-						char *key;                                                          ///< key for the section
+						dodoString key;                                                          ///< key for the section
 				};
 			};
 		};

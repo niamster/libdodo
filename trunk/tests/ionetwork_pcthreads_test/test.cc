@@ -21,7 +21,7 @@ using namespace std;
 
 data::single sh;
 
-void *
+int
 process(void *data)
 {
 	exchange *fse = (exchange *)data;
@@ -98,7 +98,7 @@ process(void *data)
 
 	delete fse;
 
-	return NULL;
+	return 0;
 }
 
 int main(int argc, char **argv)
@@ -119,18 +119,14 @@ int main(int argc, char **argv)
 
 		bool exit_st(false);
 
-#ifdef PTHREAD_EXT
 		thread::collection th;
 		vector<int> positions;
-#endif
 
 		sh.set((void *)&exit_st);
 
 		while (!exit_st)
 		{
-#ifdef PTHREAD_EXT
 			th.sweepTrash();
-#endif
 
 			if (sock.accept(fake, info))
 			{
@@ -141,16 +137,11 @@ int main(int argc, char **argv)
 				}
 
 				conn.init(fake);
-#ifdef PTHREAD_EXT
 				positions.push_back(th.add(process, (void *)(new exchange(conn))));
 				th.run(positions.back());
 				th.setExecutionLimit(positions.back(), 1);
-#else
-				process((void *)(new exchange(conn)));
-#endif
 				conn.close();
 
-#ifdef PTHREAD_EXT
 				try
 				{
 					if (th.isRunning(1))
@@ -162,13 +153,10 @@ int main(int argc, char **argv)
 				catch (...)
 				{
 				}
-#endif
 			}
 		}
 
-#ifdef PTHREAD_EXT
 		th.wait();
-#endif
 
 	}
 	catch (dodo::exception::basic ex)

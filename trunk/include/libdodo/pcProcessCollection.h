@@ -75,7 +75,9 @@ namespace dodo
 
 				pid_t pid;                                                      ///< process pid
 				void *data;                                                     ///< process data
-				bool isRunning;                                                 ///< true process is running
+				bool isRunning;                                                 ///< true if the process is running
+				bool joined;													///< true if the process was joined
+				int status;														///< process exit status
 				unsigned long position;                                         ///< identificator
 				job::routine func;                                              ///< function to execute
 				short action;                                                   ///< action on object destruction[see collectionOnDestructEnum]
@@ -224,9 +226,10 @@ namespace dodo
 
 					/**
 					 * waits for process termination
+					 * @return status of the job
 					 * @param position defines process identificator
 					 */
-					virtual void wait(unsigned long position);
+					virtual int wait(unsigned long position);
 
 					/**
 					 * wait for all registered processes termination
