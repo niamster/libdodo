@@ -74,7 +74,7 @@ namespace dodo
 					 * copy constructor
 					 * @note to prevent copying
 					 */
-					mysql(mysql &a_mypp);
+					mysql(mysql &mypp);
 
 				public:
 

@@ -64,7 +64,12 @@ namespace dodo
 			/**
 			 * @class temp
 			 * @brief provides I/O manipulations with temporary file
-			 * @note writeString* write only to the end of the file(appends)
+			 * @note  if blockOffset is false then read/write position is amount of bytes from the beginning, if true then:
+			 * writeStream, writeStreamString write only to the end of the file(append)
+			 * FIXME: should: write offset for writeStream, writeStreamString is calculated as pos*'# of \n - terminated strings'; replaces '\n - terminated string' at offset
+			 * write offset for write, writeString is calculated as pos*outSize
+			 * read offset for read, readString is calculated as pos*inSize
+			 * read offset for readStream, readStreamString is calculated as pos*'# of \n - terminated strings'
 			 */
 			class temp : virtual public channel
 			{
@@ -113,7 +118,9 @@ namespace dodo
 					 */
 					virtual void erase();
 
-					unsigned long pos;                                              ///< read/write/erase position; if pos==-1, append to the end[0 by default]
+					unsigned long pos;                                              ///< read/write/erase position[0 by default]
+					bool blockOffset;												///<  if blockOffset is false then read/write position is amount of bytes from the beginning, if true then read/write position calculated by defined rules[false by default]
+					bool append;													///< append to the end[false by default]
 
 					bool overwrite;                                                 ///< if true block will be overwritten; for regular and temp files only[false by default]
 
@@ -132,6 +139,7 @@ namespace dodo
 					/**
 					 * @param data defines buffer that will be filled
 					 * @note not more then inSize(including '\0')
+					 * if blockOffset is true read offset is calculated as pos*inSize otherwise offset it taken pos bytes from the beginning
 					 */
 					virtual void _read(char * const data);
 
@@ -139,18 +147,21 @@ namespace dodo
 					 * read from stream - '\0' or '\n' - terminated string
 					 * @param data defines buffer that will be filled
 					 * @note not more then inSize(including '\0')
+					 * if blockOffset is true read offset is calculated as pos*'# of \n - terminated strings' otherwise offset it taken pos bytes from the beginning
 					 */
 					virtual unsigned long _readStream(char * const data);
 
 					/**
 					 * @param data defines data that will be written
+					 * @note if blockOffset is true write offset is calculated as pos*outSize otherwise offset it taken pos bytes from the beginning
 					 */
 					virtual void _write(const char * const data);
 
 					/**
 					 * write to stream - '\0' - terminated string
 					 * @param data defines data that will be written
-					 * @note writes only to the end of the file(appends)
+					 * @note write only to the end of the file(append)
+					 * FIXME: should: if blockOffset is true write offset is calculated as pos*'# of \n - terminated strings'; replaces '\n - terminated string' at offset otherwise offset it taken pos bytes from the beginning
 					 */
 					virtual void _writeStream(const char * const data);
 

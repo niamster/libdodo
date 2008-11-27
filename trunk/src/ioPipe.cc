@@ -264,14 +264,14 @@ io::pipe::open()
 //-------------------------------------------------------------------
 
 void
-io::pipe::_read(char * const a_void)
+io::pipe::_read(char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	char *data = a_void;
+	char *data = a_data;
 
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
 	unsigned long iter = inSize / inPipeBuffer;
 	unsigned long rest = inSize % inPipeBuffer;
@@ -543,16 +543,16 @@ io::pipe::block(bool flag)
 //-------------------------------------------------------------------
 
 unsigned long
-io::pipe::_readStream(char * const a_void)
+io::pipe::_readStream(char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
 	while (true)
 	{
-		if (fgets(a_void, inSize, inHandle) == NULL)
+		if (fgets(a_data, inSize, inHandle) == NULL)
 		{
 			if (errno == EINTR)
 				continue;
@@ -567,7 +567,7 @@ io::pipe::_readStream(char * const a_void)
 		break;
 	}
 
-	return strlen(a_void);
+	return strlen(a_data);
 }
 
 //-------------------------------------------------------------------

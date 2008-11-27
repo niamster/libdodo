@@ -90,11 +90,11 @@ exchange::getOutDescriptor() const
 //-------------------------------------------------------------------
 
 void
-exchange::_read(char * const a_void)
+exchange::_read(char * const a_data)
 {
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
-	FCGX_GetStr(a_void, inSize, request->in);
+	FCGX_GetStr(a_data, inSize, request->in);
 }
 
 //-------------------------------------------------------------------

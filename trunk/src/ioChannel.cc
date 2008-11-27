@@ -64,7 +64,7 @@ channel::~channel()
 //-------------------------------------------------------------------
 
 void
-channel::read(char * const a_void)
+channel::read(char * const a_data)
 {
 	protector pg(this);
 
@@ -79,7 +79,7 @@ channel::read(char * const a_void)
 
 	try
 	{
-		_read(a_void);
+		_read(a_data);
 	}
 	catch (...)
 	{
@@ -90,16 +90,16 @@ channel::read(char * const a_void)
 
 #else
 
-	_read(a_void);
+	_read(a_data);
 
 #endif
 
 #ifndef IO_WO_XEXEC
-	collectedData.buffer.assign(a_void, inSize);
+	collectedData.buffer.assign(a_data, inSize);
 
 	performXExec(postExec);
 
-	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size());
+	strncpy(a_data, collectedData.buffer.c_str(), collectedData.buffer.size());
 
 	collectedData.buffer.clear();
 #endif
@@ -161,7 +161,7 @@ channel::readString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-channel::readStream(char * const a_void)
+channel::readStream(char * const a_data)
 {
 	protector pg(this);
 
@@ -170,18 +170,18 @@ channel::readStream(char * const a_void)
 	performXExec(preExec);
 #endif
 
-	unsigned long n = _readStream(a_void);
+	unsigned long n = _readStream(a_data);
 
 #ifndef IO_WO_XEXEC
 
 	if (n > 0)
-		collectedData.buffer.assign(a_void, n);
+		collectedData.buffer.assign(a_data, n);
 	else
 		collectedData.buffer.clear();
 
 	performXExec(postExec);
 
-	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size());
+	strncpy(a_data, collectedData.buffer.c_str(), collectedData.buffer.size());
 
 	collectedData.buffer.clear();
 
@@ -246,13 +246,13 @@ channel::readStreamString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-channel::writeString(const dodoString &a_buf)
+channel::writeString(const dodoString &a_data)
 {
 	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 
-	collectedData.buffer.assign(a_buf, 0, outSize);
+	collectedData.buffer.assign(a_data, 0, outSize);
 
 	operType = IO_OPERATION_WRITESTREAM;
 	performXExec(preExec);
@@ -270,7 +270,7 @@ channel::writeString(const dodoString &a_buf)
 
 #else
 
-	_write(a_buf.c_str());
+	_write(a_data.c_str());
 
 #endif
 
@@ -284,13 +284,13 @@ channel::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-channel::write(const char *const a_buf)
+channel::write(const char *const a_data)
 {
 	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 
-	collectedData.buffer.assign(a_buf, outSize);
+	collectedData.buffer.assign(a_data, outSize);
 
 	operType = IO_OPERATION_WRITE;
 	performXExec(preExec);
@@ -308,7 +308,7 @@ channel::write(const char *const a_buf)
 
 #else
 
-	_write(a_buf);
+	_write(a_data);
 
 #endif
 
@@ -323,13 +323,13 @@ channel::write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-channel::writeStreamString(const dodoString &a_buf)
+channel::writeStreamString(const dodoString &a_data)
 {
 	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 
-	collectedData.buffer = a_buf;
+	collectedData.buffer = a_data;
 
 	operType = IO_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
@@ -347,7 +347,7 @@ channel::writeStreamString(const dodoString &a_buf)
 
 #else
 
-	_writeStream(a_buf.c_str());
+	_writeStream(a_data.c_str());
 
 #endif
 
@@ -361,13 +361,13 @@ channel::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-channel::writeStream(const char *const a_buf)
+channel::writeStream(const char *const a_data)
 {
 	protector pg(this);
 
 #ifndef IO_WO_XEXEC
 
-	collectedData.buffer.assign(a_buf);
+	collectedData.buffer.assign(a_data);
 
 	operType = IO_OPERATION_WRITESTREAM;
 	performXExec(preExec);
@@ -385,7 +385,7 @@ channel::writeStream(const char *const a_buf)
 
 #else
 
-	_writeStream(a_buf);
+	_writeStream(a_data);
 
 #endif
 

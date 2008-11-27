@@ -85,6 +85,7 @@ bool basic::handlerSetEx[] = {
 	false,
 	false,
 	false,
+	false,
 	false
 };
 
@@ -140,12 +141,14 @@ errorHandler basic::handlersEx[] = {
 	NULL,
 	NULL,
 	NULL,
+	NULL,
 	NULL
 };
 
 //-------------------------------------------------------------------
 
 void *basic::handlerDataEx[] = {
+	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -251,12 +254,14 @@ bool basic::handlesOpenedEx[] = {
 	false,
 	false,
 	false,
+	false,
 	false
 };
 
 //-------------------------------------------------------------------
 
 void *basic::handlesEx[] = {
+	NULL,
 	NULL,
 	NULL,
 	NULL,

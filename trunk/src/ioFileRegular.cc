@@ -33,6 +33,8 @@ using namespace dodo::io::file;
 
 regular::regular() : overwrite(false),
 			 pos(0),
+			 blockOffset(true),
+			 append(false),
 			 handler(NULL)
 {
 #ifndef IO_WO_XEXEC
@@ -47,6 +49,8 @@ regular::regular() : overwrite(false),
 regular::regular(const regular &fd) : overwrite(fd.overwrite),
 							 path(fd.path),
 							 pos(fd.pos),
+							 blockOffset(fd.blockOffset),
+							 append(fd.append),
 							 mode(fd.mode),
 							 handler(NULL)
 
@@ -149,6 +153,8 @@ regular::clone(const regular &fd)
 	path = fd.path;
 	mode = fd.mode;
 	pos = fd.pos;
+	blockOffset = fd.blockOffset;
+	append = fd.append;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
@@ -307,19 +313,21 @@ regular::open(const dodoString &a_path,
 //-------------------------------------------------------------------
 
 void
-regular::_read(char * const a_void)
+regular::_read(char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	if (fseek(handler, pos * inSize, SEEK_SET) == -1)
+	unsigned long pos = blockOffset?this->pos * inSize:this->pos;
+
+	if (fseek(handler, pos, SEEK_SET) == -1)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
 	while (true)
 	{
-		if (fread(a_void, inSize, 1, handler) == 0)
+		if (fread(a_data, inSize, 1, handler) == 0)
 		{
 			if (feof(handler) != 0 || errno == EAGAIN)
 				break;
@@ -338,41 +346,44 @@ regular::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-regular::_write(const char *const a_buf)
+regular::_write(const char *const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	if (mode == REGULAR_OPENMODE_APPEND || pos == -1)
+	if (mode != REGULAR_OPENMODE_APPEND)
 	{
-		if (fseek(handler, 0, SEEK_END) == -1)
-			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-	}
-	else
-	{
-		unsigned long pos = this->pos * outSize;
-		if (!overwrite)
+		if (append)
 		{
+			if (fseek(handler, 0, SEEK_END) == -1)
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		}
+		else
+		{
+			unsigned long pos = blockOffset?this->pos * outSize:this->pos;
+			if (!overwrite)
+			{
+				if (fseek(handler, pos, SEEK_SET) == -1)
+					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+
+				char *t_buf = new char[outSize];
+
+				size_t read = fread(t_buf, outSize, 1, handler);
+
+				delete [] t_buf;
+
+				if (read != 0)
+					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_CANNOTOVEWRITE, IOFILEREGULAREX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
+			}
+
 			if (fseek(handler, pos, SEEK_SET) == -1)
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-
-			char *t_buf = new char[outSize];
-
-			size_t read = fread(t_buf, outSize, 1, handler);
-
-			delete [] t_buf;
-
-			if (read != 0)
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_CANNOTOVEWRITE, IOFILEREGULAREX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
 		}
-
-		if (fseek(handler, pos, SEEK_SET) == -1)
-			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	while (true)
 	{
-		if (fwrite(a_buf, outSize, 1, handler) == 0)
+		if (fwrite(a_data, outSize, 1, handler) == 0)
 		{
 			if (errno == EINTR)
 				continue;
@@ -437,39 +448,45 @@ regular::flush()
 //-------------------------------------------------------------------
 
 unsigned long
-regular::_readStream(char * const a_void)
+regular::_readStream(char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	if (fseek(handler, 0, SEEK_SET) == -1)
-		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-
-	for (long i = -1; i < pos; ++i)
+	if (blockOffset)
 	{
-		if (fgets(a_void, inSize, handler) == NULL)
+		if (fseek(handler, 0, SEEK_SET) == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+
+		for (unsigned long i = 0; i < pos; ++i)
 		{
-			switch (errno)
+			if (fgets(a_data, inSize, handler) == NULL)
 			{
-				case EIO:
-				case EINTR:
-				case EBADF:
-				case EOVERFLOW:
-				case ENOMEM:
-				case ENXIO:
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case EBADF:
+					case EOVERFLOW:
+					case ENOMEM:
+					case ENXIO:
 
-					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				}
+
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_FILEISSHORTERTHANGIVENPOSITION, IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
 			}
-
-			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_FILEISSHORTERTHANGIVENPOSITION, IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
 		}
 	}
+	else
+		if (fseek(handler, pos, SEEK_SET) == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
 	while (true)
 	{
-		if (fgets(a_void, inSize, handler) == NULL)
+		if (fgets(a_data, inSize, handler) == NULL)
 		{
 			if (errno == EINTR)
 				continue;
@@ -484,50 +501,48 @@ regular::_readStream(char * const a_void)
 		break;
 	}
 
-	return strlen(a_void);
+	return strlen(a_data);
 }
 
 //-------------------------------------------------------------------
 
 void
-regular::_writeStream(const char *const a_buf)
+regular::_writeStream(const char *const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	if (fseek(handler, 0, SEEK_END) == -1)
-		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	if (mode != REGULAR_OPENMODE_APPEND)
+	{
+		//if (append)
+		{
+			if (fseek(handler, 0, SEEK_END) == -1)
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		}
+		/*else//!blockOffset ||
+			if (fseek(handler, pos, SEEK_SET) == -1)
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);*/
+	}
 
 	unsigned long _outSize = outSize;
 
-	try
+	unsigned int bufSize = strlen(a_data);
+
+	if (bufSize < _outSize)
+		_outSize = bufSize;
+
+	while (true)
 	{
-		unsigned int bufSize = strlen(a_buf);
-
-		if (bufSize < outSize)
-			outSize = bufSize;
-
-		while (true)
+		if (fwrite(a_data, _outSize, 1, handler) == 0)
 		{
-			if (fwrite(a_buf, outSize, 1, handler) == 0)
-			{
-				if (errno == EINTR)
-					continue;
+			if (errno == EINTR)
+				continue;
 
-				if (ferror(handler) != 0)
-					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
-
-			break;
+			if (ferror(handler) != 0)
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		throw;
+		break;
 	}
 }
 

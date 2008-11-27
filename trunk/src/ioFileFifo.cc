@@ -343,14 +343,14 @@ fifo::block(bool flag)
 //-------------------------------------------------------------------
 
 void
-fifo::_read(char * const a_void)
+fifo::_read(char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READ, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	char *data = a_void;
+	char *data = a_data;
 
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
 	unsigned long iter = inSize / inFileFifoBuffer;
 	unsigned long rest = inSize % inFileFifoBuffer;
@@ -415,12 +415,12 @@ fifo::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-fifo::_write(const char *const a_buf)
+fifo::_write(const char *const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITE, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	const char *data = a_buf;
+	const char *data = a_data;
 
 	unsigned long iter = outSize / outFileFifoBuffer;
 	unsigned long rest = outSize % outFileFifoBuffer;
@@ -499,16 +499,16 @@ fifo::flush()
 //-------------------------------------------------------------------
 
 unsigned long
-fifo::_readStream(char * const a_void)
+fifo::_readStream(char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READSTREAM, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
 	while (true)
 	{
-		if (fgets(a_void, inSize, handler) == NULL)
+		if (fgets(a_data, inSize, handler) == NULL)
 		{
 			if (errno == EINTR)
 				continue;
@@ -523,24 +523,24 @@ fifo::_readStream(char * const a_void)
 		break;
 	}
 
-	return strlen(a_void);
+	return strlen(a_data);
 }
 
 //-------------------------------------------------------------------
 
 void
-fifo::_writeStream(const char *const a_buf)
+fifo::_writeStream(const char *const a_data)
 {
 	unsigned long _outSize = outSize;
 
 	try
 	{
-		unsigned int bufSize = strlen(a_buf);
+		unsigned int bufSize = strlen(a_data);
 
 		if (bufSize < outSize)
 			outSize = bufSize;
 
-		_write(a_buf);
+		_write(a_data);
 
 		while (true)
 		{

@@ -78,7 +78,6 @@ int main(int argc, char **argv)
 		io.writeStreamString("!12345890$!!@\n");
 		io.pos = 1;
 		io.outSize = 14;
-		io.inSize = 14;
 
 		file::regular io2 = io;
 		io.close();
@@ -95,10 +94,12 @@ int main(int argc, char **argv)
 		dodoString str;
 
 		io2.pos = 2;
+		io2.inSize = 15;
 		io2.readStreamString(str);
 		cout << "\n\n~~" << str << "~~\n\n";
 
 		io2.pos = 2;
+		io2.inSize = 14;
 		io2.readString(str);
 		cout << "\n\n~~" << str << "~~\n\n";
 	}

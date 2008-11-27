@@ -897,6 +897,7 @@ CONFIGURE_FILE("tests/iononblocked_ionetwork_test/Makefile.in" "tests/iononblock
 CONFIGURE_FILE("tests/iononblocked_ionetworkssl_test/Makefile.in" "tests/iononblocked_ionetworkssl_test/Makefile" @ONLY)
 CONFIGURE_FILE("tests/iostdio_test/Makefile.in" "tests/iostdio_test/Makefile" @ONLY)
 CONFIGURE_FILE("tests/iofile_toolsfilesystem_test/Makefile.in" "tests/iofile_toolsfilesystem_test/Makefile" @ONLY)
+CONFIGURE_FILE("tests/iostring_test/Makefile.in" "tests/iofile_toolsfilesystem_test/Makefile" @ONLY)
 CONFIGURE_FILE("tests/iopipe_iofilefifo_pcthreadcollection_test/Makefile.in" "tests/iopipe_iofilefifo_pcthreadcollection_test/Makefile" @ONLY)
 CONFIGURE_FILE("tests/ionetwork_pcthreads_test/Makefile.in" "tests/ionetwork_pcthreads_test/Makefile" @ONLY)
 CONFIGURE_FILE("tests/ionetworkclient_test/Makefile.in" "tests/ionetworkclient_test/Makefile" @ONLY)

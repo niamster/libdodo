@@ -60,7 +60,7 @@ namespace dodo
 					 * copy constructor
 					 * @note to prevent copying
 					 */
-					postgresql(postgresql &a_pgpp);
+					postgresql(postgresql &pgpp);
 
 				public:
 

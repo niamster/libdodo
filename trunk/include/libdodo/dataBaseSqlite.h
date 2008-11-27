@@ -59,7 +59,7 @@ namespace dodo
 					 * copy constructor
 					 * @note to prevent copying
 					 */
-					sqlite(sqlite &a_pp);
+					sqlite(sqlite &spp);
 
 				public:
 

@@ -33,6 +33,8 @@ using namespace dodo::io::file;
 
 temp::temp() : overwrite(false),
 						 pos(0),
+						 blockOffset(true),
+						 append(false),
 						 handler(NULL)
 {
 #ifndef IO_WO_XEXEC
@@ -46,6 +48,8 @@ temp::temp() : overwrite(false),
 
 temp::temp(const temp &fd) : overwrite(fd.overwrite),
 							 pos(fd.pos),
+							 blockOffset(fd.blockOffset),
+							 append(fd.append),
 							 handler(NULL)
 
 {
@@ -126,6 +130,8 @@ temp::clone(const temp &fd)
 
 	overwrite = fd.overwrite;
 	pos = fd.pos;
+	blockOffset = fd.blockOffset;
+	append = fd.append;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
@@ -211,19 +217,21 @@ temp::open()
 //-------------------------------------------------------------------
 
 void
-temp::_read(char * const a_void)
+temp::_read(char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
 
+	unsigned long pos = blockOffset?this->pos * inSize:this->pos;
+
 	if (fseek(handler, pos * inSize, SEEK_SET) == -1)
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
 	while (true)
 	{
-		if (fread(a_void, inSize, 1, handler) == 0)
+		if (fread(a_data, inSize, 1, handler) == 0)
 		{
 			if (feof(handler) != 0 || errno == EAGAIN)
 				break;
@@ -242,19 +250,19 @@ temp::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-temp::_write(const char *const a_buf)
+temp::_write(const char *const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	if (pos == -1)
+	if (append)
 	{
 		if (fseek(handler, 0, SEEK_END) == -1)
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
-		unsigned long pos = this->pos * outSize;
+		unsigned long pos = blockOffset?this->pos * outSize:this->pos;
 		if (!overwrite)
 		{
 			if (fseek(handler, pos, SEEK_SET) == -1)
@@ -276,7 +284,7 @@ temp::_write(const char *const a_buf)
 
 	while (true)
 	{
-		if (fwrite(a_buf, outSize, 1, handler) == 0)
+		if (fwrite(a_data, outSize, 1, handler) == 0)
 		{
 			if (errno == EINTR)
 				continue;
@@ -341,39 +349,45 @@ temp::flush()
 //-------------------------------------------------------------------
 
 unsigned long
-temp::_readStream(char * const a_void)
+temp::_readStream(char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	if (fseek(handler, 0, SEEK_SET) == -1)
-		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	for (long i = -1; i < pos; ++i)
+	if (blockOffset)
 	{
-		if (fgets(a_void, inSize, handler) == NULL)
+		if (fseek(handler, 0, SEEK_SET) == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		for (unsigned long i = 0; i < pos; ++i)
 		{
-			switch (errno)
+			if (fgets(a_data, inSize, handler) == NULL)
 			{
-				case EIO:
-				case EINTR:
-				case EBADF:
-				case EOVERFLOW:
-				case ENOMEM:
-				case ENXIO:
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case EBADF:
+					case EOVERFLOW:
+					case ENOMEM:
+					case ENXIO:
 
-					throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
+
+				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_FILEISSHORTERTHANGIVENPOSITION, IOFILETEMPEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__);
 			}
-
-			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_FILEISSHORTERTHANGIVENPOSITION, IOFILETEMPEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__);
 		}
 	}
+	else
+		if (fseek(handler, pos, SEEK_SET) == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
 	while (true)
 	{
-		if (fgets(a_void, inSize, handler) == NULL)
+		if (fgets(a_data, inSize, handler) == NULL)
 		{
 			if (errno == EINTR)
 				continue;
@@ -388,50 +402,45 @@ temp::_readStream(char * const a_void)
 		break;
 	}
 
-	return strlen(a_void);
+	return strlen(a_data);
 }
 
 //-------------------------------------------------------------------
 
 void
-temp::_writeStream(const char *const a_buf)
+temp::_writeStream(const char *const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	if (fseek(handler, 0, SEEK_END) == -1)
-		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	//if (append)
+	{
+		if (fseek(handler, 0, SEEK_END) == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
+	/*else//!blockOffset ||
+		if (fseek(handler, pos, SEEK_END) == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);*/
 
 	unsigned long _outSize = outSize;
 
-	try
+	unsigned int bufSize = strlen(a_data);
+
+	if (bufSize < _outSize)
+		_outSize = bufSize;
+
+	while (true)
 	{
-		unsigned int bufSize = strlen(a_buf);
-
-		if (bufSize < outSize)
-			outSize = bufSize;
-
-		while (true)
+		if (fwrite(a_data, _outSize, 1, handler) == 0)
 		{
-			if (fwrite(a_buf, outSize, 1, handler) == 0)
-			{
-				if (errno == EINTR)
-					continue;
+			if (errno == EINTR)
+				continue;
 
-				if (ferror(handler) != 0)
-					throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
-
-			break;
+			if (ferror(handler) != 0)
+				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		throw;
+		break;
 	}
 }
 

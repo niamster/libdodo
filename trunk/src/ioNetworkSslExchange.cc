@@ -239,7 +239,7 @@ exchange::isAlive()
 //-------------------------------------------------------------------
 
 void
-exchange::_write(const char * const a_void)
+exchange::_write(const char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
@@ -247,7 +247,7 @@ exchange::_write(const char * const a_void)
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
 
-	const char *data = a_void;
+	const char *data = a_data;
 
 	long n;
 
@@ -321,17 +321,17 @@ exchange::_write(const char * const a_void)
 //-------------------------------------------------------------------
 
 void
-exchange::_read(char * const a_void)
+exchange::_read(char * const a_data)
 {
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	memset(a_void, '\0', inSize);
+	memset(a_data, '\0', inSize);
 
 	unsigned long iter = inSize / inSocketBuffer;
 	unsigned long rest = inSize % inSocketBuffer;
 
-	char *data = a_void;
+	char *data = a_data;
 
 	long n;
 
