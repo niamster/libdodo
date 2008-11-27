@@ -50,7 +50,7 @@ single::single(unsigned int value,
 		tools::misc::random(_key, 31);
 		_key[31] = '\0';
 
-		key.append(tools::code::MD5Hex(_key));
+		key.append(tools::code::binToHex(_key));
 	}
 	else
 		key.append(a_key);
