@@ -474,7 +474,7 @@ http::GET()
 	unsigned long outSize = ex->outSize;
 
 	ex->outSize = data.size();
-	ex->writeString(data);
+	ex->write(data);
 
 	ex->outSize = outSize;
 
@@ -972,10 +972,10 @@ http::POST(const dodoString &a_data,
 	unsigned long outSize = ex->outSize;
 
 	ex->outSize = data.size();
-	ex->writeString(data);
+	ex->write(data);
 
 	ex->outSize = a_data.size();
-	ex->writeString(a_data);
+	ex->write(a_data);
 
 	ex->outSize = outSize;
 
@@ -1327,12 +1327,12 @@ http::getContent(dodoString &data,
 				if (chunkSize > 0)
 				{
 					ex->inSize = chunkSize;
-					ex->readString(data);
+					ex->read(data);
 					response.data.append(data, 0, ex->inSize - 2);///< remove 2 bytes of CRLF after chunk
 				}
 
 				ex->inSize = 512;
-				ex->readStreamString(data);
+				ex->readStream(data);
 
 				if (data.size() == 0)
 					break;
@@ -1380,7 +1380,7 @@ http::getContent(dodoString &data,
 			}
 			else
 			{
-				ex->readStreamString(data);
+				ex->readStream(data);
 
 				if (data.size() == 0 && contentSize <= 0)
 				{

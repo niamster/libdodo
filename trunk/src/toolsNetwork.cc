@@ -375,9 +375,9 @@ network::mail(const dodoString &host,
 
 	dodoString mess;
 
-	ex.readStreamString(mess);
-	ex.writeStreamString("EHLO " + network::getLocalName() + "\r\n");
-	ex.readStreamString(mess);
+	ex.readStream(mess);
+	ex.writeStream("EHLO " + network::getLocalName() + "\r\n");
+	ex.readStream(mess);
 
 	if (string::stringToI(dodoString(mess.data(), 3)) != 250)
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_LIBDODO, NETWORKEX_BADMAILHELO, TOOLSNETWORKEX_BADMAILHELO_STR, __LINE__, __FILE__);
@@ -398,8 +398,8 @@ network::mail(const dodoString &host,
 	{
 		if (isSetFlag(authType, SMTPAUTH_CRAMMD5))
 		{
-			ex.writeStreamString("AUTH CRAM-MD5\r\n");
-			ex.readStreamString(mess);
+			ex.writeStream("AUTH CRAM-MD5\r\n");
+			ex.readStream(mess);
 
 			if (string::stringToI(dodoString(mess.data(), 3)) != 334)
 				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
@@ -442,8 +442,8 @@ network::mail(const dodoString &host,
 
 			md5pass = code::binToHex(dodoString((char *)&digest, 16));
 
-			ex.writeStreamString(code::encodeBase64(login + " " + md5pass) + "\r\n");
-			ex.readStreamString(mess);
+			ex.writeStream(code::encodeBase64(login + " " + md5pass) + "\r\n");
+			ex.readStream(mess);
 
 			if (string::stringToI(dodoString(mess.data(), 3)) != 235)
 				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
@@ -452,20 +452,20 @@ network::mail(const dodoString &host,
 		{
 			if (isSetFlag(authType, SMTPAUTH_LOGIN))
 			{
-				ex.writeStreamString("AUTH LOGIN\r\n");
-				ex.readStreamString(mess);
+				ex.writeStream("AUTH LOGIN\r\n");
+				ex.readStream(mess);
 
 				if (string::stringToI(dodoString(mess.data(), 3)) != 334)
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
-				ex.writeStreamString(code::encodeBase64(login) + "\r\n");
-				ex.readStreamString(mess);
+				ex.writeStream(code::encodeBase64(login) + "\r\n");
+				ex.readStream(mess);
 
 				if (string::stringToI(dodoString(mess.data(), 3)) != 334)
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
-				ex.writeStreamString(code::encodeBase64(pass) + "\r\n");
-				ex.readStreamString(mess);
+				ex.writeStream(code::encodeBase64(pass) + "\r\n");
+				ex.readStream(mess);
 
 				if (string::stringToI(dodoString(mess.data(), 3)) != 235)
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
@@ -474,8 +474,8 @@ network::mail(const dodoString &host,
 			{
 				if (isSetFlag(authType, SMTPAUTH_PLAIN))
 				{
-					ex.writeStreamString("AUTH PLAIN" + code::encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
-					ex.readStreamString(mess);
+					ex.writeStream("AUTH PLAIN" + code::encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
+					ex.readStream(mess);
 
 					if (string::stringToI(dodoString(mess.data(), 3)) != 334)
 						throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
@@ -484,29 +484,29 @@ network::mail(const dodoString &host,
 		}
 	}
 
-	ex.writeStreamString("MAIL FROM: <" + from + ">\r\n");
-	ex.readStreamString(mess);
+	ex.writeStream("MAIL FROM: <" + from + ">\r\n");
+	ex.readStream(mess);
 
 	dodoStringArray pock = misc::split(to, ",");
 
 	dodoStringArray::iterator i = pock.begin(), j = pock.end();
 	for (; i != j; ++i)
 	{
-		ex.writeStreamString("RCPT TO: <" + *i + ">\r\n");
-		ex.readStreamString(mess);
+		ex.writeStream("RCPT TO: <" + *i + ">\r\n");
+		ex.readStream(mess);
 	}
 
-	ex.writeStreamString("DATA\r\n");
-	ex.readStreamString(mess);
+	ex.writeStream("DATA\r\n");
+	ex.readStream(mess);
 
-	ex.writeStreamString("To: " + to + "\r\n");
-	ex.writeStreamString("From: " + from + "\r\n");
-	ex.writeStreamString("X-Mailer: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n");
-	ex.writeStreamString("Subject: " + subject  + "\r\n");
-	ex.writeStreamString(headers);
-	ex.writeStreamString(message);
-	ex.writeStreamString("\r\n.\r\n");
-	ex.writeStreamString("QUIT\r\n");
+	ex.writeStream("To: " + to + "\r\n");
+	ex.writeStream("From: " + from + "\r\n");
+	ex.writeStream("X-Mailer: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n");
+	ex.writeStream("Subject: " + subject  + "\r\n");
+	ex.writeStream(headers);
+	ex.writeStream(message);
+	ex.writeStream("\r\n.\r\n");
+	ex.writeStream("QUIT\r\n");
 }
 
 //-------------------------------------------------------------------

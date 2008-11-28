@@ -52,21 +52,21 @@ int main(int argc, char **argv)
 
 		str = "GET / HTTP/1.1\r\n";
 		exch.outSize = str.size();
-		exch.writeString(str);
+		exch.write(str);
 
 		str = "Host: " + host + "\r\n";
 		exch.outSize = str.size();
-		exch.writeString(str);
+		exch.write(str);
 
 		str = "Connection: Close\r\n";
 		exch.outSize = str.size();
-		exch.writeString(str);
+		exch.write(str);
 
 		str = "User-Agent: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n\r\n";
 		exch.outSize = str.size();
-		exch.writeString(str);
+		exch.write(str);
 
-		exch.readStreamString(str);
+		exch.readStream(str);
 
 		cout << str;
 

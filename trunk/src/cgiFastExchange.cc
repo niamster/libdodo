@@ -94,7 +94,7 @@ exchange::_read(char * const a_data)
 {
 	memset(a_data, '\0', inSize);
 
-	FCGX_GetStr(a_data, inSize, request->in);
+	FCGX_GetStr(a_data, readSize, request->in);
 }
 
 //-------------------------------------------------------------------
@@ -137,7 +137,11 @@ exchange::_writeStream(const char * const data)
 unsigned long
 exchange::_readStream(char * const data)
 {
+	unsigned long _inSize = inSize++;
+
 	_read(data);
+
+	inSize = _inSize;
 
 	return strlen(data);
 }

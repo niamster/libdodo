@@ -72,17 +72,17 @@ int main(int argc, char **argv)
 
 		io.overwrite = true;
 
-		io.writeStreamString("!12345890#!!@\n");
-		io.writeStreamString("!12345890-!!@\n");
-		io.writeStreamString("!12345890@!!@\n");
-		io.writeStreamString("!12345890$!!@\n");
-		io.pos = 1;
-		io.outSize = 14;
+		io.writeStream("!12345890#!!@\n");
+		io.writeStream("!12345890-!!@\n");
+		io.writeStream("!12345890@!!@\n");
+		io.writeStream("!12345890$!!@\n");
 
 		file::regular io2 = io;
 		io.close();
 
-		io2.writeString("!12345890$!~@\n");
+		io2.pos = 1;
+		io2.outSize = 14;
+		io2.write("!12345890$!~@\n");
 		/**
 		 * test.dat should contain
 		 !12345890#!!@
@@ -94,14 +94,15 @@ int main(int argc, char **argv)
 		dodoString str;
 
 		io2.pos = 2;
-		io2.inSize = 15;
-		io2.readStreamString(str);
-		cout << "\n\n~~" << str << "~~\n\n";
-
-		io2.pos = 2;
 		io2.inSize = 14;
-		io2.readString(str);
-		cout << "\n\n~~" << str << "~~\n\n";
+
+		io2.readStream(str);
+		cout << "\nSize: " << str.size() << endl;
+		cout << "~~" << str << "~~" << endl << endl;
+
+		io2.read(str);
+		cout << "\nSize: " << str.size() << endl;
+		cout << "~~" << str << "~~" << endl << endl;
 	}
 	catch (dodo::exception::basic ex)
 	{

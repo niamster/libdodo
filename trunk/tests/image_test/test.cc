@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
 #endif
 
-		im.read("test.png");
+		im.readFile("test.png");
 		cout << im.getCompression() << " " << im.getEncoder() << " " << im.getQuality() << endl;
 
 		tr.scale(1000, 1000);
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 		dr.circle(point(300, 300), 100, color::red, color::green, 5);
 		dr.circle(point(300, 300), 50, color::blue, color::white, 5);
 
-		im.write("test.jpg");
+		im.writeFile("test.jpg");
 
 #ifndef GRAPHICS_WO_XEXEC
 
@@ -87,32 +87,31 @@ int main(int argc, char **argv)
 
 #endif
 
-		unsigned char *img; unsigned int size;
+		dodoString img;
 		im.setEncoder(IMAGE_ENCODER_PNG);
 		im.setCompression(IMAGE_COMPRESSION_ZIP);
 		im.setQuality(4);
 		im.setType(IMAGE_TYPE_GRAYSCALE);
-		im.write(&img, size);
+		im.writeMemory(img);
 
 		file::regular io;
 		io.open("my.png", file::REGULAR_OPENMODE_READ_WRITE_TRUNCATE);
-		io.outSize = size;
-		io.write((char *)img);
-		im.destroyImageData(&img);
+		io.outSize = img.size();
+		io.write(img);
 
-		cout << size << endl;
+		cout << img.size() << endl;
 
 		im.create(400, 400);
 		dr.circle(point(200, 200), 100, color::red, color::green, 5);
 		dr.circle(point(200, 200), 50, color::blue, color::white, 5);
 		dr.rectangle(point(200, 200), point(300, 300), color::green, color::red, 15);
-		im.write("new.png");
+		im.writeFile("new.png");
 
-		im.read("new.png");
+		im.readFile("new.png");
 		im.removeAlpha();
-		im.write("new-1.png");
+		im.writeFile("new-1.png");
 
-		im.read("new-1.png");
+		im.readFile("new-1.png");
 		im.setBackgroundColor(color::transparent);
 		dr.circle(point(200, 200), 100, color::red, color::green, 5);
 		im.setType(IMAGE_TYPE_GRAYSCALE);
@@ -121,7 +120,7 @@ int main(int argc, char **argv)
 		__color mygreen = color::green;
 		mygreen.opacity = 65535/2;
 		dr.circle(point(250, 250), 50, mygreen, color::white, 5);
-		im.write("new-2.png");
+		im.writeFile("new-2.png");
 		
 		im.create(400, 400);
 		dr.circle(point(200, 200), 100, color::red, color::green, 5);
@@ -133,7 +132,7 @@ int main(int argc, char **argv)
 			dr.point(point(i*20+100, (unsigned long)(390 - pow(i, 2)*5)), color::blue, 5);
 		for (int i=0;i<360;++i)
 			dr.point(point((unsigned long)(cos(i)*100 + 150), (unsigned long)(200 - sin(i)*100)), color::black);
-		im.write("new-3.png");
+		im.writeFile("new-3.png");
 		
 		im.create(400, 400);
 		dr.circle(point(200, 200), 100, color::red, color::green, 5);
@@ -141,15 +140,15 @@ int main(int argc, char **argv)
 		dr.text(point(100, 100), "libdodo", "Arial", 30);
 		dr.text(point(150, 150), "libdodo", "Arial", 50, color::blue, color::green, 2, 180);
 		dr.text(point(150, 200), "libdodo", "Arial", 50, color::blue, color::green, 2, 90);
-		im.write("new-4.png");
+		im.writeFile("new-4.png");
 
 		image wm;
-		wm.read("new-4.png");
+		wm.readFile("new-4.png");
 
 		im.create(600, 600);
 		dr.image(point(100, 100), wm, 45);
 		im.setOpacity(65535/2);
-		im.write("new-5.png");
+		im.writeFile("new-5.png");
 #endif
 	}
 	catch (dodo::exception::basic ex)

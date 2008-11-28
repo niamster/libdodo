@@ -504,11 +504,13 @@ fifo::_readStream(char * const a_data)
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READSTREAM, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	memset(a_data, '\0', inSize);
+	unsigned long readSize = inSize + 1;
+
+	memset(a_data, '\0', readSize);
 
 	while (true)
 	{
-		if (fgets(a_data, inSize, handler) == NULL)
+		if (fgets(a_data, readSize, handler) == NULL)
 		{
 			if (errno == EINTR)
 				continue;

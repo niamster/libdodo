@@ -29,7 +29,7 @@ hook(__xexecCollectedData *odata,
 
 		stdio *io = dynamic_cast<stdio *>(st->executor);
 		io->outSize = 100;
-		io->writeStreamString("\nhook\n");
+		io->writeStream("\nhook\n");
 
 		++a;
 		dodoString str = tools::string::iToString(a) + "\n";
@@ -71,18 +71,18 @@ int main(int argc, char **argv)
 		st.inSize = 33;
 		st.inPipeBuffer = 20;
 
-		st.readString(o);
+		st.read(o);
 
 		cout << o.size() << "\n";
 		cout << o << "\n";
 
 		st.outSize = 4;
-		st.writeString("1234567890");
-		st.writeStreamString("\n");
+		st.write("1234567890");
+		st.writeStream("\n");
 
 		st.outSize = 40;
-		st.writeStreamString(o);
-		st.writeStreamString("\nexiting\n");
+		st.writeStream(o);
+		st.writeStream("\nexiting\n");
 	}
 	catch (dodo::exception::basic ex)
 	{

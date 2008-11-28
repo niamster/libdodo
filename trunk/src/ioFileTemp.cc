@@ -354,6 +354,8 @@ temp::_readStream(char * const a_data)
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
 
+	unsigned long readSize = inSize + 1;
+
 	if (blockOffset)
 	{
 		if (fseek(handler, 0, SEEK_SET) == -1)
@@ -361,7 +363,7 @@ temp::_readStream(char * const a_data)
 
 		for (unsigned long i = 0; i < pos; ++i)
 		{
-			if (fgets(a_data, inSize, handler) == NULL)
+			if (fgets(a_data, readSize, handler) == NULL)
 			{
 				switch (errno)
 				{
@@ -383,11 +385,11 @@ temp::_readStream(char * const a_data)
 		if (fseek(handler, pos, SEEK_SET) == -1)
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	memset(a_data, '\0', inSize);
+	memset(a_data, '\0', readSize);
 
 	while (true)
 	{
-		if (fgets(a_data, inSize, handler) == NULL)
+		if (fgets(a_data, readSize, handler) == NULL)
 		{
 			if (errno == EINTR)
 				continue;

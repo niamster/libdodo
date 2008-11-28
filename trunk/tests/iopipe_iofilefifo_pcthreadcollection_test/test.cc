@@ -12,6 +12,7 @@
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/toolsMisc.h>
+#include <libdodo/toolsCode.h>
 
 #include <iostream>
 
@@ -32,17 +33,17 @@ threadRead(void *data)
 
 		io::channel *pipe = (io::channel *)data;
 
-		pipe->readStreamString(str);
+		pipe->readStream(str);
 		cout << "%" << str << "%\n";
 		cout.flush();
 
-		pipe->readStreamString(str);
+		pipe->readStream(str);
 		cout << "%" << str << "%\n";
 		cout.flush();
 
 		pipe->inSize = tools::string::stringToUL(str);
-		pipe->readString(str);
-		cout << "%" << str << "%\n";
+		pipe->read(str);
+		cout << "%MD5: " << tools::code::MD5Hex(str) << "%\n";
 		cout.flush();
 	}
 	catch (dodo::exception::basic ex)
@@ -68,16 +69,16 @@ threadWrite(void *data)
 
 		io::channel *pipe = (io::channel *)data;
 
-		pipe->writeStreamString(tools::time::byFormat("%H:%M:%S", tools::time::now()));
+		pipe->writeStream(tools::time::byFormat("%H:%M:%S", tools::time::now()));
 		pipe->flush();
 		
 		str = tools::filesystem::getFileContents("test.cc");
 		
-		pipe->writeStreamString(tools::string::ulToString(str.size()));
+		pipe->writeStream(tools::string::ulToString(str.size()));
 		pipe->flush();
 
 		pipe->outSize = str.size();
-		pipe->writeString(str);
+		pipe->write(str);
 		pipe->flush();
 	}
 	catch (dodo::exception::basic ex)

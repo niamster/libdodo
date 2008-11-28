@@ -81,7 +81,7 @@ cgif(exchange &cgiio)
 	cgit.setCookie("test", "Ni@m");
 
 	exchange *io = cgit;
-	io->writeStreamString("The headers thould be already printed successfully.<br>");
+	io->writeStream("The headers thould be already printed successfully.<br>");
 
 	cgit.printStream("User: " + user + "<br>");
 	cgit.printStream("GET[\"argument\"]: " + cgit.GET["argument"] + "<br>");

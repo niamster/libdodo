@@ -58,7 +58,7 @@ __image_init__::__image_init__()
 {
 	if (IsMagickInstantiated() == MagickFalse)
 		MagickCoreGenesis(NULL, MagickFalse);
-	
+
 	SetFatalErrorHandler(imErrorHandler);
 	SetErrorHandler(imErrorHandler);
 	SetWarningHandler(imWarningHandler);
@@ -74,18 +74,18 @@ __image_init__::~__image_init__()
 
 //-------------------------------------------------------------------
 
-void 
-__image_init__::imWarningHandler(const ExceptionType et, 
-							const char *reason, 
+void
+__image_init__::imWarningHandler(const ExceptionType et,
+							const char *reason,
 							const char *description)
 {
 }
 
 //-------------------------------------------------------------------
 
-void 
-__image_init__::imErrorHandler(const ExceptionType et, 
-							const char *reason, 
+void
+__image_init__::imErrorHandler(const ExceptionType et,
+							const char *reason,
 							const char *description)
 {
 	throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason, __LINE__, __FILE__, description);
@@ -187,7 +187,7 @@ image::~image()
 //-------------------------------------------------------------------
 
 void
-image::read(const dodoString &str)
+image::readFile(const dodoString &str)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
@@ -223,8 +223,7 @@ image::read(const dodoString &str)
 //-------------------------------------------------------------------
 
 void
-image::read(const unsigned char * const data,
-			unsigned long size)
+image::readMemory(const dodoString &data)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
@@ -236,7 +235,7 @@ image::read(const unsigned char * const data,
 	if (collectedData.imHandle != NULL)
 		DestroyImage(collectedData.imHandle);
 
-	collectedData.imHandle = BlobToImage(collectedData.imInfo, data, size, exInfo);
+	collectedData.imHandle = BlobToImage(collectedData.imInfo, data.data(), data.size(), exInfo);
 	if (collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__, exInfo->description);
 
@@ -253,7 +252,7 @@ image::read(const unsigned char * const data,
 //-------------------------------------------------------------------
 
 void
-image::read(const __imageInfo &info)
+image::readMemory(const __imageInfo &info)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
@@ -316,7 +315,7 @@ image::create(unsigned long width,
 	collectedData.imHandle = NewMagickImage(collectedData.imInfo, width, height, &bg);
 	if (collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_CREATE, exception::ERRNO_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__, exInfo->description);
-	
+
 	collectedData.imInfo->compression = collectedData.imHandle->compression;
 	collectedData.imInfo->quality = collectedData.imHandle->quality;
 
@@ -376,7 +375,6 @@ image::setOpacity(unsigned short opacity)
 	SetImageOpacity(collectedData.imHandle, opacity);
 }
 
-
 //-------------------------------------------------------------------
 
 void
@@ -409,7 +407,7 @@ image::close()
 //-------------------------------------------------------------------
 
 void
-image::write(const dodoString &str)
+image::writeFile(const dodoString &str)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
@@ -437,8 +435,7 @@ image::write(const dodoString &str)
 //-------------------------------------------------------------------
 
 void
-image::write(unsigned char **data,
-			 unsigned int &size)
+image::writeMemory(dodoString &data)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
@@ -448,10 +445,12 @@ image::write(unsigned char **data,
 	if (collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	size = 0;
-	*data = ImageToBlob(collectedData.imInfo, collectedData.imHandle, (size_t *)&size, exInfo);
-	if (data == NULL)
+	unsigned long size = 0;
+	unsigned char *imData = ImageToBlob(collectedData.imInfo, collectedData.imHandle, (size_t *)&size, exInfo);
+	if (imData == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__, exInfo->description);
+
+	data.assign((char *)imData, size);
 
 #ifndef GRAPHICS_WO_XEXEC
 	performXExec(postExec);
@@ -530,14 +529,6 @@ image::getImageSize()
 	info.width = collectedData.imHandle->columns;
 
 	return info;
-}
-
-//-------------------------------------------------------------------
-
-void
-image::destroyImageData(unsigned char **data)
-{
-	free(*data);
 }
 
 #endif

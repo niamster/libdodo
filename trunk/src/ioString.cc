@@ -177,7 +177,9 @@ string::erase()
 unsigned long
 string::_readStream(char * const a_data)
 {
-	memset(a_data, '\0', inSize);
+	unsigned long readSize = inSize + 1;
+
+	memset(a_data, '\0', readSize);
 
 	unsigned long length = buffer.size();
 	unsigned long read = 0;
@@ -197,9 +199,11 @@ string::_readStream(char * const a_data)
 			{
 				++index;
 
-				for (unsigned long i=index;i<length && read<inSize;++i,++read)
+				for (unsigned long i=index;i<length && read<readSize;++i)
 				{
 					a_data[read] = data[i];
+
+					++read;
 
 					if (data[i] == '\n' || data[i] == '\0')
 						break;
@@ -211,9 +215,11 @@ string::_readStream(char * const a_data)
 	}
 	else
 	{
-		for (unsigned long i=pos;i<length && read<inSize;++i,++read)
+		for (unsigned long i=pos;i<length && read<readSize;++i)
 		{
 			a_data[read] = data[i];
+
+			++read;
 
 			if (data[i] == '\n' || data[i] == '\0')
 				break;

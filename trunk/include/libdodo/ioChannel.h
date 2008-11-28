@@ -103,55 +103,29 @@ namespace dodo
 
 				/**
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
+				 * @note not more then inSize
 				 */
-				virtual void readString(dodoString &data);
+				virtual void read(dodoString &data);
 
 				/**
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
+				 * @param data defines data that will be written
+				 * @note not more then outSize
 				 */
-				virtual void read(char * const data);
+				virtual void write(const dodoString &data);
 
 				/**
 				 * read from stream - '\0' or '\n' - terminated string
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
+				 * @note not more then inSize
 				 */
-				virtual void readStreamString(dodoString &data);
-
-				/**
-				 * read from stream - '\0' or '\n' - terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void readStream(char * const data);
-
-				/**
-				 * @param data defines data that will be written
-				 * @note not more then outSize(including '\0')
-				 */
-				virtual void writeString(const dodoString &data);
-
-				/**
-				 * @param data defines data that will be written
-				 * @note not more then outSize(including '\0')
-				 */
-				virtual void write(const char * const data);
+				virtual void readStream(dodoString &data);
 
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
-				 * @note not more then outSize(including '\0')
+				 * @note not more then outSize
 				 */
-				virtual void writeStreamString(const dodoString &data);
-
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 * @note not more then outSize(including '\0')
-				 */
-				virtual void writeStream(const char * const data);
+				virtual void writeStream(const dodoString &data);
 
 				/**
 				 * flush output

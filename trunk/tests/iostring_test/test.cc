@@ -26,17 +26,16 @@ int main(int argc, char **argv)
 		io::string io;
 		io.blockOffset = true;
 
-		io.writeStreamString("!12345890#!!@\n");
-		io.writeStreamString("!12345890-!!@\n");
-		io.writeStreamString("!12345890@!!@\n");
-		io.writeStreamString("!12345890$!!@\n");
-		io.pos = 1;
-		io.outSize = 14;
-		io.inSize = 14;
+		io.writeStream("!12345890#!!@\n");
+		io.writeStream("!12345890-!!@\n");
+		io.writeStream("!12345890@!!@\n");
+		io.writeStream("!12345890$!!@\n");
 
 		io::string io2 = io;
 
-		io2.writeString("!12345890$!~@\n");
+		io2.pos = 1;
+		io2.outSize = 14;
+		io2.write("!12345890$!~@\n");
 
 		filesystem::writeToFile("test.dat", io2);
 		/**
@@ -50,12 +49,15 @@ int main(int argc, char **argv)
 		dodoString str;
 
 		io2.pos = 2;
-		io2.readStreamString(str);
-		cout << "\n\n~~" << str << "~~\n\n";
+		io2.inSize = 14;
 
-		io2.pos = 2;
-		io2.readString(str);
-		cout << "\n\n~~" << str << "~~\n\n";
+		io2.readStream(str);
+		cout << "\nSize: " << str.size() << endl;
+		cout << "~~" << str << "~~" << endl << endl;
+
+		io2.read(str);
+		cout << "\nSize: " << str.size() << endl;
+		cout << "~~" << str << "~~" << endl << endl;
 	}
 	catch (dodo::exception::basic ex)
 	{

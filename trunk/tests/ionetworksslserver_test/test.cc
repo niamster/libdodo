@@ -52,15 +52,15 @@ process(exchange fse)
 	fse.setOutBufferSize(1);
 
 	fse.outSize = 7;
-	fse.writeStreamString("session");
+	fse.writeStream("session");
 
 	if (fse.isAlive())
-		fse.writeStreamString("Alive!");
+		fse.writeStream("Alive!");
 
 	dodoString rec = "";
 	try
 	{
-		fse.readString(rec);
+		fse.read(rec);
 
 		cout << rec << rec.size() << endl;
 		cout.flush();

@@ -453,6 +453,8 @@ regular::_readStream(char * const a_data)
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
+	unsigned long readSize = inSize + 1;
+
 	if (blockOffset)
 	{
 		if (fseek(handler, 0, SEEK_SET) == -1)
@@ -460,7 +462,7 @@ regular::_readStream(char * const a_data)
 
 		for (unsigned long i = 0; i < pos; ++i)
 		{
-			if (fgets(a_data, inSize, handler) == NULL)
+			if (fgets(a_data, readSize, handler) == NULL)
 			{
 				switch (errno)
 				{
@@ -482,11 +484,11 @@ regular::_readStream(char * const a_data)
 		if (fseek(handler, pos, SEEK_SET) == -1)
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	memset(a_data, '\0', inSize);
+	memset(a_data, '\0', readSize);
 
 	while (true)
 	{
-		if (fgets(a_data, inSize, handler) == NULL)
+		if (fgets(a_data, readSize, handler) == NULL)
 		{
 			if (errno == EINTR)
 				continue;

@@ -65,11 +65,11 @@ namespace dodo
 			 * @class temp
 			 * @brief provides I/O manipulations with temporary file
 			 * @note  if blockOffset is false then read/write position is amount of bytes from the beginning, if true then:
-			 * writeStream, writeStreamString write only to the end of the file(append)
-			 * FIXME: should: write offset for writeStream, writeStreamString is calculated as pos*'# of \n - terminated strings'; replaces '\n - terminated string' at offset
-			 * write offset for write, writeString is calculated as pos*outSize
-			 * read offset for read, readString is calculated as pos*inSize
-			 * read offset for readStream, readStreamString is calculated as pos*'# of \n - terminated strings'
+			 * writeStream, writeStream write only to the end of the file(append)
+			 * FIXME: should: write offset for writeStream, writeStream is calculated as pos*'# of \n - terminated strings'; replaces '\n - terminated string' at offset
+			 * write offset for write, write is calculated as pos*outSize
+			 * read offset for read, read is calculated as pos*inSize
+			 * read offset for readStream, readStream is calculated as pos*'# of \n - terminated strings'
 			 */
 			class temp : virtual public channel
 			{

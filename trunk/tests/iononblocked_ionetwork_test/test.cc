@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 				{
 					if (nb.isReadable(pos))
 					{
-						conn.readStreamString(data);
+						conn.readStream(data);
 						cout << data << endl;
 
 						if (tools::string::trim(data, trimSym, 2) == "exit")

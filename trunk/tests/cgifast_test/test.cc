@@ -37,23 +37,23 @@ cgif(exchange &fcgi)
 	sh.release();
 
 	exchange *io = cgit;
-	io->writeStreamString("The headers thould be already printed successfully.<br>");
+	io->writeStream("The headers thould be already printed successfully.<br>");
 
 #ifndef FASTCGI_EXT
 
-	io->writeStreamString("No fastCGI extension was compiled!<br>");
+	io->writeStream("No fastCGI extension was compiled!<br>");
 
 #endif
 
-	fcgi.writeStreamString("counter: " + tools::string::iToString(*inc) + "<br>");
+	fcgi.writeStream("counter: " + tools::string::iToString(*inc) + "<br>");
 
-	fcgi.writeStreamString("GET[\"argument\"]: " + cgit.GET["argument"] + "<br>");
-	fcgi.writeStreamString("POST[\"hidden\"]: " + cgit.POST["hidden"] + "<br>");
-	fcgi.writeStreamString("POST[\"test\"]: " + cgit.POST["test"] + "<br>");
-	fcgi.writeStreamString("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
-	fcgi.writeStreamString("COOKIES[\"test\"]: " + cgit.COOKIES["test"] + "<br>");
-	fcgi.writeStreamString("FILES[\"file\"].size: " + tools::string::iToString(cgit.FILES["file"].size) + "<br>");
-	fcgi.writeStreamString("tpl::processor:<br>");
+	fcgi.writeStream("GET[\"argument\"]: " + cgit.GET["argument"] + "<br>");
+	fcgi.writeStream("POST[\"hidden\"]: " + cgit.POST["hidden"] + "<br>");
+	fcgi.writeStream("POST[\"test\"]: " + cgit.POST["test"] + "<br>");
+	fcgi.writeStream("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
+	fcgi.writeStream("COOKIES[\"test\"]: " + cgit.COOKIES["test"] + "<br>");
+	fcgi.writeStream("FILES[\"file\"].size: " + tools::string::iToString(cgit.FILES["file"].size) + "<br>");
+	fcgi.writeStream("tpl::processor:<br>");
 
 	try
 	{
@@ -84,10 +84,10 @@ cgif(exchange &fcgi)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		fcgi.writeStreamString(ex.baseErrstr + " " + tools::string::lToString(ex.line));
+		fcgi.writeStream(ex.baseErrstr + " " + tools::string::lToString(ex.line));
 	}
 
-	fcgi.writeStreamString("<br>");
+	fcgi.writeStream("<br>");
 	
 	inc = (int *)sh.acquire();
 	(*inc)++;

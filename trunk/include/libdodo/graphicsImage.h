@@ -225,33 +225,31 @@ namespace dodo
 				 * read image
 				 * @param path defines path to image
 				 */
-				virtual void read(const dodoString &path);
+				virtual void readFile(const dodoString &path);
 
 				/**
 				 * read image
 				 * @param info defines image info
 				 */
-				virtual void read(const __imageInfo &info);
+				virtual void readMemory(const __imageInfo &info);
 
 				/**
 				 * read image
 				 * @param data defines image data
-				 * @param size defines size of image data
 				 */
-				virtual void read(const unsigned char * const data, unsigned long size);
+				virtual void readMemory(const dodoString &data);
 
 				/**
 				 * write image
 				 * @param path describes path to image
 				 */
-				virtual void write(const dodoString &path);
+				virtual void writeFile(const dodoString &path);
 
 				/**
 				 * write image
 				 * @param data defines image data
-				 * @param size defines size of image data
 				 */
-				virtual void write(unsigned char **data, unsigned int &size);
+				virtual void writeMemory(dodoString &data);
 
 				/**
 				 * close access to image
@@ -324,12 +322,6 @@ namespace dodo
 				 * @return image quality
 				 */
 				virtual short getQuality();
-
-				/**
-				 * destroy image data got from write
-				 * @param data defines image data
-				 */
-				virtual void destroyImageData(unsigned char **data);
 
 			protected:
 

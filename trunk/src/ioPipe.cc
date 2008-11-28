@@ -548,11 +548,13 @@ io::pipe::_readStream(char * const a_data)
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	memset(a_data, '\0', inSize);
+	unsigned long readSize = inSize + 1;
+
+	memset(a_data, '\0', readSize);
 
 	while (true)
 	{
-		if (fgets(a_data, inSize, inHandle) == NULL)
+		if (fgets(a_data, readSize, inHandle) == NULL)
 		{
 			if (errno == EINTR)
 				continue;

@@ -242,7 +242,7 @@ dialogue::printStream(const dodoString &buf)
 {
 	printHeaders();
 
-	cgiIO.writeStreamString(buf);
+	cgiIO.writeStream(buf);
 }
 
 //-------------------------------------------------------------------
@@ -271,7 +271,7 @@ dialogue::print(const dodoString &buf)
 	printHeaders();
 
 	cgiIO.outSize = buf.size();
-	cgiIO.writeString(buf);
+	cgiIO.write(buf);
 }
 
 //-------------------------------------------------------------------
@@ -591,32 +591,32 @@ dialogue::printHeaders() const
 
 	headersPrinted = true;
 
-	cgiIO.writeStreamString(responseStatusStatements[returnCode]);
+	cgiIO.writeStream(responseStatusStatements[returnCode]);
 
 	dodoMap<short, dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
-		cgiIO.writeStreamString(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
+		cgiIO.writeStream(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
 
 	if (cookies.size() > 0)
 	{
 		dodoList<__cgiCookie>::const_iterator i(cookies.begin()), j(cookies.end());
 		for (; i != j; ++i)
 		{
-			cgiIO.writeStreamString("Set-Cookie: ");
-			cgiIO.writeStreamString(i->name + "=" + i->value + "; ");
+			cgiIO.writeStream("Set-Cookie: ");
+			cgiIO.writeStream(i->name + "=" + i->value + "; ");
 			if (i->path.size() > 0)
-				cgiIO.writeStreamString("path=" + i->path + "; ");
+				cgiIO.writeStream("path=" + i->path + "; ");
 			if (i->expires.size() > 0)
-				cgiIO.writeStreamString("expires=" + i->expires + "; ");
+				cgiIO.writeStream("expires=" + i->expires + "; ");
 			if (i->domain.size() > 0)
-				cgiIO.writeStreamString("domain=" + i->domain + "; ");
+				cgiIO.writeStream("domain=" + i->domain + "; ");
 			if (i->secure)
-				cgiIO.writeStreamString("secure");
-			cgiIO.writeStreamString("\r\n");
+				cgiIO.writeStream("secure");
+			cgiIO.writeStream("\r\n");
 		}
 	}
 
-	cgiIO.writeStreamString("\r\n");
+	cgiIO.writeStream("\r\n");
 	cgiIO.flush();
 }
 
@@ -632,7 +632,7 @@ dialogue::makeContent()
 
 	cgiIO.inSize = inSize;
 
-	cgiIO.readString(content);
+	cgiIO.read(content);
 }
 
 //-------------------------------------------------------------------

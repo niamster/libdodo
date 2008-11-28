@@ -120,7 +120,7 @@ logger::log(short level,
 		{
 			if (i->handler != NULL)
 			{
-				i->handler->writeStreamString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
+				i->handler->writeStream(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
 				i->handler->flush();
 			}
 			else
@@ -136,7 +136,7 @@ logger::log(short level,
 			{
 				if (i->handler != NULL)
 				{
-					i->handler->writeStreamString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
+					i->handler->writeStream(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
 					i->handler->flush();
 				}
 				else

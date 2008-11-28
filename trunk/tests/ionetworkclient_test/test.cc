@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 			{
 				st.connectFrom("127.0.0.1", "127.0.0.1", 21, exch);
 
-				exch.readStreamString(str);
+				exch.readStream(str);
 				cout << "\ngot:\n" << str << "\n";
 			}
 			catch (dodo::exception::basic ex)
