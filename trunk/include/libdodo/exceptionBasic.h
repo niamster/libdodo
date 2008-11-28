@@ -36,11 +36,7 @@
 
 #include <exception>
 
-#ifdef DL_EXT
-
 #include <dlfcn.h>
-
-#endif
 
 #ifdef PTHREAD_EXT
 
@@ -184,17 +180,9 @@ namespace dodo
 		 */
 		struct __call
 		{
-#ifdef DL_EXT
-
 			dodoString object; ///< name of the object where call was found
 			dodoString symbol; ///< name of the call
 			void *address; ///< address of the call
-
-#else
-
-			dodoString symbol; ///< the symbolic representation of each address consists of the function name, a hexadecimal offset into the function, and the actual return address
-
-#endif
 		};
 
 		/**
