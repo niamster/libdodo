@@ -94,7 +94,7 @@ exchange::_read(char * const a_data)
 {
 	memset(a_data, '\0', inSize);
 
-	FCGX_GetStr(a_data, readSize, request->in);
+	FCGX_GetStr(a_data, inSize, request->in);
 }
 
 //-------------------------------------------------------------------
