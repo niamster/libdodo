@@ -423,8 +423,6 @@ basic::basic(int a_errModule,
 
 	void *trace[MAXCALLSTACKLEN];
 
-#ifdef DL_EXT
-
 	using namespace abi;
 
 	Dl_info dlinfo;
@@ -433,21 +431,13 @@ basic::basic(int a_errModule,
 	const char *symname;
 	char *demangled;
 
-#endif
-
 	__call call;
 
 	int trace_size = backtrace(trace, MAXCALLSTACKLEN);
-
-#ifndef DL_EXT
-
 	char **symbols = backtrace_symbols(trace, trace_size);
-
-#endif
 
 	for (int i=0; i<trace_size; ++i)
 	{
-#ifdef DL_EXT
 
 		if(dladdr(trace[i], &dlinfo) == 0)
 			continue;
@@ -466,21 +456,9 @@ basic::basic(int a_errModule,
 
 		if (demangled)
 			free(demangled);
-
-#else
-
-		call.symbol = symbols[i];
-
-		callStack.push_back(call);
-
-#endif
 	}
 
-#ifndef DL_EXT
-
 	free(symbols);
-
-#endif
 
 	getInstance();
 

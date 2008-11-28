@@ -671,6 +671,7 @@ INSTALL_PROGRAM
 INSTALL_SCRIPT
 INSTALL_DATA
 DEBUG
+CXXCPP
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -685,7 +686,8 @@ CPPFLAGS
 CPP
 CXX
 CXXFLAGS
-CCC'
+CCC
+CXXCPP'
 
 
 # Initialize some variables set by options.
@@ -1264,6 +1266,7 @@ Optional Features:
   --disable-database-xexec
                           compile data::base:: w/o xexec support
   --disable-dl-lib        disable dl as lib
+  --enable-dl             enable dynamic loading
   --disable-fast-dynamic-loading
                           do not unload library to produce better performance
   --enable-zlib-lib       enable zlib as lib
@@ -1281,7 +1284,6 @@ Optional Packages:
   --with-mysql[=DIR]      use mysql
   --with-fast-cgi[=DIR]   use fast CGI
   --with-pcre[=DIR]       use pcre
-  --with-dl[=DIR]         use dl
   --with-libxml2[=DIR]    use libxml2
   --with-threading-lib[=lib]
                           specify threading library(supported: pthread),
@@ -1308,6 +1310,7 @@ Some influential environment variables:
   CPP         C preprocessor
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
+  CXXCPP      C++ preprocessor
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -5110,16 +5113,17 @@ cat > include/libdodo/directives.runtime.h  <<EOF
 EOF
 
 CPPFLAGS="$CPPFLAGS -I/usr/include -I/usr/local/include"
-LDFLAGS="$LDFLAGS -L/usr/lib -L/usr/local/lib -lrt"
+LDFLAGS="$LDFLAGS -L/usr/lib -L/usr/local/lib"
 CFLAGS="$CFLAGS -D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98 -D_XOPEN_SOURCE=600 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_THREAD_SAFE"
 
 RESULT="\n\n"
 
 
-DEBUG="no"
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then
   enableval=$enable_debug; DEBUG="$enableval"
+else
+  DEBUG="no"
 fi
 
 if test "$DEBUG" = "yes"
@@ -5131,10 +5135,11 @@ else
 	RESULT="$RESULT\nDebug\t\t\t\t\t\t\t\tdisabled"
 fi
 
-PROFILING="no"
 # Check whether --enable-profiling was given.
 if test "${enable_profiling+set}" = set; then
   enableval=$enable_profiling; PROFILING="$enableval"
+else
+  PROFILING="no"
 fi
 
 if test "$PROFILING" = "yes"
@@ -5152,7 +5157,6 @@ if test "${enable_libwrap+set}" = set; then
 else
   LIBWRAP="yes"
 fi
-
 
 if test "$LIBWRAP" = "yes"
 then
@@ -5293,6 +5297,169 @@ then
 	echo -n -e "#define DATABASE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 fi
 
+
+{ echo "$as_me:$LINENO: checking for shm_open in -lrt" >&5
+echo $ECHO_N "checking for shm_open in -lrt... $ECHO_C" >&6; }
+if test "${ac_cv_lib_rt_shm_open+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lrt  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char shm_open ();
+int
+main ()
+{
+return shm_open ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_rt_shm_open=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_rt_shm_open=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_rt_shm_open" >&5
+echo "${ECHO_T}$ac_cv_lib_rt_shm_open" >&6; }
+if test $ac_cv_lib_rt_shm_open = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBRT 1
+_ACEOF
+
+  LIBS="-lrt $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: rt lib was not found" >&5
+echo "$as_me: error: rt lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+LDFLAGS="$LDFLAGS -lrt"
+
+# Check whether --enable-dl-lib was given.
+if test "${enable_dl_lib+set}" = set; then
+  enableval=$enable_dl_lib; MOD_DL_LIB="$enableval"
+else
+  MOD_DL_LIB="no"
+fi
+
+if test "$MOD_DL_LIB" = "yes"
+then
+
+{ echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
+if test "${ac_cv_lib_dl_dlopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldl  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dlopen ();
+int
+main ()
+{
+return dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_dl_dlopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_dl_dlopen=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
+echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6; }
+if test $ac_cv_lib_dl_dlopen = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBDL 1
+_ACEOF
+
+  LIBS="-ldl $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: dl lib was not found" >&5
+echo "$as_me: error: dl lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+	LDFLAGS="$LDFLAGS -ldl"
+fi
 
 
 # Check whether --with-sqlite3 was given.
@@ -7276,240 +7443,15 @@ fi
 	RESULT="$RESULT\nPosix regex\t\t\t\t\t\t\tenabled"
 fi
 
-
-# Check whether --with-dl was given.
-if test "${with_dl+set}" = set; then
-  withval=$with_dl; MOD_DL_DIR="$withval"
+# Check whether --enable-dl was given.
+if test "${enable_dl+set}" = set; then
+  enableval=$enable_dl; DL="$enableval"
 else
-  MOD_DL="no"
+  DL="no"
 fi
 
-if test "$MOD_DL" != "no" -a "$MOD_DL_DIR" != "no"
+if test "$DL" = "yes"
 then
-	if test "$MOD_DL_DIR" = "yes"
-	then
-		MOD_DL_DIR=/usr
-	fi
-	CPPFLAGS="$CPPFLAGS -I$MOD_DL_DIR/include"
-	LDFLAGS="$LDFLAGS -L$MOD_DL_DIR/lib"
-	if test "${ac_cv_header_dlfcn_h+set}" = set; then
-  { echo "$as_me:$LINENO: checking for dlfcn.h" >&5
-echo $ECHO_N "checking for dlfcn.h... $ECHO_C" >&6; }
-if test "${ac_cv_header_dlfcn_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_header_dlfcn_h" >&5
-echo "${ECHO_T}$ac_cv_header_dlfcn_h" >&6; }
-else
-  # Is the header compilable?
-{ echo "$as_me:$LINENO: checking dlfcn.h usability" >&5
-echo $ECHO_N "checking dlfcn.h usability... $ECHO_C" >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-#include <dlfcn.h>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  ac_header_compiler=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_header_compiler=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
-echo "${ECHO_T}$ac_header_compiler" >&6; }
-
-# Is the header present?
-{ echo "$as_me:$LINENO: checking dlfcn.h presence" >&5
-echo $ECHO_N "checking dlfcn.h presence... $ECHO_C" >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <dlfcn.h>
-_ACEOF
-if { (ac_try="$ac_cpp conftest.$ac_ext"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } >/dev/null && {
-	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       }; then
-  ac_header_preproc=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-  ac_header_preproc=no
-fi
-
-rm -f conftest.err conftest.$ac_ext
-{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
-echo "${ECHO_T}$ac_header_preproc" >&6; }
-
-# So?  What about this header?
-case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
-  yes:no: )
-    { echo "$as_me:$LINENO: WARNING: dlfcn.h: accepted by the compiler, rejected by the preprocessor!" >&5
-echo "$as_me: WARNING: dlfcn.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
-    { echo "$as_me:$LINENO: WARNING: dlfcn.h: proceeding with the compiler's result" >&5
-echo "$as_me: WARNING: dlfcn.h: proceeding with the compiler's result" >&2;}
-    ac_header_preproc=yes
-    ;;
-  no:yes:* )
-    { echo "$as_me:$LINENO: WARNING: dlfcn.h: present but cannot be compiled" >&5
-echo "$as_me: WARNING: dlfcn.h: present but cannot be compiled" >&2;}
-    { echo "$as_me:$LINENO: WARNING: dlfcn.h:     check for missing prerequisite headers?" >&5
-echo "$as_me: WARNING: dlfcn.h:     check for missing prerequisite headers?" >&2;}
-    { echo "$as_me:$LINENO: WARNING: dlfcn.h: see the Autoconf documentation" >&5
-echo "$as_me: WARNING: dlfcn.h: see the Autoconf documentation" >&2;}
-    { echo "$as_me:$LINENO: WARNING: dlfcn.h:     section \"Present But Cannot Be Compiled\"" >&5
-echo "$as_me: WARNING: dlfcn.h:     section \"Present But Cannot Be Compiled\"" >&2;}
-    { echo "$as_me:$LINENO: WARNING: dlfcn.h: proceeding with the preprocessor's result" >&5
-echo "$as_me: WARNING: dlfcn.h: proceeding with the preprocessor's result" >&2;}
-    { echo "$as_me:$LINENO: WARNING: dlfcn.h: in the future, the compiler will take precedence" >&5
-echo "$as_me: WARNING: dlfcn.h: in the future, the compiler will take precedence" >&2;}
-    ( cat <<\_ASBOX
-## -------------------------- ##
-## Report this to libdodo.org ##
-## -------------------------- ##
-_ASBOX
-     ) | sed "s/^/$as_me: WARNING:     /" >&2
-    ;;
-esac
-{ echo "$as_me:$LINENO: checking for dlfcn.h" >&5
-echo $ECHO_N "checking for dlfcn.h... $ECHO_C" >&6; }
-if test "${ac_cv_header_dlfcn_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_cv_header_dlfcn_h=$ac_header_preproc
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_header_dlfcn_h" >&5
-echo "${ECHO_T}$ac_cv_header_dlfcn_h" >&6; }
-
-fi
-
-
-			# Check whether --enable-dl-lib was given.
-if test "${enable_dl_lib+set}" = set; then
-  enableval=$enable_dl_lib; MOD_DL_LIB="$enableval"
-else
-  MOD_DL_LIB="no"
-fi
-
-			if test "$MOD_DL_LIB" = "yes"
-			then
-
-{ echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
-echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
-if test "${ac_cv_lib_dl_dlopen+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ldl  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char dlopen ();
-int
-main ()
-{
-return dlopen ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_dl_dlopen=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_dl_dlopen=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
-echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6; }
-if test $ac_cv_lib_dl_dlopen = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDL 1
-_ACEOF
-
-  LIBS="-ldl $LIBS"
-
-else
-  { { echo "$as_me:$LINENO: error: dl lib was not found" >&5
-echo "$as_me: error: dl lib was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-				LDFLAGS="$LDFLAGS -ldl"
-			fi
 	echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 	# Check whether --enable-fast-dynamic-loading was given.
@@ -8423,9 +8365,11 @@ fi
 	# Check whether --enable-zlib-lib was given.
 if test "${enable_zlib_lib+set}" = set; then
   enableval=$enable_zlib_lib; MOD_ZLIB_LIB="yes"
+else
+  MOD_ZLIB_LIB="no"
 fi
 
-		if test "$MOD_ZLIB_LIB" = "yes"
+	if test "$MOD_ZLIB_LIB" = "yes"
 	then
 
 { echo "$as_me:$LINENO: checking for deflateInit2 in -lz" >&5
@@ -8662,6 +8606,8 @@ fi
 	# Check whether --enable-iconv-lib was given.
 if test "${enable_iconv_lib+set}" = set; then
   enableval=$enable_iconv_lib; MOD_ICONV_LIB="yes"
+else
+  MOD_ICONV_LIB="no"
 fi
 
 		if test "$MOD_ICONV_LIB" = "yes"
@@ -9366,6 +9312,8 @@ fi
 
 
 
+
+
 for ac_header in arpa/inet.h \
 	fcntl.h \
 	netdb.h \
@@ -9392,15 +9340,17 @@ for ac_header in arpa/inet.h \
 	sys/mman.h \
 	sys/resource.h \
 	sys/socket.h \
-	sys/stat \
+	sys/stat.h \
 	sys/time.h \
 	sys/types.h \
 	sys/un.h \
-	sys/wait \
+	sys/wait.h \
 	dirent.h \
 	unistd.h \
 	utime.h \
 	time.h \
+	execinfo.h \
+	dlfcn.h \
 	netdb.h
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -9541,9 +9491,392 @@ if test `eval echo '${'$as_ac_Header'}'` = yes; then
 #define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
 
+else
+  { { echo "$as_me:$LINENO: error: header was not found" >&5
+echo "$as_me: error: header was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 done
+
+
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+{ echo "$as_me:$LINENO: checking how to run the C++ preprocessor" >&5
+echo $ECHO_N "checking how to run the C++ preprocessor... $ECHO_C" >&6; }
+if test -z "$CXXCPP"; then
+  if test "${ac_cv_prog_CXXCPP+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+      # Double quotes because CXXCPP needs to be expanded
+    for CXXCPP in "$CXX -E" "/lib/cpp"
+    do
+      ac_preproc_ok=false
+for ac_cxx_preproc_warn_flag in '' yes
+do
+  # Use a header file that comes with gcc, so configuring glibc
+  # with a fresh cross-compiler works.
+  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+  # <limits.h> exists even on freestanding compilers.
+  # On the NeXT, cc -E runs the code through the compiler's parser,
+  # not just through cpp. "Syntax error" is here to catch this case.
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+		     Syntax error
+_ACEOF
+if { (ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null && {
+	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       }; then
+  :
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  # Broken: fails on valid input.
+continue
+fi
+
+rm -f conftest.err conftest.$ac_ext
+
+  # OK, works on sane cases.  Now check whether nonexistent headers
+  # can be detected and how.
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <ac_nonexistent.h>
+_ACEOF
+if { (ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null && {
+	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       }; then
+  # Broken: success on invalid input.
+continue
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  # Passes both tests.
+ac_preproc_ok=:
+break
+fi
+
+rm -f conftest.err conftest.$ac_ext
+
+done
+# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+rm -f conftest.err conftest.$ac_ext
+if $ac_preproc_ok; then
+  break
+fi
+
+    done
+    ac_cv_prog_CXXCPP=$CXXCPP
+
+fi
+  CXXCPP=$ac_cv_prog_CXXCPP
+else
+  ac_cv_prog_CXXCPP=$CXXCPP
+fi
+{ echo "$as_me:$LINENO: result: $CXXCPP" >&5
+echo "${ECHO_T}$CXXCPP" >&6; }
+ac_preproc_ok=false
+for ac_cxx_preproc_warn_flag in '' yes
+do
+  # Use a header file that comes with gcc, so configuring glibc
+  # with a fresh cross-compiler works.
+  # Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+  # <limits.h> exists even on freestanding compilers.
+  # On the NeXT, cc -E runs the code through the compiler's parser,
+  # not just through cpp. "Syntax error" is here to catch this case.
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+		     Syntax error
+_ACEOF
+if { (ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null && {
+	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       }; then
+  :
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  # Broken: fails on valid input.
+continue
+fi
+
+rm -f conftest.err conftest.$ac_ext
+
+  # OK, works on sane cases.  Now check whether nonexistent headers
+  # can be detected and how.
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <ac_nonexistent.h>
+_ACEOF
+if { (ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null && {
+	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       }; then
+  # Broken: success on invalid input.
+continue
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  # Passes both tests.
+ac_preproc_ok=:
+break
+fi
+
+rm -f conftest.err conftest.$ac_ext
+
+done
+# Because of `break', _AC_PREPROC_IFELSE's cleaning code was skipped.
+rm -f conftest.err conftest.$ac_ext
+if $ac_preproc_ok; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: C++ preprocessor \"$CXXCPP\" fails sanity check
+See \`config.log' for more details." >&5
+echo "$as_me: error: C++ preprocessor \"$CXXCPP\" fails sanity check
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+if test "${ac_cv_header_cxxabi_h+set}" = set; then
+  { echo "$as_me:$LINENO: checking for cxxabi.h" >&5
+echo $ECHO_N "checking for cxxabi.h... $ECHO_C" >&6; }
+if test "${ac_cv_header_cxxabi_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_header_cxxabi_h" >&5
+echo "${ECHO_T}$ac_cv_header_cxxabi_h" >&6; }
+else
+  # Is the header compilable?
+{ echo "$as_me:$LINENO: checking cxxabi.h usability" >&5
+echo $ECHO_N "checking cxxabi.h usability... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <cxxabi.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_header_compiler=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6; }
+
+# Is the header present?
+{ echo "$as_me:$LINENO: checking cxxabi.h presence" >&5
+echo $ECHO_N "checking cxxabi.h presence... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <cxxabi.h>
+_ACEOF
+if { (ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null && {
+	 test -z "$ac_cxx_preproc_warn_flag$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       }; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+
+rm -f conftest.err conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6; }
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: cxxabi.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: cxxabi.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: cxxabi.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: cxxabi.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: cxxabi.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: cxxabi.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: cxxabi.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: cxxabi.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: cxxabi.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: cxxabi.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: cxxabi.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: cxxabi.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: cxxabi.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: cxxabi.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: cxxabi.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: cxxabi.h: in the future, the compiler will take precedence" >&2;}
+    ( cat <<\_ASBOX
+## -------------------------- ##
+## Report this to libdodo.org ##
+## -------------------------- ##
+_ASBOX
+     ) | sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+{ echo "$as_me:$LINENO: checking for cxxabi.h" >&5
+echo $ECHO_N "checking for cxxabi.h... $ECHO_C" >&6; }
+if test "${ac_cv_header_cxxabi_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_cxxabi_h=$ac_header_preproc
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_header_cxxabi_h" >&5
+echo "${ECHO_T}$ac_cv_header_cxxabi_h" >&6; }
+
+fi
+if test $ac_cv_header_cxxabi_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: cxxabi.h header was not found" >&5
+echo "$as_me: error: cxxabi.h header was not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 ##
@@ -10275,11 +10608,12 @@ INSTALL_PROGRAM!$INSTALL_PROGRAM$ac_delim
 INSTALL_SCRIPT!$INSTALL_SCRIPT$ac_delim
 INSTALL_DATA!$INSTALL_DATA$ac_delim
 DEBUG!$DEBUG$ac_delim
+CXXCPP!$CXXCPP$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 58; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 59; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

@@ -55,7 +55,7 @@ class LibdodoHg(CPackageRecipe):
 			extraconfig +=' -DWITH_PCRE=ON'
 
 		if Use.dl:
-			extraconfig +=' -DWITH_DL=ON'
+			extraconfig +=' -DENABLE_DL=ON'
 
 		if Use.libxml2:
 			r.buildRequires += ['libxml2:devel']
