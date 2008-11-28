@@ -221,26 +221,24 @@ processor::getLineNumber(const dodoArray<unsigned long> &newLinePos,
 
 //-------------------------------------------------------------------
 
-dodoString
-processor::processString(const dodoString &tpl)
+void
+processor::processString(const dodoString &buffer,
+                         io::channel &tpl)
 {
-	dodoString tmp = _processString(preProcessString(tpl), "memory");
+	_processString(preProcessString(buffer), "memory", tpl);
 
 	newLinePositions.pop_back();
-
-	return tmp;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-processor::processFile(const dodoString &path)
+void
+processor::processFile(const dodoString &path,
+                       io::channel &tpl)
 {
-	dodoString tmp = _processString(preProcessFile(path), path);
+	_processString(preProcessFile(path), path, tpl);
 
 	newLinePositions.pop_back();
-
-	return tmp;
 }
 
 //-------------------------------------------------------------------
@@ -260,14 +258,14 @@ processor::clear()
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 processor::_processString(const dodoString &buffer,
-						  const dodoString &path)
+						  const dodoString &path,
+						  io::channel &tpl)
 {
 	unsigned long i(0), j(0), begin(0), k(0);
 	unsigned long stI;
 
-	dodoString tpl;
 	dodoString temp;
 
 	bool breakLoop = false;
@@ -280,12 +278,12 @@ processor::_processString(const dodoString &buffer,
 		i = buffer.find(statements[PROCESSOR_STATEMENT_OPEN_ST], begin);
 		if (i == dodoString::npos)
 		{
-			tpl.append(dodoString(buffer.data() + begin, buffer.size() - begin));
+			tpl.writeStream(dodoString(buffer.data() + begin, buffer.size() - begin));
 
 			break;
 		}
 		else
-			tpl.append(dodoString(buffer.data() + begin, i - begin));
+			tpl.writeStream(dodoString(buffer.data() + begin, i - begin));
 
 		i += 2;
 
@@ -294,7 +292,7 @@ processor::_processString(const dodoString &buffer,
 			j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_NP], i);
 
 			++i;
-			tpl.append(dodoString(buffer.data() + i, j - i));
+			tpl.writeStream(dodoString(buffer.data() + i, j - i));
 			j += 3;
 
 			continue;
@@ -442,7 +440,7 @@ processor::_processString(const dodoString &buffer,
 		}
 
 		if (keywordNotFound)
-			tpl.append(dodoString(buffer.data() + i - 2, j - i + 2));
+			tpl.writeStream(dodoString(buffer.data() + i - 2, j - i + 2));
 
 		if (breakLoop)
 			break;
@@ -453,8 +451,6 @@ processor::_processString(const dodoString &buffer,
 		if (continueFlag)
 			break;
 	}
-
-	return tpl;
 }
 
 //-------------------------------------------------------------------
@@ -527,7 +523,7 @@ unsigned long
 processor::_if(const dodoString &buffer,
 			   unsigned long start,
 			   const dodoString &statement,
-			   dodoString &tpl,
+			   io::channel &tpl,
 			   const dodoString &path)
 {
 	bool _float(false), invert(false);
@@ -688,7 +684,7 @@ processor::_if(const dodoString &buffer,
 		if (!found)
 			v = u;
 
-		tpl.append(_processString(dodoString(buffer.data() + start, v - start), path));
+		_processString(dodoString(buffer.data() + start, v - start), path, tpl);
 	}
 	else
 	{
@@ -696,7 +692,7 @@ processor::_if(const dodoString &buffer,
 		{
 			v = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], v) + 2;
 
-			tpl.append(_processString(dodoString(buffer.data() + v, u - v), path));
+			_processString(dodoString(buffer.data() + v, u - v), path, tpl);
 		}
 	}
 
@@ -750,7 +746,7 @@ processor::blockEnd(const dodoString &buffer,
 unsigned long
 processor::_include(unsigned long start,
 					const dodoString &statement,
-					dodoString &tpl,
+					io::channel &tpl,
 					const dodoString &path)
 {
 	dodoString temp1 = getVar(statement, start, path);
@@ -764,7 +760,7 @@ processor::_include(unsigned long start,
 		{
 			processed.push_back(path);
 
-			tpl.append(processFile(temp1));
+			processFile(temp1, tpl);
 
 			processed.pop_back();
 		}
@@ -778,17 +774,17 @@ processor::_include(unsigned long start,
 unsigned long
 processor::_print(unsigned long start,
 				  const dodoString &statement,
-				  dodoString &tpl,
+				  io::channel &tpl,
 				  const dodoString &path)
 {
 	dodoStringArray temp = tools::misc::split(statement, statements[PROCESSOR_STATEMENT_COMA]);
 	if (temp.size() <= 1)
-		tpl.append(getVar(statement, start, path));
+		tpl.writeStream(getVar(statement, start, path));
 	else
 	{
 		dodoStringArray::iterator i(temp.begin()), j(temp.end());
 		for (; i != j; ++i)
-			tpl.append(getVar(*i, start, path));
+			tpl.writeStream(getVar(*i, start, path));
 	}
 
 	return start;
@@ -858,12 +854,12 @@ processor::cleanNamespace()
 unsigned long
 processor::_ns(const dodoString &buffer,
 			   unsigned long start,
-			   dodoString &tpl,
+			   io::channel &tpl,
 			   const dodoString &path)
 {
 	unsigned long u(blockEnd(buffer, start, statements[PROCESSOR_STATEMENT_OPEN_NS], statements[PROCESSOR_STATEMENT_CLOSE_NS], path));
 
-	tpl.append(_processString(dodoString(buffer.data() + start, u - start), path));
+	_processString(dodoString(buffer.data() + start, u - start), path, tpl);
 
 	return buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], u) + 2;
 }
@@ -874,7 +870,7 @@ unsigned long
 processor::_for(const dodoString &buffer,
 				unsigned long start,
 				const dodoString &statement,
-				dodoString &tpl,
+				io::channel &tpl,
 				const dodoString &path)
 {
 	unsigned long u(blockEnd(buffer, start, statements[PROCESSOR_STATEMENT_OPEN_FOR], statements[PROCESSOR_STATEMENT_CLOSE_FOR], path));
@@ -946,7 +942,7 @@ processor::_for(const dodoString &buffer,
 							lns[keyName] = k->first;
 						lns[varName] = k->second;
 
-						tpl.append(_processString(forSpace, path));
+						_processString(forSpace, path, tpl);
 
 						if (breakDeepness > 0)
 						{
@@ -986,7 +982,7 @@ processor::_for(const dodoString &buffer,
 							lns[keyName] = tools::string::lToString(i);
 						lns[varName] = dodoString(1, k->second[i]);
 
-						tpl.append(_processString(forSpace, path));
+						_processString(forSpace, path, tpl);
 
 						if (breakDeepness > 0)
 						{
@@ -1022,7 +1018,7 @@ processor::_for(const dodoString &buffer,
 						lns[keyName] = tools::string::lToString(i);
 					lns[varName] = dodoString(1, k->second[i]);
 
-					tpl.append(_processString(forSpace, path));
+					_processString(forSpace, path, tpl);
 
 					if (breakDeepness > 0)
 					{
@@ -1058,7 +1054,7 @@ processor::_for(const dodoString &buffer,
 						lns[keyName] = k->first;
 					lns[varName] = k->second;
 
-					tpl.append(_processString(forSpace, path));
+					_processString(forSpace, path, tpl);
 
 					if (breakDeepness > 0)
 					{
@@ -1094,7 +1090,7 @@ processor::_for(const dodoString &buffer,
 						lns[keyName] = tools::string::lToString(keyNIter);
 					lns[varName] = *k;
 
-					tpl.append(_processString(forSpace, path));
+					_processString(forSpace, path, tpl);
 
 					if (breakDeepness > 0)
 					{
@@ -1131,7 +1127,7 @@ processor::_for(const dodoString &buffer,
 						lns[keyName] = tools::string::lToString(keyNIter);
 					lnsh[varName] = *k;
 
-					tpl.append(_processString(forSpace, path));
+					_processString(forSpace, path, tpl);
 
 					if (breakDeepness > 0)
 					{
@@ -1177,7 +1173,7 @@ processor::_for(const dodoString &buffer,
 									lns[keyName] = tools::string::lToString(i);
 								lns[varName] = dodoString(1, k->second[i]);
 
-								tpl.append(_processString(forSpace, path));
+								_processString(forSpace, path, tpl);
 
 								if (breakDeepness > 0)
 								{
@@ -1217,7 +1213,7 @@ processor::_for(const dodoString &buffer,
 								lns[keyName] = tools::string::lToString(i);
 							lns[varName] = dodoString(1, k->second[i]);
 
-							tpl.append(_processString(forSpace, path));
+							_processString(forSpace, path, tpl);
 
 							if (breakDeepness > 0)
 							{
@@ -1256,7 +1252,7 @@ processor::_for(const dodoString &buffer,
 								lns[keyName] = tools::string::lToString(i);
 							lns[varName] = dodoString(1, o->second[pos][i]);
 
-							tpl.append(_processString(forSpace, path));
+							_processString(forSpace, path, tpl);
 
 							if (breakDeepness > 0)
 							{
@@ -1296,7 +1292,7 @@ processor::_for(const dodoString &buffer,
 								lns[keyName] = k->first;
 							lns[varName] = k->second;
 
-							tpl.append(_processString(forSpace, path));
+							_processString(forSpace, path, tpl);
 
 							if (breakDeepness > 0)
 							{
@@ -1342,7 +1338,7 @@ processor::_for(const dodoString &buffer,
 										lns[keyName] = tools::string::lToString(i);
 									lns[varName] = dodoString(1, k->second[i]);
 
-									tpl.append(_processString(forSpace, path));
+									_processString(forSpace, path, tpl);
 
 									if (breakDeepness > 0)
 									{
@@ -1381,7 +1377,7 @@ processor::_for(const dodoString &buffer,
 				lns[keyName] = tools::string::lToString(i);
 			lns[varName] = dodoString(1, targetVar[i]);
 
-			tpl.append(_processString(forSpace, path));
+			_processString(forSpace, path, tpl);
 
 			if (breakDeepness > 0)
 			{

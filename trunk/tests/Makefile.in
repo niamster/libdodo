@@ -1,6 +1,6 @@
 all:
-	@for i in *; do if [ -d $$i ]; then pushd $$i >/dev/null; echo "-- Building test: $${i%_test}"; make; if [[ $$? != 0 ]]; then exit $$?; fi; popd >/dev/null; fi; done;
+	@for i in *; do if [ -d $$i ]; then echo "-- Building test for $${i%_test}"; $(MAKE) -s -C $$i; if [[ $$? != 0 ]]; then exit $$?; fi; fi; done;
 
 clean:
-	@for i in *; do if [ -d $$i ]; then pushd $$i >/dev/null; make clean; popd >/dev/null; fi; done;
+	@for i in *; do if [ -d $$i ]; then $(MAKE) -s -C $$i clean; fi; done;
 

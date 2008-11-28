@@ -38,6 +38,7 @@
 #include <libdodo/cgiFastServer.h>
 #include <libdodo/cgiServer.h>
 #include <libdodo/toolsFilesystem.h>
+#include <libdodo/ioChannel.h>
 
 namespace dodo
 {
@@ -220,16 +221,16 @@ namespace dodo
 					virtual ~processor();
 
 					/**
-					 * @return parsed template
 					 * @param path defines path of template
+					 * @param tpl defines stream for outputting parsed template
 					 */
-					virtual dodoString processFile(const dodoString &path);
+					virtual void processFile(const dodoString &path, io::channel &tpl);
 
 					/**
-					 * @return parsed template
 					 * @param buffer defines buffer where template is stored
+					 * @param tpl defines stream for outputting parsed template
 					 */
-					virtual dodoString processString(const dodoString &buffer);
+					virtual void processString(const dodoString &buffer, io::channel &tpl);
 
 					/**
 					 * set variable
@@ -284,8 +285,9 @@ namespace dodo
 					 * @return parsed template from processored buffer
 					 * @param buffer defines buffer where template is stored
 					 * @param path defines path of template
+					 * @param tpl defines stream for outputting parsed template
 					 */
-					virtual dodoString _processString(const dodoString &buffer, const dodoString &path);
+					virtual void _processString(const dodoString &buffer, const dodoString &path, io::channel &tpl);
 
 					/**
 					 * process `if` statement
@@ -293,10 +295,10 @@ namespace dodo
 					 * @param buffer defines buffer where template is stored
 					 * @param start defines position in buffer after ')>' of `<( if ... )>` block
 					 * @param statement defines `if` statement
-					 * @param processed defines buffer where to add processed block
+					 * @param tpl defines stream for outputting parsed template
 					 * @param path defines path of template
 					 */
-					virtual unsigned long _if(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &processed, const dodoString &path);
+					virtual unsigned long _if(const dodoString &buffer, unsigned long start, const dodoString &statement, io::channel &tpl, const dodoString &path);
 
 					/**
 					 * process `for` statement
@@ -304,30 +306,30 @@ namespace dodo
 					 * @param buffer defines buffer where template is stored
 					 * @param start defines position in buffer after ')>' of `<( for ... )>` block
 					 * @param statement defines `for` statement
-					 * @param processed defines buffer where to add processed block
+					 * @param tpl defines stream for outputting parsed template
 					 * @param path defines path of template
 					 */
-					virtual unsigned long _for(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &processed, const dodoString &path);
+					virtual unsigned long _for(const dodoString &buffer, unsigned long start, const dodoString &statement, io::channel &tpl, const dodoString &path);
 
 					/**
 					 * process `for` statement
 					 * @return position of cursor where to continue processing
 					 * @param buffer defines buffer where template is stored
 					 * @param start defines position in buffer after ')>' of `<( namespace ... )>` block
-					 * @param processed defines buffer where to add processed block
+					 * @param tpl defines stream for outputting parsed template
 					 * @param path defines path of template
 					 */
-					virtual unsigned long _ns(const dodoString &buffer, unsigned long start, dodoString &processed, const dodoString &path);
+					virtual unsigned long _ns(const dodoString &buffer, unsigned long start, io::channel &tpl, const dodoString &path);
 
 					/**
 					 * process `print` statement
 					 * @return position of cursor where to continue processing
 					 * @param start defines position in buffer after ')>' of `<( print ... )>` block
 					 * @param statement defines `print` statement
-					 * @param processed defines buffer where to add processed block
+					 * @param tpl defines stream for outputting parsed template
 					 * @param path defines path of template
 					 */
-					virtual unsigned long _print(unsigned long start, const dodoString &statement, dodoString &processed, const dodoString &path);
+					virtual unsigned long _print(unsigned long start, const dodoString &statement, io::channel &tpl, const dodoString &path);
 
 					/**
 					 * process `break` statement
@@ -355,7 +357,7 @@ namespace dodo
 					 * @param processed indicates string where to add result
 					 * @param path defines path of template
 					 */
-					virtual unsigned long _include(unsigned long start, const dodoString &statement, dodoString &processed, const dodoString &path);
+					virtual unsigned long _include(unsigned long start, const dodoString &statement, io::channel &tpl, const dodoString &path);
 
 					/**
 					 * clean namespace variable and bring back to life vars of prevous namespace that were overwritten

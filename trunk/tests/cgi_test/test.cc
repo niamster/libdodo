@@ -121,7 +121,7 @@ cgif(exchange &cgiio)
 		strmaparr.push_back(strmap);
 		cgip.assign("strmaparr", strmaparr);
 
-		cgit.printStream(cgip.processFile("test.tpl"));
+		cgip.processFile("test.tpl", *io);
 	}
 	catch (dodo::exception::basic ex)
 	{
