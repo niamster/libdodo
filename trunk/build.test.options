@@ -1,0 +1,13 @@
+./configure --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --enable-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick
+
+./configure --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-fast-cgi --with-pcre --enable-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick
+
+./configure --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --enable-dl --with-bzip2 --with-zlib --with-iconv --with-imagemagick
+
+./configure --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick
+
+./configure --disable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --enable-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick
+
+./configure --enable-deque --disable-io-xexec --disable-graphics-xexec --disable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --enable-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick
+
+./configure --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec
