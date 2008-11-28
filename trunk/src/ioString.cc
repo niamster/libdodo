@@ -61,6 +61,20 @@ string::string(const string &fd) : pos(fd.pos),
 
 //-------------------------------------------------------------------
 
+string::string(const dodoString &data) : pos(0),
+								blockOffset(false),
+								 append(false),
+								 buffer(data)
+{
+#ifndef IO_WO_XEXEC
+
+	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
+
+#endif
+}
+
+//-------------------------------------------------------------------
+
 string::~string()
 {
 }
@@ -240,60 +254,7 @@ string::_writeStream(const char *const a_data)
 	if (bufSize < _outSize)
 		_outSize = bufSize;
 
-	//if (append)
-		buffer.append(a_data, _outSize);
-	//else
-	{
-		//!blockOffset ||
-		/*unsigned long pos = blockOffset?this->pos * outSize:this->pos;
-
-		unsigned long shift = pos + outSize;
-		if (shift > buffer.size())
-			buffer.resize(shift, '\0');
-
-		buffer.replace(pos, outSize, a_data);*/
-	}
-
-	/*unsigned long length = buffer.size();
-	unsigned long read = 0;
-
-	const char *data = buffer.data();
-
-	if (blockOffset)
-	{
-		unsigned long block = 0;
-		unsigned long index = 0;
-		for (;index<length;++index)
-		{
-			if (data[index] == '\n' || data[index] == '\0')
-				++block;
-
-			if (block == pos)
-			{
-				++index;
-
-				for (unsigned long i=index;i<length && read<inSize;++i,++read)
-				{
-					a_data[read] = data[i];
-
-					if (data[i] == '\n' || data[i] == '\0')
-						break;
-				}
-
-				break;
-			}
-		}
-	}
-	else
-	{
-		for (unsigned long i=pos;i<length && read<inSize;++i,++read)
-		{
-			a_data[read] = data[i];
-
-			if (data[i] == '\n' || data[i] == '\0')
-				break;
-		}
-	}*/
+	buffer.append(a_data, _outSize);
 }
 
 //-------------------------------------------------------------------

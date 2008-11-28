@@ -6,7 +6,6 @@
 
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/ioString.h>
-#include <libdodo/toolsFilesystem.h>
 #include <libdodo/toolsCode.h>
 
 #include <iostream>
@@ -21,8 +20,6 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		filesystem::unlink("test.dat");
-
 		io::string io;
 		io.blockOffset = true;
 
@@ -37,9 +34,8 @@ int main(int argc, char **argv)
 		io2.outSize = 14;
 		io2.write("!12345890$!~@\n");
 
-		filesystem::writeToFile("test.dat", io2);
 		/**
-		 * test.dat should contain
+		 * io should contain
 		 !12345890#!!@
 		 !12345890$!~@
 		 !12345890@!!@
@@ -58,6 +54,11 @@ int main(int argc, char **argv)
 		io2.read(str);
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;
+
+		cout << "io:" << endl;
+		cout << io << endl;
+		cout << "io2:" << endl;
+		cout << io2 << endl;
 	}
 	catch (dodo::exception::basic ex)
 	{

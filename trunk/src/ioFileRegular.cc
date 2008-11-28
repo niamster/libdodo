@@ -515,20 +515,12 @@ regular::_writeStream(const char *const a_data)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (mode != REGULAR_OPENMODE_APPEND)
-	{
-		//if (append)
-		{
-			if (fseek(handler, 0, SEEK_END) == -1)
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-		}
-		/*else//!blockOffset ||
-			if (fseek(handler, pos, SEEK_SET) == -1)
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);*/
-	}
-
-	unsigned long _outSize = outSize;
+		if (fseek(handler, 0, SEEK_END) == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	unsigned int bufSize = strlen(a_data);
+
+	unsigned long _outSize = outSize;
 
 	if (bufSize < _outSize)
 		_outSize = bufSize;

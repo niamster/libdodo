@@ -415,14 +415,8 @@ temp::_writeStream(const char *const a_data)
 	if (!opened)
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	//if (append)
-	{
-		if (fseek(handler, 0, SEEK_END) == -1)
-			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
-	/*else//!blockOffset ||
-		if (fseek(handler, pos, SEEK_END) == -1)
-			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);*/
+	if (fseek(handler, 0, SEEK_END) == -1)
+		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	unsigned long _outSize = outSize;
 

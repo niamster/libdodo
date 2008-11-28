@@ -77,7 +77,6 @@ namespace dodo
 			 * @brief provides file I/O manipulations
 			 * @note if blockOffset is false then read/write position is amount of bytes from the beginning, if true then:
 			 * writeStream, writeStream write only to the end of the file(append)
-			 * FIXME: should: write offset for writeStream, writeStream is calculated as pos*'# of \n - terminated strings'; replaces '\n - terminated string' at offset
 			 * write offset for write, write is calculated as pos*outSize
 			 * read offset for read, read is calculated as pos*inSize
 			 * read offset for readStream, readStream is calculated as pos*'# of \n - terminated strings'
@@ -174,7 +173,6 @@ namespace dodo
 					 * write to stream - '\0' - terminated string
 					 * @param data defines data that will be written
 					 * @note write only to the end of the file(append)
-					 * FIXME: should: if blockOffset is true write offset is calculated as pos*'# of \n - terminated strings'; replaces '\n - terminated string' at offset otherwise offset it taken pos bytes from the beginning
 					 */
 					virtual void _writeStream(const char * const data);
 
