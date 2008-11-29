@@ -55,7 +55,7 @@ cat > include/libdodo/directives.runtime.h  <<EOF
 ****************************************************************************/
 
 #ifndef _DIRECTIVES_RUNTIME_H_
-#define _DIRECTIVES_RUNTIME_H_
+#define _DIRECTIVES_RUNTIME_H_ 1
 
 EOF
 
@@ -109,7 +109,7 @@ AC_ARG_ENABLE(deque,
 	AS_HELP_STRING([--disable-deque], [use std::vector instead of std::deque]), [DEQUE="$enableval"], [DEQUE="yes"])
 if test "$DEQUE" = "yes"
 then
-	echo -n -e "#define USE_DEQUE\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define USE_DEQUE 1\n\n" >> include/libdodo/directives.runtime.h        
 	
 	RESULT="$RESULT\nDeque\t\t\t\t\t\t\t\tenabled"
 else
@@ -120,7 +120,7 @@ AC_ARG_ENABLE(io-xexec,
 	AS_HELP_STRING([--disable-io-xexec], [compile io:: w/o xexec support]), [IO_W_XEXEC="$enableval"], [IO_W_XEXEC="yes"])
 if test "$IO_W_XEXEC" = "no"
 then
-	echo -n -e "#define IO_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define IO_WO_XEXEC 1\n\n" >> include/libdodo/directives.runtime.h        
 	RESULT="$RESULT\nio::stdio xexec support\t\t\t\t\t\tdisabled"
 	RESULT="$RESULT\nio::network::exchange xexec support\t\t\t\tdisabled"
 	RESULT="$RESULT\nio::network::client xexec support\t\t\t\tdisabled"
@@ -144,19 +144,11 @@ AC_ARG_ENABLE(database-xexec,
 	AS_HELP_STRING([--disable-database-xexec], [compile data::base:: w/o xexec support]), [DATABASE_W_XEXEC="$enableval"], [DATABASE_W_XEXEC="yes"])
 if test "$DATABASE_W_XEXEC" = "no"
 then
-	echo -n -e "#define DATABASE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define DATABASE_WO_XEXEC 1\n\n" >> include/libdodo/directives.runtime.h        
 fi
 
 AC_CHECK_LIB([rt], [shm_open], [], AC_MSG_ERROR(rt lib was not found))
 LDFLAGS="$LDFLAGS -lrt"
-
-AC_ARG_ENABLE([dl-lib],
-	AS_HELP_STRING([--disable-dl-lib], [disable dl as lib]), [MOD_DL_LIB="$enableval"], [MOD_DL_LIB="no"])
-if test "$MOD_DL_LIB" = "yes"
-then
-	AC_CHECK_LIB([dl], [dlopen], [], AC_MSG_ERROR(dl lib was not found))
-	LDFLAGS="$LDFLAGS -ldl"
-fi
 
 AC_ARG_WITH([sqlite3],
 	AS_HELP_STRING([--with-sqlite3@<:@=DIR@:>@], [use sqlite3]), [MOD_SQLITE3_DIR="$withval"], [MOD_SQLITE3="no"])
@@ -171,7 +163,7 @@ then
 
 	AC_CHECK_LIB([sqlite3], [sqlite3_exec], [], AC_MSG_ERROR(sqlite3 lib was not found))
 	AC_CHECK_HEADER([sqlite3.h], [], AC_MSG_ERROR(sqlite3 header was not found))
-	echo -n -e "#define SQLITE3_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define SQLITE3_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 	
 	RESULT="$RESULT\nSQLite\t\t\t\t\t\t\t\tenabled"
 
@@ -197,7 +189,7 @@ then
 	LDFLAGS="$LDFLAGS -L$MOD_OPENSSL_DIR/lib -lssl"
 	AC_CHECK_LIB([ssl], [SSL_library_init], [], AC_MSG_ERROR(openssl lib was not found))
 	AC_CHECK_HEADER([openssl/ssl.h], [], AC_MSG_ERROR(openssl header was not found))
-	echo -n -e "#define OPENSSL_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define OPENSSL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	if test "$IO_W_XEXEC" = "no"
 	then
@@ -237,7 +229,7 @@ then
 	LDFLAGS="$LDFLAGS -L$MOD_BFD_DIR/lib -lbfd"
 	AC_CHECK_LIB([bfd], [bfd_fopen], [], AC_MSG_ERROR(bfd lib was not found))
 	AC_CHECK_HEADER([bfd.h], [], AC_MSG_ERROR(bfd header was not found))
-	echo -n -e "#define BFD_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define BFD_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	RESULT="$RESULT\nLibrary name resolution\t\t\t\t\t\tenabled"
 else
@@ -267,10 +259,10 @@ then
 	AC_CHECK_HEADER([libpq-fe.h], [], AC_MSG_ERROR(postgresql header was not found))
 	
 	AC_LANG_PUSH(C++)
-	AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <libpq-fe.h>]], [[pg_encoding_to_char(0);]]), [], [echo -n -e "#define POSTGRESQL_NO_ENCODINGTOCHAR\n\n" >> include/libdodo/directives.runtime.h])
+	AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <libpq-fe.h>]], [[pg_encoding_to_char(0);]]), [], [echo -n -e "#define POSTGRESQL_NO_ENCODINGTOCHAR 1\n\n" >> include/libdodo/directives.runtime.h])
 	AC_LANG_POP()
 
-	echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define POSTGRESQL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	if test "$DATABASE_W_XEXEC" = "no"
 	then
@@ -308,10 +300,10 @@ then
 	AC_CHECK_HEADER([mysql.h], [], AC_MSG_ERROR(mySQL header was not found))
 	
 	AC_LANG_PUSH(C++)
-	AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <mysql.h>]], [[my_bool rc = 1; mysql_options(0, MYSQL_OPT_RECONNECT, &rc);]]), [], [echo -n -e "#define MYSQL_NO_OPT_RECONNECT\n\n" >> include/libdodo/directives.runtime.h])
+	AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <mysql.h>]], [[my_bool rc = 1; mysql_options(0, MYSQL_OPT_RECONNECT, &rc);]]), [], [echo -n -e "#define MYSQL_NO_OPT_RECONNECT 1\n\n" >> include/libdodo/directives.runtime.h])
 	AC_LANG_POP()
 	
-	echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define MYSQL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	if test "$DATABASE_W_XEXEC" = "no"
 	then
@@ -337,7 +329,7 @@ then
 	LDFLAGS="$LDFLAGS -L$MOD_FASTCGI_DIR/lib -lfcgi"
 	AC_CHECK_LIB([fcgi], [FCGX_Init], [], AC_MSG_ERROR(fast-cgi lib was not found))
 	AC_CHECK_HEADER([fcgiapp.h], [], AC_MSG_ERROR(fast-cgi header was not found))
-	echo -n -e "#define FASTCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define FASTCGI_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	if test "$IO_W_XEXEC" = "no"
 	then
@@ -367,7 +359,7 @@ then
 	fi
 	AC_CHECK_LIB([pcre], [pcre_exec], [], AC_MSG_ERROR(pcre lib was not found))
 	AC_CHECK_HEADER([pcre.h], [], AC_MSG_ERROR(pcre header was not found))
-	echo -n -e "#define PCRE_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define PCRE_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 	
 	RESULT="$RESULT\nPCRE\t\t\t\t\t\t\t\tenabled"
 else
@@ -379,14 +371,14 @@ AC_ARG_ENABLE(dl,
 	AS_HELP_STRING([--enable-dl], [enable dynamic loading]), [DL="$enableval"], [DL="no"])
 if test "$DL" = "yes"
 then
-	echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define DL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 	
 	AC_ARG_ENABLE(fast-dynamic-loading,
 		AS_HELP_STRING([--disable-fast-dynamic-loading], [do not unload library to produce better performance]), [DL_FAST="$enableval"], [DL_FAST="yes"])
 
 	if test "$DL_FAST" = "yes"
 	then
-		echo -n -e "#define DL_FAST\n\n" >> include/libdodo/directives.runtime.h        
+		echo -n -e "#define DL_FAST 1\n\n" >> include/libdodo/directives.runtime.h        
 
 		RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tenabled"
 	else
@@ -420,7 +412,7 @@ then
 	fi
 	AC_CHECK_LIB([xml2], [xmlInitParser], [], AC_MSG_ERROR(libxml2 lib was not found))
 	AC_CHECK_HEADER([libxml/xmlmemory.h], [], AC_MSG_ERROR(libxml2 header was not found))
-	echo -n -e "#define LIBXML2_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define LIBXML2_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 	
 	RESULT="$RESULT\nlibxml2\t\t\t\t\t\t\t\tenabled"
 else
@@ -439,7 +431,7 @@ case "$MOD_THREAD" in
 		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib -l$MOD_PTHREAD_LIB"
 		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create], [], AC_MSG_ERROR($MOD_PTHREAD_LIB lib was not found))
 		AC_CHECK_HEADER([pthread.h], [], AC_MSG_ERROR(pthread header was not found))
-		echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
+		echo -n -e "#define PTHREAD_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 		;;
 	*)
 		AC_MSG_ERROR(Unsuported threading library specified)
@@ -459,7 +451,7 @@ then
 	LDFLAGS="$LDFLAGS -L$MOD_BZIP2_DIR/lib -lbz2"
 	AC_CHECK_LIB([bz2], [BZ2_bzBuffToBuffCompress], [], AC_MSG_ERROR(bz2 lib was not found))
 	AC_CHECK_HEADER([bzlib.h], [], AC_MSG_ERROR(bz2 header was not found))
-	echo -n -e "#define BZIP2_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define BZIP2_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 	
 	RESULT="$RESULT\nBZIP2\t\t\t\t\t\t\t\tenabled"
 else
@@ -484,7 +476,7 @@ then
 		AC_CHECK_LIB([z], [deflateInit2], [], AC_MSG_ERROR(zlib lib was not found))
 		LDFLAGS="$LDFLAGS -lz"
 	fi
-	echo -n -e "#define ZLIB_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define ZLIB_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 	
 	RESULT="$RESULT\nZLIB\t\t\t\t\t\t\t\tenabled"
 else
@@ -509,7 +501,7 @@ then
 		AC_CHECK_LIB([iconv], [iconv], [], AC_MSG_ERROR(iconv lib was not found))
 		LDFLAGS="$LDFLAGS -liconv"
 	fi
-	echo -n -e "#define ICONV_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define ICONV_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 	
 	RESULT="$RESULT\niconv\t\t\t\t\t\t\t\tenabled"
 else
@@ -548,13 +540,13 @@ then
 		
 	fi
 	AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))
-	echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define IMAGEMAGICK_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	AC_ARG_ENABLE(graphics-xexec,
 		AS_HELP_STRING([--disable-graphics-xexec], [compile graphics w/o xexec support]), [GRAPHICS_W_XEXEC="$enableval"], [GRAPHICS_W_XEXEC="yes"])
 	if test "$GRAPHICS_W_XEXEC" = "no"
 	then
-		echo -n -e "#define GRAPHICS_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+		echo -n -e "#define GRAPHICS_WO_XEXEC 1\n\n" >> include/libdodo/directives.runtime.h        
 		
 		RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tdisabled"
 	else
@@ -565,8 +557,6 @@ then
 else
 	RESULT="$RESULT\nImageMagick\t\t\t\t\t\t\tdisabled"
 fi
-
-echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h        
 
 ##
 # filter LDFLAGS and CPPLAGS
@@ -663,15 +653,33 @@ AC_CHECK_HEADERS([arpa/inet.h \
 	unistd.h \
 	utime.h \
 	time.h \
-	execinfo.h \
 	dlfcn.h \
 	netdb.h],
 	[],
 	[AC_MSG_ERROR(header was not found)])
 
-AC_LANG_PUSH(C++)
-AC_CHECK_HEADER([cxxabi.h], [], AC_MSG_ERROR(cxxabi.h header was not found))
-AC_LANG_POP()
+AC_CHECK_HEADER([execinfo.h], [CALLSTACK_EX="yes"], [CALLSTACK_EX="no"])
+if test "$CALLSTACK_EX" = "yes"
+then
+	AC_LANG_PUSH(C++)
+	AC_CHECK_HEADER([cxxabi.h], [], AC_MSG_ERROR(cxxabi.h header was not found))
+	AC_LANG_POP()
+
+	echo -n -e "#define CALLSTACK_EX 1\n\n" >> include/libdodo/directives.runtime.h        
+fi
+
+if test "$CALLSTACK_EX" = "yes" -o "$DL" = "yes"
+then
+	AC_ARG_ENABLE([dl-lib],
+		AS_HELP_STRING([--disable-dl-lib], [disable dl as lib]), [MOD_DL_LIB="$enableval"], [MOD_DL_LIB="yes"])
+	if test "$MOD_DL_LIB" = "yes"
+	then
+		AC_CHECK_LIB([dl], [dlopen], [], AC_MSG_ERROR(dl lib was not found))
+		LDFLAGS="$LDFLAGS -ldl"
+	fi
+fi
+
+echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h        
 
 ##
 

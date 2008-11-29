@@ -36,7 +36,13 @@
 
 #include <exception>
 
-#include <dlfcn.h>
+#ifdef CALLSTACK_EX
+
+	#include <dlfcn.h>
+	#include <execinfo.h>
+	#include <cxxabi.h>
+
+#endif
 
 #ifdef PTHREAD_EXT
 
@@ -44,8 +50,6 @@
 
 #endif
 
-#include <execinfo.h>
-#include <cxxabi.h>
 #include <stdlib.h>
 
 namespace dodo
@@ -174,6 +178,8 @@ namespace dodo
 		 */
 		typedef void (*errorHandler)(int module, basic *ex, void *data);
 
+#ifdef CALLSTACK_EX
+
 		/**
 		 * @struct __call
 		 * @brief describes function call in call stack
@@ -184,6 +190,8 @@ namespace dodo
 			dodoString symbol; ///< name of the call
 			void *address; ///< address of the call
 		};
+
+#endif
 
 		/**
 		 * @class basic
@@ -248,7 +256,11 @@ namespace dodo
 
 				dodoString message;                                         ///< custom message that might clarify the exception
 
+#ifdef CALLSTACK_EX
+
 				dodoArray<__call> callStack; 								///< call stack of the raised exception
+
+#endif
 
 				/**
 				 * set handler for exceptions for specific module

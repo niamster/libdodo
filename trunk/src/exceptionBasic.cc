@@ -421,6 +421,8 @@ basic::basic(int a_errModule,
 {
 	syncThreadStack tg;
 
+#ifdef CALLSTACK_EX
+
 	void *trace[MAXCALLSTACKLEN];
 
 	using namespace abi;
@@ -459,6 +461,8 @@ basic::basic(int a_errModule,
 	}
 
 	free(symbols);
+
+#endif
 
 	getInstance();
 
