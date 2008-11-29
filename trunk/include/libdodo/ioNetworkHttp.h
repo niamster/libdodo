@@ -42,7 +42,6 @@
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/ioNetworkHttpEx.h>
 #include <libdodo/types.h>
-#include <libdodo/toolsRegexp.h>
 #include <libdodo/cgiDialogue.h>
 
 namespace dodo
@@ -324,14 +323,14 @@ namespace dodo
 					unsigned short authTries;                                                                                                                                                                                           ///< autherization request counter
 
 					static const dodoString requestHeaderStatements[HTTP_REQUESTHEADERSTATEMENTS];                                                                                                                                      ///< HTTP request headers[see httpRequestHeaderEnum]
-					static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];                                                                                                                                    ///< HTTP response headers[see httpResponseHeaderEnum]
-
-					tools::regexp httpStatusRE;                                                                                                                                                                                         ///< parser for HTTP response status code
+					static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];                                                                                                                                    ///< HTTP response headers[see httpResponseHeaderEnum]                                                                                                                                                                                       ///< parser for HTTP response status code
 
 					__httpResponse response;                                                                                                                                                                                            ///< HTTP response data
 					tools::__url urlComponents;                                                                                                                                                                                         ///< HTTP URL components
 					dodoString urlQuery;                                                                                                                                                                                                ///< HTTP URL query
 					dodoString urlBasePath;                                                                                                                                                                                             ///< HTTP URL base path
+
+					virtual short getStatusCode(const dodoString &header);
 
 					/**
 					 * @return true if no more headers should be processed

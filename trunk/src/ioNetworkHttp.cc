@@ -97,8 +97,7 @@ http::__proxyAuthInfo::__proxyAuthInfo() : enabled(false),
 
 //-------------------------------------------------------------------
 
-http::http() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
-			   followRedirection(true),
+http::http() : followRedirection(true),
 			   cacheAuthentification(true),
 			   authTries(0),
 			   scheme(SCHEME_HTTP)
@@ -125,6 +124,23 @@ http::http(http &fd)
 
 http::~http()
 {
+}
+
+//-------------------------------------------------------------------
+
+short
+http::getStatusCode(const dodoString &header)
+{
+	if (header.size() < 12)
+		return 0;
+
+	short code = 0;
+
+	code += ((short)header[9] - 0x30) * 100;
+	code += ((short)header[10] - 0x30) * 10;
+	code += (short)header[11] - 0x30;
+
+	return code;
 }
 
 //-------------------------------------------------------------------
@@ -968,7 +984,7 @@ http::POST(const dodoString &a_data,
 	data.append("Content-type: ");
 	data.append(type);
 	data.append("\r\n\r\n");
-	
+
 	unsigned long outSize = ex->outSize;
 
 	ex->outSize = data.size();
@@ -1158,8 +1174,7 @@ http::getHeaders(const dodoString &headers)
 			{
 				statusCode = true;
 
-				if (httpStatusRE.match(piece, arr))
-					response.code = tools::string::stringToS(tools::string::lTrim(arr[0], ' '));
+				response.code = getStatusCode(piece);
 			}
 		}
 		else
