@@ -34,6 +34,8 @@
 
 #ifdef DL_EXT
 
+#include <dlfcn.h>
+
 #ifdef BFD_EXT
 
 #include <bfd.h>

@@ -36,6 +36,12 @@
 
 #include <exception>
 
+#ifdef DL_EXT
+
+#include <dlfcn.h>
+
+#endif
+
 #ifdef CALLSTACK_EX
 
 	#include <dlfcn.h>
