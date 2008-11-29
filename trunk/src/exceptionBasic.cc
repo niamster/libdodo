@@ -508,36 +508,26 @@ basic::~basic() throw ()
 
 //-------------------------------------------------------------------
 
+#ifdef CALLSTACK_EX
+
 dodoString
 basic::getCallStack()
 {
 	dodoString stack;
 
-#ifdef DL_EXT
-
 	char str[32];
-
-#endif
 
 	dodoArray<__call>::iterator i = callStack.begin(), j = callStack.end();
 	for (;i!=j;++i)
 	{
-#ifdef DL_EXT
-
 		snprintf(str, 32, " [0x%x]", (long)i->address);
-		stack.append(i->object + ": " + i->symbol + dodoString(str));
-
-#else
-
-		stack.append(i->symbol);
-
-#endif
-
-		stack.append("\n");
+		stack.append(i->object + ": " + i->symbol + dodoString(str) + "\n");
 	}
 
 	return stack;
 }
+
+#endif
 
 //-------------------------------------------------------------------
 

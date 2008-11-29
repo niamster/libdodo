@@ -117,9 +117,9 @@ all: @PACKAGE_NAME@
 
 @PACKAGE_NAME@: $(OBJECTS)
 	@echo "-- Linking dodo"
-	@$(CXX) $(LDFLAGS) -shared -Wl,-soname,$@.so.@PACKAGE_VERSION@ -o $@.so.@PACKAGE_VERSION@ $(OBJECTS)
+	@$(CXX) $(LDFLAGS) -shared -Wl,-soname,$@.so.@SO_VERSION@ -o $@.so.@SO_VERSION@ $(OBJECTS)
 	@rm -f $@.so
-	@$(LN_S) @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $@.so
+	@$(LN_S) @PACKAGE_NAME@.so.@SO_VERSION@ $@.so
 	
 	@echo ""
 	@echo ""
@@ -133,9 +133,9 @@ install: @PACKAGE_NAME@
 	@echo "" > install_manifest.txt
 
 	@${INSTALL} -m 755 -d ${DESTDIR}$(libdir)
-	@${INSTALL} -m 755 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ ${DESTDIR}$(libdir)/
-	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@"
-	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ >> install_manifest.txt
+	@${INSTALL} -m 755 @PACKAGE_NAME@.so.@SO_VERSION@ ${DESTDIR}$(libdir)/
+	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@SO_VERSION@"
+	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@SO_VERSION@ >> install_manifest.txt
 	@${INSTALL} -m 755 @PACKAGE_NAME@.so ${DESTDIR}$(libdir)/
 	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so"
 	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so >> install_manifest.txt

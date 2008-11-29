@@ -263,7 +263,11 @@ fifo::open(const dodoString &a_path,
 
 			case FIFO_OPENMODE_READ_OPENNONBLOCK:
 			{
+#ifdef O_LARGEFILE
 				int fd = ::open(path.c_str(), O_NONBLOCK|O_RDONLY|O_LARGEFILE);
+#else
+				int fd = ::open(path.c_str(), O_NONBLOCK|O_RDONLY);
+#endif
 
 				int blockFlag = fcntl(fd, F_GETFL);
 				if (blockFlag == -1)

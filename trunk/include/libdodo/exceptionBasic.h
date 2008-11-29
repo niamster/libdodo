@@ -239,10 +239,14 @@ namespace dodo
 				 */
 				virtual const char *what() const throw ();
 
+#ifdef CALLSTACK_EX
+
 				/**
 				 * @return call stack to the exception point
 				 */
 				virtual dodoString getCallStack();
+
+#endif
 
 				int errModule;                                              ///< module where exception has been thrown
 				int funcID;                                                 ///< function where exception has been thrown[see *Ex.h headers for IDs]
