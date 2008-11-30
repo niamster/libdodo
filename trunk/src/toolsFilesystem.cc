@@ -658,9 +658,7 @@ filesystem::dirname(const dodoString &path)
 
 	strcpy(temp, path.c_str());
 
-	::dirname(temp);
-
-	return temp;
+	return ::dirname(temp);
 }
 
 //-------------------------------------------------------------------

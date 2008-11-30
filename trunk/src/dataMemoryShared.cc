@@ -46,9 +46,9 @@ shared::shared(const dodoString &a_key) : mshared(NULL),
 
 	if (a_key.empty())
 	{
-		char _key[32];
-		tools::misc::random(_key, 31);
-		_key[31] = '\0';
+		char _key[SH_KEY_SIZE / 2 - 1];
+		tools::misc::random(_key, SH_KEY_SIZE / 2 - 1 - 1);
+		_key[SH_KEY_SIZE / 2 - 1 - 1] = '\0';
 
 		key.append(tools::code::binToHex(_key));
 	}

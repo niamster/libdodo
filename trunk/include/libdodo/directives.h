@@ -52,6 +52,17 @@
 #include <unistd.h>
 
 /**
+ * size of key for shm_open and sem_open
+ * @note including leading '/'
+ */
+#ifdef __FreeBSD__
+#define SH_KEY_SIZE 14
+#else
+#define SH_KEY_SIZE 32
+#endif
+
+
+/**
  * size of block for zLib de/compression
  */
 #define ZLIB_CHUNK    100
