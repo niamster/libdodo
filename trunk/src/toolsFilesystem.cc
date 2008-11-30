@@ -641,9 +641,7 @@ filesystem::basename(const dodoString &path)
 
 	strcpy(temp, path.c_str());
 
-	::basename(temp);
-
-	return temp;
+	return ::basename(temp);
 }
 
 //-------------------------------------------------------------------
@@ -674,9 +672,9 @@ filesystem::copy(const dodoString &from,
 		char temp[MAXPATHLEN];
 
 		strcpy(temp, to.c_str());
-		::basename(temp);
-		if (strcmp(temp, "..") == 0  || strcmp(temp, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
-			to = temp + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
+		char *bname = ::basename(temp);
+		if (strcmp(bname, "..") == 0  || strcmp(bname, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
+			to = bname + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
 	}
 
 	struct stat stFrom, stTo;
@@ -821,9 +819,9 @@ filesystem::copyDir(const dodoString &from,
 		char temp[MAXPATHLEN];
 
 		strcpy(temp, to.c_str());
-		::basename(temp);
-		if (strcmp(temp, "..") == 0 || strcmp(temp, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
-			to = temp + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
+		char *bname = ::basename(temp);
+		if (strcmp(bname, "..") == 0 || strcmp(bname, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
+			to = bname + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
 	}
 
 	struct stat stFrom, stTo;
