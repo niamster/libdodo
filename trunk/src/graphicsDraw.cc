@@ -82,7 +82,15 @@ draw::primitive(char *description,
 	if (im == NULL || im->collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
+#ifndef IMAGEMAGICK_PRE_63
+
 	DrawInfo *di = AcquireDrawInfo();
+
+#else
+	
+	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
+
+#endif
 
 	di->primitive = description;
 
@@ -108,7 +116,6 @@ draw::primitive(char *description,
 
 	di->primitive = NULL;
 	DestroyDrawInfo(di);
-
 }
 
 //-------------------------------------------------------------------
@@ -183,7 +190,15 @@ draw::text(const graphics::point &position,
 	txt.append(text);
 	txt.append("\"");
 
+#ifndef IMAGEMAGICK_PRE_63
+
 	DrawInfo *di = AcquireDrawInfo();
+
+#else
+	
+	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
+
+#endif
 
 	double radians = angle * M_PI / 180;
 	double _cos = cos(radians);
@@ -298,7 +313,15 @@ draw::point(const graphics::point &position,
 	else
 		snprintf(description, 128, "circle %d,%d %d,%d", position.x, position.y, position.x + pointWidth, position.y);
 
+#ifndef IMAGEMAGICK_PRE_63
+
 	DrawInfo *di = AcquireDrawInfo();
+
+#else
+	
+	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
+
+#endif
 
 	di->primitive = description;
 

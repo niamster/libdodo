@@ -34,7 +34,16 @@
 
 #ifdef IMAGEMAGICK_EXT
 
+#ifndef IMAGEMAGICK_PRE_63
+
 #include <magick/MagickCore.h>
+
+#else
+
+#include <magick/ImageMagick.h>
+
+#endif
+
 #include <math.h>
 
 #include <libdodo/types.h>
@@ -325,7 +334,7 @@ namespace dodo
 
 			protected:
 
-				ExceptionInfo *exInfo;                                                      ///< exception info handler
+				ExceptionInfo exInfo;                                                      ///< exception info handler
 
 				__xexecImageCollectedData collectedData;                                    ///< data collected for xexec
 

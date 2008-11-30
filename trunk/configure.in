@@ -541,14 +541,25 @@ then
 	AC_CHECK_LIB([MagickCore], [MagickCoreGenesis], [], OLD_IMAGEMAGICK_LIB="yes")
 	if test "$OLD_IMAGEMAGICK_LIB" = "yes"
 	then
+		AC_CHECK_LIB([Magick], [MagickCoreGenesis], [], VERY_OLD_IMAGEMAGICK_LIB="yes")
+		if test "$VERY_OLD_IMAGEMAGICK_LIB" == "yes"
+		then
+			AC_CHECK_LIB([Magick], [InitializeMagick], [], AC_MSG_ERROR(Magick lib was not found))
+
+			echo -n -e "#define IMAGEMAGICK_PRE_63 1\n\n" >> include/libdodo/directives.runtime.h
+		fi
+
 		LDFLAGS="$LDFLAGS -lMagick"
-		
-		AC_CHECK_LIB([Magick], [MagickCoreGenesis], [], AC_MSG_ERROR(Magick lib was not found))
 	else
 		LDFLAGS="$LDFLAGS -lMagickCore"
 		
 	fi
-	AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))
+	if test "$VERY_OLD_IMAGEMAGICK_LIB" != "yes"
+	then
+		AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))
+	else
+		AC_CHECK_HEADER([magick/magick.h], [], AC_MSG_ERROR(Magick header was not found))
+	fi
 	echo -n -e "#define IMAGEMAGICK_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	AC_ARG_ENABLE(graphics-xexec,
