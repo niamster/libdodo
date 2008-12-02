@@ -42,7 +42,15 @@ shared::shared(const dodoString &a_key) : mshared(NULL),
 									  size(0),
 									  shm(-1)
 {
+#ifdef __FreeBSD__
+
+	key = "/tmp/";
+
+#else
+
 	key = '/';
+
+#endif
 
 	if (a_key.empty())
 	{
