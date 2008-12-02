@@ -158,6 +158,21 @@ fi
 
 AC_CHECK_LIB([rt], [shm_open], [], AC_MSG_ERROR(rt lib was not found))
 LDFLAGS="$LDFLAGS -lrt"
+		
+AC_ARG_WITH([ipc],
+	AS_HELP_STRING([--with-ipc@<:@=ipc implementation@:>@], [use IPC implementation(supported: POSIX, XSI), POSIX by default]), [MOD_IPC_IMPL="$withval"], [MOD_IPC_IMPL="POSIX"])
+case "$MOD_IPC_IMPL" in
+	POSIX)
+		echo -n -e "#define POSIX_SEMAPHORES 1\n\n" >> include/libdodo/directives.runtime.h
+		;;
+	XSI)
+		echo -n -e "#define XSI_SEMAPHORES 1\n\n" >> include/libdodo/directives.runtime.h
+		;;
+		*)
+		AC_MSG_ERROR(Unsuported IPC implementation specified)
+		;;
+esac
+RESULT="$RESULT\nIPC implementation\t\t\t\t\t\t$MOD_IPC_IMPL"
 
 AC_ARG_WITH([sqlite3],
 	AS_HELP_STRING([--with-sqlite3@<:@=DIR@:>@], [use sqlite3]), [MOD_SQLITE3_DIR="$withval"], [MOD_SQLITE3="no"])
@@ -667,6 +682,8 @@ AC_CHECK_HEADERS([arpa/inet.h \
 	sys/stat.h \
 	sys/time.h \
 	sys/types.h \
+	sys/ipc.h \
+	sys/sem.h \
 	sys/un.h \
 	sys/wait.h \
 	dirent.h \

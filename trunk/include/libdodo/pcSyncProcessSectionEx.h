@@ -62,6 +62,7 @@ namespace dodo
 				{
 					SECTIONEX_ACQUIRE,
 					SECTIONEX_RELEASE,
+					SECTIONEX_REMOVE,
 				};
 			};
 		};
