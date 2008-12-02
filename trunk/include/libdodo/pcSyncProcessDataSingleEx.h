@@ -64,10 +64,10 @@ namespace dodo
 					 */
 					enum singleFunctionsID
 					{
-						SINGLEEX_DEL,
 						SINGLEEX_SET,
 						SINGLEEX_ACQUIRE,
 						SINGLEEX_RELEASE,
+						SINGLEEX_REMOVE,
 					};
 				};
 			};

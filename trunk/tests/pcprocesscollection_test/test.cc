@@ -34,15 +34,20 @@ process(void *ud)
 		dodo::data::memory::shared shD("dodo");
 		char *dt = (char *)shD.map(100);
 		cout << dt << endl;
+		
+		tools::os::sleep(1);
 
 		cout << (char *)dgC.get(dgCI);
-		cout << (char *)dg.acquire();
+		cout << (char *)dg.acquire(1);
 		dg.release();
 
 		cout << endl << (char *)dt << ": " << tools::time::now() << endl;
 		cout.flush();
 
-		tools::os::sleep(2);
+		tools::os::sleep(1);
+		
+		cout << (char *)dg.acquire();
+		dg.release();
 
 		cout << endl << (char *)dt << ": " << tools::time::now() << endl;
 		cout.flush();
