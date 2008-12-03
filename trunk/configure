@@ -5613,7 +5613,7 @@ case "$MOD_IPC_IMPL" in
 		echo -n -e "#define POSIX_SEMAPHORES 1\n\n" >> include/libdodo/directives.runtime.h
 		;;
 	XSI)
-		echo -n -e "#define XSI_SEMAPHORES 1\n\n" >> include/libdodo/directives.runtime.h
+		echo -n -e "#define XSI_IPC 1\n\n" >> include/libdodo/directives.runtime.h
 		;;
 		*)
 		{ { $as_echo "$as_me:$LINENO: error: Unsuported IPC implementation specified" >&5

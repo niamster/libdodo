@@ -144,7 +144,14 @@ int main(int argc, char **argv)
 		cout << (dodoString)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
 	}
 
-	dodo::data::memory::shared::remove(shKey);
+	try
+	{
+		dodo::data::memory::shared::remove(shKey);
+	}
+	catch (dodo::exception::basic ex)
+	{
+		cout << (dodoString)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
+	}
 
 	return 0;
 }

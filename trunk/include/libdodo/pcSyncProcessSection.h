@@ -32,7 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#ifdef XSI_SEMAPHORES
+#ifdef XSI_IPC
 
 #include <sys/ipc.h>
 #include <sys/sem.h>
@@ -100,7 +100,7 @@ namespace dodo
 
 					protected:
 
-#ifdef XSI_SEMAPHORES
+#ifdef XSI_IPC
 						int keeper;                                                      ///< semaphore
 						int key;                                                     ///< key for the semaphore
 						union semun
