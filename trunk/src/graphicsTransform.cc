@@ -93,7 +93,7 @@ transform::scale(unsigned long size)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
 	float mult = (float)size / (float)((im->collectedData.imHandle->columns > im->collectedData.imHandle->rows) ? im->collectedData.imHandle->columns : im->collectedData.imHandle->rows);
-	
+
 	GetExceptionInfo(&(im->exInfo));
 
 	Image *image = ScaleImage(im->collectedData.imHandle, (unsigned long)floor(im->collectedData.imHandle->columns * mult), (unsigned long)floor(im->collectedData.imHandle->rows * mult), &(im->exInfo));
@@ -113,7 +113,7 @@ transform::rotate(double angle)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-	
+
 	GetExceptionInfo(&(im->exInfo));
 
 	Image *image = RotateImage(im->collectedData.imHandle, angle, &(im->exInfo));

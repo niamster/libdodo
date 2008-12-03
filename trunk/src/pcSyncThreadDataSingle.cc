@@ -43,17 +43,26 @@ single::single() : data(NULL)
 #ifdef PTHREAD_EXT
 
 	pthread_mutexattr_t attr;
-	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+	errno = pthread_mutexattr_init(&attr);
+	if (errno != 0)
+		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	pthread_mutex_init(&mutex, &attr);
+	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+	if (errno != 0)
+		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	pthread_mutexattr_destroy(&attr);
+	errno = pthread_mutex_init(&mutex, &attr);
+	if (errno != 0)
+		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+	errno = pthread_mutexattr_destroy(&attr);
+	if (errno != 0)
+		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+#endif
 
 	timeout.tv_nsec = 1000;
 	timeout.tv_sec = 0;
-
-#endif
 }
 
 //-------------------------------------------------------------------

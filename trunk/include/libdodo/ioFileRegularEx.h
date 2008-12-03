@@ -64,6 +64,7 @@ namespace dodo
 			 */
 			enum regularFunctionsID
 			{
+				REGULAREX_REGULAR,
 				REGULAREX_CLOSE,
 				REGULAREX_CLONE,
 				REGULAREX_OPEN,

@@ -50,14 +50,12 @@ namespace dodo
 					enum singleExR
 					{
 						SINGLEEX_CANNOTLOCK,
-						SINGLEEX_SEMAPHOREWASNOTOPENED,
 					};
 
 					/**
 					 * explanations for libdodo defined errors
 					 */
 #define PCSYNCPROCESSDATASINGLEEX_CANNOTLOCK_STR      "The share is currently locked. Timeout exhousted."
-#define PCSYNCPROCESSDATASINGLEEX_SEMAPHOREWASNOTOPENED_STR "The semaphore was not opened properly."
 
 					/**
 					 * IDs of functions where exception might be thrown
@@ -68,6 +66,7 @@ namespace dodo
 						SINGLEEX_ACQUIRE,
 						SINGLEEX_RELEASE,
 						SINGLEEX_REMOVE,
+						SINGLEEX_SIGNLE,
 					};
 				};
 			};

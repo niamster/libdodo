@@ -67,8 +67,12 @@ fifo::fifo(const fifo &fd) : inFileFifoBuffer(fd.inFileFifoBuffer),
 		int oldDesc, newDesc;
 
 		oldDesc = fileno(fd.handler);
+		if (oldDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		newDesc = dup(oldDesc);
+		if (newDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		switch (mode)
 		{
@@ -84,8 +88,10 @@ fifo::fifo(const fifo &fd) : inFileFifoBuffer(fd.inFileFifoBuffer),
 				handler = fdopen(newDesc, "r");
 		}
 
-		if (handler != NULL)
-			opened = true;
+		if (handler == NULL)
+			throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		opened = true;
 	}
 }
 

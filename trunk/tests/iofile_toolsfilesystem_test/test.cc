@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 		filesystem::rm("./test.cc.copy");
 
 		filesystem::mkdir("testDir");
-		filesystem::mkdirRecursive("testDir/1/2/3/4");
+		filesystem::mkdir("testDir/1/2/3/4");
 
 		filesystem::rm("DirTest");
 		filesystem::rename("testDir", "DirTest");

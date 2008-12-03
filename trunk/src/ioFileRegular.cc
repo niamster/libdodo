@@ -69,8 +69,12 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 		int oldDesc, newDesc;
 
 		oldDesc = fileno(fd.handler);
+		if (oldDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		newDesc = dup(oldDesc);
+		if (newDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		switch (mode)
 		{
@@ -93,8 +97,10 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 				handler = fdopen(newDesc, "r");
 		}
 
-		if (handler != NULL)
-			opened = true;
+		if (handler == NULL)
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		opened = true;
 	}
 }
 

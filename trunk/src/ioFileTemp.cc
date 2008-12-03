@@ -67,13 +67,19 @@ temp::temp(const temp &fd) : overwrite(fd.overwrite),
 		int oldDesc, newDesc;
 
 		oldDesc = fileno(fd.handler);
+		if (oldDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		newDesc = dup(oldDesc);
+		if (newDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		handler = fdopen(newDesc, "r+");
 
-		if (handler != NULL)
-			opened = true;
+		if (handler == NULL)
+			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		opened = true;
 	}
 }
 

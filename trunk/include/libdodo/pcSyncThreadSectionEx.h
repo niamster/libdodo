@@ -49,6 +49,7 @@ namespace dodo
 				{
 					SECTIONEX_LOCK,
 					SECTIONEX_UNLOCK,
+					SECTIONEX_SECTION,
 				};
 			};
 		};

@@ -62,6 +62,7 @@ namespace dodo
 			 */
 			enum tempFunctionsID
 			{
+				TEMPEX_TEMP,
 				TEMPEX_CLOSE,
 				TEMPEX_CLONE,
 				TEMPEX_OPEN,

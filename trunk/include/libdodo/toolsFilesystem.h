@@ -219,19 +219,11 @@ namespace dodo
 				static void mkfifo(const dodoString &path, int permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS);
 
 				/**
-				 * make directory
-				 * @param path defines path to directory
-				 * @param permissions defines directory permissions[see filePermissionModesEnum]
-				 * @param force defines overwrite condition[if it is true and directory already exists do not say anything]
-				 */
-				static void mkdir(const dodoString &path, int permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS, bool force = true);
-
-				/**
 				 * make directory recursively
 				 * @param path defines path to directory
 				 * @param permissions defines directory permissions[see filePermissionModesEnum]
 				 */
-				static void mkdirRecursive(const dodoString &path, int permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS);
+				static void mkdir(const dodoString &path, int permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS);
 
 				/**
 				 * delete files, non empty directory

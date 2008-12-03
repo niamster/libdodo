@@ -185,8 +185,6 @@ network::getServiceInfo(int port,
 	while (ent->s_aliases[i] != NULL)
 		info.aliases.push_back(ent->s_aliases[i++]);
 
-
-
 	return info;
 }
 

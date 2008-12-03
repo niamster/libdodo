@@ -66,23 +66,30 @@ io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 		int oldDesc, newDesc;
 
 		oldDesc = fileno(fd.inHandle);
-		if (oldDesc != -1)
-		{
-			newDesc = dup(oldDesc);
-			if (newDesc != -1)
-				inHandle = fdopen(newDesc, "r");
-		}
+		if (oldDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		newDesc = dup(oldDesc);
+		if (newDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		inHandle = fdopen(newDesc, "r");
+		if (inHandle == NULL)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		oldDesc = fileno(fd.outHandle);
-		if (oldDesc != -1)
-		{
-			newDesc = dup(oldDesc);
-			if (newDesc != -1)
-				outHandle = fdopen(newDesc, "w");
-		}
+		if (oldDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		if (inHandle != NULL && outHandle != NULL)
-			opened = true;
+		newDesc = dup(oldDesc);
+		if (newDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		outHandle = fdopen(newDesc, "w");
+		if (outHandle == NULL)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		opened = true;
 	}
 }
 

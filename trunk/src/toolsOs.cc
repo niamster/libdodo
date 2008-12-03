@@ -100,12 +100,21 @@ os::syncThreadSection::syncThreadSection()
 #ifdef PTHREAD_EXT
 
 	pthread_mutexattr_t attr;
-	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+	errno = pthread_mutexattr_init(&attr);
+	if (errno != 0)
+		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	pthread_mutex_init(&keeper, &attr);
+	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+	if (errno != 0)
+		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	pthread_mutexattr_destroy(&attr);
+	errno = pthread_mutex_init(&keeper, &attr);
+	if (errno != 0)
+		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+	errno = pthread_mutexattr_destroy(&attr);
+	if (errno != 0)
+		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -130,7 +139,7 @@ os::syncThreadSection::acquire()
 
 	errno = pthread_mutex_lock(&keeper);
 	if (errno != 0 && errno != EDEADLK)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYSTEMSTATICATOMICMUTEXEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -144,7 +153,7 @@ os::syncThreadSection::release()
 
 	errno = pthread_mutex_unlock(&keeper);
 	if (errno != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYSTEMSTATICATOMICMUTEXEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -160,7 +169,14 @@ os::syncThreadStack::syncThreadStack()
 
 os::syncThreadStack::~syncThreadStack()
 {
-	keeper.release();
+	try
+	{
+		keeper.release();
+	}
+	catch (...)
+	{
+
+	}
 }
 
 //-------------------------------------------------------------------

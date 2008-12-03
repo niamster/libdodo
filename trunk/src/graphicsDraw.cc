@@ -87,7 +87,7 @@ draw::primitive(char *description,
 	DrawInfo *di = AcquireDrawInfo();
 
 #else
-	
+
 	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
 
 #endif
@@ -195,7 +195,7 @@ draw::text(const graphics::point &position,
 	DrawInfo *di = AcquireDrawInfo();
 
 #else
-	
+
 	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
 
 #endif
@@ -318,7 +318,7 @@ draw::point(const graphics::point &position,
 	DrawInfo *di = AcquireDrawInfo();
 
 #else
-	
+
 	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
 
 #endif
