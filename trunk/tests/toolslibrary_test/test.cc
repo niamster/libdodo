@@ -38,13 +38,10 @@ int main(int argc, char **argv)
 
 		library sll("./module");
 
-		print pr;
 
-		pr = (print)sll["print"];
-		pr("operator");
+		((print)sll["print"])("operator[]");
 
-		pr = (print)sll.get("print");
-		pr("get");
+		((print)sll.get("print"))("get");
 
 #endif
 
