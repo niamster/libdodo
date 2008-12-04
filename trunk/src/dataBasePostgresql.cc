@@ -92,6 +92,31 @@ postgresql::postgresql() : empty(true)
 
 //-------------------------------------------------------------------
 
+postgresql::postgresql(const __connectionInfo &info) : empty(true)
+{
+#ifndef DATABASE_WO_XEXEC
+
+	collectedData.setExecObject(XEXEC_OBJECT_DATABASEPOSTGRESQL);
+
+#endif
+
+	pgHandle = PQsetdbLogin(
+		collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
+		tools::string::uiToString(collectedData.dbInfo.port).c_str(),
+		NULL,
+		NULL,
+		collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
+		collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
+		collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.c_str());
+
+	int status = PQstatus(pgHandle);
+
+	if (status != CONNECTION_OK)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_POSTGRESQL, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
 postgresql::postgresql(postgresql &a_mypp)
 {
 }

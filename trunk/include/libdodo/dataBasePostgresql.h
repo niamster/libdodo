@@ -70,12 +70,19 @@ namespace dodo
 					postgresql();
 
 					/**
+					 * constructor
+					 * @param dbInfo defines information for connection to db
+					 */
+					postgresql(const __connectionInfo &dbInfo);
+
+					/**
 					 * destructor
 					 */
 					virtual ~postgresql();
 
 					/**
 					 * connect to the database
+					 * @param dbInfo defines information for connection to db
 					 */
 					virtual void connect(const __connectionInfo &dbInfo);
 

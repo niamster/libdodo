@@ -31,7 +31,7 @@
 
 using namespace dodo::io::file;
 
-temp::temp() : overwrite(false),
+temp::temp(bool open) : overwrite(false),
 						 pos(0),
 						 blockOffset(true),
 						 append(false),
@@ -42,6 +42,13 @@ temp::temp() : overwrite(false),
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILETEMP);
 
 #endif
+
+	if (open)
+	{
+		handler = tmpfile();
+		if (handler == NULL)
+			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------

@@ -84,6 +84,12 @@ namespace dodo
 					mysql();
 
 					/**
+					 * constructor
+					 * @param dbInfo defines information for connection to db
+					 */
+					mysql(const __connectionInfo &dbInfo);
+
+					/**
 					 * destructor
 					 */
 					virtual ~mysql();
@@ -100,6 +106,7 @@ namespace dodo
 
 					/**
 					 * connect to the database
+					 * @param dbInfo defines information for connection to db
 					 */
 					virtual void connect(const __connectionInfo &dbInfo);
 

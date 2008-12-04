@@ -86,6 +86,13 @@ namespace dodo
 					fifo();
 
 					/**
+					 * constructor
+					 * @param path defines path to the file
+					 * @param mode defines mode to open file[see fifoOpenmodeEnum]
+					 */
+					fifo(const dodoString &path, short mode);
+
+					/**
 					 * copy constructor
 					 * @note xexec object is not copied
 					 */

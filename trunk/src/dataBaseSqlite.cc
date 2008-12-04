@@ -45,6 +45,25 @@ sqlite::sqlite() : empty(true)
 
 //-------------------------------------------------------------------
 
+sqlite::sqlite(const __connectionInfo &info) : empty(true)
+
+{
+#ifndef DATABASE_WO_XEXEC
+
+	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
+
+#endif
+
+	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &sqliteHandle) != SQLITE_OK)
+	{
+		sqlite3_close(sqliteHandle);
+
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_SQLITE, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+	}
+}
+
+//-------------------------------------------------------------------
+
 sqlite::sqlite(sqlite &a_pp)
 {
 }

@@ -45,6 +45,82 @@ fifo::fifo() : inFileFifoBuffer(IOPIPE_INSIZE),
 
 //-------------------------------------------------------------------
 
+fifo::fifo(const dodoString &path,
+           short mode) : inFileFifoBuffer(IOPIPE_INSIZE),
+				outFileFifoBuffer(IOPIPE_OUTSIZE),
+				blocked(true),
+				handler(NULL),
+				path(path),
+				mode(mode)
+{
+#ifndef IO_WO_XEXEC
+
+	collectedData.setExecObject(XEXEC_OBJECT_IOFILEFIFO);
+
+#endif
+
+	if (path.size() != 0)
+	{
+		bool exists(false);
+		struct stat st;
+
+		if (::lstat(path.c_str(), &st) == -1)
+		{
+			if (errno != ENOENT)
+				throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		}
+		else
+			exists = true;
+
+		if (exists && !S_ISFIFO(st.st_mode))
+			throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_LIBDODO, FIFOEX_WRONGFILENAME, IOFILEFIFOEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+
+		if (!exists)
+			tools::filesystem::mkfifo(path, DEFAULT_FILE_PERM);
+
+		switch (mode)
+		{
+			case FIFO_OPENMODE_WRITE:
+
+				handler = fopen(path.c_str(), "w");
+
+				break;
+
+			case FIFO_OPENMODE_READ_OPENNONBLOCK:
+			{
+#ifdef O_LARGEFILE
+				int fd = ::open(path.c_str(), O_NONBLOCK|O_RDONLY|O_LARGEFILE);
+#else
+				int fd = ::open(path.c_str(), O_NONBLOCK|O_RDONLY);
+#endif
+
+				int blockFlag = fcntl(fd, F_GETFL);
+				if (blockFlag == -1)
+					throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+				blockFlag &= ~O_NONBLOCK;
+
+				if (fcntl(fd, F_SETFL, blockFlag) == -1)
+					throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+				handler = fdopen(fd, "r");
+
+				break;
+			}
+
+			case FIFO_OPENMODE_READ:
+			default:
+
+				handler = fopen(path.c_str(), "r");
+		}
+	}
+
+	if (handler == NULL)
+		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+}
+
+//-------------------------------------------------------------------
+
 fifo::fifo(const fifo &fd) : inFileFifoBuffer(fd.inFileFifoBuffer),
 							outFileFifoBuffer(fd.outFileFifoBuffer),
 							blocked(fd.blocked),

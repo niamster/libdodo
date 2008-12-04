@@ -46,6 +46,78 @@ regular::regular() : overwrite(false),
 
 //-------------------------------------------------------------------
 
+regular::regular(const dodoString &a_path,
+      		   short a_mode) : overwrite(false),
+			 pos(0),
+			 blockOffset(true),
+			 append(false),
+			 handler(NULL),
+			 path(a_path),
+			 mode(a_mode)
+{
+#ifndef IO_WO_XEXEC
+
+	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
+
+#endif
+
+	bool exists(false);
+
+	if (path.size() == 0)
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+	else
+	{
+		struct stat st;
+
+		if (::lstat(path.c_str(), &st) == -1)
+		{
+			if (errno != ENOENT)
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		}
+		else
+			exists = true;
+
+		if (exists && !S_ISREG(st.st_mode) && !S_ISBLK(st.st_mode))
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+
+		switch (mode)
+		{
+			case REGULAR_OPENMODE_READ_WRITE:
+
+				handler = fopen(path.c_str(), "r+");
+				if (handler == NULL)
+					handler = fopen(path.c_str(), "w+");
+
+				break;
+
+			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+
+				handler = fopen(path.c_str(), "w+");
+
+				break;
+
+			case REGULAR_OPENMODE_APPEND:
+
+				handler = fopen(path.c_str(), "a");
+
+				break;
+
+			case REGULAR_OPENMODE_READ_ONLY:
+			default:
+
+				handler = fopen(path.c_str(), "r");
+		}
+	}
+
+	if (handler == NULL)
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+
+	if (!exists)
+		tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
+}
+
+//-------------------------------------------------------------------
+
 regular::regular(const regular &fd) : overwrite(fd.overwrite),
 							 path(fd.path),
 							 pos(fd.pos),

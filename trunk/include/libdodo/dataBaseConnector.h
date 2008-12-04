@@ -145,7 +145,7 @@ namespace dodo
 				public:
 
 					/**
-					 *constructor
+					 * constructor
 					 */
 					connector();
 

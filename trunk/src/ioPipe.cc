@@ -31,7 +31,7 @@
 
 using namespace dodo;
 
-io::pipe::pipe() : inPipeBuffer(IOPIPE_INSIZE),
+io::pipe::pipe(bool open) : inPipeBuffer(IOPIPE_INSIZE),
 			   outPipeBuffer(IOPIPE_OUTSIZE),
 			   blocked(true),
 			   inHandle(NULL),
@@ -42,6 +42,22 @@ io::pipe::pipe() : inPipeBuffer(IOPIPE_INSIZE),
 	collectedData.setExecObject(XEXEC_OBJECT_IOPIPE);
 
 #endif
+
+	if (open)
+	{
+		int pipefd[2];
+
+		if (::pipe(pipefd) != 0)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		inHandle = fdopen(pipefd[0], "r");
+		if (inHandle == NULL)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		outHandle = fdopen(pipefd[1], "w");
+		if (outHandle == NULL)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------

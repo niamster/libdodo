@@ -46,6 +46,42 @@ mysql::mysql() : empty(true),
 
 //-------------------------------------------------------------------
 
+mysql::mysql(const __connectionInfo &info) : empty(true),
+				 type(CLIENT_MULTI_STATEMENTS)
+
+{
+#ifndef DATABASE_WO_XEXEC
+
+	collectedData.setExecObject(XEXEC_OBJECT_DATABASEMYSQL);
+
+#endif
+
+	mysqlHandle = mysql_init(NULL);
+
+	if (!mysql_real_connect(mysqlHandle,
+							collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
+							collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
+							collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.c_str(),
+							collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
+							collectedData.dbInfo.port,
+							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
+							type))
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_MYSQL, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+
+#ifndef MYSQL_NO_OPT_RECONNECT
+
+	if (reconnect)
+	{
+		my_bool rc = 1;
+
+		mysql_options(mysqlHandle, MYSQL_OPT_RECONNECT, &rc);
+	}
+
+#endif
+}
+
+//-------------------------------------------------------------------
+
 mysql::mysql(mysql &a_mypp)
 {
 }
