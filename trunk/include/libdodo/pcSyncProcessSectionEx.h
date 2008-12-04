@@ -45,7 +45,7 @@ namespace dodo
 				/**
 				 * libdodo defined errors
 				 */
-				enum singleExR
+				enum sectionExR
 				{
 					SECTIONEX_NOTOPENED,
 				};

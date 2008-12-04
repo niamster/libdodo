@@ -34,7 +34,8 @@
 using namespace dodo::data::base;
 
 mysql::mysql() : empty(true),
-				 type(CLIENT_MULTI_STATEMENTS)
+				 type(CLIENT_MULTI_STATEMENTS),
+				 mysqlHandle(NULL)
 
 {
 #ifndef DATABASE_WO_XEXEC
@@ -42,12 +43,15 @@ mysql::mysql() : empty(true),
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASEMYSQL);
 
 #endif
+
+	mysqlHandle = mysql_init(NULL);
 }
 
 //-------------------------------------------------------------------
 
 mysql::mysql(const __connectionInfo &info) : empty(true),
-				 type(CLIENT_MULTI_STATEMENTS)
+				 type(CLIENT_MULTI_STATEMENTS),
+				 mysqlHandle(NULL)
 
 {
 #ifndef DATABASE_WO_XEXEC
@@ -55,6 +59,8 @@ mysql::mysql(const __connectionInfo &info) : empty(true),
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASEMYSQL);
 
 #endif
+
+	collectedData.dbInfo = info;
 
 	mysqlHandle = mysql_init(NULL);
 
@@ -90,7 +96,7 @@ mysql::mysql(mysql &a_mypp)
 
 mysql::~mysql()
 {
-	if (connected)
+	if (mysqlHandle != NULL)
 	{
 		if (!empty)
 			mysql_free_result(mysqlResult);
@@ -105,6 +111,9 @@ void
 mysql::connectSettings(unsigned long a_type,
 					   const __mysqlSslOptions &options)
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	type = a_type;
 
 	if (mysql_ssl_set(mysqlHandle,
@@ -128,7 +137,7 @@ mysql::connect(const __connectionInfo &info)
 	performXExec(preExec);
 #endif
 
-	if (connected)
+	if (mysqlHandle != NULL)
 	{
 		if (!empty)
 		{
@@ -138,7 +147,7 @@ mysql::connect(const __connectionInfo &info)
 
 		mysql_close(mysqlHandle);
 
-		connected = false;
+		mysqlHandle = NULL;
 	}
 
 	mysqlHandle = mysql_init(NULL);
@@ -167,8 +176,6 @@ mysql::connect(const __connectionInfo &info)
 #ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
-
-	connected = true;
 }
 
 //-------------------------------------------------------------------
@@ -176,7 +183,7 @@ mysql::connect(const __connectionInfo &info)
 void
 mysql::disconnect()
 {
-	if (connected)
+	if (mysqlHandle != NULL)
 	{
 #ifndef DATABASE_WO_XEXEC
 		operType = DATABASE_OPERATION_DISCONNECT;
@@ -195,7 +202,7 @@ mysql::disconnect()
 		performXExec(postExec);
 #endif
 
-		connected = false;
+		mysqlHandle = NULL;
 	}
 }
 
@@ -204,6 +211,9 @@ mysql::disconnect()
 dodoArray<dodo::dodoStringArray>
 mysql::fetchRows() const
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHROW;
 	performXExec(preExec);
@@ -261,6 +271,9 @@ mysql::fetchRows() const
 dodo::dodoStringArray
 mysql::fetchFields() const
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHFIELD;
 	performXExec(preExec);
@@ -303,6 +316,9 @@ mysql::fetch() const
 unsigned int
 mysql::rowsCount() const
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (empty || !show)
 		return 0;
 	else
@@ -314,6 +330,9 @@ mysql::rowsCount() const
 unsigned int
 mysql::fieldsCount() const
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (empty || !show)
 		return 0;
 	else
@@ -325,6 +344,9 @@ mysql::fieldsCount() const
 unsigned int
 mysql::affectedRowsCount() const
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (empty || show)
 		return 0;
 	else
@@ -336,6 +358,9 @@ mysql::affectedRowsCount() const
 void
 mysql::getFieldsTypes(const dodoString &table)
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	dodoString temp = collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + table;
 
 	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
@@ -419,6 +444,9 @@ void
 mysql::exec(const dodoString &query,
 			bool result)
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_EXEC;
 	performXExec(preExec);
@@ -473,6 +501,9 @@ mysql::exec(const dodoString &query,
 void
 mysql::setCharset(const dodoString &charset)
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	mysql_options(mysqlHandle, MYSQL_SET_CHARSET_NAME, charset.c_str());
 }
 
@@ -481,6 +512,9 @@ mysql::setCharset(const dodoString &charset)
 void
 mysql::setConnectTimeout(unsigned int time)
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	mysql_options(mysqlHandle, MYSQL_OPT_CONNECT_TIMEOUT, (char *)&time);
 }
 
@@ -489,6 +523,9 @@ mysql::setConnectTimeout(unsigned int time)
 dodoString
 mysql::getCharset() const
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	return mysql_character_set_name(mysqlHandle);
 }
 
@@ -497,6 +534,9 @@ mysql::getCharset() const
 dodo::dodoStringMapArray
 mysql::fetchFieldsToRows() const
 {
+	if (mysqlHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	dodoStringMapArray rowsFields;
 
 	if (empty || !show)
