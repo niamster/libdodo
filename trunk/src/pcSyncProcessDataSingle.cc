@@ -179,6 +179,9 @@ single::close()
 			}
 		}
 	}
+
+	keeper = -1;
+
 #else
 
 	if (keeper != NULL)
@@ -194,6 +197,9 @@ single::close()
 			if (sem_unlink(key.c_str()))
 				throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
+
+	keeper = NULL;
+
 #endif
 }
 
@@ -291,6 +297,9 @@ single::set(void *a_data)
 {
 #ifdef XSI_IPC
 
+	if (keeper == -1)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SET, exception::ERRNO_LIBDODO, SINGLEEX_NOTOPENED, PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	operations[0].sem_op = 0;
 
 	if(semop(keeper, operations, 1) != 0)
@@ -309,6 +318,9 @@ single::set(void *a_data)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #else
+
+	if (keeper == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SET, exception::ERRNO_LIBDODO, SINGLEEX_NOTOPENED, PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (sem_wait(keeper) != 0)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -335,6 +347,9 @@ void *
 single::acquire(unsigned long microseconds)
 {
 #ifdef XSI_IPC
+
+	if (keeper == -1)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_ACQUIRE, exception::ERRNO_LIBDODO, SINGLEEX_NOTOPENED, PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (microseconds == 0)
 	{
@@ -396,6 +411,9 @@ single::acquire(unsigned long microseconds)
 
 #else
 
+	if (keeper == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_ACQUIRE, exception::ERRNO_LIBDODO, SINGLEEX_NOTOPENED, PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (microseconds == 0)
 	{
 		if (sem_wait(keeper) != 0)
@@ -441,12 +459,18 @@ single::release()
 {
 #ifdef XSI_IPC
 
+	if (keeper == -1)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_RELEASE, exception::ERRNO_LIBDODO, SINGLEEX_NOTOPENED, PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	operations[0].sem_op = -1;
 
 	if(semop(keeper, operations, 1) != 0)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #else
+
+	if (keeper == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_RELEASE, exception::ERRNO_LIBDODO, SINGLEEX_NOTOPENED, PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (sem_post(keeper) != 0)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

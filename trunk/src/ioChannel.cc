@@ -43,8 +43,7 @@ __xexecIoChannelCollectedData::__xexecIoChannelCollectedData(xexec *a_executor,
 //-------------------------------------------------------------------
 
 channel::channel() : inSize(IO_INSIZE),
-					 outSize(IO_OUTSIZE),
-					 opened(false)
+					 outSize(IO_OUTSIZE)
 
 #ifndef IO_WO_XEXEC
 

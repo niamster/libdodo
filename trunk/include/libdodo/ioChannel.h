@@ -163,8 +163,6 @@ namespace dodo
 				 */
 				virtual void _writeStream(const char * const data) = 0;
 
-				bool opened;                                 ///< true if I/O *session* is opened
-
 #ifndef IO_WO_XEXEC
 
 				__xexecIoChannelCollectedData collectedData;                                   ///< data collected for xexec

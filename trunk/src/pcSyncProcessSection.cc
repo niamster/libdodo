@@ -178,6 +178,8 @@ section::close()
 		}
 	}
 
+	keeper = -1;
+
 #else
 
 	if (keeper != NULL)
@@ -193,6 +195,8 @@ section::close()
 			if (sem_unlink(key.c_str()) == -1)
 				throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
+
+	keeper = NULL;
 
 #endif
 }
@@ -291,6 +295,9 @@ section::acquire()
 {
 #ifdef XSI_IPC
 
+	if (keeper == -1)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_ACQUIRE, exception::ERRNO_LIBDODO, SECTIONEX_NOTOPENED, PCSYNCPROCESSSECTIONEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	operations[0].sem_op = 0;
 
 	if(semop(keeper, operations, 1) != 0)
@@ -302,6 +309,9 @@ section::acquire()
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #else
+
+	if (keeper == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_ACQUIRE, exception::ERRNO_LIBDODO, SECTIONEX_NOTOPENED, PCSYNCPROCESSSECTIONEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (sem_wait(keeper) != 0)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -318,12 +328,18 @@ section::release()
 {
 #ifdef XSI_IPC
 
+	if (keeper == -1)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_RELEASE, exception::ERRNO_LIBDODO, SECTIONEX_NOTOPENED, PCSYNCPROCESSSECTIONEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	operations[0].sem_op = -1;
 
 	if(semop(keeper, operations, 1) != 0)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #else
+
+	if (keeper == NULL)
+		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_RELEASE, exception::ERRNO_LIBDODO, SECTIONEX_NOTOPENED, PCSYNCPROCESSSECTIONEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (sem_post(keeper) != 0)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

@@ -63,10 +63,8 @@ exchange::exchange(exchange &fse)
 	lingerSeconds = fse.lingerSeconds;
 	blocked = fse.blocked;
 	socket = fse.socket;
-	opened = fse.opened;
 
 	fse.socket = -1;
-	fse.opened = false;
 }
 
 //-------------------------------------------------------------------
@@ -97,7 +95,7 @@ exchange::exchange(__initialAccept &a_init)
 
 exchange::~exchange()
 {
-	if (opened)
+	if (socket != -1)
 	{
 		::shutdown(socket, SHUT_RDWR);
 
@@ -127,14 +125,12 @@ exchange::close()
 	performXExec(preExec);
 #endif
 
-	if (!opened)
-		return ;
+	if (socket != -1)
+	{
+		_close(socket);
 
-	_close(socket);
-
-	socket = -1;
-
-	opened = false;
+		socket = -1;
+	}
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
@@ -150,13 +146,11 @@ exchange::init(int a_socket,
 {
 	protector pg(this);
 
-	if (opened)
+	if (socket != -1)
 	{
 		_close(socket);
 
 		socket = -1;
-
-		opened = false;
 	}
 
 	blocked = a_blocked;
@@ -179,8 +173,6 @@ exchange::init(int a_socket,
 	}
 	else
 		block(true);
-
-	opened = true;
 }
 
 //-------------------------------------------------------------------
@@ -190,7 +182,7 @@ exchange::isAlive()
 {
 	protector pg(this);
 
-	if (!opened)
+	if (socket == -1)
 		return false;
 
 	pollfd fd;
@@ -204,7 +196,6 @@ exchange::isAlive()
 	_close(socket);
 
 	socket = -1;
-	opened = false;
 
 	return false;
 }
@@ -215,7 +206,7 @@ exchange::isAlive()
 void
 exchange::_write(const char * const a_data)
 {
-	if (!opened)
+	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	unsigned long iter = outSize / outSocketBuffer;
@@ -283,7 +274,7 @@ exchange::_write(const char * const a_data)
 void
 exchange::_read(char * const a_data)
 {
-	if (!opened)
+	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(a_data, '\0', inSize);
@@ -385,7 +376,7 @@ exchange::_writeStream(const char * const data)
 unsigned long
 exchange::_readStream(char * const data)
 {
-	if (!opened)
+	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(data, '\0', inSize);

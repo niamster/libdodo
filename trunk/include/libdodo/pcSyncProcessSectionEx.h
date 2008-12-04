@@ -43,6 +43,19 @@ namespace dodo
 			namespace process
 			{
 				/**
+				 * libdodo defined errors
+				 */
+				enum singleExR
+				{
+					SECTIONEX_NOTOPENED,
+				};
+
+				/**
+				 * explanations for libdodo defined errors
+				 */
+#define PCSYNCPROCESSSECTIONEX_NOTOPENED_STR      "The semaphore was not opened."
+
+				/**
 				 * IDs of functions where exception might be thrown
 				 */
 				enum sectionFunctionsID
