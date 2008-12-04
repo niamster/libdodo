@@ -56,6 +56,14 @@ namespace dodo
 				 */
 				class section : public sync::section
 				{
+					private:
+
+						/**
+						 * copy constructor
+						 * @note to prevent copying
+						 */
+						section(section &sec);
+
 					public:
 
 						/**

@@ -148,15 +148,13 @@ exchange::close()
 	performXExec(preExec);
 #endif
 
-	if (!opened)
-		return ;
+	if (socket != -1)
+	{
+		_close(socket, sslHandle);
 
-	_close(socket, sslHandle);
-
-	socket = -1;
-	sslHandle = NULL;
-
-	opened = false;
+		socket = -1;
+		sslHandle = NULL;
+	}
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
@@ -173,14 +171,12 @@ exchange::init(int a_socket,
 {
 	protector pg(this);
 
-	if (opened)
+	if (socket != -1)
 	{
 		_close(socket, sslHandle);
 
 		socket = -1;
 		sslHandle = NULL;
-
-		opened = false;
 	}
 
 	blocked = a_blocked;
@@ -204,8 +200,6 @@ exchange::init(int a_socket,
 	}
 	else
 		block(true);
-
-	opened = true;
 }
 
 //-------------------------------------------------------------------
@@ -215,7 +209,7 @@ exchange::isAlive()
 {
 	protector pg(this);
 
-	if (!opened)
+	if (socket == -1)
 		return false;
 
 	pollfd fd;
@@ -231,8 +225,6 @@ exchange::isAlive()
 	socket = -1;
 	sslHandle = NULL;
 
-	opened = false;
-
 	return false;
 }
 
@@ -241,7 +233,7 @@ exchange::isAlive()
 void
 exchange::_write(const char * const a_data)
 {
-	if (!opened)
+	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	unsigned long iter = outSize / outSocketBuffer;
@@ -323,7 +315,7 @@ exchange::_write(const char * const a_data)
 void
 exchange::_read(char * const a_data)
 {
-	if (!opened)
+	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(a_data, '\0', inSize);
@@ -407,7 +399,7 @@ exchange::_read(char * const a_data)
 unsigned long
 exchange::_readStream(char * const data)
 {
-	if (!opened)
+	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(data, '\0', inSize);

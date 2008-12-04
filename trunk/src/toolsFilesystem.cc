@@ -169,12 +169,11 @@ filesystem::mkfifo(const dodoString &path,
 
 void
 filesystem::mkdir(const dodoString &path,
-				  int permissions,
-				  bool force)
+						   int permissions)
 {
 	if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
 	{
-		if (force && (errno == EEXIST))
+		if (errno == EEXIST)
 		{
 			struct stat st;
 			if (::lstat(path.c_str(), &st) == -1)
@@ -184,40 +183,18 @@ filesystem::mkdir(const dodoString &path,
 				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_LIBDODO, FILESYSTEMEX_NOTADIR, TOOLSFILESYSTEMEX_NOTADIR_STR, __LINE__, __FILE__, path);
 		}
 		else
-			throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-	}
-}
-
-//-------------------------------------------------------------------
-
-void
-filesystem::mkdirRecursive(const dodoString &path,
-						   int permissions)
-{
-	if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
-	{
-		if (errno == EEXIST)
 		{
-			struct stat st;
-			if (::lstat(path.c_str(), &st) == -1)
-				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIRRECURSIVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-
-			if (!S_ISDIR(st.st_mode))
-				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIRRECURSIVE, exception::ERRNO_LIBDODO, FILESYSTEMEX_NOTADIR, TOOLSFILESYSTEMEX_NOTADIR_STR, __LINE__, __FILE__, path);
-		}
-		else
-		{
-			mkdirRecursive(dirname(path), permissions);
+			mkdir(dirname(path), permissions);
 
 			if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
 				if (errno == EEXIST)
 				{
 					struct stat st;
 					if (::lstat(path.c_str(), &st) == -1)
-						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIRRECURSIVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 					if (!S_ISDIR(st.st_mode))
-						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIRRECURSIVE, exception::ERRNO_LIBDODO, FILESYSTEMEX_NOTADIR, TOOLSFILESYSTEMEX_NOTADIR_STR, __LINE__, __FILE__, path);
+						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_LIBDODO, FILESYSTEMEX_NOTADIR, TOOLSFILESYSTEMEX_NOTADIR_STR, __LINE__, __FILE__, path);
 				}
 		}
 	}

@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 		st.inSize = 33;
 		st.inPipeBuffer = 20;
 
-		st.read(o);
+		o = st.read();
 
 		cout << o.size() << "\n";
 		cout << o << "\n";

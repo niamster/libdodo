@@ -39,22 +39,31 @@ library::library() : handle(NULL)
 
 //-------------------------------------------------------------------
 
-library::library(const dodoString &path) : handle(NULL)
+library::library(const dodoString &path)
 {
 #ifdef DL_FAST
+
 	handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
+
 #else
+
 	handle = dlopen(path.c_str(), RTLD_LAZY);
+
 #endif
+
+	if (handle == NULL)
+		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_LIBRARY, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 library::~library()
 {
-#ifdef DL_FAST
+#ifndef DL_FAST
+
 	if (handle != NULL)
 		dlclose(handle);
+
 #endif
 }
 
@@ -63,11 +72,24 @@ library::~library()
 void
 library::open(const dodoString &path)
 {
-#ifdef DL_FAST
-	handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
-#else
-	handle = dlopen(path.c_str(), RTLD_LAZY);
+#ifndef DL_FAST
+
+	if (handle != NULL)
+		if (dlclose(handle) != 0)
+			throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+
 #endif
+
+#ifdef DL_FAST
+
+	handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
+
+#else
+
+	handle = dlopen(path.c_str(), RTLD_LAZY);
+
+#endif
+
 	if (handle == NULL)
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
@@ -78,8 +100,11 @@ void
 library::close()
 {
 #ifndef DL_FAST
-	if (dlclose(handle) != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_CLOSE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+
+	if (handle != NULL)
+		if (dlclose(handle) != 0)
+			throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_CLOSE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+
 #endif
 }
 

@@ -68,6 +68,7 @@ namespace dodo
 						SINGLEEX_SET,
 						SINGLEEX_LOCK,
 						SINGLEEX_UNLOCK,
+						SINGLEEX_SIGNLE,
 					};
 				};
 			};

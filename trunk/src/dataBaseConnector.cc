@@ -67,8 +67,7 @@ __tuples::__tuples()
 
 //-------------------------------------------------------------------
 
-connector::connector() : connected(false),
-						 reconnect(true)
+connector::connector() : reconnect(true)
 {
 }
 

@@ -47,13 +47,13 @@ namespace dodo
 				 */
 				enum sectionExR
 				{
-					SECTIONEX_SEMAPHOREWASNOTOPENED,
+					SECTIONEX_NOTOPENED,
 				};
 
 				/**
 				 * explanations for libdodo defined errors
 				 */
-#define PCSYNCPROCESSSECTIONEX_SEMAPHOREWASNOTOPENED_STR "The semaphore was not opened properly."
+#define PCSYNCPROCESSSECTIONEX_NOTOPENED_STR      "The semaphore was not opened."
 
 				/**
 				 * IDs of functions where exception might be thrown
@@ -63,6 +63,9 @@ namespace dodo
 					SECTIONEX_ACQUIRE,
 					SECTIONEX_RELEASE,
 					SECTIONEX_REMOVE,
+					SECTIONEX_SECTION,
+					SECTIONEX_OPEN,
+					SECTIONEX_CLOSE,
 				};
 			};
 		};

@@ -38,23 +38,21 @@ int main(int argc, char **argv)
 {
 #ifdef POSTGRESQL_EXT
 
-	postgresql pp;
-
 	try
 	{
-#ifndef DATABASE_WO_XEXEC
-
-		pp.addPreExec(&hook, NULL);
-
-#endif
-
 		__connectionInfo info;
 		info.db = "test";
 		info.host = "localhost";
 		info.port = 5432;
 		info.user = "postgres";
 
-		pp.connect(info);
+		postgresql pp(info);
+
+#ifndef DATABASE_WO_XEXEC
+
+		pp.addPreExec(&hook, NULL);
+
+#endif
 
 		try
 		{
@@ -92,6 +90,9 @@ int main(int argc, char **argv)
 
 			arr["operation"] = "mu";
 		}
+		
+		pp.disconnect();
+		pp.connect(info);
 
 		pp.select("test", select, "operation='um'");
 		pp.exec();

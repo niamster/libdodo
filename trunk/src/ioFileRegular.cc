@@ -46,6 +46,78 @@ regular::regular() : overwrite(false),
 
 //-------------------------------------------------------------------
 
+regular::regular(const dodoString &a_path,
+      		   short a_mode) : overwrite(false),
+			 pos(0),
+			 blockOffset(true),
+			 append(false),
+			 handler(NULL),
+			 path(a_path),
+			 mode(a_mode)
+{
+#ifndef IO_WO_XEXEC
+
+	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
+
+#endif
+
+	bool exists(false);
+
+	if (path.size() == 0)
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+	else
+	{
+		struct stat st;
+
+		if (::lstat(path.c_str(), &st) == -1)
+		{
+			if (errno != ENOENT)
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		}
+		else
+			exists = true;
+
+		if (exists && !S_ISREG(st.st_mode) && !S_ISBLK(st.st_mode))
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+
+		switch (mode)
+		{
+			case REGULAR_OPENMODE_READ_WRITE:
+
+				handler = fopen(path.c_str(), "r+");
+				if (handler == NULL)
+					handler = fopen(path.c_str(), "w+");
+
+				break;
+
+			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+
+				handler = fopen(path.c_str(), "w+");
+
+				break;
+
+			case REGULAR_OPENMODE_APPEND:
+
+				handler = fopen(path.c_str(), "a");
+
+				break;
+
+			case REGULAR_OPENMODE_READ_ONLY:
+			default:
+
+				handler = fopen(path.c_str(), "r");
+		}
+	}
+
+	if (handler == NULL)
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+
+	if (!exists)
+		tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
+}
+
+//-------------------------------------------------------------------
+
 regular::regular(const regular &fd) : overwrite(fd.overwrite),
 							 path(fd.path),
 							 pos(fd.pos),
@@ -64,13 +136,17 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.opened)
+	if (fd.handler != NULL)
 	{
 		int oldDesc, newDesc;
 
 		oldDesc = fileno(fd.handler);
+		if (oldDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		newDesc = dup(oldDesc);
+		if (newDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		switch (mode)
 		{
@@ -93,8 +169,8 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 				handler = fdopen(newDesc, "r");
 		}
 
-		if (handler != NULL)
-			opened = true;
+		if (handler == NULL)
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 }
 
@@ -102,7 +178,7 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 
 regular::~regular()
 {
-	if (opened)
+	if (handler != NULL)
 		fclose(handler);
 }
 
@@ -113,7 +189,7 @@ regular::getInDescriptor() const
 {
 	protector pg(this);
 
-	if (!opened)
+	if (handler == NULL)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	return fileno(handler);
@@ -126,7 +202,7 @@ regular::getOutDescriptor() const
 {
 	protector pg(this);
 
-	if (!opened)
+	if (handler == NULL)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	return fileno(handler);
@@ -139,14 +215,12 @@ regular::clone(const regular &fd)
 {
 	protector pg(this);
 
-	if (opened)
+	if (handler != NULL)
 	{
 		if (fclose(handler) != 0)
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		handler = NULL;
-
-		opened = false;
 	}
 
 	overwrite = fd.overwrite;
@@ -158,7 +232,7 @@ regular::clone(const regular &fd)
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.opened)
+	if (fd.handler != NULL)
 	{
 		int oldDesc, newDesc;
 
@@ -193,8 +267,6 @@ regular::clone(const regular &fd)
 
 		if (handler == NULL)
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		opened = true;
 	}
 }
 
@@ -210,14 +282,12 @@ regular::close()
 	performXExec(preExec);
 #endif
 
-	if (opened)
+	if (handler != NULL)
 	{
 		if (fclose(handler) != 0)
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		handler = NULL;
-
-		opened = false;
 	}
 
 #ifndef IO_WO_XEXEC
@@ -241,12 +311,12 @@ regular::open(const dodoString &a_path,
 	path = a_path;
 	mode = a_mode;
 
-	if (opened)
+	if (handler != NULL)
 	{
 		if (fclose(handler) != 0)
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-		opened = false;
+		handler = NULL;
 	}
 
 	bool exists(false);
@@ -303,8 +373,6 @@ regular::open(const dodoString &a_path,
 	if (!exists)
 		tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
 
-	opened = true;
-
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
@@ -315,7 +383,7 @@ regular::open(const dodoString &a_path,
 void
 regular::_read(char * const a_data)
 {
-	if (!opened)
+	if (handler == NULL)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	unsigned long pos = blockOffset?this->pos * inSize:this->pos;
@@ -348,7 +416,7 @@ regular::_read(char * const a_data)
 void
 regular::_write(const char *const a_data)
 {
-	if (!opened)
+	if (handler == NULL)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (mode != REGULAR_OPENMODE_APPEND)
@@ -438,7 +506,7 @@ regular::flush()
 {
 	protector pg(this);
 
-	if (!opened)
+	if (handler == NULL)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fflush(handler) != 0)
@@ -450,7 +518,7 @@ regular::flush()
 unsigned long
 regular::_readStream(char * const a_data)
 {
-	if (!opened)
+	if (handler == NULL)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	unsigned long readSize = inSize + 1;
@@ -511,7 +579,7 @@ regular::_readStream(char * const a_data)
 void
 regular::_writeStream(const char *const a_data)
 {
-	if (!opened)
+	if (handler == NULL)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (mode != REGULAR_OPENMODE_APPEND)

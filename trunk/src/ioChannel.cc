@@ -43,8 +43,7 @@ __xexecIoChannelCollectedData::__xexecIoChannelCollectedData(xexec *a_executor,
 //-------------------------------------------------------------------
 
 channel::channel() : inSize(IO_INSIZE),
-					 outSize(IO_OUTSIZE),
-					 opened(false)
+					 outSize(IO_OUTSIZE)
 
 #ifndef IO_WO_XEXEC
 
@@ -63,10 +62,12 @@ channel::~channel()
 
 //-------------------------------------------------------------------
 
-void
-channel::read(dodoString &a_str)
+dodoString
+channel::read()
 {
 	protector pg(this);
+
+	dodoString a_str;
 
 	unsigned long readSize = inSize + 1;
 
@@ -116,14 +117,18 @@ channel::read(dodoString &a_str)
 	delete [] data;
 
 #endif
+
+	return a_str;
 }
 
 //-------------------------------------------------------------------
 
-void
-channel::readStream(dodoString &a_str)
+dodoString
+channel::readStream()
 {
 	protector pg(this);
+
+	dodoString a_str;
 
 #ifndef IO_WO_XEXEC
 	operType = IO_OPERATION_READSTREAMSTRING;
@@ -171,6 +176,8 @@ channel::readStream(dodoString &a_str)
 	delete [] data;
 
 #endif
+
+	return a_str;
 }
 
 //-------------------------------------------------------------------

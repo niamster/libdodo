@@ -33,14 +33,35 @@
 
 using namespace dodo::data::base;
 
-sqlite::sqlite() : empty(true)
-
+sqlite::sqlite() : empty(true),
+					sqliteHandle(NULL)
 {
 #ifndef DATABASE_WO_XEXEC
 
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
 
 #endif
+}
+
+//-------------------------------------------------------------------
+
+sqlite::sqlite(const __connectionInfo &info) : empty(true),
+												sqliteHandle(NULL)
+{
+#ifndef DATABASE_WO_XEXEC
+
+	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
+
+#endif
+
+	collectedData.dbInfo = info;
+
+	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &sqliteHandle) != SQLITE_OK)
+	{
+		sqlite3_close(sqliteHandle);
+
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_SQLITE, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -53,7 +74,7 @@ sqlite::sqlite(sqlite &a_pp)
 
 sqlite::~sqlite()
 {
-	if (connected)
+	if (sqliteHandle != NULL)
 	{
 		if (!empty)
 			sqlite3_finalize(sqliteResult);
@@ -74,7 +95,7 @@ sqlite::connect(const __connectionInfo &info)
 	performXExec(preExec);
 #endif
 
-	if (connected)
+	if (sqliteHandle != NULL)
 	{
 		if (!empty)
 		{
@@ -85,7 +106,7 @@ sqlite::connect(const __connectionInfo &info)
 		if (sqlite3_close(sqliteHandle) != SQLITE_OK)
 			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
-		connected = false;
+		sqliteHandle = NULL;
 	}
 
 	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &sqliteHandle) != SQLITE_OK)
@@ -98,8 +119,6 @@ sqlite::connect(const __connectionInfo &info)
 #ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
-
-	connected = true;
 }
 
 //-------------------------------------------------------------------
@@ -107,7 +126,7 @@ sqlite::connect(const __connectionInfo &info)
 void
 sqlite::disconnect()
 {
-	if (connected)
+	if (sqliteHandle != NULL)
 	{
 #ifndef DATABASE_WO_XEXEC
 		operType = DATABASE_OPERATION_DISCONNECT;
@@ -127,7 +146,7 @@ sqlite::disconnect()
 		performXExec(postExec);
 #endif
 
-		connected = false;
+		sqliteHandle = NULL;
 	}
 }
 
@@ -136,6 +155,9 @@ sqlite::disconnect()
 dodoArray<dodo::dodoStringArray>
 sqlite::fetchRows() const
 {
+	if (sqliteHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHROW;
 	performXExec(preExec);
@@ -238,6 +260,9 @@ sqlite::fetchRows() const
 dodo::dodoStringArray
 sqlite::fetchFields() const
 {
+	if (sqliteHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHFIELD;
 	performXExec(preExec);
@@ -277,6 +302,9 @@ sqlite::fetch() const
 unsigned int
 sqlite::rowsCount() const
 {
+	if (sqliteHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (show)
 	{
 		sqlite3_reset(sqliteResult);
@@ -323,6 +351,9 @@ sqlite::rowsCount() const
 unsigned int
 sqlite::fieldsCount() const
 {
+	if (sqliteHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (show)
 		return sqlite3_column_count(sqliteResult);
 	else
@@ -334,6 +365,9 @@ sqlite::fieldsCount() const
 unsigned int
 sqlite::affectedRowsCount() const
 {
+	if (sqliteHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (!show)
 		return sqlite3_changes(sqliteHandle);
 	else
@@ -345,6 +379,9 @@ sqlite::affectedRowsCount() const
 void
 sqlite::getFieldsTypes(const dodoString &table)
 {
+	if (sqliteHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	dodoString temp = collectedData.dbInfo.db + ":" + table;
 
 	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
@@ -548,6 +585,9 @@ void
 sqlite::exec(const dodoString &query,
 			 bool result)
 {
+	if (sqliteHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_EXEC;
 	performXExec(preExec);
@@ -905,6 +945,9 @@ sqlite::insertCollect()
 dodo::dodoStringMapArray
 sqlite::fetchFieldsToRows() const
 {
+	if (sqliteHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	dodoStringMapArray rowsFields;
 
 	if (!show)

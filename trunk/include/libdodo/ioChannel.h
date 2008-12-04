@@ -102,10 +102,10 @@ namespace dodo
 				virtual ~channel();
 
 				/**
-				 * @param data defines buffer that will be filled
+				 * @return read data
 				 * @note not more then inSize
 				 */
-				virtual void read(dodoString &data);
+				virtual dodoString read();
 
 				/**
 				 * @param data defines data that will be written
@@ -115,10 +115,10 @@ namespace dodo
 
 				/**
 				 * read from stream - '\0' or '\n' - terminated string
-				 * @param data defines buffer that will be filled
+				 * @return read data
 				 * @note not more then inSize
 				 */
-				virtual void readStream(dodoString &data);
+				virtual dodoString readStream();
 
 				/**
 				 * write to stream - '\0' - terminated string
@@ -162,8 +162,6 @@ namespace dodo
 				 * @note not more then outSize(including '\0')
 				 */
 				virtual void _writeStream(const char * const data) = 0;
-
-				bool opened;                                 ///< true if I/O *session* is opened
 
 #ifndef IO_WO_XEXEC
 

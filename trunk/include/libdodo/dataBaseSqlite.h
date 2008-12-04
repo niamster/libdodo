@@ -69,12 +69,19 @@ namespace dodo
 					sqlite();
 
 					/**
+					 * constructor
+					 * @param dbInfo defines information for connection to db
+					 */
+					sqlite(const __connectionInfo &dbInfo);
+
+					/**
 					 * destructor
 					 */
 					virtual ~sqlite();
 
 					/**
 					 * connect to the database
+					 * @param dbInfo defines information for connection to db
 					 */
 					virtual void connect(const __connectionInfo &dbInfo);
 

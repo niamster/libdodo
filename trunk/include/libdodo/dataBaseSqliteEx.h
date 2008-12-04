@@ -41,6 +41,19 @@ namespace dodo
 		namespace base
 		{
 			/**
+			 * libdodo defined errors
+			 */
+			enum sqliteExR
+			{
+				SQLITEEX_NOTOPENED,
+			};
+
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define DATABASESQLITEEX_NOTOPENED_STR      "The database was not opened."
+
+			/**
 			 * IDs of functions where exception might be thrown
 			 */
 			enum sqliteFunctionsID
@@ -48,6 +61,7 @@ namespace dodo
 				SQLITEEX_DISCONNECT,
 				SQLITEEX_CONNECT,
 				SQLITEEX_EXEC,
+				SQLITEEX_SQLITE,
 				SQLITEEX_FETCHROWS,
 				SQLITEEX_FETCHFIELDSTOROWS,
 				SQLITEEX_GETFIELDSTYPES,

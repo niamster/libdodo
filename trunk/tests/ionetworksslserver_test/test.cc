@@ -60,7 +60,7 @@ process(exchange fse)
 	dodoString rec = "";
 	try
 	{
-		fse.read(rec);
+		rec = fse.read();
 
 		cout << rec << rec.size() << endl;
 		cout.flush();

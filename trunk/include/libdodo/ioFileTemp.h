@@ -76,8 +76,9 @@ namespace dodo
 
 					/**
 					 * constructor
+					 * @param open defines whether temp file should be opened in constructor
 					 */
-					temp();
+					temp(bool open = false);
 
 					/**
 					 * copy constructor

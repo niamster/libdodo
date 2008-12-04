@@ -41,8 +41,6 @@ stdio::stdio()
 
 	inHandle = stdin;
 	outHandle = stdout;
-
-	opened = true;
 }
 
 //-------------------------------------------------------------------
@@ -55,7 +53,6 @@ stdio::stdio(stdio &fd)
 
 stdio::~stdio()
 {
-	opened = false;
 }
 
 //-------------------------------------------------------------------

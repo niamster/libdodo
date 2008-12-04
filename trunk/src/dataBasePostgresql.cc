@@ -81,13 +81,42 @@ const dodoString postgresql::encodingStatements[] = {
 
 //-------------------------------------------------------------------
 
-postgresql::postgresql() : empty(true)
+postgresql::postgresql() : empty(true),
+						pgHandle(NULL)
 {
 #ifndef DATABASE_WO_XEXEC
 
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASEPOSTGRESQL);
 
 #endif
+}
+
+//-------------------------------------------------------------------
+
+postgresql::postgresql(const __connectionInfo &info) : empty(true),
+														pgHandle(NULL)
+{
+#ifndef DATABASE_WO_XEXEC
+
+	collectedData.setExecObject(XEXEC_OBJECT_DATABASEPOSTGRESQL);
+
+#endif
+
+	collectedData.dbInfo = info;
+
+	pgHandle = PQsetdbLogin(
+		collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
+		tools::string::uiToString(collectedData.dbInfo.port).c_str(),
+		NULL,
+		NULL,
+		collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
+		collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
+		collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.c_str());
+
+	int status = PQstatus(pgHandle);
+
+	if (status != CONNECTION_OK)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_POSTGRESQL, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -100,7 +129,7 @@ postgresql::postgresql(postgresql &a_mypp)
 
 postgresql::~postgresql()
 {
-	if (connected)
+	if (pgHandle != NULL)
 	{
 		if (!empty)
 			PQclear(pgResult);
@@ -121,7 +150,7 @@ postgresql::connect(const __connectionInfo &info)
 	performXExec(preExec);
 #endif
 
-	if (connected)
+	if (pgHandle != NULL)
 	{
 		if (!empty)
 		{
@@ -131,7 +160,7 @@ postgresql::connect(const __connectionInfo &info)
 
 		PQfinish(pgHandle);
 
-		connected = false;
+		pgHandle = NULL;
 	}
 
 	pgHandle = PQsetdbLogin(
@@ -146,13 +175,15 @@ postgresql::connect(const __connectionInfo &info)
 	int status = PQstatus(pgHandle);
 
 	if (status != CONNECTION_OK)
+	{
+		pgHandle = NULL;
+
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_CONNECT, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+	}
 
 #ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
 #endif
-
-	connected = true;
 }
 
 //-------------------------------------------------------------------
@@ -160,7 +191,7 @@ postgresql::connect(const __connectionInfo &info)
 void
 postgresql::disconnect()
 {
-	if (connected)
+	if (pgHandle != NULL)
 	{
 #ifndef DATABASE_WO_XEXEC
 		operType = DATABASE_OPERATION_DISCONNECT;
@@ -179,7 +210,7 @@ postgresql::disconnect()
 		performXExec(postExec);
 #endif
 
-		connected = false;
+		pgHandle = NULL;
 	}
 }
 
@@ -188,6 +219,8 @@ postgresql::disconnect()
 dodoArray<dodo::dodoStringArray>
 postgresql::fetchRows() const
 {
+	if (pgHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHROW;
@@ -240,6 +273,9 @@ postgresql::fetchRows() const
 dodo::dodoStringArray
 postgresql::fetchFields() const
 {
+	if (pgHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHFIELD;
 	performXExec(preExec);
@@ -279,6 +315,9 @@ postgresql::fetch() const
 unsigned int
 postgresql::rowsCount() const
 {
+	if (pgHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (empty || !show)
 		return 0;
 	else
@@ -290,6 +329,9 @@ postgresql::rowsCount() const
 unsigned int
 postgresql::fieldsCount() const
 {
+	if (pgHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (empty || !show)
 		return 0;
 	else
@@ -301,6 +343,9 @@ postgresql::fieldsCount() const
 unsigned int
 postgresql::affectedRowsCount() const
 {
+	if (pgHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	if (empty || show)
 		return 0;
 	else
@@ -312,6 +357,9 @@ postgresql::affectedRowsCount() const
 void
 postgresql::getFieldsTypes(const dodoString &table)
 {
+	if (pgHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	dodoString temp = collectedData.dbInfo.db + ":" + table;
 
 	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
@@ -411,6 +459,9 @@ void
 postgresql::exec(const dodoString &query,
 				 bool result)
 {
+	if (pgHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_EXEC;
 	performXExec(preExec);
@@ -822,6 +873,9 @@ postgresql::fetchFieldsToRows() const
 void
 postgresql::setCharset(const dodoString &charset)
 {
+	if (pgHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 	int status = PQsetClientEncoding(pgHandle, charset.c_str());
 	if (status == -1)
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
@@ -832,6 +886,9 @@ postgresql::setCharset(const dodoString &charset)
 dodoString
 postgresql::getCharset() const
 {
+	if (pgHandle == NULL)
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
 
 	int encoding = PQclientEncoding(pgHandle);

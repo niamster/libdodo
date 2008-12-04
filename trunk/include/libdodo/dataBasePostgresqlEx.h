@@ -41,12 +41,26 @@ namespace dodo
 		namespace base
 		{
 			/**
+			 * libdodo defined errors
+			 */
+			enum postgresqlExR
+			{
+				POSTGRESQLEX_NOTOPENED,
+			};
+
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define DATABASEPOSTGRESQLEX_NOTOPENED_STR      "The database was not opened."
+
+			/**
 			 * IDs of functions where exception might be thrown
 			 */
 			enum postgresqlFunctionsID
 			{
 				POSTGRESQLEX_CONNECT,
 				POSTGRESQLEX_EXEC,
+				POSTGRESQLEX_POSTGRESQL,
 				POSTGRESQLEX_SETCHARSET,
 				POSTGRESQLEX_GETFIELDSTYPES,
 			};

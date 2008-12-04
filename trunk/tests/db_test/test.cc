@@ -38,47 +38,15 @@ hook(__xexecCollectedData *odata,
 
 int main(int argc, char **argv)
 {
-	connector *pp;
-
-	///parse command line arguments to figure out what db to use
-	if (argc == 2)
+	if (argc == 1)
 	{
-		if (strcasecmp(argv[1], "postgresql") == 0)
-#ifdef POSTGRESQL_EXT
-			pp = new postgresql;
-#else
-			return 1;
-#endif
+		cout << "usage: " << argv[0] << " [postgresql|mysql|sqlite]" << endl;
 
-		else if (strcasecmp(argv[1], "mysql") == 0)
-#ifdef MYSQL_EXT
-			pp = new mysql;
-#else
-			return 1;
-#endif
-
-		else if (strcasecmp(argv[1], "sqlite") == 0)
-#ifdef SQLITE3_EXT
-			pp = new sqlite;
-#else
-			return 1;
-#endif
-
-		else
-			return 1;
-	}
-	else
 		return 1;
+	}
 
 	try
 	{
-
-#ifndef DATABASE_WO_XEXEC
-
-		int pos = pp->addPreExec(hook, (void *)"id");
-
-#endif
-
 		__connectionInfo info;
 		info.db = "test";
 		if (strcasecmp(argv[1], "postgresql") == 0)
@@ -97,7 +65,39 @@ int main(int argc, char **argv)
 		{
 			info.path = "test.lite";
 		}
-		pp->connect(info);
+		
+		connector *pp;
+
+		///parse command line arguments to figure out what db to use
+		if (strcasecmp(argv[1], "postgresql") == 0)
+#ifdef POSTGRESQL_EXT
+			pp = new postgresql(info);
+#else
+			return 1;
+#endif
+
+		else if (strcasecmp(argv[1], "mysql") == 0)
+#ifdef MYSQL_EXT
+			pp = new mysql(info);
+#else
+			return 1;
+#endif
+
+		else if (strcasecmp(argv[1], "sqlite") == 0)
+#ifdef SQLITE3_EXT
+			pp = new sqlite(info);
+#else
+			return 1;
+#endif
+
+		else
+			return 1;
+
+#ifndef DATABASE_WO_XEXEC
+
+		int pos = pp->addPreExec(hook, (void *)"id");
+
+#endif
 
 		///define session charset
 		if (strcasecmp(argv[1], "postgresql") == 0)
@@ -216,6 +216,9 @@ int main(int argc, char **argv)
 
 		pp->insert("test", arr);
 		pp->exec();
+		
+		pp->disconnect();
+		pp->connect(info);
 
 		pp->select("test", select, "operation='ma'");
 		pp->exec();
@@ -225,13 +228,13 @@ int main(int argc, char **argv)
 		///put fetched binary data to file
 		if (store.fields.size() == 3 && store.rows.size() > 0)
 			tools::filesystem::writeToFile("test.db", (*store.rows.begin())[2]);
+		
+		delete pp;
 	}
 	catch (dodo::exception::basic ex)
 	{
 		cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 	}
-
-	delete pp;
 
 	return 0;
 }

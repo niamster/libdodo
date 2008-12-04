@@ -56,6 +56,7 @@ namespace dodo
 		 */
 		enum pipeFunctionsID
 		{
+			PIPEEX_PIPE,
 			PIPEEX_CLOSE,
 			PIPEEX_CLONE,
 			PIPEEX_OPEN,

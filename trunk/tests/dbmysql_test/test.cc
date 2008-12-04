@@ -43,17 +43,15 @@ int main(int argc, char **argv)
 
 #ifdef MYSQL_EXT
 
-	mysql pp;
 	try
 	{
+		mysql pp(__connectionInfo("test", "localhost", "root", "password", "", 3306));
 
 #ifndef DATABASE_WO_XEXEC
 
 		int pos = pp.addPreExec(hook, NULL);
 
 #endif
-
-		pp.connect(__connectionInfo("test", "localhost", "root", "password", "", 3306));
 
 		try
 		{
@@ -102,6 +100,9 @@ int main(int argc, char **argv)
 		pp.exec();
 
 		arr.clear();
+
+		pp.disconnect();
+		pp.connect(__connectionInfo("test", "localhost", "root", "password", "", 3306));
 
 		arr["d"] = "100000";
 		pp.update("test", arr);

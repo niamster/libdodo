@@ -41,21 +41,20 @@ int main(int argc, char **argv)
 {
 #ifdef SQLITE3_EXT
 
-	sqlite pp;
 	try
 	{
-#ifndef DATABASE_WO_XEXEC
-
-		int pos = pp.addPreExec(hook, (void *)"id");
-
-#endif
-
 		tools::filesystem::unlink("test.lite", true);
 
 		__connectionInfo info;
 		info.path = "test.lite";
 
-		pp.connect(info);
+		sqlite pp(info);
+
+#ifndef DATABASE_WO_XEXEC
+
+		int pos = pp.addPreExec(hook, (void *)"id");
+
+#endif
 
 		try
 		{
@@ -97,6 +96,9 @@ int main(int argc, char **argv)
 
 			arr["operation"] = "mu";
 		}
+		
+		pp.disconnect();
+		pp.connect(info);
 
 		pp.select("test", select, "`id`<20 or `operation`='um'");
 		pp.exec();

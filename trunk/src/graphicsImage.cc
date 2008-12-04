@@ -189,7 +189,7 @@ image::image()
 	collectedData.imInfo = AcquireImageInfo();
 
 #else
-	
+
 	collectedData.imInfo = CloneImageInfo(NULL);
 
 #endif
@@ -449,7 +449,7 @@ image::writeFile(const dodoString &str)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_LIBDODO, IMAGEEX_LONGPATH, GRAPHICSIMAGEEX_LONGPATH_STR, __LINE__, __FILE__);
 
 	strncpy(collectedData.imHandle->filename, str.c_str(), size);
-	
+
 	GetExceptionInfo(&exInfo);
 
 	if (WriteImage(collectedData.imInfo, collectedData.imHandle) == MagickFalse)
@@ -472,7 +472,7 @@ image::writeMemory(dodoString &data)
 
 	if (collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-	
+
 	GetExceptionInfo(&exInfo);
 
 	unsigned long size = 0;

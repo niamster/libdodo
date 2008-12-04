@@ -145,7 +145,7 @@ namespace dodo
 				public:
 
 					/**
-					 *constructor
+					 * constructor
 					 */
 					connector();
 
@@ -339,10 +339,6 @@ namespace dodo
 					virtual void exec(const dodoString &query = __dodostring__, bool result = false) = 0;
 
 					bool reconnect;                                 ///< if true tries to reconect in case when `exec` failed with connection error[true by default]
-
-				protected:
-
-					bool connected;                                 ///< true if connected to the db
 			};
 		};
 	};

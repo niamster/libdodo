@@ -60,6 +60,7 @@ namespace dodo
 			 */
 			enum fifoFunctionsID
 			{
+				FIFOEX_FIFO,
 				FIFOEX_CLOSE,
 				FIFOEX_CLONE,
 				FIFOEX_OPEN,

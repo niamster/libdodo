@@ -22,7 +22,7 @@ do
 
 		if [[ "$j" == "${j%.cc}" ]]
 		then
-			directive=$(echo ${j//./_} | gawk '{ print "_" toupper($1) "_"}')
+			directive=$(echo ${j//./_} | awk '{ print "_" toupper($1) "_"}')
 			grep -q $directive $j
 			if [[ $? -ne 0 ]]
 			then 

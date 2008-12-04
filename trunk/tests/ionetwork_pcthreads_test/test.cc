@@ -55,7 +55,7 @@ process(void *data)
 		dodoString rec = "";
 		try
 		{
-			fse->read(rec);
+			rec = fse->read();
 
 			cout << rec << rec.size() << endl;
 			cout.flush();

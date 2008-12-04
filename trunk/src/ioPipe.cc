@@ -31,7 +31,7 @@
 
 using namespace dodo;
 
-io::pipe::pipe() : inPipeBuffer(IOPIPE_INSIZE),
+io::pipe::pipe(bool open) : inPipeBuffer(IOPIPE_INSIZE),
 			   outPipeBuffer(IOPIPE_OUTSIZE),
 			   blocked(true),
 			   inHandle(NULL),
@@ -42,6 +42,22 @@ io::pipe::pipe() : inPipeBuffer(IOPIPE_INSIZE),
 	collectedData.setExecObject(XEXEC_OBJECT_IOPIPE);
 
 #endif
+
+	if (open)
+	{
+		int pipefd[2];
+
+		if (::pipe(pipefd) != 0)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		inHandle = fdopen(pipefd[0], "r");
+		if (inHandle == NULL)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		outHandle = fdopen(pipefd[1], "w");
+		if (outHandle == NULL)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -61,28 +77,33 @@ io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.opened)
+	if (fd.inHandle != NULL && fd.outHandle != NULL)
 	{
 		int oldDesc, newDesc;
 
 		oldDesc = fileno(fd.inHandle);
-		if (oldDesc != -1)
-		{
-			newDesc = dup(oldDesc);
-			if (newDesc != -1)
-				inHandle = fdopen(newDesc, "r");
-		}
+		if (oldDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		newDesc = dup(oldDesc);
+		if (newDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		inHandle = fdopen(newDesc, "r");
+		if (inHandle == NULL)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		oldDesc = fileno(fd.outHandle);
-		if (oldDesc != -1)
-		{
-			newDesc = dup(oldDesc);
-			if (newDesc != -1)
-				outHandle = fdopen(newDesc, "w");
-		}
+		if (oldDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		if (inHandle != NULL && outHandle != NULL)
-			opened = true;
+		newDesc = dup(oldDesc);
+		if (newDesc == -1)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		outHandle = fdopen(newDesc, "w");
+		if (outHandle == NULL)
+			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 }
 
@@ -90,12 +111,11 @@ io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 
 io::pipe::~pipe()
 {
-	if (opened)
-	{
+	if (inHandle != NULL)
 		fclose(inHandle);
 
+	if (outHandle != NULL)
 		fclose(outHandle);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -105,18 +125,20 @@ io::pipe::clone(const pipe &fd)
 {
 	protector pg(this);
 
-	if (opened)
+	if (inHandle != NULL)
 	{
 		if (fclose(inHandle) != 0)
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+		inHandle = NULL;
+	}
+
+	if (outHandle != NULL)
+	{
 		if (fclose(outHandle) != 0)
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		inHandle = NULL;
 		outHandle = NULL;
-
-		opened = false;
 	}
 
 	inPipeBuffer = fd.inPipeBuffer;
@@ -125,7 +147,7 @@ io::pipe::clone(const pipe &fd)
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.opened)
+	if (fd.inHandle != NULL && fd.outHandle != NULL)
 	{
 		int oldDesc, newDesc;
 
@@ -152,8 +174,6 @@ io::pipe::clone(const pipe &fd)
 		outHandle = fdopen(newDesc, "w");
 		if (outHandle == NULL)
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		opened = true;
 	}
 }
 
@@ -164,7 +184,7 @@ io::pipe::getInDescriptor() const
 {
 	protector pg(this);
 
-	if (!opened)
+	if (inHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	return fileno(inHandle);
@@ -177,9 +197,8 @@ io::pipe::getOutDescriptor() const
 {
 	protector pg(this);
 
-	if (!opened)
+	if (outHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
-
 
 	return fileno(outHandle);
 }
@@ -196,18 +215,20 @@ io::pipe::close()
 	performXExec(preExec);
 #endif
 
-	if (opened)
+	if (inHandle != NULL)
 	{
 		if (fclose(inHandle) != 0)
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+		inHandle = NULL;
+	}
+
+	if (outHandle != NULL)
+	{
 		if (fclose(outHandle) != 0)
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		inHandle = NULL;
 		outHandle = NULL;
-
-		opened = false;
 	}
 
 #ifndef IO_WO_XEXEC
@@ -227,18 +248,20 @@ io::pipe::open()
 	performXExec(preExec);
 #endif
 
-	if (opened)
+	if (inHandle != NULL)
 	{
 		if (fclose(inHandle) != 0)
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+		inHandle = NULL;
+	}
+
+	if (outHandle != NULL)
+	{
 		if (fclose(outHandle) != 0)
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		inHandle = NULL;
 		outHandle = NULL;
-
-		opened = false;
 	}
 
 	int pipefd[2];
@@ -254,8 +277,6 @@ io::pipe::open()
 	if (outHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	opened = true;
-
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
@@ -266,7 +287,7 @@ io::pipe::open()
 void
 io::pipe::_read(char * const a_data)
 {
-	if (!opened)
+	if (inHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	char *data = a_data;
@@ -338,7 +359,7 @@ io::pipe::_read(char * const a_data)
 void
 io::pipe::_write(const char *const buf)
 {
-	if (!opened)
+	if (outHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	const char *data = buf;
@@ -410,7 +431,7 @@ io::pipe::flush()
 {
 	protector pg(this);
 
-	if (!opened)
+	if (outHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (fflush(outHandle) != 0)
@@ -424,7 +445,7 @@ io::pipe::peerInfo()
 {
 	protector pg(this);
 
-	if (!opened)
+	if (inHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	network::__peerInfo info;
@@ -496,7 +517,7 @@ io::pipe::block(bool flag)
 {
 	protector pg(this);
 
-	if (!opened)
+	if (inHandle == NULL && outHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (blocked == flag)
@@ -545,7 +566,7 @@ io::pipe::block(bool flag)
 unsigned long
 io::pipe::_readStream(char * const a_data)
 {
-	if (!opened)
+	if (inHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	unsigned long readSize = inSize + 1;

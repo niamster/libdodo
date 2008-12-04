@@ -76,8 +76,9 @@ namespace dodo
 
 				/**
 				 * constructor
+				 * @param open defines whether pipe should be opened in constructor
 				 */
-				pipe();
+				pipe(bool open = false);
 
 				/**
 				 * destructor

@@ -60,15 +60,7 @@ regexp::regexp(const dodoString &pattern) : extended(true),
 	notCompiled = true;
 #endif
 
-	try
-	{
-		compile(pattern);
-	}
-	catch (exception::basic &ex)
-	{
-		if (ex.funcID != REGEXPEX_COMPILE)
-			throw;
-	}
+	compile(pattern);
 }
 
 //-------------------------------------------------------------------

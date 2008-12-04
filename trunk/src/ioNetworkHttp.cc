@@ -1342,12 +1342,12 @@ http::getContent(dodoString &data,
 				if (chunkSize > 0)
 				{
 					ex->inSize = chunkSize;
-					ex->read(data);
+					data = ex->read();
 					response.data.append(data, 0, ex->inSize - 2);///< remove 2 bytes of CRLF after chunk
 				}
 
 				ex->inSize = 512;
-				ex->readStream(data);
+				data = ex->readStream();
 
 				if (data.size() == 0)
 					break;
@@ -1395,7 +1395,7 @@ http::getContent(dodoString &data,
 			}
 			else
 			{
-				ex->readStream(data);
+				data = ex->readStream();
 
 				if (data.size() == 0 && contentSize <= 0)
 				{
