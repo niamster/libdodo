@@ -33,16 +33,16 @@ threadRead(void *data)
 
 		io::channel *pipe = (io::channel *)data;
 
-		pipe->readStream(str);
+		str = pipe->readStream();
 		cout << "%" << str << "%\n";
 		cout.flush();
 
-		pipe->readStream(str);
+		str = pipe->readStream();
 		cout << "%" << str << "%\n";
 		cout.flush();
 
 		pipe->inSize = tools::string::stringToUL(str);
-		pipe->read(str);
+		str = pipe->read();
 		cout << "%MD5: " << tools::code::MD5Hex(str) << "%\n";
 		cout.flush();
 	}

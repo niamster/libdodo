@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 		exch.outSize = str.size();
 		exch.write(str);
 
-		exch.readStream(str);
+		str = exch.readStream();
 
 		cout << str;
 

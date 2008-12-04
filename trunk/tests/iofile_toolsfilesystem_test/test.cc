@@ -96,11 +96,11 @@ int main(int argc, char **argv)
 		io2.pos = 2;
 		io2.inSize = 14;
 
-		io2.readStream(str);
+		str = io2.readStream();
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;
 
-		io2.read(str);
+		str = io2.read();
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;
 	}

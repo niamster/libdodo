@@ -632,7 +632,7 @@ dialogue::makeContent()
 
 	cgiIO.inSize = inSize;
 
-	cgiIO.read(content);
+	content = cgiIO.read();
 }
 
 //-------------------------------------------------------------------
