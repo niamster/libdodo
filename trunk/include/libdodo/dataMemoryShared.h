@@ -81,12 +81,31 @@ namespace dodo
 					 * if you want to share data between different instances of process - set own key,
 					 * otherwise(like fork) - it may be generated
 					 */
-					shared(const int key = 0);
+					shared(const int key);
+
+					/**
+					 * constructor
+					 */
+					shared();
 
 					/**
 					 * destructor
 					 */
 					virtual ~shared();
+
+					/**
+					 * open or create shared memory object
+					 * @param key defines shared memory key
+					 * @note if key is 0 - key will be generated
+					 * if you want to share data between different instances of process - set own key,
+					 * otherwise(like fork) - it may be generated
+					 */
+					virtual void open(const int key);
+
+					/**
+					 * close shared memory object
+					 */
+					virtual void close();
 
 					/**
 					 * map shared data

@@ -33,7 +33,7 @@ using namespace dodo::pc::sync::process;
 
 stack::stack()
 {
-	keeper = new section;
+	keeper = new section(0);
 }
 
 //-------------------------------------------------------------------

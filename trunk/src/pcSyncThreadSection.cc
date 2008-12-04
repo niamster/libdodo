@@ -31,6 +31,12 @@
 
 using namespace dodo::pc::sync::thread;
 
+section::section(section &sec)
+{
+}
+
+//-------------------------------------------------------------------
+
 section::section()
 {
 #ifdef PTHREAD_EXT

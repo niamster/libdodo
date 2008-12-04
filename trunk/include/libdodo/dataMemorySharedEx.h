@@ -50,6 +50,8 @@ namespace dodo
 				SHAREDEX_GETSIZE,
 				SHAREDEX_SHARED,
 				SHAREDEX_REMOVE,
+				SHAREDEX_OPEN,
+				SHAREDEX_CLOSE,
 			};
 		};
 	};

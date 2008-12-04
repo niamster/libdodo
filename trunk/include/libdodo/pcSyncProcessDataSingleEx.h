@@ -66,7 +66,9 @@ namespace dodo
 						SINGLEEX_ACQUIRE,
 						SINGLEEX_RELEASE,
 						SINGLEEX_REMOVE,
-						SINGLEEX_SIGNLE,
+						SINGLEEX_SINGLE,
+						SINGLEEX_OPEN,
+						SINGLEEX_CLOSE,
 					};
 				};
 			};
