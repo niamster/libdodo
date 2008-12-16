@@ -16,7 +16,7 @@ hgext.notify =
 [hooks]
 changegroup.notify = python:hgext.notify.hook
 changegroup.mirror = for i in $(cat <path to list with mirrors>); do hg push $i; done
-commit.mantis = /usr/bin/php <path to mantis>/core/checkin.php <<< echo -e "$(hg tip --template '{desc}\n\n(changeset: {rev}:{node|short})')"
+incoming.mantis = /usr/bin/php <path to mantis>/core/checkin.php <<< echo -e "$(hg tip --template '{desc}\n\n(changeset: {rev}:{node|short})')"
 
 [email]
 method = /usr/sbin/sendmail
