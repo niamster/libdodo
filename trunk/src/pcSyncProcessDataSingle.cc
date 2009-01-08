@@ -96,7 +96,7 @@ single::single(int a_key) : data(NULL),
 	}
 
 	keeper = sem_open(key.c_str(), O_CREAT, S_IRUSR | S_IWUSR, 1);
-	if (keeper == NULL)
+	if (keeper == SEM_FAILED)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SINGLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
@@ -255,7 +255,7 @@ single::open(int a_key)
 	}
 
 	keeper = sem_open(key.c_str(), O_CREAT, S_IRUSR | S_IWUSR, 1);
-	if (keeper == NULL)
+	if (keeper == SEM_FAILED)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
