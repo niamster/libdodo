@@ -31,14 +31,16 @@
 
 using namespace dodo::rpc::xml;
 
-const char method::trimSymbols[] = { ' ',
-									 '\r' };
+const char method::trimSymbols[] =
+{
+	' ',
+	'\r'
+};
 
 //-------------------------------------------------------------------
 
 
-dodo::rpc::method
-method::xmlToMethod(dodo::data::format::xml::node &node)
+dodo::rpc::method method::xmlToMethod(dodo::data::format::xml::node &node)
 {
 	rpc::method meth;
 
@@ -49,9 +51,13 @@ method::xmlToMethod(dodo::data::format::xml::node &node)
 		{
 			dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 			if (arr0.size() > 0)
+			{
 				meth.name = tools::string::trim(arr0[0].value, trimSymbols, 2);
+			}
 			else
+			{
 				meth.name = __dodostring__;
+			}
 		}
 		else
 		{
@@ -59,7 +65,9 @@ method::xmlToMethod(dodo::data::format::xml::node &node)
 			{
 				dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 				if (arr0.size() == 0)
+				{
 					return meth;
+				}
 
 				dodoArray<dodo::data::format::xml::node> &nodeArray = arr0[0].children["param"];
 
@@ -68,7 +76,9 @@ method::xmlToMethod(dodo::data::format::xml::node &node)
 				{
 					dodoArray<dodo::data::format::xml::node> &arr1 = o->children["value"];
 					if (arr0.size() > 0)
+					{
 						meth.arguments.push_back(value::xmlToValue(arr1[0]));
+					}
 				}
 			}
 		}
@@ -79,8 +89,7 @@ method::xmlToMethod(dodo::data::format::xml::node &node)
 
 //-------------------------------------------------------------------
 
-dodo::data::format::xml::node
-method::methodToXml(const rpc::method &data)
+dodo::data::format::xml::node method::methodToXml(const rpc::method &data)
 {
 	dodoArray<dodo::data::format::xml::node> nodeArr;
 

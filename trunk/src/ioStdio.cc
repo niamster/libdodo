@@ -57,46 +57,47 @@ stdio::~stdio()
 
 //-------------------------------------------------------------------
 
-void
-stdio::open()
+void stdio::open()
 {
 }
 
 //-------------------------------------------------------------------
 
-void
-stdio::close()
+void stdio::close()
 {
 }
 
 //-------------------------------------------------------------------
 
-void
-stdio::redirectToStderr(bool toStderr)
+void stdio::redirectToStderr(bool toStderr)
 {
 	if (err == toStderr)
+	{
 		return;
+	}
 
 	err = toStderr;
 
 	if (err)
+	{
 		outHandle = stderr;
+	}
 	else
+	{
 		outHandle = stdout;
+	}
 }
 
 //-------------------------------------------------------------------
 
-bool
-stdio::isRedirectedToStderr()
+bool stdio::isRedirectedToStderr()
 {
 	return err;
 }
 
 //-------------------------------------------------------------------
 
-void
-stdio::_writeStream(const char * const data)
+void stdio::_writeStream(const char * const data)
 {
 	unsigned long _outSize = outSize;
 
@@ -105,7 +106,9 @@ stdio::_writeStream(const char * const data)
 		unsigned int bufSize = strlen(data);
 
 		if (bufSize < outSize)
+		{
 			outSize = bufSize;
+		}
 
 		_write(data);
 

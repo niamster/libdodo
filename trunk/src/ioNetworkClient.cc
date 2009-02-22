@@ -34,7 +34,7 @@ using namespace dodo::io::network;
 #ifndef IO_WO_XEXEC
 
 __xexecIoNetworkClientCollectedData::__xexecIoNetworkClientCollectedData(xexec *executor,
-                                                                         short execObject) : __xexecCollectedData(executor, execObject)
+																		 short execObject) : __xexecCollectedData(executor, execObject)
 {
 }
 
@@ -83,8 +83,7 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-void
-client::restoreOptions()
+void client::restoreOptions()
 {
 	setInBufferSize(inSocketBuffer);
 	setOutBufferSize(outSocketBuffer);
@@ -99,15 +98,16 @@ client::restoreOptions()
 
 //-------------------------------------------------------------------
 
-void
-client::makeSocket()
+void client::makeSocket()
 {
 	if (socket != -1)
 	{
 		::shutdown(socket, SHUT_RDWR);
 
 		if (::close(socket) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		socket = -1;
 	}
@@ -160,17 +160,18 @@ client::makeSocket()
 
 	socket = ::socket(real_domain, real_type, 0);
 	if (socket == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	restoreOptions();
 }
 
 //-------------------------------------------------------------------
 
-void
-client::connect(const dodoString &host,
-				int port,
-				exchange &exchange)
+void client::connect(const dodoString &host,
+					 int              port,
+					 exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT;
@@ -191,7 +192,9 @@ client::connect(const dodoString &host,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 
 			socket = -1;
 
@@ -208,7 +211,9 @@ client::connect(const dodoString &host,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 
 			socket = -1;
 
@@ -227,11 +232,10 @@ client::connect(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-void
-client::connectFrom(const dodoString &local,
-					const dodoString &host,
-					int port,
-					exchange &exchange)
+void client::connectFrom(const dodoString &local,
+						 const dodoString &host,
+						 int              port,
+						 exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECTFROM;
@@ -242,7 +246,9 @@ client::connectFrom(const dodoString &local,
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
@@ -256,7 +262,9 @@ client::connectFrom(const dodoString &local,
 		inet_pton(AF_INET6, local.c_str(), &sa.sin6_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		sa.sin6_port = htons(port);
 		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
@@ -264,7 +272,9 @@ client::connectFrom(const dodoString &local,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 
 			socket = -1;
 
@@ -279,7 +289,9 @@ client::connectFrom(const dodoString &local,
 		inet_aton(local.c_str(), &sa.sin_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		sa.sin_port = htons(port);
 		inet_aton(host.c_str(), &sa.sin_addr);
@@ -287,7 +299,9 @@ client::connectFrom(const dodoString &local,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 
 			socket = -1;
 
@@ -306,9 +320,8 @@ client::connectFrom(const dodoString &local,
 
 //-------------------------------------------------------------------
 
-void
-client::connect(const dodoString &path,
-				exchange &exchange)
+void client::connect(const dodoString &path,
+					 exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT_UNIX;
@@ -322,7 +335,9 @@ client::connect(const dodoString &path,
 	unsigned long size = path.size();
 
 	if (size >= 108)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_LIBDODO, CLIENTEX_LONGPATH, IONETWORKCLIENTEX_LONGPATH_STR, __LINE__, __FILE__);
+	}
 
 	strncpy(sa.sun_path, path.c_str(), size);
 	sa.sun_family = AF_UNIX;
@@ -330,7 +345,9 @@ client::connect(const dodoString &path,
 	if (::connect(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
 	{
 		if (::close(socket) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		socket = -1;
 

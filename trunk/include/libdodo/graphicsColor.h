@@ -44,10 +44,10 @@ namespace dodo
 		 */
 		struct __color
 		{
-				unsigned short red;///< in range [0; 65535]
-				unsigned short green;///< in range [0; 65535]
-				unsigned short blue;///< in range [0; 65535]
-				unsigned short opacity;///< 0 is fully opaque and 65535 is fully transparent
+			unsigned short red;     ///< in range [0; 65535]
+			unsigned short green;   ///< in range [0; 65535]
+			unsigned short blue;    ///< in range [0; 65535]
+			unsigned short opacity; ///< 0 is fully opaque and 65535 is fully transparent
 		};
 
 		/**
@@ -56,14 +56,14 @@ namespace dodo
 		 */
 		class color
 		{
-			public:
+		  public:
 
-				static __color red;
-				static __color green;
-				static __color blue;
-				static __color white;
-				static __color black;
-				static __color transparent;
+			static __color red;
+			static __color green;
+			static __color blue;
+			static __color white;
+			static __color black;
+			static __color transparent;
 		};
 	};
 };

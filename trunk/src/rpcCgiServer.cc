@@ -32,7 +32,7 @@
 using namespace dodo::rpc::cgi;
 
 server::server(dodo::cgi::dialogue &a_provider,
-			   const dodoString &ct) : provider(a_provider)
+			   const dodoString    &ct) : provider(a_provider)
 {
 	provider.HEADERS[dodo::cgi::CGI_RESPONSEHEADER_CONTENTTYPE] =  ct;
 
@@ -47,8 +47,7 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-void
-server::sendTextRequest(const dodoString &response)
+void server::sendTextRequest(const dodoString &response)
 {
 	provider.print(response);
 	provider.flush();
@@ -56,8 +55,7 @@ server::sendTextRequest(const dodoString &response)
 
 //-------------------------------------------------------------------
 
-dodoString
-server::receiveTextResponse()
+dodoString server::receiveTextResponse()
 {
 	dodoString content = provider.content;
 

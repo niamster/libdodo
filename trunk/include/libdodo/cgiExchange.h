@@ -45,18 +45,18 @@ namespace dodo
 		 */
 		class exchange : virtual public io::channel
 		{
-			public:
+		  public:
 
-				/**
-				 * destructor
-				 */
-				virtual ~exchange() = 0;
+			/**
+			 * destructor
+			 */
+			virtual ~exchange() = 0;
 
-				/**
-				 * @return environment variable
-				 * @param data defines name of environment variable
-				 */
-				virtual char *getenv(const char *data) = 0;
+			/**
+			 * @return environment variable
+			 * @param data defines name of environment variable
+			 */
+			virtual char *getenv(const char *data) = 0;
 		};
 	};
 };

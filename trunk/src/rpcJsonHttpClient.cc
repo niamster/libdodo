@@ -33,14 +33,12 @@ using namespace dodo::rpc::json::http;
 
 client::client() : rpc::http::client("application/json")
 {
-
 }
 
 //-------------------------------------------------------------------
 
 client::~client()
 {
-
 }
 
 //-------------------------------------------------------------------

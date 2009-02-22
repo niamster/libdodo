@@ -54,73 +54,74 @@ namespace dodo
 					class collection : public sync::data::collection,
 									   virtual public sync::thread::stack
 					{
-						private:
+					  private:
 
-							/**
-							 * copy constructor
-							 * @note to prevent copying
-							 */
-							collection(collection &sts);
+						/**
+						 * copy constructor
+						 * @note to prevent copying
+						 */
+						collection(collection &sts);
 
-						public:
+					  public:
 
-							/**
-							 * constructor
-							 */
-							collection();
+						/**
+						 * constructor
+						 */
+						collection();
 
-							/**
-							 * destructor
-							 */
-							virtual ~collection();
+						/**
+						 * destructor
+						 */
+						virtual ~collection();
 
-							/**
-							 * add shared data
-							 * @return shared data identificator
-							 * @param data defines shared data
-							 */
-							virtual unsigned long add(void *data);
+						/**
+						 * add shared data
+						 * @return shared data identificator
+						 * @param data defines shared data
+						 */
+						virtual unsigned long add(void *data);
 
-							/**
-							 * delete data from collection
-							 * @param position defines shared data identificator
-							 */
-							virtual void del(unsigned long position);
+						/**
+						 * delete data from collection
+						 * @param position defines shared data identificator
+						 */
+						virtual void del(unsigned long position);
 
-							/**
-							 * lock, set data, unlock
-							 * @param position defines shared data identificator
-							 * @param data defines shared data
-							 */
-							virtual void set(unsigned long position, void *data);
+						/**
+						 * lock, set data, unlock
+						 * @param position defines shared data identificator
+						 * @param data defines shared data
+						 */
+						virtual void set(unsigned long position,
+										 void          *data);
 
-							/**
-							 * lock, return data, unlock
-							 * @return shared data
-							 * @param position defines shared data identificator
-							 */
-							virtual const void *get(unsigned long position);
+						/**
+						 * lock, return data, unlock
+						 * @return shared data
+						 * @param position defines shared data identificator
+						 */
+						virtual const void *get(unsigned long position);
 
-							/**
-							 * @return list of shared data in object
-							 */
-							virtual dodoList<unsigned long> getIds();
+						/**
+						 * @return list of shared data in object
+						 */
+						virtual dodoList<unsigned long> getIds();
 
-						protected:
+					  protected:
 
-							/**
-							 * search shared data by identificator
-							 * @return true if found
-							 * @param position describes defines shared data identificator
-							 * @note this sets internal class parameter 'current' to found shared data
-							 */
-							virtual bool getShare(unsigned long position);
+						/**
+						 * search shared data by identificator
+						 * @return true if found
+						 * @param position describes defines shared data identificator
+						 * @note this sets internal class parameter 'current' to found shared data
+						 */
+						virtual bool getShare(unsigned long position);
 
-							dodoList<pc::sync::data::__info> shares;                                                                        ///< identificators of shared data
+						dodoList<pc::sync::data::__info> shares;            ///< identificators of shared data
 
-							unsigned long shareNum;                                                                                         ///< number of registered shares
+						unsigned long shareNum;                             ///< number of registered shares
 
-							dodoList<pc::sync::data::__info>::iterator current;                                                             ///< iterator for list of shared data[for matched with getShare method]
+						dodoList<pc::sync::data::__info>::iterator current; ///< iterator for list of shared data[for matched with getShare method]
 					};
 				};
 			};

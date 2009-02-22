@@ -36,12 +36,12 @@ __connectionInfo::__connectionInfo(const dodoString &a_db,
 								   const dodoString &a_user,
 								   const dodoString &a_password,
 								   const dodoString &a_path,
-								   int a_port) : db(a_db),
-												 host(a_host),
-												 user(a_user),
-												 password(a_password),
-												 path(a_path),
-												 port(a_port)
+								   int              a_port) : db(a_db),
+															  host(a_host),
+															  user(a_user),
+															  password(a_password),
+															  path(a_path),
+															  port(a_port)
 {
 }
 
@@ -62,7 +62,6 @@ __tuples::__tuples(dodoArray<dodoStringArray> a_rows, dodoStringArray a_fields) 
 
 __tuples::__tuples()
 {
-
 }
 
 //-------------------------------------------------------------------

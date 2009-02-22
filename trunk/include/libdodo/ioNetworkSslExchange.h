@@ -74,27 +74,27 @@ namespace dodo
 					friend class client;
 					friend class server;
 
-					public:
+				  public:
 
-						/**
-						 * constructor
-						 */
-						__initialAccept();
+					/**
+					 * constructor
+					 */
+					__initialAccept();
 
-						/**
-						 * copy constructor
-						 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
-						 */
-						__initialAccept(__initialAccept &init);
+					/**
+					 * copy constructor
+					 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
+					 */
+					__initialAccept(__initialAccept &init);
 
-					private:
+				  private:
 
-						int socket;                                                             ///< socket
+					int socket;             ///< socket
 
-						SSL *sslHandle;                                                         ///< SSL connection handle
+					SSL *sslHandle;         ///< SSL connection handle
 
-						bool blocked;                                                           ///< true if blocked
-						bool blockInherited;                                                    ///< true if block flag is inherited
+					bool blocked;           ///< true if blocked
+					bool blockInherited;    ///< true if block flag is inherited
 				};
 
 				/**
@@ -107,85 +107,89 @@ namespace dodo
 					friend class client;
 					friend class network::http;
 
-					public:
+				  public:
 
-						/**
-						 * constructor
-						 */
-						exchange();
+					/**
+					 * constructor
+					 */
+					exchange();
 
-						/**
-						 * copy constructor
-						 * @note the object that has inited the object of current instance is unusable anymore and can be used for another connections
-						 * xexec object is not copied
-						 */
-						exchange(exchange &fse);
+					/**
+					 * copy constructor
+					 * @note the object that has inited the object of current instance is unusable anymore and can be used for another connections
+					 * xexec object is not copied
+					 */
+					exchange(exchange &fse);
 
-						/**
-						 * constructor
-						 * @param init is initial data[got from the ::accept method]
-						 * @note the object that has inited the object of current instance can be used for another connections
-						 */
-						exchange(__initialAccept &init);
+					/**
+					 * constructor
+					 * @param init is initial data[got from the ::accept method]
+					 * @note the object that has inited the object of current instance can be used for another connections
+					 */
+					exchange(__initialAccept &init);
 
-						/**
-						 * destructor
-						 */
-						virtual ~exchange();
+					/**
+					 * destructor
+					 */
+					virtual ~exchange();
 
-						/**
-						 * init object
-						 * @param init defines initial data[got from ::accept method]
-						 */
-						virtual void init(__initialAccept &init);
+					/**
+					 * init object
+					 * @param init defines initial data[got from ::accept method]
+					 */
+					virtual void init(__initialAccept &init);
 
-						/**
-						 * @return true if connection is alive
-						 */
-						virtual bool isAlive();
+					/**
+					 * @return true if connection is alive
+					 */
+					virtual bool isAlive();
 
-						/**
-						 * close connection
-						 */
-						virtual void close();
+					/**
+					 * close connection
+					 */
+					virtual void close();
 
-					protected:
+				  protected:
 
-						SSL *sslHandle;                                                 ///< SSL connection handle
+					SSL *sslHandle; ///< SSL connection handle
 
-						/**
-						 * close socket connection
-						 * @param socket defines socket descriptor
-						 * @param sslHandle defines SSL handle
-						 */
-						virtual void _close(int socket, SSL *sslHandle);
+					/**
+					 * close socket connection
+					 * @param socket defines socket descriptor
+					 * @param sslHandle defines SSL handle
+					 */
+					virtual void _close(int socket,
+										SSL *sslHandle);
 
-						/**
-						 * init current instance
-						 * @param socket defines socket
-						 * @param handle defines SSL handle
-						 * @param blocked defines the connection block status
-						 * @param blockInherited defines block flag inheritance
-						 */
-						virtual void init(int socket, SSL *handle, bool blocked, bool blockInherited);
+					/**
+					 * init current instance
+					 * @param socket defines socket
+					 * @param handle defines SSL handle
+					 * @param blocked defines the connection block status
+					 * @param blockInherited defines block flag inheritance
+					 */
+					virtual void init(int  socket,
+									  SSL  *handle,
+									  bool blocked,
+									  bool blockInherited);
 
-						/**
-						 * @param data defines buffer that will be filled
-						 * @note not more then inSize(including '\0')
-						 */
-						virtual void _read(char * const data);
+					/**
+					 * @param data defines buffer that will be filled
+					 * @note not more then inSize(including '\0')
+					 */
+					virtual void _read(char * const data);
 
-						/**
-						 * read from stream - '\0' or '\n' - terminated string
-						 * @param data defines buffer that will be filled
-						 * @note not more then inSize(including '\0')
-						 */
-						virtual unsigned long _readStream(char * const data);
+					/**
+					 * read from stream - '\0' or '\n' - terminated string
+					 * @param data defines buffer that will be filled
+					 * @note not more then inSize(including '\0')
+					 */
+					virtual unsigned long _readStream(char * const data);
 
-						/**
-						 * @param data defines data that will be written
-						 */
-						virtual void _write(const char * const data);
+					/**
+					 * @param data defines data that will be written
+					 */
+					virtual void _write(const char * const data);
 				};
 			};
 		};

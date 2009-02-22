@@ -45,22 +45,22 @@ namespace dodo
 		{
 			friend class event;
 
-			public:
+		  public:
 
-				/**
-				 * destructor
-				 */
-				virtual ~eventInfo() = 0;
+			/**
+			 * destructor
+			 */
+			virtual ~eventInfo() = 0;
 
-				/**
-				 * @return descriptor of input stream
-				 */
-				virtual int getInDescriptor() const = 0;
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const = 0;
 
-				/**
-				 * @return descriptor of output stream
-				 */
-				virtual int getOutDescriptor() const = 0;
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const = 0;
 		};
 	};
 };

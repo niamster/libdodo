@@ -77,174 +77,175 @@ namespace dodo
 			friend class json::method;
 			friend class json::response;
 
-			public:
+		  public:
 
-				/**
-				 * constructor
-				 * @note constructs empty string value
-				 */
-				value();
+			/**
+			 * constructor
+			 * @note constructs empty string value
+			 */
+			value();
 
-				/**
-				 * constructor
-				 * @param value defines string, date/time, base64 value
-				 */
-				value(const dodoString &value);
+			/**
+			 * constructor
+			 * @param value defines string, date/time, base64 value
+			 */
+			value(const dodoString &value);
 
-				/**
-				 * constructor
-				 * @param value defines integer value
-				 */
-				value(long value);
+			/**
+			 * constructor
+			 * @param value defines integer value
+			 */
+			value(long value);
 
-				/**
-				 * constructor
-				 * @param value defines double value
-				 */
-				value(double value);
+			/**
+			 * constructor
+			 * @param value defines double value
+			 */
+			value(double value);
 
-				/**
-				 * constructor
-				 * @param value defines boolean value
-				 */
-				value(bool value);
+			/**
+			 * constructor
+			 * @param value defines boolean value
+			 */
+			value(bool value);
 
-				/**
-				 * constructor
-				 * @param value defines array value
-				 */
-				value(const dodoArray<value> &value);
+			/**
+			 * constructor
+			 * @param value defines array value
+			 */
+			value(const dodoArray<value> &value);
 
-				/**
-				 * constructor
-				 * @param value defines object value
-				 */
-				value(const dodoMap<dodoString, value, dodoMapStringCompare> &value);
+			/**
+			 * constructor
+			 * @param value defines object value
+			 */
+			value(const dodoMap<dodoString, value, dodoMapStringCompare> &value);
 
-				/**
-				 * destructor
-				 */
-				virtual ~value();
+			/**
+			 * destructor
+			 */
+			virtual ~value();
 
-				/**
-				 * clear arguments information
-				 */
-				virtual void clear();
+			/**
+			 * clear arguments information
+			 */
+			virtual void clear();
 
-				/**
-				 * set string, date/time, base64 value
-				 * @param value defines string value
-				 */
-				virtual void setString(const dodoString &value);
+			/**
+			 * set string, date/time, base64 value
+			 * @param value defines string value
+			 */
+			virtual void setString(const dodoString &value);
 
-				/**
-				 * set boolean value
-				 * @param value defines boolean value
-				 */
-				virtual void setBoolean(bool value);
+			/**
+			 * set boolean value
+			 * @param value defines boolean value
+			 */
+			virtual void setBoolean(bool value);
 
-				/**
-				 * set integer value
-				 * @param value defines integer value
-				 */
-				virtual void setInteger(long value);
+			/**
+			 * set integer value
+			 * @param value defines integer value
+			 */
+			virtual void setInteger(long value);
 
-				/**
-				 * set double value
-				 * @param value defines double value
-				 */
-				virtual void setDouble(double value);
+			/**
+			 * set double value
+			 * @param value defines double value
+			 */
+			virtual void setDouble(double value);
 
-				/**
-				 * add array value
-				 * @param value defines array member value
-				 */
-				virtual void addArrayElement(const value &value);
+			/**
+			 * add array value
+			 * @param value defines array member value
+			 */
+			virtual void addArrayElement(const value &value);
 
-				/**
-				 * add struct value element
-				 * @param name defines struct member name
-				 * @param value defines struct member value
-				 */
-				virtual void addStructMember(const dodoString &name, const value &value);
+			/**
+			 * add struct value element
+			 * @param name defines struct member name
+			 * @param value defines struct member value
+			 */
+			virtual void addStructMember(const dodoString &name,
+										 const value      &value);
 
-				/**
-				 * set array value member
-				 * @param value defines array value
-				 */
-				virtual void setArray(const dodoArray<value> &value);
+			/**
+			 * set array value member
+			 * @param value defines array value
+			 */
+			virtual void setArray(const dodoArray<value> &value);
 
-				/**
-				 * set struct value
-				 * @param value defines struct value
-				 */
-				virtual void setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &value);
+			/**
+			 * set struct value
+			 * @param value defines struct value
+			 */
+			virtual void setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &value);
 
-				/**
-				 * @return structure member
-				 * @param name defines structure member name
-				 * @note throws exception if data type is not DATATYPE_STRUCT
-				 */
-				virtual value operator[](const dodoString &name);
+			/**
+			 * @return structure member
+			 * @param name defines structure member name
+			 * @note throws exception if data type is not DATATYPE_STRUCT
+			 */
+			virtual value operator[](const dodoString &name);
 
-				/**
-				 * @return array element
-				 * @param key defines array index
-				 * @note throws exception if data type is not DATATYPE_ARRAY
-				 */
-				virtual value operator[](unsigned long key);
+			/**
+			 * @return array element
+			 * @param key defines array index
+			 * @note throws exception if data type is not DATATYPE_ARRAY
+			 */
+			virtual value operator[](unsigned long key);
 
-				/**
-				 * get argument type
-				 */
-				virtual short getType();
+			/**
+			 * get argument type
+			 */
+			virtual short getType();
 
-				/**
-				 * get string, date/time, base64 value
-				 * @note throws exception if data type is not DATATYPE_STRING, DATATYPE_DATETIME, DATATYPE_BASE64
-				 */
-				virtual dodoString getString();
+			/**
+			 * get string, date/time, base64 value
+			 * @note throws exception if data type is not DATATYPE_STRING, DATATYPE_DATETIME, DATATYPE_BASE64
+			 */
+			virtual dodoString getString();
 
-				/**
-				 * get boolean value
-				 * @note throws exception if data type is not DATATYPE_BOOLEAN
-				 */
-				virtual bool getBoolean();
+			/**
+			 * get boolean value
+			 * @note throws exception if data type is not DATATYPE_BOOLEAN
+			 */
+			virtual bool getBoolean();
 
-				/**
-				 * get integer value
-				 * @note throws exception if data type is not DATATYPE_INTEGER
-				 */
-				virtual long getInteger();
+			/**
+			 * get integer value
+			 * @note throws exception if data type is not DATATYPE_INTEGER
+			 */
+			virtual long getInteger();
 
-				/**
-				 * get double value
-				 * @note throws exception if data type is not DATATYPE_DOUBLE
-				 */
-				virtual double getDouble();
+			/**
+			 * get double value
+			 * @note throws exception if data type is not DATATYPE_DOUBLE
+			 */
+			virtual double getDouble();
 
-				/**
-				 * get array value
-				 * @note throws exception if data type is not DATATYPE_ARRAY
-				 */
-				virtual dodoArray<value> getArray();
+			/**
+			 * get array value
+			 * @note throws exception if data type is not DATATYPE_ARRAY
+			 */
+			virtual dodoArray<value> getArray();
 
-				/**
-				 * get struct value
-				 * @note throws exception if data type is not DATATYPE_STRUCT
-				 */
-				virtual dodoMap<dodoString, value, dodoMapStringCompare> getStruct();
+			/**
+			 * get struct value
+			 * @note throws exception if data type is not DATATYPE_STRUCT
+			 */
+			virtual dodoMap<dodoString, value, dodoMapStringCompare> getStruct();
 
-			protected:
+		  protected:
 
-				short valueDataType;                                                                            ///< argument type[see dataTypeEnum]
+			short valueDataType;                                            ///< argument type[see dataTypeEnum]
 
-				dodoString stringValue;                                                                         ///< string, datetime, base64 value
-				long integerValue;                                                                              ///< integer value
-				bool booleanValue;                                                                              ///< boolean value
-				double doubleValue;                                                                             ///< double value
-				dodoArray<value> arrayValue;                                                                    ///< array value
-				dodoMap<dodoString, value, dodoMapStringCompare> structValue;                                   ///< struct value
+			dodoString stringValue;                                         ///< string, datetime, base64 value
+			long integerValue;                                              ///< integer value
+			bool booleanValue;                                              ///< boolean value
+			double doubleValue;                                             ///< double value
+			dodoArray<value> arrayValue;                                    ///< array value
+			dodoMap<dodoString, value, dodoMapStringCompare> structValue;   ///< struct value
 		};
 	};
 };

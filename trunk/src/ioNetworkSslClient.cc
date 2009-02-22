@@ -51,7 +51,6 @@ client::client(short a_family,
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLCLIENT);
 
 #endif
-
 }
 
 //-------------------------------------------------------------------
@@ -61,19 +60,22 @@ client::~client()
 	if (sslHandle != NULL)
 	{
 		if (sslConnected && SSL_shutdown(sslHandle) == 0)
+		{
 			SSL_shutdown(sslHandle);
+		}
 
 		SSL_free(sslHandle);
 	}
 
 	if (sslCtx != NULL)
+	{
 		SSL_CTX_free(sslCtx);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-client::removeSertificates()
+void client::removeSertificates()
 {
 	if (sslHandle != NULL)
 	{
@@ -112,17 +114,20 @@ client::removeSertificates()
 
 	sslCtx = SSL_CTX_new(SSLv23_client_method());
 	if (sslCtx == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
+	}
 
 	sslHandle = SSL_new(sslCtx);
 	if (sslHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-client::setSertificates(const io::ssl::__certificates &certs)
+void client::setSertificates(const io::ssl::__certificates &certs)
 {
 	if (sslHandle != NULL)
 	{
@@ -161,7 +166,9 @@ client::setSertificates(const io::ssl::__certificates &certs)
 
 	sslCtx = SSL_CTX_new(SSLv23_client_method());
 	if (sslCtx == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
+	}
 
 	if (certs.cipher.size() > 0 && SSL_CTX_set_cipher_list(sslCtx, certs.cipher.c_str()) != 1)
 	{
@@ -182,11 +189,14 @@ client::setSertificates(const io::ssl::__certificates &certs)
 	}
 
 	if (certs.keyPassword.size() > 0)
+	{
 		SSL_CTX_set_default_passwd_cb_userdata(sslCtx, (void *)certs.keyPassword.c_str());
+	}
 
 	bool keySet = false;
 
 	if (certs.key.size() > 0)
+	{
 		switch (certs.keyType)
 		{
 			case io::ssl::KEYTYPE_PKEY:
@@ -217,6 +227,7 @@ client::setSertificates(const io::ssl::__certificates &certs)
 
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNKEYTYPE, IONETWORKSSLCLIENTEX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
 		}
+	}
 	else
 	{
 		if (certs.ca.size() > 0)
@@ -259,33 +270,37 @@ client::setSertificates(const io::ssl::__certificates &certs)
 
 	sslHandle = SSL_new(sslCtx);
 	if (sslHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-client::initSsl()
+void client::initSsl()
 {
 	if (sslCtx == NULL)
 	{
 		sslCtx = SSL_CTX_new(SSLv23_client_method());
 		if (sslCtx == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_INITSSL, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
+		}
 	}
 
 	if (sslHandle == NULL)
 	{
 		sslHandle = SSL_new(sslCtx);
 		if (sslHandle == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_INITSSL, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
+		}
 	}
 }
 
 //-------------------------------------------------------------------
 
-void
-client::connectSsl()
+void client::connectSsl()
 {
 	io::ssl::__openssl_init_object__.addEntropy();
 
@@ -338,7 +353,9 @@ client::connectSsl()
 		{
 			int nerr = SSL_get_error(sslHandle, res);
 			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
+			{
 				break;
+			}
 		}
 
 		default:
@@ -370,10 +387,9 @@ client::connectSsl()
 
 //-------------------------------------------------------------------
 
-void
-client::connect(const dodoString &host,
-				int port,
-				exchange &exchange)
+void client::connect(const dodoString &host,
+					 int              port,
+					 exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT;
@@ -393,7 +409,9 @@ client::connect(const dodoString &host,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 
 			socket = -1;
 
@@ -412,7 +430,9 @@ client::connect(const dodoString &host,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 
 			socket = -1;
 
@@ -434,11 +454,10 @@ client::connect(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-void
-client::connectFrom(const dodoString &local,
-					const dodoString &host,
-					int port,
-					exchange &exchange)
+void client::connectFrom(const dodoString &local,
+						 const dodoString &host,
+						 int              port,
+						 exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECTFROM;
@@ -450,7 +469,9 @@ client::connectFrom(const dodoString &local,
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
@@ -462,7 +483,9 @@ client::connectFrom(const dodoString &local,
 		inet_aton(local.c_str(), &sa.sin_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		sa.sin_port = htons(port);
 		inet_aton(host.c_str(), &sa.sin_addr);
@@ -470,7 +493,9 @@ client::connectFrom(const dodoString &local,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 
 			socket = -1;
 
@@ -487,7 +512,9 @@ client::connectFrom(const dodoString &local,
 		inet_pton(AF_INET6, local.c_str(), &sa.sin6_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		sa.sin6_port = htons(port);
 		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
@@ -495,7 +522,9 @@ client::connectFrom(const dodoString &local,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 
 			socket = -1;
 
@@ -517,9 +546,8 @@ client::connectFrom(const dodoString &local,
 
 //-------------------------------------------------------------------
 
-void
-client::connect(const dodoString &path,
-				exchange &exchange)
+void client::connect(const dodoString &path,
+					 exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT_UNIX;
@@ -534,7 +562,9 @@ client::connect(const dodoString &path,
 	unsigned long size = path.size();
 
 	if (size >= 108)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECT, exception::ERRNO_LIBDODO, CLIENTEX_LONGPATH, IONETWORKCLIENTEX_LONGPATH_STR, __LINE__, __FILE__);
+	}
 
 	strncpy(sa.sun_path, path.c_str(), size);
 	sa.sun_family = AF_UNIX;
@@ -542,7 +572,9 @@ client::connect(const dodoString &path,
 	if (::connect(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
 	{
 		if (::close(socket) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		socket = -1;
 

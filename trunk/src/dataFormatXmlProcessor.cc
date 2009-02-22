@@ -35,10 +35,10 @@ using namespace dodo::data::format::xml;
 __info::__info(const dodoString &a_version,
 			   const dodoString &a_encoding,
 			   const dodoString &a_root,
-			   int a_compression) : version(a_version),
-									encoding(a_encoding),
-									root(a_root),
-									compression(a_compression)
+			   int              a_compression) : version(a_version),
+												 encoding(a_encoding),
+												 root(a_root),
+												 compression(a_compression)
 {
 }
 
@@ -58,7 +58,7 @@ __nodeDef::__nodeDef() : allChildren(true),
 //-------------------------------------------------------------------
 
 __nodeDef::__nodeDef(const dodoString &name,
-                     const dodoString &ns) : allChildren(true),
+					 const dodoString &ns) : allChildren(true),
 											 allAttributes(true),
 											 name(name),
 											 ns(ns)
@@ -126,14 +126,15 @@ processor::~processor()
 
 #ifdef LIBXML2_EXT
 
-bool
-processor::isCDATA(xmlNodePtr chNode)
+bool processor::isCDATA(xmlNodePtr chNode)
 {
 	xmlNodePtr xnode = chNode->children;
 	while (xnode != NULL)
 	{
 		if (xnode->type == XML_CDATA_SECTION_NODE)
+		{
 			return true;
+		}
 
 		xnode = xnode->next;
 	}
@@ -145,9 +146,8 @@ processor::isCDATA(xmlNodePtr chNode)
 
 //-------------------------------------------------------------------
 
-node
-processor::processFile(const __nodeDef &definition,
-					   const dodoString &file)
+node processor::processFile(const __nodeDef  &definition,
+							const dodoString &file)
 {
 #ifdef LIBXML2_EXT
 
@@ -159,9 +159,13 @@ processor::processFile(const __nodeDef &definition,
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		}
 	}
 
 #endif
@@ -171,9 +175,8 @@ processor::processFile(const __nodeDef &definition,
 
 //-------------------------------------------------------------------
 
-node
-processor::processString(const __nodeDef &definition,
-						 const dodoString &buffer)
+node processor::processString(const __nodeDef  &definition,
+							  const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
 
@@ -185,9 +188,13 @@ processor::processString(const __nodeDef &definition,
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		}
 	}
 
 #endif
@@ -197,8 +204,7 @@ processor::processString(const __nodeDef &definition,
 
 //-------------------------------------------------------------------
 
-node
-processor::parse(const __nodeDef &definition)
+node processor::parse(const __nodeDef &definition)
 {
 #ifdef LIBXML2_EXT
 
@@ -208,9 +214,13 @@ processor::parse(const __nodeDef &definition)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		}
 	}
 
 	xnode = findNode(definition, xnode);
@@ -218,14 +228,18 @@ processor::parse(const __nodeDef &definition)
 	node sample;
 
 	if (xnode == NULL)
+	{
 		return sample;
+	}
 
 	getNodeInfo(xnode, sample);
 
 	getAttributes(definition, xnode, sample.attributes);
 
 	if (xnode->children == NULL)
+	{
 		return sample;
+	}
 
 	sample.CDATA = isCDATA(xnode);
 
@@ -259,7 +273,9 @@ processor::parse(const __nodeDef &definition)
 				i = children.begin();
 				j = children.end();
 				for (; i != j; ++i)
+				{
 					one.children[i->name].push_back(*i);
+				}
 			}
 
 			sample.children[(char *)xnode->name].push_back(one);
@@ -275,7 +291,9 @@ processor::parse(const __nodeDef &definition)
 		{
 			dodoMap<dodoString, __nodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 			for (; i != j; ++i)
+			{
 				sample.children.insert(make_pair(i->first, parse(i->second, xnode->children)));
+			}
 		}
 	}
 
@@ -292,9 +310,8 @@ processor::parse(const __nodeDef &definition)
 
 #ifdef LIBXML2_EXT
 
-dodoArray<node>
-processor::parse(const __nodeDef &definition,
-				 const xmlNodePtr chNode)
+dodoArray<node>processor::parse(const __nodeDef  &definition,
+								const xmlNodePtr chNode)
 {
 	xmlNodePtr xnode = chNode, subNode;
 
@@ -302,9 +319,13 @@ processor::parse(const __nodeDef &definition,
 	dodoArray<node> sampleArr;
 
 	if (icaseNames)
+	{
 		cmpFunc = xmlStrcasecmp;
+	}
 	else
+	{
 		cmpFunc = xmlStrcmp;
+	}
 
 	do
 	{
@@ -376,7 +397,9 @@ processor::parse(const __nodeDef &definition,
 					i = chldrn.begin();
 					j = chldrn.end();
 					for (; i != j; ++i)
+					{
 						one.children[i->name].push_back(*i);
+					}
 				}
 
 				sample.children[(char *)subNode->name].push_back(one);
@@ -392,16 +415,16 @@ processor::parse(const __nodeDef &definition,
 			{
 				dodoMap<dodoString, __nodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 				for (; i != j; ++i)
+				{
 					sample.children.insert(make_pair(i->first, parse(i->second, xnode->children)));
+				}
 			}
 		}
 
 		sampleArr.push_back(sample);
 
 		xnode = xnode->next;
-
-	}
-	while (xnode != NULL);
+	} while (xnode != NULL);
 
 	return sampleArr;
 }
@@ -412,18 +435,16 @@ processor::parse(const __nodeDef &definition,
 
 #ifdef LIBXML2_EXT
 
-void
-processor::errHandler(void        *data,
-					  xmlErrorPtr error)
+void processor::errHandler(void        *data,
+						   xmlErrorPtr error)
 {
 }
 
 //-------------------------------------------------------------------
 
-void
-processor::getAttributes(const __nodeDef &definition,
-						 const xmlNodePtr xnode,
-						 dodoStringMap &attributes)
+void processor::getAttributes(const __nodeDef  &definition,
+							  const xmlNodePtr xnode,
+							  dodoStringMap    &attributes)
 {
 	attribute = xnode->properties;
 
@@ -486,9 +507,8 @@ processor::getAttributes(const __nodeDef &definition,
 
 //-------------------------------------------------------------------
 
-void
-processor::getAttributes(const xmlNodePtr xnode,
-						 dodoStringMap &attributes)
+void processor::getAttributes(const xmlNodePtr xnode,
+							  dodoStringMap    &attributes)
 {
 	attribute = xnode->properties;
 
@@ -507,9 +527,8 @@ processor::getAttributes(const xmlNodePtr xnode,
 
 //-------------------------------------------------------------------
 
-void
-processor::getNodeInfo(const xmlNodePtr xnode,
-					   node &resNode)
+void processor::getNodeInfo(const xmlNodePtr xnode,
+							node             &resNode)
 {
 	if (xnode->ns != NULL)
 	{
@@ -524,7 +543,9 @@ processor::getNodeInfo(const xmlNodePtr xnode,
 	}
 
 	if (xnode->name != NULL)
+	{
 		resNode.name.assign((char *)xnode->name);
+	}
 
 	xmlChar *xChar = xmlNodeListGetString(document, xnode->children, 1);
 	if (xChar != NULL)
@@ -538,8 +559,7 @@ processor::getNodeInfo(const xmlNodePtr xnode,
 
 //-------------------------------------------------------------------
 
-__info
-processor::getFileInfo(const dodoString &file)
+__info processor::getFileInfo(const dodoString &file)
 {
 #ifdef LIBXML2_EXT
 
@@ -551,9 +571,13 @@ processor::getFileInfo(const dodoString &file)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_GETFILEINFO, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_GETFILEINFO, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		}
 	}
 
 	return __info(document->version != NULL ? (char *)document->version : __dodostring__,
@@ -570,8 +594,7 @@ processor::getFileInfo(const dodoString &file)
 
 //-------------------------------------------------------------------
 
-__info
-processor::getBufferInfo(const dodoString &buffer)
+__info processor::getBufferInfo(const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
 
@@ -583,9 +606,13 @@ processor::getBufferInfo(const dodoString &buffer)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		}
 	}
 
 	return __info(document->version != NULL ? (char *)document->version : __dodostring__,
@@ -604,8 +631,7 @@ processor::getBufferInfo(const dodoString &buffer)
 
 #ifdef LIBXML2_EXT
 
-dodoArray<node>
-processor::parse(xmlNodePtr xnode)
+dodoArray<node>processor::parse(xmlNodePtr xnode)
 {
 	dodoArray<node> sample;
 
@@ -635,7 +661,9 @@ processor::parse(xmlNodePtr xnode)
 			i = children.begin();
 			j = children.end();
 			for (; i != j; ++i)
+			{
 				one.children[i->name].push_back(*i);
+			}
 		}
 
 		sample.push_back(one);
@@ -652,8 +680,7 @@ processor::parse(xmlNodePtr xnode)
 
 //-------------------------------------------------------------------
 
-void
-processor::initNode(node &xnode)
+void processor::initNode(node &xnode)
 {
 	xnode.attributes.clear();
 	xnode.children.clear();
@@ -667,8 +694,7 @@ processor::initNode(node &xnode)
 
 //-------------------------------------------------------------------
 
-node
-processor::processFile(const dodoString &file)
+node processor::processFile(const dodoString &file)
 {
 #ifdef LIBXML2_EXT
 
@@ -680,9 +706,13 @@ processor::processFile(const dodoString &file)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		}
 	}
 
 	xmlNodePtr xnode = xmlDocGetRootElement(document);
@@ -691,9 +721,13 @@ processor::processFile(const dodoString &file)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__, file);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		}
 	}
 
 	return *(parse(xnode).begin());
@@ -707,8 +741,7 @@ processor::processFile(const dodoString &file)
 
 //-------------------------------------------------------------------
 
-node
-processor::processString(const dodoString &buffer)
+node processor::processString(const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
 
@@ -720,9 +753,13 @@ processor::processString(const dodoString &buffer)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		}
 	}
 
 	xmlNodePtr xnode = xmlDocGetRootElement(document);
@@ -731,9 +768,13 @@ processor::processString(const dodoString &buffer)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		}
 	}
 
 	return *(parse(xnode).begin());
@@ -747,8 +788,7 @@ processor::processString(const dodoString &buffer)
 
 //-------------------------------------------------------------------
 
-void
-processor::initNodeDef(__nodeDef &xnode)
+void processor::initNodeDef(__nodeDef &xnode)
 {
 	xnode.attributes.clear();
 	xnode.children.clear();
@@ -760,17 +800,20 @@ processor::initNodeDef(__nodeDef &xnode)
 
 #ifdef LIBXML2_EXT
 
-xmlNodePtr
-processor::findNode(const __nodeDef &definition,
-					xmlNodePtr xnode)
+xmlNodePtr processor::findNode(const __nodeDef &definition,
+							   xmlNodePtr      xnode)
 {
 	xmlNodePtr one;
 	bool skip;
 
 	if (icaseNames)
+	{
 		cmpFunc = xmlStrcasecmp;
+	}
 	else
+	{
 		cmpFunc = xmlStrcmp;
+	}
 
 	while (xnode != NULL)
 	{
@@ -786,20 +829,29 @@ processor::findNode(const __nodeDef &definition,
 		if (definition.ns.size() > 0)
 		{
 			if (xnode->ns == NULL)
+			{
 				skip = true;
-			else
-			if (cmpFunc(xnode->ns->prefix, (xmlChar *)definition.ns.c_str()) != 0)
+			}
+			else if (cmpFunc(xnode->ns->prefix, (xmlChar *)definition.ns.c_str()) != 0)
+			{
 				skip = true;
+			}
 		}
 
 		if (!skip && xnode->name != NULL)
+		{
 			if (cmpFunc(xnode->name, (xmlChar *)definition.name.c_str()) == 0)
+			{
 				return xnode;
+			}
+		}
 
 		one = findNode(definition, xnode->children);
 
 		if (one != NULL)
+		{
 			return one;
+		}
 
 		xnode = xnode->next;
 	}
@@ -811,8 +863,7 @@ processor::findNode(const __nodeDef &definition,
 
 //-------------------------------------------------------------------
 
-void
-processor::clear()
+void processor::clear()
 {
 #ifdef LIBXML2_EXT
 
@@ -824,13 +875,14 @@ processor::clear()
 
 //-------------------------------------------------------------------
 
-dodoString
-processor::make(const node &root,
-				const dodoString &encoding,
-				const dodoString &version) const
+dodoString processor::make(const node       &root,
+						   const dodoString &encoding,
+						   const dodoString &version) const
 {
 	if (root.name.empty())
+	{
 		throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
+	}
 
 	dodoString processor = "<?xml version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
 
@@ -841,11 +893,12 @@ processor::make(const node &root,
 
 //-------------------------------------------------------------------
 
-dodoString
-processor::make(const node &xnode) const
+dodoString processor::make(const node &xnode) const
 {
 	if (xnode.name.empty())
+	{
 		throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
+	}
 
 	dodoString data = statements[PROCESSOR_STATEMENT_LT];
 
@@ -905,7 +958,9 @@ processor::make(const node &xnode) const
 		x = o->second.begin();
 		y = o->second.end();
 		for (; x != y; ++x)
+		{
 			data.append(make(*x));
+		}
 	}
 
 	data.append(statements[PROCESSOR_STATEMENT_LTSLASH]);

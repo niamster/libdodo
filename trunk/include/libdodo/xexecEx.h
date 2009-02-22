@@ -63,7 +63,6 @@ namespace dodo
 		XEXECEX_DELXEXEC,
 
 #endif
-
 	};
 };
 

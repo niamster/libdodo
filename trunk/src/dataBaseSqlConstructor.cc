@@ -104,22 +104,22 @@ constructor::~constructor()
 
 //-------------------------------------------------------------------
 
-void
-constructor::setFieldType(const dodoString &table,
-						  const dodoString &field,
-						  short type)
+void constructor::setFieldType(const dodoString &table,
+							   const dodoString &field,
+							   short            type)
 {
 	fieldTypes[collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + table][field] = type;
 }
 
 //-------------------------------------------------------------------
 
-void
-constructor::additionalCollect(unsigned int qTypeTocheck,
-							   const dodoString &collectedString)
+void constructor::additionalCollect(unsigned int     qTypeTocheck,
+									const dodoString &collectedString)
 {
 	if (collectedData.qShift == ACCUMULATOR_NONE)
+	{
 		return ;
+	}
 
 	if (isSetFlag(collectedData.qShift, 1 << qTypeTocheck))
 	{
@@ -130,8 +130,7 @@ constructor::additionalCollect(unsigned int qTypeTocheck,
 
 //-------------------------------------------------------------------
 
-void
-constructor::callFunctionCollect()
+void constructor::callFunctionCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
 	request.append(collectedData.table);
@@ -142,8 +141,7 @@ constructor::callFunctionCollect()
 
 //-------------------------------------------------------------------
 
-void
-constructor::callProcedureCollect()
+void constructor::callProcedureCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_CALL];
 	request.append(collectedData.table);
@@ -154,8 +152,7 @@ constructor::callProcedureCollect()
 
 //-------------------------------------------------------------------
 
-void
-constructor::selectCollect()
+void constructor::selectCollect()
 {
 	if (collectedData.table.size() > 0)
 	{
@@ -173,8 +170,7 @@ constructor::selectCollect()
 
 //-------------------------------------------------------------------
 
-void
-constructor::insertCollect()
+void constructor::insertCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
@@ -212,23 +208,35 @@ constructor::insertCollect()
 					if (type != typesEnd)
 					{
 						if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
+						{
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+						}
 						else
+						{
 							request.append(*i + statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+						}
 					}
 					else
+					{
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+					}
 				}
 				type = types->second.find(*t);
 				if (type != typesEnd)
 				{
 					if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
+					{
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+					}
 					else
+					{
 						request.append(*i);
+					}
 				}
 				else
+				{
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+				}
 
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
 			}
@@ -243,23 +251,35 @@ constructor::insertCollect()
 				if (type != typesEnd)
 				{
 					if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
+					{
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+					}
 					else
+					{
 						request.append(*i + statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+					}
 				}
 				else
+				{
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+				}
 			}
 			type = types->second.find(*t);
 			if (type != typesEnd)
 			{
 				if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
+				{
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+				}
 				else
+				{
 					request.append(*i);
+				}
 			}
 			else
+			{
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+			}
 
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 		}
@@ -281,8 +301,7 @@ constructor::insertCollect()
 
 //-------------------------------------------------------------------
 
-void
-constructor::insertSelectCollect()
+void constructor::insertSelectCollect()
 {
 	dodoString fieldsPartTo = tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 
@@ -290,7 +309,9 @@ constructor::insertSelectCollect()
 
 	dodoArray<dodoStringArray>::iterator i = collectedData.values.begin();
 	if (i != collectedData.values.end())
+	{
 		fieldsPartFrom = tools::misc::join(*i, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+	}
 
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
@@ -305,8 +326,7 @@ constructor::insertSelectCollect()
 
 //-------------------------------------------------------------------
 
-void
-constructor::updateCollect()
+void constructor::updateCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_UPDATE];
 	request.append(collectedData.table);
@@ -401,8 +421,7 @@ constructor::updateCollect()
 
 //-------------------------------------------------------------------
 
-void
-constructor::delCollect()
+void constructor::delCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_DELETE];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
@@ -411,16 +430,14 @@ constructor::delCollect()
 
 //-------------------------------------------------------------------
 
-void
-constructor::subCollect()
+void constructor::subCollect()
 {
 	request = tools::misc::join(collectedData.subQueries, sqlQStArr[collectedData.qType - 1]);
 }
 
 //-------------------------------------------------------------------
 
-void
-constructor::joinCollect()
+void constructor::joinCollect()
 {
 	dodoStringArray::iterator i = collectedData.joinTables.begin(), j = collectedData.joinTables.end();
 	dodoStringArray::iterator o = collectedData.joinConds.begin(), p = collectedData.joinConds.end();
@@ -428,9 +445,13 @@ constructor::joinCollect()
 	for (; i != j; ++i, ++o, ++m)
 	{
 		if (*m >= 0 && *m < JOINTYPESTSTATEMENTS)
+		{
 			request.append(sqlJoinArr[*m]);
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATABASESQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DATABASESQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
+		}
 
 		request.append(*i);
 
@@ -444,8 +465,7 @@ constructor::joinCollect()
 
 //-------------------------------------------------------------------
 
-dodoString
-constructor::queryCollect()
+dodoString constructor::queryCollect()
 {
 	bool additionalActions = true;
 	bool selectAction = false;
@@ -516,7 +536,9 @@ constructor::queryCollect()
 	if (additionalActions)
 	{
 		if (selectAction && isSetFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_JOIN))
+		{
 			joinCollect();
+		}
 		additionalCollect(ACCUMULATOR_ADDREQUEST_AS, collectedData.where);
 		additionalCollect(ACCUMULATOR_ADDREQUEST_WHERE, collectedData.where);
 		if (selectAction)
@@ -534,8 +556,7 @@ constructor::queryCollect()
 
 //-------------------------------------------------------------------
 
-dodoString
-constructor::escapeFields(const dodoString &data)
+dodoString constructor::escapeFields(const dodoString &data)
 {
 	dodoString temp;
 
@@ -544,13 +565,19 @@ constructor::escapeFields(const dodoString &data)
 	for (unsigned long i = 0; i < size; ++i)
 	{
 		if (data[i] == '\\')
+		{
 			temp.append("\\\\");
+		}
 		else
 		{
 			if (data[i] == '\'')
+			{
 				temp.append("\\'");
+			}
 			else
+			{
 				temp.append(1, data[i]);
+			}
 		}
 	}
 
@@ -559,11 +586,10 @@ constructor::escapeFields(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-dodoString
-constructor::joinFields(const dodoStringArray &fields,
-						const dodoString &separator,
-						const dodoString &frame,
-						int limit)
+dodoString constructor::joinFields(const dodoStringArray &fields,
+								   const dodoString      &separator,
+								   const dodoString      &frame,
+								   int                   limit)
 {
 	int k(0);
 
@@ -577,7 +603,9 @@ constructor::joinFields(const dodoStringArray &fields,
 			if (limit != -1)
 			{
 				if (k > limit)
+				{
 					return temp;
+				}
 				++k;
 			}
 			temp.append(frame);

@@ -50,17 +50,17 @@ namespace dodo
 				 */
 				class stack : virtual public sync::stack
 				{
-					protected:
+				  protected:
 
-						/**
-						 * contructor
-						 */
-						stack();
+					/**
+					 * contructor
+					 */
+					stack();
 
-						/**
-						 * destructor
-						 */
-						virtual ~stack();
+					/**
+					 * destructor
+					 */
+					virtual ~stack();
 				};
 			};
 		};

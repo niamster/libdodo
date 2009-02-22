@@ -55,61 +55,61 @@ namespace dodo
 					 */
 					class single : public sync::data::single
 					{
-						private:
+					  private:
 
-							/**
-							 * copy constructor
-							 * @note to prevent copying
-							 */
-							single(single &sts);
+						/**
+						 * copy constructor
+						 * @note to prevent copying
+						 */
+						single(single &sts);
 
-						public:
+					  public:
 
-							/**
-							 * constructor
-							 */
-							single();
+						/**
+						 * constructor
+						 */
+						single();
 
-							/**
-							 * destructor
-							 */
-							virtual ~single();
+						/**
+						 * destructor
+						 */
+						virtual ~single();
 
-							/**
-							 * set shared data
-							 * @param data defines shared data
-							 */
-							virtual void set(void *data);
+						/**
+						 * set shared data
+						 * @param data defines shared data
+						 */
+						virtual void set(void *data);
 
-							/**
-							 * set shared data to NULL
-							 */
-							virtual void del();
+						/**
+						 * set shared data to NULL
+						 */
+						virtual void del();
 
-							/**
-							 * lock and return shared data
-							 * @return shared data
-							 * @param microseconds defines wait timeout for unlock
-							 * @note if microseconds is 0 it will wait infinitely
-							 */
-							virtual void *acquire(unsigned long microseconds = 0);
+						/**
+						 * lock and return shared data
+						 * @return shared data
+						 * @param microseconds defines wait timeout for unlock
+						 * @note if microseconds is 0 it will wait infinitely
+						 */
+						virtual void *acquire(unsigned long microseconds = 0);
 
-							/**
-							 * unlock shared data
-							 */
-							virtual void release();
+						/**
+						 * unlock shared data
+						 */
+						virtual void release();
 
-						protected:
+					  protected:
 
-							void *data;                                                                 ///< shared data
+						void *data;             ///< shared data
 
 #ifdef PTHREAD_EXT
 
-							pthread_mutex_t mutex;                                                      ///< lock
+						pthread_mutex_t mutex;  ///< lock
 
 #endif
 
-							timespec timeout;                                                           ///< lcok timeout
+						timespec timeout;       ///< lcok timeout
 					};
 				};
 			};

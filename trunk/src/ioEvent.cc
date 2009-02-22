@@ -51,8 +51,7 @@ event::~event()
 
 //-------------------------------------------------------------------
 
-int
-event::addChannel(const eventInfo &fl)
+int event::addChannel(const eventInfo &fl)
 {
 	protector pg(this);
 
@@ -69,9 +68,8 @@ event::addChannel(const eventInfo &fl)
 
 //-------------------------------------------------------------------
 
-dodoArray<bool>
-event::isReadable(const dodoArray<int> &pos,
-				  int timeout) const
+dodoArray<bool>event::isReadable(const dodoArray<int> &pos,
+								 int                  timeout) const
 {
 	protector pg(this);
 
@@ -108,9 +106,13 @@ event::isReadable(const dodoArray<int> &pos,
 			for (int i = 0; i < count; ++i)
 			{
 				if (isSetFlag(fds[i].revents, POLLIN) || isSetFlag(fds[i].revents, POLLPRI))
+				{
 					tempRB.push_back(true);
+				}
 				else
+				{
 					tempRB.push_back(false);
+				}
 			}
 
 			delete [] fds;
@@ -122,7 +124,9 @@ event::isReadable(const dodoArray<int> &pos,
 			if (res == 0)
 			{
 				for (int i = 0; i < count; ++i)
+				{
 					tempRB.push_back(false);
+				}
 
 				delete [] fds;
 
@@ -140,16 +144,17 @@ event::isReadable(const dodoArray<int> &pos,
 	delete [] fds;
 
 	for (int i = 0; i < count; ++i)
+	{
 		tempRB.push_back(false);
+	}
 
 	return tempRB;
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<bool>
-event::isWritable(const dodoArray<int> &pos,
-				  int timeout) const
+dodoArray<bool>event::isWritable(const dodoArray<int> &pos,
+								 int                  timeout) const
 {
 	protector pg(this);
 
@@ -186,9 +191,13 @@ event::isWritable(const dodoArray<int> &pos,
 			for (int i = 0; i < count; ++i)
 			{
 				if (isSetFlag(fds[i].revents, POLLOUT))
+				{
 					tempRB.push_back(true);
+				}
 				else
+				{
 					tempRB.push_back(false);
+				}
 			}
 
 			delete [] fds;
@@ -202,7 +211,9 @@ event::isWritable(const dodoArray<int> &pos,
 				delete [] fds;
 
 				for (int i = 0; i < count; ++i)
+				{
 					tempRB.push_back(false);
+				}
 
 				return tempRB;
 			}
@@ -218,16 +229,17 @@ event::isWritable(const dodoArray<int> &pos,
 	delete [] fds;
 
 	for (int i = 0; i < count; ++i)
+	{
 		tempRB.push_back(false);
+	}
 
 	return tempRB;
 }
 
 //-------------------------------------------------------------------
 
-bool
-event::isReadable(int pos,
-				  int timeout) const
+bool event::isReadable(int pos,
+					   int timeout) const
 {
 	protector pg(this);
 
@@ -235,6 +247,7 @@ event::isReadable(int pos,
 
 	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
+	{
 		if (i->position == pos)
 		{
 			fd.fd = i->in;
@@ -245,44 +258,53 @@ event::isReadable(int pos,
 			if (res > 0)
 			{
 				if (isSetFlag(fd.revents, POLLIN) || isSetFlag(fd.revents, POLLPRI))
+				{
 					return true;
+				}
 				else
+				{
 					return false;
+				}
 			}
 			else
 			{
 				if (res == 0)
+				{
 					return false;
+				}
 				else
+				{
 					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 			}
 		}
+	}
 
 	return false;
 }
 
 //-------------------------------------------------------------------
 
-void
-event::delChannel(int pos)
+void event::delChannel(int pos)
 {
 	protector pg(this);
 
 	dodoArray<__eventInOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
+	{
 		if (i->position == pos)
 		{
 			desc.erase(i);
 
 			break;
 		}
+	}
 }
 
 //-------------------------------------------------------------------
 
-bool
-event::isWritable(int pos,
-				  int timeout) const
+bool event::isWritable(int pos,
+					   int timeout) const
 {
 	protector pg(this);
 
@@ -290,6 +312,7 @@ event::isWritable(int pos,
 
 	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
+	{
 		if (i->position == pos)
 		{
 			fd.fd = i->out;
@@ -300,18 +323,27 @@ event::isWritable(int pos,
 			if (res > 0)
 			{
 				if (isSetFlag(fd.revents, POLLOUT))
+				{
 					return true;
+				}
 				else
+				{
 					return false;
+				}
 			}
 			else
 			{
 				if (res == 0)
+				{
 					return false;
+				}
 				else
+				{
 					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 			}
 		}
+	}
 
 	return false;
 }

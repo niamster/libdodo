@@ -54,8 +54,7 @@ exchange::~exchange()
 
 //-------------------------------------------------------------------
 
-char *
-exchange::getenv(const char *buf)
+char *exchange::getenv(const char *buf)
 {
 	return ::getenv(buf);
 }

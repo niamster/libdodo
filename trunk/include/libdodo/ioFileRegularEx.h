@@ -57,7 +57,7 @@ namespace dodo
 #define IOFILEREGULAREX_WRONGFILENAME_STR                  "Probably wrong filename, type of file is wrong or `path` is empty."
 #define IOFILEREGULAREX_CANNOTOVEWRITE_STR                 "You set option not to overwrite but tried to do that."
 #define IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
-#define IOFILEREGULAREX_NOTOPENED_STR 						"File was not opened."
+#define IOFILEREGULAREX_NOTOPENED_STR                       "File was not opened."
 
 			/**
 			 * IDs of functions where exception might be thrown

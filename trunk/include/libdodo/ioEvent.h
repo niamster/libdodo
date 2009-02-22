@@ -51,10 +51,10 @@ namespace dodo
 		 */
 		struct __eventInOutDescriptors
 		{
-			int position;                           ///< identificator of the pair
+			int position;   ///< identificator of the pair
 
-			int in;                                 ///< input stream
-			int out;                                ///< output stream
+			int in;         ///< input stream
+			int out;        ///< output stream
 		};
 
 		/**
@@ -63,76 +63,79 @@ namespace dodo
 		 */
 		class event : virtual public pc::sync::thread::stack
 		{
+		  private:
 
-			private:
+			/**
+			 * copy constructor
+			 * @note to prevent copying
+			 */
+			event(event &rt);
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				event(event &rt);
+		  public:
 
-			public:
+			/**
+			 * constructor
+			 */
+			event();
 
-				/**
-				 * constructor
-				 */
-				event();
+			/**
+			 * destructor
+			 */
+			virtual ~event();
 
-				/**
-				 * destructor
-				 */
-				virtual ~event();
+			/**
+			 * @return identificator of stream pair
+			 * @param fl defines a stream[file, stdio, exchange, ...]
+			 */
+			virtual int addChannel(const eventInfo &fl);
 
-				/**
-				 * @return identificator of stream pair
-				 * @param fl defines a stream[file, stdio, exchange, ...]
-				 */
-				virtual int addChannel(const eventInfo &fl);
+			/**
+			 * delete stream pair from watchers
+			 * @param pos defines identificator of stream pair
+			 */
+			virtual void delChannel(int pos);
 
-				/**
-				 * delete stream pair from watchers
-				 * @param pos defines identificator of stream pair
-				 */
-				virtual void delChannel(int pos);
+			/**
+			 * @return true if io* is readable
+			 * @param pos defines identificator of stream pair
+			 * @param timeout defines amount of time to wait for result[in milliseconds]
+			 * @note if timeout is negative - infinit timeout
+			 */
+			virtual bool isReadable(int pos,
+									int timeout = 100) const;
 
-				/**
-				 * @return true if io* is readable
-				 * @param pos defines identificator of stream pair
-				 * @param timeout defines amount of time to wait for result[in milliseconds]
-				 * @note if timeout is negative - infinit timeout
-				 */
-				virtual bool isReadable(int pos, int timeout = 100) const;
+			/**
+			 * @return collection of boolean values[value is true if io* is readable]
+			 * @param pos defines collection of identificators of stream pairs
+			 * @param timeout defines amount of time to wait for result[in milliseconds]
+			 * @note if timeout is negative - infinit timeout
+			 */
+			virtual dodoArray<bool> isReadable(const dodoArray<int> &pos,
+											   int                  timeout = 100) const;
 
-				/**
-				 * @return collection of boolean values[value is true if io* is readable]
-				 * @param pos defines collection of identificators of stream pairs
-				 * @param timeout defines amount of time to wait for result[in milliseconds]
-				 * @note if timeout is negative - infinit timeout
-				 */
-				virtual dodoArray<bool> isReadable(const dodoArray<int> &pos, int timeout = 100) const;
+			/**
+			 * @return true if io* is writable
+			 * @param pos defines identificator of stream pair
+			 * @param timeout defines amount of time to wait for result[in milliseconds]
+			 * @note if timeout is negative - infinit timeout
+			 */
+			virtual bool isWritable(int pos,
+									int timeout = 100) const;
 
-				/**
-				 * @return true if io* is writable
-				 * @param pos defines identificator of stream pair
-				 * @param timeout defines amount of time to wait for result[in milliseconds]
-				 * @note if timeout is negative - infinit timeout
-				 */
-				virtual bool isWritable(int pos, int timeout = 100) const;
+			/**
+			 * @return collection of boolean values[value is true if io* is writable]
+			 * @param pos defines collection of identificators of stream pairs
+			 * @param timeout defines amount of time to wait for result[in milliseconds]
+			 * @note if timeout is negative - infinit timeout
+			 */
+			virtual dodoArray<bool> isWritable(const dodoArray<int> &pos,
+											   int                  timeout = 100) const;
 
-				/**
-				 * @return collection of boolean values[value is true if io* is writable]
-				 * @param pos defines collection of identificators of stream pairs
-				 * @param timeout defines amount of time to wait for result[in milliseconds]
-				 * @note if timeout is negative - infinit timeout
-				 */
-				virtual dodoArray<bool> isWritable(const dodoArray<int> &pos, int timeout = 100) const;
+		  protected:
 
-			protected:
+			dodoArray<__eventInOutDescriptors> desc;    ///< stream pairs
 
-				dodoArray<__eventInOutDescriptors> desc;                                        ///< stream pairs
-
-				int descs;                                                                      ///< descriptors counter
+			int descs;                                  ///< descriptors counter
 		};
 	};
 };

@@ -34,7 +34,7 @@ using namespace dodo::io;
 #ifndef IO_WO_XEXEC
 
 __xexecIoChannelCollectedData::__xexecIoChannelCollectedData(xexec *a_executor,
-                                                             short execObject) : __xexecCollectedData(a_executor, execObject)
+															 short execObject) : __xexecCollectedData(a_executor, execObject)
 {
 }
 
@@ -62,8 +62,7 @@ channel::~channel()
 
 //-------------------------------------------------------------------
 
-dodoString
-channel::read()
+dodoString channel::read()
 {
 	protector pg(this);
 
@@ -123,8 +122,7 @@ channel::read()
 
 //-------------------------------------------------------------------
 
-dodoString
-channel::readStream()
+dodoString channel::readStream()
 {
 	protector pg(this);
 
@@ -154,9 +152,13 @@ channel::readStream()
 #ifndef IO_WO_XEXEC
 
 	if (n > 0)
+	{
 		collectedData.buffer.assign(data, n);
+	}
 	else
+	{
 		collectedData.buffer.clear();
+	}
 
 	delete [] data;
 
@@ -169,9 +171,13 @@ channel::readStream()
 #else
 
 	if (n > 0)
+	{
 		a_str.assign(data, n);
+	}
 	else
+	{
 		a_str.clear();
+	}
 
 	delete [] data;
 
@@ -182,8 +188,7 @@ channel::readStream()
 
 //-------------------------------------------------------------------
 
-void
-channel::write(const dodoString &a_data)
+void channel::write(const dodoString &a_data)
 {
 	protector pg(this);
 
@@ -220,8 +225,7 @@ channel::write(const dodoString &a_data)
 
 //-------------------------------------------------------------------
 
-void
-channel::writeStream(const dodoString &a_data)
+void channel::writeStream(const dodoString &a_data)
 {
 	protector pg(this);
 

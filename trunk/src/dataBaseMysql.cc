@@ -50,8 +50,8 @@ mysql::mysql() : empty(true),
 //-------------------------------------------------------------------
 
 mysql::mysql(const __connectionInfo &info) : empty(true),
-				 type(CLIENT_MULTI_STATEMENTS),
-				 mysqlHandle(NULL)
+											 type(CLIENT_MULTI_STATEMENTS),
+											 mysqlHandle(NULL)
 
 {
 #ifndef DATABASE_WO_XEXEC
@@ -72,7 +72,9 @@ mysql::mysql(const __connectionInfo &info) : empty(true),
 							collectedData.dbInfo.port,
 							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
 							type))
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_MYSQL, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+	}
 
 #ifndef MYSQL_NO_OPT_RECONNECT
 
@@ -99,7 +101,9 @@ mysql::~mysql()
 	if (mysqlHandle != NULL)
 	{
 		if (!empty)
+		{
 			mysql_free_result(mysqlResult);
+		}
 
 		mysql_close(mysqlHandle);
 	}
@@ -107,12 +111,13 @@ mysql::~mysql()
 
 //-------------------------------------------------------------------
 
-void
-mysql::connectSettings(unsigned long a_type,
-					   const __mysqlSslOptions &options)
+void mysql::connectSettings(unsigned long           a_type,
+							const __mysqlSslOptions &options)
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	type = a_type;
 
@@ -122,13 +127,14 @@ mysql::connectSettings(unsigned long a_type,
 					  options.ca.size() == 0 ? NULL : options.ca.c_str(),
 					  options.capath.size() == 0 ? NULL : options.capath.c_str(),
 					  options.cipher.size() == 0 ? NULL : options.cipher.c_str()) == 0)
+	{
 		type |= CLIENT_SSL;
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-mysql::connect(const __connectionInfo &info)
+void mysql::connect(const __connectionInfo &info)
 {
 	collectedData.dbInfo = info;
 
@@ -160,7 +166,9 @@ mysql::connect(const __connectionInfo &info)
 							collectedData.dbInfo.port,
 							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
 							type))
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_CONNECT, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+	}
 
 #ifndef MYSQL_NO_OPT_RECONNECT
 
@@ -180,8 +188,7 @@ mysql::connect(const __connectionInfo &info)
 
 //-------------------------------------------------------------------
 
-void
-mysql::disconnect()
+void mysql::disconnect()
 {
 	if (mysqlHandle != NULL)
 	{
@@ -208,11 +215,12 @@ mysql::disconnect()
 
 //-------------------------------------------------------------------
 
-dodoArray<dodo::dodoStringArray>
-mysql::fetchRows() const
+dodoArray<dodo::dodoStringArray>mysql::fetchRows() const
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHROW;
@@ -222,7 +230,9 @@ mysql::fetchRows() const
 	dodoArray<dodoStringArray> rows;
 
 	if (empty || !show)
+	{
 		return rows;
+	}
 
 	mysql_data_seek(mysqlResult, 0);
 
@@ -251,9 +261,13 @@ mysql::fetchRows() const
 		for (j = 0; j < numFields; ++j)
 		{
 			if (mysqlRow[j] != NULL)
+			{
 				rowsPart.push_back(dodoString(mysqlRow[j], length[j]));
+			}
 			else
+			{
 				rowsPart.push_back(statements[SQLCONSTRUCTOR_STATEMENT_NULL]);
+			}
 		}
 
 		rows.push_back(rowsPart);
@@ -268,11 +282,12 @@ mysql::fetchRows() const
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringArray
-mysql::fetchFields() const
+dodo::dodoStringArray mysql::fetchFields() const
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHFIELD;
@@ -282,7 +297,9 @@ mysql::fetchFields() const
 	dodoStringArray fields;
 
 	if (empty || !show)
+	{
 		return fields;
+	}
 
 	mysql_field_seek(mysqlResult, 0);
 
@@ -294,7 +311,9 @@ mysql::fetchFields() const
 #endif
 
 	for (unsigned int i(0); i < numFields; ++i)
+	{
 		fields.push_back(mysqlFields[i].name);
+	}
 
 #ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
@@ -305,68 +324,85 @@ mysql::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__tuples
-mysql::fetch() const
+__tuples mysql::fetch() const
 {
 	return __tuples(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
 
-unsigned int
-mysql::rowsCount() const
+unsigned int mysql::rowsCount() const
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	if (empty || !show)
+	{
 		return 0;
+	}
 	else
+	{
 		return mysql_num_rows(mysqlResult);
+	}
 }
 
 //-------------------------------------------------------------------
 
-unsigned int
-mysql::fieldsCount() const
+unsigned int mysql::fieldsCount() const
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	if (empty || !show)
+	{
 		return 0;
+	}
 	else
+	{
 		return mysql_num_fields(mysqlResult);
+	}
 }
 
 //-------------------------------------------------------------------
 
-unsigned int
-mysql::affectedRowsCount() const
+unsigned int mysql::affectedRowsCount() const
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	if (empty || show)
+	{
 		return 0;
+	}
 	else
+	{
 		return mysql_affected_rows(mysqlHandle);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-mysql::getFieldsTypes(const dodoString &table)
+void mysql::getFieldsTypes(const dodoString &table)
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	dodoString temp = collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + table;
 
 	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
 
 	if (types == fieldTypes.end())
+	{
 		types = fieldTypes.insert(make_pair(temp, dodoMap<dodoString, short, dodoMapICaseStringCompare>())).first;
+	}
 
 	request = "describe " + table;
 
@@ -377,15 +413,21 @@ mysql::getFieldsTypes(const dodoString &table)
 		{
 			connect(collectedData.dbInfo);
 			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+			}
 		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+		}
 	}
 
 	mysqlResult = mysql_store_result(mysqlHandle);
 	if (mysqlResult == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+	}
 
 	empty = false;
 
@@ -405,13 +447,19 @@ mysql::getFieldsTypes(const dodoString &table)
 				strcasestr(mysqlRow[1], "text") != NULL ||
 				strcasestr(mysqlRow[1], "enum") != NULL ||
 				strcasestr(mysqlRow[1], "set") != NULL)
+			{
 				types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELDTYPE_TEXT));
+			}
 			else
 			{
 				if (strcasestr(mysqlRow[1], "blob") != NULL)
+				{
 					types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELDTYPE_BINARY));
+				}
 				else
+				{
 					types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELDTYPE_NUMERIC));
+				}
 			}
 		}
 		else
@@ -422,13 +470,19 @@ mysql::getFieldsTypes(const dodoString &table)
 				strcasestr(mysqlRow[1], "text") != NULL ||
 				strcasestr(mysqlRow[1], "enum") != NULL ||
 				strcasestr(mysqlRow[1], "set") != NULL)
+			{
 				field->second = sql::FIELDTYPE_TEXT;
+			}
 			else
 			{
 				if (strcasestr(mysqlRow[1], "blob") != NULL)
+				{
 					field->second = sql::FIELDTYPE_BINARY;
+				}
 				else
+				{
 					field->second = sql::FIELDTYPE_NUMERIC;
+				}
 			}
 		}
 	}
@@ -440,12 +494,13 @@ mysql::getFieldsTypes(const dodoString &table)
 
 //-------------------------------------------------------------------
 
-void
-mysql::exec(const dodoString &query,
-			bool result)
+void mysql::exec(const dodoString &query,
+				 bool             result)
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_EXEC;
@@ -453,7 +508,9 @@ mysql::exec(const dodoString &query,
 #endif
 
 	if (query.size() == 0)
+	{
 		queryCollect();
+	}
 	else
 	{
 		request = query;
@@ -467,10 +524,14 @@ mysql::exec(const dodoString &query,
 		{
 			connect(collectedData.dbInfo);
 			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+			}
 		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+		}
 	}
 
 	if (show)
@@ -483,7 +544,9 @@ mysql::exec(const dodoString &query,
 
 		mysqlResult = mysql_store_result(mysqlHandle);
 		if (mysqlResult == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+		}
 
 		empty = false;
 	}
@@ -498,49 +561,55 @@ mysql::exec(const dodoString &query,
 
 //-------------------------------------------------------------------
 
-void
-mysql::setCharset(const dodoString &charset)
+void mysql::setCharset(const dodoString &charset)
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	mysql_options(mysqlHandle, MYSQL_SET_CHARSET_NAME, charset.c_str());
 }
 
 //-------------------------------------------------------------------
 
-void
-mysql::setConnectTimeout(unsigned int time)
+void mysql::setConnectTimeout(unsigned int time)
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	mysql_options(mysqlHandle, MYSQL_OPT_CONNECT_TIMEOUT, (char *)&time);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-mysql::getCharset() const
+dodoString mysql::getCharset() const
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	return mysql_character_set_name(mysqlHandle);
 }
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringMapArray
-mysql::fetchFieldsToRows() const
+dodo::dodoStringMapArray mysql::fetchFieldsToRows() const
 {
 	if (mysqlHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	dodoStringMapArray rowsFields;
 
 	if (empty || !show)
+	{
 		return rowsFields;
+	}
 
 	mysql_data_seek(mysqlResult, 0);
 	mysql_field_seek(mysqlResult, 0);
@@ -566,9 +635,13 @@ mysql::fetchFieldsToRows() const
 		for (j = 0; j < numFields; ++j)
 		{
 			if (mysqlRow[j] != NULL)
+			{
 				rowFieldsPart.insert(make_pair(mysqlFields[j].name, dodoString(mysqlRow[j], length[j])));
+			}
 			else
+			{
 				rowFieldsPart.insert(make_pair(mysqlFields[j].name, statements[SQLCONSTRUCTOR_STATEMENT_NULL]));
+			}
 		}
 	}
 

@@ -32,8 +32,8 @@
 using namespace dodo::io;
 
 string::string() : pos(0),
-					blockOffset(false),
-					 append(false)
+				   blockOffset(false),
+				   append(false)
 {
 #ifndef IO_WO_XEXEC
 
@@ -45,9 +45,9 @@ string::string() : pos(0),
 //-------------------------------------------------------------------
 
 string::string(const string &fd) : pos(fd.pos),
-								blockOffset(fd.blockOffset),
-								 append(fd.append),
-								 buffer(fd.buffer)
+								   blockOffset(fd.blockOffset),
+								   append(fd.append),
+								   buffer(fd.buffer)
 {
 #ifndef IO_WO_XEXEC
 
@@ -62,9 +62,9 @@ string::string(const string &fd) : pos(fd.pos),
 //-------------------------------------------------------------------
 
 string::string(const dodoString &data) : pos(0),
-								blockOffset(false),
-								 append(false),
-								 buffer(data)
+										 blockOffset(false),
+										 append(false),
+										 buffer(data)
 {
 #ifndef IO_WO_XEXEC
 
@@ -81,8 +81,7 @@ string::~string()
 
 //-------------------------------------------------------------------
 
-int
-string::getInDescriptor() const
+int string::getInDescriptor() const
 {
 	throw exception::basic(exception::ERRMODULE_IOSTRING, STRINGEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, STRINGEX_CANTBEUSEDWITHIOEVENT, IOSTRINGEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 
@@ -91,8 +90,7 @@ string::getInDescriptor() const
 
 //-------------------------------------------------------------------
 
-int
-string::getOutDescriptor() const
+int string::getOutDescriptor() const
 {
 	throw exception::basic(exception::ERRMODULE_IOSTRING, STRINGEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, STRINGEX_CANTBEUSEDWITHIOEVENT, IOSTRINGEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 
@@ -101,29 +99,27 @@ string::getOutDescriptor() const
 
 //-------------------------------------------------------------------
 
-void
-string::flush()
+void string::flush()
 {
 }
 
 //-------------------------------------------------------------------
 
-string::operator const dodoString &()
+string::operator const dodoString & ()
 {
 	return buffer;
 }
 
 //-------------------------------------------------------------------
 
-string::operator const char *()
+string::operator const char*()
 {
 	return buffer.data();
 }
 
 //-------------------------------------------------------------------
 
-void
-string::clone(const string &fd)
+void string::clone(const string &fd)
 {
 	protector pg(this);
 
@@ -138,13 +134,14 @@ string::clone(const string &fd)
 
 //-------------------------------------------------------------------
 
-void
-string::_read(char * const a_data)
+void string::_read(char * const a_data)
 {
-	unsigned long pos = blockOffset?this->pos * inSize:this->pos;
+	unsigned long pos = blockOffset ? this->pos * inSize : this->pos;
 
 	if ((pos + inSize) > buffer.size())
+	{
 		throw exception::basic(exception::ERRMODULE_IOSTRING, STRINGEX__READ, exception::ERRNO_LIBDODO, STRINGEX_OUTOFBOUNDS, IOSTRINGEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
+	}
 
 	memset(a_data, '\0', inSize);
 
@@ -153,18 +150,21 @@ string::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void
-string::_write(const char *const a_data)
+void string::_write(const char *const a_data)
 {
 	if (append)
+	{
 		buffer.append(a_data, outSize);
+	}
 	else
 	{
-		unsigned long pos = blockOffset?this->pos * outSize:this->pos;
+		unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
 
 		unsigned long shift = pos + outSize;
 		if (shift > buffer.size())
+		{
 			buffer.resize(shift, '\0');
+		}
 
 		buffer.replace(pos, outSize, a_data);
 	}
@@ -172,24 +172,24 @@ string::_write(const char *const a_data)
 
 //-------------------------------------------------------------------
 
-void
-string::erase()
+void string::erase()
 {
 	protector pg(this);
 
-	unsigned long pos = blockOffset?this->pos * outSize:this->pos;
+	unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
 
 	unsigned long shift = outSize + pos;
 	if (shift > buffer.size())
+	{
 		buffer.resize(shift, '\0');
+	}
 
 	buffer.replace(pos, outSize, 1, '\0');
 }
 
 //-------------------------------------------------------------------
 
-unsigned long
-string::_readStream(char * const a_data)
+unsigned long string::_readStream(char * const a_data)
 {
 	unsigned long readSize = inSize + 1;
 
@@ -204,23 +204,27 @@ string::_readStream(char * const a_data)
 	{
 		unsigned long block = 0;
 		unsigned long index = 0;
-		for (;index<length;++index)
+		for (; index < length; ++index)
 		{
 			if (data[index] == '\n' || data[index] == '\0')
+			{
 				++block;
+			}
 
 			if (block == pos)
 			{
 				++index;
 
-				for (unsigned long i=index;i<length && read<readSize;++i)
+				for (unsigned long i = index; i < length && read < readSize; ++i)
 				{
 					a_data[read] = data[i];
 
 					++read;
 
 					if (data[i] == '\n' || data[i] == '\0')
+					{
 						break;
+					}
 				}
 
 				break;
@@ -229,14 +233,16 @@ string::_readStream(char * const a_data)
 	}
 	else
 	{
-		for (unsigned long i=pos;i<length && read<readSize;++i)
+		for (unsigned long i = pos; i < length && read < readSize; ++i)
 		{
 			a_data[read] = data[i];
 
 			++read;
 
 			if (data[i] == '\n' || data[i] == '\0')
+			{
 				break;
+			}
 		}
 	}
 
@@ -245,14 +251,15 @@ string::_readStream(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void
-string::_writeStream(const char *const a_data)
+void string::_writeStream(const char *const a_data)
 {
 	unsigned long _outSize = outSize;
 	unsigned int bufSize = strlen(a_data);
 
 	if (bufSize < _outSize)
+	{
 		_outSize = bufSize;
+	}
 
 	buffer.append(a_data, _outSize);
 }

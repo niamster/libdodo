@@ -57,8 +57,8 @@ namespace dodo
 				 */
 				__additionalData(dodoString &version, long &id);
 
-				dodoString &version;                    ///< response/request version
-				long &id;                               ///< response/request ID
+				dodoString &version;    ///< response/request version
+				long       &id;         ///< response/request ID
 			};
 
 			/**
@@ -67,53 +67,53 @@ namespace dodo
 			 */
 			class server : virtual public rpc::server
 			{
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 */
-					server();
+				/**
+				 * constructor
+				 */
+				server();
 
-					/**
-					 * destructor
-					 */
-					virtual ~server();
+				/**
+				 * destructor
+				 */
+				virtual ~server();
 
-					/**
-					 * set version of JSON-RPC response
-					 * @param version defines version of JSON-RPC response
-					 */
-					virtual void setResponseVersion(const dodoString &version);
+				/**
+				 * set version of JSON-RPC response
+				 * @param version defines version of JSON-RPC response
+				 */
+				virtual void setResponseVersion(const dodoString &version);
 
-					/**
-					 * serve rpc call
-					 * @note processes only one call
-					 * should be called again to process next
-					 * default values of odata for handler are set by setResponseVersion method and request ID
-					 */
-					virtual void serve();
+				/**
+				 * serve rpc call
+				 * @note processes only one call
+				 * should be called again to process next
+				 * default values of odata for handler are set by setResponseVersion method and request ID
+				 */
+				virtual void serve();
 
-				protected:
+			  protected:
 
-					/**
-					 * process RPC call
-					 * @return RPC method represantation
-					 * @param data defines buffer that contains RPC request
-					 */
-					virtual rpc::method processCall(const dodoString &data);
+				/**
+				 * process RPC call
+				 * @return RPC method represantation
+				 * @param data defines buffer that contains RPC request
+				 */
+				virtual rpc::method processCall(const dodoString &data);
 
-					/**
-					 * process RPC call
-					 * @return RPC response
-					 * @param response defines RPC response representation
-					 */
-					virtual dodoString processCallResult(const rpc::response &response);
+				/**
+				 * process RPC call
+				 * @return RPC response
+				 * @param response defines RPC response representation
+				 */
+				virtual dodoString processCallResult(const rpc::response &response);
 
-					dodoString rqVersion;                       ///< request version
-					dodoString rpVersion;                       ///< response version['1.1' by default]
+				dodoString rqVersion;   ///< request version
+				dodoString rpVersion;   ///< response version['1.1' by default]
 
-					long rqId;                                  ///< request ID
-					long rpId;                                  ///< response ID
+				long rqId;              ///< request ID
+				long rpId;              ///< response ID
 			};
 		};
 	};

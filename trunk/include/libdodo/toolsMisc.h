@@ -74,133 +74,144 @@ namespace dodo
 		 */
 		class misc
 		{
-			public:
+		  public:
 
-				/**
-				 * generate random data
-				 * @param data defines pointer to store data
-				 * @param size defines size of random data in bytes
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static void random(void *data, unsigned long size, short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * generate random data
+			 * @param data defines pointer to store data
+			 * @param size defines size of random data in bytes
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static void random(void          *data,
+							   unsigned long size,
+							   short         strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random data
-				 * @param size defines size of random data in bytes
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 * '\0' is replaced with '*'
-				 */
-				static dodoString stringRandom(unsigned long size, short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random data
+			 * @param size defines size of random data in bytes
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * '\0' is replaced with '*'
+			 */
+			static dodoString stringRandom(unsigned long size,
+										   short         strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random unsigned long
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static unsigned long ulRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random unsigned long
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static unsigned long ulRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random long
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static long lRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random long
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static long lRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random unsigned int
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static unsigned int uiRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random unsigned int
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static unsigned int uiRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random int
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static int iRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random int
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static int iRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random unsigned short
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static unsigned short usRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random unsigned short
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static unsigned short usRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random short
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static short sRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random short
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static short sRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random unsigned char
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static unsigned char ucRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random unsigned char
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static unsigned char ucRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random char
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static char cRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random char
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static char cRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return random double
-				 * @param strength defines the ramndomness
-				 * @note based on /dev/(u)?random
-				 * MISC_RANDOMSTRENGTH_STRONG may block
-				 */
-				static double dRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			/**
+			 * @return random double
+			 * @param strength defines the ramndomness
+			 * @note based on /dev/(u)?random
+			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 */
+			static double dRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
-				/**
-				 * @return true if needle has been found
-				 * @param arr defines list to search in
-				 * @param needle defines string to search for
-				 * @param icase defines case sensitivity
-				 */
-				static bool isInList(const dodoStringList &arr, const dodoString &needle, bool icase = false);
+			/**
+			 * @return true if needle has been found
+			 * @param arr defines list to search in
+			 * @param needle defines string to search for
+			 * @param icase defines case sensitivity
+			 */
+			static bool isInList(const dodoStringList &arr,
+								 const dodoString     &needle,
+								 bool                 icase = false);
 
-				/**
-				 * @return true if needle has been found
-				 * @param arr defines array to search in
-				 * @param needle defines string to search for
-				 * @param icase defines case sensitivity
-				 */
-				static bool isInArray(const dodoStringArray &arr, const dodoString &needle, bool icase = false);
+			/**
+			 * @return true if needle has been found
+			 * @param arr defines array to search in
+			 * @param needle defines string to search for
+			 * @param icase defines case sensitivity
+			 */
+			static bool isInArray(const dodoStringArray &arr,
+								  const dodoString      &needle,
+								  bool                  icase = false);
 
-				/**
-				 * @return array of substrings
-				 * @param string defines string to split
-				 * @param separator defines separator string
-				 * @param limit defines maximum number of parts to divide string; -1 for unlimit
-				 * @note split will stop when amount of parts exceed limit and the rest of the buffer will be appended to the last piece
-				 */
-				static dodoStringArray split(const dodoString &string, const dodoString &separator, int limit = -1);
+			/**
+			 * @return array of substrings
+			 * @param string defines string to split
+			 * @param separator defines separator string
+			 * @param limit defines maximum number of parts to divide string; -1 for unlimit
+			 * @note split will stop when amount of parts exceed limit and the rest of the buffer will be appended to the last piece
+			 */
+			static dodoStringArray split(const dodoString &string,
+										 const dodoString &separator,
+										 int              limit = -1);
 
-				/**
-				 * @return string of substrings, separated with separator
-				 * @param fields defines substrings to join
-				 * @param separator defines separator string
-				 * @param frame defines frame string[frame='; substring => 'substring']
-				 * @param limit defines maximum number of parts to divide string; -1 for unlimit
-				 */
-				static dodoString join(const dodoStringArray &fields, const dodoString &separator, int limit = -1);
+			/**
+			 * @return string of substrings, separated with separator
+			 * @param fields defines substrings to join
+			 * @param separator defines separator string
+			 * @param frame defines frame string[frame='; substring => 'substring']
+			 * @param limit defines maximum number of parts to divide string; -1 for unlimit
+			 */
+			static dodoString join(const dodoStringArray &fields,
+								   const dodoString      &separator,
+								   int                   limit = -1);
 		};
 	};
 };

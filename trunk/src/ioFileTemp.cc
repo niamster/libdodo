@@ -32,10 +32,10 @@
 using namespace dodo::io::file;
 
 temp::temp(bool open) : overwrite(false),
-						 pos(0),
-						 blockOffset(true),
-						 append(false),
-						 handler(NULL)
+						pos(0),
+						blockOffset(true),
+						append(false),
+						handler(NULL)
 {
 #ifndef IO_WO_XEXEC
 
@@ -47,7 +47,9 @@ temp::temp(bool open) : overwrite(false),
 	{
 		handler = tmpfile();
 		if (handler == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 }
 
@@ -75,16 +77,22 @@ temp::temp(const temp &fd) : overwrite(fd.overwrite),
 
 		oldDesc = fileno(fd.handler);
 		if (oldDesc == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		handler = fdopen(newDesc, "r+");
 
 		if (handler == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 }
 
@@ -93,46 +101,51 @@ temp::temp(const temp &fd) : overwrite(fd.overwrite),
 temp::~temp()
 {
 	if (handler != NULL)
+	{
 		fclose(handler);
+	}
 }
 
 //-------------------------------------------------------------------
 
-int
-temp::getInDescriptor() const
+int temp::getInDescriptor() const
 {
 	protector pg(this);
 
 	if (handler == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	return fileno(handler);
 }
 
 //-------------------------------------------------------------------
 
-int
-temp::getOutDescriptor() const
+int temp::getOutDescriptor() const
 {
 	protector pg(this);
 
 	if (handler == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	return fileno(handler);
 }
 
 //-------------------------------------------------------------------
 
-void
-temp::clone(const temp &fd)
+void temp::clone(const temp &fd)
 {
 	protector pg(this);
 
 	if (handler != NULL)
 	{
 		if (fclose(handler) != 0)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		handler = NULL;
 	}
@@ -150,23 +163,28 @@ temp::clone(const temp &fd)
 
 		oldDesc = fileno(fd.handler);
 		if (oldDesc == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		handler = fdopen(newDesc, "r+");
 
 		if (handler == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 }
 
 //-------------------------------------------------------------------
 
-void
-temp::close()
+void temp::close()
 {
 	protector pg(this);
 
@@ -178,7 +196,9 @@ temp::close()
 	if (handler != NULL)
 	{
 		if (fclose(handler) != 0)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		handler = NULL;
 	}
@@ -190,8 +210,7 @@ temp::close()
 
 //-------------------------------------------------------------------
 
-void
-temp::open()
+void temp::open()
 {
 	protector pg(this);
 
@@ -203,14 +222,18 @@ temp::open()
 	if (handler != NULL)
 	{
 		if (fclose(handler) != 0)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		handler = NULL;
 	}
 
 	handler = tmpfile();
 	if (handler == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
@@ -219,16 +242,19 @@ temp::open()
 
 //-------------------------------------------------------------------
 
-void
-temp::_read(char * const a_data)
+void temp::_read(char * const a_data)
 {
 	if (handler == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
-	unsigned long pos = blockOffset?this->pos * inSize:this->pos;
+	unsigned long pos = blockOffset ? this->pos * inSize : this->pos;
 
 	if (fseek(handler, pos * inSize, SEEK_SET) == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	memset(a_data, '\0', inSize);
 
@@ -237,13 +263,19 @@ temp::_read(char * const a_data)
 		if (fread(a_data, inSize, 1, handler) == 0)
 		{
 			if (feof(handler) != 0 || errno == EAGAIN)
+			{
 				break;
+			}
 
 			if (errno == EINTR)
+			{
 				continue;
+			}
 
 			if (ferror(handler) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 		}
 
 		break;
@@ -252,24 +284,29 @@ temp::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void
-temp::_write(const char *const a_data)
+void temp::_write(const char *const a_data)
 {
 	if (handler == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	if (append)
 	{
 		if (fseek(handler, 0, SEEK_END) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 	else
 	{
-		unsigned long pos = blockOffset?this->pos * outSize:this->pos;
+		unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
 		if (!overwrite)
 		{
 			if (fseek(handler, pos, SEEK_SET) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 
 			char *t_buf = new char[outSize];
 
@@ -278,11 +315,15 @@ temp::_write(const char *const a_data)
 			delete [] t_buf;
 
 			if (read != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_LIBDODO, TEMPEX_CANNOTOVEWRITE, IOFILETEMPEX_CANNOTOVEWRITE_STR, __LINE__, __FILE__);
+			}
 		}
 
 		if (fseek(handler, pos, SEEK_SET) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 
 	while (true)
@@ -290,13 +331,19 @@ temp::_write(const char *const a_data)
 		if (fwrite(a_data, outSize, 1, handler) == 0)
 		{
 			if (errno == EINTR)
+			{
 				continue;
+			}
 
 			if (errno == EAGAIN)
+			{
 				break;
+			}
 
 			if (ferror(handler) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 		}
 
 		break;
@@ -305,8 +352,7 @@ temp::_write(const char *const a_data)
 
 //-------------------------------------------------------------------
 
-void
-temp::erase()
+void temp::erase()
 {
 	protector pg(this);
 
@@ -337,32 +383,38 @@ temp::erase()
 
 //-------------------------------------------------------------------
 
-void
-temp::flush()
+void temp::flush()
 {
 	protector pg(this);
 
 	if (handler == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_FLUSH, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	if (fflush(handler) != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-unsigned long
-temp::_readStream(char * const a_data)
+unsigned long temp::_readStream(char * const a_data)
 {
 	if (handler == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	unsigned long readSize = inSize + 1;
 
 	if (blockOffset)
 	{
 		if (fseek(handler, 0, SEEK_SET) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		for (unsigned long i = 0; i < pos; ++i)
 		{
@@ -384,9 +436,10 @@ temp::_readStream(char * const a_data)
 			}
 		}
 	}
-	else
-		if (fseek(handler, pos, SEEK_SET) == -1)
-			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	else if (fseek(handler, pos, SEEK_SET) == -1)
+	{
+		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	memset(a_data, '\0', readSize);
 
@@ -395,13 +448,19 @@ temp::_readStream(char * const a_data)
 		if (fgets(a_data, readSize, handler) == NULL)
 		{
 			if (errno == EINTR)
+			{
 				continue;
+			}
 
 			if (errno == EAGAIN)
+			{
 				break;
+			}
 
 			if (ferror(handler) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 		}
 
 		break;
@@ -412,31 +471,40 @@ temp::_readStream(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void
-temp::_writeStream(const char *const a_data)
+void temp::_writeStream(const char *const a_data)
 {
 	if (handler == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	if (fseek(handler, 0, SEEK_END) == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	unsigned long _outSize = outSize;
 
 	unsigned int bufSize = strlen(a_data);
 
 	if (bufSize < _outSize)
+	{
 		_outSize = bufSize;
+	}
 
 	while (true)
 	{
 		if (fwrite(a_data, _outSize, 1, handler) == 0)
 		{
 			if (errno == EINTR)
+			{
 				continue;
+			}
 
 			if (ferror(handler) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 		}
 
 		break;

@@ -52,7 +52,9 @@ library::library(const dodoString &path)
 #endif
 
 	if (handle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_LIBRARY, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -62,21 +64,26 @@ library::~library()
 #ifndef DL_FAST
 
 	if (handle != NULL)
+	{
 		dlclose(handle);
+	}
 
 #endif
 }
 
 //-------------------------------------------------------------------
 
-void
-library::open(const dodoString &path)
+void library::open(const dodoString &path)
 {
 #ifndef DL_FAST
 
 	if (handle != NULL)
+	{
 		if (dlclose(handle) != 0)
+		{
 			throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		}
+	}
 
 #endif
 
@@ -91,34 +98,42 @@ library::open(const dodoString &path)
 #endif
 
 	if (handle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-library::close()
+void library::close()
 {
 #ifndef DL_FAST
 
 	if (handle != NULL)
+	{
 		if (dlclose(handle) != 0)
+		{
 			throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_CLOSE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		}
+	}
 
 #endif
 }
 
 //-------------------------------------------------------------------
 
-void *
-library::get(const dodoString &name)
+void *library::get(const dodoString &name)
 {
 	if (handle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_GET, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_GET, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -127,19 +142,22 @@ void *
 library::operator[](const dodoString &name)
 {
 	if (handle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
+	}
 
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
 #ifdef BFD_EXT
 
-dodo::dodoStringArray
-library::getSymbols(const dodoString &path)
+dodo::dodoStringArray library::getSymbols(const dodoString &path)
 {
 	bfd_init();
 
@@ -165,7 +183,9 @@ library::getSymbols(const dodoString &path)
 	}
 
 	if (storageSize == 0)
+	{
 		return dodoStringArray();
+	}
 
 	asymbol **symbolTable = (asymbol **)malloc(storageSize);
 
@@ -179,8 +199,12 @@ library::getSymbols(const dodoString &path)
 
 	dodoStringArray arr;
 	for (long i = 0; i < numberOfSymbols; ++i)
+	{
 		if (isSetFlag(symbolTable[i]->flags, BSF_FUNCTION) && isSetFlag(symbolTable[i]->flags, BSF_GLOBAL))
+		{
 			arr.push_back(symbolTable[i]->name);
+		}
+	}
 
 	if (bfd_close(lib) == FALSE)
 	{

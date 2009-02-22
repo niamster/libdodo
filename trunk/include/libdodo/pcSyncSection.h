@@ -46,22 +46,22 @@ namespace dodo
 			 */
 			class section
 			{
-				public:
+			  public:
 
-					/**
-					 * destructor
-					 */
-					virtual ~section() = 0;
+				/**
+				 * destructor
+				 */
+				virtual ~section() = 0;
 
-					/**
-					 * lock critical section
-					 */
-					virtual void acquire() = 0;
+				/**
+				 * lock critical section
+				 */
+				virtual void acquire() = 0;
 
-					/**
-					 * lock critical section
-					 */
-					virtual void release() = 0;
+				/**
+				 * lock critical section
+				 */
+				virtual void release() = 0;
 			};
 		};
 	};

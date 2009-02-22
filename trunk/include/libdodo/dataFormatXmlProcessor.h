@@ -68,15 +68,15 @@ namespace dodo
 					 */
 					__nodeDef(const dodoString &name, const dodoString &ns=__dodostring__);
 
-					dodoString name;                                                                        ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
+					dodoString                     name;            ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-					dodoMap<dodoString, __nodeDef> children;                                                ///< children definitions
-					bool allChildren;                                                                 ///< if true - get all children tree[true by default]
+					dodoMap<dodoString, __nodeDef> children;        ///< children definitions
+					bool                           allChildren;     ///< if true - get all children tree[true by default]
 
-					dodoStringArray attributes;                                                             ///< node attrributes; if empty - take all
-					bool allAttributes;                                                               ///< if true - get all attributes[true by default]
+					dodoStringArray                attributes;      ///< node attrributes; if empty - take all
+					bool                           allAttributes;   ///< if true - get all attributes[true by default]
 
-					dodoString ns;                                                                          ///< node namespace; if empty parser skips namespace specification
+					dodoString                     ns;              ///< node namespace; if empty parser skips namespace specification
 				};
 
 				/**
@@ -96,11 +96,11 @@ namespace dodo
 					 */
 					__info(const dodoString &version, const dodoString &encoding, const dodoString &root, int compression);
 
-					dodoString version;                                     ///< version of XML document
-					dodoString encoding;                                    ///< encoding of XML document
-					dodoString root;                                        ///< name of the root element of XML document
+					dodoString version;                             ///< version of XML document
+					dodoString encoding;                            ///< encoding of XML document
+					dodoString root;                                ///< name of the root element of XML document
 
-					int compression;                                        ///< compression of XML document
+					int        compression;                         ///< compression of XML document
 				};
 
 				/**
@@ -109,212 +109,223 @@ namespace dodo
 				 */
 				class processor
 				{
-					private:
+				  private:
 
-						/**
-						 * copy constructor
-						 * @note to prevent copying
-						 */
-						processor(processor &xt);
+					/**
+					 * copy constructor
+					 * @note to prevent copying
+					 */
+					processor(processor &xt);
 
-					public:
+				  public:
 
-						/**
-						 * constructor
-						 */
-						processor();
+					/**
+					 * constructor
+					 */
+					processor();
 
-						/**
-						 * destructor
-						 */
-						virtual ~processor();
+					/**
+					 * destructor
+					 */
+					virtual ~processor();
 
-						/**
-						 * parse XML file using __nodeDef XML definition
-						 * @return parsed XML in node structure
-						 * @param definition defines structure of XML
-						 * @param file defines path to XML file
-						 */
-						virtual node processFile(const __nodeDef &definition, const dodoString &file);
+					/**
+					 * parse XML file using __nodeDef XML definition
+					 * @return parsed XML in node structure
+					 * @param definition defines structure of XML
+					 * @param file defines path to XML file
+					 */
+					virtual node processFile(const __nodeDef  &definition,
+											 const dodoString &file);
 
-						/**
-						 * parse XML buffer using __nodeDef XML definition
-						 * @return parsed XML in node structure
-						 * @param definition defines structure of XML
-						 * @param buffer defines XML buffer
-						 */
-						virtual node processString(const __nodeDef &definition, const dodoString &buffer);
+					/**
+					 * parse XML buffer using __nodeDef XML definition
+					 * @return parsed XML in node structure
+					 * @param definition defines structure of XML
+					 * @param buffer defines XML buffer
+					 */
+					virtual node processString(const __nodeDef  &definition,
+											   const dodoString &buffer);
 
-						/**
-						 * parse XML file
-						 * @return parsed XML in node structure
-						 * @param file defines path to XML file
-						 */
-						virtual node processFile(const dodoString &file);
+					/**
+					 * parse XML file
+					 * @return parsed XML in node structure
+					 * @param file defines path to XML file
+					 */
+					virtual node processFile(const dodoString &file);
 
-						/**
-						 * parse XML buffer
-						 * @return parsed XML in node structure
-						 * @param buffer defines XML buffer
-						 */
-						virtual node processString(const dodoString &buffer);
+					/**
+					 * parse XML buffer
+					 * @return parsed XML in node structure
+					 * @param buffer defines XML buffer
+					 */
+					virtual node processString(const dodoString &buffer);
 
-						bool icaseNames;                                            ///< if true ignore case of names[false by default]
+					bool icaseNames; ///< if true ignore case of names[false by default]
 
-						/**
-						 * @return XML info
-						 * @param file defines path to XML file
-						 */
-						virtual __info getFileInfo(const dodoString &file);
+					/**
+					 * @return XML info
+					 * @param file defines path to XML file
+					 */
+					virtual __info getFileInfo(const dodoString &file);
 
-						/**
-						 * @return XML info
-						 * @param buffer defines XML buffer
-						 */
-						virtual __info getBufferInfo(const dodoString &buffer);
+					/**
+					 * @return XML info
+					 * @param buffer defines XML buffer
+					 */
+					virtual __info getBufferInfo(const dodoString &buffer);
 
-						/**
-						 * clear parameters of the give node
-						 * @param xnode defines node to clean
-						 */
-						static void initNode(node &xnode);
+					/**
+					 * clear parameters of the give node
+					 * @param xnode defines node to clean
+					 */
+					static void initNode(node &xnode);
 
-						/**
-						 * clear parameters of the give node definition
-						 * @param xnode defines node definition to clean
-						 */
-						static void initNodeDef(__nodeDef &xnode);
+					/**
+					 * clear parameters of the give node definition
+					 * @param xnode defines node definition to clean
+					 */
+					static void initNodeDef(__nodeDef &xnode);
 
-						/**
-						 * free internal structures
-						 */
-						virtual void clear();
+					/**
+					 * free internal structures
+					 */
+					virtual void clear();
 
-						/**
-						 * @return XML string
-						 * @param root defines root node of XML document
-						 * @param encoding defines XML encoding
-						 * @param version defines XML version
-						 */
-						virtual dodoString make(const node &root, const dodoString &encoding, const dodoString &version = "1.0")  const;
+					/**
+					 * @return XML string
+					 * @param root defines root node of XML document
+					 * @param encoding defines XML encoding
+					 * @param version defines XML version
+					 */
+					virtual dodoString make(const node       &root,
+											const dodoString &encoding,
+											const dodoString &version = "1.0")  const;
 
-						/**
-						 * @return XML string
-						 * @param xnode defines root node of XML document
-						 */
-						virtual dodoString make(const node &xnode) const;
+					/**
+					 * @return XML string
+					 * @param xnode defines root node of XML document
+					 */
+					virtual dodoString make(const node &xnode) const;
 
-					protected:
+				  protected:
 
-						/**
-						 * parse XML using __nodeDef XML definition
-						 * @return parsed XML in node structure
-						 * @param definition defines structure of XML
-						 */
-						virtual node parse(const __nodeDef &definition);
+					/**
+					 * parse XML using __nodeDef XML definition
+					 * @return parsed XML in node structure
+					 * @param definition defines structure of XML
+					 */
+					virtual node parse(const __nodeDef &definition);
 
 #ifdef LIBXML2_EXT
 
-						/**
-						 * @return true if content is in CDATA
-						 * @param xnode defines XML tree node
-						 */
-						bool isCDATA(xmlNodePtr xnode);
+					/**
+					 * @return true if content is in CDATA
+					 * @param xnode defines XML tree node
+					 */
+					bool isCDATA(xmlNodePtr xnode);
 
-						/**
-						 * parse XML
-						 * @return parsed XML in node structure
-						 * @param xnode defines XML tree node
-						 */
-						virtual dodoArray<node> parse(xmlNodePtr xnode);
+					/**
+					 * parse XML
+					 * @return parsed XML in node structure
+					 * @param xnode defines XML tree node
+					 */
+					virtual dodoArray<node> parse(xmlNodePtr xnode);
 
-						/**
-						 * parses XML using __nodeDef XML definition
-						 * @return parsed XML nodes in node structures
-						 * @param definition defines structure of XML
-						 * @param chNode defines XML tree node
-						 */
-						virtual dodoArray<node> parse(const __nodeDef &definition, const xmlNodePtr chNode);
+					/**
+					 * parses XML using __nodeDef XML definition
+					 * @return parsed XML nodes in node structures
+					 * @param definition defines structure of XML
+					 * @param chNode defines XML tree node
+					 */
+					virtual dodoArray<node> parse(const __nodeDef  &definition,
+												  const xmlNodePtr chNode);
 
-						/**
-						 * get node attributes
-						 * @param xnode defines node content
-						 * @param attributes defines buffer for attributes
-						 */
-						virtual void getAttributes(const xmlNodePtr xnode, dodoStringMap &attributes);
+					/**
+					 * get node attributes
+					 * @param xnode defines node content
+					 * @param attributes defines buffer for attributes
+					 */
+					virtual void getAttributes(const xmlNodePtr xnode,
+											   dodoStringMap    &attributes);
 
-						/**
-						 * get node attributes
-						 * @param definition defines structure of XML
-						 * @param xnode defines node content
-						 * @param attributes defines buffer for attributes
-						 */
-						virtual void getAttributes(const __nodeDef &definition, const xmlNodePtr xnode, dodoStringMap &attributes);
+					/**
+					 * get node attributes
+					 * @param definition defines structure of XML
+					 * @param xnode defines node content
+					 * @param attributes defines buffer for attributes
+					 */
+					virtual void getAttributes(const __nodeDef  &definition,
+											   const xmlNodePtr xnode,
+											   dodoStringMap    &attributes);
 
-						/**
-						 * get node info
-						 * @param xnode defines node content
-						 * @param sample defines buffer for node
-						 */
-						virtual void getNodeInfo(const xmlNodePtr xnode, node &sample);
+					/**
+					 * get node info
+					 * @param xnode defines node content
+					 * @param sample defines buffer for node
+					 */
+					virtual void getNodeInfo(const xmlNodePtr xnode,
+											 node             &sample);
 
 #endif
 
-					private:
+				  private:
 
 #ifdef LIBXML2_EXT
 
-						/**
-						 * @typedef xcharCmp
-						 * @brief defines name compare function
-						 * @param one defines string to compare
-						 * @param two defines string to compare
-						 */
-						typedef int (*xcharCmp)(const xmlChar *one, const xmlChar *two);
+					/**
+					 * @typedef xcharCmp
+					 * @brief defines name compare function
+					 * @param one defines string to compare
+					 * @param two defines string to compare
+					 */
+					typedef int (*xcharCmp)(const xmlChar *one, const xmlChar *two);
 
-						xcharCmp cmpFunc;                                            ///< name compare function
+					xcharCmp cmpFunc;   ///< name compare function
 
-						/**
-						 * find node by definition
-						 * @param definition defines structure of XML
-						 * @param node defines node content
-						 */
-						xmlNodePtr findNode(const __nodeDef &definition, xmlNodePtr node);
+					/**
+					 * find node by definition
+					 * @param definition defines structure of XML
+					 * @param node defines node content
+					 */
+					xmlNodePtr findNode(const __nodeDef &definition,
+										xmlNodePtr      node);
 
-						xmlDocPtr document;                                             ///< XML Document
-						xmlAttr *attribute;                                             ///< XML attributes
+					xmlDocPtr document; ///< XML Document
+					xmlAttr *attribute; ///< XML attributes
 
-						/**
-						 * catche libprocessor2 warnings
-						 * @param data defines user-defined data
-						 * @param error defines error descriptor
-						 */
-						static void errHandler(void *data, xmlErrorPtr error);
+					/**
+					 * catche libprocessor2 warnings
+					 * @param data defines user-defined data
+					 * @param error defines error descriptor
+					 */
+					static void errHandler(void        *data,
+										   xmlErrorPtr error);
 
 #endif
 
 #define PROCESSOR_STATEMENTS 11
 
-						/**
-						 * @enum processorStatementEnum defines processor statements
-						 * @note defines positions of string representation in 'statements' class property
-						 */
-						enum processorStatementEnum
-						{
-							PROCESSOR_STATEMENT_LT = 0,
-							PROCESSOR_STATEMENT_COLON,
-							PROCESSOR_STATEMENT_SPACE,
-							PROCESSOR_STATEMENT_XMLNS,
-							PROCESSOR_STATEMENT_EQUALDQUOTE,
-							PROCESSOR_STATEMENT_DQUOTESPACE,
-							PROCESSOR_STATEMENT_SLASHGT,
-							PROCESSOR_STATEMENT_GT,
-							PROCESSOR_STATEMENT_CDATAOPEN,
-							PROCESSOR_STATEMENT_CDATACLOSE,
-							PROCESSOR_STATEMENT_LTSLASH,
-						};
+					/**
+					 * @enum processorStatementEnum defines processor statements
+					 * @note defines positions of string representation in 'statements' class property
+					 */
+					enum processorStatementEnum
+					{
+						PROCESSOR_STATEMENT_LT = 0,
+						PROCESSOR_STATEMENT_COLON,
+						PROCESSOR_STATEMENT_SPACE,
+						PROCESSOR_STATEMENT_XMLNS,
+						PROCESSOR_STATEMENT_EQUALDQUOTE,
+						PROCESSOR_STATEMENT_DQUOTESPACE,
+						PROCESSOR_STATEMENT_SLASHGT,
+						PROCESSOR_STATEMENT_GT,
+						PROCESSOR_STATEMENT_CDATAOPEN,
+						PROCESSOR_STATEMENT_CDATACLOSE,
+						PROCESSOR_STATEMENT_LTSLASH,
+					};
 
-						static const dodoString statements[PROCESSOR_STATEMENTS];                                         ///< processor statements
+					static const dodoString statements[PROCESSOR_STATEMENTS]; ///< processor statements
 				};
 			};
 		};

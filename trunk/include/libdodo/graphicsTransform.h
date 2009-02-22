@@ -73,63 +73,63 @@ namespace dodo
 		 */
 		class transform
 		{
-			private:
+		  private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				transform(transform &im);
+			/**
+			 * copy constructor
+			 * @note to prevent copying
+			 */
+			transform(transform &im);
 
-			public:
+		  public:
 
-				/**
-				 * contructor
-				 */
-				transform();
+			/**
+			 * contructor
+			 */
+			transform();
 
-				/**
-				 * contructor
-				 * @param im defines image for transformations
-				 */
-				transform(image *im);
+			/**
+			 * contructor
+			 * @param im defines image for transformations
+			 */
+			transform(image *im);
 
-				/**
-				 * destructor
-				 */
-				virtual ~transform();
+			/**
+			 * destructor
+			 */
+			virtual ~transform();
 
-				/**
-				 * set image for transformations
-				 * @param im defines image for transformations
-				 */
-				virtual void setImage(image *im);
+			/**
+			 * set image for transformations
+			 * @param im defines image for transformations
+			 */
+			virtual void setImage(image *im);
 
-				/**
-				 * scale transform
-				 * @param width defines width of the transform
-				 * @param height defines height of the transform
-				 */
-				virtual void scale(unsigned long width, unsigned long height);
+			/**
+			 * scale transform
+			 * @param width defines width of the transform
+			 * @param height defines height of the transform
+			 */
+			virtual void scale(unsigned long width,
+							   unsigned long height);
 
-				/**
-				 * scale transform
-				 * @param size defines size of the transform
-				 * @note scales transform by reducing size of the greater side saving proportions
-				 */
-				virtual void scale(unsigned long size);
+			/**
+			 * scale transform
+			 * @param size defines size of the transform
+			 * @note scales transform by reducing size of the greater side saving proportions
+			 */
+			virtual void scale(unsigned long size);
 
-				/**
-				 * rotate transform
-				 * @param angle defines rotation degree[see also transformRotateDirectionAngleEnum]
-				 */
-				virtual void rotate(double angle);
+			/**
+			 * rotate transform
+			 * @param angle defines rotation degree[see also transformRotateDirectionAngleEnum]
+			 */
+			virtual void rotate(double angle);
 
-			protected:
+		  protected:
 
-				image *im;                ///< image to perform transformations
+			image *im; ///< image to perform transformations
 		};
-
 	};
 };
 

@@ -32,15 +32,14 @@
 using namespace dodo;
 
 __xexecCollectedData::__xexecCollectedData(xexec *executor,
-                                           short execObject) : operType(executor->operType),
+										   short execObject) : operType(executor->operType),
 															   executor(executor)
 {
 	executor->execObjectData = this;
 	executor->execObject = execObject;
 }
 
-void
-__xexecCollectedData::setExecObject(short execObject)
+void __xexecCollectedData::setExecObject(short execObject)
 {
 	executor->execObject = execObject;
 }
@@ -75,11 +74,15 @@ xexec::~xexec()
 	for (; i != j; ++i)
 	{
 		if (i->handle == NULL)
+		{
 			continue;
+		}
 
 		deinit = (deinitXexecModule)dlsym(i->handle, "deinitXexecModule");
 		if (deinit != NULL)
+		{
 			deinit();
+		}
 
 #ifndef DL_FAST
 		dlclose(i->handle);
@@ -91,11 +94,15 @@ xexec::~xexec()
 	for (; i != j; ++i)
 	{
 		if (i->handle == NULL)
+		{
 			continue;
+		}
 
 		deinit = (deinitXexecModule)dlsym(i->handle, "deinitXexecModule");
 		if (deinit != NULL)
+		{
 			deinit();
+		}
 
 #ifndef DL_FAST
 		dlclose(i->handle);
@@ -107,10 +114,9 @@ xexec::~xexec()
 
 //-------------------------------------------------------------------
 
-int
-xexec::addXExec(dodoList<__xexecItem> &list,
-				inExec func,
-				void                  *data)
+int xexec::addXExec(dodoList<__xexecItem> &list,
+					inExec                func,
+					void                  *data)
 {
 	__xexecItem temp;
 
@@ -130,20 +136,20 @@ xexec::addXExec(dodoList<__xexecItem> &list,
 
 //-------------------------------------------------------------------
 
-void
-xexec::setStatXExec(dodoList<__xexecItem> &list,
-					int position,
-					bool stat)
+void xexec::setStatXExec(dodoList<__xexecItem> &list,
+						 int                   position,
+						 bool                  stat)
 {
 	if (getXexec(list, position))
+	{
 		current->enabled = stat;
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::delXExec(dodoList<__xexecItem> &list,
-				int position)
+void xexec::delXExec(dodoList<__xexecItem> &list,
+					 int                   position)
 {
 	if (getXexec(list, position))
 	{
@@ -155,11 +161,15 @@ xexec::delXExec(dodoList<__xexecItem> &list,
 
 			deinit = (deinitXexecModule)dlsym(current->handle, "deinitXexecModule");
 			if (deinit != NULL)
+			{
 				deinit();
+			}
 
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_DELXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+			}
 #endif
 		}
 
@@ -171,138 +181,121 @@ xexec::delXExec(dodoList<__xexecItem> &list,
 
 //-------------------------------------------------------------------
 
-int
-xexec::addPreExec(inExec func,
-				  void   *data)
+int xexec::addPreExec(inExec func,
+					  void   *data)
 {
 	return addXExec(preExec.exec, func, data);
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::disablePreExec(int position)
+void xexec::disablePreExec(int position)
 {
 	setStatXExec(preExec.exec, position, false);
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::delPreExec(int position)
+void xexec::delPreExec(int position)
 {
 	delXExec(preExec.exec, position);
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::enablePreExec(int position)
+void xexec::enablePreExec(int position)
 {
 	setStatXExec(preExec.exec, position, true);
 }
 
 //-------------------------------------------------------------------
 
-int
-xexec::addPostExec(inExec func,
-				   void   *data)
+int xexec::addPostExec(inExec func,
+					   void   *data)
 {
 	return addXExec(postExec.exec, func, data);
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::disablePostExec(int position)
+void xexec::disablePostExec(int position)
 {
 	setStatXExec(postExec.exec, position, false);
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::delPostExec(int position)
+void xexec::delPostExec(int position)
 {
 	delXExec(postExec.exec, position);
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::enablePostExec(int position)
+void xexec::enablePostExec(int position)
 {
 	setStatXExec(postExec.exec, position, true);
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::enableAllPreExec() const
+void xexec::enableAllPreExec() const
 {
 	preExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::enableAllPostExec() const
+void xexec::enableAllPostExec() const
 {
 	postExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::disableAllPreExec() const
+void xexec::disableAllPreExec() const
 {
 	preExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::disableAllPostExec() const
+void xexec::disableAllPostExec() const
 {
 	postExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::enableAllPreExec()
+void xexec::enableAllPreExec()
 {
 	preExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::enableAllPostExec()
+void xexec::enableAllPostExec()
 {
 	postExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::disableAllPreExec()
+void xexec::disableAllPreExec()
 {
 	preExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::disableAllPostExec()
+void xexec::disableAllPostExec()
 {
 	postExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::disableAll()
+void xexec::disableAll()
 {
 	postExec.execDisabled = true;
 	preExec.execDisabled = true;
@@ -310,8 +303,7 @@ xexec::disableAll()
 
 //-------------------------------------------------------------------
 
-void
-xexec::enableAll()
+void xexec::enableAll()
 {
 	postExec.execDisabled = false;
 	preExec.execDisabled = false;
@@ -319,31 +311,28 @@ xexec::enableAll()
 
 //-------------------------------------------------------------------
 
-void
-xexec::replacePostExec(int position,
-					   inExec func,
-					   void   *data)
+void xexec::replacePostExec(int    position,
+							inExec func,
+							void   *data)
 {
 	replaceXExec(postExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::replacePreExec(int position,
-					  inExec func,
-					  void   *data)
+void xexec::replacePreExec(int    position,
+						   inExec func,
+						   void   *data)
 {
 	replaceXExec(preExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
 
-void
-xexec::replaceXExec(dodoList<__xexecItem> &list,
-					int position,
-					inExec func,
-					void                  *data)
+void xexec::replaceXExec(dodoList<__xexecItem> &list,
+						 int                   position,
+						 inExec                func,
+						 void                  *data)
 {
 	if (getXexec(list, position))
 	{
@@ -355,11 +344,15 @@ xexec::replaceXExec(dodoList<__xexecItem> &list,
 
 			deinit = (deinitXexecModule)dlsym(current->handle, "deinitXexecModule");
 			if (deinit != NULL)
+			{
 				deinit();
+			}
 
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_DELXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+			}
 #endif
 
 			current->handle = NULL;
@@ -376,19 +369,23 @@ xexec::replaceXExec(dodoList<__xexecItem> &list,
 #endif
 	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_REPLACEXEXEC, exception::ERRNO_LIBDODO, XEXECEX_EXECNOTFOUND, XEXECEX_EXECNOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
-void
-xexec::performXExec(__xexecItemList &list) const
+void xexec::performXExec(__xexecItemList &list) const
 {
 	if (list.execDisabled)
+	{
 		return ;
+	}
 
 	dodoList<__xexecItem>::iterator i(list.exec.begin()), j(list.exec.end());
 
 	for (; i != j; ++i)
+	{
 		if (i->enabled)
 		{
 			if (safeHooks)
@@ -403,6 +400,7 @@ xexec::performXExec(__xexecItemList &list) const
 				enableAllPreExec();
 			}
 		}
+	}
 }
 
 //-------------------------------------------------------------------
@@ -416,11 +414,10 @@ __xexecCounts::__xexecCounts() : pre(-1),
 
 //-------------------------------------------------------------------
 
-int
-xexec::addXExecModule(dodoList<__xexecItem> &list,
-					  const dodoString &module,
-					  void                  *data,
-					  void                  *toInit)
+int xexec::addXExecModule(dodoList<__xexecItem> &list,
+						  const dodoString      &module,
+						  void                  *data,
+						  void                  *toInit)
 {
 	__xexecItem temp;
 
@@ -434,15 +431,21 @@ xexec::addXExecModule(dodoList<__xexecItem> &list,
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (temp.handle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	initXexecModule init = (initXexecModule)dlsym(temp.handle, "initXexecModule");
 	if (init == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	inExec in = (inExec)dlsym(temp.handle, init(toInit).hook);
 	if (in == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	temp.func = in;
 
@@ -453,29 +456,26 @@ xexec::addXExecModule(dodoList<__xexecItem> &list,
 
 //-------------------------------------------------------------------
 
-int
-xexec::addPostExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
+int xexec::addPostExec(const dodoString &module,
+					   void             *data,
+					   void             *toInit)
 {
 	return addXExecModule(postExec.exec, module, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-int
-xexec::addPreExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
+int xexec::addPreExec(const dodoString &module,
+					  void             *data,
+					  void             *toInit)
 {
 	return addXExecModule(preExec.exec, module, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-__xexecMod
-xexec::getModuleInfo(const dodoString &module,
-					 void             *toInit)
+__xexecMod xexec::getModuleInfo(const dodoString &module,
+								void             *toInit)
 {
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -483,17 +483,23 @@ xexec::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
 	if (init == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	__xexecMod mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 #endif
 
 	return mod;
@@ -501,10 +507,9 @@ xexec::getModuleInfo(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecCounts
-xexec::addExec(const dodoString &module,
-			   void             *data,
-			   void             *toInit)
+__xexecCounts xexec::addExec(const dodoString &module,
+							 void             *data,
+							 void             *toInit)
 {
 	__xexecItem temp;
 
@@ -517,17 +522,23 @@ xexec::addExec(const dodoString &module,
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (temp.handle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	initXexecModule init = (initXexecModule)dlsym(temp.handle, "initXexecModule");
 	if (init == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	__xexecMod info = init(toInit);
 
 	inExec in = (inExec)dlsym(temp.handle, info.hook);
 	if (in == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	temp.func = in;
 
@@ -571,18 +582,19 @@ xexec::addExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-bool
-xexec::getXexec(dodoList<__xexecItem> &list,
-				int position)
+bool xexec::getXexec(dodoList<__xexecItem> &list,
+					 int                   position)
 {
 	dodoList<__xexecItem>::iterator i(list.begin()), j(list.end());
 	for (; i != j; ++i)
+	{
 		if (i->position == position)
 		{
 			current = i;
 
 			return true;
 		}
+	}
 
 	return false;
 }

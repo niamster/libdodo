@@ -62,66 +62,66 @@ namespace dodo
 			friend class xml::response;
 			friend class json::response;
 
-			public:
+		  public:
 
-				/**
-				 * constructor
-				 */
-				response();
+			/**
+			 * constructor
+			 */
+			response();
 
-				/**
-				 * destructor
-				 */
-				virtual ~response();
+			/**
+			 * destructor
+			 */
+			virtual ~response();
 
-				/**
-				 * @return response value
-				 * @param position defines index of returned value
-				 */
-				virtual value getValue(unsigned long position = 0);
+			/**
+			 * @return response value
+			 * @param position defines index of returned value
+			 */
+			virtual value getValue(unsigned long position = 0);
 
-				/**
-				 * @return response values
-				 */
-				virtual dodoArray<value> getValues();
+			/**
+			 * @return response values
+			 */
+			virtual dodoArray<value> getValues();
 
-				/**
-				 * @return response values count
-				 */
-				virtual unsigned long getValuesCount();
+			/**
+			 * @return response values count
+			 */
+			virtual unsigned long getValuesCount();
 
-				/**
-				 * @return true if request has
-				 */
-				virtual bool isSuccessful();
+			/**
+			 * @return true if request has
+			 */
+			virtual bool isSuccessful();
 
-				/**
-				 * set argument for fault response
-				 * @param argument defines response argument
-				 */
-				virtual void fault(const value &argument);
+			/**
+			 * set argument for fault response
+			 * @param argument defines response argument
+			 */
+			virtual void fault(const value &argument);
 
-				/**
-				 * add argument for successful response
-				 * @param argument defines response argument
-				 */
-				virtual void addArgument(const value &argument);
+			/**
+			 * add argument for successful response
+			 * @param argument defines response argument
+			 */
+			virtual void addArgument(const value &argument);
 
-				/**
-				 * @return value for type casting
-				 * @param position defines index of returned value
-				 */
-				virtual value operator[](unsigned long position);
+			/**
+			 * @return value for type casting
+			 * @param position defines index of returned value
+			 */
+			virtual value operator[](unsigned long position);
 
-				/**
-				 * clear arguments information
-				 */
-				virtual void clear();
+			/**
+			 * clear arguments information
+			 */
+			virtual void clear();
 
-			private:
+		  private:
 
-				dodoArray<value> values;                                        ///< response values
-				bool succ;                                                      ///< true if server returned non-fail response
+			dodoArray<value> values;    ///< response values
+			bool succ;                  ///< true if server returned non-fail response
 		};
 	};
 };

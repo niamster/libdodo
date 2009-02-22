@@ -52,18 +52,18 @@ namespace dodo
 				class server : public json::server,
 							   public rpc::cgi::server
 				{
-					public:
+				  public:
 
-						/**
-						 * constructor
-						 * @param provider defines cgi I/O provider
-						 */
-						server(dodo::cgi::dialogue &provider);
+					/**
+					 * constructor
+					 * @param provider defines cgi I/O provider
+					 */
+					server(dodo::cgi::dialogue &provider);
 
-						/**
-						 * destructor
-						 */
-						virtual ~server();
+					/**
+					 * destructor
+					 */
+					virtual ~server();
 				};
 			};
 		};

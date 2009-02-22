@@ -50,23 +50,23 @@ namespace dodo
 			 */
 			class method
 			{
-				public:
+			  public:
 
-					/**
-					 * @return method parsed from XML node
-					 * @param node defines XML node
-					 */
-					static rpc::method xmlToMethod(dodo::data::format::xml::node &node);
+				/**
+				 * @return method parsed from XML node
+				 * @param node defines XML node
+				 */
+				static rpc::method xmlToMethod(dodo::data::format::xml::node &node);
 
-					/**
-					 * @return XML node parsed from method
-					 * @param data defines method structure
-					 */
-					static dodo::data::format::xml::node methodToXml(const rpc::method &data);
+				/**
+				 * @return XML node parsed from method
+				 * @param data defines method structure
+				 */
+				static dodo::data::format::xml::node methodToXml(const rpc::method &data);
 
-				protected:
+			  protected:
 
-					static const char trimSymbols[2];                                         ///< symbols to trim in the end and in the begining of the XML node value
+				static const char trimSymbols[2]; ///< symbols to trim in the end and in the begining of the XML node value
 			};
 		};
 	};

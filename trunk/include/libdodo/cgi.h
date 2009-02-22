@@ -51,19 +51,19 @@ namespace dodo
 			CGI_ENVIRONMENT_CONTENTTYPE,
 			CGI_ENVIRONMENT_CONTENTLENGTH,
 			CGI_ENVIRONMENT_CONTENTTRANSFERENCODING,
-			CGI_ENVIRONMENT_HTTPAUTHORIZATION,                           ///< authentication credentials for HTTP authentication
+			CGI_ENVIRONMENT_HTTPAUTHORIZATION,      ///< authentication credentials for HTTP authentication
 			CGI_ENVIRONMENT_HTTPHOST,
-			CGI_ENVIRONMENT_HTTPUSERAGENT,                               ///< the user agent string of the user agent
-			CGI_ENVIRONMENT_HTTPCOOKIE,                                  ///< the user agent string of the user agent
-			CGI_ENVIRONMENT_HTTPIFMODIFIEDSINCE,                         ///< allows a 304 Not Modified to be returned
-			CGI_ENVIRONMENT_HTTPDATE,                                    ///< the date and time that the message was sent
-			CGI_ENVIRONMENT_HTTPACCEPT,                                  ///< content-types that are acceptable by dialogue
-			CGI_ENVIRONMENT_HTTPACCEPTLANGUAGE,                          ///< acceptable languages for response
-			CGI_ENVIRONMENT_HTTPACCEPTENCODING,                          ///< acceptable encodings
-			CGI_ENVIRONMENT_HTTPACCEPTCHARSET,                           ///< character sets that are acceptable
-			CGI_ENVIRONMENT_HTTPACCEPTRANGES,                            ///< character sets that are acceptable
+			CGI_ENVIRONMENT_HTTPUSERAGENT,          ///< the user agent string of the user agent
+			CGI_ENVIRONMENT_HTTPCOOKIE,             ///< the user agent string of the user agent
+			CGI_ENVIRONMENT_HTTPIFMODIFIEDSINCE,    ///< allows a 304 Not Modified to be returned
+			CGI_ENVIRONMENT_HTTPDATE,               ///< the date and time that the message was sent
+			CGI_ENVIRONMENT_HTTPACCEPT,             ///< content-types that are acceptable by dialogue
+			CGI_ENVIRONMENT_HTTPACCEPTLANGUAGE,     ///< acceptable languages for response
+			CGI_ENVIRONMENT_HTTPACCEPTENCODING,     ///< acceptable encodings
+			CGI_ENVIRONMENT_HTTPACCEPTCHARSET,      ///< character sets that are acceptable
+			CGI_ENVIRONMENT_HTTPACCEPTRANGES,       ///< character sets that are acceptable
 			CGI_ENVIRONMENT_HTTPKEEPALIVE,
-			CGI_ENVIRONMENT_HTTPCONNECTION,                              ///< what type of connection the user-agent would prefer
+			CGI_ENVIRONMENT_HTTPCONNECTION,         ///< what type of connection the user-agent would prefer
 			CGI_ENVIRONMENT_HTTPREFERER,
 			CGI_ENVIRONMENT_HTTPVIA,
 			CGI_ENVIRONMENT_HTTPXFORWARDEDFOR,
@@ -92,24 +92,24 @@ namespace dodo
 		 */
 		enum cgiResponseHeaderEnum
 		{
-			CGI_RESPONSEHEADER_ACCEPTRANGES,                                     ///< what partial content range types this dialogue supports
-			CGI_RESPONSEHEADER_AGE,                                              ///< the age the object has been in a proxy cache in seconds
-			CGI_RESPONSEHEADER_ALLOW,                                            ///< valid actions for a specified resource. To be used for a 405 Method not allowed
-			CGI_RESPONSEHEADER_CACHECONTROL,                                     ///< tells all caching mechanisms from dialogue to dialogue whether they may cache this object
-			CGI_RESPONSEHEADER_CONTENTENCODING,                                  ///< the type of encoding used on the data
-			CGI_RESPONSEHEADER_CONTENTLANGUAGE,                                  ///< the language the content is in
-			CGI_RESPONSEHEADER_CONTENTLENGTH,                                    ///< the length of the content in bytes
-			CGI_RESPONSEHEADER_CONTENTLOCATION,                                  ///< an alternate location for the returned data
-			CGI_RESPONSEHEADER_CONTENTDISPOSITION,                               ///< an opportunity to raise a "File Download" dialog box for a known MIME type
-			CGI_RESPONSEHEADER_CONTENTMD5,                                       ///< an MD5 sum of the content of the response
-			CGI_RESPONSEHEADER_CONTENTRANGE,                                     ///< where in a full body message this partial message belongs
-			CGI_RESPONSEHEADER_CONTENTTYPE,                                      ///< the mime type of this content
-			CGI_RESPONSEHEADER_DATE,                                             ///< the date and time that the message was sent
-			CGI_RESPONSEHEADER_LASTMODIFIED,                                     ///< the last modified date for the requested object
-			CGI_RESPONSEHEADER_LOCATION,                                         ///< used in redirection
-			CGI_RESPONSEHEADER_DIALOGUE,                                           ///< a name for the dialogue
-			CGI_RESPONSEHEADER_WWWAUTHENTICATE,                                  ///< auuthentification request
-			CGI_RESPONSEHEADER_XPOWEREDBY,                                       ///< cgi provider
+			CGI_RESPONSEHEADER_ACCEPTRANGES,            ///< what partial content range types this dialogue supports
+			CGI_RESPONSEHEADER_AGE,                     ///< the age the object has been in a proxy cache in seconds
+			CGI_RESPONSEHEADER_ALLOW,                   ///< valid actions for a specified resource. To be used for a 405 Method not allowed
+			CGI_RESPONSEHEADER_CACHECONTROL,            ///< tells all caching mechanisms from dialogue to dialogue whether they may cache this object
+			CGI_RESPONSEHEADER_CONTENTENCODING,         ///< the type of encoding used on the data
+			CGI_RESPONSEHEADER_CONTENTLANGUAGE,         ///< the language the content is in
+			CGI_RESPONSEHEADER_CONTENTLENGTH,           ///< the length of the content in bytes
+			CGI_RESPONSEHEADER_CONTENTLOCATION,         ///< an alternate location for the returned data
+			CGI_RESPONSEHEADER_CONTENTDISPOSITION,      ///< an opportunity to raise a "File Download" dialog box for a known MIME type
+			CGI_RESPONSEHEADER_CONTENTMD5,              ///< an MD5 sum of the content of the response
+			CGI_RESPONSEHEADER_CONTENTRANGE,            ///< where in a full body message this partial message belongs
+			CGI_RESPONSEHEADER_CONTENTTYPE,             ///< the mime type of this content
+			CGI_RESPONSEHEADER_DATE,                    ///< the date and time that the message was sent
+			CGI_RESPONSEHEADER_LASTMODIFIED,            ///< the last modified date for the requested object
+			CGI_RESPONSEHEADER_LOCATION,                ///< used in redirection
+			CGI_RESPONSEHEADER_DIALOGUE,                ///< a name for the dialogue
+			CGI_RESPONSEHEADER_WWWAUTHENTICATE,         ///< auuthentification request
+			CGI_RESPONSEHEADER_XPOWEREDBY,              ///< cgi provider
 		};
 
 #define CGI_STATUSSTATEMENTS 40
@@ -119,46 +119,46 @@ namespace dodo
 		 */
 		enum cgiStatusCodeEnum
 		{
-			CGI_STATUSCODE_CONTINUE,                                                     ///< 100
-			CGI_STATUSCODE_SWITCHINGPROTOCOLS,                                           ///< 101
-			CGI_STATUSCODE_OK,                                                           ///< 200
-			CGI_STATUSCODE_CREATED,                                                      ///< 201
-			CGI_STATUSCODE_ACCEPTED,                                                     ///< 202
-			CGI_STATUSCODE_NONAUTHORITATIVE,                                             ///< 203
-			CGI_STATUSCODE_NOCONTENT,                                                    ///< 204
-			CGI_STATUSCODE_RESETCONTENT,                                                 ///< 205
-			CGI_STATUSCODE_PARTIALCONTENT,                                               ///< 206
-			CGI_STATUSCODE_MULTIPLECHOISES,                                              ///< 300
-			CGI_STATUSCODE_MOVEDPERMANENTLY,                                             ///< 301
-			CGI_STATUSCODE_FOUND,                                                        ///< 302
-			CGI_STATUSCODE_SEEOTHER,                                                     ///< 303
-			CGI_STATUSCODE_NOTMODIFIED,                                                  ///< 304
-			CGI_STATUSCODE_USEPROXY,                                                     ///< 305
-			CGI_STATUSCODE_TEMPORARYREDIRECT,                                            ///< 307
-			CGI_STATUSCODE_BADREQUEST,                                                   ///< 400
-			CGI_STATUSCODE_UNAUTHORIZED,                                                 ///< 401
-			CGI_STATUSCODE_PAYMENTREQUIRED,                                              ///< 402
-			CGI_STATUSCODE_FORBIDDEN,                                                    ///< 403
-			CGI_STATUSCODE_NOTFOUND,                                                     ///< 404
-			CGI_STATUSCODE_METHODNOTALLOWED,                                             ///< 405
-			CGI_STATUSCODE_NOTACCEPTABLE,                                                ///< 406
-			CGI_STATUSCODE_PROXYauthenticationREQUIRED,                                  ///< 407
-			CGI_STATUSCODE_REQUESTTIMEOUT,                                               ///< 408
-			CGI_STATUSCODE_CONFLICT,                                                     ///< 409
-			CGI_STATUSCODE_GONE,                                                         ///< 410
-			CGI_STATUSCODE_LENGTHREQUIRED,                                               ///< 411
-			CGI_STATUSCODE_PRECONDITIONFAILED,                                           ///< 412
-			CGI_STATUSCODE_REQUESTENTITYTOOLARGE,                                        ///< 413
-			CGI_STATUSCODE_REQUESTURITOOLONG,                                            ///< 414
-			CGI_STATUSCODE_UNSUPPORTEDMEDIATYPE,                                         ///< 415
-			CGI_STATUSCODE_REQUESTRANGENOTSATISFIABLE,                                   ///< 416
-			CGI_STATUSCODE_EXPECTATIONFAILED,                                            ///< 417
-			CGI_STATUSCODE_INTERNALDIALOGUEERROR,                                          ///< 500
-			CGI_STATUSCODE_NOTIMPLEMENTED,                                               ///< 501
-			CGI_STATUSCODE_BADGATEWAY,                                                   ///< 502
-			CGI_STATUSCODE_SERVICEUNAVAILABLE,                                           ///< 503
-			CGI_STATUSCODE_GATEWAYTIMEOUT,                                               ///< 504
-			CGI_STATUSCODE_HTTPVERSIONNOTSUPPORTED,                                      ///< 505
+			CGI_STATUSCODE_CONTINUE,                    ///< 100
+			CGI_STATUSCODE_SWITCHINGPROTOCOLS,          ///< 101
+			CGI_STATUSCODE_OK,                          ///< 200
+			CGI_STATUSCODE_CREATED,                     ///< 201
+			CGI_STATUSCODE_ACCEPTED,                    ///< 202
+			CGI_STATUSCODE_NONAUTHORITATIVE,            ///< 203
+			CGI_STATUSCODE_NOCONTENT,                   ///< 204
+			CGI_STATUSCODE_RESETCONTENT,                ///< 205
+			CGI_STATUSCODE_PARTIALCONTENT,              ///< 206
+			CGI_STATUSCODE_MULTIPLECHOISES,             ///< 300
+			CGI_STATUSCODE_MOVEDPERMANENTLY,            ///< 301
+			CGI_STATUSCODE_FOUND,                       ///< 302
+			CGI_STATUSCODE_SEEOTHER,                    ///< 303
+			CGI_STATUSCODE_NOTMODIFIED,                 ///< 304
+			CGI_STATUSCODE_USEPROXY,                    ///< 305
+			CGI_STATUSCODE_TEMPORARYREDIRECT,           ///< 307
+			CGI_STATUSCODE_BADREQUEST,                  ///< 400
+			CGI_STATUSCODE_UNAUTHORIZED,                ///< 401
+			CGI_STATUSCODE_PAYMENTREQUIRED,             ///< 402
+			CGI_STATUSCODE_FORBIDDEN,                   ///< 403
+			CGI_STATUSCODE_NOTFOUND,                    ///< 404
+			CGI_STATUSCODE_METHODNOTALLOWED,            ///< 405
+			CGI_STATUSCODE_NOTACCEPTABLE,               ///< 406
+			CGI_STATUSCODE_PROXYauthenticationREQUIRED, ///< 407
+			CGI_STATUSCODE_REQUESTTIMEOUT,              ///< 408
+			CGI_STATUSCODE_CONFLICT,                    ///< 409
+			CGI_STATUSCODE_GONE,                        ///< 410
+			CGI_STATUSCODE_LENGTHREQUIRED,              ///< 411
+			CGI_STATUSCODE_PRECONDITIONFAILED,          ///< 412
+			CGI_STATUSCODE_REQUESTENTITYTOOLARGE,       ///< 413
+			CGI_STATUSCODE_REQUESTURITOOLONG,           ///< 414
+			CGI_STATUSCODE_UNSUPPORTEDMEDIATYPE,        ///< 415
+			CGI_STATUSCODE_REQUESTRANGENOTSATISFIABLE,  ///< 416
+			CGI_STATUSCODE_EXPECTATIONFAILED,           ///< 417
+			CGI_STATUSCODE_INTERNALDIALOGUEERROR,       ///< 500
+			CGI_STATUSCODE_NOTIMPLEMENTED,              ///< 501
+			CGI_STATUSCODE_BADGATEWAY,                  ///< 502
+			CGI_STATUSCODE_SERVICEUNAVAILABLE,          ///< 503
+			CGI_STATUSCODE_GATEWAYTIMEOUT,              ///< 504
+			CGI_STATUSCODE_HTTPVERSIONNOTSUPPORTED,     ///< 505
 		};
 
 		/**
@@ -166,11 +166,11 @@ namespace dodo
 		 */
 		enum cgiPostFileErrEnum
 		{
-			CGI_POSTFILEERR_NONE,                                        ///< everything is OK
-			CGI_POSTFILEERR_ACCESS_DENY,                                 ///< permissions error
-			CGI_POSTFILEERR_BAD_FILE_NAME,                               ///< filename is too long
-			CGI_POSTFILEERR_NO_SPACE,                                    ///< not enough space to save the file
-			CGI_POSTFILEERR_NO_FILE,                                     ///< file with such name not found
+			CGI_POSTFILEERR_NONE,                       ///< everything is OK
+			CGI_POSTFILEERR_ACCESS_DENY,                ///< permissions error
+			CGI_POSTFILEERR_BAD_FILE_NAME,              ///< filename is too long
+			CGI_POSTFILEERR_NO_SPACE,                   ///< not enough space to save the file
+			CGI_POSTFILEERR_NO_FILE,                    ///< file with such name not found
 		};
 
 		/**
@@ -184,12 +184,12 @@ namespace dodo
 			 */
 			__cgiFile();
 
-			dodoString name;                                                ///< real name of the file
-			dodoString mime;                                                ///< mimetype of the file
-			dodoString tmp_name;                                            ///< path where it was temporary saved[empty, if file is stored in the memory]
-			unsigned long size;                                             ///< size of the file
-			short error;                                                    ///< error code[see dialoguePostFileErrEnum]
-			dodoString data;                                                ///< contains file data[if file is stored in the memory]
+			dodoString    name;                         ///< real name of the file
+			dodoString    mime;                         ///< mimetype of the file
+			dodoString    tmp_name;                     ///< path where it was temporary saved[empty, if file is stored in the memory]
+			unsigned long size;                         ///< size of the file
+			short         error;                        ///< error code[see dialoguePostFileErrEnum]
+			dodoString    data;                         ///< contains file data[if file is stored in the memory]
 		};
 
 		/**
@@ -214,13 +214,13 @@ namespace dodo
 			 */
 			__cgiCookie(const dodoString &name, const dodoString &value, const dodoString &exDate, const dodoString &path, const dodoString &domain, bool secure);
 
-			dodoString name;                                ///< name of the cookie
-			dodoString value;                               ///< value of the cookie
+			dodoString name;                            ///< name of the cookie
+			dodoString value;                           ///< value of the cookie
 
-			dodoString expires;                             ///< expiration date
-			dodoString path;                                ///< cookie path
-			dodoString domain;                              ///< cookie domain
-			bool secure;                                    ///< defines cookie security; false by default
+			dodoString expires;                         ///< expiration date
+			dodoString path;                            ///< cookie path
+			dodoString domain;                          ///< cookie domain
+			bool       secure;                          ///< defines cookie security; false by default
 		};
 
 		/**
@@ -230,7 +230,7 @@ namespace dodo
 		{
 			CGI_REQUESTMETHOD_GET,
 			CGI_REQUESTMETHOD_POST,
-			CGI_REQUESTMETHOD_GET_POST                         ///< if POST method and request Url also contains ?name=value&.... format data
+			CGI_REQUESTMETHOD_GET_POST                  ///< if POST method and request Url also contains ?name=value&.... format data
 		};
 
 		/**
@@ -249,8 +249,8 @@ namespace dodo
 		 */
 		struct __cgiAuthInfo
 		{
-			dodoString user;                                ///< user name
-			short type;                                     ///< authenfication type[see cgiAuthTypeEnum]
+			dodoString user;                            ///< user name
+			short      type;                            ///< authenfication type[see cgiAuthTypeEnum]
 		};
 	};
 };

@@ -49,32 +49,37 @@ tools::__time::__time(unsigned int a_sec,
 					  unsigned int a_day,
 					  unsigned int a_month,
 					  unsigned int a_year,
-					  bool a_daylight) : sec(a_sec),
-										 min(a_min),
-										 hour(a_hour),
-										 day(a_day),
-										 month(a_month),
-										 year(a_year),
-										 daylight(a_daylight)
+					  bool         a_daylight) : sec(a_sec),
+												 min(a_min),
+												 hour(a_hour),
+												 day(a_day),
+												 month(a_month),
+												 year(a_year),
+												 daylight(a_daylight)
 {
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-tools::time::byFormat(const dodoString &format,
-					  long timestamp,
-					  bool local)
+dodoString tools::time::byFormat(const dodoString &format,
+								 long             timestamp,
+								 bool             local)
 {
 	tm *tTime;
 
 	if (local)
+	{
 		tTime = ::localtime((const time_t *)&timestamp);
+	}
 	else
+	{
 		tTime = gmtime((const time_t *)&timestamp);
+	}
 
 	if (tTime == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSTIME, TIMEEX_GETBYFORMAT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	char formatted[30];
 
@@ -85,43 +90,46 @@ tools::time::byFormat(const dodoString &format,
 
 //-------------------------------------------------------------------
 
-long
-tools::time::now()
+long tools::time::now()
 {
 	time_t tTime = ::time(NULL);
 	if (tTime == (time_t)-1)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSTIME, TIMEEX_NOW, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	return tTime;
 }
 
 //-------------------------------------------------------------------
 
-dodoStringArray
-tools::time::week(long date,
-				  const dodoString &format,
-				  bool local)
+dodoStringArray tools::time::week(long             date,
+								  const dodoString &format,
+								  bool             local)
 {
 	long daynum = string::stringToL(tools::time::byFormat("%w", date, local));
 	if (daynum == 0)
+	{
 		daynum = 7;
+	}
 
 	dodoStringArray week;
 	long mon = date - (daynum - 1) * 86400;
 
 	for (short int i(0); i < 7; ++i, mon += 86400)
+	{
 		week.push_back(tools::time::byFormat(format, mon, local));
+	}
 
 	return week;
 }
 
 //-------------------------------------------------------------------
 
-dodoStringArray
-tools::time::dates(long dateFrom,
-				   long dateTo,
-				   const dodoString &format,
-				   bool local)
+dodoStringArray tools::time::dates(long             dateFrom,
+								   long             dateTo,
+								   const dodoString &format,
+								   bool             local)
 {
 	dodoStringArray result;
 
@@ -150,8 +158,7 @@ tools::time::dates(long dateFrom,
 
 //-------------------------------------------------------------------
 
-long
-tools::time::timestamp(const __time &timeInfo)
+long tools::time::timestamp(const __time &timeInfo)
 {
 	tm tTime;
 
@@ -168,19 +175,24 @@ tools::time::timestamp(const __time &timeInfo)
 
 //-------------------------------------------------------------------
 
-tools::__time
-tools::time::timestamp(long seconds,
-					   bool local)
+tools::__time tools::time::timestamp(long seconds,
+									 bool local)
 {
 	tm *tTime;
 
 	if (local)
+	{
 		tTime = ::localtime((const time_t *)&seconds);
+	}
 	else
+	{
 		tTime = gmtime((const time_t *)&seconds);
+	}
 
 	if (tTime == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSTIME, TIMEEX_MAKETIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	__time timeInfo;
 
@@ -197,9 +209,8 @@ tools::time::timestamp(long seconds,
 
 //-------------------------------------------------------------------
 
-unsigned short int
-tools::time::daysInMonth(unsigned int year,
-						 unsigned short int month)
+unsigned short int tools::time::daysInMonth(unsigned int       year,
+											unsigned short int month)
 {
 	unsigned short int day(0);
 
@@ -233,14 +244,19 @@ tools::time::daysInMonth(unsigned int year,
 			{
 				isleap = 1;
 				if (year % 100 == 0 && year % 400 != 0)
+				{
 					isleap = 0;
+				}
 			}
 			if (isleap == 1)
+			{
 				day = 29;
+			}
 			else
+			{
 				day = 28;
+			}
 			break;
-
 	}
 
 	return day;
@@ -248,9 +264,8 @@ tools::time::daysInMonth(unsigned int year,
 
 //-------------------------------------------------------------------
 
-long
-tools::time::byFormat(const dodoString &format,
-					  const dodoString &dt)
+long tools::time::byFormat(const dodoString &format,
+						   const dodoString &dt)
 {
 	tm tTime;
 	strptime(dt.c_str(), format.c_str(), &tTime);

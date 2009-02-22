@@ -67,7 +67,9 @@ __openssl_init__::__openssl_init__()
 		for (int i = 0; i < 10000; ++i)
 		{
 			if (RAND_status() == 1)
+			{
 				break;
+			}
 
 			gettimeofday(&tv, NULL);
 
@@ -90,8 +92,7 @@ __openssl_init__::~__openssl_init__()
 	RAND_cleanup();
 }
 
-void
-__openssl_init__::addEntropy()
+void __openssl_init__::addEntropy()
 {
 	struct stat randstat;
 
@@ -103,7 +104,9 @@ __openssl_init__::addEntropy()
 		for (int i = 0; i < 10000; ++i)
 		{
 			if (RAND_status() == 1)
+			{
 				break;
+			}
 
 			gettimeofday(&tv, NULL);
 

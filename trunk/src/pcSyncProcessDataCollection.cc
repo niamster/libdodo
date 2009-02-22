@@ -50,8 +50,7 @@ collection::~collection()
 
 //-------------------------------------------------------------------
 
-unsigned long
-collection::add(void *data)
+unsigned long collection::add(void *data)
 {
 	protector tg(this);
 
@@ -67,71 +66,82 @@ collection::add(void *data)
 
 //-------------------------------------------------------------------
 
-void
-collection::del(unsigned long position)
+void collection::del(unsigned long position)
 {
 	protector tg(this);
 
 	if (getShare(position))
+	{
 		shares.erase(current);
+	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATACOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCPROCESSDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-collection::set(unsigned long position,
-				void          *data)
+void collection::set(unsigned long position,
+					 void          *data)
 {
 	protector tg(this);
 
 	if (getShare(position))
+	{
 		current->data = data;
+	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATACOLLECTION, COLLECTIONEX_SET, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCPROCESSDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-const void *
-collection::get(unsigned long position)
+const void *collection::get(unsigned long position)
 {
 	protector tg(this);
 
 	if (getShare(position))
+	{
 		return current->data;
+	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATACOLLECTION, COLLECTIONEX_SET, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCPROCESSDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-bool
-collection::getShare(unsigned long position)
+bool collection::getShare(unsigned long position)
 {
 	dodoList<pc::sync::data::__info>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
+	{
 		if (i->position == position)
 		{
 			current = i;
 
 			return true;
 		}
+	}
 
 	return false;
 }
 
 //-------------------------------------------------------------------
 
-dodoList<unsigned long>
-collection::getIds()
+dodoList<unsigned long>collection::getIds()
 {
 	dodoList<unsigned long> ids;
 
 	dodoList<pc::sync::data::__info>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
+	{
 		ids.push_back(i->position);
+	}
 
 	return ids;
 }

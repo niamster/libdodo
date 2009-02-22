@@ -71,7 +71,6 @@ exchange::exchange() : sslHandle(NULL)
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
 
 #endif
-
 }
 
 //-------------------------------------------------------------------
@@ -94,7 +93,9 @@ exchange::~exchange()
 	if (sslHandle != NULL)
 	{
 		if (SSL_shutdown(sslHandle) == 0)
+		{
 			SSL_shutdown(sslHandle);
+		}
 
 		SSL_free(sslHandle);
 	}
@@ -102,8 +103,7 @@ exchange::~exchange()
 
 //-------------------------------------------------------------------
 
-void
-exchange::init(__initialAccept &a_init)
+void exchange::init(__initialAccept &a_init)
 {
 	init(a_init.socket, a_init.sslHandle, a_init.blocked, a_init.blockInherited);
 
@@ -113,9 +113,8 @@ exchange::init(__initialAccept &a_init)
 
 //-------------------------------------------------------------------
 
-void
-exchange::_close(int socket,
-				 SSL *sslHandle)
+void exchange::_close(int socket,
+					  SSL *sslHandle)
 {
 	int err = SSL_shutdown(sslHandle);
 	if (err < 0)
@@ -138,8 +137,7 @@ exchange::_close(int socket,
 
 //-------------------------------------------------------------------
 
-void
-exchange::close()
+void exchange::close()
 {
 	protector pg(this);
 
@@ -163,11 +161,10 @@ exchange::close()
 
 //-------------------------------------------------------------------
 
-void
-exchange::init(int a_socket,
-			   SSL *a_sslHandle,
-			   bool a_blocked,
-			   bool blockInherited)
+void exchange::init(int  a_socket,
+					SSL  *a_sslHandle,
+					bool a_blocked,
+					bool blockInherited)
 {
 	protector pg(this);
 
@@ -194,31 +191,42 @@ exchange::init(int a_socket,
 	if (!blocked)
 	{
 		if (blockInherited)
+		{
 			block(false);
+		}
 		else
+		{
 			block(true);
+		}
 	}
 	else
+	{
 		block(true);
+	}
 }
 
 //-------------------------------------------------------------------
 
-bool
-exchange::isAlive()
+bool exchange::isAlive()
 {
 	protector pg(this);
 
 	if (socket == -1)
+	{
 		return false;
+	}
 
 	pollfd fd;
 	fd.fd = socket;
 	fd.events = POLLOUT;
 
 	if (poll(&fd, 1, -1) > 0)
+	{
 		if (isSetFlag(fd.revents, POLLOUT))
+		{
 			return true;
+		}
+	}
 
 	_close(socket, sslHandle);
 
@@ -230,11 +238,12 @@ exchange::isAlive()
 
 //-------------------------------------------------------------------
 
-void
-exchange::_write(const char * const a_data)
+void exchange::_write(const char * const a_data)
 {
 	if (socket == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+	}
 
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
@@ -260,14 +269,15 @@ exchange::_write(const char * const a_data)
 					case SSL_ERROR_SYSCALL:
 
 						if (errno == 0)
+						{
 							continue;
+						}
 
 					default:
 					{
 						unsigned long nerr = ERR_get_error();
 						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 					}
-
 				}
 			}
 
@@ -294,14 +304,15 @@ exchange::_write(const char * const a_data)
 					case SSL_ERROR_SYSCALL:
 
 						if (errno == 0)
+						{
 							continue;
+						}
 
 					default:
 					{
 						unsigned long nerr = ERR_get_error();
 						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 					}
-
 				}
 			}
 
@@ -312,11 +323,12 @@ exchange::_write(const char * const a_data)
 
 //-------------------------------------------------------------------
 
-void
-exchange::_read(char * const a_data)
+void exchange::_read(char * const a_data)
 {
 	if (socket == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+	}
 
 	memset(a_data, '\0', inSize);
 
@@ -344,14 +356,15 @@ exchange::_read(char * const a_data)
 					case SSL_ERROR_SYSCALL:
 
 						if (errno == 0)
+						{
 							continue;
+						}
 
 					default:
 					{
 						unsigned long nerr = ERR_get_error();
 						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 					}
-
 				}
 			}
 
@@ -378,14 +391,15 @@ exchange::_read(char * const a_data)
 					case SSL_ERROR_SYSCALL:
 
 						if (errno == 0)
+						{
 							continue;
+						}
 
 					default:
 					{
 						unsigned long nerr = ERR_get_error();
 						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 					}
-
 				}
 			}
 
@@ -396,11 +410,12 @@ exchange::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-unsigned long
-exchange::_readStream(char * const data)
+unsigned long exchange::_readStream(char * const data)
 {
 	if (socket == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+	}
 
 	memset(data, '\0', inSize);
 
@@ -422,7 +437,9 @@ exchange::_readStream(char * const data)
 				case SSL_ERROR_SYSCALL:
 
 					if (errno == 0)
+					{
 						continue;
+					}
 
 				default:
 				{

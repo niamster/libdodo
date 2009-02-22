@@ -67,9 +67,9 @@ namespace dodo
 		 */
 		struct __logMap
 		{
-			short level;                                ///< log level[see loggerLogLevelEnum]
-			io::channel *handler;                       ///< log handler
-			long position;                              ///< log handler identificator
+			short       level;      ///< log level[see loggerLogLevelEnum]
+			io::channel *handler;   ///< log handler
+			long        position;   ///< log handler identificator
 		};
 
 		/**
@@ -79,59 +79,61 @@ namespace dodo
 		class logger : virtual public pc::sync::thread::stack,
 					   public singleton<logger>
 		{
-			public:
+		  public:
 
-				/**
-				 * constructor
-				 */
-				logger();
+			/**
+			 * constructor
+			 */
+			logger();
 
-				/**
-				 * destructor
-				 */
-				virtual ~logger();
+			/**
+			 * destructor
+			 */
+			virtual ~logger();
 
-				/**
-				 * register log handler
-				 * @return log handler identificator
-				 * @param level defines log level[see loggerLogLevelEnum]
-				 * @param handler defines log handler
-				 * @note if handler is NULL logger will pass message to the syslog
-				 */
-				virtual unsigned long add(short level, io::channel *handler);
+			/**
+			 * register log handler
+			 * @return log handler identificator
+			 * @param level defines log level[see loggerLogLevelEnum]
+			 * @param handler defines log handler
+			 * @note if handler is NULL logger will pass message to the syslog
+			 */
+			virtual unsigned long add(short       level,
+									  io::channel *handler);
 
-				/**
-				 * unregister log handler
-				 * @param position defines log handler identificator
-				 */
-				virtual void remove(unsigned long position);
+			/**
+			 * unregister log handler
+			 * @param position defines log handler identificator
+			 */
+			virtual void remove(unsigned long position);
 
-				/**
-				 * log message
-				 * @param level defines log level[see loggerLogLevelEnum]
-				 * @param msg defines log message
-				 */
-				virtual void log(short level, const dodoString &msg);
+			/**
+			 * log message
+			 * @param level defines log level[see loggerLogLevelEnum]
+			 * @param msg defines log message
+			 */
+			virtual void log(short            level,
+							 const dodoString &msg);
 
-				/**
-				 * set date/time format for log messages
-				 * @param format defines date/time format[see tools::time]
-				 * @note date/time format is not used for syslog
-				 */
-				virtual void setTimeFormat(const dodoString &format);
+			/**
+			 * set date/time format for log messages
+			 * @param format defines date/time format[see tools::time]
+			 * @note date/time format is not used for syslog
+			 */
+			virtual void setTimeFormat(const dodoString &format);
 
-				bool forward;                ///< forward message to global log instance[false by default]
+			bool forward;                                   ///< forward message to global log instance[false by default]
 
-			private:
+		  private:
 
-				dodoString timeFormat;                                                      ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
+			dodoString timeFormat;                          ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
 
-				dodoList<__logMap> handlers;                                                ///< list of log maps
+			dodoList<__logMap> handlers;                    ///< list of log maps
 
-				unsigned long handlersNum;                                                  ///< number of registered handlers
+			unsigned long handlersNum;                      ///< number of registered handlers
 
-				static const dodoString levels[LOGGER_LEVELS];                              ///< log levels statements
-				static const int syslogLevels[LOGGER_LEVELS];                               ///< syslog log levels
+			static const dodoString levels[LOGGER_LEVELS];  ///< log levels statements
+			static const int syslogLevels[LOGGER_LEVELS];   ///< syslog log levels
 		};
 	};
 };

@@ -91,7 +91,6 @@ namespace dodo
 			CODEEX_BZDECOMPRESS,
 
 #endif
-
 		};
 	};
 };

@@ -83,14 +83,14 @@ namespace dodo
 			 */
 			class __xexecIoNetworkClientCollectedData : public __xexecCollectedData
 			{
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 * @param executor defines class that executed hook
-					 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
-					 */
-					__xexecIoNetworkClientCollectedData(xexec *executor, short execObject);
+				/**
+				 * constructor
+				 * @param executor defines class that executed hook
+				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
+				 */
+				__xexecIoNetworkClientCollectedData(xexec *executor, short execObject);
 			};
 
 #endif
@@ -108,80 +108,85 @@ namespace dodo
 				friend class exchange;
 				friend class ssl::client;
 
-				private:
+			  private:
 
-					/**
-					 * copy constructor
-					 * @note to prevent copying
-					 */
-					client(client &fs);
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				client(client &fs);
 
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 * @param family defines family of the socket[see connectionProtoFamilyEnum]
-					 * @param type defines type of the socket[see connectionTransferTypeEnum]
-					 */
-					client(short family, short type);
+				/**
+				 * constructor
+				 * @param family defines family of the socket[see connectionProtoFamilyEnum]
+				 * @param type defines type of the socket[see connectionTransferTypeEnum]
+				 */
+				client(short family, short type);
 
-					/**
-					 * destructor
-					 */
-					virtual ~client();
+				/**
+				 * destructor
+				 */
+				virtual ~client();
 
-					/**
-					 * connect from specific address
-					 * @param local defines ip address to bind
-					 * @param host defines ip address of host to connect
-					 * @param port defines port of host to connect
-					 * @param exchange defines an oject that will perform I/O operations
-					 */
-					virtual void connectFrom(const dodoString &local, const dodoString &host, int port, exchange &exchange);
+				/**
+				 * connect from specific address
+				 * @param local defines ip address to bind
+				 * @param host defines ip address of host to connect
+				 * @param port defines port of host to connect
+				 * @param exchange defines an oject that will perform I/O operations
+				 */
+				virtual void connectFrom(const dodoString &local,
+										 const dodoString &host,
+										 int              port,
+										 exchange         &exchange);
 
-					/**
-					 * connect
-					 * @param host defines ip address of host to connect
-					 * @param port defines port of host to connect
-					 * @param exchange defines an oject that will perform I/O operations
-					 */
-					virtual void connect(const dodoString &host, int port, exchange &exchange);
+				/**
+				 * connect
+				 * @param host defines ip address of host to connect
+				 * @param port defines port of host to connect
+				 * @param exchange defines an oject that will perform I/O operations
+				 */
+				virtual void connect(const dodoString &host,
+									 int              port,
+									 exchange         &exchange);
 
-					/**
-					 * connect
-					 * @param path defines path to unix socket
-					 * @param exchange defines an oject that will perform I/O operations
-					 */
-					virtual void connect(const dodoString &path, exchange &exchange);
+				/**
+				 * connect
+				 * @param path defines path to unix socket
+				 * @param exchange defines an oject that will perform I/O operations
+				 */
+				virtual void connect(const dodoString &path,
+									 exchange         &exchange);
 
-					bool blockInherited;                                         ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
+				bool blockInherited;                                ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
 
-				protected:
+			  protected:
 
-					short family;                                                           ///< socket family
-					short type;                                                             ///< socket type
+				short family;                                       ///< socket family
+				short type;                                         ///< socket type
 
-					/**
-					 * restore options on connect/bind
-					 */
-					virtual void restoreOptions();
+				/**
+				 * restore options on connect/bind
+				 */
+				virtual void restoreOptions();
 
-					/**
-					 * create socket
-					 */
-					virtual void makeSocket();
+				/**
+				 * create socket
+				 */
+				virtual void makeSocket();
 
-					dodoString unixSock;                                            ///< path to unix socket
+				dodoString unixSock;                                ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
 
-					__xexecIoNetworkClientCollectedData collectedData;                                           ///< data collected for xexec
+				__xexecIoNetworkClientCollectedData collectedData;  ///< data collected for xexec
 
 #endif
 			};
 		};
 	};
-
 };
 
 #endif

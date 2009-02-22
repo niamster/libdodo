@@ -66,10 +66,10 @@ namespace dodo
 			 */
 			enum regularOpenmodeEnum
 			{
-				REGULAR_OPENMODE_READ_ONLY,                                        ///< reading from the file
-				REGULAR_OPENMODE_READ_WRITE,                                       ///< reading and writing[creates if not exists]
-				REGULAR_OPENMODE_READ_WRITE_TRUNCATE,                              ///< file will be truncated if exists
-				REGULAR_OPENMODE_APPEND                                            ///< writing to the end[creates if not exists]
+				REGULAR_OPENMODE_READ_ONLY,             ///< reading from the file
+				REGULAR_OPENMODE_READ_WRITE,            ///< reading and writing[creates if not exists]
+				REGULAR_OPENMODE_READ_WRITE_TRUNCATE,   ///< file will be truncated if exists
+				REGULAR_OPENMODE_APPEND                 ///< writing to the end[creates if not exists]
 			};
 
 			/**
@@ -83,112 +83,113 @@ namespace dodo
 			 */
 			class regular : virtual public channel
 			{
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 * @param path defines path to the file
-					 * @param mode defines mode to open file[see regularOpenmodeEnum]
-					 */
-					regular(const dodoString &path, short mode);
+				/**
+				 * constructor
+				 * @param path defines path to the file
+				 * @param mode defines mode to open file[see regularOpenmodeEnum]
+				 */
+				regular(const dodoString &path, short mode);
 
-					/**
-					 * constructor
-					 */
-					regular();
+				/**
+				 * constructor
+				 */
+				regular();
 
-					/**
-					 * copy constructor
-					 * @note xexec object is not copied
-					 */
-					regular(const regular &fd);
+				/**
+				 * copy constructor
+				 * @note xexec object is not copied
+				 */
+				regular(const regular &fd);
 
-					/**
-					 * destructor
-					 */
-					virtual ~regular();
+				/**
+				 * destructor
+				 */
+				virtual ~regular();
 
-					/**
-					 * clone file object
-					 * @param fd defines object to clone
-					 * @note xexec object is not copied
-					 */
-					virtual void clone(const regular &fd);
+				/**
+				 * clone file object
+				 * @param fd defines object to clone
+				 * @note xexec object is not copied
+				 */
+				virtual void clone(const regular &fd);
 
-					/**
-					 * open file
-					 * @param path defines path to the file
-					 * @param mode defines mode to open file[see regularOpenmodeEnum]
-					 */
-					virtual void open(const dodoString &path, short mode);
+				/**
+				 * open file
+				 * @param path defines path to the file
+				 * @param mode defines mode to open file[see regularOpenmodeEnum]
+				 */
+				virtual void open(const dodoString &path,
+								  short            mode);
 
-					/**
-					 * close file
-					 */
-					virtual void close();
+				/**
+				 * close file
+				 */
+				virtual void close();
 
-					/**
-					 * flush output
-					 */
-					virtual void flush();
+				/**
+				 * flush output
+				 */
+				virtual void flush();
 
-					/**
-					 * erase node on position
-					 */
-					virtual void erase();
+				/**
+				 * erase node on position
+				 */
+				virtual void erase();
 
-					unsigned long pos;                                              ///< read/write/erase position; if pos==-1, append to the end for write[0 by default]
-					bool blockOffset;												///<  if blockOffset is false then read/write position is amount of bytes from the beginning, if true then read/write position calculated by defined rules[true by default]
-					bool append;													///< append to the end[false by default]
+				unsigned long pos;  ///< read/write/erase position; if pos==-1, append to the end for write[0 by default]
+				bool blockOffset;   ///<  if blockOffset is false then read/write position is amount of bytes from the beginning, if true then read/write position calculated by defined rules[true by default]
+				bool append;        ///< append to the end[false by default]
 
-					bool overwrite;                                                 ///< if true block will be overwritten; for regular and temp files only[false by default]
+				bool overwrite;     ///< if true block will be overwritten; for regular and temp files only[false by default]
 
-				protected:
+			  protected:
 
-					/**
-					 * @return descriptor of the input stream
-					 */
-					virtual int getInDescriptor() const;
+				/**
+				 * @return descriptor of the input stream
+				 */
+				virtual int getInDescriptor() const;
 
-					/**
-					 * @return descriptor of the output stream
-					 */
-					virtual int getOutDescriptor() const;
+				/**
+				 * @return descriptor of the output stream
+				 */
+				virtual int getOutDescriptor() const;
 
-					/**
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 * if blockOffset is true read offset is calculated as pos*inSize otherwise offset it taken pos bytes from the beginning
-					 */
-					virtual void _read(char * const data);
+				/**
+				 * @param data defines buffer that will be filled
+				 * @note not more then inSize(including '\0')
+				 * if blockOffset is true read offset is calculated as pos*inSize otherwise offset it taken pos bytes from the beginning
+				 */
+				virtual void _read(char * const data);
 
-					/**
-					 * read from stream - '\0' or '\n' - terminated string
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 * if blockOffset is true read offset is calculated as pos*'# of \n - terminated strings' otherwise offset it taken pos bytes from the beginning
-					 */
-					virtual unsigned long _readStream(char * const data);
+				/**
+				 * read from stream - '\0' or '\n' - terminated string
+				 * @param data defines buffer that will be filled
+				 * @note not more then inSize(including '\0')
+				 * if blockOffset is true read offset is calculated as pos*'# of \n - terminated strings' otherwise offset it taken pos bytes from the beginning
+				 */
+				virtual unsigned long _readStream(char * const data);
 
-					/**
-					 * @param data defines data that will be written
-					 * @note if blockOffset is true write offset is calculated as pos*outSize otherwise offset it taken pos bytes from the beginning
-					 */
-					virtual void _write(const char * const data);
+				/**
+				 * @param data defines data that will be written
+				 * @note if blockOffset is true write offset is calculated as pos*outSize otherwise offset it taken pos bytes from the beginning
+				 */
+				virtual void _write(const char * const data);
 
-					/**
-					 * write to stream - '\0' - terminated string
-					 * @param data defines data that will be written
-					 * @note write only to the end of the file(append)
-					 */
-					virtual void _writeStream(const char * const data);
+				/**
+				 * write to stream - '\0' - terminated string
+				 * @param data defines data that will be written
+				 * @note write only to the end of the file(append)
+				 */
+				virtual void _writeStream(const char * const data);
 
-				private:
+			  private:
 
-					dodoString path;                                                                        ///< file path
-					short mode;                                                                             ///< file open mode[see fileOpenmodeEnum]
+				dodoString path;    ///< file path
+				short mode;         ///< file open mode[see fileOpenmodeEnum]
 
-					FILE *handler;                                                                          ///< file handler
+				FILE *handler;      ///< file handler
 			};
 		};
 	};

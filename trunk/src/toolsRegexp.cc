@@ -70,16 +70,17 @@ regexp::~regexp()
 #ifdef PCRE_EXT
 #else
 	if (!notCompiled)
+	{
 		regfree(&code);
+	}
 #endif
 }
 
 //-------------------------------------------------------------------
 
-bool
-regexp::match(const dodoString &pattern,
-			  const dodoString &sample,
-			  dodoStringArray &pockets)
+bool regexp::match(const dodoString &pattern,
+				   const dodoString &sample,
+				   dodoStringArray  &pockets)
 {
 	try
 	{
@@ -88,9 +89,13 @@ regexp::match(const dodoString &pattern,
 	catch (exception::basic &ex)
 	{
 		if (ex.funcID == REGEXPEX_COMPILE)
+		{
 			return false;
+		}
 		else
+		{
 			throw;
+		}
 	}
 
 	return match(sample, pockets);
@@ -98,13 +103,14 @@ regexp::match(const dodoString &pattern,
 
 //-------------------------------------------------------------------
 
-bool
-regexp::match(const dodoString &sample,
-			  dodoStringArray &pockets)
+bool regexp::match(const dodoString &sample,
+				   dodoStringArray  &pockets)
 {
 	pockets.clear();
 	if (!boundMatch(sample))
+	{
 		return false;
+	}
 
 #ifndef USE_DEQUE
 	pockets.reserve(boundaries.size());
@@ -112,15 +118,16 @@ regexp::match(const dodoString &sample,
 
 	dodoArray<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
 	for (; i != j; ++i)
+	{
 		pockets.push_back(dodoString(sample.data() + i->begin, i->end - i->begin));
+	}
 
 	return true;
 }
 
 //-------------------------------------------------------------------
 
-bool
-regexp::boundMatch(const dodoString &sample)
+bool regexp::boundMatch(const dodoString &sample)
 {
 	boundaries.clear();
 
@@ -129,7 +136,9 @@ regexp::boundMatch(const dodoString &sample)
 	int subs;
 
 	if (pcre_fullinfo(code, NULL, PCRE_INFO_CAPTURECOUNT, &subs) != 0)
+	{
 		return false;
+	}
 
 	subs *= 3;
 	subs += 3;
@@ -187,38 +196,53 @@ regexp::boundMatch(const dodoString &sample)
 
 //-------------------------------------------------------------------
 
-void
-regexp::compile(const dodoString &pattern)
+void regexp::compile(const dodoString &pattern)
 {
 	int bits(0);
 
 #ifdef PCRE_EXT
 
 	if (icase)
+	{
 		bits |= PCRE_CASELESS;
+	}
 	if (!greedy)
+	{
 		bits |= PCRE_UNGREEDY;
+	}
 	if (multiline)
+	{
 		bits |= PCRE_MULTILINE;
+	}
 	bits |= PCRE_DOTALL;
 
 	int errOffset(0), errn(0);
 	const char *error;
 	code = pcre_compile2(pattern.c_str(), bits, &errn, &error, &errOffset, NULL);
 	if (code == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
+	}
 
 #else
 
 	if (extended)
+	{
 		bits |= REG_EXTENDED;
+	}
 	if (icase)
+	{
 		bits |= REG_ICASE;
+	}
 
 	if (notCompiled)
+	{
 		notCompiled = false;
+	}
 	else
+	{
 		regfree(&code);
+	}
 
 	int errn = regcomp(&code, pattern.c_str(), bits);
 	if (errn != 0)
@@ -234,10 +258,9 @@ regexp::compile(const dodoString &pattern)
 
 //-------------------------------------------------------------------
 
-dodoString
-regexp::replace(const dodoString &pattern,
-				const dodoString &sample,
-				const dodoStringArray &replacements)
+dodoString regexp::replace(const dodoString      &pattern,
+						   const dodoString      &sample,
+						   const dodoStringArray &replacements)
 {
 	try
 	{
@@ -246,9 +269,13 @@ regexp::replace(const dodoString &pattern,
 	catch (exception::basic &ex)
 	{
 		if (ex.funcID == REGEXPEX_COMPILE)
+		{
 			return sample;
+		}
 		else
+		{
 			throw;
+		}
 	}
 
 	return replace(sample, replacements);
@@ -256,12 +283,13 @@ regexp::replace(const dodoString &pattern,
 
 //-------------------------------------------------------------------
 
-dodoString
-regexp::replace(const dodoString &sample,
-				const dodoStringArray &replacements)
+dodoString regexp::replace(const dodoString      &sample,
+						   const dodoStringArray &replacements)
 {
 	if (!boundMatch(sample))
+	{
 		return sample;
+	}
 
 	dodoArray<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end()), o;
 

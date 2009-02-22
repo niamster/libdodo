@@ -65,39 +65,39 @@ namespace dodo
 			friend class json::method;
 			friend class json::server;
 
-			public:
+		  public:
 
-				/**
-				 * constructor
-				 */
-				method();
+			/**
+			 * constructor
+			 */
+			method();
 
-				/**
-				 * destructor
-				 */
-				virtual ~method();
+			/**
+			 * destructor
+			 */
+			virtual ~method();
 
-				/**
-				 * set method name
-				 * @param name defines method name
-				 */
-				virtual void setName(const dodoString &name);
+			/**
+			 * set method name
+			 * @param name defines method name
+			 */
+			virtual void setName(const dodoString &name);
 
-				/**
-				 * clear arguments information
-				 */
-				virtual void clear();
+			/**
+			 * clear arguments information
+			 */
+			virtual void clear();
 
-				/**
-				 * add argument
-				 * @param argument defines method argument
-				 */
-				virtual void addArgument(const value &argument);
+			/**
+			 * add argument
+			 * @param argument defines method argument
+			 */
+			virtual void addArgument(const value &argument);
 
-			private:
+		  private:
 
-				dodoArray<value> arguments;                                     ///< method arguments
-				dodoString name;                                                ///< method name
+			dodoArray<value> arguments; ///< method arguments
+			dodoString name;            ///< method name
 		};
 	};
 };

@@ -33,10 +33,9 @@ using namespace dodo::tools;
 
 //-------------------------------------------------------------------
 
-void
-misc::random(void *data,
-			 unsigned long size,
-			 short strength)
+void misc::random(void          *data,
+				  unsigned long size,
+				  short         strength)
 {
 	FILE *file;
 
@@ -44,7 +43,9 @@ misc::random(void *data,
 	{
 		file = fopen("/dev/urandom", "r");
 		if (file == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 	else
 	{
@@ -52,10 +53,14 @@ misc::random(void *data,
 		{
 			file = fopen("/dev/random", "r");
 			if (file == NULL)
+			{
 				throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
+		}
 	}
 
 	while (true)
@@ -63,27 +68,34 @@ misc::random(void *data,
 		if (fread(data, size, 1, file) == 0)
 		{
 			if (feof(file) != 0 || errno == EAGAIN)
+			{
 				break;
+			}
 
 			if (errno == EINTR)
+			{
 				continue;
+			}
 
 			if (ferror(file) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 		}
 
 		break;
 	}
 
 	if (fclose(file) != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-misc::stringRandom(unsigned long size,
-				   short strength)
+dodoString misc::stringRandom(unsigned long size,
+							  short         strength)
 {
 	char *data = new char[size + 1];
 	try
@@ -97,8 +109,12 @@ misc::stringRandom(unsigned long size,
 		throw;
 	}
 	for (unsigned long i = 0; i < size; ++i)
+	{
 		if (data[i] == '\0')
+		{
 			data[i] = '*';
+		}
+	}
 
 	dodoString res(data, size);
 	delete [] data;
@@ -108,8 +124,7 @@ misc::stringRandom(unsigned long size,
 
 //-------------------------------------------------------------------
 
-unsigned long
-misc::ulRandom(short strength)
+unsigned long misc::ulRandom(short strength)
 {
 	unsigned long rnd;
 
@@ -120,8 +135,7 @@ misc::ulRandom(short strength)
 
 //-------------------------------------------------------------------
 
-long
-misc::lRandom(short strength)
+long misc::lRandom(short strength)
 {
 	long rnd;
 
@@ -132,8 +146,7 @@ misc::lRandom(short strength)
 
 //-------------------------------------------------------------------
 
-unsigned int
-misc::uiRandom(short strength)
+unsigned int misc::uiRandom(short strength)
 {
 	unsigned int rnd;
 
@@ -144,8 +157,7 @@ misc::uiRandom(short strength)
 
 //-------------------------------------------------------------------
 
-int
-misc::iRandom(short strength)
+int misc::iRandom(short strength)
 {
 	int rnd;
 
@@ -156,8 +168,7 @@ misc::iRandom(short strength)
 
 //-------------------------------------------------------------------
 
-unsigned short
-misc::usRandom(short strength)
+unsigned short misc::usRandom(short strength)
 {
 	unsigned short rnd;
 
@@ -168,8 +179,7 @@ misc::usRandom(short strength)
 
 //-------------------------------------------------------------------
 
-short
-misc::sRandom(short strength)
+short misc::sRandom(short strength)
 {
 	short rnd;
 
@@ -180,8 +190,7 @@ misc::sRandom(short strength)
 
 //-------------------------------------------------------------------
 
-unsigned char
-misc::ucRandom(short strength)
+unsigned char misc::ucRandom(short strength)
 {
 	unsigned char rnd;
 
@@ -192,8 +201,7 @@ misc::ucRandom(short strength)
 
 //-------------------------------------------------------------------
 
-char
-misc::cRandom(short strength)
+char misc::cRandom(short strength)
 {
 	char rnd;
 
@@ -204,8 +212,7 @@ misc::cRandom(short strength)
 
 //-------------------------------------------------------------------
 
-double
-misc::dRandom(short strength)
+double misc::dRandom(short strength)
 {
 	double rnd;
 
@@ -216,54 +223,69 @@ misc::dRandom(short strength)
 
 //-------------------------------------------------------------------
 
-bool
-misc::isInArray(const dodoStringArray &arr,
-				const dodoString &needle,
-				bool icase)
+bool misc::isInArray(const dodoStringArray &arr,
+					 const dodoString      &needle,
+					 bool                  icase)
 {
-	bool (*cmpFunc)(const dodoString &, const dodoString &);
+	bool (*cmpFunc)(const dodoString &,
+					const dodoString &);
 
 	if (icase)
+	{
 		cmpFunc = string::iequal;
+	}
 	else
+	{
 		cmpFunc = string::equal;
+	}
 
 	dodoStringArray::const_iterator i(arr.begin()), j(arr.end());
 	for (; i != j; ++i)
+	{
 		if (cmpFunc(*i, needle))
+		{
 			return true;
+		}
+	}
 
 	return false;
 }
 
 //-------------------------------------------------------------------
 
-bool
-misc::isInList(const dodoStringList &arr,
-			   const dodoString &needle,
-			   bool icase)
+bool misc::isInList(const dodoStringList &arr,
+					const dodoString     &needle,
+					bool                 icase)
 {
-	bool (*cmpFunc)(const dodoString &, const dodoString &);
+	bool (*cmpFunc)(const dodoString &,
+					const dodoString &);
 
 	if (icase)
+	{
 		cmpFunc = string::iequal;
+	}
 	else
+	{
 		cmpFunc = string::equal;
+	}
 
 	dodoStringList::const_iterator i(arr.begin()), j(arr.end());
 	for (; i != j; ++i)
+	{
 		if (cmpFunc(*i, needle))
+		{
 			return true;
+		}
+	}
 
 	return false;
 }
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringArray
-misc::split(const dodoString &fields,
-			  const dodoString &separator,
-			  int limit)
+dodo::dodoStringArray misc::split(const dodoString &fields,
+								  const dodoString &separator,
+								  int              limit)
 {
 	unsigned long i(0), j(0), sep_size(separator.size());
 	int k(1);
@@ -290,7 +312,9 @@ misc::split(const dodoString &fields,
 			break;
 		}
 		else
+		{
 			arr.push_back(dodoString(fields.data() + j, i - j));
+		}
 
 		i += sep_size;
 		j = i;
@@ -301,13 +325,14 @@ misc::split(const dodoString &fields,
 
 //-------------------------------------------------------------------
 
-dodoString
-misc::join(const dodoStringArray &fields,
-			  const dodoString &separator,
-			  int limit)
+dodoString misc::join(const dodoStringArray &fields,
+					  const dodoString      &separator,
+					  int                   limit)
 {
 	if (fields.size() == 0)
+	{
 		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_JOIN, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+	}
 
 	int k(0);
 
@@ -321,7 +346,9 @@ misc::join(const dodoStringArray &fields,
 			if (limit != -1)
 			{
 				if (k > limit)
+				{
 					return temp;
+				}
 
 				++k;
 			}

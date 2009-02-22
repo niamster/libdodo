@@ -31,27 +31,33 @@
 
 using namespace dodo::tools;
 
-const dodoString logger::levels[] = { "INFO",
-									  "NOTICE",
-									  "DEBUG",
-									  "WARNING",
-									  "ERROR",
-									  "ALERT",
-									  "CRITICAL",
-									  "EMERGENCY",
-									  "USER" };
+const dodoString logger::levels[] =
+{
+	"INFO",
+	"NOTICE",
+	"DEBUG",
+	"WARNING",
+	"ERROR",
+	"ALERT",
+	"CRITICAL",
+	"EMERGENCY",
+	"USER"
+};
 
 //-------------------------------------------------------------------
 
-const int logger::syslogLevels[] = { LOG_EMERG,
-									 LOG_ALERT,
-									 LOG_CRIT,
-									 LOG_ERR,
-									 LOG_WARNING,
-									 LOG_NOTICE,
-									 LOG_INFO,
-									 LOG_DEBUG,
-									 LOG_USER };
+const int logger::syslogLevels[] =
+{
+	LOG_EMERG,
+	LOG_ALERT,
+	LOG_CRIT,
+	LOG_ERR,
+	LOG_WARNING,
+	LOG_NOTICE,
+	LOG_INFO,
+	LOG_DEBUG,
+	LOG_USER
+};
 
 //-------------------------------------------------------------------
 
@@ -69,9 +75,8 @@ logger::~logger()
 
 //-------------------------------------------------------------------
 
-unsigned long
-logger::add(short level,
-			io::channel *handler)
+unsigned long logger::add(short       level,
+						  io::channel *handler)
 {
 	protector tg(this);
 
@@ -88,34 +93,37 @@ logger::add(short level,
 
 //-------------------------------------------------------------------
 
-void
-logger::remove(unsigned long position)
+void logger::remove(unsigned long position)
 {
 	protector tg(this);
 
 	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
 	for (; i != j; ++i)
+	{
 		if (i->position == position)
 		{
 			handlers.erase(i);
 
 			break;
 		}
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-logger::log(short level,
-			const dodoString &msg)
+void logger::log(short            level,
+				 const dodoString &msg)
 {
 	protector tg(this);
 
 	if (level < 0 && level >= LOGGER_LEVELS)
+	{
 		return;
+	}
 
 	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
 	for (; i != j; ++i)
+	{
 		if (i->level == level)
 		{
 			if (i->handler != NULL)
@@ -124,14 +132,18 @@ logger::log(short level,
 				i->handler->flush();
 			}
 			else
+			{
 				syslog(syslogLevels[level], msg.c_str());
+			}
 		}
+	}
 
 	if (forward)
 	{
 		i = getInstance().handlers.begin();
 		j = getInstance().handlers.end();
 		for (; i != j; ++i)
+		{
 			if (i->level == level)
 			{
 				if (i->handler != NULL)
@@ -140,15 +152,17 @@ logger::log(short level,
 					i->handler->flush();
 				}
 				else
+				{
 					syslog(syslogLevels[level], msg.c_str());
+				}
 			}
+		}
 	}
 }
 
 //-------------------------------------------------------------------
 
-void
-logger::setTimeFormat(const dodoString &format)
+void logger::setTimeFormat(const dodoString &format)
 {
 	timeFormat = " " + format + ": ";
 }

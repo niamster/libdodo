@@ -31,8 +31,7 @@
 
 using namespace dodo::rpc::json;
 
-dodo::rpc::value
-value::jsonToValue(dodo::data::format::json::node &node)
+dodo::rpc::value value::jsonToValue(dodo::data::format::json::node &node)
 {
 	rpc::value val;
 
@@ -52,7 +51,9 @@ value::jsonToValue(dodo::data::format::json::node &node)
 
 			dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>::iterator i = node.objectValue.begin(), j = node.objectValue.end();
 			for (; i != j; ++i)
+			{
 				val.structValue.insert(make_pair(i->first, jsonToValue(i->second)));
+			}
 
 			break;
 		}
@@ -63,7 +64,9 @@ value::jsonToValue(dodo::data::format::json::node &node)
 
 			dodoArray<dodo::data::format::json::node>::iterator i = node.arrayValue.begin(), j = node.arrayValue.end();
 			for (; i != j; ++i)
+			{
 				val.arrayValue.push_back(jsonToValue(*i));
+			}
 
 			break;
 		}
@@ -98,8 +101,7 @@ value::jsonToValue(dodo::data::format::json::node &node)
 
 //-------------------------------------------------------------------
 
-dodo::data::format::json::node
-value::valueToJson(const rpc::value &data)
+dodo::data::format::json::node value::valueToJson(const rpc::value &data)
 {
 	dodo::data::format::json::node node;
 
@@ -143,7 +145,9 @@ value::valueToJson(const rpc::value &data)
 
 			dodoArray<rpc::value>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
 			for (; i != j; ++i)
+			{
 				node.arrayValue.push_back(valueToJson(*i));
+			}
 
 			break;
 		}
@@ -154,7 +158,9 @@ value::valueToJson(const rpc::value &data)
 
 			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator i = data.structValue.begin(), j = data.structValue.end();
 			for (; i != j; ++i)
+			{
 				node.objectValue.insert(make_pair(i->first, valueToJson(i->second)));
+			}
 
 			break;
 		}

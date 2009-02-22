@@ -54,80 +54,80 @@ namespace dodo
 			 */
 			class exchange : virtual public cgi::exchange
 			{
-				private:
+			  private:
 
-					/**
-					 * copy constructor
-					 * @note to prevent copying
-					 */
-					exchange(exchange &cf);
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				exchange(exchange &cf);
 
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 * @param request defines CGI request descriptor
-					 */
-					exchange(FCGX_Request *request);
+				/**
+				 * constructor
+				 * @param request defines CGI request descriptor
+				 */
+				exchange(FCGX_Request *request);
 
-					/**
-					 * destructor
-					 */
-					virtual ~exchange();
+				/**
+				 * destructor
+				 */
+				virtual ~exchange();
 
-					/**
-					 * flush output
-					 */
-					virtual void flush();
+				/**
+				 * flush output
+				 */
+				virtual void flush();
 
-					/**
-					 * @return environment variable
-					 * @param data defines name of environment variable
-					 */
-					virtual char *getenv(const char *data);
+				/**
+				 * @return environment variable
+				 * @param data defines name of environment variable
+				 */
+				virtual char *getenv(const char *data);
 
-				protected:
+			  protected:
 
-					/**
-					 * @return descriptor of input stream
-					 */
-					virtual int getInDescriptor() const;
+				/**
+				 * @return descriptor of input stream
+				 */
+				virtual int getInDescriptor() const;
 
-					/**
-					 * @return descriptor of output stream
-					 */
-					virtual int getOutDescriptor() const;
+				/**
+				 * @return descriptor of output stream
+				 */
+				virtual int getOutDescriptor() const;
 
-					/**
-					 * read
-					 * @param data is filled with read data
-					 * if inSize bigger than buffer size - reads with few iterations
-					 */
-					virtual void _read(char * const data);
+				/**
+				 * read
+				 * @param data is filled with read data
+				 * if inSize bigger than buffer size - reads with few iterations
+				 */
+				virtual void _read(char * const data);
 
-					/**
-					 * read from stream - '\0' or '\n' - terminated string
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual unsigned long _readStream(char * const data);
+				/**
+				 * read from stream - '\0' or '\n' - terminated string
+				 * @param data defines buffer that will be filled
+				 * @note not more then inSize(including '\0')
+				 */
+				virtual unsigned long _readStream(char * const data);
 
-					/**
-					 * write
-					 * @param data is data that will be written
-					 * if outSize bigger than buffer size - writes with few iterations
-					 */
-					virtual void _write(const char * const data);
+				/**
+				 * write
+				 * @param data is data that will be written
+				 * if outSize bigger than buffer size - writes with few iterations
+				 */
+				virtual void _write(const char * const data);
 
-					/**
-					 * write to stream - '\0' - terminated string
-					 * @param data defines data that will be written
-					 */
-					virtual void _writeStream(const char * const data);
+				/**
+				 * write to stream - '\0' - terminated string
+				 * @param data defines data that will be written
+				 */
+				virtual void _writeStream(const char * const data);
 
-				private:
+			  private:
 
-					FCGX_Request *request;                                            ///< fast CGI descriptor
+				FCGX_Request *request; ///< fast CGI descriptor
 			};
 		};
 	};

@@ -33,23 +33,20 @@ using namespace dodo::rpc;
 
 server::server() : defaultHandler(&rpcDefaultHandler)
 {
-
 }
 
 //-------------------------------------------------------------------
 
 server::~server()
 {
-
 }
 
 //-------------------------------------------------------------------
 
-response
-server::rpcDefaultHandler(const dodoString &method,
-						  const dodoArray<value> &arguments,
-						  const void *idata,
-						  void *odata)
+response server::rpcDefaultHandler(const dodoString       &method,
+								   const dodoArray<value> &arguments,
+								   const void             *idata,
+								   void                   *odata)
 {
 	response response;
 	response.fault(dodoString("rpcDefaultHandler"));
@@ -59,33 +56,29 @@ server::rpcDefaultHandler(const dodoString &method,
 
 //-------------------------------------------------------------------
 
-void
-server::setDefault(handler handler)
+void server::setDefault(handler handler)
 {
 	defaultHandler = handler;
 }
 
 //-------------------------------------------------------------------
 
-void
-server::setHandler(const dodoString &method,
-				   handler handler)
+void server::setHandler(const dodoString &method,
+						handler          handler)
 {
 	handlers.insert(make_pair(method, handler));
 }
 
 //-------------------------------------------------------------------
 
-void
-server::removeHandler(const dodoString &method)
+void server::removeHandler(const dodoString &method)
 {
 	handlers.erase(method);
 }
 
 //-------------------------------------------------------------------
 
-void
-server::serve()
+void server::serve()
 {
 	try
 	{
@@ -94,9 +87,13 @@ server::serve()
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
 		if (handler == handlers.end())
+		{
 			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL)));
+		}
 		else
+		{
 			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL)));
+		}
 	}
 	catch (exception::basic &ex)
 	{

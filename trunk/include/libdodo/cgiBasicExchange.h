@@ -49,31 +49,31 @@ namespace dodo
 			class exchange : virtual public cgi::exchange,
 							 virtual public io::stdio
 			{
-				private:
+			  private:
 
-					/**
-					 * copy constructor
-					 * @note to prevent copying
-					 */
-					exchange(exchange &cf);
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				exchange(exchange &cf);
 
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 */
-					exchange();
+				/**
+				 * constructor
+				 */
+				exchange();
 
-					/**
-					 * destructor
-					 */
-					virtual ~exchange();
+				/**
+				 * destructor
+				 */
+				virtual ~exchange();
 
-					/**
-					 * @return environment variable
-					 * @param data defines name of environment variable
-					 */
-					virtual char *getenv(const char *data);
+				/**
+				 * @return environment variable
+				 * @param data defines name of environment variable
+				 */
+				virtual char *getenv(const char *data);
 			};
 		};
 	};

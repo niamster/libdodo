@@ -66,9 +66,9 @@ namespace dodo
 			 */
 			enum fifoOpenmodeEnum
 			{
-				FIFO_OPENMODE_READ,                                        ///< normaly blocks until some other process opens the same FIFO for writing
-				FIFO_OPENMODE_READ_OPENNONBLOCK,                           ///< normaly does't block until some other process opens the same FIFO for writing, further I/O is in blocked mode
-				FIFO_OPENMODE_WRITE,                                       ///< normaly blocks until some other process opens the same FIFO for reading
+				FIFO_OPENMODE_READ,                 ///< normaly blocks until some other process opens the same FIFO for writing
+				FIFO_OPENMODE_READ_OPENNONBLOCK,    ///< normaly does't block until some other process opens the same FIFO for writing, further I/O is in blocked mode
+				FIFO_OPENMODE_WRITE,                ///< normaly blocks until some other process opens the same FIFO for reading
 			};
 
 			/**
@@ -78,114 +78,115 @@ namespace dodo
 			 */
 			class fifo : virtual public channel
 			{
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 */
-					fifo();
+				/**
+				 * constructor
+				 */
+				fifo();
 
-					/**
-					 * constructor
-					 * @param path defines path to the file
-					 * @param mode defines mode to open file[see fifoOpenmodeEnum]
-					 */
-					fifo(const dodoString &path, short mode);
+				/**
+				 * constructor
+				 * @param path defines path to the file
+				 * @param mode defines mode to open file[see fifoOpenmodeEnum]
+				 */
+				fifo(const dodoString &path, short mode);
 
-					/**
-					 * copy constructor
-					 * @note xexec object is not copied
-					 */
-					fifo(const fifo &fd);
+				/**
+				 * copy constructor
+				 * @note xexec object is not copied
+				 */
+				fifo(const fifo &fd);
 
-					/**
-					 * destructor
-					 */
-					virtual ~fifo();
+				/**
+				 * destructor
+				 */
+				virtual ~fifo();
 
-					/**
-					 * clone file object
-					 * @param fd defines object to clone
-					 * @note xexec object is not copied
-					 */
-					virtual void clone(const fifo &fd);
+				/**
+				 * clone file object
+				 * @param fd defines object to clone
+				 * @note xexec object is not copied
+				 */
+				virtual void clone(const fifo &fd);
 
-					/**
-					 * open file
-					 * @param path defines path to the file
-					 * @param mode defines mode to open file[see fifoOpenmodeEnum]
-					 */
-					virtual void open(const dodoString &path, short mode);
+				/**
+				 * open file
+				 * @param path defines path to the file
+				 * @param mode defines mode to open file[see fifoOpenmodeEnum]
+				 */
+				virtual void open(const dodoString &path,
+								  short            mode);
 
-					/**
-					 * close file
-					 */
-					virtual void close();
+				/**
+				 * close file
+				 */
+				virtual void close();
 
-					/**
-					 * flush output
-					 */
-					virtual void flush();
+				/**
+				 * flush output
+				 */
+				virtual void flush();
 
-					/**
-					 * @return true if stream is blocked
-					 */
-					virtual bool isBlocked();
+				/**
+				 * @return true if stream is blocked
+				 */
+				virtual bool isBlocked();
 
-					/**
-					 * blocks/unblocks stream
-					 * @param flag indicates whether to block or unblock stream
-					 */
-					virtual void block(bool flag);
+				/**
+				 * blocks/unblocks stream
+				 * @param flag indicates whether to block or unblock stream
+				 */
+				virtual void block(bool flag);
 
-					int inFileFifoBuffer;                                           ///< input buffer
-					int outFileFifoBuffer;                                          ///< output buffer
+				int inFileFifoBuffer;   ///< input buffer
+				int outFileFifoBuffer;  ///< output buffer
 
-				protected:
+			  protected:
 
-					/**
-					 * @return descriptor of the input stream
-					 */
-					virtual int getInDescriptor() const;
+				/**
+				 * @return descriptor of the input stream
+				 */
+				virtual int getInDescriptor() const;
 
-					/**
-					 * @return descriptor of the output stream
-					 */
-					virtual int getOutDescriptor() const;
+				/**
+				 * @return descriptor of the output stream
+				 */
+				virtual int getOutDescriptor() const;
 
-					/**
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual void _read(char * const data);
+				/**
+				 * @param data defines buffer that will be filled
+				 * @note not more then inSize(including '\0')
+				 */
+				virtual void _read(char * const data);
 
-					/**
-					 * read from stream - '\0' or '\n' - terminated string
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual unsigned long _readStream(char * const data);
+				/**
+				 * read from stream - '\0' or '\n' - terminated string
+				 * @param data defines buffer that will be filled
+				 * @note not more then inSize(including '\0')
+				 */
+				virtual unsigned long _readStream(char * const data);
 
-					/**
-					 * @param data defines data that will be written
-					 */
-					virtual void _write(const char * const data);
+				/**
+				 * @param data defines data that will be written
+				 */
+				virtual void _write(const char * const data);
 
-					/**
-					 * write to stream - '\0' - terminated string
-					 * @param data defines data that will be written
-					 * @note puts extra '\n' to the end of the string
-					 */
-					virtual void _writeStream(const char * const data);
+				/**
+				 * write to stream - '\0' - terminated string
+				 * @param data defines data that will be written
+				 * @note puts extra '\n' to the end of the string
+				 */
+				virtual void _writeStream(const char * const data);
 
-				private:
+			  private:
 
-					dodoString path;                                                                        ///< file path
-					short mode;                                                                             ///< file open mode[see fileOpenmodeEnum]
+				dodoString path;    ///< file path
+				short mode;         ///< file open mode[see fileOpenmodeEnum]
 
-					FILE *handler;                                                                          ///< file handler
+				FILE *handler;      ///< file handler
 
-					bool blocked;                                           ///< true if stream is blocked
+				bool blocked;       ///< true if stream is blocked
 			};
 		};
 	};

@@ -53,8 +53,7 @@ unsigned long server::requests = -1;
 
 //-------------------------------------------------------------------
 
-void
-dummyStackThread(dodo::cgi::exchange &data)
+void dummyStackThread(dodo::cgi::exchange &data)
 {
 }
 
@@ -73,9 +72,9 @@ server::server(server &cf)
 #ifdef PTHREAD_EXT
 
 server::server(unsigned long a_limit,
-               bool threading,
-			   unsigned int threadsNum) : threading(threading),
-									  threadsNum(threadsNum)
+			   bool          threading,
+			   unsigned int  threadsNum) : threading(threading),
+										   threadsNum(threadsNum)
 {
 	limit = a_limit;
 
@@ -116,8 +115,7 @@ server::~server()
 
 #ifdef PTHREAD_EXT
 
-void *
-server::stackThread(void *data)
+void *server::stackThread(void *data)
 {
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
@@ -128,7 +126,6 @@ server::stackThread(void *data)
 
 	while (true)
 	{
-
 		if (limit != 0)
 		{
 			pthread_mutex_lock(&requestsM);
@@ -150,7 +147,9 @@ server::stackThread(void *data)
 		pthread_mutex_unlock(&acceptM);
 
 		if (res == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+		}
 
 		handler(cfSTD);
 
@@ -164,11 +163,12 @@ server::stackThread(void *data)
 
 //-------------------------------------------------------------------
 
-void
-server::serve(serverHandler func)
+void server::serve(serverHandler func)
 {
 	if (!isFastCgi())
+	{
 		throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ISCGI, CGIFASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);
+	}
 
 	handler = func;
 
@@ -182,10 +182,14 @@ server::serve(serverHandler func)
 		unsigned int i = 0;
 
 		for (; i < threadsNum; ++i)
+		{
 			pthread_create(&id[i], NULL, stackThread, NULL);
+		}
 
 		for (i = 0; i < threadsNum; ++i)
+		{
 			pthread_join(id[i], NULL);
+		}
 
 		delete [] id;
 	}
@@ -204,11 +208,15 @@ server::serve(serverHandler func)
 				++requests;
 
 				if (requests >= limit)
+				{
 					break;
+				}
 			}
 
 			if (FCGX_Accept_r(&request) == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+			}
 
 			handler(cfSTD);
 
@@ -219,8 +227,7 @@ server::serve(serverHandler func)
 
 //-------------------------------------------------------------------
 
-bool
-server::isFastCgi()
+bool server::isFastCgi()
 {
 	return !FCGX_IsCGI();
 }

@@ -33,36 +33,31 @@ using namespace dodo::rpc;
 
 method::method()
 {
-
 }
 
 //-------------------------------------------------------------------
 
 method::~method()
 {
-
 }
 
 //-------------------------------------------------------------------
 
-void
-method::setName(const dodoString &name)
+void method::setName(const dodoString &name)
 {
 	this->name = name;
 }
 
 //-------------------------------------------------------------------
 
-void
-method::clear()
+void method::clear()
 {
 	arguments.clear();
 }
 
 //-------------------------------------------------------------------
 
-void
-method::addArgument(const value &argument)
+void method::addArgument(const value &argument)
 {
 	arguments.push_back(argument);
 }

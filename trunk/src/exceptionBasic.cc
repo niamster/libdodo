@@ -35,7 +35,8 @@ unsigned long basic::instances = 0;
 
 //-------------------------------------------------------------------
 
-bool basic::handlerSetEx[] = {
+bool basic::handlerSetEx[] =
+{
 	false,
 	false,
 	false,
@@ -91,7 +92,8 @@ bool basic::handlerSetEx[] = {
 
 //-------------------------------------------------------------------
 
-errorHandler basic::handlersEx[] = {
+errorHandler basic::handlersEx[] =
+{
 	NULL,
 	NULL,
 	NULL,
@@ -147,7 +149,8 @@ errorHandler basic::handlersEx[] = {
 
 //-------------------------------------------------------------------
 
-void *basic::handlerDataEx[] = {
+void *basic::handlerDataEx[] =
+{
 	NULL,
 	NULL,
 	NULL,
@@ -205,7 +208,8 @@ void *basic::handlerDataEx[] = {
 
 #ifdef DL_EXT
 
-bool basic::handlesOpenedEx[] = {
+bool basic::handlesOpenedEx[] =
+{
 	false,
 	false,
 	false,
@@ -260,7 +264,8 @@ bool basic::handlesOpenedEx[] = {
 
 //-------------------------------------------------------------------
 
-void *basic::handlesEx[] = {
+void *basic::handlesEx[] =
+{
 	NULL,
 	NULL,
 	NULL,
@@ -358,8 +363,7 @@ basic::syncThreadSection::~syncThreadSection()
 
 //-------------------------------------------------------------------
 
-void
-basic::syncThreadSection::acquire()
+void basic::syncThreadSection::acquire()
 {
 #ifdef PTHREAD_EXT
 
@@ -370,8 +374,7 @@ basic::syncThreadSection::acquire()
 
 //-------------------------------------------------------------------
 
-void
-basic::syncThreadSection::release()
+void basic::syncThreadSection::release()
 {
 #ifdef PTHREAD_EXT
 
@@ -403,12 +406,12 @@ basic::basic() throw ()
 
 //-------------------------------------------------------------------
 
-basic::basic(int a_errModule,
-			 int functionID,
-			 int errnoSource,
-			 int a_errno,
+basic::basic(int              a_errModule,
+			 int              functionID,
+			 int              errnoSource,
+			 int              a_errno,
 			 const dodoString &a_errstr,
-			 unsigned long a_line,
+			 unsigned long    a_line,
 			 const dodoString &a_file,
 			 const dodoString &a_message) throw () : errModule(a_errModule),
 													 funcID(functionID),
@@ -438,26 +441,31 @@ basic::basic(int a_errModule,
 	int trace_size = backtrace(trace, MAXCALLSTACKLEN);
 	char **symbols = backtrace_symbols(trace, trace_size);
 
-	for (int i=0; i<trace_size; ++i)
+	for (int i = 0; i < trace_size; ++i)
 	{
-
-		if(dladdr(trace[i], &dlinfo) == 0)
+		if (dladdr(trace[i], &dlinfo) == 0)
+		{
 			continue;
+		}
 
 		symname = dlinfo.dli_sname;
 
 		demangled = __cxa_demangle(symname, NULL, 0, &status);
-		if(status == 0 && demangled != NULL)
+		if (status == 0 && demangled != NULL)
+		{
 			symname = demangled;
+		}
 
 		call.address = trace[i];
-		call.symbol = (symname != NULL)?symname:"undefined";
-		call.object = (dlinfo.dli_fname != NULL)?dlinfo.dli_fname:"undefined";
+		call.symbol = (symname != NULL) ? symname : "undefined";
+		call.object = (dlinfo.dli_fname != NULL) ? dlinfo.dli_fname : "undefined";
 
 		callStack.push_back(call);
 
 		if (demangled)
+		{
 			free(demangled);
+		}
 	}
 
 	free(symbols);
@@ -469,7 +477,9 @@ basic::basic(int a_errModule,
 	++instances;
 
 	if (handlerSetEx[errModule])
+	{
 		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -489,11 +499,15 @@ basic::~basic() throw ()
 		for (int i(0); i < BASEEX_MODULES; ++i)
 		{
 			if (!handlesOpenedEx[i])
+			{
 				continue;
+			}
 
 			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
 			if (deinit != NULL)
+			{
 				deinit();
+			}
 
 			handlesOpenedEx[i] = false;
 
@@ -510,15 +524,14 @@ basic::~basic() throw ()
 
 #ifdef CALLSTACK_EX
 
-dodoString
-basic::getCallStack()
+dodoString basic::getCallStack()
 {
 	dodoString stack;
 
 	char str[32];
 
 	dodoArray<__call>::iterator i = callStack.begin(), j = callStack.end();
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 	{
 		snprintf(str, 32, " [0x%x]", (long)i->address);
 		stack.append(i->object + ": " + i->symbol + dodoString(str) + "\n");
@@ -540,8 +553,7 @@ basic::operator const dodoString & ()
 
 //-------------------------------------------------------------------
 
-const char *
-basic::what() const throw ()
+const char *basic::what() const throw ()
 {
 	syncThreadStack tg;
 
@@ -550,10 +562,9 @@ basic::what() const throw ()
 
 //-------------------------------------------------------------------
 
-void
-basic::setErrorHandler(errorModuleEnum module,
-					   errorHandler handler,
-					   void *data)
+void basic::setErrorHandler(errorModuleEnum module,
+							errorHandler    handler,
+							void            *data)
 {
 	syncThreadStack tg;
 
@@ -567,7 +578,9 @@ basic::setErrorHandler(errorModuleEnum module,
 
 		deinit = (deinitBaseExModule)dlsym(handlesEx[module], "deinitBaseExModule");
 		if (deinit != NULL)
+		{
 			deinit();
+		}
 
 #ifndef DL_FAST
 		dlclose(handlesEx[module]);
@@ -586,9 +599,8 @@ basic::setErrorHandler(errorModuleEnum module,
 
 //-------------------------------------------------------------------
 
-void
-basic::setErrorHandlers(errorHandler handler,
-						void *data)
+void basic::setErrorHandlers(errorHandler handler,
+							 void         *data)
 {
 	syncThreadStack tg;
 
@@ -606,7 +618,9 @@ basic::setErrorHandlers(errorHandler handler,
 		{
 			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
 			if (deinit != NULL)
+			{
 				deinit();
+			}
 
 #ifndef DL_FAST
 			dlclose(handlesEx[i]);
@@ -626,8 +640,7 @@ basic::setErrorHandlers(errorHandler handler,
 
 //-------------------------------------------------------------------
 
-void
-basic::unsetErrorHandler(errorModuleEnum module)
+void basic::unsetErrorHandler(errorModuleEnum module)
 {
 	syncThreadStack tg;
 
@@ -639,7 +652,9 @@ basic::unsetErrorHandler(errorModuleEnum module)
 
 		deinit = (deinitBaseExModule)dlsym(handlesEx[module], "deinitBaseExModule");
 		if (deinit != NULL)
+		{
 			deinit();
+		}
 
 #ifndef DL_FAST
 		dlclose(handlesEx[module]);
@@ -658,8 +673,7 @@ basic::unsetErrorHandler(errorModuleEnum module)
 
 //-------------------------------------------------------------------
 
-void
-basic::unsetErrorHandlers()
+void basic::unsetErrorHandlers()
 {
 	syncThreadStack tg;
 
@@ -675,7 +689,9 @@ basic::unsetErrorHandlers()
 		{
 			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
 			if (deinit != NULL)
+			{
 				deinit();
+			}
 
 #ifndef DL_FAST
 			dlclose(handlesEx[i]);
@@ -697,10 +713,9 @@ basic::unsetErrorHandlers()
 
 #ifdef DL_EXT
 
-bool
-basic::setErrorHandlers(const dodoString &path,
-						void *data,
-						void *toInit)
+bool basic::setErrorHandlers(const dodoString &path,
+							 void             *data,
+							 void             *toInit)
 {
 	syncThreadStack tg;
 
@@ -712,12 +727,13 @@ basic::setErrorHandlers(const dodoString &path,
 
 	for (int i(0); i < BASEEX_MODULES; ++i)
 	{
-
 		if (handlesOpenedEx[i])
 		{
 			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
 			if (deinit != NULL)
+			{
 				deinit();
+			}
 
 #ifndef DL_FAST
 			dlclose(handlesEx[i]);
@@ -733,22 +749,27 @@ basic::setErrorHandlers(const dodoString &path,
 		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY);
 #endif
 		if (handlesEx[i] == NULL)
+		{
 			return false;
+		}
 
 		init = (initBaseExModule)dlsym(handlesEx[i], "initBaseExModule");
 		if (init == NULL)
+		{
 			return false;
+		}
 
 		in = (errorHandler)dlsym(handlesEx[i], init(toInit).hook);
 		if (in == NULL)
+		{
 			return false;
+		}
 
 		handlesOpenedEx[i] = true;
 
 		handlersEx[i] = in;
 		handlerSetEx[i] = true;
 		handlerDataEx[i] = data;
-
 	}
 
 	return true;
@@ -756,10 +777,9 @@ basic::setErrorHandlers(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-bool
-basic::setErrorHandler(const dodoString &path,
-					   void *data,
-					   void *toInit)
+bool basic::setErrorHandler(const dodoString &path,
+							void             *data,
+							void             *toInit)
 {
 	syncThreadStack tg;
 
@@ -771,11 +791,15 @@ basic::setErrorHandler(const dodoString &path,
 	void *handler = dlopen(path.c_str(), RTLD_LAZY);
 #endif
 	if (handler == NULL)
+	{
 		return false;
+	}
 
 	initBaseExModule init = (initBaseExModule)dlsym(handler, "initBaseExModule");
 	if (init == NULL)
+	{
 		return false;
+	}
 
 	__basicMod mod = init(toInit);
 
@@ -785,7 +809,9 @@ basic::setErrorHandler(const dodoString &path,
 	{
 		deinit = (deinitBaseExModule)dlsym(handlesEx[mod.module], "deinitBaseExModule");
 		if (deinit != NULL)
+		{
 			deinit();
+		}
 
 #ifndef DL_FAST
 		dlclose(handlesEx[mod.module]);
@@ -799,7 +825,9 @@ basic::setErrorHandler(const dodoString &path,
 
 	errorHandler in = (errorHandler)dlsym(handlesEx[mod.module], mod.hook);
 	if (in == NULL)
+	{
 		return false;
+	}
 
 	handlesOpenedEx[mod.module] = true;
 
@@ -812,9 +840,8 @@ basic::setErrorHandler(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-__basicMod
-basic::getModuleInfo(const dodoString &module,
-					 void *toInit)
+__basicMod basic::getModuleInfo(const dodoString &module,
+								void             *toInit)
 {
 	syncThreadStack tg;
 
@@ -824,17 +851,23 @@ basic::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
+	{
 		return __basicMod();
+	}
 
 	initBaseExModule init = (initBaseExModule)dlsym(handle, "initBaseExModule");
 	if (init == NULL)
+	{
 		return __basicMod();
+	}
 
 	__basicMod mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
+	{
 		return mod;
+	}
 #endif
 
 	return mod;

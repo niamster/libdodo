@@ -32,8 +32,8 @@
 using namespace dodo::rpc::json;
 
 __additionalData::__additionalData(dodoString &version,
-								   long &id) : version(version),
-											   id(id)
+								   long       &id) : version(version),
+													 id(id)
 {
 }
 
@@ -53,8 +53,7 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-dodo::rpc::method
-server::processCall(const dodoString &data)
+dodo::rpc::method server::processCall(const dodoString &data)
 {
 	dodo::data::format::json::processor jsonValue;
 
@@ -65,8 +64,7 @@ server::processCall(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-dodoString
-server::processCallResult(const rpc::response &resp)
+dodoString server::processCallResult(const rpc::response &resp)
 {
 	dodo::data::format::json::processor jsonValue;
 
@@ -75,16 +73,14 @@ server::processCallResult(const rpc::response &resp)
 
 //-------------------------------------------------------------------
 
-void
-server::setResponseVersion(const dodoString &version)
+void server::setResponseVersion(const dodoString &version)
 {
 	rpVersion = version;
 }
 
 //-------------------------------------------------------------------
 
-void
-server::serve()
+void server::serve()
 {
 	try
 	{
@@ -100,9 +96,13 @@ server::serve()
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
 		if (handler == handlers.end())
+		{
 			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
+		}
 		else
+		{
 			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
+		}
 
 		rpVersion = version;
 	}

@@ -48,38 +48,38 @@ namespace dodo
 			 */
 			class stack
 			{
-				protected:
+			  protected:
 
-					section *keeper;                                     ///< lock
+				section *keeper; ///< lock
+
+				/**
+				 * destructor
+				 */
+				virtual ~stack() = 0;
+
+				/**
+				 * @class protector
+				 * @brief provides thread safe behaviour
+				 * @note it locks in constructor and unlocks in destructor
+				 */
+				class protector
+				{
+				  public:
+
+					/**
+					 * contructor
+					 */
+					protector(const stack *parent);
 
 					/**
 					 * destructor
 					 */
-					virtual ~stack() = 0;
+					virtual ~protector();
 
-					/**
-					 * @class protector
-					 * @brief provides thread safe behaviour
-					 * @note it locks in constructor and unlocks in destructor
-					 */
-					class protector
-					{
-						public:
+				  protected:
 
-							/**
-							 * contructor
-							 */
-							protector(const stack *parent);
-
-							/**
-							 * destructor
-							 */
-							virtual ~protector();
-
-						protected:
-
-							const stack *parent;                                                     ///< lock
-					};
+					const stack *parent; ///< lock
+				};
 			};
 		};
 	};

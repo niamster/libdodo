@@ -52,18 +52,18 @@ namespace dodo
 		 */
 		class server
 		{
-			public:
+		  public:
 
-				/**
-				 * destructor
-				 */
-				virtual ~server() = 0;
+			/**
+			 * destructor
+			 */
+			virtual ~server() = 0;
 
-				/**
-				 * listen for incoming requests
-				 * @param func define request handler
-				 */
-				virtual void serve(serverHandler func) = 0;
+			/**
+			 * listen for incoming requests
+			 * @param func define request handler
+			 */
+			virtual void serve(serverHandler func) = 0;
 		};
 	};
 };

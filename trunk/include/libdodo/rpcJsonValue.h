@@ -49,19 +49,19 @@ namespace dodo
 			 */
 			class value
 			{
-				public:
+			  public:
 
-					/**
-					 * @return value parsed from JSON node
-					 * @param node defines JSON node
-					 */
-					static rpc::value jsonToValue(dodo::data::format::json::node &node);
+				/**
+				 * @return value parsed from JSON node
+				 * @param node defines JSON node
+				 */
+				static rpc::value jsonToValue(dodo::data::format::json::node &node);
 
-					/**
-					 * @return JSON node from value
-					 * @param data defines value structure
-					 */
-					static dodo::data::format::json::node valueToJson(const rpc::value &data);
+				/**
+				 * @return JSON node from value
+				 * @param data defines value structure
+				 */
+				static dodo::data::format::json::node valueToJson(const rpc::value &data);
 			};
 		};
 	};

@@ -49,8 +49,7 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-void
-server::serve(serverHandler func)
+void server::serve(serverHandler func)
 {
 	exchange cSTD;
 

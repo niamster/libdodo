@@ -64,16 +64,16 @@ namespace dodo
 		 */
 		class __xexecIoChannelCollectedData : public __xexecCollectedData
 		{
-			public:
+		  public:
 
-				/**
-				 * constructor
-				 * @param executor defines class that executed hook
-				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
-				 */
-				__xexecIoChannelCollectedData(xexec *executor, short execObject);
+			/**
+			 * constructor
+			 * @param executor defines class that executed hook
+			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
+			 */
+			__xexecIoChannelCollectedData(xexec *executor, short execObject);
 
-				dodoString buffer;                                      ///< data buffer
+			dodoString buffer; ///< data buffer
 		};
 
 #endif
@@ -89,83 +89,83 @@ namespace dodo
 						public xexec
 #endif
 		{
-			public:
+		  public:
 
-				/**
-				 * constructor
-				 */
-				channel();
+			/**
+			 * constructor
+			 */
+			channel();
 
-				/**
-				 * destructor
-				 */
-				virtual ~channel();
+			/**
+			 * destructor
+			 */
+			virtual ~channel();
 
-				/**
-				 * @return read data
-				 * @note not more then inSize
-				 */
-				virtual dodoString read();
+			/**
+			 * @return read data
+			 * @note not more then inSize
+			 */
+			virtual dodoString read();
 
-				/**
-				 * @param data defines data that will be written
-				 * @note not more then outSize
-				 */
-				virtual void write(const dodoString &data);
+			/**
+			 * @param data defines data that will be written
+			 * @note not more then outSize
+			 */
+			virtual void write(const dodoString &data);
 
-				/**
-				 * read from stream - '\0' or '\n' - terminated string
-				 * @return read data
-				 * @note not more then inSize
-				 */
-				virtual dodoString readStream();
+			/**
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @return read data
+			 * @note not more then inSize
+			 */
+			virtual dodoString readStream();
 
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 * @note not more then outSize
-				 */
-				virtual void writeStream(const dodoString &data);
+			/**
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
+			 * @note not more then outSize
+			 */
+			virtual void writeStream(const dodoString &data);
 
-				/**
-				 * flush output
-				 */
-				virtual void flush() = 0;
+			/**
+			 * flush output
+			 */
+			virtual void flush() = 0;
 
-				unsigned long inSize;                                   ///< size of data block for read* operations
-				unsigned long outSize;                                  ///< size of data block for write* operations
+			unsigned long inSize;   ///< size of data block for read* operations
+			unsigned long outSize;  ///< size of data block for write* operations
 
-			protected:
+		  protected:
 
-				/**
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void _read(char * const data) = 0;
+			/**
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
+			 */
+			virtual void _read(char * const data) = 0;
 
-				/**
-				 * read from stream - '\0' or '\n' - terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual unsigned long _readStream(char * const data) = 0;
+			/**
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
+			 */
+			virtual unsigned long _readStream(char * const data) = 0;
 
-				/**
-				 * @param data defines data that will be written
-				 * @note not more then outSize(including '\0')
-				 */
-				virtual void _write(const char * const data) = 0;
+			/**
+			 * @param data defines data that will be written
+			 * @note not more then outSize(including '\0')
+			 */
+			virtual void _write(const char * const data) = 0;
 
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 * @note not more then outSize(including '\0')
-				 */
-				virtual void _writeStream(const char * const data) = 0;
+			/**
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
+			 * @note not more then outSize(including '\0')
+			 */
+			virtual void _writeStream(const char * const data) = 0;
 
 #ifndef IO_WO_XEXEC
 
-				__xexecIoChannelCollectedData collectedData;                                   ///< data collected for xexec
+			__xexecIoChannelCollectedData collectedData; ///< data collected for xexec
 
 #endif
 		};

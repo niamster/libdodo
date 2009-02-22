@@ -48,35 +48,35 @@ namespace dodo
 			 */
 			class server : virtual public rpc::server
 			{
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 * @param provider defines cgi I/O provider
-					 * @param ct defines content-type of the response
-					 */
-					server(dodo::cgi::dialogue &provider, const dodoString &ct);
+				/**
+				 * constructor
+				 * @param provider defines cgi I/O provider
+				 * @param ct defines content-type of the response
+				 */
+				server(dodo::cgi::dialogue &provider, const dodoString &ct);
 
-					/**
-					 * destructor
-					 */
-					virtual ~server();
+				/**
+				 * destructor
+				 */
+				virtual ~server();
 
-				protected:
+			  protected:
 
-					/**
-					 * send request
-					 * @param response defines rpc method call
-					 */
-					virtual void sendTextRequest(const dodoString &response);
+				/**
+				 * send request
+				 * @param response defines rpc method call
+				 */
+				virtual void sendTextRequest(const dodoString &response);
 
-					/**
-					 * get response
-					 * @return rpc response result
-					 */
-					virtual dodoString receiveTextResponse();
+				/**
+				 * get response
+				 * @return rpc response result
+				 */
+				virtual dodoString receiveTextResponse();
 
-					dodo::cgi::dialogue &provider;
+				dodo::cgi::dialogue &provider;
 			};
 		};
 	};

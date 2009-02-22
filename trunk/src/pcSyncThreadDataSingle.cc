@@ -45,19 +45,27 @@ single::single() : data(NULL)
 	pthread_mutexattr_t attr;
 	errno = pthread_mutexattr_init(&attr);
 	if (errno != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
 	if (errno != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	errno = pthread_mutex_init(&mutex, &attr);
 	if (errno != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	errno = pthread_mutexattr_destroy(&attr);
 	if (errno != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 #endif
 
@@ -72,7 +80,9 @@ single::~single()
 #ifdef PTHREAD_EXT
 
 	if (pthread_mutex_trylock(&mutex) == 0)
+	{
 		pthread_mutex_unlock(&mutex);
+	}
 
 	pthread_mutex_destroy(&mutex);
 
@@ -81,48 +91,53 @@ single::~single()
 
 //-------------------------------------------------------------------
 
-void
-single::set(void *a_data)
+void single::set(void *a_data)
 {
 #ifdef PTHREAD_EXT
 
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	data = a_data;
 
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 #endif
 }
 
 //-------------------------------------------------------------------
 
-void
-single::del()
+void single::del()
 {
 #ifdef PTHREAD_EXT
 
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	data = NULL;
 
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 #endif
 }
 
 //-------------------------------------------------------------------
 
-void *
-single::acquire(unsigned long microseconds)
+void *single::acquire(unsigned long microseconds)
 {
 #ifdef PTHREAD_EXT
 
@@ -130,7 +145,9 @@ single::acquire(unsigned long microseconds)
 	{
 		errno = pthread_mutex_lock(&mutex);
 		if (errno != 0)
+		{
 			throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 	else
 	{
@@ -143,18 +160,26 @@ single::acquire(unsigned long microseconds)
 			if (errno != 0)
 			{
 				if (errno != EBUSY)
+				{
 					throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 
 				if (nanosleep(&timeout, NULL) == -1)
+				{
 					throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 
 				slept += 1;
 
 				if (slept > microseconds)
+				{
 					throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_LOCK, exception::ERRNO_ERRNO, SINGLEEX_CANNOTLOCK, PCSYNCTHREADDATASINGLEEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+				}
 			}
 			else
+			{
 				locked = false;
+			}
 		}
 	}
 
@@ -165,14 +190,15 @@ single::acquire(unsigned long microseconds)
 
 //-------------------------------------------------------------------
 
-void
-single::release()
+void single::release()
 {
 #ifdef PTHREAD_EXT
 
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 #endif
 }

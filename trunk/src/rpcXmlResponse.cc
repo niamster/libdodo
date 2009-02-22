@@ -31,12 +31,13 @@
 
 using namespace dodo::rpc::xml;
 
-dodo::rpc::response
-response::xmlToResponse(dodo::data::format::xml::node &node)
+dodo::rpc::response response::xmlToResponse(dodo::data::format::xml::node &node)
 {
 	dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
+	{
 		return rpc::response();
+	}
 
 	rpc::response resp;
 
@@ -49,7 +50,9 @@ response::xmlToResponse(dodo::data::format::xml::node &node)
 		{
 			dodoArray<dodo::data::format::xml::node> &arr1 = arr0[0].children["value"];
 			if (arr1.size() > 0)
+			{
 				resp.values.assign(1, value::xmlToValue(arr1[0]));
+			}
 		}
 	}
 	else
@@ -60,7 +63,9 @@ response::xmlToResponse(dodo::data::format::xml::node &node)
 
 			dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 			if (arr0.size() == 0)
+			{
 				return resp;
+			}
 
 			dodoArray<dodo::data::format::xml::node> &nodeArray = arr0[0].children["param"];
 
@@ -69,7 +74,9 @@ response::xmlToResponse(dodo::data::format::xml::node &node)
 			{
 				dodoArray<dodo::data::format::xml::node> &arr1 = o->children["value"];
 				if (arr1.size() > 0)
+				{
 					resp.values.push_back(value::xmlToValue(arr1[0]));
+				}
 			}
 		}
 	}
@@ -79,8 +86,7 @@ response::xmlToResponse(dodo::data::format::xml::node &node)
 
 //-------------------------------------------------------------------
 
-dodo::data::format::xml::node
-response::responseToXml(const rpc::response &data)
+dodo::data::format::xml::node response::responseToXml(const rpc::response &data)
 {
 	dodoArray<dodo::data::format::xml::node> nodeArr;
 

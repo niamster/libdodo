@@ -92,7 +92,6 @@ namespace dodo
 			FILESYSTEM_PERMISSION_OTHER_ALL_ACCESS = FILESYSTEM_PERMISSION_OTHER_READ_ACCESS | FILESYSTEM_PERMISSION_OTHER_WRITE_ACCESS | FILESYSTEM_PERMISSION_OTHER_EXECUTE_ACCESS,
 
 			FILESYSTEM_PERMISSION_ALL_ALL_ACCESS = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS | FILESYSTEM_PERMISSION_GROUP_ALL_ACCESS | FILESYSTEM_PERMISSION_OTHER_ALL_ACCESS,
-
 		};
 
 		/**
@@ -101,14 +100,14 @@ namespace dodo
 		 */
 		struct __fileInfo
 		{
-			dodoString name;                                ///< file name
-			int perm;                                       ///< file permissions[see filePermissionModesEnum]
-			int type;                                       ///< file type[see filesystemFileTypeEnum]
-			long size;                                      ///< file size
-			long modTime;                                   ///< modyfication time
-			long accTime;                                   ///< access time
-			int gid;                                        ///< group id of the file
-			int uid;                                        ///< user id of the file
+			dodoString name;    ///< file name
+			int        perm;    ///< file permissions[see filePermissionModesEnum]
+			int        type;    ///< file type[see filesystemFileTypeEnum]
+			long       size;    ///< file size
+			long       modTime; ///< modyfication time
+			long       accTime; ///< access time
+			int        gid;     ///< group id of the file
+			int        uid;     ///< user id of the file
 		};
 
 		/**
@@ -117,247 +116,271 @@ namespace dodo
 		 */
 		class filesystem
 		{
-			public:
+		  public:
 
-				/**
-				 * copy file/empty dir/...
-				 * @param from defines source file/empty directory/...
-				 * @param to defines destination file/empty directory/...
-				 * @param force defines overwrite condition
-				 * @note if destination has trailing slash it will treat destination as a diroctory and copy into it
-				 */
-				static void copy(const dodoString &from, const dodoString &to, bool force = false);
+			/**
+			 * copy file/empty dir/...
+			 * @param from defines source file/empty directory/...
+			 * @param to defines destination file/empty directory/...
+			 * @param force defines overwrite condition
+			 * @note if destination has trailing slash it will treat destination as a diroctory and copy into it
+			 */
+			static void copy(const dodoString &from,
+							 const dodoString &to,
+							 bool             force = false);
 
-				/**
-				 * copy file/dir
-				 * @param from defines source file/directory/...
-				 * @param to defines destination file/directory/...
-				 * @param force defines overwrite condition
-				 * @note if destination has trailing slash it will treat destination as a diroctory and copy into it
-				 */
-				static void copyDir(const dodoString &from, const dodoString &to, bool force = false);
+			/**
+			 * copy file/dir
+			 * @param from defines source file/directory/...
+			 * @param to defines destination file/directory/...
+			 * @param force defines overwrite condition
+			 * @note if destination has trailing slash it will treat destination as a diroctory and copy into it
+			 */
+			static void copyDir(const dodoString &from,
+								const dodoString &to,
+								bool             force = false);
 
-				/**
-				 * append string to file
-				 * @param path defines path to file
-				 * @param content defines string that will be appended to the file
-				 */
-				static void appendToFile(const dodoString &path, const dodoString &content);
+			/**
+			 * append string to file
+			 * @param path defines path to file
+			 * @param content defines string that will be appended to the file
+			 */
+			static void appendToFile(const dodoString &path,
+									 const dodoString &content);
 
-				/**
-				 * append array of strings to file
-				 * @param path defines path to file
-				 * @param content defines array of strings that will be appended to the file
-				 */
-				static void appendToFile(const dodoString &path, const dodoStringArray &content);
+			/**
+			 * append array of strings to file
+			 * @param path defines path to file
+			 * @param content defines array of strings that will be appended to the file
+			 */
+			static void appendToFile(const dodoString      &path,
+									 const dodoStringArray &content);
 
-				/**
-				 * write string to file
-				 * @param path defines path to file
-				 * @param content defines string that will be written to the file
-				 */
-				static void writeToFile(const dodoString &path, const dodoString &content);
+			/**
+			 * write string to file
+			 * @param path defines path to file
+			 * @param content defines string that will be written to the file
+			 */
+			static void writeToFile(const dodoString &path,
+									const dodoString &content);
 
-				/**
-				 * write array of strings to file
-				 * @param path defines path to file
-				 * @param content defines array of strings that will be written to the file
-				 */
-				static void writeToFile(const dodoString &path, const dodoStringArray &content);
+			/**
+			 * write array of strings to file
+			 * @param path defines path to file
+			 * @param content defines array of strings that will be written to the file
+			 */
+			static void writeToFile(const dodoString      &path,
+									const dodoStringArray &content);
 
-				/**
-				 * @return basename of path string
-				 * @param path defines path string
-				 */
-				static dodoString basename(const dodoString &path);
+			/**
+			 * @return basename of path string
+			 * @param path defines path string
+			 */
+			static dodoString basename(const dodoString &path);
 
-				/**
-				 * @return dirname of path string
-				 * @param path defines path string
-				 */
-				static dodoString dirname(const dodoString &path);
+			/**
+			 * @return dirname of path string
+			 * @param path defines path string
+			 */
+			static dodoString dirname(const dodoString &path);
 
-				/**
-				 * @return file content
-				 * @param path defines path to file
-				 */
-				static dodoString getFileContents(const dodoString &path);
+			/**
+			 * @return file content
+			 * @param path defines path to file
+			 */
+			static dodoString getFileContents(const dodoString &path);
 
-				/**
-				 * @return file content
-				 * @param path defines path to file
-				 */
-				static dodoStringArray getFileContentsArr(const dodoString &path);
+			/**
+			 * @return file content
+			 * @param path defines path to file
+			 */
+			static dodoStringArray getFileContentsArr(const dodoString &path);
 
-				/**
-				 * delete file/empty directory/...
-				 * @param path defines path to file/empty directory/...
-				 * @param force defines unlink condition[if it is true and nothing already exists do not say anything]
-				 */
-				static void unlink(const dodoString &path, bool force = true);
+			/**
+			 * delete file/empty directory/...
+			 * @param path defines path to file/empty directory/...
+			 * @param force defines unlink condition[if it is true and nothing already exists do not say anything]
+			 */
+			static void unlink(const dodoString &path,
+							   bool             force = true);
 
-				/**
-				 * rename file
-				 * @param oldPath defines source file
-				 * @param newPath defines destination file
-				 */
-				static void rename(const dodoString &oldPath, const dodoString &newPath);
+			/**
+			 * rename file
+			 * @param oldPath defines source file
+			 * @param newPath defines destination file
+			 */
+			static void rename(const dodoString &oldPath,
+							   const dodoString &newPath);
 
-				/**
-				 * set access and modyfication time of file
-				 * @param path defines path to file
-				 * @param time defines timestams
-				 * @note if time is defined as (-1) - as by default timestamp of current timepoint is used
-				 */
-				static void touch(const dodoString &path, int time = -1);
+			/**
+			 * set access and modyfication time of file
+			 * @param path defines path to file
+			 * @param time defines timestams
+			 * @note if time is defined as (-1) - as by default timestamp of current timepoint is used
+			 */
+			static void touch(const dodoString &path,
+							  int              time = -1);
 
-				/**
-				 * make fifo(pipe)
-				 * @param path defines path to file
-				 * @param permissions defines fifo permissions[see filePermissionModesEnum]
-				 */
-				static void mkfifo(const dodoString &path, int permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS);
+			/**
+			 * make fifo(pipe)
+			 * @param path defines path to file
+			 * @param permissions defines fifo permissions[see filePermissionModesEnum]
+			 */
+			static void mkfifo(const dodoString &path,
+							   int              permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS);
 
-				/**
-				 * make directory recursively
-				 * @param path defines path to directory
-				 * @param permissions defines directory permissions[see filePermissionModesEnum]
-				 */
-				static void mkdir(const dodoString &path, int permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS);
+			/**
+			 * make directory recursively
+			 * @param path defines path to directory
+			 * @param permissions defines directory permissions[see filePermissionModesEnum]
+			 */
+			static void mkdir(const dodoString &path,
+							  int              permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS);
 
-				/**
-				 * delete files, non empty directory
-				 * @param path defines path to file/directory/...
-				 * @param force defines unlink condition[if it is true and nothing already exists do not say anything]
-				 */
-				static void rm(const dodoString &path, bool force = true);
+			/**
+			 * delete files, non empty directory
+			 * @param path defines path to file/directory/...
+			 * @param force defines unlink condition[if it is true and nothing already exists do not say anything]
+			 */
+			static void rm(const dodoString &path,
+						   bool             force = true);
 
-				/**
-				 * @return type of file
-				 * @param path defines path to file/directory/...
-				 */
-				static int getFileType(const dodoString &path);
+			/**
+			 * @return type of file
+			 * @param path defines path to file/directory/...
+			 */
+			static int getFileType(const dodoString &path);
 
-				/**
-				 * change permissions
-				 * @param path defines path to file/directory/...
-				 * @param permissions defines file/directory/... permissions[see filePermissionModesEnum]
-				 */
-				static void chmod(const dodoString &path, int permissions);
+			/**
+			 * change permissions
+			 * @param path defines path to file/directory/...
+			 * @param permissions defines file/directory/... permissions[see filePermissionModesEnum]
+			 */
+			static void chmod(const dodoString &path,
+							  int              permissions);
 
-				/**
-				 * @return file/directory/... permissions
-				 * @param path defines path to file/directory/...
-				 */
-				static int getPermissions(const dodoString &path);
+			/**
+			 * @return file/directory/... permissions
+			 * @param path defines path to file/directory/...
+			 */
+			static int getPermissions(const dodoString &path);
 
-				/**
-				 * @return file size
-				 * @param path indicates path what to describe
-				 */
-				static long getSize(const dodoString &path);                                 ///< in bytes
+			/**
+			 * @return file size
+			 * @param path indicates path what to describe
+			 */
+			static long getSize(const dodoString &path); ///< in bytes
 
-				/**
-				 * @return file access time
-				 * @param path defines path to file
-				 */
-				static long getAccTime(const dodoString &path);
+			/**
+			 * @return file access time
+			 * @param path defines path to file
+			 */
+			static long getAccTime(const dodoString &path);
 
-				/**
-				 * @return file modification time
-				 * @param path defines path to file
-				 */
-				static long getModTime(const dodoString &path);
+			/**
+			 * @return file modification time
+			 * @param path defines path to file
+			 */
+			static long getModTime(const dodoString &path);
 
-				/**
-				 * get original path of the file
-				 * @return original path
-				 * @param path defines path to symbolic link
-				 */
-				static dodoString followSymlink(const dodoString &path);
+			/**
+			 * get original path of the file
+			 * @return original path
+			 * @param path defines path to symbolic link
+			 */
+			static dodoString followSymlink(const dodoString &path);
 
-				/**
-				 * create symbolic link
-				 * @param oldPath defines path to file
-				 * @param newPath defines path to symlink
-				 * @param force defines overwrite condition[if it is true and link already exists do not say anything and replace]
-				 */
-				static void symlink(const dodoString &oldPath, const dodoString &newPath, bool force = true);
+			/**
+			 * create symbolic link
+			 * @param oldPath defines path to file
+			 * @param newPath defines path to symlink
+			 * @param force defines overwrite condition[if it is true and link already exists do not say anything and replace]
+			 */
+			static void symlink(const dodoString &oldPath,
+								const dodoString &newPath,
+								bool             force = true);
 
-				/**
-				 * create hard link
-				 * @param oldPath defines path to file
-				 * @param newPath defines path to link
-				 */
-				static void link(const dodoString &oldPath, const dodoString &newPath);
+			/**
+			 * create hard link
+			 * @param oldPath defines path to file
+			 * @param newPath defines path to link
+			 */
+			static void link(const dodoString &oldPath,
+							 const dodoString &newPath);
 
-				/**
-				 * change owner of the file/directory/...
-				 * @param path defines path to file/directory/...
-				 * @param uid defines user id
-				 */
-				static void chown(const dodoString &path, int uid);
+			/**
+			 * change owner of the file/directory/...
+			 * @param path defines path to file/directory/...
+			 * @param uid defines user id
+			 */
+			static void chown(const dodoString &path,
+							  int              uid);
 
-				/**
-				 * change group owner of the file/directory/...
-				 * @param path defines path to file/directory/...
-				 * @param gid defines group id
-				 */
-				static void chgrp(const dodoString &path, int gid);
+			/**
+			 * change group owner of the file/directory/...
+			 * @param path defines path to file/directory/...
+			 * @param gid defines group id
+			 */
+			static void chgrp(const dodoString &path,
+							  int              gid);
 
-				/**
-				 * @return true if file/directory/... exists
-				 * @param path defines path to file/directory/...
-				 */
-				static bool exists(const dodoString &path);
+			/**
+			 * @return true if file/directory/... exists
+			 * @param path defines path to file/directory/...
+			 */
+			static bool exists(const dodoString &path);
 
-				/**
-				 * @return user id of the file/directory/...
-				 * @param path defines path to file/directory/...
-				 */
-				static int getUserOwner(const dodoString &path);
+			/**
+			 * @return user id of the file/directory/...
+			 * @param path defines path to file/directory/...
+			 */
+			static int getUserOwner(const dodoString &path);
 
-				/**
-				 * @return group id of the file/directory/...
-				 * @param path defines path to file/directory/...
-				 */
-				static int getGroupOwner(const dodoString &path);
+			/**
+			 * @return group id of the file/directory/...
+			 * @param path defines path to file/directory/...
+			 */
+			static int getGroupOwner(const dodoString &path);
 
-				/**
-				 * @return file info[see __fileInfo]
-				 * @param path defines path to file
-				 */
-				static __fileInfo getFileInfo(const dodoString &path);
+			/**
+			 * @return file info[see __fileInfo]
+			 * @param path defines path to file
+			 */
+			static __fileInfo getFileInfo(const dodoString &path);
 
-				/**
-				 * @return info of files in directory[see __fileInfo]
-				 * @param path defines path to file
-				 */
-				static dodoArray<__fileInfo> getDirInfo(const dodoString &path);
+			/**
+			 * @return info of files in directory[see __fileInfo]
+			 * @param path defines path to file
+			 */
+			static dodoArray<__fileInfo> getDirInfo(const dodoString &path);
 
-			protected:
+		  protected:
 
-				/**
-				 * @return system understandable permissions
-				 * @param permission defines user[libdodo] understandable permissions
-				 */
-				static int toRealPermission(int permission);
+			/**
+			 * @return system understandable permissions
+			 * @param permission defines user[libdodo] understandable permissions
+			 */
+			static int toRealPermission(int permission);
 
-				/**
-				 * write string to file
-				 * @param path defines path to file
-				 * @param content defines string that will be written to the file
-				 * @param mode defines mode to open file
-				 */
-				static void _writeToFile(const dodoString &path, const dodoString &content, const char *mode);
+			/**
+			 * write string to file
+			 * @param path defines path to file
+			 * @param content defines string that will be written to the file
+			 * @param mode defines mode to open file
+			 */
+			static void _writeToFile(const dodoString &path,
+									 const dodoString &content,
+									 const char       *mode);
 
-				/**
-				 * writes array of strings to file
-				 * @param path defines path to file
-				 * @param content defines array of strings that will be written to the file
-				 * @param mode defines mode to open file
-				 */
-				static void _writeToFile(const dodoString &path, const dodoStringArray &content, const char *mode);
+			/**
+			 * writes array of strings to file
+			 * @param path defines path to file
+			 * @param content defines array of strings that will be written to the file
+			 * @param mode defines mode to open file
+			 */
+			static void _writeToFile(const dodoString      &path,
+									 const dodoStringArray &content,
+									 const char            *mode);
 		};
 	};
 };

@@ -56,41 +56,38 @@ exchange::~exchange()
 
 //-------------------------------------------------------------------
 
-void
-exchange::flush()
+void exchange::flush()
 {
 	if (FCGX_FFlush(request->out) == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_FLUSH, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOFLUSH, CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-char *
-exchange::getenv(const char *buf)
+char *exchange::getenv(const char *buf)
 {
 	return FCGX_GetParam(buf, request->envp);
 }
 
 //-------------------------------------------------------------------
 
-int
-exchange::getInDescriptor() const
+int exchange::getInDescriptor() const
 {
 	return -1;
 }
 
 //-------------------------------------------------------------------
 
-int
-exchange::getOutDescriptor() const
+int exchange::getOutDescriptor() const
 {
 	return -1;
 }
 
 //-------------------------------------------------------------------
 
-void
-exchange::_read(char * const a_data)
+void exchange::_read(char * const a_data)
 {
 	memset(a_data, '\0', inSize);
 
@@ -99,17 +96,17 @@ exchange::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void
-exchange::_write(const char *const buf)
+void exchange::_write(const char *const buf)
 {
 	if (FCGX_PutStr(buf, outSize, request->out) == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-exchange::_writeStream(const char * const data)
+void exchange::_writeStream(const char * const data)
 {
 	unsigned long _outSize = outSize;
 
@@ -118,7 +115,9 @@ exchange::_writeStream(const char * const data)
 		unsigned int bufSize = strlen(data);
 
 		if (bufSize < outSize)
+		{
 			outSize = bufSize;
+		}
 
 		_write(data);
 
@@ -134,8 +133,7 @@ exchange::_writeStream(const char * const data)
 
 //-------------------------------------------------------------------
 
-unsigned long
-exchange::_readStream(char * const data)
+unsigned long exchange::_readStream(char * const data)
 {
 	unsigned long _inSize = inSize++;
 

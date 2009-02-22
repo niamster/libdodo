@@ -77,21 +77,21 @@ namespace dodo
 
 #endif
 		{
-			public:
+		  public:
 
 #ifndef GRAPHICS_WO_XEXEC
 
-				/**
-				 * constructor
-				 * @param executor defines class that executed hook
-				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
-				 */
-				__xexecImageCollectedData(xexec *executor, short execObject);
+			/**
+			 * constructor
+			 * @param executor defines class that executed hook
+			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
+			 */
+			__xexecImageCollectedData(xexec *executor, short execObject);
 
 #endif
 
-				ImageInfo *imInfo;                                                          ///< image info handler
-				Image *imHandle;                                                            ///< image handler
+			ImageInfo * imInfo; ///< image info handler
+			Image *imHandle;    ///< image handler
 		};
 
 #define IMAGE_MAPPINGSTATEMENTS 2
@@ -123,12 +123,12 @@ namespace dodo
 		 */
 		enum imagePixelSizeEnum
 		{
-			IMAGE_PIXELSIZE_CHAR,                       ///< 8 bits
-			IMAGE_PIXELSIZE_SHORT,                      ///< 16 bits
-			IMAGE_PIXELSIZE_INT,                        ///< 32(16 on some CPUs) bits
-			IMAGE_PIXELSIZE_LONG,                       ///< 32(32 on some CPUs) bits
-			IMAGE_PIXELSIZE_FLOAT,                      ///< 32 bits
-			IMAGE_PIXELSIZE_DOUBLE,                     ///< 64 bits
+			IMAGE_PIXELSIZE_CHAR,   ///< 8 bits
+			IMAGE_PIXELSIZE_SHORT,  ///< 16 bits
+			IMAGE_PIXELSIZE_INT,    ///< 32(16 on some CPUs) bits
+			IMAGE_PIXELSIZE_LONG,   ///< 32(32 on some CPUs) bits
+			IMAGE_PIXELSIZE_FLOAT,  ///< 32 bits
+			IMAGE_PIXELSIZE_DOUBLE, ///< 64 bits
 		};
 
 #define IMAGE_ENCODERSTATEMENTS 6
@@ -158,9 +158,9 @@ namespace dodo
 			IMAGE_COMPRESSION_LZW,
 			IMAGE_COMPRESSION_RLE,
 			IMAGE_COMPRESSION_ZIP,
-			IMAGE_COMPRESSION_JPEG,                             ///< only for JPEG
-			IMAGE_COMPRESSION_LOSSLESSJPEG,                     ///< only for JPEG
-			IMAGE_COMPRESSION_JPEG2000,                         ///< only for JPEG
+			IMAGE_COMPRESSION_JPEG,         ///< only for JPEG
+			IMAGE_COMPRESSION_LOSSLESSJPEG, ///< only for JPEG
+			IMAGE_COMPRESSION_JPEG2000,     ///< only for JPEG
 		};
 
 		/**
@@ -169,11 +169,11 @@ namespace dodo
 		 */
 		struct __imageInfo
 		{
-			void *data;                                 ///< 2D array of pixels
-			unsigned long width;                        ///< width of the image
-			unsigned long height;                       ///< height of the image
-			short mapping;                              ///< type of mapping[see imageMappingEnum]
-			short pixelSize;                            ///< type of pixel
+			void          *data;            ///< 2D array of pixels
+			unsigned long width;            ///< width of the image
+			unsigned long height;           ///< height of the image
+			short         mapping;          ///< type of mapping[see imageMappingEnum]
+			short         pixelSize;        ///< type of pixel
 		};
 
 		/**
@@ -182,8 +182,8 @@ namespace dodo
 		 */
 		struct __imageSize
 		{
-			unsigned long width;                        ///< width of the image
-			unsigned long height;                       ///< height of the image
+			unsigned long width;            ///< width of the image
+			unsigned long height;           ///< height of the image
 		};
 
 		/**
@@ -194,157 +194,160 @@ namespace dodo
 
 #ifndef GRAPHICS_WO_XEXEC
 
-		: public xexec
+			: public xexec
 
 #endif
 		{
 			friend class transform;
 			friend class draw;
 
-			private:
+		  private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				image(image &im);
+			/**
+			 * copy constructor
+			 * @note to prevent copying
+			 */
+			image(image &im);
 
-			public:
+		  public:
 
-				/**
-				 * contructor
-				 */
-				image();
+			/**
+			 * contructor
+			 */
+			image();
 
-				/**
-				 * destructor
-				 */
-				virtual ~image();
+			/**
+			 * destructor
+			 */
+			virtual ~image();
 
-				/**
-				 * create image
-				 * @param width defines image width
-				 * @param height defines image height
-				 * @param background defines image background
-				 * @param backgroundDepth defines the color depth of the image background in bits
-				 */
-				virtual void create(unsigned long width, unsigned long height, const __color &background = color::transparent, unsigned short backgroundDepth = 32);
+			/**
+			 * create image
+			 * @param width defines image width
+			 * @param height defines image height
+			 * @param background defines image background
+			 * @param backgroundDepth defines the color depth of the image background in bits
+			 */
+			virtual void create(unsigned long  width,
+								unsigned long  height,
+								const __color  &background = color::transparent,
+								unsigned short backgroundDepth = 32);
 
-				/**
-				 * read image
-				 * @param path defines path to image
-				 */
-				virtual void readFile(const dodoString &path);
+			/**
+			 * read image
+			 * @param path defines path to image
+			 */
+			virtual void readFile(const dodoString &path);
 
-				/**
-				 * read image
-				 * @param info defines image info
-				 */
-				virtual void readMemory(const __imageInfo &info);
+			/**
+			 * read image
+			 * @param info defines image info
+			 */
+			virtual void readMemory(const __imageInfo &info);
 
-				/**
-				 * read image
-				 * @param data defines image data
-				 */
-				virtual void readMemory(const dodoString &data);
+			/**
+			 * read image
+			 * @param data defines image data
+			 */
+			virtual void readMemory(const dodoString &data);
 
-				/**
-				 * write image
-				 * @param path describes path to image
-				 */
-				virtual void writeFile(const dodoString &path);
+			/**
+			 * write image
+			 * @param path describes path to image
+			 */
+			virtual void writeFile(const dodoString &path);
 
-				/**
-				 * write image
-				 * @param data defines image data
-				 */
-				virtual void writeMemory(dodoString &data);
+			/**
+			 * write image
+			 * @param data defines image data
+			 */
+			virtual void writeMemory(dodoString &data);
 
-				/**
-				 * close access to image
-				 */
-				virtual void close();
+			/**
+			 * close access to image
+			 */
+			virtual void close();
 
-				/**
-				 * @return info about image
-				 */
-				virtual __imageSize getImageSize();
+			/**
+			 * @return info about image
+			 */
+			virtual __imageSize getImageSize();
 
-				/**
-				 * set image type
-				 * @param type defines image type[see imageTypeEnum]
-				 */
-				virtual void setType(short type);
+			/**
+			 * set image type
+			 * @param type defines image type[see imageTypeEnum]
+			 */
+			virtual void setType(short type);
 
-				/**
-				 * set image alpha channel
-				 */
-				virtual void setAlpha();
+			/**
+			 * set image alpha channel
+			 */
+			virtual void setAlpha();
 
-				/**
-				 * remove image alpha channel
-				 */
-				virtual void removeAlpha();
+			/**
+			 * remove image alpha channel
+			 */
+			virtual void removeAlpha();
 
-				/**
-				 * set image opacity
-				 * @param opacity define image opacity
-				 * @note 0 is fully opaque and 65535 is fully transparent
-				 */
-				virtual void setOpacity(unsigned short opacity);
+			/**
+			 * set image opacity
+			 * @param opacity define image opacity
+			 * @note 0 is fully opaque and 65535 is fully transparent
+			 */
+			virtual void setOpacity(unsigned short opacity);
 
-				/**
-				 * set image background
-				 * @param background define image background color
-				 */
-				virtual void setBackgroundColor(__color background);
+			/**
+			 * set image background
+			 * @param background define image background color
+			 */
+			virtual void setBackgroundColor(__color background);
 
-				/**
-				 * set image output encoder
-				 * @param encoder defines image encoder[see imageEncoderEnum]
-				 */
-				virtual void setEncoder(short encoder);
+			/**
+			 * set image output encoder
+			 * @param encoder defines image encoder[see imageEncoderEnum]
+			 */
+			virtual void setEncoder(short encoder);
 
-				/**
-				 * set image compression type
-				 * @param type defines type of image compression[see imageCompressionEnum]
-				 */
-				virtual void setCompression(short type);
+			/**
+			 * set image compression type
+			 * @param type defines type of image compression[see imageCompressionEnum]
+			 */
+			virtual void setCompression(short type);
 
-				/**
-				 * set image quality
-				 * @param quality defines image quality
-				 */
-				virtual void setQuality(short quality);
+			/**
+			 * set image quality
+			 * @param quality defines image quality
+			 */
+			virtual void setQuality(short quality);
 
-				/**
-				 * @return image output encoder
-				 */
-				virtual short getEncoder();
+			/**
+			 * @return image output encoder
+			 */
+			virtual short getEncoder();
 
-				/**
-				 * @return image compression type
-				 */
-				virtual short getCompression();
+			/**
+			 * @return image compression type
+			 */
+			virtual short getCompression();
 
-				/**
-				 * @return image quality
-				 */
-				virtual short getQuality();
+			/**
+			 * @return image quality
+			 */
+			virtual short getQuality();
 
-			protected:
+		  protected:
 
-				ExceptionInfo exInfo;                                                      ///< exception info handler
+			ExceptionInfo exInfo;                                                       ///< exception info handler
 
-				__xexecImageCollectedData collectedData;                                    ///< data collected for xexec
+			__xexecImageCollectedData collectedData;                                    ///< data collected for xexec
 
-			private:
+		  private:
 
-				static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                                                       ///< image mapping statements
-				static const StorageType pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];                                             ///< pixel type statements
-				static const ImageType typeStArr[IMAGE_TYPESTATEMENTS];                                        ///< color space statements
-				static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                                                       ///< image encoder
-				static const CompressionType compressionStArr[IMAGE_COMPRESSIONSTATEMENTS];                                     ///< image compression
+			static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                   ///< image mapping statements
+			static const StorageType pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];         ///< pixel type statements
+			static const ImageType typeStArr[IMAGE_TYPESTATEMENTS];                     ///< color space statements
+			static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                   ///< image encoder
+			static const CompressionType compressionStArr[IMAGE_COMPRESSIONSTATEMENTS]; ///< image compression
 		};
 
 		/**
@@ -353,35 +356,39 @@ namespace dodo
 		 */
 		class __image_init__
 		{
-			public:
+		  public:
 
-				/**
-				 * contructor
-				 */
-				__image_init__();
+			/**
+			 * contructor
+			 */
+			__image_init__();
 
-				/**
-				 * destructor
-				 */
-				~__image_init__();
+			/**
+			 * destructor
+			 */
+			~__image_init__();
 
-			private:
+		  private:
 
-				/**
-				 * ImageMagic error handler
-				 * @param et defines error category
-				 * @param reason defines the reason of the error
-				 * @param description defines description to the reason
-				 */
-				static void imErrorHandler(const ExceptionType et, const char *reason, const char *description);
+			/**
+			 * ImageMagic error handler
+			 * @param et defines error category
+			 * @param reason defines the reason of the error
+			 * @param description defines description to the reason
+			 */
+			static void imErrorHandler(const ExceptionType et,
+									   const char          *reason,
+									   const char          *description);
 
-				/**
-				 * ImageMagic warning handler
-				 * @param et defines warning category
-				 * @param reason defines the reason of the warning
-				 * @param description defines description to the reason
-				 */
-				static void imWarningHandler(const ExceptionType et, const char *reason, const char *description);
+			/**
+			 * ImageMagic warning handler
+			 * @param et defines warning category
+			 * @param reason defines the reason of the warning
+			 * @param description defines description to the reason
+			 */
+			static void imWarningHandler(const ExceptionType et,
+										 const char          *reason,
+										 const char          *description);
 		};
 
 		extern __image_init__ __image_init_object__;

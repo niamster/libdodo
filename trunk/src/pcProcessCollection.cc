@@ -35,8 +35,8 @@ using namespace dodo::pc::process;
 __processInfo::__processInfo() : isRunning(false),
 								 executed(0),
 								 executeLimit(0),
-								joined(false),
-								status(0)
+								 joined(false),
+								 status(0)
 {
 }
 
@@ -65,7 +65,9 @@ collection::~collection()
 	for (; i != j; ++i)
 	{
 		if (!_isRunning(i))
+		{
 			continue;
+		}
 
 		switch (i->action)
 		{
@@ -93,12 +95,13 @@ collection::~collection()
 		{
 			deinit = (deinitIpcProcessCollectionModule)dlsym(i->handle, "deinitIpcProcessCollectionModule");
 			if (deinit != NULL)
+			{
 				deinit();
+			}
 
 #ifndef DL_FAST
 			dlclose(i->handle);
 #endif
-
 		}
 
 #endif
@@ -107,10 +110,9 @@ collection::~collection()
 
 //-------------------------------------------------------------------
 
-unsigned long
-collection::add(job::routine func,
-				void        *data,
-				short action)
+unsigned long collection::add(job::routine func,
+							  void         *data,
+							  short        action)
 {
 	__processInfo process;
 
@@ -131,29 +133,26 @@ collection::add(job::routine func,
 
 //-------------------------------------------------------------------
 
-unsigned long
-collection::add(job::routine func,
-				void    *data)
+unsigned long collection::add(job::routine func,
+							  void         *data)
 {
 	return add(func, data, COLLECTION_ONDESTRUCT_WAIT);
 }
 
 //-------------------------------------------------------------------
 
-unsigned long
-collection::addNRun(job::routine func,
-					void    *data)
+unsigned long collection::addNRun(job::routine func,
+								  void         *data)
 {
 	return addNRun(func, data, 1, COLLECTION_ONDESTRUCT_WAIT);
 }
 
 //-------------------------------------------------------------------
 
-unsigned long
-collection::addNRun(job::routine func,
-					void          *data,
-					unsigned long limit,
-					short action)
+unsigned long collection::addNRun(job::routine  func,
+								  void          *data,
+								  unsigned long limit,
+								  short         action)
 {
 	__processInfo process;
 
@@ -172,13 +171,19 @@ collection::addNRun(job::routine func,
 	pid_t pid = fork();
 
 	if (pid == 0)
+	{
 		_exit(func(data));
+	}
 	else
 	{
 		if (pid == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 		else
+		{
 			process.pid = pid;
+		}
 	}
 
 	process.isRunning = true;
@@ -189,20 +194,23 @@ collection::addNRun(job::routine func,
 
 //-------------------------------------------------------------------
 
-void
-collection::del(unsigned long position,
-				bool force)
+void collection::del(unsigned long position,
+					 bool          force)
 {
 	if (getProcess(position))
 	{
 		if (_isRunning(current))
 		{
 			if (!force)
+			{
 				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			}
 			else
 			{
 				if (kill(current->pid, 2) == -1)
+				{
 					throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 			}
 		}
 
@@ -214,11 +222,15 @@ collection::del(unsigned long position,
 
 			deinit = (deinitIpcProcessCollectionModule)dlsym(current->handle, "deinitIpcProcessCollectionModule");
 			if (deinit != NULL)
+			{
 				deinit();
+			}
 
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+			}
 #endif
 		}
 
@@ -227,33 +239,37 @@ collection::del(unsigned long position,
 		processes.erase(current);
 	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-bool
-collection::getProcess(unsigned long position) const
+bool collection::getProcess(unsigned long position) const
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
+	{
 		if (i->position == position)
 		{
 			current = i;
 
 			return true;
 		}
+	}
 
 	return false;
 }
 
 //-------------------------------------------------------------------
 
-bool
-collection::_isRunning(dodoList<__processInfo>::iterator &position) const
+bool collection::_isRunning(dodoList<__processInfo>::iterator &position) const
 {
 	if (!position->isRunning)
+	{
 		return false;
+	}
 
 	int res = kill(position->pid, 0);
 	if (res != 0)
@@ -273,23 +289,26 @@ collection::_isRunning(dodoList<__processInfo>::iterator &position) const
 
 //-------------------------------------------------------------------
 
-void
-collection::replace(unsigned long position,
-					job::routine func,
-					void          *data,
-					bool force,
-					short action)
+void collection::replace(unsigned long position,
+						 job::routine  func,
+						 void          *data,
+						 bool          force,
+						 short         action)
 {
 	if (getProcess(position))
 	{
 		if (_isRunning(current))
 		{
 			if (!force)
+			{
 				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			}
 			else
 			{
 				if (kill(current->pid, 2) == -1)
+				{
 					throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 			}
 		}
 
@@ -302,11 +321,15 @@ collection::replace(unsigned long position,
 
 			deinit = (deinitIpcProcessCollectionModule)dlsym(current->handle, "deinitIpcProcessCollectionModule");
 			if (deinit != NULL)
+			{
 				deinit();
+			}
 
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
+			{
 				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+			}
 #endif
 		}
 
@@ -318,14 +341,15 @@ collection::replace(unsigned long position,
 		current->action = action;
 	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-collection::run(unsigned long position,
-				bool force)
+void collection::run(unsigned long position,
+					 bool          force)
 {
 	if (getProcess(position))
 	{
@@ -337,56 +361,72 @@ collection::run(unsigned long position,
 		}
 
 		if (_isRunning(current) && !force)
+		{
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+		}
 
 		pid_t pid = fork();
 
 		if (pid == 0)
+		{
 			_exit(current->func(current->data));
+		}
 		else
 		{
 			if (pid == -1)
+			{
 				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
 			else
+			{
 				current->pid = pid;
+			}
 		}
 
 		current->isRunning = true;
 		++(current->executed);
 	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-collection::stop(unsigned long position)
+void collection::stop(unsigned long position)
 {
 	if (getProcess(position))
 	{
 		if (kill(current->pid, 9) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		current->isRunning = false;
 	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-collection::stop()
+void collection::stop()
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
 	{
 		if (!_isRunning(i))
+		{
 			continue;
+		}
 
 		if (kill(i->pid, 9) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		i->isRunning = false;
 	}
@@ -394,34 +434,40 @@ collection::stop()
 
 //-------------------------------------------------------------------
 
-int
-collection::wait(unsigned long position)
+int collection::wait(unsigned long position)
 {
 	if (getProcess(position))
 	{
 		if (current->joined)
+		{
 			return current->status;
+		}
 
 		int status;
 
 		if (waitpid(current->pid, &status, 0) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		if (WIFEXITED(status))
+		{
 			current->status = WEXITSTATUS(status);
+		}
 		current->isRunning = false;
 		current->joined = true;
 
 		return current->status;
 	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-collection::wait()
+void collection::wait()
 {
 	int status;
 
@@ -429,13 +475,19 @@ collection::wait()
 	for (; i != j; ++i)
 	{
 		if (i->joined)
+		{
 			continue;
+		}
 
 		if (waitpid(i->pid, &status, 0) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 
 		if (WIFEXITED(status))
+		{
 			i->status = WEXITSTATUS(status);
+		}
 		i->isRunning = false;
 		i->joined = true;
 	}
@@ -443,34 +495,39 @@ collection::wait()
 
 //-------------------------------------------------------------------
 
-bool
-collection::isRunning(unsigned long position) const
+bool collection::isRunning(unsigned long position) const
 {
 	if (getProcess(position))
+	{
 		return _isRunning(current);
+	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ISRUNNING, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-unsigned long
-collection::running() const
+unsigned long collection::running() const
 {
 	unsigned long amount(0);
 
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
+	{
 		if (_isRunning(i))
+		{
 			++amount;
+		}
+	}
 
 	return amount;
 }
 
 //-------------------------------------------------------------------
 
-void
-collection::sweepTrash()
+void collection::sweepTrash()
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	while (i != j)
@@ -495,23 +552,25 @@ collection::sweepTrash()
 
 //-------------------------------------------------------------------
 
-void
-collection::setExecutionLimit(unsigned long position,
-							  unsigned long limit)
+void collection::setExecutionLimit(unsigned long position,
+								   unsigned long limit)
 {
 	if (getProcess(position))
+	{
 		current->executeLimit = limit;
+	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_SETEXECUTIONLIMIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
 
-__processMod
-collection::getModuleInfo(const dodoString &module,
-						  void             *toInit)
+__processMod collection::getModuleInfo(const dodoString &module,
+									   void             *toInit)
 {
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -519,17 +578,23 @@ collection::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	initIpcProcessCollectionModule init = (initIpcProcessCollectionModule)dlsym(handle, "initIpcProcessCollectionModule");
 	if (init == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	__processMod mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 #endif
 
 	return mod;
@@ -537,10 +602,9 @@ collection::getModuleInfo(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-unsigned long
-collection::add(const dodoString &module,
-				void             *data,
-				void             *toInit)
+unsigned long collection::add(const dodoString &module,
+							  void             *data,
+							  void             *toInit)
 {
 	__processInfo process;
 
@@ -553,17 +617,23 @@ collection::add(const dodoString &module,
 	process.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (process.handle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	initIpcProcessCollectionModule init = (initIpcProcessCollectionModule)dlsym(process.handle, "initIpcProcessCollectionModule");
 	if (init == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	__processMod temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(process.handle, temp.hook);
 	if (in == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+	}
 
 	process.executeLimit = temp.executeLimit;
 	process.action = temp.action;
@@ -578,17 +648,17 @@ collection::add(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-dodoList<unsigned long>
-collection::getIds()
+dodoList<unsigned long>collection::getIds()
 {
 	dodoList<unsigned long> ids;
 
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
+	{
 		ids.push_back(i->position);
+	}
 
 	return ids;
-
 }
 
 //-------------------------------------------------------------------

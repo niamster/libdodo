@@ -48,38 +48,37 @@ namespace dodo
 			 */
 			class client : virtual public rpc::client
 			{
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 * @param ct defines content type of the request
-					 */
-					client(const dodoString &ct);
+				/**
+				 * constructor
+				 * @param ct defines content type of the request
+				 */
+				client(const dodoString &ct);
 
-					/**
-					 * destructor
-					 */
-					virtual ~client();
+				/**
+				 * destructor
+				 */
+				virtual ~client();
 
-					/**
-					 * set url to RPC server
-					 * @param url define url to RPC server
-					 */
-					virtual void setUrl(const dodoString &url);
+				/**
+				 * set url to RPC server
+				 * @param url define url to RPC server
+				 */
+				virtual void setUrl(const dodoString &url);
 
-				protected:
+			  protected:
 
-					/**
-					 * send request
-					 * @return rpc response result
-					 * @param method defines rpc method call
-					 */
-					virtual dodoString sendTextRequest(const dodoString &method);
+				/**
+				 * send request
+				 * @return rpc response result
+				 * @param method defines rpc method call
+				 */
+				virtual dodoString sendTextRequest(const dodoString &method);
 
-					io::network::http http;                    ///< http handler
+				io::network::http http; ///< http handler
 
-					dodoString ct;                    ///< content-type of the request
-
+				dodoString ct;          ///< content-type of the request
 			};
 		};
 	};

@@ -33,39 +33,36 @@ using namespace dodo::rpc;
 
 response::response() : succ(false)
 {
-
 }
 
 //-------------------------------------------------------------------
 
 response::~response()
 {
-
 }
 
 //-------------------------------------------------------------------
 
-value
-response::getValue(unsigned long position)
+value response::getValue(unsigned long position)
 {
 	if (position >= values.size())
+	{
 		throw exception::basic(exception::ERRMODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+	}
 
 	return values[position];
 }
 
 //-------------------------------------------------------------------
 
-bool
-response::isSuccessful()
+bool response::isSuccessful()
 {
 	return succ;
 }
 
 //-------------------------------------------------------------------
 
-void
-response::addArgument(const value &argument)
+void response::addArgument(const value &argument)
 {
 	succ = true;
 
@@ -74,8 +71,7 @@ response::addArgument(const value &argument)
 
 //-------------------------------------------------------------------
 
-void
-response::fault(const value &argument)
+void response::fault(const value &argument)
 {
 	succ = false;
 
@@ -88,31 +84,30 @@ value
 response::operator[](unsigned long position)
 {
 	if (position >= values.size())
+	{
 		throw exception::basic(exception::ERRMODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+	}
 
 	return values[position];
 }
 
 //-------------------------------------------------------------------
 
-unsigned long
-response::getValuesCount()
+unsigned long response::getValuesCount()
 {
 	return values.size();
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<value>
-response::getValues()
+dodoArray<value>response::getValues()
 {
 	return values;
 }
 
 //-------------------------------------------------------------------
 
-void
-response::clear()
+void response::clear()
 {
 	values.clear();
 }

@@ -68,21 +68,21 @@ namespace dodo
 	 */
 	class dodoMapStringCompare
 	{
-		public:
+	  public:
 
-			/**
-			 * compares strings
-			 * @param first defines first string to compare
-			 * @param second defines second string to compare
-			 */
-			bool operator()(const dodoString &first, const dodoString &second);
+		/**
+		 * compares strings
+		 * @param first defines first string to compare
+		 * @param second defines second string to compare
+		 */
+		bool operator()(const dodoString &first, const dodoString &second);
 
-			/**
-			 * compares strings
-			 * @param first defines first string to compare
-			 * @param second defines second string to compare
-			 */
-			bool operator()(const dodoString &first, const dodoString &second) const;
+		/**
+		 * compares strings
+		 * @param first defines first string to compare
+		 * @param second defines second string to compare
+		 */
+		bool operator()(const dodoString &first, const dodoString &second) const;
 	};
 
 	/**
@@ -91,21 +91,21 @@ namespace dodo
 	 */
 	class dodoMapICaseStringCompare
 	{
-		public:
+	  public:
 
-			/**
-			 * compares strings
-			 * @param first defines first string to compare
-			 * @param second defines second string to compare
-			 */
-			bool operator()(const dodoString &first, const dodoString &second);
+		/**
+		 * compares strings
+		 * @param first defines first string to compare
+		 * @param second defines second string to compare
+		 */
+		bool operator()(const dodoString &first, const dodoString &second);
 
-			/**
-			 * compares strings
-			 * @param first defines first string to compare
-			 * @param second defines second string to compare
-			 */
-			bool operator()(const dodoString &first, const dodoString &second) const;
+		/**
+		 * compares strings
+		 * @param first defines first string to compare
+		 * @param second defines second string to compare
+		 */
+		bool operator()(const dodoString &first, const dodoString &second) const;
 	};
 
 	/**
@@ -116,18 +116,17 @@ namespace dodo
 	template<typename T>
 	class singleton
 	{
-		public:
+	  public:
 
-			/**
-			 * @return logger instance which can be used globally
-			 */
-			static T &
-			getInstance()
-			{
-				static T t;
+		/**
+		 * @return logger instance which can be used globally
+		 */
+		static T &getInstance()
+		{
+			static T t;
 
-				return t;
-			}
+			return t;
+		}
 	};
 
 #define dodoMap std::map
@@ -138,16 +137,16 @@ namespace dodo
 #define dodoArray    std::vector
 #endif
 
-	typedef dodoArray<dodoString> dodoStringArray;                                        ///< array of strings
+	typedef dodoArray<dodoString> dodoStringArray;                                          ///< array of strings
 
 #define dodoList std::list
 
-	typedef dodoList<dodoString> dodoStringList;                                                    ///< array of strings
+	typedef dodoList<dodoString> dodoStringList;                                            ///< array of strings
 
-	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;                    ///< hash of strings
-	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;          ///< hash of strings[case insensitive]
+	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;            ///< hash of strings
+	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;  ///< hash of strings[case insensitive]
 
-	typedef dodoArray<dodoStringMap> dodoStringMapArray;                                            ///< array of hashes of string
+	typedef dodoArray<dodoStringMap> dodoStringMapArray;                                    ///< array of hashes of string
 
 	/**
 	 * predifined constants
@@ -162,7 +161,6 @@ namespace dodo
 	extern dodoArray<dodoStringArray> __dodostringarrayarray__;
 
 	extern dodoStringMapArray __dodostringmaparray__;
-
 };
 
 #endif

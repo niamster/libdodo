@@ -61,79 +61,79 @@ namespace dodo
 			 */
 			class server : public cgi::server
 			{
-				private:
+			  private:
 
-					/**
-					 * copy constructor
-					 * @note to prevent copying
-					 */
-					server(server &cf);
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				server(server &cf);
 
-				public:
+			  public:
 
 #ifdef PTHREAD_EXT
 
-					/**
-					 * constructor
-					 * @param limit defines limit of incoming requests
-					 * @param threading defines if to use threads on new CGI requests
-					 * @param threadsNum defines amount of threads for processing fast CGI queue
-					 * @note if limit is exhausted `listen` will return
-					 * if limit is 0 `listen` never returns
-					 */
-					server(unsigned long limit = 0, bool threading = true, unsigned int threadsNum = 10);
+				/**
+				 * constructor
+				 * @param limit defines limit of incoming requests
+				 * @param threading defines if to use threads on new CGI requests
+				 * @param threadsNum defines amount of threads for processing fast CGI queue
+				 * @note if limit is exhausted `listen` will return
+				 * if limit is 0 `listen` never returns
+				 */
+				server(unsigned long limit = 0, bool threading = true, unsigned int threadsNum = 10);
 
 #else
 
-					/**
-					 * constructor
-					 * @param limit defines limit of incoming requests
-					 * @note if limit is exhausted `listen` will return
-					 * if limit is 0 `listen` never returns
-					 */
-					server(unsigned long limit = 0);
+				/**
+				 * constructor
+				 * @param limit defines limit of incoming requests
+				 * @note if limit is exhausted `listen` will return
+				 * if limit is 0 `listen` never returns
+				 */
+				server(unsigned long limit = 0);
 
 #endif
 
-					/**
-					 * destructor
-					 */
-					virtual ~server();
+				/**
+				 * destructor
+				 */
+				virtual ~server();
 
-					/**
-					 * listen for incoming requests
-					 * @param func define request handler
-					 */
-					virtual void serve(serverHandler func);
+				/**
+				 * listen for incoming requests
+				 * @param func define request handler
+				 */
+				virtual void serve(serverHandler func);
 
-					/**
-					 * @return true if called as a fast CGI[not as a CGI]
-					 */
-					virtual bool isFastCgi();
+				/**
+				 * @return true if called as a fast CGI[not as a CGI]
+				 */
+				virtual bool isFastCgi();
 
-				private:
+			  private:
 
 #ifdef PTHREAD_EXT
 
-					bool threading;                                                         ///< true use threading
+				bool threading;                     ///< true use threading
 
-					unsigned int threadsNum;                                                ///< amount of threads
+				unsigned int threadsNum;            ///< amount of threads
 
-					/**
-					 * thread that holds one queue of CGI requests
-					 * @param data defines the data that will be passed to the thread
-					 */
-					static void *stackThread(void *data);
+				/**
+				 * thread that holds one queue of CGI requests
+				 * @param data defines the data that will be passed to the thread
+				 */
+				static void *stackThread(void *data);
 
-					static pthread_mutex_t acceptM;                                                     ///< accept request mutex
-					static pthread_mutex_t requestsM;                                                   ///< request conter mutex
+				static pthread_mutex_t acceptM;     ///< accept request mutex
+				static pthread_mutex_t requestsM;   ///< request conter mutex
 
 #endif
 
-					static serverHandler handler;                                               ///< function to be called on new request
+				static serverHandler handler;       ///< function to be called on new request
 
-					static unsigned long limit;                                                 ///< limit of requests to serve; if 0 server forever[0 by default]
-					static unsigned long requests;                                              ///< counter of requests
+				static unsigned long limit;         ///< limit of requests to serve; if 0 server forever[0 by default]
+				static unsigned long requests;      ///< counter of requests
 			};
 		};
 	};

@@ -72,84 +72,89 @@ namespace dodo
 					friend class exchange;
 					friend class network::http;
 
-					private:
+				  private:
 
-						/**
-						 * copy constructor
-						 * @note to prevent copying
-						 */
-						client(client &fs);
+					/**
+					 * copy constructor
+					 * @note to prevent copying
+					 */
+					client(client &fs);
 
-					public:
+				  public:
 
-						/**
-						 * constructor
-						 * @param family defines family of the socket[see connectionProtoFamilyEnum]
-						 * @param type defines type of the socket[see connectionTransferTypeEnum]
-						 */
-						client(short family, short type);
+					/**
+					 * constructor
+					 * @param family defines family of the socket[see connectionProtoFamilyEnum]
+					 * @param type defines type of the socket[see connectionTransferTypeEnum]
+					 */
+					client(short family, short type);
 
-						/**
-						 * destructor
-						 */
-						virtual ~client();
+					/**
+					 * destructor
+					 */
+					virtual ~client();
 
-						/**
-						 * set certificates information
-						 * @param certs defines certificates information
-						 */
-						virtual void setSertificates(const io::ssl::__certificates &certs);
+					/**
+					 * set certificates information
+					 * @param certs defines certificates information
+					 */
+					virtual void setSertificates(const io::ssl::__certificates &certs);
 
-						/**
-						 * remove certificates information
-						 */
-						virtual void removeSertificates();
+					/**
+					 * remove certificates information
+					 */
+					virtual void removeSertificates();
 
-						/**
-						 * connect from specific address
-						 * @param local defines ip address to bind
-						 * @param host defines ip address of host to connect
-						 * @param port defines port of host to connect
-						 * @param exchange defines an oject that will perform I/O operations
-						 */
-						virtual void connectFrom(const dodoString &local, const dodoString &host, int port, exchange &exchange);
+					/**
+					 * connect from specific address
+					 * @param local defines ip address to bind
+					 * @param host defines ip address of host to connect
+					 * @param port defines port of host to connect
+					 * @param exchange defines an oject that will perform I/O operations
+					 */
+					virtual void connectFrom(const dodoString &local,
+											 const dodoString &host,
+											 int              port,
+											 exchange         &exchange);
 
-						/**
-						 * connect
-						 * @param host defines ip address of host to connect
-						 * @param port defines port of host to connect
-						 * @param exchange defines an oject that will perform I/O operations
-						 */
-						virtual void connect(const dodoString &host, int port, exchange &exchange);
+					/**
+					 * connect
+					 * @param host defines ip address of host to connect
+					 * @param port defines port of host to connect
+					 * @param exchange defines an oject that will perform I/O operations
+					 */
+					virtual void connect(const dodoString &host,
+										 int              port,
+										 exchange         &exchange);
 
-						/**
-						 * connect
-						 * @param path defines path to unix socket
-						 * @param exchange defines an oject that will perform I/O operations
-						 */
-						virtual void connect(const dodoString &path, exchange &exchange);
+					/**
+					 * connect
+					 * @param path defines path to unix socket
+					 * @param exchange defines an oject that will perform I/O operations
+					 */
+					virtual void connect(const dodoString &path,
+										 exchange         &exchange);
 
-					protected:
+				  protected:
 
-						/**
-						 * initialize SSL objects
-						 */
-						virtual void initSsl();
+					/**
+					 * initialize SSL objects
+					 */
+					virtual void initSsl();
 
-						/**
-						 * establish SSL connection
-						 */
-						virtual void connectSsl();
+					/**
+					 * establish SSL connection
+					 */
+					virtual void connectSsl();
 
-						SSL_CTX *sslCtx;                                                        ///< SSL context
-						SSL *sslHandle;                                                         ///< SSL connection handle
+					SSL_CTX *sslCtx;    ///< SSL context
+					SSL *sslHandle;     ///< SSL connection handle
 
-						bool sslConnected;                                                      ///< true if SSL connection established
+					bool sslConnected;  ///< true if SSL connection established
 				};
 			};
 		};
 	};
-
 };
 
 #endif

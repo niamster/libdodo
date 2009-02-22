@@ -49,16 +49,14 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-void
-server::setResponseEncoding(const dodoString &a_encoding)
+void server::setResponseEncoding(const dodoString &a_encoding)
 {
 	rpEncoding = a_encoding;
 }
 
 //-------------------------------------------------------------------
 
-dodo::rpc::method
-server::processCall(const dodoString &data)
+dodo::rpc::method server::processCall(const dodoString &data)
 {
 	dodo::data::format::xml::processor xmlValue;
 
@@ -75,8 +73,7 @@ server::processCall(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-dodoString
-server::processCallResult(const rpc::response &resp)
+dodoString server::processCallResult(const rpc::response &resp)
 {
 	dodo::data::format::xml::processor xmlValue;
 
@@ -85,8 +82,7 @@ server::processCallResult(const rpc::response &resp)
 
 //-------------------------------------------------------------------
 
-void
-server::serve()
+void server::serve()
 {
 	try
 	{
@@ -101,9 +97,13 @@ server::serve()
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
 		if (handler == handlers.end())
+		{
 			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
+		}
 		else
+		{
 			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
+		}
 
 		rpEncoding = encoding;
 	}

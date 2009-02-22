@@ -57,14 +57,15 @@ server::server(short a_family,
 server::~server()
 {
 	if (sslCtx != NULL)
+	{
 		SSL_CTX_free(sslCtx);
+	}
 }
 
 
 //-------------------------------------------------------------------
 
-void
-server::removeSertificates()
+void server::removeSertificates()
 {
 	if (sslCtx != NULL)
 	{
@@ -75,20 +76,25 @@ server::removeSertificates()
 
 	sslCtx = SSL_CTX_new(SSLv23_server_method());
 	if (sslCtx == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_REMOVESERTIFICATES, exception::ERRNO_LIBDODO, SERVEREX_UNABLETOINITCONTEXT, IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
-void
-server::setSertificates(const io::ssl::__certificates &certs)
+void server::setSertificates(const io::ssl::__certificates &certs)
 {
 	if (sslCtx != NULL)
+	{
 		SSL_CTX_free(sslCtx);
+	}
 
 	sslCtx = SSL_CTX_new(SSLv23_server_method());
 	if (sslCtx == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_LIBDODO, SERVEREX_UNABLETOINITCONTEXT, IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
+	}
 
 	if (certs.cipher.size() > 0 && SSL_CTX_set_cipher_list(sslCtx, certs.cipher.c_str()) != 1)
 	{
@@ -109,7 +115,9 @@ server::setSertificates(const io::ssl::__certificates &certs)
 	}
 
 	if (certs.keyPassword.size() > 0)
+	{
 		SSL_CTX_set_default_passwd_cb_userdata(sslCtx, (void *)certs.keyPassword.c_str());
+	}
 
 	bool keySet = false;
 
@@ -189,27 +197,29 @@ server::setSertificates(const io::ssl::__certificates &certs)
 
 //-------------------------------------------------------------------
 
-void
-server::initSsl()
+void server::initSsl()
 {
 	if (sslCtx == NULL)
 	{
 		sslCtx = SSL_CTX_new(SSLv23_server_method());
 		if (sslCtx == NULL)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_INITSSL, exception::ERRNO_LIBDODO, SERVEREX_UNABLETOINITCONTEXT, IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
+		}
 	}
 }
 
 //-------------------------------------------------------------------
 
-void
-server::acceptSsl(__initialAccept &init)
+void server::acceptSsl(__initialAccept &init)
 {
 	io::ssl::__openssl_init_object__.addEntropy();
 
 	init.sslHandle = SSL_new(sslCtx);
 	if (init.sslHandle == NULL)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_INITSSL, exception::ERRNO_LIBDODO, SERVEREX_UNABLETOINITSSL, IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
+	}
 
 	if (SSL_set_fd(init.sslHandle, init.socket) == 0)
 	{
@@ -233,7 +243,9 @@ server::acceptSsl(__initialAccept &init)
 		{
 			int nerr = SSL_get_error(init.sslHandle, res);
 			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
+			{
 				break;
+			}
 		}
 
 		default:
@@ -263,10 +275,9 @@ server::acceptSsl(__initialAccept &init)
 
 //-------------------------------------------------------------------
 
-void
-server::serve(const dodoString &host,
-					int port,
-					int numberOfConnections)
+void server::serve(const dodoString &host,
+				   int              port,
+				   int              numberOfConnections)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN;
@@ -278,7 +289,9 @@ server::serve(const dodoString &host,
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == 1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
@@ -292,12 +305,18 @@ server::serve(const dodoString &host,
 		sa.sin6_flowinfo = 0;
 		sa.sin6_scope_id = 0;
 		if (host == "*")
+		{
 			sa.sin6_addr = in6addr_any;
+		}
 		else
+		{
 			inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
+		}
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 	else
 	{
@@ -306,30 +325,38 @@ server::serve(const dodoString &host,
 		sa.sin_family = AF_INET;
 		sa.sin_port = htons(port);
 		if (host == "*")
+		{
 			sa.sin_addr.s_addr = htonl(INADDR_ANY);
+		}
 		else
+		{
 			inet_pton(AF_INET, host.c_str(), &sa.sin_addr);
+		}
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 
 	if (type == CONNECTION_TRANSFER_TYPE_STREAM)
+	{
 		if (::listen(socket, numberOfConnections) == -1)
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
+	}
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
-
 }
 
 //-------------------------------------------------------------------
 
-void
-server::serve(const dodoString &path,
-					int numberOfConnections,
-					bool force)
+void server::serve(const dodoString &path,
+				   int              numberOfConnections,
+				   bool             force)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN_UNIX;
@@ -343,15 +370,23 @@ server::serve(const dodoString &path,
 	{
 		struct stat st;
 		if (::lstat(path.c_str(), &st) != -1)
+		{
 			if (S_ISSOCK(st.st_mode))
+			{
 				::unlink(path.c_str());
+			}
 			else
+			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_WRONGFILENAME, IONETWORKSSLSERVEREX_WRONGFILENAME_STR, __LINE__, __FILE__);
+			}
+		}
 	}
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
@@ -362,16 +397,22 @@ server::serve(const dodoString &path,
 	unsigned long size = path.size();
 
 	if (size >= 108)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_LONGPATH, IONETWORKSSLSERVEREX_LONGPATH_STR, __LINE__, __FILE__);
+	}
 
 	strncpy(sa.sun_path, path.c_str(), size);
 	sa.sun_family = AF_UNIX;
 
 	if (::bind(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	if (::listen(socket, numberOfConnections) == -1)
+	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	unixSock = path;
 
@@ -382,9 +423,8 @@ server::serve(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-bool
-server::accept(__initialAccept &init,
-			   __peerInfo &info)
+bool server::accept(__initialAccept &init,
+					__peerInfo      &info)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
@@ -414,14 +454,20 @@ server::accept(__initialAccept &init,
 			if (sock == -1)
 			{
 				if (errno == EAGAIN)
+				{
 					return false;
+				}
 				else
+				{
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 			}
 
 			char temp[INET_ADDRSTRLEN];
 			if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
+			{
 				info.host.assign(temp);
+			}
 			info.port = ntohs(sa.sin_port);
 
 			break;
@@ -437,14 +483,20 @@ server::accept(__initialAccept &init,
 			if (sock == -1)
 			{
 				if (errno == EAGAIN)
+				{
 					return false;
+				}
 				else
+				{
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 			}
 
 			char temp[INET6_ADDRSTRLEN];
 			if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
+			{
 				info.host.assign(temp);
+			}
 			info.port = ntohs(sa.sin6_port);
 
 			break;
@@ -456,9 +508,13 @@ server::accept(__initialAccept &init,
 			if (sock == -1)
 			{
 				if (errno == EAGAIN)
+				{
 					return false;
+				}
 				else
+				{
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 			}
 
 			break;
@@ -483,8 +539,7 @@ server::accept(__initialAccept &init,
 
 //-------------------------------------------------------------------
 
-bool
-server::accept(__initialAccept &init)
+bool server::accept(__initialAccept &init)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
@@ -504,9 +559,13 @@ server::accept(__initialAccept &init)
 	if (sock == -1)
 	{
 		if (errno == EAGAIN)
+		{
 			return false;
+		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		}
 	}
 
 	init.socket = sock;

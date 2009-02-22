@@ -53,60 +53,60 @@ namespace dodo
 		 */
 		class stdio : virtual public pipe
 		{
-			private:
+		  private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				stdio(stdio &fd);
+			/**
+			 * copy constructor
+			 * @note to prevent copying
+			 */
+			stdio(stdio &fd);
 
-			public:
+		  public:
 
-				/**
-				 * constructor
-				 */
-				stdio();
+			/**
+			 * constructor
+			 */
+			stdio();
 
-				/**
-				 * destructor
-				 */
-				virtual ~stdio();
+			/**
+			 * destructor
+			 */
+			virtual ~stdio();
 
-				/**
-				 * redirect output stream to stderr or stdout
-				 * @param toStderr defines to redirect stream to stderr if true
-				 */
-				virtual void redirectToStderr(bool toStderr);
+			/**
+			 * redirect output stream to stderr or stdout
+			 * @param toStderr defines to redirect stream to stderr if true
+			 */
+			virtual void redirectToStderr(bool toStderr);
 
-				/**
-				 * @return true if output stream is redirected to stderr
-				 */
-				virtual bool isRedirectedToStderr();
+			/**
+			 * @return true if output stream is redirected to stderr
+			 */
+			virtual bool isRedirectedToStderr();
 
-			protected:
+		  protected:
 
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 */
-				virtual void _writeStream(const char * const data);
+			/**
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
+			 */
+			virtual void _writeStream(const char * const data);
 
-			private:
+		  private:
 
-				/**
-				 * do nothing
-				 * @note stdin/stdout/stderr are already available for I/O
-				 */
-				virtual void open();
+			/**
+			 * do nothing
+			 * @note stdin/stdout/stderr are already available for I/O
+			 */
+			virtual void open();
 
-				/**
-				 * do nothing
-				 * @note stdin/stdout/stderr shouldn't be closed
-				 */
-				virtual void close();
+			/**
+			 * do nothing
+			 * @note stdin/stdout/stderr shouldn't be closed
+			 */
+			virtual void close();
 
-				bool err;                                               ///< true if output stream is redirected to stderr
+			bool err; ///< true if output stream is redirected to stderr
 		};
 	};
 };

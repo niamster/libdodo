@@ -47,9 +47,9 @@ namespace dodo
 			STRINGEX_OUTOFBOUNDS,
 		};
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+		/**
+		 * explanations for libdodo defined errors
+		 */
 #define IOSTRINGEX_CANTBEUSEDWITHIOEVENT_STR                  "io::string can not be used with io::event."
 #define IOSTRINGEX_OUTOFBOUNDS_STR                  "Access data out of bounds."
 

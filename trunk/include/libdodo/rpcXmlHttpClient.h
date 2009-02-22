@@ -52,17 +52,17 @@ namespace dodo
 				class client : public xml::client,
 							   public rpc::http::client
 				{
-					public:
+				  public:
 
-						/**
-						 * constructor
-						 */
-						client();
+					/**
+					 * constructor
+					 */
+					client();
 
-						/**
-						 * destructor
-						 */
-						virtual ~client();
+					/**
+					 * destructor
+					 */
+					virtual ~client();
 				};
 			};
 		};

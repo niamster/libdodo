@@ -33,7 +33,6 @@ using namespace dodo::rpc;
 
 value::value() : valueDataType(DATATYPE_STRING)
 {
-
 }
 
 //-------------------------------------------------------------------
@@ -41,7 +40,6 @@ value::value() : valueDataType(DATATYPE_STRING)
 value::value(const dodoString &value) : valueDataType(DATATYPE_STRING),
 										stringValue(value)
 {
-
 }
 
 //-------------------------------------------------------------------
@@ -49,7 +47,6 @@ value::value(const dodoString &value) : valueDataType(DATATYPE_STRING),
 value::value(long value) : valueDataType(DATATYPE_INTEGER),
 						   integerValue(value)
 {
-
 }
 
 //-------------------------------------------------------------------
@@ -57,7 +54,6 @@ value::value(long value) : valueDataType(DATATYPE_INTEGER),
 value::value(double value) : valueDataType(DATATYPE_DOUBLE),
 							 doubleValue(value)
 {
-
 }
 
 //-------------------------------------------------------------------
@@ -65,7 +61,6 @@ value::value(double value) : valueDataType(DATATYPE_DOUBLE),
 value::value(bool value) : valueDataType(DATATYPE_BOOLEAN),
 						   booleanValue(value)
 {
-
 }
 
 //-------------------------------------------------------------------
@@ -73,7 +68,6 @@ value::value(bool value) : valueDataType(DATATYPE_BOOLEAN),
 value::value(const dodoArray<value> &value) : valueDataType(DATATYPE_ARRAY),
 											  arrayValue(value)
 {
-
 }
 
 //-------------------------------------------------------------------
@@ -81,20 +75,17 @@ value::value(const dodoArray<value> &value) : valueDataType(DATATYPE_ARRAY),
 value::value(const dodoMap<dodoString, value, dodoMapStringCompare> &value) : valueDataType(DATATYPE_STRUCT),
 																			  structValue(value)
 {
-
 }
 
 //-------------------------------------------------------------------
 
 value::~value()
 {
-
 }
 
 //-------------------------------------------------------------------
 
-void
-value::clear()
+void value::clear()
 {
 	stringValue.clear();
 	arrayValue.clear();
@@ -103,8 +94,7 @@ value::clear()
 
 //-------------------------------------------------------------------
 
-void
-value::setString(const dodoString &value)
+void value::setString(const dodoString &value)
 {
 	valueDataType = DATATYPE_STRING;
 
@@ -113,8 +103,7 @@ value::setString(const dodoString &value)
 
 //-------------------------------------------------------------------
 
-void
-value::setBoolean(bool value)
+void value::setBoolean(bool value)
 {
 	valueDataType = DATATYPE_BOOLEAN;
 
@@ -123,8 +112,7 @@ value::setBoolean(bool value)
 
 //-------------------------------------------------------------------
 
-void
-value::setInteger(long value)
+void value::setInteger(long value)
 {
 	valueDataType = DATATYPE_INTEGER;
 
@@ -133,8 +121,7 @@ value::setInteger(long value)
 
 //-------------------------------------------------------------------
 
-void
-value::setDouble(double value)
+void value::setDouble(double value)
 {
 	valueDataType = DATATYPE_DOUBLE;
 
@@ -143,8 +130,7 @@ value::setDouble(double value)
 
 //-------------------------------------------------------------------
 
-void
-value::addArrayElement(const value &value)
+void value::addArrayElement(const value &value)
 {
 	valueDataType = DATATYPE_ARRAY;
 
@@ -153,9 +139,8 @@ value::addArrayElement(const value &value)
 
 //-------------------------------------------------------------------
 
-void
-value::addStructMember(const dodoString &name,
-					   const value &value)
+void value::addStructMember(const dodoString &name,
+							const value      &value)
 {
 	valueDataType = DATATYPE_STRUCT;
 
@@ -164,8 +149,7 @@ value::addStructMember(const dodoString &name,
 
 //-------------------------------------------------------------------
 
-void
-value::setArray(const dodoArray<value> &value)
+void value::setArray(const dodoArray<value> &value)
 {
 	valueDataType = DATATYPE_ARRAY;
 
@@ -174,8 +158,7 @@ value::setArray(const dodoArray<value> &value)
 
 //-------------------------------------------------------------------
 
-void
-value::setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &value)
+void value::setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &value)
 {
 	valueDataType = DATATYPE_STRUCT;
 
@@ -188,7 +171,9 @@ value
 value::operator[](const dodoString &name)
 {
 	if (valueDataType != DATATYPE_STRUCT)
+	{
 		throw exception::basic(exception::ERRMODULE_RPCVALUE, VALUEEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	}
 
 	return structValue[name];
 }
@@ -199,89 +184,95 @@ value
 value::operator[](unsigned long key)
 {
 	if (valueDataType != DATATYPE_ARRAY)
+	{
 		throw exception::basic(exception::ERRMODULE_RPCVALUE, VALUEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	}
 
 	if (key >= arrayValue.size())
+	{
 		throw exception::basic(exception::ERRMODULE_RPCVALUE, VALUEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, VALUEEX_ARRAYOUTOFRANGE, RPCVALUEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
+	}
 
 	return arrayValue[key];
 }
 
 //-------------------------------------------------------------------
 
-short
-value::getType()
+short value::getType()
 {
 	return valueDataType;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-value::getString()
+dodoString value::getString()
 {
 	if (valueDataType != DATATYPE_STRING)
+	{
 		throw exception::basic(exception::ERRMODULE_RPCVALUE, VALUEEX_GETSTRING, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	}
 
 	return stringValue;
 }
 
 //-------------------------------------------------------------------
 
-bool
-value::getBoolean()
+bool value::getBoolean()
 {
 	if (valueDataType != DATATYPE_BOOLEAN)
+	{
 		throw exception::basic(exception::ERRMODULE_RPCVALUE, VALUEEX_GETBOOLEAN, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	}
 
 	return booleanValue;
 }
 
 //-------------------------------------------------------------------
 
-long
-value::getInteger()
+long value::getInteger()
 {
 	if (valueDataType != DATATYPE_INTEGER)
+	{
 		throw exception::basic(exception::ERRMODULE_RPCVALUE, VALUEEX_GETINTEGER, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	}
 
 	return integerValue;
-
 }
 
 //-------------------------------------------------------------------
 
-double
-value::getDouble()
+double value::getDouble()
 {
 	if (valueDataType != DATATYPE_DOUBLE)
+	{
 		throw exception::basic(exception::ERRMODULE_RPCVALUE, VALUEEX_GETDOUBLE, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	}
 
 	return doubleValue;
-
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<value>
-value::getArray()
+dodoArray<value>value::getArray()
 {
 	if (valueDataType != DATATYPE_ARRAY)
+	{
 		throw exception::basic(exception::ERRMODULE_RPCVALUE, VALUEEX_GETARRAY, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	}
 
 	return arrayValue;
 }
 
 //-------------------------------------------------------------------
 
-dodoMap<dodoString, value, dodo::dodoMapStringCompare>
-value::getStruct()
+dodoMap<dodoString, value, dodo::dodoMapStringCompare>value::getStruct()
 {
 	if (valueDataType != DATATYPE_STRUCT)
+	{
 		throw exception::basic(exception::ERRMODULE_RPCVALUE, VALUEEX_GETSTRUCT, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	}
 
 	return structValue;
-
 }
 
 //-------------------------------------------------------------------

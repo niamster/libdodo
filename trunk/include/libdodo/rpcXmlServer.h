@@ -56,7 +56,7 @@ namespace dodo
 				 */
 				__additionalData(dodoString &encoding);
 
-				dodoString &encoding;                 ///< response/request encoding
+				dodoString &encoding; ///< response/request encoding
 			};
 
 			/**
@@ -65,49 +65,49 @@ namespace dodo
 			 */
 			class server : virtual public rpc::server
 			{
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 */
-					server();
+				/**
+				 * constructor
+				 */
+				server();
 
-					/**
-					 * destructor
-					 */
-					virtual ~server();
+				/**
+				 * destructor
+				 */
+				virtual ~server();
 
-					/**
-					 * @param encoding defines response encoding
-					 */
-					virtual void setResponseEncoding(const dodoString &encoding);
+				/**
+				 * @param encoding defines response encoding
+				 */
+				virtual void setResponseEncoding(const dodoString &encoding);
 
-					/**
-					 * serve rpc call
-					 * @note processes only one call
-					 * should be called again to process next
-					 * default values of odata for handler are set by setResponseEncoding method
-					 */
-					virtual void serve();
+				/**
+				 * serve rpc call
+				 * @note processes only one call
+				 * should be called again to process next
+				 * default values of odata for handler are set by setResponseEncoding method
+				 */
+				virtual void serve();
 
-				protected:
+			  protected:
 
-					/**
-					 * process RPC call
-					 * @return RPC method represantation
-					 * @param data defines buffer that contains RPC request
-					 */
-					virtual rpc::method processCall(const dodoString &data);
+				/**
+				 * process RPC call
+				 * @return RPC method represantation
+				 * @param data defines buffer that contains RPC request
+				 */
+				virtual rpc::method processCall(const dodoString &data);
 
-					/**
-					 * process RPC call
-					 * @return RPC response
-					 * @param response defines RPC response representation
-					 */
-					virtual dodoString processCallResult(const rpc::response &response);
+				/**
+				 * process RPC call
+				 * @return RPC response
+				 * @param response defines RPC response representation
+				 */
+				virtual dodoString processCallResult(const rpc::response &response);
 
-					dodoString rpEncoding;                      ///< encoding of the messages['UTF-8' by default]
-					dodoString rqEncoding;                      ///< encoding of the messages['UTF-8' by default]
+				dodoString rpEncoding;  ///< encoding of the messages['UTF-8' by default]
+				dodoString rqEncoding;  ///< encoding of the messages['UTF-8' by default]
 			};
 		};
 	};

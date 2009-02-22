@@ -48,31 +48,31 @@ namespace dodo
 			 */
 			class server : public cgi::server
 			{
-				private:
+			  private:
 
-					/**
-					 * copy constructor
-					 * @note to prevent copying
-					 */
-					server(server &cf);
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				server(server &cf);
 
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 */
-					server();
+				/**
+				 * constructor
+				 */
+				server();
 
-					/**
-					 * destructor
-					 */
-					virtual ~server();
+				/**
+				 * destructor
+				 */
+				virtual ~server();
 
-					/**
-					 * listen for incoming requests
-					 * @param func define request handler
-					 */
-					virtual void serve(serverHandler func);
+				/**
+				 * listen for incoming requests
+				 * @param func define request handler
+				 */
+				virtual void serve(serverHandler func);
 			};
 		};
 	};

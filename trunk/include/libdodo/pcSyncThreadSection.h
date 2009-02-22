@@ -56,41 +56,41 @@ namespace dodo
 				 */
 				class section : public sync::section
 				{
-					private:
+				  private:
 
-						/**
-						 * copy constructor
-						 * @note to prevent copying
-						 */
-						section(section &sec);
+					/**
+					 * copy constructor
+					 * @note to prevent copying
+					 */
+					section(section &sec);
 
-					public:
+				  public:
 
-						/**
-						 * consructor
-						 */
-						section();
+					/**
+					 * consructor
+					 */
+					section();
 
-						/**
-						 * destructor
-						 */
-						virtual ~section();
+					/**
+					 * destructor
+					 */
+					virtual ~section();
 
-						/**
-						 * lock critical section
-						 */
-						virtual void acquire();
+					/**
+					 * lock critical section
+					 */
+					virtual void acquire();
 
-						/**
-						 * unlock critical section
-						 */
-						virtual void release();
+					/**
+					 * unlock critical section
+					 */
+					virtual void release();
 
-					protected:
+				  protected:
 
 #ifdef PTHREAD_EXT
 
-						pthread_mutex_t keeper;                                             ///< mutex
+					pthread_mutex_t keeper; ///< mutex
 
 #endif
 				};

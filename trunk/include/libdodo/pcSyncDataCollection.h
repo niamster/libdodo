@@ -49,8 +49,8 @@ namespace dodo
 				 */
 				struct __info
 				{
-					unsigned long position;                                     ///< shared data identificator
-					void *data;                                                 ///< shared data
+					unsigned long position; ///< shared data identificator
+					void          *data;    ///< shared data
 				};
 
 				/**
@@ -59,44 +59,45 @@ namespace dodo
 				 */
 				class collection
 				{
-					public:
+				  public:
 
-						/**
-						 * destructor
-						 */
-						virtual ~collection() = 0;
+					/**
+					 * destructor
+					 */
+					virtual ~collection() = 0;
 
-						/**
-						 * add shared data
-						 * @return shared data identificator
-						 * @param data defines shared data
-						 */
-						virtual unsigned long add(void *data) = 0;
+					/**
+					 * add shared data
+					 * @return shared data identificator
+					 * @param data defines shared data
+					 */
+					virtual unsigned long add(void *data) = 0;
 
-						/**
-						 * delete data from collection
-						 * @param position defines shared data identificator
-						 */
-						virtual void del(unsigned long position) = 0;
+					/**
+					 * delete data from collection
+					 * @param position defines shared data identificator
+					 */
+					virtual void del(unsigned long position) = 0;
 
-						/**
-						 * lock, set data, unlock
-						 * @param position defines shared data identificator
-						 * @param data defines shared data
-						 */
-						virtual void set(unsigned long position, void *data) = 0;
+					/**
+					 * lock, set data, unlock
+					 * @param position defines shared data identificator
+					 * @param data defines shared data
+					 */
+					virtual void set(unsigned long position,
+									 void          *data) = 0;
 
-						/**
-						 * lock, return data, unlock
-						 * @return shared data
-						 * @param position defines shared data identificator
-						 */
-						virtual const void *get(unsigned long position) = 0;
+					/**
+					 * lock, return data, unlock
+					 * @return shared data
+					 * @param position defines shared data identificator
+					 */
+					virtual const void *get(unsigned long position) = 0;
 
-						/**
-						 * @return list of shared data in object
-						 */
-						virtual dodoList<unsigned long> getIds() = 0;
+					/**
+					 * @return list of shared data in object
+					 */
+					virtual dodoList<unsigned long> getIds() = 0;
 				};
 			};
 		};

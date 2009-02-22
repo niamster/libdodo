@@ -74,246 +74,255 @@ namespace dodo
 		{
 			friend class rpc::cgi::server;
 
-			private:
+		  private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				dialogue(dialogue &ct);
+			/**
+			 * copy constructor
+			 * @note to prevent copying
+			 */
+			dialogue(dialogue &ct);
 
-			public:
+		  public:
 
-				/**
-				 * constructor
-				 * @param cf defines I/O interface
-				 * @param silent defines whether to print headers in constructor or not
-				 * @param autocleanFiles defines whether to clean POST files in destructor
-				 * @param postFilesInMem defines place of POST files[disk or memory]
-				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
-				 */
-				dialogue(exchange &cf, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			/**
+			 * constructor
+			 * @param cf defines I/O interface
+			 * @param silent defines whether to print headers in constructor or not
+			 * @param autocleanFiles defines whether to clean POST files in destructor
+			 * @param postFilesInMem defines place of POST files[disk or memory]
+			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
+			 */
+			dialogue(exchange &cf, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
-				/**
-				 * constructor
-				 * @param cf defines I/O interface
-				 * @param headers defines headers that will be printed
-				 * @param silent defines whether to print headers in constructor or not
-				 * @param autocleanFiles defines whether to clean POST files in destructor
-				 * @param postFilesInMem defines place of POST files[disk or memory]
-				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
-				 */
-				dialogue(exchange &cf, dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			/**
+			 * constructor
+			 * @param cf defines I/O interface
+			 * @param headers defines headers that will be printed
+			 * @param silent defines whether to print headers in constructor or not
+			 * @param autocleanFiles defines whether to clean POST files in destructor
+			 * @param postFilesInMem defines place of POST files[disk or memory]
+			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
+			 */
+			dialogue(exchange &cf, dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
-				/**
-				 * destructor
-				 */
-				virtual ~dialogue();
+			/**
+			 * destructor
+			 */
+			virtual ~dialogue();
 
-				/**
-				 * @return authentication info
-				 */
-				virtual __cgiAuthInfo getAuthenticationInfo();
+			/**
+			 * @return authentication info
+			 */
+			virtual __cgiAuthInfo getAuthenticationInfo();
 
-				/**
-				 * request the authentication
-				 * @param realm defines authentication request string
-				 * @param type defines type of authentication[see cgiAuthTypeEnum]
-				 */
-				virtual void requestAuthentication(const dodoString &realm, short type = CGI_AUTHTYPE_DIGEST);
+			/**
+			 * request the authentication
+			 * @param realm defines authentication request string
+			 * @param type defines type of authentication[see cgiAuthTypeEnum]
+			 */
+			virtual void requestAuthentication(const dodoString &realm,
+											   short            type = CGI_AUTHTYPE_DIGEST);
 
-				/**
-				 * check authentication
-				 * @return true if authentication successfull
-				 * @param user defines user for authentication
-				 * @param password defined user's password for authentication
-				 */
-				virtual bool isAuthenticated(const dodoString &user, const dodoString &password);
+			/**
+			 * check authentication
+			 * @return true if authentication successfull
+			 * @param user defines user for authentication
+			 * @param password defined user's password for authentication
+			 */
+			virtual bool isAuthenticated(const dodoString &user,
+										 const dodoString &password);
 
-				/**
-				 * set response code and message
-				 * @param code defines return code[see cgiStatusCodeEnum]
-				 */
-				virtual void setResponseStatus(short code);
+			/**
+			 * set response code and message
+			 * @param code defines return code[see cgiStatusCodeEnum]
+			 */
+			virtual void setResponseStatus(short code);
 
-				/**
-				 * @return method type[see cgiRequestMethodEnum]
-				 */
-				virtual int getMethod() const;
+			/**
+			 * @return method type[see cgiRequestMethodEnum]
+			 */
+			virtual int getMethod() const;
 
-				/**
-				 * @return array of request variables of given method
-				 * @param method defines defines type of array of request variables to return[see requestMethodEnum]
-				 * @note example: classObj[CGI_REQUESTMETHOD_POST]["name"]
-				 */
-				virtual const dodoStringMap &operator[](short method);
+			/**
+			 * @return array of request variables of given method
+			 * @param method defines defines type of array of request variables to return[see requestMethodEnum]
+			 * @note example: classObj[CGI_REQUESTMETHOD_POST]["name"]
+			 */
+			virtual const dodoStringMap &operator[](short method);
 
-				/**
-				 * specific variables (from POST, GET, ENV or COOKIE)
-				 */
-				dodoStringMap POST;                                                                                     ///< POST variables
-				dodoStringMap GET;                                                                                      ///< GET variables
-				mutable dodoMap<short, dodoString> ENVIRONMENT;                                                         ///< environment variables[see cgiEnvironmentEnum]
-				dodoStringMap COOKIES;                                                                                  ///< cookies sent by browser
-				dodoMap<dodoString, __cgiFile, dodoMapStringCompare> FILES;                                          ///< POST files
-				dodoMap<short, dodoString> HEADERS;                                                                     ///< headers that will be printed with printHeaders method
+			/**
+			 * specific variables (from POST, GET, ENV or COOKIE)
+			 */
+			dodoStringMap POST;                                         ///< POST variables
+			dodoStringMap GET;                                          ///< GET variables
+			mutable dodoMap<short, dodoString> ENVIRONMENT;             ///< environment variables[see cgiEnvironmentEnum]
+			dodoStringMap COOKIES;                                      ///< cookies sent by browser
+			dodoMap<dodoString, __cgiFile, dodoMapStringCompare> FILES; ///< POST files
+			dodoMap<short, dodoString> HEADERS;                         ///< headers that will be printed with printHeaders method
 
-				dodoString content;                                                                                     ///< contents of the stdin for the POST request
+			dodoString content;                                         ///< contents of the stdin for the POST request
 
-				/**
-				 * @return value of the requested variable from POST and GET
-				 * @param varName defines name of the variable
-				 * @note searches in GET first
-				 */
-				virtual dodoString request(const dodoString &varName);
+			/**
+			 * @return value of the requested variable from POST and GET
+			 * @param varName defines name of the variable
+			 * @note searches in GET first
+			 */
+			virtual dodoString request(const dodoString &varName);
 
-				/**
-				 * print data to the output
-				 * @param data defines data that would be printed
-				 */
-				virtual void print(const dodoString &data);
+			/**
+			 * print data to the output
+			 * @param data defines data that would be printed
+			 */
+			virtual void print(const dodoString &data);
 
-				/**
-				 * print data to the output
-				 * @param data defines data that would be printed
-				 * @note print until '\n' is reached
-				 */
-				virtual void printStream(const dodoString &data);
+			/**
+			 * print data to the output
+			 * @param data defines data that would be printed
+			 * @note print until '\n' is reached
+			 */
+			virtual void printStream(const dodoString &data);
 
-				/**
-				 * flush output
-				 */
-				virtual void flush();
+			/**
+			 * flush output
+			 */
+			virtual void flush();
 
-				/**
-				 * set cookie
-				 * @param name defines name of cookie
-				 * @param value defines value of cookie
-				 * @param exDate defines expiration date
-				 * @param path defines cookie path
-				 * @param domain defines cookie domain
-				 * @param secure defines cookie security
-				 * @note cookies are printed with printHeaders method
-				 */
-				virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate = __dodostring__, const dodoString &path = __dodostring__, const dodoString &domain = __dodostring__, bool secure = false);
+			/**
+			 * set cookie
+			 * @param name defines name of cookie
+			 * @param value defines value of cookie
+			 * @param exDate defines expiration date
+			 * @param path defines cookie path
+			 * @param domain defines cookie domain
+			 * @param secure defines cookie security
+			 * @note cookies are printed with printHeaders method
+			 */
+			virtual void setCookie(const dodoString &name,
+								   const dodoString &value,
+								   const dodoString &exDate = __dodostring__,
+								   const dodoString &path = __dodostring__,
+								   const dodoString &domain = __dodostring__,
+								   bool             secure = false);
 
-				/**
-				 * set cookie
-				 * @param cookie defines the cookie
-				 * @note cookies are printed with printHeaders method
-				 */
-				virtual void setCookie(const __cgiCookie &cookie);
+			/**
+			 * set cookie
+			 * @param cookie defines the cookie
+			 * @note cookies are printed with printHeaders method
+			 */
+			virtual void setCookie(const __cgiCookie &cookie);
 
-				/**
-				 * @return charset of the request
-				 */
-				virtual dodoString getCharset();
+			/**
+			 * @return charset of the request
+			 */
+			virtual dodoString getCharset();
 
-				/**
-				 * cast to exchange *
-				 * @return I/O interface
-				 * @note headers are printed before the cast
-				 */
-				virtual operator exchange *();
+			/**
+			 * cast to exchange *
+			 * @return I/O interface
+			 * @note headers are printed before the cast
+			 */
+			virtual operator exchange*();
 
-			protected:
+		  protected:
 
-				/**
-				 * fetch auth information
-				 */
-				virtual void makeAuth();
+			/**
+			 * fetch auth information
+			 */
+			virtual void makeAuth();
 
-				/**
-				 * write detected method to method class property
-				 */
-				virtual void detectMethod();
+			/**
+			 * write detected method to method class property
+			 */
+			virtual void detectMethod();
 
-				/**
-				 * fill POST variables and files if defined
-				 */
-				virtual void makePost();
+			/**
+			 * fill POST variables and files if defined
+			 */
+			virtual void makePost();
 
-				/**
-				 * get contents of stdin for the POST request
-				 */
-				virtual void makeContent();
+			/**
+			 * get contents of stdin for the POST request
+			 */
+			virtual void makeContent();
 
-				/**
-				 * get environment variables
-				 */
-				virtual void makeEnv();
+			/**
+			 * get environment variables
+			 */
+			virtual void makeEnv();
 
-				/**
-				 * initiate HEADERS class property with given tuples name->value
-				 * @param headers defines init headers
-				 */
-				virtual void initHeaders(dodoMap<short, dodoString> &headers);
+			/**
+			 * initiate HEADERS class property with given tuples name->value
+			 * @param headers defines init headers
+			 */
+			virtual void initHeaders(dodoMap<short, dodoString> &headers);
 
-				/**
-				 * process serialized string of tuples key->value
-				 * @param val defines map that will be filled with processed tuples key->value
-				 * @param string defines string to process
-				 * @param delim defines delimite
-				 * @note
-				 * from : name1=value1`delim`name2=value2
-				 * to : val["name1"]=value1; val["name2"]=value2;
-				 */
-				virtual void make(dodoStringMap &val, const dodoString &string, const char *delim = "&");
+			/**
+			 * process serialized string of tuples key->value
+			 * @param val defines map that will be filled with processed tuples key->value
+			 * @param string defines string to process
+			 * @param delim defines delimite
+			 * @note
+			 * from : name1=value1`delim`name2=value2
+			 * to : val["name1"]=value1; val["name2"]=value2;
+			 */
+			virtual void make(dodoStringMap    &val,
+							  const dodoString &string,
+							  const char       *delim = "&");
 
-				/**
-				 * print cgi headers
-				 * @note print cookies also
-				 */
-				virtual void printHeaders() const;
+			/**
+			 * print cgi headers
+			 * @note print cookies also
+			 */
+			virtual void printHeaders() const;
 
-			private:
+		  private:
 
-				short returnCode;                                                                                       ///< HTTP return code
-				dodoString returnMessage;                                                                               ///< HTTP return message
+			short returnCode;                                                                   ///< HTTP return code
+			dodoString returnMessage;                                                           ///< HTTP return message
 
-				bool postFilesInMem;                                                                                    ///< place of POST files
+			bool postFilesInMem;                                                                ///< place of POST files
 
-				bool autocleanFiles;                                                                                    ///< defines whether to clean POST files in destructor
+			bool autocleanFiles;                                                                ///< defines whether to clean POST files in destructor
 
-				dodoString postFilesTmpDir;                                                                             ///< directory for POST files if on they are saved on the disk
+			dodoString postFilesTmpDir;                                                         ///< directory for POST files if on they are saved on the disk
 
-				dodoList<__cgiCookie> cookies;                                                                       ///< cookies
-				int method;                                                                                             ///< request method
+			dodoList<__cgiCookie> cookies;                                                      ///< cookies
+			int method;                                                                         ///< request method
 
-				dodoStringArray contenTypeExtensions;                                                                   ///< contains contentype extension[boundary, modification-date, etc]
+			dodoStringArray contenTypeExtensions;                                               ///< contains contentype extension[boundary, modification-date, etc]
 
-				/**
-				 * delete temp POST files that have been created
-				 */
-				virtual void cleanTmp();
+			/**
+			 * delete temp POST files that have been created
+			 */
+			virtual void cleanTmp();
 
-				exchange &cgiIO;                                                                                                        ///< CGI I/O instance
+			exchange &cgiIO;                                                                    ///< CGI I/O instance
 
-				mutable bool headersPrinted;                                                                                            ///< true if headers have been printed
+			mutable bool headersPrinted;                                                        ///< true if headers have been printed
 
-				static const char *environmentStatements[CGI_ENVIRONMENTSTATEMENTS];                                                 ///< names of environment variables[see cgiEnvironmentEnum]
-				static const dodoString responseHeaderStatements[CGI_RESPONSEHEADERSTATEMENTSD];                                      ///< HTTP response headers[see cgiResponseHeaderEnum]
-				static const dodoString responseStatusStatements[CGI_STATUSSTATEMENTS];                                              ///< HTTP response headers[see cgiStatusCodeEnum]
+			static const char *environmentStatements[CGI_ENVIRONMENTSTATEMENTS];                ///< names of environment variables[see cgiEnvironmentEnum]
+			static const dodoString responseHeaderStatements[CGI_RESPONSEHEADERSTATEMENTSD];    ///< HTTP response headers[see cgiResponseHeaderEnum]
+			static const dodoString responseStatusStatements[CGI_STATUSSTATEMENTS];             ///< HTTP response headers[see cgiStatusCodeEnum]
 
-				/**
-				 * @struct __authInfo defines authenfication information
-				 */
-				struct __internalAuthInfo
-				{
-					dodoString user;                                                ///< user name
-					dodoString password;                                            ///< user password
-					dodoString realm;                                               ///< explanation of the authentication request
-					dodoString nonce;                                               ///< dialogue-specified uniquely generated data
-					dodoString opaque;                                              ///< dialogue-specified uniquely generated data, which should be returned by the dialogue unchanged
-					dodoString cnonce;                                              ///< dialogue-specified uniquely generated data
-					dodoString nonceCount;                                          ///< hexadecimal count of the number of requests (including the current request) that the server has sent with the nonce value in this request
-					dodoString uri;                                                 ///< URI from Request-URI
-					dodoString qop;                                                 ///< quality of protection
-					dodoString response;                                            ///< 32 hex digits. which proves that the user knows a password
-					short type;                                                     ///< authenfication type[see cgiAuthTypeEnum]
-				};
+			/**
+			 * @struct __authInfo defines authenfication information
+			 */
+			struct __internalAuthInfo
+			{
+				dodoString user;                                                                ///< user name
+				dodoString password;                                                            ///< user password
+				dodoString realm;                                                               ///< explanation of the authentication request
+				dodoString nonce;                                                               ///< dialogue-specified uniquely generated data
+				dodoString opaque;                                                              ///< dialogue-specified uniquely generated data, which should be returned by the dialogue unchanged
+				dodoString cnonce;                                                              ///< dialogue-specified uniquely generated data
+				dodoString nonceCount;                                                          ///< hexadecimal count of the number of requests (including the current request) that the server has sent with the nonce value in this request
+				dodoString uri;                                                                 ///< URI from Request-URI
+				dodoString qop;                                                                 ///< quality of protection
+				dodoString response;                                                            ///< 32 hex digits. which proves that the user knows a password
+				short      type;                                                                ///< authenfication type[see cgiAuthTypeEnum]
+			};
 
-				__internalAuthInfo authInfo;                                 ///< authentication information
+			__internalAuthInfo authInfo;                                                        ///< authentication information
 		};
 	};
 };

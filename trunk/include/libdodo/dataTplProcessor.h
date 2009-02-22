@@ -138,7 +138,7 @@ namespace dodo
 			 *              `break` and `continue` blocks outside the loop blocks do nothing
 			 *
 			 *              example:
-			 *                      //c++ code:
+			 * //c++ code:
 			 *                      cgiProcessor cgip;
 			 *
 			 *                      dodoStringArray arr;
@@ -159,7 +159,7 @@ namespace dodo
 			 *                      arr2.push_back(arr1);
 			 *                      cgip.assign("arr2",arr2);
 			 *
-			 *                      //template
+			 * //template
 			 *                      <(for $b in $arr)>
 			 *                              <div class="test"><(print $b)></div>
 			 *                      <(rof)>
@@ -208,278 +208,317 @@ namespace dodo
 			 */
 			class processor
 			{
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 */
-					processor();
+				/**
+				 * constructor
+				 */
+				processor();
 
-					/**
-					 * destructor
-					 */
-					virtual ~processor();
+				/**
+				 * destructor
+				 */
+				virtual ~processor();
 
-					/**
-					 * @param path defines path of template
-					 * @param tpl defines stream for outputting parsed template
-					 */
-					virtual void processFile(const dodoString &path, io::channel &tpl);
+				/**
+				 * @param path defines path of template
+				 * @param tpl defines stream for outputting parsed template
+				 */
+				virtual void processFile(const dodoString &path,
+										 io::channel      &tpl);
 
-					/**
-					 * @param buffer defines buffer where template is stored
-					 * @param tpl defines stream for outputting parsed template
-					 */
-					virtual void processString(const dodoString &buffer, io::channel &tpl);
+				/**
+				 * @param buffer defines buffer where template is stored
+				 * @param tpl defines stream for outputting parsed template
+				 */
+				virtual void processString(const dodoString &buffer,
+										   io::channel      &tpl);
 
-					/**
-					 * set variable
-					 * @param varName defines name of variable
-					 * @param varVal defines value of variable
-					 */
-					virtual void assign(dodoString varName, const dodoString &varVal);
+				/**
+				 * set variable
+				 * @param varName defines name of variable
+				 * @param varVal defines value of variable
+				 */
+				virtual void assign(dodoString       varName,
+									const dodoString &varVal);
 
-					/**
-					 * set variable
-					 * @param varName defines name of variable
-					 * @param varVal defines value of variable(array)
-					 */
-					virtual void assign(dodoString varName, const dodoStringArray &varVal);
+				/**
+				 * set variable
+				 * @param varName defines name of variable
+				 * @param varVal defines value of variable(array)
+				 */
+				virtual void assign(dodoString            varName,
+									const dodoStringArray &varVal);
 
-					/**
-					 * set variable
-					 * @param varName defines name of variable
-					 * @param varVal defines value of variablee(hash)
-					 */
-					virtual void assign(dodoString varName, const dodoStringMap &varVal);
+				/**
+				 * set variable
+				 * @param varName defines name of variable
+				 * @param varVal defines value of variablee(hash)
+				 */
+				virtual void assign(dodoString          varName,
+									const dodoStringMap &varVal);
 
-					/**
-					 * set variable
-					 * @param varName defines name of variable
-					 * @param varVal defines value of variable(array of hashes)
-					 */
-					virtual void assign(dodoString varName, const dodoArray<dodoStringMap> &varVal);
+				/**
+				 * set variable
+				 * @param varName defines name of variable
+				 * @param varVal defines value of variable(array of hashes)
+				 */
+				virtual void assign(dodoString                     varName,
+									const dodoArray<dodoStringMap> &varVal);
 
-					/**
-					 * clear internal data[assigned vars, etc.]
-					 */
-					virtual void clear();
+				/**
+				 * clear internal data[assigned vars, etc.]
+				 */
+				virtual void clear();
 
-					dodoString tplBasePath;                                     ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
+				dodoString tplBasePath; ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
 
-				protected:
+			  protected:
 
-					/**
-					 * @return preprocessed template
-					 * @param path defines path of template
-					 */
-					virtual dodoString preProcessFile(const dodoString &path);
+				/**
+				 * @return preprocessed template
+				 * @param path defines path of template
+				 */
+				virtual dodoString preProcessFile(const dodoString &path);
 
-					/**
-					 * @return preprocessed template
-					 * @param buffer defines buffer where template is stored
-					 */
-					virtual dodoString preProcessString(const dodoString &buffer);
+				/**
+				 * @return preprocessed template
+				 * @param buffer defines buffer where template is stored
+				 */
+				virtual dodoString preProcessString(const dodoString &buffer);
 
-					/**
-					 * @return parsed template from processored buffer
-					 * @param buffer defines buffer where template is stored
-					 * @param path defines path of template
-					 * @param tpl defines stream for outputting parsed template
-					 */
-					virtual void _processString(const dodoString &buffer, const dodoString &path, io::channel &tpl);
+				/**
+				 * @return parsed template from processored buffer
+				 * @param buffer defines buffer where template is stored
+				 * @param path defines path of template
+				 * @param tpl defines stream for outputting parsed template
+				 */
+				virtual void _processString(const dodoString &buffer,
+											const dodoString &path,
+											io::channel      &tpl);
 
-					/**
-					 * process `if` statement
-					 * @return position of cursor where to continue processing
-					 * @param buffer defines buffer where template is stored
-					 * @param start defines position in buffer after ')>' of `<( if ... )>` block
-					 * @param statement defines `if` statement
-					 * @param tpl defines stream for outputting parsed template
-					 * @param path defines path of template
-					 */
-					virtual unsigned long _if(const dodoString &buffer, unsigned long start, const dodoString &statement, io::channel &tpl, const dodoString &path);
+				/**
+				 * process `if` statement
+				 * @return position of cursor where to continue processing
+				 * @param buffer defines buffer where template is stored
+				 * @param start defines position in buffer after ')>' of `<( if ... )>` block
+				 * @param statement defines `if` statement
+				 * @param tpl defines stream for outputting parsed template
+				 * @param path defines path of template
+				 */
+				virtual unsigned long _if(const dodoString &buffer,
+										  unsigned long    start,
+										  const dodoString &statement,
+										  io::channel      &tpl,
+										  const dodoString &path);
 
-					/**
-					 * process `for` statement
-					 * @return position of cursor where to continue processing
-					 * @param buffer defines buffer where template is stored
-					 * @param start defines position in buffer after ')>' of `<( for ... )>` block
-					 * @param statement defines `for` statement
-					 * @param tpl defines stream for outputting parsed template
-					 * @param path defines path of template
-					 */
-					virtual unsigned long _for(const dodoString &buffer, unsigned long start, const dodoString &statement, io::channel &tpl, const dodoString &path);
+				/**
+				 * process `for` statement
+				 * @return position of cursor where to continue processing
+				 * @param buffer defines buffer where template is stored
+				 * @param start defines position in buffer after ')>' of `<( for ... )>` block
+				 * @param statement defines `for` statement
+				 * @param tpl defines stream for outputting parsed template
+				 * @param path defines path of template
+				 */
+				virtual unsigned long _for(const dodoString &buffer,
+										   unsigned long    start,
+										   const dodoString &statement,
+										   io::channel      &tpl,
+										   const dodoString &path);
 
-					/**
-					 * process `for` statement
-					 * @return position of cursor where to continue processing
-					 * @param buffer defines buffer where template is stored
-					 * @param start defines position in buffer after ')>' of `<( namespace ... )>` block
-					 * @param tpl defines stream for outputting parsed template
-					 * @param path defines path of template
-					 */
-					virtual unsigned long _ns(const dodoString &buffer, unsigned long start, io::channel &tpl, const dodoString &path);
+				/**
+				 * process `for` statement
+				 * @return position of cursor where to continue processing
+				 * @param buffer defines buffer where template is stored
+				 * @param start defines position in buffer after ')>' of `<( namespace ... )>` block
+				 * @param tpl defines stream for outputting parsed template
+				 * @param path defines path of template
+				 */
+				virtual unsigned long _ns(const dodoString &buffer,
+										  unsigned long    start,
+										  io::channel      &tpl,
+										  const dodoString &path);
 
-					/**
-					 * process `print` statement
-					 * @return position of cursor where to continue processing
-					 * @param start defines position in buffer after ')>' of `<( print ... )>` block
-					 * @param statement defines `print` statement
-					 * @param tpl defines stream for outputting parsed template
-					 * @param path defines path of template
-					 */
-					virtual unsigned long _print(unsigned long start, const dodoString &statement, io::channel &tpl, const dodoString &path);
+				/**
+				 * process `print` statement
+				 * @return position of cursor where to continue processing
+				 * @param start defines position in buffer after ')>' of `<( print ... )>` block
+				 * @param statement defines `print` statement
+				 * @param tpl defines stream for outputting parsed template
+				 * @param path defines path of template
+				 */
+				virtual unsigned long _print(unsigned long    start,
+											 const dodoString &statement,
+											 io::channel      &tpl,
+											 const dodoString &path);
 
-					/**
-					 * process `break` statement
-					 * @return true if process must break
-					 * @param start defines position in buffer after ')>' of `<( break ... )>` block
-					 * @param statement defines `break` statement
-					 * @param path defines path of template
-					 */
-					virtual bool _break(unsigned long start, const dodoString &statement, const dodoString &path);
+				/**
+				 * process `break` statement
+				 * @return true if process must break
+				 * @param start defines position in buffer after ')>' of `<( break ... )>` block
+				 * @param statement defines `break` statement
+				 * @param path defines path of template
+				 */
+				virtual bool _break(unsigned long    start,
+									const dodoString &statement,
+									const dodoString &path);
 
-					/**
-					 * process `assign` statement
-					 * @return position of cursor where to continue processing
-					 * @param start defines position in buffer after ')>' of `<( assign ... )>` block
-					 * @param statement defines `assign` statement
-					 * @param path defines path of template
-					 */
-					virtual unsigned long _assign(unsigned long start, const dodoString &statement, const dodoString &path);
+				/**
+				 * process `assign` statement
+				 * @return position of cursor where to continue processing
+				 * @param start defines position in buffer after ')>' of `<( assign ... )>` block
+				 * @param statement defines `assign` statement
+				 * @param path defines path of template
+				 */
+				virtual unsigned long _assign(unsigned long    start,
+											  const dodoString &statement,
+											  const dodoString &path);
 
-					/**
-					 * process `include` statement
-					 * @return position of cursor where to continue processing
-					 * @param start defines position in buffer after ')>' of `<( include ... )>` block
-					 * @param statement defines `include` statement
-					 * @param processed indicates string where to add result
-					 * @param path defines path of template
-					 */
-					virtual unsigned long _include(unsigned long start, const dodoString &statement, io::channel &tpl, const dodoString &path);
+				/**
+				 * process `include` statement
+				 * @return position of cursor where to continue processing
+				 * @param start defines position in buffer after ')>' of `<( include ... )>` block
+				 * @param statement defines `include` statement
+				 * @param processed indicates string where to add result
+				 * @param path defines path of template
+				 */
+				virtual unsigned long _include(unsigned long    start,
+											   const dodoString &statement,
+											   io::channel      &tpl,
+											   const dodoString &path);
 
-					/**
-					 * clean namespace variable and bring back to life vars of prevous namespace that were overwritten
-					 */
-					virtual void cleanNamespace();
+				/**
+				 * clean namespace variable and bring back to life vars of prevous namespace that were overwritten
+				 */
+				virtual void cleanNamespace();
 
-					/**
-					 * @return position in buffer after ')>' of the end block
-					 * @param buffer defines buffer where template is stored
-					 * @param start defines position in buffer after ')>' of the block
-					 * @param st defines open statement[if, for ...]
-					 * @param ts defines close statement[fi, rof ...]
-					 * @param path defines path of template
-					 */
-					virtual unsigned long blockEnd(const dodoString &buffer, unsigned long start, const dodoString &st, const dodoString &ts, const dodoString &path);
+				/**
+				 * @return position in buffer after ')>' of the end block
+				 * @param buffer defines buffer where template is stored
+				 * @param start defines position in buffer after ')>' of the block
+				 * @param st defines open statement[if, for ...]
+				 * @param ts defines close statement[fi, rof ...]
+				 * @param path defines path of template
+				 */
+				virtual unsigned long blockEnd(const dodoString &buffer,
+											   unsigned long    start,
+											   const dodoString &st,
+											   const dodoString &ts,
+											   const dodoString &path);
 
-					/**
-					 * @return value of the variable
-					 * @param varName defines name of variable
-					 * @param start defines position in file
-					 * @param path defines path of template
-					 */
-					virtual dodoString getVar(const dodoString &varName, unsigned long start, const dodoString &path);
+				/**
+				 * @return value of the variable
+				 * @param varName defines name of variable
+				 * @param start defines position in file
+				 * @param path defines path of template
+				 */
+				virtual dodoString getVar(const dodoString &varName,
+										  unsigned long    start,
+										  const dodoString &path);
 
-					/**
-					 * @return interpolated name of the variable[expanded from {}]
-					 * @param varName defines name of variable
-					 * @param start defines position in file
-					 * @param path defines path of template
-					 */
-					virtual dodoString getVarName(const dodoString &varName, unsigned long start, const dodoString &path);
+				/**
+				 * @return interpolated name of the variable[expanded from {}]
+				 * @param varName defines name of variable
+				 * @param start defines position in file
+				 * @param path defines path of template
+				 */
+				virtual dodoString getVarName(const dodoString &varName,
+											  unsigned long    start,
+											  const dodoString &path);
 
-					/**
-					 * @return extracted data(e.g. removes pairs of ",',`)
-					 * @param statement defines statement that needs extraction from the pairs of ",',`
-					 */
-					virtual dodoString trim(const dodoString &statement);
+				/**
+				 * @return extracted data(e.g. removes pairs of ",',`)
+				 * @param statement defines statement that needs extraction from the pairs of ",',`
+				 */
+				virtual dodoString trim(const dodoString &statement);
 
-					/**
-					 * @return preprocessed template
-					 * @param buffer defines buffer where template is stored
-					 * @param path defines path of template
-					 */
-					virtual dodoString _preProcessString(const dodoString &buffer, const dodoString &path);
+				/**
+				 * @return preprocessed template
+				 * @param buffer defines buffer where template is stored
+				 * @param path defines path of template
+				 */
+				virtual dodoString _preProcessString(const dodoString &buffer,
+													 const dodoString &path);
 
-					/**
-					 * @return line number in file
-					 * @param newlines defines positions of new lines if template
-					 * @param pos defines position of symbol in template
-					 */
-					virtual unsigned long getLineNumber(const dodoArray<unsigned long> &newlines, unsigned long pos);
+				/**
+				 * @return line number in file
+				 * @param newlines defines positions of new lines if template
+				 * @param pos defines position of symbol in template
+				 */
+				virtual unsigned long getLineNumber(const dodoArray<unsigned long> &newlines,
+													unsigned long                  pos);
 
-					/**
-					 * @return positions of new lines
-					 * @param buffer defines buffer where template is stored
-					 */
-					virtual dodoArray<unsigned long> detectNewLines(const dodoString &buffer);
+				/**
+				 * @return positions of new lines
+				 * @param buffer defines buffer where template is stored
+				 */
+				virtual dodoArray<unsigned long> detectNewLines(const dodoString &buffer);
 
-					dodoArray< dodoArray<unsigned long> > newLinePositions;                                                                                             ///< stack of positions of new lines of templates
+				dodoArray< dodoArray<unsigned long> > newLinePositions;                 ///< stack of positions of new lines of templates
 
-					dodoStringList processed;                                                                                                                           ///< files that will be skipped due to the recursion
+				dodoStringList processed;                                               ///< files that will be skipped due to the recursion
 
-					dodoStringMap global;                                                                                                                               ///< set of global variables[user-set]
-					dodoMap<dodoString, dodoStringArray> globalArray;                                                                                                   ///< global user-defined variables(arrays)
-					dodoMap<dodoString, dodoStringMap> globalHash;                                                                                                      ///< global user-defined variables(hashes)
-					dodoMap<dodoString, dodoArray<dodoStringMap> > globalArrayHash;                                                                                     ///< global user-defined variables(array of hashes)
+				dodoStringMap global;                                                   ///< set of global variables[user-set]
+				dodoMap<dodoString, dodoStringArray> globalArray;                       ///< global user-defined variables(arrays)
+				dodoMap<dodoString, dodoStringMap> globalHash;                          ///< global user-defined variables(hashes)
+				dodoMap<dodoString, dodoArray<dodoStringMap> > globalArrayHash;         ///< global user-defined variables(array of hashes)
 
-					dodoMap<unsigned int, dodoStringMap> local;                                                                                                         ///< local variables[occur in `for` block]
-					dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> > localHash;                                                                               ///< local variables(hashes)[occur in `for` block]
+				dodoMap<unsigned int, dodoStringMap> local;                             ///< local variables[occur in `for` block]
+				dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> > localHash;   ///< local variables(hashes)[occur in `for` block]
 
-					dodoStringMap dodo;                                                                                                                                 ///< auxillary variables[dodo defined][for dodo.*]
+				dodoStringMap dodo;                                                     ///< auxillary variables[dodo defined][for dodo.*]
 
-					bool continueFlag;                                                                                                                                  ///< indicates `continue` state
+				bool continueFlag;                                                      ///< indicates `continue` state
 
-					unsigned int breakDeepness;                                                                                                                         ///< deepness of the break
-					unsigned int loopDeepness;                                                                                                                          ///< deepness of the loop
+				unsigned int breakDeepness;                                             ///< deepness of the break
+				unsigned int loopDeepness;                                              ///< deepness of the loop
 
-					unsigned long iterator;                                                                                                                             ///< amount of iterations of the loop
+				unsigned long iterator;                                                 ///< amount of iterations of the loop
 
-					unsigned int namespaceDeepness;                                                                                                                     ///< cgi object through what output will be performed
+				unsigned int namespaceDeepness;                                         ///< cgi object through what output will be performed
 
 #define PROCESSOR_STATEMENTS 30
 
-					/**
-					 * @enum processorStatementEnum defines processor statements
-					 * @note defines positions of string representation in 'statements' class property
-					 */
-					enum processorStatementEnum
-					{
-						PROCESSOR_STATEMENT_DODO = 0,
-						PROCESSOR_STATEMENT_OPEN_ST,
-						PROCESSOR_STATEMENT_CLOSE_ST,
-						PROCESSOR_STATEMENT_OPEN_NP,
-						PROCESSOR_STATEMENT_CLOSE_NP,
-						PROCESSOR_STATEMENT_OPEN_COMM,
-						PROCESSOR_STATEMENT_CLOSE_COMM,
-						PROCESSOR_STATEMENT_OPEN_IF,
-						PROCESSOR_STATEMENT_ELSE,
-						PROCESSOR_STATEMENT_CLOSE_IF,
-						PROCESSOR_STATEMENT_OPEN_FOR,
-						PROCESSOR_STATEMENT_IN,
-						PROCESSOR_STATEMENT_KEY_VALUE,
-						PROCESSOR_STATEMENT_CLOSE_FOR,
-						PROCESSOR_STATEMENT_PRINT,
-						PROCESSOR_STATEMENT_BREAK,
-						PROCESSOR_STATEMENT_CONT,
-						PROCESSOR_STATEMENT_ASSIGN,
-						PROCESSOR_STATEMENT_ASSIGN_OP,
-						PROCESSOR_STATEMENT_OPEN_NS,
-						PROCESSOR_STATEMENT_CLOSE_NS,
-						PROCESSOR_STATEMENT_INCLUDE,
-						PROCESSOR_STATEMENT_ITERATOR,
-						PROCESSOR_STATEMENT_VERSION,
-						PROCESSOR_STATEMENT_DOT,
-						PROCESSOR_STATEMENT_COMA,
-						PROCESSOR_STATEMENT_DOLLAR,
-						PROCESSOR_STATEMENT_FALSE,
-						PROCESSOR_STATEMENT_OPEN_VARPART,
-						PROCESSOR_STATEMENT_CLOSE_VARPART,
-					};
+				/**
+				 * @enum processorStatementEnum defines processor statements
+				 * @note defines positions of string representation in 'statements' class property
+				 */
+				enum processorStatementEnum
+				{
+					PROCESSOR_STATEMENT_DODO = 0,
+					PROCESSOR_STATEMENT_OPEN_ST,
+					PROCESSOR_STATEMENT_CLOSE_ST,
+					PROCESSOR_STATEMENT_OPEN_NP,
+					PROCESSOR_STATEMENT_CLOSE_NP,
+					PROCESSOR_STATEMENT_OPEN_COMM,
+					PROCESSOR_STATEMENT_CLOSE_COMM,
+					PROCESSOR_STATEMENT_OPEN_IF,
+					PROCESSOR_STATEMENT_ELSE,
+					PROCESSOR_STATEMENT_CLOSE_IF,
+					PROCESSOR_STATEMENT_OPEN_FOR,
+					PROCESSOR_STATEMENT_IN,
+					PROCESSOR_STATEMENT_KEY_VALUE,
+					PROCESSOR_STATEMENT_CLOSE_FOR,
+					PROCESSOR_STATEMENT_PRINT,
+					PROCESSOR_STATEMENT_BREAK,
+					PROCESSOR_STATEMENT_CONT,
+					PROCESSOR_STATEMENT_ASSIGN,
+					PROCESSOR_STATEMENT_ASSIGN_OP,
+					PROCESSOR_STATEMENT_OPEN_NS,
+					PROCESSOR_STATEMENT_CLOSE_NS,
+					PROCESSOR_STATEMENT_INCLUDE,
+					PROCESSOR_STATEMENT_ITERATOR,
+					PROCESSOR_STATEMENT_VERSION,
+					PROCESSOR_STATEMENT_DOT,
+					PROCESSOR_STATEMENT_COMA,
+					PROCESSOR_STATEMENT_DOLLAR,
+					PROCESSOR_STATEMENT_FALSE,
+					PROCESSOR_STATEMENT_OPEN_VARPART,
+					PROCESSOR_STATEMENT_CLOSE_VARPART,
+				};
 
-					static const dodoString statements[PROCESSOR_STATEMENTS];                                     ///< processor statements[for dodo.*, ...]
+				static const dodoString statements[PROCESSOR_STATEMENTS]; ///< processor statements[for dodo.*, ...]
 			};
 		};
 	};

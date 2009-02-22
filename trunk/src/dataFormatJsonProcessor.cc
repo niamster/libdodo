@@ -43,14 +43,12 @@ processor::~processor()
 
 //-------------------------------------------------------------------
 
-dodoString
-processor::make(const node &root)
+dodoString processor::make(const node &root)
 {
 	switch (root.valueDataType)
 	{
 		case DATATYPE_STRING:
 		{
-
 			dodoString jsonObject = "\"";
 			dodoString stringValue = root.stringValue;
 			tools::string::replace("\"", "\\\"", stringValue);
@@ -128,10 +126,9 @@ processor::make(const node &root)
 
 //-------------------------------------------------------------------
 
-unsigned long
-processor::processArray(dodoArray<node> &jnode,
-						const dodoString &root,
-						unsigned long pos)
+unsigned long processor::processArray(dodoArray<node>  &jnode,
+									  const dodoString &root,
+									  unsigned long    pos)
 {
 	jnode.clear();
 
@@ -154,7 +151,9 @@ processor::processArray(dodoArray<node> &jnode,
 			case '[':
 
 				if (initial)
+				{
 					initial = false;
+				}
 				else
 				{
 					i = processValue(subNode, root, i);
@@ -185,10 +184,9 @@ processor::processArray(dodoArray<node> &jnode,
 
 //-------------------------------------------------------------------
 
-unsigned long
-processor::processValue(node &node,
-						const dodoString &root,
-						unsigned long pos)
+unsigned long processor::processValue(node             &node,
+									  const dodoString &root,
+									  unsigned long    pos)
 {
 	node.clear();
 
@@ -246,13 +244,14 @@ processor::processValue(node &node,
 
 //-------------------------------------------------------------------
 
-unsigned long
-processor::processBoolean(bool &node,
-						  const dodoString &root,
-						  unsigned long pos)
+unsigned long processor::processBoolean(bool             &node,
+										const dodoString &root,
+										unsigned long    pos)
 {
 	if ((root.size() - pos) < 4)
+	{
 		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
+	}
 
 	if (root[pos] == 't' && root[pos + 1] == 'r' && root[pos + 2] == 'u' && root[pos + 3] == 'e')
 	{
@@ -269,7 +268,9 @@ processor::processBoolean(bool &node,
 			return pos + 4;
 		}
 		else
+		{
 			throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
+		}
 	}
 
 	return pos;
@@ -277,28 +278,31 @@ processor::processBoolean(bool &node,
 
 //-------------------------------------------------------------------
 
-unsigned long
-processor::processNull(const dodoString &root,
-					   unsigned long pos)
+unsigned long processor::processNull(const dodoString &root,
+									 unsigned long    pos)
 {
 	if ((root.size() - pos) < 4)
+	{
 		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSNULL, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
+	}
 
 	if (root[pos] == 'n' && root[pos + 1] == 'u' && root[pos + 2] == 'l' && root[pos + 3] == 'l')
+	{
 		return pos + 3;
+	}
 	else
+	{
 		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSNULL, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
+	}
 
 	return pos;
-
 }
 
 //-------------------------------------------------------------------
 
-unsigned long
-processor::processNumeric(long &node,
-						  const dodoString &root,
-						  unsigned long pos)
+unsigned long processor::processNumeric(long             &node,
+										const dodoString &root,
+										unsigned long    pos)
 {
 	dodoString numeric;
 
@@ -353,10 +357,9 @@ processor::processNumeric(long &node,
 
 //-------------------------------------------------------------------
 
-unsigned long
-processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
-						 const dodoString &root,
-						 unsigned long pos)
+unsigned long processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
+									   const dodoString &root,
+									   unsigned long pos)
 {
 	jnode.clear();
 
@@ -452,8 +455,7 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
 
 //-------------------------------------------------------------------
 
-node
-processor::processString(const dodoString &root)
+node processor::processString(const dodoString &root)
 {
 	node node;
 
@@ -465,8 +467,7 @@ processor::processString(const dodoString &root)
 
 //-------------------------------------------------------------------
 
-node
-processor::processFile(const dodoString &path)
+node processor::processFile(const dodoString &path)
 {
 	node node;
 
@@ -478,8 +479,7 @@ processor::processFile(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoString
-processor::fromMap(const dodoStringMap &root)
+dodoString processor::fromMap(const dodoStringMap &root)
 {
 	node nodeDef;
 	node subNodeDef;
@@ -499,8 +499,7 @@ processor::fromMap(const dodoStringMap &root)
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringMap
-processor::toMap(const dodoString &jnode)
+dodo::dodoStringMap processor::toMap(const dodoString &jnode)
 {
 	node JSON = processString(jnode);
 
@@ -508,17 +507,18 @@ processor::toMap(const dodoString &jnode)
 
 	dodoMap<dodoString, node, dodoMapStringCompare>::iterator i = JSON.objectValue.begin(), j = JSON.objectValue.end();
 	for (; i != j; ++i)
+	{
 		map.insert(make_pair(i->first, i->second.stringValue));
+	}
 
 	return map;
 }
 
 //-------------------------------------------------------------------
 
-unsigned long
-processor::processString(dodoString &jnode,
-						 const dodoString &root,
-						 unsigned long pos)
+unsigned long processor::processString(dodoString       &jnode,
+									   const dodoString &root,
+									   unsigned long    pos)
 {
 	jnode.clear();
 
@@ -550,7 +550,9 @@ processor::processString(dodoString &jnode,
 						break;
 					}
 					else
+					{
 						return i;
+					}
 				}
 
 			default:
@@ -563,7 +565,9 @@ processor::processString(dodoString &jnode,
 					jnode.append(1, root[i]);
 				}
 				else
+				{
 					jnode.append(1, root[i]);
+				}
 		}
 	}
 

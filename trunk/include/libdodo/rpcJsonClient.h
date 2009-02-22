@@ -50,55 +50,55 @@ namespace dodo
 			 */
 			class client : virtual public rpc::client
 			{
-				public:
+			  public:
 
-					/**
-					 * constructor
-					 */
-					client();
+				/**
+				 * constructor
+				 */
+				client();
 
-					/**
-					 * destructor
-					 */
-					virtual ~client();
+				/**
+				 * destructor
+				 */
+				virtual ~client();
 
-					/**
-					 * set version of JSON-RPC request
-					 * @param version defines version of JSON-RPC request
-					 */
-					virtual void setRequestVersion(const dodoString &version);
+				/**
+				 * set version of JSON-RPC request
+				 * @param version defines version of JSON-RPC request
+				 */
+				virtual void setRequestVersion(const dodoString &version);
 
-					/**
-					 * @return version of JSON-RPC response
-					 */
-					virtual dodoString getResponseVersion();
+				/**
+				 * @return version of JSON-RPC response
+				 */
+				virtual dodoString getResponseVersion();
 
-					/**
-					 * @return ID of JSON-RPC response
-					 */
-					virtual long getResponseId();
+				/**
+				 * @return ID of JSON-RPC response
+				 */
+				virtual long getResponseId();
 
-				protected:
+			  protected:
 
-					/**
-					 * process RPC call
-					 * @return RPC method
-					 * @param meth defines RPC method representation
-					 */
-					virtual dodoString processCallRequest(const rpc::method &meth);
+				/**
+				 * process RPC call
+				 * @return RPC method
+				 * @param meth defines RPC method representation
+				 */
+				virtual dodoString processCallRequest(const rpc::method &meth);
 
-					/**
-					 * process RPC call
-					 * @return RPC response represantation
-					 * @param data defines buffer that contains RPC response
-					 */
-					virtual rpc::response processCallResult(const dodoString &data);
+				/**
+				 * process RPC call
+				 * @return RPC response represantation
+				 * @param data defines buffer that contains RPC response
+				 */
+				virtual rpc::response processCallResult(const dodoString &data);
 
-					dodoString rqVersion;                       ///< request version['1.1' by default]
-					dodoString rpVersion;                       ///< response version
+				dodoString rqVersion;   ///< request version['1.1' by default]
+				dodoString rpVersion;   ///< response version
 
-					long rqId;                                  ///< request ID
-					long rpId;                                  ///< response ID
+				long rqId;              ///< request ID
+				long rpId;              ///< response ID
 			};
 		};
 	};
