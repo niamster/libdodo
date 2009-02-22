@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioStringEx.h
+ *            ioMemoryEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOSTRINGEX_H_
-#define _IOSTRINGEX_H_ 1
+#ifndef _IOMEMORYEX_H_
+#define _IOMEMORYEX_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -41,26 +41,26 @@ namespace dodo
 		/**
 		 * libdodo defined errors
 		 */
-		enum stringExR
+		enum memoryExR
 		{
-			STRINGEX_CANTBEUSEDWITHIOEVENT,
-			STRINGEX_OUTOFBOUNDS,
+			MEMORYEX_CANTBEUSEDWITHIOEVENT,
+			MEMORYEX_OUTOFBOUNDS,
 		};
 
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define IOSTRINGEX_CANTBEUSEDWITHIOEVENT_STR                  "io::string can not be used with io::event."
-#define IOSTRINGEX_OUTOFBOUNDS_STR                  "Access data out of bounds."
+#define IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR        "io::memory can not be used with io::event."
+#define IOMEMORYEX_OUTOFBOUNDS_STR                  "Access data out of bounds."
 
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum stringFunctionsID
+		enum memoryFunctionsID
 		{
-			STRINGEX__READ,
-			STRINGEX_GETINDESCRIPTOR,
-			STRINGEX_GETOUTDESCRIPTOR,
+			MEMORYEX__READ,
+			MEMORYEX_GETINDESCRIPTOR,
+			MEMORYEX_GETOUTDESCRIPTOR,
 		};
 	};
 };

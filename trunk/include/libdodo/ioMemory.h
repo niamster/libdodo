@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioString.h
+ *            ioMemory.h
  *
  *  Tue Oct 8 08:19:57 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOSTRING_H_
-#define _IOSTRING_H_ 1
+#ifndef _IOMEMORY_H_
+#define _IOMEMORY_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -38,53 +38,53 @@
 
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/ioStringEx.h>
+#include <libdodo/ioMemoryEx.h>
 
 namespace dodo
 {
 	namespace io
 	{
 		/**
-		 * @class string
-		 * @brief provides string I/O manipulations
+		 * @class memory
+		 * @brief provides memory I/O manipulations
 		 * @note if blockOffset is false then read/write position is amount of bytes from the beginning, if true then:
 		 * writeStream, writeStream write only to the end of the file(append)
 		 * write offset for write, write is calculated as pos*outSize
 		 * read offset for read, read is calculated as pos*inSize
-		 * read offset for readStream, readStream is calculated as pos*'# of \n - terminated strings'
+		 * read offset for readStream, readStream is calculated as pos*'# of \n - terminated memorys'
 		 */
-		class string : virtual public channel
+		class memory : virtual public channel
 		{
 		  public:
 
 			/**
 			 * constructor
 			 */
-			string();
+			memory();
 
 			/**
 			 * copy constructor
 			 * @note xexec object is not copied
 			 */
-			string(const string &fd);
+			memory(const memory &fd);
 
 			/**
 			 * copy constructor
 			 * @note xexec object is not copied
 			 */
-			string(const dodoString &data);
+			memory(const dodoString &data);
 
 			/**
 			 * destructor
 			 */
-			virtual ~string();
+			virtual ~memory();
 
 			/**
 			 * clone file object
 			 * @param fd defines object to clone
 			 * @note xexec object is not copied
 			 */
-			virtual void clone(const string &fd);
+			virtual void clone(const memory &fd);
 
 			/**
 			 * erase node on position
@@ -101,12 +101,12 @@ namespace dodo
 			bool append;        ///< append to the end[false by default]
 
 			/**
-			 * @return string
+			 * @return memory
 			 */
 			operator const dodoString &();
 
 			/**
-			 * @return string
+			 * @return memory
 			 */
 			operator const char*();
 
@@ -130,10 +130,10 @@ namespace dodo
 			virtual void _read(char * const data);
 
 			/**
-			 * read from stream - '\0' or '\n' - terminated string
+			 * read from stream - '\0' or '\n' - terminated memory
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
-			 * if blockOffset is true read offset is calculated as pos*'# of \n - terminated strings' otherwise offset it taken pos bytes from the beginning
+			 * if blockOffset is true read offset is calculated as pos*'# of \n - terminated memorys' otherwise offset it taken pos bytes from the beginning
 			 */
 			virtual unsigned long _readStream(char * const data);
 
@@ -144,7 +144,7 @@ namespace dodo
 			virtual void _write(const char * const data);
 
 			/**
-			 * write to stream - '\0' - terminated string
+			 * write to stream - '\0' - terminated memory
 			 * @param data defines data that will be written
 			 * @note write only to the end of the file(append)
 			 */

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioString.cc
+ *            ioMemory.cc
  *
  *  Wed Oct 8 01:44:18 2005
  *  Copyright  2005  Ni@m
@@ -27,24 +27,24 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/ioString.h>
+#include <libdodo/ioMemory.h>
 
 using namespace dodo::io;
 
-string::string() : pos(0),
+memory::memory() : pos(0),
 				   blockOffset(false),
 				   append(false)
 {
 #ifndef IO_WO_XEXEC
 
-	collectedData.setExecObject(XEXEC_OBJECT_IOSTRING);
+	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
 
 #endif
 }
 
 //-------------------------------------------------------------------
 
-string::string(const string &fd) : pos(fd.pos),
+memory::memory(const memory &fd) : pos(fd.pos),
 								   blockOffset(fd.blockOffset),
 								   append(fd.append),
 								   buffer(fd.buffer)
@@ -61,7 +61,7 @@ string::string(const string &fd) : pos(fd.pos),
 
 //-------------------------------------------------------------------
 
-string::string(const dodoString &data) : pos(0),
+memory::memory(const dodoString &data) : pos(0),
 										 blockOffset(false),
 										 append(false),
 										 buffer(data)
@@ -75,16 +75,16 @@ string::string(const dodoString &data) : pos(0),
 
 //-------------------------------------------------------------------
 
-string::~string()
+memory::~memory()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-string::getInDescriptor() const
+memory::getInDescriptor() const
 {
-	throw exception::basic(exception::ERRMODULE_IOSTRING, STRINGEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, STRINGEX_CANTBEUSEDWITHIOEVENT, IOSTRINGEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
+	throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 
 	return -1;
 }
@@ -92,9 +92,9 @@ string::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-string::getOutDescriptor() const
+memory::getOutDescriptor() const
 {
-	throw exception::basic(exception::ERRMODULE_IOSTRING, STRINGEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, STRINGEX_CANTBEUSEDWITHIOEVENT, IOSTRINGEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
+	throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 
 	return -1;
 }
@@ -102,13 +102,13 @@ string::getOutDescriptor() const
 //-------------------------------------------------------------------
 
 void
-string::flush()
+memory::flush()
 {
 }
 
 //-------------------------------------------------------------------
 
-string::operator const dodoString
+memory::operator const dodoString
 & ()
 {
 	return buffer;
@@ -116,7 +116,7 @@ string::operator const dodoString
 
 //-------------------------------------------------------------------
 
-string::operator const char
+memory::operator const char
 *()
 {
 	return buffer.data();
@@ -125,7 +125,7 @@ string::operator const char
 //-------------------------------------------------------------------
 
 void
-string::clone(const string &fd)
+memory::clone(const memory &fd)
 {
 	pc::sync::protector pg(keeper);
 
@@ -141,13 +141,13 @@ string::clone(const string &fd)
 //-------------------------------------------------------------------
 
 void
-string::_read(char * const a_data)
+memory::_read(char * const a_data)
 {
 	unsigned long pos = blockOffset ? this->pos * inSize : this->pos;
 
 	if ((pos + inSize) > buffer.size())
 	{
-		throw exception::basic(exception::ERRMODULE_IOSTRING, STRINGEX__READ, exception::ERRNO_LIBDODO, STRINGEX_OUTOFBOUNDS, IOSTRINGEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__READ, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
 	}
 
 	memset(a_data, '\0', inSize);
@@ -158,7 +158,7 @@ string::_read(char * const a_data)
 //-------------------------------------------------------------------
 
 void
-string::_write(const char *const a_data)
+memory::_write(const char *const a_data)
 {
 	if (append)
 	{
@@ -181,7 +181,7 @@ string::_write(const char *const a_data)
 //-------------------------------------------------------------------
 
 void
-string::erase()
+memory::erase()
 {
 	pc::sync::protector pg(keeper);
 
@@ -199,7 +199,7 @@ string::erase()
 //-------------------------------------------------------------------
 
 unsigned long
-string::_readStream(char * const a_data)
+memory::_readStream(char * const a_data)
 {
 	unsigned long readSize = inSize + 1;
 
@@ -262,7 +262,7 @@ string::_readStream(char * const a_data)
 //-------------------------------------------------------------------
 
 void
-string::_writeStream(const char *const a_data)
+memory::_writeStream(const char *const a_data)
 {
 	unsigned long _outSize = outSize;
 	unsigned int bufSize = strlen(a_data);

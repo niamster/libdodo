@@ -58,7 +58,7 @@ OBJECTS:=dataBaseAccumulator.o \
 	ioNetworkExchange.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
-	ioString.o \
+	ioMemory.o \
 	rpcValue.o \
 	rpcMethod.o \
 	rpcResponse.o \

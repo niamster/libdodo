@@ -5,7 +5,7 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/ioString.h>
+#include <libdodo/ioMemory.h>
 #include <libdodo/toolsCode.h>
 
 #include <iostream>
@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		io::string io;
+		io::memory io;
 		io.blockOffset = true;
 
 		io.writeStream("!12345890#!!@\n");
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 		io.writeStream("!12345890@!!@\n");
 		io.writeStream("!12345890$!!@\n");
 
-		io::string io2 = io;
+		io::memory io2 = io;
 
 		io2.pos = 1;
 		io2.outSize = 14;
