@@ -39,7 +39,8 @@ event::event(event &rt)
 
 //-------------------------------------------------------------------
 
-event::event() : descs(0)
+event::event() : descs(0),
+				 keeper(new pc::sync::process::section)
 {
 }
 
@@ -47,13 +48,14 @@ event::event() : descs(0)
 
 event::~event()
 {
+	delete keeper;
 }
 
 //-------------------------------------------------------------------
 
 int event::addChannel(const eventInfo &fl)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	__eventInOutDescriptors tempD;
 
@@ -71,7 +73,7 @@ int event::addChannel(const eventInfo &fl)
 dodoArray<bool>event::isReadable(const dodoArray<int> &pos,
 								 int                  timeout) const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	int count = -1;
 
@@ -156,7 +158,7 @@ dodoArray<bool>event::isReadable(const dodoArray<int> &pos,
 dodoArray<bool>event::isWritable(const dodoArray<int> &pos,
 								 int                  timeout) const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	int count = -1;
 
@@ -241,7 +243,7 @@ dodoArray<bool>event::isWritable(const dodoArray<int> &pos,
 bool event::isReadable(int pos,
 					   int timeout) const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	pollfd fd;
 
@@ -287,7 +289,7 @@ bool event::isReadable(int pos,
 
 void event::delChannel(int pos)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	dodoArray<__eventInOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
@@ -306,7 +308,7 @@ void event::delChannel(int pos)
 bool event::isWritable(int pos,
 					   int timeout) const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	pollfd fd;
 

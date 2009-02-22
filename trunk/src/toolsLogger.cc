@@ -63,7 +63,8 @@ const int logger::syslogLevels[] =
 
 logger::logger() : handlersNum(0),
 				   timeFormat(" %d/%m/%Y.%H-%M-%S: "),
-				   forward(false)
+				   forward(false),
+				   keeper(new pc::sync::process::section)
 {
 }
 
@@ -71,6 +72,7 @@ logger::logger() : handlersNum(0),
 
 logger::~logger()
 {
+	delete keeper;
 }
 
 //-------------------------------------------------------------------
@@ -78,7 +80,7 @@ logger::~logger()
 unsigned long logger::add(short       level,
 						  io::channel *handler)
 {
-	protector tg(this);
+	pc::sync::protector pg(keeper);
 
 	__logMap lm;
 
@@ -95,7 +97,7 @@ unsigned long logger::add(short       level,
 
 void logger::remove(unsigned long position)
 {
-	protector tg(this);
+	pc::sync::protector pg(keeper);
 
 	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
 	for (; i != j; ++i)
@@ -114,7 +116,7 @@ void logger::remove(unsigned long position)
 void logger::log(short            level,
 				 const dodoString &msg)
 {
-	protector tg(this);
+	pc::sync::protector pg(keeper);
 
 	if (level < 0 && level >= LOGGER_LEVELS)
 	{

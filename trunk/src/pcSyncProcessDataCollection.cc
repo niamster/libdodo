@@ -38,7 +38,8 @@ collection::collection(collection &sts)
 
 //-------------------------------------------------------------------
 
-collection::collection() : shareNum(0)
+collection::collection() : shareNum(0),
+						   keeper(new section(0))
 {
 }
 
@@ -46,13 +47,14 @@ collection::collection() : shareNum(0)
 
 collection::~collection()
 {
+	delete keeper;
 }
 
 //-------------------------------------------------------------------
 
 unsigned long collection::add(void *data)
 {
-	protector tg(this);
+pc::sync::protector pg(keeper);
 
 	pc::sync::data::__info share;
 
@@ -68,7 +70,7 @@ unsigned long collection::add(void *data)
 
 void collection::del(unsigned long position)
 {
-	protector tg(this);
+pc::sync::protector pg(keeper);
 
 	if (getShare(position))
 	{
@@ -85,7 +87,7 @@ void collection::del(unsigned long position)
 void collection::set(unsigned long position,
 					 void          *data)
 {
-	protector tg(this);
+pc::sync::protector pg(keeper);
 
 	if (getShare(position))
 	{
@@ -101,7 +103,7 @@ void collection::set(unsigned long position,
 
 const void *collection::get(unsigned long position)
 {
-	protector tg(this);
+pc::sync::protector pg(keeper);
 
 	if (getShare(position))
 	{

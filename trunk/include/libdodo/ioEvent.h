@@ -39,7 +39,8 @@
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/ioEventInfo.h>
-#include <libdodo/pcSyncThreadStack.h>
+#include <libdodo/pcSyncProcessSection.h>
+#include <libdodo/pcSyncProtector.h>
 
 namespace dodo
 {
@@ -61,7 +62,7 @@ namespace dodo
 		 * @class event
 		 * @brief provides information if in/output stream is readable/writable
 		 */
-		class event : virtual public pc::sync::thread::stack
+		class event
 		{
 		  private:
 
@@ -136,6 +137,8 @@ namespace dodo
 			dodoArray<__eventInOutDescriptors> desc;    ///< stream pairs
 
 			int descs;                                  ///< descriptors counter
+
+			pc::sync::section *keeper;					///< section locker
 		};
 	};
 };

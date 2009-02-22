@@ -1,7 +1,7 @@
 /***************************************************************************
- *            pcSyncStack.cc
+ *            pcSyncProtector.h
  *
- *  Sat Oct 20 11:00:55 2007
+ *  Sat Oct 20 02:00:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,33 +27,46 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/pcSyncStack.h>
+#ifndef _PCSYNCPROTECTOR_H_
+#define _PCSYNCPROTECTOR_H_ 1
 
-using namespace dodo::pc::sync;
+#include <libdodo/directives.h>
 
-stack::~stack()
+#include <libdodo/types.h>
+#include <libdodo/pcSyncSection.h>
+#include <libdodo/exceptionBasic.h>
+
+namespace dodo
 {
-}
-
-//-------------------------------------------------------------------
-
-stack::protector::protector(const stack *a_parent) : parent(a_parent)
-{
-	parent->keeper->acquire();
-}
-
-//-------------------------------------------------------------------
-
-stack::protector::~protector()
-{
-	try
+	namespace pc
 	{
-		parent->keeper->release();
-	}
-	catch (exception::basic &ex)
-	{
-	}
-}
+		namespace sync
+		{
+			/**
+			 * @class protector
+			 * @brief provides thread/process safe behaviour
+			 * @note it locks in constructor and unlocks in destructor
+			 */
+			class protector
+			{
+			  public:
 
-//-------------------------------------------------------------------
+				/**
+				 * contructor
+				 */
+				protector(section *parent);
 
+				/**
+				 * destructor
+				 */
+				virtual ~protector();
+
+			  protected:
+
+				section *keeper; ///< lock
+			};
+		};
+	};
+};
+
+#endif

@@ -43,7 +43,8 @@ __xexecIoChannelCollectedData::__xexecIoChannelCollectedData(xexec *a_executor,
 //-------------------------------------------------------------------
 
 channel::channel() : inSize(IO_INSIZE),
-					 outSize(IO_OUTSIZE)
+					 outSize(IO_OUTSIZE),
+					 keeper(new pc::sync::process::section)
 
 #ifndef IO_WO_XEXEC
 
@@ -58,13 +59,14 @@ channel::channel() : inSize(IO_INSIZE),
 
 channel::~channel()
 {
+	delete keeper;
 }
 
 //-------------------------------------------------------------------
 
 dodoString channel::read()
 {
-	protector pg(this);
+	pc::sync::protector pg(keeper);
 
 	dodoString a_str;
 
@@ -124,7 +126,7 @@ dodoString channel::read()
 
 dodoString channel::readStream()
 {
-	protector pg(this);
+	pc::sync::protector pg(keeper);
 
 	dodoString a_str;
 
@@ -190,7 +192,7 @@ dodoString channel::readStream()
 
 void channel::write(const dodoString &a_data)
 {
-	protector pg(this);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 
@@ -227,7 +229,7 @@ void channel::write(const dodoString &a_data)
 
 void channel::writeStream(const dodoString &a_data)
 {
-	protector pg(this);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 

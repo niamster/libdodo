@@ -203,7 +203,7 @@ fifo::~fifo()
 
 int fifo::getInDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -217,7 +217,7 @@ int fifo::getInDescriptor() const
 
 int fifo::getOutDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -231,7 +231,7 @@ int fifo::getOutDescriptor() const
 
 void fifo::clone(const fifo &fd)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler != NULL)
 	{
@@ -292,7 +292,7 @@ void fifo::clone(const fifo &fd)
 
 void fifo::close()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = FIFO_OPERATION_CLOSE;
@@ -319,7 +319,7 @@ void fifo::close()
 void fifo::open(const dodoString &a_path,
 				short            a_mode)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = FIFO_OPERATION_OPEN;
@@ -425,7 +425,7 @@ void fifo::open(const dodoString &a_path,
 
 bool fifo::isBlocked()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	return blocked;
 }
@@ -434,7 +434,7 @@ bool fifo::isBlocked()
 
 void fifo::block(bool flag)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -649,7 +649,7 @@ void fifo::_write(const char *const a_data)
 
 void fifo::flush()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{

@@ -110,7 +110,7 @@ temp::~temp()
 
 int temp::getInDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -124,7 +124,7 @@ int temp::getInDescriptor() const
 
 int temp::getOutDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -138,7 +138,7 @@ int temp::getOutDescriptor() const
 
 void temp::clone(const temp &fd)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler != NULL)
 	{
@@ -186,7 +186,7 @@ void temp::clone(const temp &fd)
 
 void temp::close()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = TEMP_OPERATION_CLOSE;
@@ -212,7 +212,7 @@ void temp::close()
 
 void temp::open()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = TEMP_OPERATION_OPEN;
@@ -354,7 +354,7 @@ void temp::_write(const char *const a_data)
 
 void temp::erase()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	char *empty = new char[outSize];
 
@@ -385,7 +385,7 @@ void temp::erase()
 
 void temp::flush()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{

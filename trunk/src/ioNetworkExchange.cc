@@ -116,7 +116,7 @@ void exchange::init(__initialAccept &a_init)
 
 void exchange::close()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
@@ -141,7 +141,7 @@ void exchange::init(int  a_socket,
 					bool a_blocked,
 					bool blockInherited)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (socket != -1)
 	{
@@ -182,7 +182,7 @@ void exchange::init(int  a_socket,
 
 bool exchange::isAlive()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (socket == -1)
 	{
@@ -448,7 +448,7 @@ void exchange::flush()
 
 int exchange::getInDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	return socket;
 }
@@ -457,7 +457,7 @@ int exchange::getInDescriptor() const
 
 int exchange::getOutDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	return socket;
 }

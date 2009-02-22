@@ -1,4 +1,3 @@
-
 prefix:=@prefix@
 datarootdir:=@datarootdir@
 exec_prefix:=@exec_prefix@
@@ -12,7 +11,7 @@ INSTALL:=@INSTALL@
 LN_S:=@LN_S@
 
 CPPFLAGS:=-I./include @CPPFLAGS@
-LDFLAGS:=-L./ @LDFLAGS@ 
+LDFLAGS:=-L./ @LDFLAGS@
 CFLAGS:=@CFLAGS@ @DEFS@
 
 ###########################################################
@@ -85,15 +84,13 @@ OBJECTS:=dataBaseAccumulator.o \
 	graphicsImage.o \
 	graphicsDraw.o \
 	graphicsColor.o \
-	pcSyncStack.o \
+	pcSyncProtector.o \
 	pcSyncSection.o \
 	pcSyncThreadSection.o \
 	pcSyncProcessSection.o \
 	pcProcessCollection.o \
 	pcThreadCollection.o \
 	pcJobCollection.o \
-	pcSyncThreadStack.o \
-	pcSyncProcessStack.o \
 	pcSyncThreadDataSingle.o \
 	pcSyncProcessDataSingle.o \
 	pcSyncDataSingle.o \
@@ -120,7 +117,7 @@ all: @PACKAGE_NAME@
 	@$(CXX) $(LDFLAGS) -shared -Wl,-soname,$@.so.@SO_VERSION@ -o $@.so.@SO_VERSION@ $(OBJECTS)
 	@rm -f $@.so
 	@$(LN_S) @PACKAGE_NAME@.so.@SO_VERSION@ $@.so
-	
+
 	@echo ""
 	@echo ""
 	@echo "Now you can run 'gmake install'."
@@ -152,7 +149,7 @@ install: @PACKAGE_NAME@
 	@${INSTALL} -m 755 bin/dodo-config ${DESTDIR}$(bindir)/
 	@echo "-- Installing: ${DESTDIR}$(bindir)/dodo-config"
 	@echo ${DESTDIR}$(bindir)/dodo-config >> install_manifest.txt
-	
+
 	@echo ""
 	@echo ""
 	@echo "Use libdodo with pleasure"
@@ -161,4 +158,3 @@ install: @PACKAGE_NAME@
 
 clean:
 	@rm -rf *.o *.so* *.a*
-

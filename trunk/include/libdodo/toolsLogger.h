@@ -34,7 +34,8 @@
 
 #include <libdodo/ioChannel.h>
 #include <libdodo/toolsTime.h>
-#include <libdodo/pcSyncThreadStack.h>
+#include <libdodo/pcSyncProcessSection.h>
+#include <libdodo/pcSyncProtector.h>
 #include <libdodo/types.h>
 
 #include <syslog.h>
@@ -76,8 +77,7 @@ namespace dodo
 		 * @class logger
 		 * @brief provides logging function
 		 */
-		class logger : virtual public pc::sync::thread::stack,
-					   public singleton<logger>
+		class logger : public singleton<logger>
 		{
 		  public:
 
@@ -134,6 +134,8 @@ namespace dodo
 
 			static const dodoString levels[LOGGER_LEVELS];  ///< log levels statements
 			static const int syslogLevels[LOGGER_LEVELS];   ///< syslog log levels
+
+			pc::sync::section *keeper;						///< section locker
 		};
 	};
 };

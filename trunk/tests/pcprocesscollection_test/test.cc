@@ -12,6 +12,7 @@
 #include <libdodo/dataMemoryShared.h>
 #include <libdodo/pcSyncProcessDataSingle.h>
 #include <libdodo/pcSyncProcessDataCollection.h>
+#include <libdodo/pcSyncProtector.h>
 
 #include <iostream>
 
@@ -46,9 +47,9 @@ process(void *ud)
 		char *dt = (char *)shD.map();
 		cout << "Data: " << dt << endl, cout.flush();
 		shD.close();
-		
+
 		cout << (char *)dgC.get(dgCI), cout.flush();
-		
+
 		cout << (char *)dg0.acquire(1), cout.flush();
 		tools::os::microSleep(1000);
 		dg0.release();
@@ -71,8 +72,8 @@ process(void *ud)
 int
 processLocked(void *ud)
 {
-	sec.acquire();
-	
+	sync::protector pg(&sec);
+
 	cout << "processLocked:" << (char *)ud << endl, cout.flush();
 
 	try
@@ -83,16 +84,16 @@ processLocked(void *ud)
 		cout << "Size: " << size << endl, cout.flush();
 		char *dt = (char *)shD.map(size);
 		cout << "Data: " << dt << endl, cout.flush();
-		
+
 		cout << (char *)dgC.get(dgCI), cout.flush();
-	
+
 		cout << (char *)dg0.acquire(), cout.flush();
 		dg0.release();
 
 		cout << endl << (char *)dt << ": " << tools::time::now() << endl, cout.flush();
 
 		tools::os::sleep(1);
-		
+
 		cout << (char *)dg1.acquire(), cout.flush();
 		dg1.release();
 
@@ -102,8 +103,6 @@ processLocked(void *ud)
 	{
 		cout << (dodoString)ex << ex.line << endl, cout.flush();
 	}
-
-	sec.release();
 
 	return 0;
 }

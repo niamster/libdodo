@@ -44,7 +44,6 @@
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioNetwork.h>
-#include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo
 {

@@ -33,7 +33,6 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/pcSyncStack.h>
 
 namespace dodo
 {

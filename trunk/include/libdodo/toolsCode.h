@@ -57,8 +57,6 @@
 #include <stdlib.h>
 
 #include <libdodo/types.h>
-#include <libdodo/ioNetwork.h>
-#include <libdodo/toolsNetwork.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/toolsCodeEx.h>
 

@@ -35,7 +35,8 @@
 #include <libdodo/types.h>
 #include <libdodo/pcSyncDataCollection.h>
 #include <libdodo/pcSyncThreadDataCollectionEx.h>
-#include <libdodo/pcSyncThreadStack.h>
+#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncThreadSection.h>
 
 namespace dodo
 {
@@ -51,8 +52,7 @@ namespace dodo
 					 * @class collection
 					 * @brief implements collection of shared data for threads
 					 */
-					class collection : public sync::data::collection,
-									   virtual public sync::thread::stack
+					class collection : public sync::data::collection
 					{
 					  private:
 
@@ -122,6 +122,8 @@ namespace dodo
 						unsigned long shareNum;                             ///< number of registered shares
 
 						dodoList<pc::sync::data::__info>::iterator current; ///< iterator for list of shared data[for matched with getShare method]
+
+						section *keeper;									///< section locker
 					};
 				};
 			};

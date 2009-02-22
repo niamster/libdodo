@@ -35,7 +35,8 @@
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
 #include <libdodo/ioEventInfo.h>
-#include <libdodo/pcSyncThreadStack.h>
+#include <libdodo/pcSyncProcessSection.h>
+#include <libdodo/pcSyncProtector.h>
 
 namespace dodo
 {
@@ -82,8 +83,7 @@ namespace dodo
 		 * @class channel
 		 * @brief implements an interface for I/O operations
 		 */
-		class channel : virtual public eventInfo,
-						virtual public pc::sync::thread::stack
+		class channel : virtual public eventInfo
 #ifndef IO_WO_XEXEC
 						,
 						public xexec
@@ -168,6 +168,7 @@ namespace dodo
 			__xexecIoChannelCollectedData collectedData; ///< data collected for xexec
 
 #endif
+			pc::sync::section *keeper;							 ///< section locker
 		};
 	};
 };

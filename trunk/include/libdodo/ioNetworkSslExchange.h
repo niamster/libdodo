@@ -52,7 +52,6 @@
 #include <libdodo/ioSsl.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
-#include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo
 {

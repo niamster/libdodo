@@ -1,7 +1,7 @@
 /***************************************************************************
- *            pcSyncThreadStack.h
+ *            pcSyncProtector.cc
  *
- *  Tue Jul  10 22:00:57 2007
+ *  Sat Oct 20 11:00:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,44 +27,27 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCSYNCTHREADSTACK_H_
-#define _PCSYNCTHREADSTACK_H_ 1
+#include <libdodo/pcSyncProtector.h>
 
-#include <libdodo/directives.h>
+using namespace dodo::pc::sync;
 
-#include <libdodo/types.h>
-#include <libdodo/pcSyncStack.h>
-#include <libdodo/pcSyncThreadSection.h>
-
-namespace dodo
+protector::protector(section *a_keeper) : keeper(a_keeper)
 {
-	namespace pc
+	keeper->acquire();
+}
+
+//-------------------------------------------------------------------
+
+protector::~protector()
+{
+	try
 	{
-		namespace sync
-		{
-			namespace thread
-			{
-				/**
-				 * @class stack
-				 * @brief provides mutex lock
-				 */
-				class stack : virtual public sync::stack
-				{
-				  protected:
+		keeper->release();
+	}
+	catch (exception::basic &ex)
+	{
+	}
+}
 
-					/**
-					 * contructor
-					 */
-					stack();
+//-------------------------------------------------------------------
 
-					/**
-					 * destructor
-					 */
-					virtual ~stack();
-				};
-			};
-		};
-	};
-};
-
-#endif

@@ -121,7 +121,7 @@ string::operator const char*()
 
 void string::clone(const string &fd)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	pos = fd.pos;
 	blockOffset = fd.blockOffset;
@@ -174,7 +174,7 @@ void string::_write(const char *const a_data)
 
 void string::erase()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
 

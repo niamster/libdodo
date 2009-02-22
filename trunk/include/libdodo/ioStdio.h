@@ -41,7 +41,6 @@
 
 #include <libdodo/types.h>
 #include <libdodo/ioPipe.h>
-#include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo
 {

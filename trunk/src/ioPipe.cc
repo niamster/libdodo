@@ -144,7 +144,7 @@ io::pipe::~pipe()
 
 void io::pipe::clone(const pipe &fd)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (inHandle != NULL)
 	{
@@ -218,7 +218,7 @@ void io::pipe::clone(const pipe &fd)
 
 int io::pipe::getInDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (inHandle == NULL)
 	{
@@ -232,7 +232,7 @@ int io::pipe::getInDescriptor() const
 
 int io::pipe::getOutDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (outHandle == NULL)
 	{
@@ -246,7 +246,7 @@ int io::pipe::getOutDescriptor() const
 
 void io::pipe::close()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = PIPE_OPERATION_CLOSE;
@@ -282,7 +282,7 @@ void io::pipe::close()
 
 void io::pipe::open()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = PIPE_OPERATION_OPEN;
@@ -505,7 +505,7 @@ void io::pipe::_write(const char *const buf)
 
 void io::pipe::flush()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (outHandle == NULL)
 	{
@@ -522,7 +522,7 @@ void io::pipe::flush()
 
 io::network::__peerInfo io::pipe::peerInfo()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (inHandle == NULL)
 	{
@@ -595,7 +595,7 @@ io::network::__peerInfo io::pipe::peerInfo()
 
 bool io::pipe::isBlocked()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	return blocked;
 }
@@ -604,7 +604,7 @@ bool io::pipe::isBlocked()
 
 void io::pipe::block(bool flag)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (inHandle == NULL && outHandle == NULL)
 	{

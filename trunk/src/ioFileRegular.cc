@@ -208,7 +208,7 @@ regular::~regular()
 
 int regular::getInDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -222,7 +222,7 @@ int regular::getInDescriptor() const
 
 int regular::getOutDescriptor() const
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -236,7 +236,7 @@ int regular::getOutDescriptor() const
 
 void regular::clone(const regular &fd)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler != NULL)
 	{
@@ -305,7 +305,7 @@ void regular::clone(const regular &fd)
 
 void regular::close()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = REGULAR_OPERATION_CLOSE;
@@ -332,7 +332,7 @@ void regular::close()
 void regular::open(const dodoString &a_path,
 				   short            a_mode)
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = REGULAR_OPERATION_OPEN;
@@ -542,7 +542,7 @@ void regular::_write(const char *const a_data)
 
 void regular::erase()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	char *empty = new char[outSize];
 
@@ -573,7 +573,7 @@ void regular::erase()
 
 void regular::flush()
 {
-	protector pg(this);
+pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{

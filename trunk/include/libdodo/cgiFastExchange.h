@@ -40,7 +40,6 @@
 #include <libdodo/cgiFastExchangeEx.h>
 #include <libdodo/cgiExchange.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/pcSyncThreadStack.h>
 
 namespace dodo
 {
