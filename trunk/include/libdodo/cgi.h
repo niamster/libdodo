@@ -212,7 +212,12 @@ namespace dodo
 			 * constructor
 			 * @note defines struct data with user data
 			 */
-			__cgiCookie(const dodoString &name, const dodoString &value, const dodoString &exDate, const dodoString &path, const dodoString &domain, bool secure);
+			__cgiCookie(const dodoString &name,
+						const dodoString &value,
+						const dodoString &exDate,
+						const dodoString &path,
+						const dodoString &domain,
+						bool			 secure);
 
 			dodoString name;                            ///< name of the cookie
 			dodoString value;                           ///< value of the cookie

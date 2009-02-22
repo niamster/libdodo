@@ -93,7 +93,10 @@ namespace dodo
 					 * @param value devines node value
 					 * @param ns defines node namespace
 					 */
-					node(const dodoString &name, const dodoStringMap &attributes, const dodoString &value, const dodoString &ns = __dodostring__);
+					node(const dodoString	 &name,
+						 const dodoStringMap &attributes,
+						 const dodoString	 &value,
+						 const dodoString	 &ns = __dodostring__);
 
 					/**
 					 * add child to the node

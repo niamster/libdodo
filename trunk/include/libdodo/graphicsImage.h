@@ -86,7 +86,8 @@ namespace dodo
 			 * @param executor defines class that executed hook
 			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 			 */
-			__xexecImageCollectedData(xexec *executor, short execObject);
+			__xexecImageCollectedData(xexec *executor,
+									  short execObject);
 
 #endif
 

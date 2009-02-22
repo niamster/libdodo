@@ -80,7 +80,9 @@ namespace dodo
 				 * @note if limit is exhausted `listen` will return
 				 * if limit is 0 `listen` never returns
 				 */
-				server(unsigned long limit = 0, bool threading = true, unsigned int threadsNum = 10);
+				server(unsigned long limit = 0,
+					   bool			 threading = true,
+					   unsigned int	 threadsNum = 10);
 
 #else
 

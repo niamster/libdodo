@@ -66,7 +66,8 @@ namespace dodo
 					 * @param name defines node name
 					 * @param ns defines namespace of the node
 					 */
-					__nodeDef(const dodoString &name, const dodoString &ns=__dodostring__);
+					__nodeDef(const dodoString &name,
+							  const dodoString &ns = __dodostring__);
 
 					dodoString                     name;            ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
@@ -94,7 +95,10 @@ namespace dodo
 					 * constructor
 					 * @note initializes with user values
 					 */
-					__info(const dodoString &version, const dodoString &encoding, const dodoString &root, int compression);
+					__info(const dodoString &version,
+						   const dodoString &encoding,
+						   const dodoString &root,
+						   int				compression);
 
 					dodoString version;                             ///< version of XML document
 					dodoString encoding;                            ///< encoding of XML document

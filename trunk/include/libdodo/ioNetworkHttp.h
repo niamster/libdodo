@@ -129,7 +129,8 @@ namespace dodo
 				 * @param path defines path to file
 				 * @param mime defines mimetype of the file
 				 */
-				__httpPostFile(const dodoString path, const dodoString mime);
+				__httpPostFile(const dodoString path,
+							   const dodoString mime);
 
 				/**
 				 * constructor

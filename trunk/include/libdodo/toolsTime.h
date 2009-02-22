@@ -88,7 +88,13 @@ namespace dodo
 			 * @param year defines year
 			 * @param daylight defines daylight savings condition
 			 */
-			__time(unsigned int sec, unsigned int min, unsigned int hour, unsigned int day, unsigned int month, unsigned int year, bool daylight = true);
+			__time(unsigned int sec,
+				   unsigned int min,
+				   unsigned int hour,
+				   unsigned int day,
+				   unsigned int month,
+				   unsigned int year,
+				   bool			daylight = true);
 
 			unsigned int sec;       ///< seconds [0, 60]
 			unsigned int min;       ///< minutes [0, 59]

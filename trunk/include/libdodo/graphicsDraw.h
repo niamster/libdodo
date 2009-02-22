@@ -69,7 +69,8 @@ namespace dodo
 			 * @param x defines x position of the point
 			 * @param y defines y position of the point
 			 */
-			point(unsigned long x, unsigned long y);
+			point(unsigned long x,
+				  unsigned long y);
 
 			unsigned long x;    ///< x position of the point
 			unsigned long y;    ///< y position of the point

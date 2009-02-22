@@ -87,7 +87,8 @@ namespace dodo
 					 * @param family defines family of the socket[see connectionProtoFamilyEnum]
 					 * @param type defines type of the socket[see connectionTransferTypeEnum]
 					 */
-					client(short family, short type);
+					client(short family,
+						   short type);
 
 					/**
 					 * destructor

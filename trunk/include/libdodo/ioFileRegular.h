@@ -90,7 +90,8 @@ namespace dodo
 				 * @param path defines path to the file
 				 * @param mode defines mode to open file[see regularOpenmodeEnum]
 				 */
-				regular(const dodoString &path, short mode);
+				regular(const dodoString &path,
+						short			 mode);
 
 				/**
 				 * constructor
