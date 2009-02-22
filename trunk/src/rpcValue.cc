@@ -85,7 +85,8 @@ value::~value()
 
 //-------------------------------------------------------------------
 
-void value::clear()
+void
+value::clear()
 {
 	stringValue.clear();
 	arrayValue.clear();
@@ -94,7 +95,8 @@ void value::clear()
 
 //-------------------------------------------------------------------
 
-void value::setString(const dodoString &value)
+void
+value::setString(const dodoString &value)
 {
 	valueDataType = DATATYPE_STRING;
 
@@ -103,7 +105,8 @@ void value::setString(const dodoString &value)
 
 //-------------------------------------------------------------------
 
-void value::setBoolean(bool value)
+void
+value::setBoolean(bool value)
 {
 	valueDataType = DATATYPE_BOOLEAN;
 
@@ -112,7 +115,8 @@ void value::setBoolean(bool value)
 
 //-------------------------------------------------------------------
 
-void value::setInteger(long value)
+void
+value::setInteger(long value)
 {
 	valueDataType = DATATYPE_INTEGER;
 
@@ -121,7 +125,8 @@ void value::setInteger(long value)
 
 //-------------------------------------------------------------------
 
-void value::setDouble(double value)
+void
+value::setDouble(double value)
 {
 	valueDataType = DATATYPE_DOUBLE;
 
@@ -130,7 +135,8 @@ void value::setDouble(double value)
 
 //-------------------------------------------------------------------
 
-void value::addArrayElement(const value &value)
+void
+value::addArrayElement(const value &value)
 {
 	valueDataType = DATATYPE_ARRAY;
 
@@ -139,8 +145,9 @@ void value::addArrayElement(const value &value)
 
 //-------------------------------------------------------------------
 
-void value::addStructMember(const dodoString &name,
-							const value      &value)
+void
+value::addStructMember(const dodoString &name,
+					   const value      &value)
 {
 	valueDataType = DATATYPE_STRUCT;
 
@@ -149,7 +156,8 @@ void value::addStructMember(const dodoString &name,
 
 //-------------------------------------------------------------------
 
-void value::setArray(const dodoArray<value> &value)
+void
+value::setArray(const dodoArray<value> &value)
 {
 	valueDataType = DATATYPE_ARRAY;
 
@@ -158,7 +166,8 @@ void value::setArray(const dodoArray<value> &value)
 
 //-------------------------------------------------------------------
 
-void value::setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &value)
+void
+value::setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &value)
 {
 	valueDataType = DATATYPE_STRUCT;
 
@@ -198,14 +207,16 @@ value::operator[](unsigned long key)
 
 //-------------------------------------------------------------------
 
-short value::getType()
+short
+value::getType()
 {
 	return valueDataType;
 }
 
 //-------------------------------------------------------------------
 
-dodoString value::getString()
+dodoString
+value::getString()
 {
 	if (valueDataType != DATATYPE_STRING)
 	{
@@ -217,7 +228,8 @@ dodoString value::getString()
 
 //-------------------------------------------------------------------
 
-bool value::getBoolean()
+bool
+value::getBoolean()
 {
 	if (valueDataType != DATATYPE_BOOLEAN)
 	{
@@ -229,7 +241,8 @@ bool value::getBoolean()
 
 //-------------------------------------------------------------------
 
-long value::getInteger()
+long
+value::getInteger()
 {
 	if (valueDataType != DATATYPE_INTEGER)
 	{
@@ -241,7 +254,8 @@ long value::getInteger()
 
 //-------------------------------------------------------------------
 
-double value::getDouble()
+double
+value::getDouble()
 {
 	if (valueDataType != DATATYPE_DOUBLE)
 	{
@@ -253,7 +267,8 @@ double value::getDouble()
 
 //-------------------------------------------------------------------
 
-dodoArray<value>value::getArray()
+dodoArray<value>
+value::getArray()
 {
 	if (valueDataType != DATATYPE_ARRAY)
 	{
@@ -265,7 +280,8 @@ dodoArray<value>value::getArray()
 
 //-------------------------------------------------------------------
 
-dodoMap<dodoString, value, dodo::dodoMapStringCompare>value::getStruct()
+dodoMap<dodoString, value, dodo::dodoMapStringCompare>
+value::getStruct()
 {
 	if (valueDataType != DATATYPE_STRUCT)
 	{

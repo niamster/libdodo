@@ -91,7 +91,8 @@ single::~single()
 
 //-------------------------------------------------------------------
 
-void single::set(void *a_data)
+void
+single::set(void *a_data)
 {
 #ifdef PTHREAD_EXT
 
@@ -114,7 +115,8 @@ void single::set(void *a_data)
 
 //-------------------------------------------------------------------
 
-void single::del()
+void
+single::del()
 {
 #ifdef PTHREAD_EXT
 
@@ -137,7 +139,8 @@ void single::del()
 
 //-------------------------------------------------------------------
 
-void *single::acquire(unsigned long microseconds)
+void *
+single::acquire(unsigned long microseconds)
 {
 #ifdef PTHREAD_EXT
 
@@ -190,7 +193,8 @@ void *single::acquire(unsigned long microseconds)
 
 //-------------------------------------------------------------------
 
-void single::release()
+void
+single::release()
 {
 #ifdef PTHREAD_EXT
 

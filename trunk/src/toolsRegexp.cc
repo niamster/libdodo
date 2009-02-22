@@ -78,9 +78,10 @@ regexp::~regexp()
 
 //-------------------------------------------------------------------
 
-bool regexp::match(const dodoString &pattern,
-				   const dodoString &sample,
-				   dodoStringArray  &pockets)
+bool
+regexp::match(const dodoString &pattern,
+			  const dodoString &sample,
+			  dodoStringArray  &pockets)
 {
 	try
 	{
@@ -103,8 +104,9 @@ bool regexp::match(const dodoString &pattern,
 
 //-------------------------------------------------------------------
 
-bool regexp::match(const dodoString &sample,
-				   dodoStringArray  &pockets)
+bool
+regexp::match(const dodoString &sample,
+			  dodoStringArray  &pockets)
 {
 	pockets.clear();
 	if (!boundMatch(sample))
@@ -127,7 +129,8 @@ bool regexp::match(const dodoString &sample,
 
 //-------------------------------------------------------------------
 
-bool regexp::boundMatch(const dodoString &sample)
+bool
+regexp::boundMatch(const dodoString &sample)
 {
 	boundaries.clear();
 
@@ -196,7 +199,8 @@ bool regexp::boundMatch(const dodoString &sample)
 
 //-------------------------------------------------------------------
 
-void regexp::compile(const dodoString &pattern)
+void
+regexp::compile(const dodoString &pattern)
 {
 	int bits(0);
 
@@ -258,9 +262,10 @@ void regexp::compile(const dodoString &pattern)
 
 //-------------------------------------------------------------------
 
-dodoString regexp::replace(const dodoString      &pattern,
-						   const dodoString      &sample,
-						   const dodoStringArray &replacements)
+dodoString
+regexp::replace(const dodoString      &pattern,
+				const dodoString      &sample,
+				const dodoStringArray &replacements)
 {
 	try
 	{
@@ -283,8 +288,9 @@ dodoString regexp::replace(const dodoString      &pattern,
 
 //-------------------------------------------------------------------
 
-dodoString regexp::replace(const dodoString      &sample,
-						   const dodoStringArray &replacements)
+dodoString
+regexp::replace(const dodoString      &sample,
+				const dodoStringArray &replacements)
 {
 	if (!boundMatch(sample))
 	{

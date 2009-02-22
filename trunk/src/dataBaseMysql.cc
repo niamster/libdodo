@@ -111,8 +111,9 @@ mysql::~mysql()
 
 //-------------------------------------------------------------------
 
-void mysql::connectSettings(unsigned long           a_type,
-							const __mysqlSslOptions &options)
+void
+mysql::connectSettings(unsigned long           a_type,
+					   const __mysqlSslOptions &options)
 {
 	if (mysqlHandle == NULL)
 	{
@@ -134,7 +135,8 @@ void mysql::connectSettings(unsigned long           a_type,
 
 //-------------------------------------------------------------------
 
-void mysql::connect(const __connectionInfo &info)
+void
+mysql::connect(const __connectionInfo &info)
 {
 	collectedData.dbInfo = info;
 
@@ -188,7 +190,8 @@ void mysql::connect(const __connectionInfo &info)
 
 //-------------------------------------------------------------------
 
-void mysql::disconnect()
+void
+mysql::disconnect()
 {
 	if (mysqlHandle != NULL)
 	{
@@ -215,7 +218,8 @@ void mysql::disconnect()
 
 //-------------------------------------------------------------------
 
-dodoArray<dodo::dodoStringArray>mysql::fetchRows() const
+dodoArray<dodo::dodoStringArray>
+mysql::fetchRows() const
 {
 	if (mysqlHandle == NULL)
 	{
@@ -282,7 +286,8 @@ dodoArray<dodo::dodoStringArray>mysql::fetchRows() const
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringArray mysql::fetchFields() const
+dodo::dodoStringArray
+mysql::fetchFields() const
 {
 	if (mysqlHandle == NULL)
 	{
@@ -324,14 +329,16 @@ dodo::dodoStringArray mysql::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__tuples mysql::fetch() const
+__tuples
+mysql::fetch() const
 {
 	return __tuples(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
 
-unsigned int mysql::rowsCount() const
+unsigned int
+mysql::rowsCount() const
 {
 	if (mysqlHandle == NULL)
 	{
@@ -350,7 +357,8 @@ unsigned int mysql::rowsCount() const
 
 //-------------------------------------------------------------------
 
-unsigned int mysql::fieldsCount() const
+unsigned int
+mysql::fieldsCount() const
 {
 	if (mysqlHandle == NULL)
 	{
@@ -369,7 +377,8 @@ unsigned int mysql::fieldsCount() const
 
 //-------------------------------------------------------------------
 
-unsigned int mysql::affectedRowsCount() const
+unsigned int
+mysql::affectedRowsCount() const
 {
 	if (mysqlHandle == NULL)
 	{
@@ -388,7 +397,8 @@ unsigned int mysql::affectedRowsCount() const
 
 //-------------------------------------------------------------------
 
-void mysql::getFieldsTypes(const dodoString &table)
+void
+mysql::getFieldsTypes(const dodoString &table)
 {
 	if (mysqlHandle == NULL)
 	{
@@ -494,8 +504,9 @@ void mysql::getFieldsTypes(const dodoString &table)
 
 //-------------------------------------------------------------------
 
-void mysql::exec(const dodoString &query,
-				 bool             result)
+void
+mysql::exec(const dodoString &query,
+			bool             result)
 {
 	if (mysqlHandle == NULL)
 	{
@@ -561,7 +572,8 @@ void mysql::exec(const dodoString &query,
 
 //-------------------------------------------------------------------
 
-void mysql::setCharset(const dodoString &charset)
+void
+mysql::setCharset(const dodoString &charset)
 {
 	if (mysqlHandle == NULL)
 	{
@@ -573,7 +585,8 @@ void mysql::setCharset(const dodoString &charset)
 
 //-------------------------------------------------------------------
 
-void mysql::setConnectTimeout(unsigned int time)
+void
+mysql::setConnectTimeout(unsigned int time)
 {
 	if (mysqlHandle == NULL)
 	{
@@ -585,7 +598,8 @@ void mysql::setConnectTimeout(unsigned int time)
 
 //-------------------------------------------------------------------
 
-dodoString mysql::getCharset() const
+dodoString
+mysql::getCharset() const
 {
 	if (mysqlHandle == NULL)
 	{
@@ -597,7 +611,8 @@ dodoString mysql::getCharset() const
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringMapArray mysql::fetchFieldsToRows() const
+dodo::dodoStringMapArray
+mysql::fetchFieldsToRows() const
 {
 	if (mysqlHandle == NULL)
 	{

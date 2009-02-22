@@ -61,9 +61,10 @@ tools::__time::__time(unsigned int a_sec,
 
 //-------------------------------------------------------------------
 
-dodoString tools::time::byFormat(const dodoString &format,
-								 long             timestamp,
-								 bool             local)
+dodoString
+tools::time::byFormat(const dodoString &format,
+					  long             timestamp,
+					  bool             local)
 {
 	tm *tTime;
 
@@ -90,7 +91,8 @@ dodoString tools::time::byFormat(const dodoString &format,
 
 //-------------------------------------------------------------------
 
-long tools::time::now()
+long
+tools::time::now()
 {
 	time_t tTime = ::time(NULL);
 	if (tTime == (time_t)-1)
@@ -103,9 +105,10 @@ long tools::time::now()
 
 //-------------------------------------------------------------------
 
-dodoStringArray tools::time::week(long             date,
-								  const dodoString &format,
-								  bool             local)
+dodoStringArray
+tools::time::week(long             date,
+				  const dodoString &format,
+				  bool             local)
 {
 	long daynum = string::stringToL(tools::time::byFormat("%w", date, local));
 	if (daynum == 0)
@@ -126,10 +129,11 @@ dodoStringArray tools::time::week(long             date,
 
 //-------------------------------------------------------------------
 
-dodoStringArray tools::time::dates(long             dateFrom,
-								   long             dateTo,
-								   const dodoString &format,
-								   bool             local)
+dodoStringArray
+tools::time::dates(long             dateFrom,
+				   long             dateTo,
+				   const dodoString &format,
+				   bool             local)
 {
 	dodoStringArray result;
 
@@ -158,7 +162,8 @@ dodoStringArray tools::time::dates(long             dateFrom,
 
 //-------------------------------------------------------------------
 
-long tools::time::timestamp(const __time &timeInfo)
+long
+tools::time::timestamp(const __time &timeInfo)
 {
 	tm tTime;
 
@@ -175,8 +180,9 @@ long tools::time::timestamp(const __time &timeInfo)
 
 //-------------------------------------------------------------------
 
-tools::__time tools::time::timestamp(long seconds,
-									 bool local)
+tools::__time
+tools::time::timestamp(long seconds,
+					   bool local)
 {
 	tm *tTime;
 
@@ -209,54 +215,55 @@ tools::__time tools::time::timestamp(long seconds,
 
 //-------------------------------------------------------------------
 
-unsigned short int tools::time::daysInMonth(unsigned int       year,
-											unsigned short int month)
+unsigned short int
+tools::time::daysInMonth(unsigned int       year,
+						 unsigned short int month)
 {
 	unsigned short int day(0);
 
 	switch (month)
 	{
-		case 1:
-		case 3:
-		case 5:
-		case 7:
-		case 8:
-		case 10:
-		case 12:
+	case 1:
+	case 3:
+	case 5:
+	case 7:
+	case 8:
+	case 10:
+	case 12:
 
-			day = 31;
+		day = 31;
 
-			break;
+		break;
 
-		case 4:
-		case 6:
-		case 9:
-		case 11:
+	case 4:
+	case 6:
+	case 9:
+	case 11:
 
-			day = 30;
+		day = 30;
 
-			break;
+		break;
 
-		case 2:
+	case 2:
 
-			unsigned int isleap = 0;
-			if (year % 4 == 0)
+		unsigned int isleap = 0;
+		if (year % 4 == 0)
+		{
+			isleap = 1;
+			if (year % 100 == 0 && year % 400 != 0)
 			{
-				isleap = 1;
-				if (year % 100 == 0 && year % 400 != 0)
-				{
-					isleap = 0;
-				}
+				isleap = 0;
 			}
-			if (isleap == 1)
-			{
-				day = 29;
-			}
-			else
-			{
-				day = 28;
-			}
-			break;
+		}
+		if (isleap == 1)
+		{
+			day = 29;
+		}
+		else
+		{
+			day = 28;
+		}
+		break;
 	}
 
 	return day;
@@ -264,8 +271,9 @@ unsigned short int tools::time::daysInMonth(unsigned int       year,
 
 //-------------------------------------------------------------------
 
-long tools::time::byFormat(const dodoString &format,
-						   const dodoString &dt)
+long
+tools::time::byFormat(const dodoString &format,
+					  const dodoString &dt)
 {
 	tm tTime;
 	strptime(dt.c_str(), format.c_str(), &tTime);

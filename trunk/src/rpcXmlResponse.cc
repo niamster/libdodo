@@ -31,7 +31,8 @@
 
 using namespace dodo::rpc::xml;
 
-dodo::rpc::response response::xmlToResponse(dodo::data::format::xml::node &node)
+dodo::rpc::response
+response::xmlToResponse(dodo::data::format::xml::node &node)
 {
 	dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
@@ -86,7 +87,8 @@ dodo::rpc::response response::xmlToResponse(dodo::data::format::xml::node &node)
 
 //-------------------------------------------------------------------
 
-dodo::data::format::xml::node response::responseToXml(const rpc::response &data)
+dodo::data::format::xml::node
+response::responseToXml(const rpc::response &data)
 {
 	dodoArray<dodo::data::format::xml::node> nodeArr;
 

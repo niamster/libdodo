@@ -31,7 +31,8 @@
 
 using namespace dodo::tools;
 
-__hostInfo network::getHostInfo(const dodoString &host)
+__hostInfo
+network::getHostInfo(const dodoString &host)
 {
 	hostent *ent = gethostbyname(host.c_str());
 
@@ -57,27 +58,27 @@ __hostInfo network::getHostInfo(const dodoString &host)
 	{
 		switch (ent->h_addrtype)
 		{
-			case AF_INET:
+		case AF_INET:
 
-				if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN) == NULL)
-				{
-					++i;
+			if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN) == NULL)
+			{
+				++i;
 
-					continue;
-				}
+				continue;
+			}
 
-				break;
+			break;
 
-			case AF_INET6:
+		case AF_INET6:
 
-				if (inet_ntop(AF_INET6, ent->h_addr_list[i], temp, INET6_ADDRSTRLEN) == NULL)
-				{
-					++i;
+			if (inet_ntop(AF_INET6, ent->h_addr_list[i], temp, INET6_ADDRSTRLEN) == NULL)
+			{
+				++i;
 
-					continue;
-				}
+				continue;
+			}
 
-				break;
+			break;
 		}
 
 		info.addresses.push_back(temp);
@@ -89,7 +90,8 @@ __hostInfo network::getHostInfo(const dodoString &host)
 
 //-------------------------------------------------------------------
 
-dodoString network::getHostPrimaryIp(const dodoString &host)
+dodoString
+network::getHostPrimaryIp(const dodoString &host)
 {
 	hostent *ent = gethostbyname(host.c_str());
 
@@ -104,23 +106,23 @@ dodoString network::getHostPrimaryIp(const dodoString &host)
 	{
 		switch (ent->h_addrtype)
 		{
-			case AF_INET:
+		case AF_INET:
 
-				if (inet_ntop(AF_INET, ent->h_addr_list[0], temp, INET_ADDRSTRLEN) == NULL)
-				{
-					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
-				}
+			if (inet_ntop(AF_INET, ent->h_addr_list[0], temp, INET_ADDRSTRLEN) == NULL)
+			{
+				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+			}
 
-				break;
+			break;
 
-			case AF_INET6:
+		case AF_INET6:
 
-				if (inet_ntop(AF_INET6, ent->h_addr_list[0], temp, INET6_ADDRSTRLEN) == NULL)
-				{
-					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
-				}
+			if (inet_ntop(AF_INET6, ent->h_addr_list[0], temp, INET6_ADDRSTRLEN) == NULL)
+			{
+				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+			}
 
-				break;
+			break;
 		}
 	}
 
@@ -129,7 +131,8 @@ dodoString network::getHostPrimaryIp(const dodoString &host)
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringArray network::getInterfacesNames()
+dodo::dodoStringArray
+network::getInterfacesNames()
 {
 	struct if_nameindex *ifaces = if_nameindex();
 	if (ifaces == NULL)
@@ -152,8 +155,9 @@ dodo::dodoStringArray network::getInterfacesNames()
 
 //-------------------------------------------------------------------
 
-__serviceInfo network::getServiceInfo(const dodoString &host,
-									  const dodoString &protocol)
+__serviceInfo
+network::getServiceInfo(const dodoString &host,
+						const dodoString &protocol)
 {
 	servent *ent = getservbyname(host.c_str(), protocol.c_str());
 
@@ -179,8 +183,9 @@ __serviceInfo network::getServiceInfo(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-__serviceInfo network::getServiceInfo(int              port,
-									  const dodoString &protocol)
+__serviceInfo
+network::getServiceInfo(int              port,
+						const dodoString &protocol)
 {
 	servent *ent = getservbyport(port, protocol.c_str());
 
@@ -206,7 +211,8 @@ __serviceInfo network::getServiceInfo(int              port,
 
 //-------------------------------------------------------------------
 
-__interfaceInfo network::getInterfaceInfo(const dodoString &interface)
+__interfaceInfo
+network::getInterfaceInfo(const dodoString &interface)
 {
 	int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
 	if (socket == -1)
@@ -326,7 +332,8 @@ __interfaceInfo network::getInterfaceInfo(const dodoString &interface)
 }
 //-------------------------------------------------------------------
 
-dodoString network::getLocalName()
+dodoString
+network::getLocalName()
 {
 	dodoString temp0;
 	char *temp1 = new char[256];
@@ -347,7 +354,8 @@ dodoString network::getLocalName()
 
 //-------------------------------------------------------------------
 
-void network::setLocalName(const dodoString &host)
+void
+network::setLocalName(const dodoString &host)
 {
 	if (::sethostname(host.c_str(), host.size()) == -1)
 	{
@@ -357,11 +365,12 @@ void network::setLocalName(const dodoString &host)
 
 //-------------------------------------------------------------------
 
-void network::mail(const dodoString &to,
-				   const dodoString &subject,
-				   const dodoString &message,
-				   const dodoString &headers,
-				   const dodoString &path)
+void
+network::mail(const dodoString &to,
+			  const dodoString &subject,
+			  const dodoString &message,
+			  const dodoString &headers,
+			  const dodoString &path)
 {
 	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 
@@ -386,15 +395,16 @@ void network::mail(const dodoString &to,
 
 //-------------------------------------------------------------------
 
-void network::mail(const dodoString &host,
-				   int              port,
-				   const dodoString &to,
-				   const dodoString &from,
-				   const dodoString &subject,
-				   const dodoString &message,
-				   const dodoString &login,
-				   const dodoString &pass,
-				   const dodoString &headers)
+void
+network::mail(const dodoString &host,
+			  int              port,
+			  const dodoString &to,
+			  const dodoString &from,
+			  const dodoString &subject,
+			  const dodoString &message,
+			  const dodoString &login,
+			  const dodoString &pass,
+			  const dodoString &headers)
 {
 	using namespace io::network;
 

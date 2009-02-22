@@ -104,17 +104,19 @@ constructor::~constructor()
 
 //-------------------------------------------------------------------
 
-void constructor::setFieldType(const dodoString &table,
-							   const dodoString &field,
-							   short            type)
+void
+constructor::setFieldType(const dodoString &table,
+						  const dodoString &field,
+						  short            type)
 {
 	fieldTypes[collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + table][field] = type;
 }
 
 //-------------------------------------------------------------------
 
-void constructor::additionalCollect(unsigned int     qTypeTocheck,
-									const dodoString &collectedString)
+void
+constructor::additionalCollect(unsigned int     qTypeTocheck,
+							   const dodoString &collectedString)
 {
 	if (collectedData.qShift == ACCUMULATOR_NONE)
 	{
@@ -130,7 +132,8 @@ void constructor::additionalCollect(unsigned int     qTypeTocheck,
 
 //-------------------------------------------------------------------
 
-void constructor::callFunctionCollect()
+void
+constructor::callFunctionCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
 	request.append(collectedData.table);
@@ -141,7 +144,8 @@ void constructor::callFunctionCollect()
 
 //-------------------------------------------------------------------
 
-void constructor::callProcedureCollect()
+void
+constructor::callProcedureCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_CALL];
 	request.append(collectedData.table);
@@ -152,7 +156,8 @@ void constructor::callProcedureCollect()
 
 //-------------------------------------------------------------------
 
-void constructor::selectCollect()
+void
+constructor::selectCollect()
 {
 	if (collectedData.table.size() > 0)
 	{
@@ -170,7 +175,8 @@ void constructor::selectCollect()
 
 //-------------------------------------------------------------------
 
-void constructor::insertCollect()
+void
+constructor::insertCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
@@ -301,7 +307,8 @@ void constructor::insertCollect()
 
 //-------------------------------------------------------------------
 
-void constructor::insertSelectCollect()
+void
+constructor::insertSelectCollect()
 {
 	dodoString fieldsPartTo = tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 
@@ -326,7 +333,8 @@ void constructor::insertSelectCollect()
 
 //-------------------------------------------------------------------
 
-void constructor::updateCollect()
+void
+constructor::updateCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_UPDATE];
 	request.append(collectedData.table);
@@ -421,7 +429,8 @@ void constructor::updateCollect()
 
 //-------------------------------------------------------------------
 
-void constructor::delCollect()
+void
+constructor::delCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_DELETE];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
@@ -430,14 +439,16 @@ void constructor::delCollect()
 
 //-------------------------------------------------------------------
 
-void constructor::subCollect()
+void
+constructor::subCollect()
 {
 	request = tools::misc::join(collectedData.subQueries, sqlQStArr[collectedData.qType - 1]);
 }
 
 //-------------------------------------------------------------------
 
-void constructor::joinCollect()
+void
+constructor::joinCollect()
 {
 	dodoStringArray::iterator i = collectedData.joinTables.begin(), j = collectedData.joinTables.end();
 	dodoStringArray::iterator o = collectedData.joinConds.begin(), p = collectedData.joinConds.end();
@@ -465,72 +476,73 @@ void constructor::joinCollect()
 
 //-------------------------------------------------------------------
 
-dodoString constructor::queryCollect()
+dodoString
+constructor::queryCollect()
 {
 	bool additionalActions = true;
 	bool selectAction = false;
 
 	switch (collectedData.qType)
 	{
-		case ACCUMULATOR_REQUEST_SELECT:
+	case ACCUMULATOR_REQUEST_SELECT:
 
-			selectCollect();
-			selectAction = true;
+		selectCollect();
+		selectAction = true;
 
-			break;
+		break;
 
-		case ACCUMULATOR_REQUEST_INSERT:
+	case ACCUMULATOR_REQUEST_INSERT:
 
-			insertCollect();
-			additionalActions = false;
+		insertCollect();
+		additionalActions = false;
 
-			break;
+		break;
 
-		case ACCUMULATOR_REQUEST_UPDATE:
+	case ACCUMULATOR_REQUEST_UPDATE:
 
-			updateCollect();
+		updateCollect();
 
-			break;
+		break;
 
-		case ACCUMULATOR_REQUEST_DELETE:
+	case ACCUMULATOR_REQUEST_DELETE:
 
-			delCollect();
+		delCollect();
 
-			break;
+		break;
 
-		case ACCUMULATOR_REQUEST_INSERT_SELECT:
+	case ACCUMULATOR_REQUEST_INSERT_SELECT:
 
-			insertSelectCollect();
-			selectAction = true;
+		insertSelectCollect();
+		selectAction = true;
 
-			break;
+		break;
 
-		case SUBREQUEST_UNION:
-		case SUBREQUEST_UNION_ALL:
-		case SUBREQUEST_MINUS:
-		case SUBREQUEST_INTERSECT:
+	case SUBREQUEST_UNION:
+	case SUBREQUEST_UNION_ALL:
+	case SUBREQUEST_MINUS:
+	case SUBREQUEST_INTERSECT:
 
-			subCollect();
-			additionalActions = false;
+		subCollect();
+		additionalActions = false;
 
-			break;
+		break;
 
-		case ACCUMULATOR_REQUEST_CALL_FUNCTION:
+	case ACCUMULATOR_REQUEST_CALL_FUNCTION:
 
-			callFunctionCollect();
-			selectAction = true;
+		callFunctionCollect();
+		selectAction = true;
 
-			break;
+		break;
 
-		case ACCUMULATOR_REQUEST_CALL_PROCEDURE:
+	case ACCUMULATOR_REQUEST_CALL_PROCEDURE:
 
-			callProcedureCollect();
+		callProcedureCollect();
 
-			break;
+		break;
 
-		default:
+	default:
 
-			additionalActions = false;
+		additionalActions = false;
 	}
 
 	if (additionalActions)
@@ -556,7 +568,8 @@ dodoString constructor::queryCollect()
 
 //-------------------------------------------------------------------
 
-dodoString constructor::escapeFields(const dodoString &data)
+dodoString
+constructor::escapeFields(const dodoString &data)
 {
 	dodoString temp;
 
@@ -586,10 +599,11 @@ dodoString constructor::escapeFields(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-dodoString constructor::joinFields(const dodoStringArray &fields,
-								   const dodoString      &separator,
-								   const dodoString      &frame,
-								   int                   limit)
+dodoString
+constructor::joinFields(const dodoStringArray &fields,
+						const dodoString      &separator,
+						const dodoString      &frame,
+						int                   limit)
 {
 	int k(0);
 

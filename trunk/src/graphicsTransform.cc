@@ -57,15 +57,17 @@ transform::~transform()
 
 //-------------------------------------------------------------------
 
-void transform::setImage(image *a_im)
+void
+transform::setImage(image *a_im)
 {
 	im = a_im;
 }
 
 //-------------------------------------------------------------------
 
-void transform::scale(unsigned long width,
-					  unsigned long height)
+void
+transform::scale(unsigned long width,
+				 unsigned long height)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
 	{
@@ -88,7 +90,8 @@ void transform::scale(unsigned long width,
 
 //-------------------------------------------------------------------
 
-void transform::scale(unsigned long size)
+void
+transform::scale(unsigned long size)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
 	{
@@ -113,7 +116,8 @@ void transform::scale(unsigned long size)
 
 //-------------------------------------------------------------------
 
-void transform::rotate(double angle)
+void
+transform::rotate(double angle)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
 	{

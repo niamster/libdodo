@@ -47,7 +47,8 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-void server::sendTextRequest(const dodoString &response)
+void
+server::sendTextRequest(const dodoString &response)
 {
 	provider.print(response);
 	provider.flush();
@@ -55,7 +56,8 @@ void server::sendTextRequest(const dodoString &response)
 
 //-------------------------------------------------------------------
 
-dodoString server::receiveTextResponse()
+dodoString
+server::receiveTextResponse()
 {
 	dodoString content = provider.content;
 

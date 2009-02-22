@@ -43,10 +43,11 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-response server::rpcDefaultHandler(const dodoString       &method,
-								   const dodoArray<value> &arguments,
-								   const void             *idata,
-								   void                   *odata)
+response
+server::rpcDefaultHandler(const dodoString       &method,
+						  const dodoArray<value> &arguments,
+						  const void             *idata,
+						  void                   *odata)
 {
 	response response;
 	response.fault(dodoString("rpcDefaultHandler"));
@@ -56,29 +57,33 @@ response server::rpcDefaultHandler(const dodoString       &method,
 
 //-------------------------------------------------------------------
 
-void server::setDefault(handler handler)
+void
+server::setDefault(handler handler)
 {
 	defaultHandler = handler;
 }
 
 //-------------------------------------------------------------------
 
-void server::setHandler(const dodoString &method,
-						handler          handler)
+void
+server::setHandler(const dodoString &method,
+				   handler          handler)
 {
 	handlers.insert(make_pair(method, handler));
 }
 
 //-------------------------------------------------------------------
 
-void server::removeHandler(const dodoString &method)
+void
+server::removeHandler(const dodoString &method)
 {
 	handlers.erase(method);
 }
 
 //-------------------------------------------------------------------
 
-void server::serve()
+void
+server::serve()
 {
 	try
 	{

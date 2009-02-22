@@ -56,7 +56,8 @@ exchange::~exchange()
 
 //-------------------------------------------------------------------
 
-void exchange::flush()
+void
+exchange::flush()
 {
 	if (FCGX_FFlush(request->out) == -1)
 	{
@@ -66,28 +67,32 @@ void exchange::flush()
 
 //-------------------------------------------------------------------
 
-char *exchange::getenv(const char *buf)
+char *
+exchange::getenv(const char *buf)
 {
 	return FCGX_GetParam(buf, request->envp);
 }
 
 //-------------------------------------------------------------------
 
-int exchange::getInDescriptor() const
+int
+exchange::getInDescriptor() const
 {
 	return -1;
 }
 
 //-------------------------------------------------------------------
 
-int exchange::getOutDescriptor() const
+int
+exchange::getOutDescriptor() const
 {
 	return -1;
 }
 
 //-------------------------------------------------------------------
 
-void exchange::_read(char * const a_data)
+void
+exchange::_read(char * const a_data)
 {
 	memset(a_data, '\0', inSize);
 
@@ -96,7 +101,8 @@ void exchange::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void exchange::_write(const char *const buf)
+void
+exchange::_write(const char *const buf)
 {
 	if (FCGX_PutStr(buf, outSize, request->out) == -1)
 	{
@@ -106,7 +112,8 @@ void exchange::_write(const char *const buf)
 
 //-------------------------------------------------------------------
 
-void exchange::_writeStream(const char * const data)
+void
+exchange::_writeStream(const char * const data)
 {
 	unsigned long _outSize = outSize;
 
@@ -133,7 +140,8 @@ void exchange::_writeStream(const char * const data)
 
 //-------------------------------------------------------------------
 
-unsigned long exchange::_readStream(char * const data)
+unsigned long
+exchange::_readStream(char * const data)
 {
 	unsigned long _inSize = inSize++;
 

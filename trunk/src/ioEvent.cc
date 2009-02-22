@@ -53,9 +53,10 @@ event::~event()
 
 //-------------------------------------------------------------------
 
-int event::addChannel(const eventInfo &fl)
+int
+event::addChannel(const eventInfo &fl)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	__eventInOutDescriptors tempD;
 
@@ -70,10 +71,11 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-dodoArray<bool>event::isReadable(const dodoArray<int> &pos,
-								 int                  timeout) const
+dodoArray<bool>
+event::isReadable(const dodoArray<int> &pos,
+				  int                  timeout) const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	int count = -1;
 
@@ -155,10 +157,11 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-dodoArray<bool>event::isWritable(const dodoArray<int> &pos,
-								 int                  timeout) const
+dodoArray<bool>
+event::isWritable(const dodoArray<int> &pos,
+				  int                  timeout) const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	int count = -1;
 
@@ -240,10 +243,11 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-bool event::isReadable(int pos,
-					   int timeout) const
+bool
+event::isReadable(int pos,
+				  int timeout) const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	pollfd fd;
 
@@ -287,9 +291,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void event::delChannel(int pos)
+void
+event::delChannel(int pos)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	dodoArray<__eventInOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
@@ -305,10 +310,11 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-bool event::isWritable(int pos,
-					   int timeout) const
+bool
+event::isWritable(int pos,
+				  int timeout) const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	pollfd fd;
 

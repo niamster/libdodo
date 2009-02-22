@@ -92,7 +92,8 @@ __openssl_init__::~__openssl_init__()
 	RAND_cleanup();
 }
 
-void __openssl_init__::addEntropy()
+void
+__openssl_init__::addEntropy()
 {
 	struct stat randstat;
 

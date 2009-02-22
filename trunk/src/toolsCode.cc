@@ -284,9 +284,10 @@ const char code::hexEncodeChars[] = "0123456789abcdef";
 
 #ifdef ICONV_EXT
 
-dodoString code::codesetConversion(const dodoString &buffer,
-								   const dodoString &toCode,
-								   const dodoString &fromCode)
+dodoString
+code::codesetConversion(const dodoString &buffer,
+						const dodoString &toCode,
+						const dodoString &fromCode)
 {
 	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
@@ -329,9 +330,10 @@ dodoString code::codesetConversion(const dodoString &buffer,
 
 #ifdef ZLIB_EXT
 
-dodoString code::zCompress(const dodoString &buffer,
-						   unsigned short   level,
-						   short            type)
+dodoString
+code::zCompress(const dodoString &buffer,
+				unsigned short   level,
+				short            type)
 {
 	z_stream strm;
 	int ret;
@@ -378,7 +380,8 @@ dodoString code::zCompress(const dodoString &buffer,
 
 //-------------------------------------------------------------------
 
-dodoString code::zDecompress(const dodoString &buffer)
+dodoString
+code::zDecompress(const dodoString &buffer)
 {
 	z_stream strm;
 	int ret;
@@ -427,63 +430,64 @@ dodoString code::zDecompress(const dodoString &buffer)
 
 //-------------------------------------------------------------------
 
-char code::hexToChar(char first,
-					 char second)
+char
+code::hexToChar(char first,
+				char second)
 {
 	int val = 0;
 
 	switch (first)
 	{
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
 
-			val = 16 * (int(first) - 48);
+		val = 16 * (int(first) - 48);
 
-			break;
+		break;
 
-		default:
+	default:
 
-			if (first > 90)
-			{
-				first -= 32;
-			}
+		if (first > 90)
+		{
+			first -= 32;
+		}
 
-			val = 16 * int(first) - 55;
+		val = 16 * int(first) - 55;
 	}
 
 	switch (second)
 	{
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
 
-			val += int(second) - 48;
+		val += int(second) - 48;
 
-			break;
+		break;
 
-		default:
+	default:
 
-			if (second > 90)
-			{
-				second -= 32;
-			}
+		if (second > 90)
+		{
+			second -= 32;
+		}
 
-			val += int(second) - 55;
+		val += int(second) - 55;
 	}
 
 	return char(val);
@@ -491,7 +495,8 @@ char code::hexToChar(char first,
 
 //-------------------------------------------------------------------
 
-unsigned long code::hexToLong(const dodoString &string)
+unsigned long
+code::hexToLong(const dodoString &string)
 {
 	long i = string.size() - 1;
 	if (i < 0)
@@ -504,6 +509,37 @@ unsigned long code::hexToLong(const dodoString &string)
 	char first = string[i];
 	switch (first)
 	{
+	case '0':
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+	case '7':
+	case '8':
+	case '9':
+
+		val = int(first) - 48;
+
+		break;
+
+	default:
+
+		if (first > 90)
+		{
+			first -= 32;
+		}
+
+		val = int(first) - 55;
+	}
+	--i;
+
+	for (long j = 1; i >= 0; --i, ++j)
+	{
+		first = string[i];
+		switch (first)
+		{
 		case '0':
 		case '1':
 		case '2':
@@ -515,7 +551,7 @@ unsigned long code::hexToLong(const dodoString &string)
 		case '8':
 		case '9':
 
-			val = int(first) - 48;
+			val += (2 << ((4 * j) - 1)) * (int(first) - 48);
 
 			break;
 
@@ -526,38 +562,7 @@ unsigned long code::hexToLong(const dodoString &string)
 				first -= 32;
 			}
 
-			val = int(first) - 55;
-	}
-	--i;
-
-	for (long j = 1; i >= 0; --i, ++j)
-	{
-		first = string[i];
-		switch (first)
-		{
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-
-				val += (2 << ((4 * j) - 1)) * (int(first) - 48);
-
-				break;
-
-			default:
-
-				if (first > 90)
-				{
-					first -= 32;
-				}
-
-				val += (2 << ((4 * j) - 1)) * (int(first) - 55);
+			val += (2 << ((4 * j) - 1)) * (int(first) - 55);
 		}
 	}
 
@@ -566,8 +571,9 @@ unsigned long code::hexToLong(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-void code::charToHex(char result[3],
-					 char first)
+void
+code::charToHex(char result[3],
+				char first)
 {
 	result[0] = hexEncodeChars[(first >> 4) & 0xf];
 	result[1] = hexEncodeChars[first & 0xf];
@@ -577,7 +583,8 @@ void code::charToHex(char result[3],
 
 //-------------------------------------------------------------------
 
-dodoString code::longToHex(unsigned long numeric)
+dodoString
+code::longToHex(unsigned long numeric)
 {
 	dodoString hex;
 
@@ -591,7 +598,8 @@ dodoString code::longToHex(unsigned long numeric)
 
 //-------------------------------------------------------------------
 
-dodoString code::decodeUrl(const dodoString &string)
+dodoString
+code::decodeUrl(const dodoString &string)
 {
 	dodoString result;
 	unsigned long o(0), k(string.size());
@@ -600,29 +608,29 @@ dodoString code::decodeUrl(const dodoString &string)
 	{
 		switch (string[o])
 		{
-			case '+':
+		case '+':
 
-				result.append(1, ' ');
+			result.append(1, ' ');
 
-				break;
+			break;
 
-			case '%':
+		case '%':
 
-				if ((k - o) >= 2 && std::isxdigit(string[o + 1]) && std::isxdigit(string[o + 2]))
-				{
-					result.append(1, code::hexToChar(string[o + 1], string[o + 2]));
-					o += 2;
-				}
-				else
-				{
-					result.append(1, '%');
-				}
+			if ((k - o) >= 2 && std::isxdigit(string[o + 1]) && std::isxdigit(string[o + 2]))
+			{
+				result.append(1, code::hexToChar(string[o + 1], string[o + 2]));
+				o += 2;
+			}
+			else
+			{
+				result.append(1, '%');
+			}
 
-				break;
+			break;
 
-			default:
+		default:
 
-				result.append(1, string[o]);
+			result.append(1, string[o]);
 		}
 	}
 
@@ -631,7 +639,8 @@ dodoString code::decodeUrl(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-dodoString code::encodeUrl(const dodoString &string)
+dodoString
+code::encodeUrl(const dodoString &string)
 {
 	dodoString result;
 
@@ -642,88 +651,88 @@ dodoString code::encodeUrl(const dodoString &string)
 	{
 		switch (string[i])
 		{
-			case ' ':
+		case ' ':
 
-				result.append(1, '+');
+			result.append(1, '+');
 
-				break;
+			break;
 
-			case 'A':
-			case 'B':
-			case 'C':
-			case 'D':
-			case 'E':
-			case 'F':
-			case 'G':
-			case 'H':
-			case 'I':
-			case 'J':
-			case 'K':
-			case 'L':
-			case 'M':
-			case 'N':
-			case 'O':
-			case 'P':
-			case 'Q':
-			case 'R':
-			case 'S':
-			case 'T':
-			case 'U':
-			case 'V':
-			case 'W':
-			case 'X':
-			case 'Y':
-			case 'Z':
-			case 'a':
-			case 'b':
-			case 'c':
-			case 'd':
-			case 'e':
-			case 'f':
-			case 'g':
-			case 'h':
-			case 'i':
-			case 'j':
-			case 'k':
-			case 'l':
-			case 'm':
-			case 'n':
-			case 'o':
-			case 'p':
-			case 'q':
-			case 'r':
-			case 's':
-			case 't':
-			case 'u':
-			case 'v':
-			case 'w':
-			case 'x':
-			case 'y':
-			case 'z':
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-			case '-':
-			case '_':
-			case '.':
-			case '~':
+		case 'A':
+		case 'B':
+		case 'C':
+		case 'D':
+		case 'E':
+		case 'F':
+		case 'G':
+		case 'H':
+		case 'I':
+		case 'J':
+		case 'K':
+		case 'L':
+		case 'M':
+		case 'N':
+		case 'O':
+		case 'P':
+		case 'Q':
+		case 'R':
+		case 'S':
+		case 'T':
+		case 'U':
+		case 'V':
+		case 'W':
+		case 'X':
+		case 'Y':
+		case 'Z':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h':
+		case 'i':
+		case 'j':
+		case 'k':
+		case 'l':
+		case 'm':
+		case 'n':
+		case 'o':
+		case 'p':
+		case 'q':
+		case 'r':
+		case 's':
+		case 't':
+		case 'u':
+		case 'v':
+		case 'w':
+		case 'x':
+		case 'y':
+		case 'z':
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+		case '-':
+		case '_':
+		case '.':
+		case '~':
 
-				result.append(1, string[i]);
+			result.append(1, string[i]);
 
-				break;
+			break;
 
-			default:
+		default:
 
-				result.append(1, '%');
-				charToHex(temp, string[i]);
-				result.append(temp);
+			result.append(1, '%');
+			charToHex(temp, string[i]);
+			result.append(temp);
 		}
 	}
 
@@ -732,9 +741,10 @@ dodoString code::encodeUrl(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-void code::_encodeASCII85(dodoString    &result,
-						  unsigned long tuple,
-						  int           count)
+void
+code::_encodeASCII85(dodoString    &result,
+					 unsigned long tuple,
+					 int           count)
 {
 	short int i(5);
 	char buf[5], *s = buf;
@@ -754,7 +764,8 @@ void code::_encodeASCII85(dodoString    &result,
 
 //-------------------------------------------------------------------
 
-dodoString code::encodeASCII85(const dodoString &string)
+dodoString
+code::encodeASCII85(const dodoString &string)
 {
 	dodoString result("<~");
 	unsigned long tuple = 0;
@@ -766,41 +777,41 @@ dodoString code::encodeASCII85(const dodoString &string)
 	{
 		switch (count++)
 		{
-			case 0:
+		case 0:
 
-				tuple |= (string[k] << 24);
+			tuple |= (string[k] << 24);
 
-				break;
+			break;
 
-			case 1:
+		case 1:
 
-				tuple |= (string[k] << 16);
+			tuple |= (string[k] << 16);
 
-				break;
+			break;
 
-			case 2:
+		case 2:
 
-				tuple |= (string[k] <<  8);
+			tuple |= (string[k] <<  8);
 
-				break;
+			break;
 
-			case 3:
+		case 3:
 
-				tuple |= string[k];
+			tuple |= string[k];
 
-				if (tuple == 0)
-				{
-					result.append(1, 'z');
-				}
-				else
-				{
-					code::_encodeASCII85(result, tuple, count);
-				}
+			if (tuple == 0)
+			{
+				result.append(1, 'z');
+			}
+			else
+			{
+				code::_encodeASCII85(result, tuple, count);
+			}
 
-				tuple = 0;
-				count = 0;
+			tuple = 0;
+			count = 0;
 
-				break;
+			break;
 		}
 	}
 
@@ -816,47 +827,49 @@ dodoString code::encodeASCII85(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-void code::_decodeASCII85(dodoString    &result,
-						  unsigned long tuple,
-						  int           count)
+void
+code::_decodeASCII85(dodoString    &result,
+					 unsigned long tuple,
+					 int           count)
 {
 	switch (count)
 	{
-		case 4:
+	case 4:
 
-			result.append(1, (char)(tuple >> 24));
-			result.append(1, (char)(tuple >> 16));
-			result.append(1, (char)(tuple >>  8));
-			result.append(1, (char)(tuple));
+		result.append(1, (char)(tuple >> 24));
+		result.append(1, (char)(tuple >> 16));
+		result.append(1, (char)(tuple >>  8));
+		result.append(1, (char)(tuple));
 
-			break;
+		break;
 
-		case 3:
+	case 3:
 
-			result.append(1, (char)(tuple >> 24));
-			result.append(1, (char)(tuple >> 16));
-			result.append(1, (char)(tuple >>  8));
+		result.append(1, (char)(tuple >> 24));
+		result.append(1, (char)(tuple >> 16));
+		result.append(1, (char)(tuple >>  8));
 
-			break;
+		break;
 
-		case 2:
+	case 2:
 
-			result.append(1, (char)(tuple >> 24));
-			result.append(1, (char)(tuple >> 16));
+		result.append(1, (char)(tuple >> 24));
+		result.append(1, (char)(tuple >> 16));
 
-			break;
+		break;
 
-		case 1:
+	case 1:
 
-			result.append(1, (char)(tuple >> 24));
+		result.append(1, (char)(tuple >> 24));
 
-			break;
+		break;
 	}
 }
 
 //-------------------------------------------------------------------
 
-dodoString code::decodeASCII85(const dodoString &string)
+dodoString
+code::decodeASCII85(const dodoString &string)
 {
 	unsigned long j = string.size(), count = 0, tuple = 0;
 	bool _break = false;
@@ -873,60 +886,60 @@ dodoString code::decodeASCII85(const dodoString &string)
 				{
 					switch (string[++k])
 					{
-						case 'z':
+					case 'z':
 
-							if (count != 0)
-							{
-								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
-							}
-
-							result.append(4, '\0');
-
-							break;
-
-						case '~':
-
-							if ((k - j) >= 1 && string[++k] == '>')
-							{
-								if (count > 0)
-								{
-									count--;
-									tuple += powASCII85[count];
-									_decodeASCII85(result, tuple, count);
-								}
-								++k;
-								_break = true;
-
-								break;
-							}
-
+						if (count != 0)
+						{
 							throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+						}
 
-						case '\n':
-						case '\r':
-						case '\t':
-						case ' ':
-						case '\0':
-						case '\f':
-						case '\b':
-						case 0177:
+						result.append(4, '\0');
+
+						break;
+
+					case '~':
+
+						if ((k - j) >= 1 && string[++k] == '>')
+						{
+							if (count > 0)
+							{
+								count--;
+								tuple += powASCII85[count];
+								_decodeASCII85(result, tuple, count);
+							}
+							++k;
+							_break = true;
 
 							break;
+						}
 
-						default:
+						throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
-							if (string[k] < '!' || string[k] > 'u')
-							{
-								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
-							}
+					case '\n':
+					case '\r':
+					case '\t':
+					case ' ':
+					case '\0':
+					case '\f':
+					case '\b':
+					case 0177:
 
-							tuple += (string[k] - '!') * powASCII85[count++];
-							if (count == 5)
-							{
-								_decodeASCII85(result, tuple, 4);
-								count = 0;
-								tuple = 0;
-							}
+						break;
+
+					default:
+
+						if (string[k] < '!' || string[k] > 'u')
+						{
+							throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+						}
+
+						tuple += (string[k] - '!') * powASCII85[count++];
+						if (count == 5)
+						{
+							_decodeASCII85(result, tuple, 4);
+							count = 0;
+							tuple = 0;
+						}
 					}
 				}
 			}
@@ -947,9 +960,10 @@ dodoString code::decodeASCII85(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-void code::_encodeBase64(unsigned char in[3],
-						 unsigned char out[4],
-						 int           len)
+void
+code::_encodeBase64(unsigned char in[3],
+					unsigned char out[4],
+					int           len)
 {
 	out[0] = base64EncodeChars[in[0] >> 2];
 	out[1] = base64EncodeChars[((in[0] & 0x03) << 4) | ((in[1] & 0xf0) >> 4)];
@@ -959,7 +973,8 @@ void code::_encodeBase64(unsigned char in[3],
 
 //-------------------------------------------------------------------
 
-dodoString code::encodeBase64(const dodoString &string)
+dodoString
+code::encodeBase64(const dodoString &string)
 {
 	unsigned long j = string.size();
 	unsigned char in[3], out[4];
@@ -998,8 +1013,9 @@ dodoString code::encodeBase64(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-void code::_decodeBase64(unsigned char in[4],
-						 unsigned char out[3])
+void
+code::_decodeBase64(unsigned char in[4],
+					unsigned char out[3])
 {
 	out[0] = (unsigned char )(in[0] << 2 | in[1] >> 4);
 	out[1] = (unsigned char )(in[1] << 4 | in[2] >> 2);
@@ -1008,7 +1024,8 @@ void code::_decodeBase64(unsigned char in[4],
 
 //-------------------------------------------------------------------
 
-dodoString code::decodeBase64(const dodoString &string)
+dodoString
+code::decodeBase64(const dodoString &string)
 {
 	unsigned long j = string.size() + 1;
 	unsigned char in[4], out[3], v;
@@ -1060,7 +1077,8 @@ dodoString code::decodeBase64(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-__url code::parseUrl(const dodoString &url)
+__url
+code::parseUrl(const dodoString &url)
 {
 	unsigned long begin(0), pos, pos1;
 
@@ -1139,7 +1157,8 @@ __url code::parseUrl(const dodoString &url)
 
 //-------------------------------------------------------------------
 
-dodoString code::makeUrl(const __url &url)
+dodoString
+code::makeUrl(const __url &url)
 {
 	dodoString stringUrl;
 
@@ -1184,9 +1203,10 @@ dodoString code::makeUrl(const __url &url)
 
 #ifdef BZIP2_EXT
 
-dodoString code::bzCompress(const dodoString &buffer,
-							unsigned short   level,
-							unsigned short   type)
+dodoString
+code::bzCompress(const dodoString &buffer,
+				 unsigned short   level,
+				 unsigned short   type)
 {
 	unsigned int len = buffer.size();
 	char *dst = new char[len + 1];
@@ -1202,7 +1222,8 @@ dodoString code::bzCompress(const dodoString &buffer,
 
 //-------------------------------------------------------------------
 
-dodoString code::bzDecompress(const dodoString &buffer)
+dodoString
+code::bzDecompress(const dodoString &buffer)
 {
 	bz_stream bzs;
 
@@ -1267,7 +1288,8 @@ dodoString code::bzDecompress(const dodoString &buffer)
 
 //-------------------------------------------------------------------
 
-void code::MD5Init(__MD5Context *context)
+void
+code::MD5Init(__MD5Context *context)
 {
 	context->count[0] = context->count[1] = 0;
 
@@ -1279,8 +1301,9 @@ void code::MD5Init(__MD5Context *context)
 
 //-------------------------------------------------------------------
 
-void code::MD5Transform(unsigned int        state[4],
-						const unsigned char block[64])
+void
+code::MD5Transform(unsigned int        state[4],
+				   const unsigned char block[64])
 {
 	unsigned int a = state[0], b = state[1], c = state[2], d = state[3], x[16];
 
@@ -1365,8 +1388,9 @@ void code::MD5Transform(unsigned int        state[4],
 
 //-------------------------------------------------------------------
 
-void code::MD5Final(unsigned char digest[16],
-					__MD5Context  *context)
+void
+code::MD5Final(unsigned char digest[16],
+			   __MD5Context  *context)
 {
 	unsigned char bits[8];
 	unsigned int index, padLen;
@@ -1400,9 +1424,10 @@ void code::MD5Final(unsigned char digest[16],
 
 //-------------------------------------------------------------------
 
-void code::MD5Update(__MD5Context        *context,
-					 const unsigned char *input,
-					 unsigned int        inputLen)
+void
+code::MD5Update(__MD5Context        *context,
+				const unsigned char *input,
+				unsigned int        inputLen)
 {
 	unsigned int i, index, partLen;
 
@@ -1440,7 +1465,8 @@ void code::MD5Update(__MD5Context        *context,
 
 //-------------------------------------------------------------------
 
-dodoString code::MD5(const dodoString &string)
+dodoString
+code::MD5(const dodoString &string)
 {
 	__MD5Context context;
 	unsigned char digest[16];
@@ -1454,14 +1480,16 @@ dodoString code::MD5(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-dodoString code::MD5Hex(const dodoString &string)
+dodoString
+code::MD5Hex(const dodoString &string)
 {
 	return binToHex(MD5(string));
 }
 
 //-------------------------------------------------------------------
 
-dodoString code::binToHex(const dodoString &string)
+dodoString
+code::binToHex(const dodoString &string)
 {
 	int j = string.size();
 	dodoString hex;
@@ -1478,7 +1506,8 @@ dodoString code::binToHex(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-void code::SHA1Init(__SHAContext *context)
+void
+code::SHA1Init(__SHAContext *context)
 {
 	context->lengthLow = 0;
 	context->lengthHigh = 0;
@@ -1496,9 +1525,10 @@ void code::SHA1Init(__SHAContext *context)
 
 //-------------------------------------------------------------------
 
-void code::SHA1Input(__SHAContext        *context,
-					 const unsigned char *bytes,
-					 unsigned int        bytecount)
+void
+code::SHA1Input(__SHAContext        *context,
+				const unsigned char *bytes,
+				unsigned int        bytecount)
 {
 	if (bytecount == 0)
 	{
@@ -1526,8 +1556,9 @@ void code::SHA1Input(__SHAContext        *context,
 
 //-------------------------------------------------------------------
 
-void code::SHA1Result(__SHAContext  *context,
-					  unsigned char digest[20])
+void
+code::SHA1Result(__SHAContext  *context,
+				 unsigned char digest[20])
 {
 	SHA1PadMessage(context, 0x80);
 
@@ -1539,8 +1570,9 @@ void code::SHA1Result(__SHAContext  *context,
 
 //-------------------------------------------------------------------
 
-void code::SHA1PadMessage(__SHAContext  *context,
-						  unsigned char padByte)
+void
+code::SHA1PadMessage(__SHAContext  *context,
+					 unsigned char padByte)
 {
 	if (context->messageBlockIndex >= 56)
 	{
@@ -1578,7 +1610,8 @@ void code::SHA1PadMessage(__SHAContext  *context,
 
 //-------------------------------------------------------------------
 
-void code::SHA1ProcessMessageBlock(__SHAContext *context)
+void
+code::SHA1ProcessMessageBlock(__SHAContext *context)
 {
 		/* Constants defined in FIPS-180-2, section 4.2.1 */
 	const static unsigned long K[4] =
@@ -1663,7 +1696,8 @@ void code::SHA1ProcessMessageBlock(__SHAContext *context)
 
 //-------------------------------------------------------------------
 
-dodoString code::SHA1(const dodoString &string)
+dodoString
+code::SHA1(const dodoString &string)
 {
 	__SHAContext context;
 	unsigned char digest[20];
@@ -1677,13 +1711,15 @@ dodoString code::SHA1(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-dodoString code::SHA1Hex(const dodoString &string)
+dodoString
+code::SHA1Hex(const dodoString &string)
 {
 	return binToHex(SHA1(string));
 }
 //-------------------------------------------------------------------
 
-void code::SHA256Init(__SHAContext *context)
+void
+code::SHA256Init(__SHAContext *context)
 {
 	context->lengthLow = 0;
 	context->lengthHigh = 0;
@@ -1704,9 +1740,10 @@ void code::SHA256Init(__SHAContext *context)
 
 //-------------------------------------------------------------------
 
-void code::SHA256Input(__SHAContext        *context,
-					   const unsigned char *bytes,
-					   unsigned int        bytecount)
+void
+code::SHA256Input(__SHAContext        *context,
+				  const unsigned char *bytes,
+				  unsigned int        bytecount)
 {
 	if (bytecount == 0)
 	{
@@ -1734,8 +1771,9 @@ void code::SHA256Input(__SHAContext        *context,
 
 //-------------------------------------------------------------------
 
-void code::SHA256Result(__SHAContext  *context,
-						unsigned char digest[32])
+void
+code::SHA256Result(__SHAContext  *context,
+				   unsigned char digest[32])
 {
 	SHA256PadMessage(context, 0x80);
 
@@ -1747,8 +1785,9 @@ void code::SHA256Result(__SHAContext  *context,
 
 //-------------------------------------------------------------------
 
-void code::SHA256PadMessage(__SHAContext  *context,
-							unsigned char padByte)
+void
+code::SHA256PadMessage(__SHAContext  *context,
+					   unsigned char padByte)
 {
 	if (context->messageBlockIndex >= 56)
 	{
@@ -1785,7 +1824,8 @@ void code::SHA256PadMessage(__SHAContext  *context,
 
 //-------------------------------------------------------------------
 
-void code::SHA256ProcessMessageBlock(__SHAContext *context)
+void
+code::SHA256ProcessMessageBlock(__SHAContext *context)
 {
 		/* Constants defined in FIPS-180-2, section 4.2.2 */
 	static const uint32_t K[64] =
@@ -1864,7 +1904,8 @@ void code::SHA256ProcessMessageBlock(__SHAContext *context)
 
 //-------------------------------------------------------------------
 
-dodoString code::SHA256(const dodoString &string)
+dodoString
+code::SHA256(const dodoString &string)
 {
 	__SHAContext context;
 	unsigned char digest[32];
@@ -1878,13 +1919,15 @@ dodoString code::SHA256(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-dodoString code::SHA256Hex(const dodoString &string)
+dodoString
+code::SHA256Hex(const dodoString &string)
 {
 	return binToHex(SHA256(string));
 }
 //-------------------------------------------------------------------
 
-void code::SHA512Init(__SHAContext *context)
+void
+code::SHA512Init(__SHAContext *context)
 {
 	context->messageBlockIndex = 0;
 
@@ -1913,9 +1956,10 @@ void code::SHA512Init(__SHAContext *context)
 
 //-------------------------------------------------------------------
 
-void code::SHA512Input(__SHAContext        *context,
-					   const unsigned char *bytes,
-					   unsigned int        bytecount)
+void
+code::SHA512Input(__SHAContext        *context,
+				  const unsigned char *bytes,
+				  unsigned int        bytecount)
 {
 	if (bytecount == 0)
 	{
@@ -1953,8 +1997,9 @@ void code::SHA512Input(__SHAContext        *context,
 
 //-------------------------------------------------------------------
 
-void code::SHA512Result(__SHAContext  *context,
-						unsigned char digest[64])
+void
+code::SHA512Result(__SHAContext  *context,
+				   unsigned char digest[64])
 {
 	SHA512PadMessage(context, 0x80);
 
@@ -1973,8 +2018,9 @@ void code::SHA512Result(__SHAContext  *context,
 
 //-------------------------------------------------------------------
 
-void code::SHA512PadMessage(__SHAContext  *context,
-							unsigned char padByte)
+void
+code::SHA512PadMessage(__SHAContext  *context,
+					   unsigned char padByte)
 {
 	if (context->messageBlockIndex >= 112)
 	{
@@ -2020,7 +2066,8 @@ void code::SHA512PadMessage(__SHAContext  *context,
 
 //-------------------------------------------------------------------
 
-void code::SHA512ProcessMessageBlock(__SHAContext *context)
+void
+code::SHA512ProcessMessageBlock(__SHAContext *context)
 {
 		/* Constants defined in FIPS-180-2, section 4.2.3 */
 	const unsigned long K[80 * 2] =
@@ -2207,7 +2254,8 @@ void code::SHA512ProcessMessageBlock(__SHAContext *context)
 
 //-------------------------------------------------------------------
 
-dodoString code::SHA512(const dodoString &string)
+dodoString
+code::SHA512(const dodoString &string)
 {
 	__SHAContext context;
 	unsigned char digest[64];
@@ -2221,7 +2269,8 @@ dodoString code::SHA512(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-dodoString code::SHA512Hex(const dodoString &string)
+dodoString
+code::SHA512Hex(const dodoString &string)
 {
 	return binToHex(SHA512(string));
 }

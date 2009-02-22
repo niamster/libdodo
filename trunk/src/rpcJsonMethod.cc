@@ -31,9 +31,10 @@
 
 using namespace dodo::rpc::json;
 
-dodo::rpc::method method::jsonToMethod(dodo::data::format::json::node &node,
-									   dodoString                     &version,
-									   long                           &id)
+dodo::rpc::method
+method::jsonToMethod(dodo::data::format::json::node &node,
+					 dodoString                     &version,
+					 long                           &id)
 {
 	if (node.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
 	{
@@ -76,9 +77,10 @@ dodo::rpc::method method::jsonToMethod(dodo::data::format::json::node &node,
 
 //-------------------------------------------------------------------
 
-dodo::data::format::json::node method::methodToJson(const rpc::method &data,
-													const dodoString  &version,
-													long              id)
+dodo::data::format::json::node
+method::methodToJson(const rpc::method &data,
+					 const dodoString  &version,
+					 long              id)
 {
 	dodo::data::format::json::node meth;
 

@@ -53,7 +53,8 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-dodo::rpc::method server::processCall(const dodoString &data)
+dodo::rpc::method
+server::processCall(const dodoString &data)
 {
 	dodo::data::format::json::processor jsonValue;
 
@@ -64,7 +65,8 @@ dodo::rpc::method server::processCall(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-dodoString server::processCallResult(const rpc::response &resp)
+dodoString
+server::processCallResult(const rpc::response &resp)
 {
 	dodo::data::format::json::processor jsonValue;
 
@@ -73,14 +75,16 @@ dodoString server::processCallResult(const rpc::response &resp)
 
 //-------------------------------------------------------------------
 
-void server::setResponseVersion(const dodoString &version)
+void
+server::setResponseVersion(const dodoString &version)
 {
 	rpVersion = version;
 }
 
 //-------------------------------------------------------------------
 
-void server::serve()
+void
+server::serve()
 {
 	try
 	{

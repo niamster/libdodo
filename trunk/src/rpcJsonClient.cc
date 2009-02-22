@@ -44,7 +44,8 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-dodoString client::processCallRequest(const rpc::method &meth)
+dodoString
+client::processCallRequest(const rpc::method &meth)
 {
 	dodo::data::format::json::processor jsonValue;
 
@@ -53,7 +54,8 @@ dodoString client::processCallRequest(const rpc::method &meth)
 
 //-------------------------------------------------------------------
 
-dodo::rpc::response client::processCallResult(const dodoString &data)
+dodo::rpc::response
+client::processCallResult(const dodoString &data)
 {
 	dodo::data::format::json::processor jsonValue;
 
@@ -64,21 +66,24 @@ dodo::rpc::response client::processCallResult(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-void client::setRequestVersion(const dodoString &version)
+void
+client::setRequestVersion(const dodoString &version)
 {
 	rqVersion = version;
 }
 
 //-------------------------------------------------------------------
 
-dodoString client::getResponseVersion()
+dodoString
+client::getResponseVersion()
 {
 	return rpVersion;
 }
 
 //-------------------------------------------------------------------
 
-long client::getResponseId()
+long
+client::getResponseId()
 {
 	return rpId;
 }

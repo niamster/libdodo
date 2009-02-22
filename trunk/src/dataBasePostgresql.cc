@@ -145,7 +145,8 @@ postgresql::~postgresql()
 
 //-------------------------------------------------------------------
 
-void postgresql::connect(const __connectionInfo &info)
+void
+postgresql::connect(const __connectionInfo &info)
 {
 	collectedData.dbInfo = info;
 
@@ -192,7 +193,8 @@ void postgresql::connect(const __connectionInfo &info)
 
 //-------------------------------------------------------------------
 
-void postgresql::disconnect()
+void
+postgresql::disconnect()
 {
 	if (pgHandle != NULL)
 	{
@@ -219,7 +221,8 @@ void postgresql::disconnect()
 
 //-------------------------------------------------------------------
 
-dodoArray<dodo::dodoStringArray>postgresql::fetchRows() const
+dodoArray<dodo::dodoStringArray>
+postgresql::fetchRows() const
 {
 	if (pgHandle == NULL)
 	{
@@ -280,7 +283,8 @@ dodoArray<dodo::dodoStringArray>postgresql::fetchRows() const
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringArray postgresql::fetchFields() const
+dodo::dodoStringArray
+postgresql::fetchFields() const
 {
 	if (pgHandle == NULL)
 	{
@@ -319,14 +323,16 @@ dodo::dodoStringArray postgresql::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__tuples postgresql::fetch() const
+__tuples
+postgresql::fetch() const
 {
 	return __tuples(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
 
-unsigned int postgresql::rowsCount() const
+unsigned int
+postgresql::rowsCount() const
 {
 	if (pgHandle == NULL)
 	{
@@ -345,7 +351,8 @@ unsigned int postgresql::rowsCount() const
 
 //-------------------------------------------------------------------
 
-unsigned int postgresql::fieldsCount() const
+unsigned int
+postgresql::fieldsCount() const
 {
 	if (pgHandle == NULL)
 	{
@@ -364,7 +371,8 @@ unsigned int postgresql::fieldsCount() const
 
 //-------------------------------------------------------------------
 
-unsigned int postgresql::affectedRowsCount() const
+unsigned int
+postgresql::affectedRowsCount() const
 {
 	if (pgHandle == NULL)
 	{
@@ -383,7 +391,8 @@ unsigned int postgresql::affectedRowsCount() const
 
 //-------------------------------------------------------------------
 
-void postgresql::getFieldsTypes(const dodoString &table)
+void
+postgresql::getFieldsTypes(const dodoString &table)
 {
 	if (pgHandle == NULL)
 	{
@@ -417,12 +426,12 @@ void postgresql::getFieldsTypes(const dodoString &table)
 
 	switch (status)
 	{
-		case PGRES_EMPTY_QUERY:
-		case PGRES_BAD_RESPONSE:
-		case PGRES_NONFATAL_ERROR:
-		case PGRES_FATAL_ERROR:
+	case PGRES_EMPTY_QUERY:
+	case PGRES_BAD_RESPONSE:
+	case PGRES_NONFATAL_ERROR:
+	case PGRES_FATAL_ERROR:
 
-			throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 	}
 
 	empty = false;
@@ -501,8 +510,9 @@ void postgresql::getFieldsTypes(const dodoString &table)
 
 //-------------------------------------------------------------------
 
-void postgresql::exec(const dodoString &query,
-					  bool             result)
+void
+postgresql::exec(const dodoString &query,
+				 bool             result)
 {
 	if (pgHandle == NULL)
 	{
@@ -565,12 +575,12 @@ void postgresql::exec(const dodoString &query,
 	status = PQresultStatus(pgResult);
 	switch (status)
 	{
-		case PGRES_EMPTY_QUERY:
-		case PGRES_BAD_RESPONSE:
-		case PGRES_NONFATAL_ERROR:
-		case PGRES_FATAL_ERROR:
+	case PGRES_EMPTY_QUERY:
+	case PGRES_BAD_RESPONSE:
+	case PGRES_NONFATAL_ERROR:
+	case PGRES_FATAL_ERROR:
 
-			throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 	}
 
 	empty = false;
@@ -585,7 +595,8 @@ void postgresql::exec(const dodoString &query,
 
 //-------------------------------------------------------------------
 
-void postgresql::updateCollect()
+void
+postgresql::updateCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_UPDATE];
 	request.append(collectedData.table);
@@ -710,7 +721,8 @@ void postgresql::updateCollect()
 
 //-------------------------------------------------------------------
 
-void postgresql::insertCollect()
+void
+postgresql::insertCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
@@ -903,7 +915,8 @@ void postgresql::insertCollect()
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringMapArray postgresql::fetchFieldsToRows() const
+dodo::dodoStringMapArray
+postgresql::fetchFieldsToRows() const
 {
 	dodoStringMapArray rowsFields;
 
@@ -946,7 +959,8 @@ dodo::dodoStringMapArray postgresql::fetchFieldsToRows() const
 
 //-------------------------------------------------------------------
 
-void postgresql::setCharset(const dodoString &charset)
+void
+postgresql::setCharset(const dodoString &charset)
 {
 	if (pgHandle == NULL)
 	{
@@ -962,7 +976,8 @@ void postgresql::setCharset(const dodoString &charset)
 
 //-------------------------------------------------------------------
 
-dodoString postgresql::getCharset() const
+dodoString
+postgresql::getCharset() const
 {
 	if (pgHandle == NULL)
 	{

@@ -82,7 +82,8 @@ section::~section()
 
 //-------------------------------------------------------------------
 
-void section::acquire()
+void
+section::acquire()
 {
 #ifdef PTHREAD_EXT
 
@@ -97,7 +98,8 @@ void section::acquire()
 
 //-------------------------------------------------------------------
 
-void section::release()
+void
+section::release()
 {
 #ifdef PTHREAD_EXT
 

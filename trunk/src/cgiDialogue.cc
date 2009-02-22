@@ -235,7 +235,8 @@ dialogue::~dialogue()
 
 //-------------------------------------------------------------------
 
-dialogue::operator exchange*()
+dialogue::operator exchange
+*()
 {
 	printHeaders();
 
@@ -244,14 +245,16 @@ dialogue::operator exchange*()
 
 //-------------------------------------------------------------------
 
-void dialogue::flush()
+void
+dialogue::flush()
 {
 	cgiIO.flush();
 }
 
 //-------------------------------------------------------------------
 
-void dialogue::printStream(const dodoString &buf)
+void
+dialogue::printStream(const dodoString &buf)
 {
 	printHeaders();
 
@@ -260,7 +263,8 @@ void dialogue::printStream(const dodoString &buf)
 
 //-------------------------------------------------------------------
 
-dodoString dialogue::getCharset()
+dodoString
+dialogue::getCharset()
 {
 	unsigned long temp;
 
@@ -279,7 +283,8 @@ dodoString dialogue::getCharset()
 	return __dodostring__;
 }
 
-void dialogue::print(const dodoString &buf)
+void
+dialogue::print(const dodoString &buf)
 {
 	printHeaders();
 
@@ -289,7 +294,8 @@ void dialogue::print(const dodoString &buf)
 
 //-------------------------------------------------------------------
 
-void dialogue::makeAuth()
+void
+dialogue::makeAuth()
 {
 	dodoString &httpAuthorization = ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION];
 
@@ -398,8 +404,9 @@ void dialogue::makeAuth()
 
 //-------------------------------------------------------------------
 
-void dialogue::requestAuthentication(const dodoString &realm,
-									 short            type)
+void
+dialogue::requestAuthentication(const dodoString &realm,
+								short            type)
 {
 	returnCode = CGI_STATUSCODE_UNAUTHORIZED;
 
@@ -420,7 +427,8 @@ void dialogue::requestAuthentication(const dodoString &realm,
 
 //-------------------------------------------------------------------
 
-__cgiAuthInfo dialogue::getAuthenticationInfo()
+__cgiAuthInfo
+dialogue::getAuthenticationInfo()
 {
 	__cgiAuthInfo info =
 	{
@@ -432,8 +440,9 @@ __cgiAuthInfo dialogue::getAuthenticationInfo()
 
 //-------------------------------------------------------------------
 
-bool dialogue::isAuthenticated(const dodoString &user,
-							   const dodoString &password)
+bool
+dialogue::isAuthenticated(const dodoString &user,
+						  const dodoString &password)
 {
 	if (authInfo.type == CGI_AUTHTYPE_BASIC)
 	{
@@ -491,7 +500,8 @@ bool dialogue::isAuthenticated(const dodoString &user,
 
 //-------------------------------------------------------------------
 
-void dialogue::cleanTmp()
+void
+dialogue::cleanTmp()
 {
 	dodoMap<dodoString, __cgiFile>::iterator i(FILES.begin()), j(FILES.end());
 	for (; i != j; ++i)
@@ -505,7 +515,8 @@ void dialogue::cleanTmp()
 
 //-------------------------------------------------------------------
 
-void dialogue::detectMethod()
+void
+dialogue::detectMethod()
 {
 	if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "GET"))
 	{
@@ -526,16 +537,18 @@ void dialogue::detectMethod()
 
 //-------------------------------------------------------------------
 
-int dialogue::getMethod() const
+int
+dialogue::getMethod() const
 {
 	return method;
 }
 
 //-------------------------------------------------------------------
 
-void dialogue::make(dodoStringMap    &val,
-					const dodoString &string,
-					const char       *delim)
+void
+dialogue::make(dodoStringMap    &val,
+			   const dodoString &string,
+			   const char       *delim)
 {
 	dodoStringArray getPair = tools::misc::split(tools::code::decodeUrl(string), delim);
 
@@ -555,7 +568,8 @@ void dialogue::make(dodoStringMap    &val,
 
 //-------------------------------------------------------------------
 
-void dialogue::makeEnv()
+void
+dialogue::makeEnv()
 {
 	char *env;
 
@@ -611,7 +625,8 @@ void dialogue::makeEnv()
 
 //-------------------------------------------------------------------
 
-void dialogue::initHeaders(dodoMap<short, dodoString> &headers)
+void
+dialogue::initHeaders(dodoMap<short, dodoString> &headers)
 {
 	if (headers.size() > 0)
 	{
@@ -626,7 +641,8 @@ void dialogue::initHeaders(dodoMap<short, dodoString> &headers)
 
 //-------------------------------------------------------------------
 
-void dialogue::setResponseStatus(short code)
+void
+dialogue::setResponseStatus(short code)
 {
 	if (code <= CGI_STATUSCODE_HTTPVERSIONNOTSUPPORTED)
 	{
@@ -640,7 +656,8 @@ void dialogue::setResponseStatus(short code)
 
 //-------------------------------------------------------------------
 
-void dialogue::printHeaders() const
+void
+dialogue::printHeaders() const
 {
 	if (headersPrinted)
 	{
@@ -690,7 +707,8 @@ void dialogue::printHeaders() const
 
 //-------------------------------------------------------------------
 
-void dialogue::makeContent()
+void
+dialogue::makeContent()
 {
 	unsigned long inSize = tools::string::stringToUL(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTLENGTH]);
 
@@ -706,7 +724,8 @@ void dialogue::makeContent()
 
 //-------------------------------------------------------------------
 
-void dialogue::makePost()
+void
+dialogue::makePost()
 {
 	if (content.size() == 0)
 	{
@@ -842,29 +861,29 @@ void dialogue::makePost()
 								{
 									switch (errno)
 									{
-										case EACCES:
-										case EISDIR:
+									case EACCES:
+									case EISDIR:
 
-											file.error = CGI_POSTFILEERR_ACCESS_DENY;
+										file.error = CGI_POSTFILEERR_ACCESS_DENY;
 
-											break;
+										break;
 
-										case ENAMETOOLONG:
-										case ENOTDIR:
+									case ENAMETOOLONG:
+									case ENOTDIR:
 
-											file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
+										file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
 
-											break;
+										break;
 
-										case ENOMEM:
+									case ENOMEM:
 
-											file.error = CGI_POSTFILEERR_NO_SPACE;
+										file.error = CGI_POSTFILEERR_NO_SPACE;
 
-											break;
+										break;
 
-										default:
+									default:
 
-											throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+										throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 									}
 								}
 								else
@@ -939,7 +958,8 @@ dialogue::operator[](short method)
 
 //-------------------------------------------------------------------
 
-dodoString dialogue::request(const dodoString &varName)
+dodoString
+dialogue::request(const dodoString &varName)
 {
 	dodoStringMap::iterator item = GET.find(varName);
 	if (item != GET.end())
@@ -958,12 +978,13 @@ dodoString dialogue::request(const dodoString &varName)
 
 //-------------------------------------------------------------------
 
-void dialogue::setCookie(const dodoString &name,
-						 const dodoString &value,
-						 const dodoString &expires,
-						 const dodoString &path,
-						 const dodoString &domain,
-						 bool             secure)
+void
+dialogue::setCookie(const dodoString &name,
+					const dodoString &value,
+					const dodoString &expires,
+					const dodoString &path,
+					const dodoString &domain,
+					bool             secure)
 {
 	__cgiCookie temp(secure);
 	temp.name = name;
@@ -977,7 +998,8 @@ void dialogue::setCookie(const dodoString &name,
 
 //-------------------------------------------------------------------
 
-void dialogue::setCookie(const __cgiCookie &cookie)
+void
+dialogue::setCookie(const __cgiCookie &cookie)
 {
 	cookies.push_back(cookie);
 }

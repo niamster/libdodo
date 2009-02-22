@@ -40,7 +40,8 @@ const char method::trimSymbols[] =
 //-------------------------------------------------------------------
 
 
-dodo::rpc::method method::xmlToMethod(dodo::data::format::xml::node &node)
+dodo::rpc::method
+method::xmlToMethod(dodo::data::format::xml::node &node)
 {
 	rpc::method meth;
 
@@ -89,7 +90,8 @@ dodo::rpc::method method::xmlToMethod(dodo::data::format::xml::node &node)
 
 //-------------------------------------------------------------------
 
-dodo::data::format::xml::node method::methodToXml(const rpc::method &data)
+dodo::data::format::xml::node
+method::methodToXml(const rpc::method &data)
 {
 	dodoArray<dodo::data::format::xml::node> nodeArr;
 

@@ -363,7 +363,8 @@ basic::syncThreadSection::~syncThreadSection()
 
 //-------------------------------------------------------------------
 
-void basic::syncThreadSection::acquire()
+void
+basic::syncThreadSection::acquire()
 {
 #ifdef PTHREAD_EXT
 
@@ -374,7 +375,8 @@ void basic::syncThreadSection::acquire()
 
 //-------------------------------------------------------------------
 
-void basic::syncThreadSection::release()
+void
+basic::syncThreadSection::release()
 {
 #ifdef PTHREAD_EXT
 
@@ -524,7 +526,8 @@ basic::~basic() throw ()
 
 #ifdef CALLSTACK_EX
 
-dodoString basic::getCallStack()
+dodoString
+basic::getCallStack()
 {
 	dodoString stack;
 
@@ -544,7 +547,8 @@ dodoString basic::getCallStack()
 
 //-------------------------------------------------------------------
 
-basic::operator const dodoString & ()
+basic::operator const dodoString
+& ()
 {
 	syncThreadStack tg;
 
@@ -553,7 +557,8 @@ basic::operator const dodoString & ()
 
 //-------------------------------------------------------------------
 
-const char *basic::what() const throw ()
+const char *
+basic::what() const throw ()
 {
 	syncThreadStack tg;
 
@@ -562,9 +567,10 @@ const char *basic::what() const throw ()
 
 //-------------------------------------------------------------------
 
-void basic::setErrorHandler(errorModuleEnum module,
-							errorHandler    handler,
-							void            *data)
+void
+basic::setErrorHandler(errorModuleEnum module,
+					   errorHandler    handler,
+					   void            *data)
 {
 	syncThreadStack tg;
 
@@ -599,8 +605,9 @@ void basic::setErrorHandler(errorModuleEnum module,
 
 //-------------------------------------------------------------------
 
-void basic::setErrorHandlers(errorHandler handler,
-							 void         *data)
+void
+basic::setErrorHandlers(errorHandler handler,
+						void         *data)
 {
 	syncThreadStack tg;
 
@@ -640,7 +647,8 @@ void basic::setErrorHandlers(errorHandler handler,
 
 //-------------------------------------------------------------------
 
-void basic::unsetErrorHandler(errorModuleEnum module)
+void
+basic::unsetErrorHandler(errorModuleEnum module)
 {
 	syncThreadStack tg;
 
@@ -673,7 +681,8 @@ void basic::unsetErrorHandler(errorModuleEnum module)
 
 //-------------------------------------------------------------------
 
-void basic::unsetErrorHandlers()
+void
+basic::unsetErrorHandlers()
 {
 	syncThreadStack tg;
 
@@ -713,9 +722,10 @@ void basic::unsetErrorHandlers()
 
 #ifdef DL_EXT
 
-bool basic::setErrorHandlers(const dodoString &path,
-							 void             *data,
-							 void             *toInit)
+bool
+basic::setErrorHandlers(const dodoString &path,
+						void             *data,
+						void             *toInit)
 {
 	syncThreadStack tg;
 
@@ -777,9 +787,10 @@ bool basic::setErrorHandlers(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-bool basic::setErrorHandler(const dodoString &path,
-							void             *data,
-							void             *toInit)
+bool
+basic::setErrorHandler(const dodoString &path,
+					   void             *data,
+					   void             *toInit)
 {
 	syncThreadStack tg;
 
@@ -840,8 +851,9 @@ bool basic::setErrorHandler(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-__basicMod basic::getModuleInfo(const dodoString &module,
-								void             *toInit)
+__basicMod
+basic::getModuleInfo(const dodoString &module,
+					 void             *toInit)
 {
 	syncThreadStack tg;
 

@@ -134,7 +134,8 @@ http::~http()
 
 //-------------------------------------------------------------------
 
-short http::getStatusCode(const dodoString &header)
+short
+http::getStatusCode(const dodoString &header)
 {
 	if (header.size() < 12)
 	{
@@ -154,7 +155,8 @@ short http::getStatusCode(const dodoString &header)
 
 #ifdef OPENSSL_EXT
 
-void http::setSertificates(const io::ssl::__certificates &a_certs)
+void
+http::setSertificates(const io::ssl::__certificates &a_certs)
 {
 	certs = a_certs;
 
@@ -163,7 +165,8 @@ void http::setSertificates(const io::ssl::__certificates &a_certs)
 
 //-------------------------------------------------------------------
 
-void http::removeSertificates()
+void
+http::removeSertificates()
 {
 	certs.ca.clear();
 	certs.caPath.clear();
@@ -180,7 +183,8 @@ void http::removeSertificates()
 
 //-------------------------------------------------------------------
 
-void http::setUrl(const dodoString &a_url)
+void
+http::setUrl(const dodoString &a_url)
 {
 	urlComponents = tools::code::parseUrl(a_url);
 
@@ -246,7 +250,8 @@ void http::setUrl(const dodoString &a_url)
 
 //-------------------------------------------------------------------
 
-void http::setCookies(const dodoStringMap &cookies)
+void
+http::setCookies(const dodoStringMap &cookies)
 {
 	dodoString data;
 
@@ -269,7 +274,8 @@ void http::setCookies(const dodoStringMap &cookies)
 
 //-------------------------------------------------------------------
 
-__httpResponse http::GET()
+__httpResponse
+http::GET()
 {
 	exchange *ex = NULL;
 	client *net = NULL;
@@ -331,45 +337,45 @@ __httpResponse http::GET()
 			{
 				switch (getProxyConnectResponse(proxyData, ex))
 				{
-					case GETCONTENTSTATUS_NORMAL:
+				case GETCONTENTSTATUS_NORMAL:
 
-						break;
+					break;
 
-					case GETCONTENTSTATUS_PROXYBASICAUTH:
+				case GETCONTENTSTATUS_PROXYBASICAUTH:
 
-						if (authTries > 2)
-						{
-							authTries = 0;
+					if (authTries > 2)
+					{
+						authTries = 0;
 
-							throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-						}
+						throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					}
 
-						makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 
-						delete ex;
-						ex = NULL;
-						delete net;
-						net = NULL;
+					delete ex;
+					ex = NULL;
+					delete net;
+					net = NULL;
 
-						return GET();
+					return GET();
 
-					case GETCONTENTSTATUS_PROXYDIGESTAUTH:
+				case GETCONTENTSTATUS_PROXYDIGESTAUTH:
 
-						if (authTries > 2)
-						{
-							authTries = 0;
+					if (authTries > 2)
+					{
+						authTries = 0;
 
-							throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-						}
+						throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					}
 
-						makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
+					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 
-						delete ex;
-						ex = NULL;
-						delete net;
-						net = NULL;
+					delete ex;
+					ex = NULL;
+					delete net;
+					net = NULL;
 
-						return GET();
+					return GET();
 				}
 			}
 			catch (...)
@@ -519,132 +525,132 @@ __httpResponse http::GET()
 	{
 		switch (getContent(data, ex))
 		{
-			case GETCONTENTSTATUS_NORMAL:
+		case GETCONTENTSTATUS_NORMAL:
 
-				break;
+			break;
 
-			case GETCONTENTSTATUS_REDIRECT:
+		case GETCONTENTSTATUS_REDIRECT:
 
-				setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
+			setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
 
-				delete ex;
-				ex = NULL;
+			delete ex;
+			ex = NULL;
 
-				return GET();
+			return GET();
 
-			case GETCONTENTSTATUS_PROXYBASICAUTH:
+		case GETCONTENTSTATUS_PROXYBASICAUTH:
 
-				if (authTries > 2)
-				{
-					authTries = 0;
+			if (authTries > 2)
+			{
+				authTries = 0;
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
 
+			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+
+			delete ex;
+			ex = NULL;
+
+			return GET();
+
+		case GETCONTENTSTATUS_WWWBASICAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
+
+			delete ex;
+			ex = NULL;
+
+			return GET();
+
+		case GETCONTENTSTATUS_PROXYDIGESTAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
+
+			delete ex;
+			ex = NULL;
+
+			return GET();
+
+		case GETCONTENTSTATUS_WWWDIGESTAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
+
+			delete ex;
+			ex = NULL;
+
+			return GET();
+
+		case GETCONTENTSTATUS_WWWPROXYBASICAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
+
+			if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
+			{
 				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-
-				delete ex;
-				ex = NULL;
-
-				return GET();
-
-			case GETCONTENTSTATUS_WWWBASICAUTH:
-
-				if (authTries > 2)
-				{
-					authTries = 0;
-
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
-
-				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
-
-				delete ex;
-				ex = NULL;
-
-				return GET();
-
-			case GETCONTENTSTATUS_PROXYDIGESTAUTH:
-
-				if (authTries > 2)
-				{
-					authTries = 0;
-
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
-
+			}
+			else
+			{
 				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
+			}
 
-				delete ex;
-				ex = NULL;
+			delete ex;
+			ex = NULL;
 
-				return GET();
+			return GET();
 
-			case GETCONTENTSTATUS_WWWDIGESTAUTH:
+		case GETCONTENTSTATUS_WWWPROXYDIGESTAUTH:
 
-				if (authTries > 2)
-				{
-					authTries = 0;
+			if (authTries > 2)
+			{
+				authTries = 0;
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
 
-				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
 
-				delete ex;
-				ex = NULL;
+			if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
+			{
+				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+			}
+			else
+			{
+				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
+			}
 
-				return GET();
+			delete ex;
+			ex = NULL;
 
-			case GETCONTENTSTATUS_WWWPROXYBASICAUTH:
-
-				if (authTries > 2)
-				{
-					authTries = 0;
-
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
-
-				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
-
-				if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
-				{
-					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-				}
-				else
-				{
-					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
-				}
-
-				delete ex;
-				ex = NULL;
-
-				return GET();
-
-			case GETCONTENTSTATUS_WWWPROXYDIGESTAUTH:
-
-				if (authTries > 2)
-				{
-					authTries = 0;
-
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
-
-				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
-
-				if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
-				{
-					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-				}
-				else
-				{
-					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
-				}
-
-				delete ex;
-				ex = NULL;
-
-				return GET();
+			return GET();
 		}
 	}
 	catch (...)
@@ -667,7 +673,8 @@ __httpResponse http::GET()
 
 //-------------------------------------------------------------------
 
-__httpResponse http::GET(const dodoString &a_url)
+__httpResponse
+http::GET(const dodoString &a_url)
 {
 	setUrl(a_url);
 
@@ -676,9 +683,10 @@ __httpResponse http::GET(const dodoString &a_url)
 
 //-------------------------------------------------------------------
 
-__httpResponse http::POST(const dodoString							&a_url,
-						  const dodoStringMap						&arguments,
-						  const dodoMap<dodoString, __httpPostFile> &files)
+__httpResponse
+http::POST(const dodoString &a_url,
+		   const dodoStringMap &arguments,
+		   const dodoMap<dodoString, __httpPostFile> &files)
 {
 	setUrl(a_url);
 
@@ -687,8 +695,9 @@ __httpResponse http::POST(const dodoString							&a_url,
 
 //-------------------------------------------------------------------
 
-__httpResponse http::POST(const dodoStringMap						&arguments,
-						  const dodoMap<dodoString, __httpPostFile> &files)
+__httpResponse
+http::POST(const dodoStringMap &arguments,
+		   const dodoMap<dodoString, __httpPostFile> &files)
 {
 	dodoString boundary = "---------------------------" + tools::string::ulToString(tools::misc::ulRandom()) + tools::string::ulToString(tools::misc::ulRandom());
 	dodoString type = "multipart/form-data; boundary=" + boundary;
@@ -733,8 +742,9 @@ __httpResponse http::POST(const dodoStringMap						&arguments,
 
 //-------------------------------------------------------------------
 
-__httpResponse http::POST(const dodoString    &a_url,
-						  const dodoStringMap &arguments)
+__httpResponse
+http::POST(const dodoString    &a_url,
+		   const dodoStringMap &arguments)
 {
 	setUrl(a_url);
 
@@ -743,7 +753,8 @@ __httpResponse http::POST(const dodoString    &a_url,
 
 //-------------------------------------------------------------------
 
-__httpResponse http::POST(const dodoStringMap &arguments)
+__httpResponse
+http::POST(const dodoStringMap &arguments)
 {
 	dodoString data;
 
@@ -766,9 +777,10 @@ __httpResponse http::POST(const dodoStringMap &arguments)
 
 //-------------------------------------------------------------------
 
-__httpResponse http::POST(const dodoString &a_url,
-						  const dodoString &data,
-						  const dodoString &type)
+__httpResponse
+http::POST(const dodoString &a_url,
+		   const dodoString &data,
+		   const dodoString &type)
 {
 	setUrl(a_url);
 
@@ -777,8 +789,9 @@ __httpResponse http::POST(const dodoString &a_url,
 
 //-------------------------------------------------------------------
 
-__httpResponse http::POST(const dodoString &a_data,
-						  const dodoString &type)
+__httpResponse
+http::POST(const dodoString &a_data,
+		   const dodoString &type)
 {
 	exchange *ex = NULL;
 	client *net = NULL;
@@ -840,45 +853,45 @@ __httpResponse http::POST(const dodoString &a_data,
 			{
 				switch (getProxyConnectResponse(proxyData, ex))
 				{
-					case GETCONTENTSTATUS_NORMAL:
+				case GETCONTENTSTATUS_NORMAL:
 
-						break;
+					break;
 
-					case GETCONTENTSTATUS_PROXYBASICAUTH:
+				case GETCONTENTSTATUS_PROXYBASICAUTH:
 
-						if (authTries > 2)
-						{
-							authTries = 0;
+					if (authTries > 2)
+					{
+						authTries = 0;
 
-							throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-						}
+						throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					}
 
-						makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 
-						delete ex;
-						ex = NULL;
-						delete net;
-						net = NULL;
+					delete ex;
+					ex = NULL;
+					delete net;
+					net = NULL;
 
-						return POST(data, type);
+					return POST(data, type);
 
-					case GETCONTENTSTATUS_PROXYDIGESTAUTH:
+				case GETCONTENTSTATUS_PROXYDIGESTAUTH:
 
-						if (authTries > 2)
-						{
-							authTries = 0;
+					if (authTries > 2)
+					{
+						authTries = 0;
 
-							throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-						}
+						throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					}
 
-						makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
+					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
 
-						delete ex;
-						ex = NULL;
-						delete net;
-						net = NULL;
+					delete ex;
+					ex = NULL;
+					delete net;
+					net = NULL;
 
-						return POST(data, type);
+					return POST(data, type);
 				}
 			}
 			catch (...)
@@ -1037,111 +1050,111 @@ __httpResponse http::POST(const dodoString &a_data,
 	{
 		switch (getContent(data, ex))
 		{
-			case GETCONTENTSTATUS_NORMAL:
+		case GETCONTENTSTATUS_NORMAL:
 
-				break;
+			break;
 
-			case GETCONTENTSTATUS_REDIRECT:
+		case GETCONTENTSTATUS_REDIRECT:
 
-				setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
+			setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
 
-				return POST(data, type);
+			return POST(data, type);
 
-			case GETCONTENTSTATUS_PROXYBASICAUTH:
+		case GETCONTENTSTATUS_PROXYBASICAUTH:
 
-				if (authTries > 2)
-				{
-					authTries = 0;
+			if (authTries > 2)
+			{
+				authTries = 0;
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
 
+			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+
+			return POST(data, type);
+
+		case GETCONTENTSTATUS_WWWBASICAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
+
+			return POST(data, type);
+
+		case GETCONTENTSTATUS_PROXYDIGESTAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
+
+			return POST(data, type);
+
+		case GETCONTENTSTATUS_WWWDIGESTAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
+
+			return POST(data, type);
+
+		case GETCONTENTSTATUS_WWWPROXYBASICAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
+
+			if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
+			{
 				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-
-				return POST(data, type);
-
-			case GETCONTENTSTATUS_WWWBASICAUTH:
-
-				if (authTries > 2)
-				{
-					authTries = 0;
-
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
-
-				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
-
-				return POST(data, type);
-
-			case GETCONTENTSTATUS_PROXYDIGESTAUTH:
-
-				if (authTries > 2)
-				{
-					authTries = 0;
-
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
-
+			}
+			else
+			{
 				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
+			}
 
-				return POST(data, type);
+			return POST(data, type);
 
-			case GETCONTENTSTATUS_WWWDIGESTAUTH:
+		case GETCONTENTSTATUS_WWWPROXYDIGESTAUTH:
 
-				if (authTries > 2)
-				{
-					authTries = 0;
+			if (authTries > 2)
+			{
+				authTries = 0;
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
+				throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
 
-				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
 
-				return POST(data, type);
+			if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
+			{
+				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+			}
+			else
+			{
+				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
+			}
 
-			case GETCONTENTSTATUS_WWWPROXYBASICAUTH:
-
-				if (authTries > 2)
-				{
-					authTries = 0;
-
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
-
-				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
-
-				if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
-				{
-					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-				}
-				else
-				{
-					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
-				}
-
-				return POST(data, type);
-
-			case GETCONTENTSTATUS_WWWPROXYDIGESTAUTH:
-
-				if (authTries > 2)
-				{
-					authTries = 0;
-
-					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-				}
-
-				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
-
-				if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
-				{
-					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-				}
-				else
-				{
-					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
-				}
-
-				return POST(data, type);
+			return POST(data, type);
 		}
 	}
 	catch (...)
@@ -1164,7 +1177,8 @@ __httpResponse http::POST(const dodoString &a_data,
 
 //-------------------------------------------------------------------
 
-void http::removeProxy()
+void
+http::removeProxy()
 {
 	proxyAuthInfo = __proxyAuthInfo();
 
@@ -1173,10 +1187,11 @@ void http::removeProxy()
 
 //-------------------------------------------------------------------
 
-void http::setProxy(const dodoString &host,
-					unsigned int     port,
-					const dodoString &user,
-					const dodoString &password)
+void
+http::setProxy(const dodoString &host,
+			   unsigned int     port,
+			   const dodoString &user,
+			   const dodoString &password)
 {
 	proxyAuthInfo.host = host;
 	proxyAuthInfo.port = port;
@@ -1190,7 +1205,8 @@ void http::setProxy(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-void http::getHeaders(const dodoString &headers)
+void
+http::getHeaders(const dodoString &headers)
 {
 	unsigned long i(0), j(0);
 	unsigned long size = headers.size();
@@ -1245,8 +1261,9 @@ void http::getHeaders(const dodoString &headers)
 
 //-------------------------------------------------------------------
 
-bool http::extractHeaders(const dodoString &data,
-						  dodoString       &headers)
+bool
+http::extractHeaders(const dodoString &data,
+					 dodoString       &headers)
 {
 	headers.append(data);
 
@@ -1281,8 +1298,9 @@ bool http::extractHeaders(const dodoString &data,
 
 //-------------------------------------------------------------------
 
-short http::getProxyConnectResponse(char     *data,
-									exchange *ex)
+short
+http::getProxyConnectResponse(char     *data,
+							  exchange *ex)
 {
 	unsigned long size = 0, i;
 	bool endOfHeaders = false;
@@ -1372,8 +1390,9 @@ short http::getProxyConnectResponse(char     *data,
 
 //-------------------------------------------------------------------
 
-short http::getContent(dodoString &data,
-					   exchange   *ex)
+short
+http::getContent(dodoString &data,
+				 exchange   *ex)
 {
 	unsigned long contentSize = 0;
 
@@ -1651,11 +1670,12 @@ short http::getContent(dodoString &data,
 
 //-------------------------------------------------------------------
 
-void http::makeDigestAuth(short            requestHeader,
-						  short            responseHeader,
-						  const dodoString &method,
-						  const dodoString &user,
-						  const dodoString &password)
+void
+http::makeDigestAuth(short            requestHeader,
+					 short            responseHeader,
+					 const dodoString &method,
+					 const dodoString &user,
+					 const dodoString &password)
 {
 	dodoString nonce, opaque, realm;
 
@@ -1746,16 +1766,18 @@ void http::makeDigestAuth(short            requestHeader,
 
 //-------------------------------------------------------------------
 
-void http::makeBasicAuth(short            responseHeader,
-						 const dodoString &user,
-						 const dodoString &password)
+void
+http::makeBasicAuth(short            responseHeader,
+					const dodoString &user,
+					const dodoString &password)
 {
 	requestHeaders[responseHeader] = "Basic " + tools::code::encodeBase64(user + ":" + password);
 }
 
 //-------------------------------------------------------------------
 
-void http::clear()
+void
+http::clear()
 {
 	requestHeaders.erase(HTTP_REQUESTHEADER_COOKIE);
 
@@ -1784,8 +1806,9 @@ void http::clear()
 
 //-------------------------------------------------------------------
 
-void http::setAuthInfo(const dodoString &user,
-					   const dodoString &password)
+void
+http::setAuthInfo(const dodoString &user,
+				  const dodoString &password)
 {
 	urlComponents.login = user;
 	urlComponents.password = password;
@@ -1793,7 +1816,8 @@ void http::setAuthInfo(const dodoString &user,
 
 //-------------------------------------------------------------------
 
-dodo::cgi::__cgiCookie http::parseCookie(const dodoString &header)
+dodo::cgi::__cgiCookie
+http::parseCookie(const dodoString &header)
 {
 	dodoStringArray parts = tools::misc::split(header, ";");
 

@@ -105,7 +105,8 @@ exchange::~exchange()
 
 //-------------------------------------------------------------------
 
-void exchange::init(__initialAccept &a_init)
+void
+exchange::init(__initialAccept &a_init)
 {
 	init(a_init.socket, a_init.blocked, a_init.blockInherited);
 
@@ -114,9 +115,10 @@ void exchange::init(__initialAccept &a_init)
 
 //-------------------------------------------------------------------
 
-void exchange::close()
+void
+exchange::close()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
@@ -137,11 +139,12 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void exchange::init(int  a_socket,
-					bool a_blocked,
-					bool blockInherited)
+void
+exchange::init(int  a_socket,
+			   bool a_blocked,
+			   bool blockInherited)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (socket != -1)
 	{
@@ -180,9 +183,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-bool exchange::isAlive()
+bool
+exchange::isAlive()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (socket == -1)
 	{
@@ -211,7 +215,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void exchange::_write(const char * const a_data)
+void
+exchange::_write(const char * const a_data)
 {
 	if (socket == -1)
 	{
@@ -288,7 +293,8 @@ void exchange::_write(const char * const a_data)
 
 //-------------------------------------------------------------------
 
-void exchange::_read(char * const a_data)
+void
+exchange::_read(char * const a_data)
 {
 	if (socket == -1)
 	{
@@ -377,7 +383,8 @@ void exchange::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void exchange::_writeStream(const char * const data)
+void
+exchange::_writeStream(const char * const data)
 {
 	unsigned long _outSize = outSize;
 
@@ -404,7 +411,8 @@ void exchange::_writeStream(const char * const data)
 
 //-------------------------------------------------------------------
 
-unsigned long exchange::_readStream(char * const data)
+unsigned long
+exchange::_readStream(char * const data)
 {
 	if (socket == -1)
 	{
@@ -440,24 +448,27 @@ unsigned long exchange::_readStream(char * const data)
 
 //-------------------------------------------------------------------
 
-void exchange::flush()
+void
+exchange::flush()
 {
 }
 
 //-------------------------------------------------------------------
 
-int exchange::getInDescriptor() const
+int
+exchange::getInDescriptor() const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	return socket;
 }
 
 //-------------------------------------------------------------------
 
-int exchange::getOutDescriptor() const
+int
+exchange::getOutDescriptor() const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	return socket;
 }

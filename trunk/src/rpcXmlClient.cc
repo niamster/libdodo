@@ -43,21 +43,24 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-void client::setRequestEncoding(const dodoString &a_encoding)
+void
+client::setRequestEncoding(const dodoString &a_encoding)
 {
 	rqEncoding = a_encoding;
 }
 
 //-------------------------------------------------------------------
 
-dodoString client::getResponseEncoding()
+dodoString
+client::getResponseEncoding()
 {
 	return rpEncoding;
 }
 
 //-------------------------------------------------------------------
 
-dodoString client::processCallRequest(const rpc::method &meth)
+dodoString
+client::processCallRequest(const rpc::method &meth)
 {
 	dodo::data::format::xml::processor xmlValue;
 
@@ -66,7 +69,8 @@ dodoString client::processCallRequest(const rpc::method &meth)
 
 //-------------------------------------------------------------------
 
-dodo::rpc::response client::processCallResult(const dodoString &data)
+dodo::rpc::response
+client::processCallResult(const dodoString &data)
 {
 	dodo::data::format::xml::processor xmlValue;
 

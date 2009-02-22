@@ -142,9 +142,10 @@ io::pipe::~pipe()
 
 //-------------------------------------------------------------------
 
-void io::pipe::clone(const pipe &fd)
+void
+io::pipe::clone(const pipe &fd)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (inHandle != NULL)
 	{
@@ -216,9 +217,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-int io::pipe::getInDescriptor() const
+int
+io::pipe::getInDescriptor() const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (inHandle == NULL)
 	{
@@ -230,9 +232,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-int io::pipe::getOutDescriptor() const
+int
+io::pipe::getOutDescriptor() const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (outHandle == NULL)
 	{
@@ -244,9 +247,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void io::pipe::close()
+void
+io::pipe::close()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = PIPE_OPERATION_CLOSE;
@@ -280,9 +284,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void io::pipe::open()
+void
+io::pipe::open()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = PIPE_OPERATION_OPEN;
@@ -335,7 +340,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void io::pipe::_read(char * const a_data)
+void
+io::pipe::_read(char * const a_data)
 {
 	if (inHandle == NULL)
 	{
@@ -420,7 +426,8 @@ void io::pipe::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void io::pipe::_write(const char *const buf)
+void
+io::pipe::_write(const char *const buf)
 {
 	if (outHandle == NULL)
 	{
@@ -503,9 +510,10 @@ void io::pipe::_write(const char *const buf)
 
 //-------------------------------------------------------------------
 
-void io::pipe::flush()
+void
+io::pipe::flush()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (outHandle == NULL)
 	{
@@ -520,9 +528,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-io::network::__peerInfo io::pipe::peerInfo()
+io::network::__peerInfo
+io::pipe::peerInfo()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (inHandle == NULL)
 	{
@@ -555,56 +564,58 @@ pc::sync::protector pg(keeper);
 
 	switch (len)
 	{
-		case sizeof(sockaddr_in):
+	case sizeof(sockaddr_in):
 
+	{
+		char temp[15];
+		sockaddr_in *sa4;
+		sa4 = (sockaddr_in *)&sa;
+		if (inet_ntop(AF_INET, &(sa4->sin_addr), temp, 15) != NULL)
 		{
-			char temp[15];
-			sockaddr_in *sa4;
-			sa4 = (sockaddr_in *)&sa;
-			if (inet_ntop(AF_INET, &(sa4->sin_addr), temp, 15) != NULL)
-			{
-				info.host.assign(temp);
-			}
-			info.port = ntohs(sa4->sin_port);
-
-			return info;
+			info.host.assign(temp);
 		}
+		info.port = ntohs(sa4->sin_port);
 
-		case sizeof(sockaddr_in6):
+		return info;
+	}
 
+	case sizeof(sockaddr_in6):
+
+	{
+		char temp[INET6_ADDRSTRLEN];
+		sockaddr_in6 *sa6;
+		sa6 = (sockaddr_in6 *)&sa6;
+		if (inet_ntop(AF_INET6, &(sa6->sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
 		{
-			char temp[INET6_ADDRSTRLEN];
-			sockaddr_in6 *sa6;
-			sa6 = (sockaddr_in6 *)&sa6;
-			if (inet_ntop(AF_INET6, &(sa6->sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
-			{
-				info.host.assign(temp);
-			}
-			info.port = ntohs(sa6->sin6_port);
-
-			return info;
+			info.host.assign(temp);
 		}
+		info.port = ntohs(sa6->sin6_port);
 
-		default:
+		return info;
+	}
 
-			return info;
+	default:
+
+		return info;
 	}
 }
 
 //-------------------------------------------------------------------
 
-bool io::pipe::isBlocked()
+bool
+io::pipe::isBlocked()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	return blocked;
 }
 
 //-------------------------------------------------------------------
 
-void io::pipe::block(bool flag)
+void
+io::pipe::block(bool flag)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (inHandle == NULL && outHandle == NULL)
 	{
@@ -676,7 +687,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-unsigned long io::pipe::_readStream(char * const a_data)
+unsigned long
+io::pipe::_readStream(char * const a_data)
 {
 	if (inHandle == NULL)
 	{
@@ -715,7 +727,8 @@ unsigned long io::pipe::_readStream(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void io::pipe::_writeStream(const char * const data)
+void
+io::pipe::_writeStream(const char * const data)
 {
 	unsigned long _outSize = outSize;
 

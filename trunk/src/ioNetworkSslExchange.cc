@@ -103,7 +103,8 @@ exchange::~exchange()
 
 //-------------------------------------------------------------------
 
-void exchange::init(__initialAccept &a_init)
+void
+exchange::init(__initialAccept &a_init)
 {
 	init(a_init.socket, a_init.sslHandle, a_init.blocked, a_init.blockInherited);
 
@@ -113,8 +114,9 @@ void exchange::init(__initialAccept &a_init)
 
 //-------------------------------------------------------------------
 
-void exchange::_close(int socket,
-					  SSL *sslHandle)
+void
+exchange::_close(int socket,
+				 SSL *sslHandle)
 {
 	int err = SSL_shutdown(sslHandle);
 	if (err < 0)
@@ -137,9 +139,10 @@ void exchange::_close(int socket,
 
 //-------------------------------------------------------------------
 
-void exchange::close()
+void
+exchange::close()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
@@ -161,12 +164,13 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void exchange::init(int  a_socket,
-					SSL  *a_sslHandle,
-					bool a_blocked,
-					bool blockInherited)
+void
+exchange::init(int  a_socket,
+			   SSL  *a_sslHandle,
+			   bool a_blocked,
+			   bool blockInherited)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (socket != -1)
 	{
@@ -207,9 +211,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-bool exchange::isAlive()
+bool
+exchange::isAlive()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (socket == -1)
 	{
@@ -238,7 +243,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void exchange::_write(const char * const a_data)
+void
+exchange::_write(const char * const a_data)
 {
 	if (socket == -1)
 	{
@@ -260,24 +266,24 @@ void exchange::_write(const char * const a_data)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
-					case SSL_ERROR_WANT_READ:
-					case SSL_ERROR_WANT_WRITE:
-					case SSL_ERROR_WANT_X509_LOOKUP:
+				case SSL_ERROR_WANT_READ:
+				case SSL_ERROR_WANT_WRITE:
+				case SSL_ERROR_WANT_X509_LOOKUP:
 
-						continue;
+					continue;
 
-					case SSL_ERROR_SYSCALL:
+				case SSL_ERROR_SYSCALL:
 
-						if (errno == 0)
-						{
-							continue;
-						}
-
-					default:
+					if (errno == 0)
 					{
-						unsigned long nerr = ERR_get_error();
-						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+						continue;
 					}
+
+				default:
+				{
+					unsigned long nerr = ERR_get_error();
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
 				}
 			}
 
@@ -295,24 +301,24 @@ void exchange::_write(const char * const a_data)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
-					case SSL_ERROR_WANT_READ:
-					case SSL_ERROR_WANT_WRITE:
-					case SSL_ERROR_WANT_X509_LOOKUP:
+				case SSL_ERROR_WANT_READ:
+				case SSL_ERROR_WANT_WRITE:
+				case SSL_ERROR_WANT_X509_LOOKUP:
 
-						continue;
+					continue;
 
-					case SSL_ERROR_SYSCALL:
+				case SSL_ERROR_SYSCALL:
 
-						if (errno == 0)
-						{
-							continue;
-						}
-
-					default:
+					if (errno == 0)
 					{
-						unsigned long nerr = ERR_get_error();
-						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+						continue;
 					}
+
+				default:
+				{
+					unsigned long nerr = ERR_get_error();
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
 				}
 			}
 
@@ -323,7 +329,8 @@ void exchange::_write(const char * const a_data)
 
 //-------------------------------------------------------------------
 
-void exchange::_read(char * const a_data)
+void
+exchange::_read(char * const a_data)
 {
 	if (socket == -1)
 	{
@@ -347,24 +354,24 @@ void exchange::_read(char * const a_data)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
-					case SSL_ERROR_WANT_READ:
-					case SSL_ERROR_WANT_WRITE:
-					case SSL_ERROR_WANT_X509_LOOKUP:
+				case SSL_ERROR_WANT_READ:
+				case SSL_ERROR_WANT_WRITE:
+				case SSL_ERROR_WANT_X509_LOOKUP:
 
-						continue;
+					continue;
 
-					case SSL_ERROR_SYSCALL:
+				case SSL_ERROR_SYSCALL:
 
-						if (errno == 0)
-						{
-							continue;
-						}
-
-					default:
+					if (errno == 0)
 					{
-						unsigned long nerr = ERR_get_error();
-						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+						continue;
 					}
+
+				default:
+				{
+					unsigned long nerr = ERR_get_error();
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
 				}
 			}
 
@@ -382,24 +389,24 @@ void exchange::_read(char * const a_data)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
-					case SSL_ERROR_WANT_READ:
-					case SSL_ERROR_WANT_WRITE:
-					case SSL_ERROR_WANT_X509_LOOKUP:
+				case SSL_ERROR_WANT_READ:
+				case SSL_ERROR_WANT_WRITE:
+				case SSL_ERROR_WANT_X509_LOOKUP:
 
-						continue;
+					continue;
 
-					case SSL_ERROR_SYSCALL:
+				case SSL_ERROR_SYSCALL:
 
-						if (errno == 0)
-						{
-							continue;
-						}
-
-					default:
+					if (errno == 0)
 					{
-						unsigned long nerr = ERR_get_error();
-						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+						continue;
 					}
+
+				default:
+				{
+					unsigned long nerr = ERR_get_error();
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
 				}
 			}
 
@@ -410,7 +417,8 @@ void exchange::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-unsigned long exchange::_readStream(char * const data)
+unsigned long
+exchange::_readStream(char * const data)
 {
 	if (socket == -1)
 	{
@@ -427,25 +435,25 @@ unsigned long exchange::_readStream(char * const data)
 		{
 			switch (SSL_get_error(sslHandle, n))
 			{
-				case SSL_ERROR_WANT_READ:
-				case SSL_ERROR_WANT_WRITE:
-				case SSL_ERROR_WANT_X509_LOOKUP:
-				case SSL_ERROR_ZERO_RETURN:
+			case SSL_ERROR_WANT_READ:
+			case SSL_ERROR_WANT_WRITE:
+			case SSL_ERROR_WANT_X509_LOOKUP:
+			case SSL_ERROR_ZERO_RETURN:
 
-					continue;
+				continue;
 
-				case SSL_ERROR_SYSCALL:
+			case SSL_ERROR_SYSCALL:
 
-					if (errno == 0)
-					{
-						continue;
-					}
-
-				default:
+				if (errno == 0)
 				{
-					unsigned long nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+					continue;
 				}
+
+			default:
+			{
+				unsigned long nerr = ERR_get_error();
+				throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+			}
 			}
 		}
 

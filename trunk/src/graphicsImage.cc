@@ -97,17 +97,19 @@ __image_init__::~__image_init__()
 
 //-------------------------------------------------------------------
 
-void __image_init__::imWarningHandler(const ExceptionType et,
-									  const char          *reason,
-									  const char          *description)
+void
+__image_init__::imWarningHandler(const ExceptionType et,
+								 const char          *reason,
+								 const char          *description)
 {
 }
 
 //-------------------------------------------------------------------
 
-void __image_init__::imErrorHandler(const ExceptionType et,
-									const char          *reason,
-									const char          *description)
+void
+__image_init__::imErrorHandler(const ExceptionType et,
+							   const char          *reason,
+							   const char          *description)
 {
 	throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason, __LINE__, __FILE__, description);
 }
@@ -216,7 +218,8 @@ image::~image()
 
 //-------------------------------------------------------------------
 
-void image::readFile(const dodoString &str)
+void
+image::readFile(const dodoString &str)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
@@ -258,7 +261,8 @@ void image::readFile(const dodoString &str)
 
 //-------------------------------------------------------------------
 
-void image::readMemory(const dodoString &data)
+void
+image::readMemory(const dodoString &data)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
@@ -291,7 +295,8 @@ void image::readMemory(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-void image::readMemory(const __imageInfo &info)
+void
+image::readMemory(const __imageInfo &info)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
@@ -329,10 +334,11 @@ void image::readMemory(const __imageInfo &info)
 
 //-------------------------------------------------------------------
 
-void image::create(unsigned long  width,
-				   unsigned long  height,
-				   const __color  &background,
-				   unsigned short backgroundDepth)
+void
+image::create(unsigned long  width,
+			  unsigned long  height,
+			  const __color  &background,
+			  unsigned short backgroundDepth)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_CREATE;
@@ -378,7 +384,8 @@ void image::create(unsigned long  width,
 
 //-------------------------------------------------------------------
 
-void image::setType(short type)
+void
+image::setType(short type)
 {
 	if (type < 0 || type >= IMAGE_TYPESTATEMENTS)
 	{
@@ -398,7 +405,8 @@ void image::setType(short type)
 
 //-------------------------------------------------------------------
 
-void image::setAlpha()
+void
+image::setAlpha()
 {
 	if (collectedData.imHandle == NULL)
 	{
@@ -410,7 +418,8 @@ void image::setAlpha()
 
 //-------------------------------------------------------------------
 
-void image::removeAlpha()
+void
+image::removeAlpha()
 {
 	if (collectedData.imHandle == NULL)
 	{
@@ -422,7 +431,8 @@ void image::removeAlpha()
 
 //-------------------------------------------------------------------
 
-void image::setOpacity(unsigned short opacity)
+void
+image::setOpacity(unsigned short opacity)
 {
 	if (collectedData.imHandle == NULL)
 	{
@@ -434,7 +444,8 @@ void image::setOpacity(unsigned short opacity)
 
 //-------------------------------------------------------------------
 
-void image::setBackgroundColor(__color background)
+void
+image::setBackgroundColor(__color background)
 {
 	if (collectedData.imHandle == NULL)
 	{
@@ -451,7 +462,8 @@ void image::setBackgroundColor(__color background)
 
 //-------------------------------------------------------------------
 
-void image::close()
+void
+image::close()
 {
 	if (collectedData.imHandle != NULL)
 	{
@@ -463,7 +475,8 @@ void image::close()
 
 //-------------------------------------------------------------------
 
-void image::writeFile(const dodoString &str)
+void
+image::writeFile(const dodoString &str)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
@@ -498,7 +511,8 @@ void image::writeFile(const dodoString &str)
 
 //-------------------------------------------------------------------
 
-void image::writeMemory(dodoString &data)
+void
+image::writeMemory(dodoString &data)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
@@ -528,7 +542,8 @@ void image::writeMemory(dodoString &data)
 
 //-------------------------------------------------------------------
 
-void image::setCompression(short type)
+void
+image::setCompression(short type)
 {
 	if (type < 0 || type >= IMAGE_COMPRESSIONSTATEMENTS)
 	{
@@ -540,14 +555,16 @@ void image::setCompression(short type)
 
 //-------------------------------------------------------------------
 
-void image::setQuality(short quality)
+void
+image::setQuality(short quality)
 {
 	collectedData.imInfo->quality = quality;
 }
 
 //-------------------------------------------------------------------
 
-void image::setEncoder(short encoder)
+void
+image::setEncoder(short encoder)
 {
 	if (encoder < 0 || encoder >= IMAGE_ENCODERSTATEMENTS)
 	{
@@ -559,7 +576,8 @@ void image::setEncoder(short encoder)
 
 //-------------------------------------------------------------------
 
-short image::getCompression()
+short
+image::getCompression()
 {
 	for (int i = 0; i < IMAGE_COMPRESSIONSTATEMENTS; ++i)
 	{
@@ -572,14 +590,16 @@ short image::getCompression()
 
 //-------------------------------------------------------------------
 
-short image::getQuality()
+short
+image::getQuality()
 {
 	return collectedData.imInfo->quality;
 }
 
 //-------------------------------------------------------------------
 
-short image::getEncoder()
+short
+image::getEncoder()
 {
 	for (int i = 0; i < IMAGE_ENCODERSTATEMENTS; ++i)
 	{
@@ -592,7 +612,8 @@ short image::getEncoder()
 
 //-------------------------------------------------------------------
 
-__imageSize image::getImageSize()
+__imageSize
+image::getImageSize()
 {
 	if (collectedData.imHandle == NULL)
 	{

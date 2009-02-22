@@ -145,7 +145,8 @@ shared::~shared()
 
 //-------------------------------------------------------------------
 
-void shared::open(int a_key)
+void
+shared::open(int a_key)
 {
 	close();
 
@@ -202,7 +203,8 @@ void shared::open(int a_key)
 
 //-------------------------------------------------------------------
 
-void shared::close()
+void
+shared::close()
 {
 #ifdef XSI_IPC
 
@@ -239,7 +241,8 @@ void shared::close()
 
 //-------------------------------------------------------------------
 
-void shared::remove(int a_key)
+void
+shared::remove(int a_key)
 {
 #ifdef XSI_IPC
 
@@ -281,7 +284,8 @@ void shared::remove(int a_key)
 
 //-------------------------------------------------------------------
 
-void *shared::map(unsigned long a_size)
+void *
+shared::map(unsigned long a_size)
 {
 	unmap();
 
@@ -346,7 +350,8 @@ void *shared::map(unsigned long a_size)
 
 //-------------------------------------------------------------------
 
-void shared::unmap()
+void
+shared::unmap()
 {
 	if (mshared != NULL)
 	{
@@ -369,14 +374,16 @@ void shared::unmap()
 
 //-------------------------------------------------------------------
 
-void *shared::get()
+void *
+shared::get()
 {
 	return mshared;
 }
 
 //-------------------------------------------------------------------
 
-unsigned long shared::getSize()
+unsigned long
+shared::getSize()
 {
 #ifdef XSI_IPC
 

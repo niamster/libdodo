@@ -75,7 +75,8 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-void client::removeSertificates()
+void
+client::removeSertificates()
 {
 	if (sslHandle != NULL)
 	{
@@ -127,7 +128,8 @@ void client::removeSertificates()
 
 //-------------------------------------------------------------------
 
-void client::setSertificates(const io::ssl::__certificates &certs)
+void
+client::setSertificates(const io::ssl::__certificates &certs)
 {
 	if (sslHandle != NULL)
 	{
@@ -199,33 +201,33 @@ void client::setSertificates(const io::ssl::__certificates &certs)
 	{
 		switch (certs.keyType)
 		{
-			case io::ssl::KEYTYPE_PKEY:
+		case io::ssl::KEYTYPE_PKEY:
 
-				if (SSL_CTX_use_PrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
-				{
-					unsigned long nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
+			if (SSL_CTX_use_PrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
+			{
+				unsigned long nerr = ERR_get_error();
+				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+			}
 
-				keySet = true;
+			keySet = true;
 
-				break;
+			break;
 
-			case io::ssl::KEYTYPE_RSA:
+		case io::ssl::KEYTYPE_RSA:
 
-				if (SSL_CTX_use_RSAPrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
-				{
-					unsigned long nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
+			if (SSL_CTX_use_RSAPrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
+			{
+				unsigned long nerr = ERR_get_error();
+				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+			}
 
-				keySet = true;
+			keySet = true;
 
-				break;
+			break;
 
-			default:
+		default:
 
-				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNKEYTYPE, IONETWORKSSLCLIENTEX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNKEYTYPE, IONETWORKSSLCLIENTEX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
 		}
 	}
 	else
@@ -277,7 +279,8 @@ void client::setSertificates(const io::ssl::__certificates &certs)
 
 //-------------------------------------------------------------------
 
-void client::initSsl()
+void
+client::initSsl()
 {
 	if (sslCtx == NULL)
 	{
@@ -300,7 +303,8 @@ void client::initSsl()
 
 //-------------------------------------------------------------------
 
-void client::connectSsl()
+void
+client::connectSsl()
 {
 	io::ssl::__openssl_init_object__.addEntropy();
 
@@ -340,46 +344,46 @@ void client::connectSsl()
 	int res = SSL_connect(sslHandle);
 	switch (res)
 	{
-		case 1:
-			break;
+	case 1:
+		break;
 
-		case 0:
+	case 0:
+	{
+		unsigned long nerr = ERR_get_error();
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+	}
+
+	case - 1:
+	{
+		int nerr = SSL_get_error(sslHandle, res);
+		if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
 		{
-			unsigned long nerr = ERR_get_error();
+			break;
+		}
+	}
+
+	default:
+	{
+		unsigned long nerr = ERR_get_error();
+
+		int err = SSL_shutdown(sslHandle);
+		if (err < 0)
+		{
+			nerr = ERR_get_error();
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
-
-		case - 1:
+		if (err == 0)
 		{
-			int nerr = SSL_get_error(sslHandle, res);
-			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
-			{
-				break;
-			}
-		}
-
-		default:
-		{
-			unsigned long nerr = ERR_get_error();
-
-			int err = SSL_shutdown(sslHandle);
+			err = SSL_shutdown(sslHandle);
 			if (err < 0)
 			{
 				nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
-			if (err == 0)
-			{
-				err = SSL_shutdown(sslHandle);
-				if (err < 0)
-				{
-					nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
-			}
-
-			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
+
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+	}
 	}
 
 	sslConnected = true;
@@ -387,9 +391,10 @@ void client::connectSsl()
 
 //-------------------------------------------------------------------
 
-void client::connect(const dodoString &host,
-					 int              port,
-					 exchange         &exchange)
+void
+client::connect(const dodoString &host,
+				int              port,
+				exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT;
@@ -454,10 +459,11 @@ void client::connect(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-void client::connectFrom(const dodoString &local,
-						 const dodoString &host,
-						 int              port,
-						 exchange         &exchange)
+void
+client::connectFrom(const dodoString &local,
+					const dodoString &host,
+					int              port,
+					exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECTFROM;
@@ -546,8 +552,9 @@ void client::connectFrom(const dodoString &local,
 
 //-------------------------------------------------------------------
 
-void client::connect(const dodoString &path,
-					 exchange         &exchange)
+void
+client::connect(const dodoString &path,
+				exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT_UNIX;

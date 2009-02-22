@@ -53,7 +53,8 @@ unsigned long server::requests = -1;
 
 //-------------------------------------------------------------------
 
-void dummyStackThread(dodo::cgi::exchange &data)
+void
+dummyStackThread(dodo::cgi::exchange &data)
 {
 }
 
@@ -115,7 +116,8 @@ server::~server()
 
 #ifdef PTHREAD_EXT
 
-void *server::stackThread(void *data)
+void *
+server::stackThread(void *data)
 {
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
@@ -163,7 +165,8 @@ void *server::stackThread(void *data)
 
 //-------------------------------------------------------------------
 
-void server::serve(serverHandler func)
+void
+server::serve(serverHandler func)
 {
 	if (!isFastCgi())
 	{
@@ -227,7 +230,8 @@ void server::serve(serverHandler func)
 
 //-------------------------------------------------------------------
 
-bool server::isFastCgi()
+bool
+server::isFastCgi()
 {
 	return !FCGX_IsCGI();
 }

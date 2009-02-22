@@ -50,14 +50,16 @@ connection::~connection()
 
 //-------------------------------------------------------------------
 
-bool connection::isBlocked() const
+bool
+connection::isBlocked() const
 {
 	return blocked;
 }
 
 //-------------------------------------------------------------------
 
-void connection::block(bool flag)
+void
+connection::block(bool flag)
 {
 	if (socket == -1)
 	{
@@ -89,7 +91,8 @@ void connection::block(bool flag)
 
 //-------------------------------------------------------------------
 
-void connection::setInBufferSize(unsigned long bytes)
+void
+connection::setInBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
 	{
@@ -106,14 +109,16 @@ void connection::setInBufferSize(unsigned long bytes)
 
 //-------------------------------------------------------------------
 
-unsigned long connection::getInBufferSize() const
+unsigned long
+connection::getInBufferSize() const
 {
 	return inSocketBuffer;
 }
 
 //-------------------------------------------------------------------
 
-void connection::setOutBufferSize(unsigned long bytes)
+void
+connection::setOutBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
 	{
@@ -130,14 +135,16 @@ void connection::setOutBufferSize(unsigned long bytes)
 
 //-------------------------------------------------------------------
 
-unsigned long connection::getOutBufferSize() const
+unsigned long
+connection::getOutBufferSize() const
 {
 	return outSocketBuffer;
 }
 
 //-------------------------------------------------------------------
 
-void connection::setInTimeout(unsigned long microseconds)
+void
+connection::setInTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
 	{
@@ -158,14 +165,16 @@ void connection::setInTimeout(unsigned long microseconds)
 
 //-------------------------------------------------------------------
 
-unsigned long connection::getInTimeout() const
+unsigned long
+connection::getInTimeout() const
 {
 	return inTimeout;
 }
 
 //-------------------------------------------------------------------
 
-void connection::setOutTimeout(unsigned long microseconds)
+void
+connection::setOutTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
 	{
@@ -187,14 +196,16 @@ void connection::setOutTimeout(unsigned long microseconds)
 
 //-------------------------------------------------------------------
 
-unsigned long connection::getOutTimeout() const
+unsigned long
+connection::getOutTimeout() const
 {
 	return outTimeout;
 }
 
 //-------------------------------------------------------------------
 
-bool connection::isSetOption(int option) const
+bool
+connection::isSetOption(int option) const
 {
 	if  ((option & socketOpts) == option)
 	{
@@ -206,8 +217,9 @@ bool connection::isSetOption(int option) const
 
 //-------------------------------------------------------------------
 
-void connection::setOption(short option,
-						   bool  flag)
+void
+connection::setOption(short option,
+					  bool  flag)
 {
 	if (socket == -1)
 	{
@@ -225,49 +237,49 @@ void connection::setOption(short option,
 
 	switch (option)
 	{
-		case CONNECTION_OPTION_KEEP_ALIVE:
+	case CONNECTION_OPTION_KEEP_ALIVE:
 
-			real_option = SO_KEEPALIVE;
+		real_option = SO_KEEPALIVE;
 
-			break;
+		break;
 
-		case CONNECTION_OPTION_REUSE_ADDRESS:
+	case CONNECTION_OPTION_REUSE_ADDRESS:
 
-			real_option = SO_REUSEADDR;
+		real_option = SO_REUSEADDR;
 
-			break;
+		break;
 
-		case CONNECTION_OPTION_DONOT_USE_GATEWAY:
+	case CONNECTION_OPTION_DONOT_USE_GATEWAY:
 
-			real_option = SO_DONTROUTE;
+		real_option = SO_DONTROUTE;
 
-			break;
+		break;
 
-		case CONNECTION_OPTION_BROADCAST:
+	case CONNECTION_OPTION_BROADCAST:
 
-			real_option = SO_BROADCAST;
+		real_option = SO_BROADCAST;
 
-			break;
+		break;
 
-		case CONNECTION_OPTION_OOB_INLINE:
+	case CONNECTION_OPTION_OOB_INLINE:
 
-			real_option = SO_OOBINLINE;
+		real_option = SO_OOBINLINE;
 
-			break;
+		break;
 
 #ifdef SO_REUSEPORT
 
-		case CONNECTION_OPTION_REUSE_PORT:
+	case CONNECTION_OPTION_REUSE_PORT:
 
-			real_option = SO_REUSEPORT;
+		real_option = SO_REUSEPORT;
 
-			break;
+		break;
 
 #endif
 
-		default:
+	default:
 
-			throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_WRONGPARAMETER, IONETWORKCONNECTIONEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_WRONGPARAMETER, IONETWORKCONNECTIONEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, real_option, &sockFlag, sizeof(int)) == 1)
@@ -287,8 +299,9 @@ void connection::setOption(short option,
 
 //-------------------------------------------------------------------
 
-void connection::setLingerOption(short option,
-								 int   seconds)
+void
+connection::setLingerOption(short option,
+							int   seconds)
 {
 	if (socket == -1)
 	{
@@ -299,29 +312,29 @@ void connection::setLingerOption(short option,
 
 	switch (option)
 	{
-		case CONNECTION_LINGEROPTION_GRACEFUL_CLOSE:
+	case CONNECTION_LINGEROPTION_GRACEFUL_CLOSE:
 
-			lin.l_onoff = 0;
+		lin.l_onoff = 0;
 
-			break;
+		break;
 
-		case CONNECTION_LINGEROPTION_HARD_CLOSE:
+	case CONNECTION_LINGEROPTION_HARD_CLOSE:
 
-			lin.l_onoff = 1;
-			lin.l_linger = 0;
+		lin.l_onoff = 1;
+		lin.l_linger = 0;
 
-			break;
+		break;
 
-		case CONNECTION_LINGEROPTION_WAIT_CLOSE:
+	case CONNECTION_LINGEROPTION_WAIT_CLOSE:
 
-			lin.l_onoff = 1;
-			lin.l_linger = seconds;
+		lin.l_onoff = 1;
+		lin.l_linger = seconds;
 
-			break;
+		break;
 
-		default:
+	default:
 
-			throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETLINGERSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_WRONGPARAMETER, IONETWORKCONNECTIONEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETLINGERSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_WRONGPARAMETER, IONETWORKCONNECTIONEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, SO_LINGER, &lin, sizeof(linger)) == 1)
@@ -335,21 +348,24 @@ void connection::setLingerOption(short option,
 
 //-------------------------------------------------------------------
 
-short connection::getLingerOption() const
+short
+connection::getLingerOption() const
 {
 	return lingerOpts;
 }
 
 //-------------------------------------------------------------------
 
-int connection::getLingerPeriod() const
+int
+connection::getLingerPeriod() const
 {
 	return lingerSeconds;
 }
 
 //-------------------------------------------------------------------
 
-void connection::_close(int socket)
+void
+connection::_close(int socket)
 {
 	if (::shutdown(socket, SHUT_RDWR) == -1)
 	{

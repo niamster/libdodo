@@ -73,7 +73,8 @@ library::~library()
 
 //-------------------------------------------------------------------
 
-void library::open(const dodoString &path)
+void
+library::open(const dodoString &path)
 {
 #ifndef DL_FAST
 
@@ -105,7 +106,8 @@ void library::open(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-void library::close()
+void
+library::close()
 {
 #ifndef DL_FAST
 
@@ -122,7 +124,8 @@ void library::close()
 
 //-------------------------------------------------------------------
 
-void *library::get(const dodoString &name)
+void *
+library::get(const dodoString &name)
 {
 	if (handle == NULL)
 	{
@@ -157,7 +160,8 @@ library::operator[](const dodoString &name)
 
 #ifdef BFD_EXT
 
-dodo::dodoStringArray library::getSymbols(const dodoString &path)
+dodo::dodoStringArray
+library::getSymbols(const dodoString &path)
 {
 	bfd_init();
 

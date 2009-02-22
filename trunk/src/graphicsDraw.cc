@@ -64,7 +64,8 @@ draw::~draw()
 
 //-------------------------------------------------------------------
 
-void draw::setImage(graphics::image *a_im)
+void
+draw::setImage(graphics::image *a_im)
 {
 	im = a_im;
 }
@@ -72,10 +73,11 @@ void draw::setImage(graphics::image *a_im)
 
 //-------------------------------------------------------------------
 
-void draw::primitive(char           *description,
-					 const __color  &fillColor,
-					 const __color  &borderColor,
-					 unsigned short borderWidth)
+void
+draw::primitive(char           *description,
+				const __color  &fillColor,
+				const __color  &borderColor,
+				unsigned short borderWidth)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
 	{
@@ -120,11 +122,12 @@ void draw::primitive(char           *description,
 
 //-------------------------------------------------------------------
 
-void draw::circle(const graphics::point &center,
-				  unsigned long         radius,
-				  const __color         &fillColor,
-				  const __color         &borderColor,
-				  unsigned short        borderWidth)
+void
+draw::circle(const graphics::point &center,
+			 unsigned long         radius,
+			 const __color         &fillColor,
+			 const __color         &borderColor,
+			 unsigned short        borderWidth)
 {
 	char description[128];
 	snprintf(description, 128, "circle %d,%d %d,%d", center.x, center.y, center.x + radius, center.y);
@@ -135,9 +138,10 @@ void draw::circle(const graphics::point &center,
 
 //-------------------------------------------------------------------
 
-void draw::line(const dodoArray<graphics::point> &points,
-				const __color                    &lineColor,
-				unsigned short                   lineWidth)
+void
+draw::line(const dodoArray<graphics::point> &points,
+		   const __color                    &lineColor,
+		   unsigned short                   lineWidth)
 {
 	char pointDesc[128];
 
@@ -156,11 +160,12 @@ void draw::line(const dodoArray<graphics::point> &points,
 
 //-------------------------------------------------------------------
 
-void draw::rectangle(const graphics::point &tl,
-					 const graphics::point &br,
-					 const __color         &fillColor,
-					 const __color         &borderColor,
-					 unsigned short        borderWidth)
+void
+draw::rectangle(const graphics::point &tl,
+				const graphics::point &br,
+				const __color         &fillColor,
+				const __color         &borderColor,
+				unsigned short        borderWidth)
 {
 	char description[128];
 	snprintf(description, 128, "rectangle %d,%d %d,%d", tl.x, tl.y, br.x, br.y);
@@ -170,14 +175,15 @@ void draw::rectangle(const graphics::point &tl,
 
 //-------------------------------------------------------------------
 
-void draw::text(const graphics::point &position,
-				const dodoString      &text,
-				const dodoString      &font,
-				unsigned short        fontWidth,
-				const __color         &fillColor,
-				const __color         &borderColor,
-				unsigned short        borderWidth,
-				double                angle)
+void
+draw::text(const graphics::point &position,
+		   const dodoString      &text,
+		   const dodoString      &font,
+		   unsigned short        fontWidth,
+		   const __color         &fillColor,
+		   const __color         &borderColor,
+		   unsigned short        borderWidth,
+		   double                angle)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
 	{
@@ -255,9 +261,10 @@ void draw::text(const graphics::point &position,
 
 //-------------------------------------------------------------------
 
-void draw::image(const graphics::point &position,
-				 const graphics::image &a_im,
-				 double                angle)
+void
+draw::image(const graphics::point &position,
+			const graphics::image &a_im,
+			double                angle)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
 	{
@@ -299,9 +306,10 @@ void draw::image(const graphics::point &position,
 
 //-------------------------------------------------------------------
 
-void draw::point(const graphics::point &position,
-				 const __color         &pointColor,
-				 unsigned short        pointWidth)
+void
+draw::point(const graphics::point &position,
+			const __color         &pointColor,
+			unsigned short        pointWidth)
 {
 	if (im == NULL || im->collectedData.imHandle == NULL)
 	{

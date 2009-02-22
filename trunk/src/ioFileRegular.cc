@@ -90,32 +90,32 @@ regular::regular(const dodoString &a_path,
 
 		switch (mode)
 		{
-			case REGULAR_OPENMODE_READ_WRITE:
+		case REGULAR_OPENMODE_READ_WRITE:
 
-				handler = fopen(path.c_str(), "r+");
-				if (handler == NULL)
-				{
-					handler = fopen(path.c_str(), "w+");
-				}
-
-				break;
-
-			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
-
+			handler = fopen(path.c_str(), "r+");
+			if (handler == NULL)
+			{
 				handler = fopen(path.c_str(), "w+");
+			}
 
-				break;
+			break;
 
-			case REGULAR_OPENMODE_APPEND:
+		case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-				handler = fopen(path.c_str(), "a");
+			handler = fopen(path.c_str(), "w+");
 
-				break;
+			break;
 
-			case REGULAR_OPENMODE_READ_ONLY:
-			default:
+		case REGULAR_OPENMODE_APPEND:
 
-				handler = fopen(path.c_str(), "r");
+			handler = fopen(path.c_str(), "a");
+
+			break;
+
+		case REGULAR_OPENMODE_READ_ONLY:
+		default:
+
+			handler = fopen(path.c_str(), "r");
 		}
 	}
 
@@ -168,23 +168,23 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 
 		switch (mode)
 		{
-			case REGULAR_OPENMODE_READ_WRITE:
-			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+		case REGULAR_OPENMODE_READ_WRITE:
+		case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-				handler = fdopen(newDesc, "r+");
+			handler = fdopen(newDesc, "r+");
 
-				break;
+			break;
 
-			case REGULAR_OPENMODE_APPEND:
+		case REGULAR_OPENMODE_APPEND:
 
-				handler = fdopen(newDesc, "a");
+			handler = fdopen(newDesc, "a");
 
-				break;
+			break;
 
-			case REGULAR_OPENMODE_READ_ONLY:
-			default:
+		case REGULAR_OPENMODE_READ_ONLY:
+		default:
 
-				handler = fdopen(newDesc, "r");
+			handler = fdopen(newDesc, "r");
 		}
 
 		if (handler == NULL)
@@ -206,9 +206,10 @@ regular::~regular()
 
 //-------------------------------------------------------------------
 
-int regular::getInDescriptor() const
+int
+regular::getInDescriptor() const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -220,9 +221,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-int regular::getOutDescriptor() const
+int
+regular::getOutDescriptor() const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -234,9 +236,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void regular::clone(const regular &fd)
+void
+regular::clone(const regular &fd)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (handler != NULL)
 	{
@@ -275,23 +278,23 @@ pc::sync::protector pg(keeper);
 
 		switch (mode)
 		{
-			case REGULAR_OPENMODE_READ_WRITE:
-			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+		case REGULAR_OPENMODE_READ_WRITE:
+		case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-				handler = fdopen(newDesc, "r+");
+			handler = fdopen(newDesc, "r+");
 
-				break;
+			break;
 
-			case REGULAR_OPENMODE_APPEND:
+		case REGULAR_OPENMODE_APPEND:
 
-				handler = fdopen(newDesc, "a");
+			handler = fdopen(newDesc, "a");
 
-				break;
+			break;
 
-			case REGULAR_OPENMODE_READ_ONLY:
-			default:
+		case REGULAR_OPENMODE_READ_ONLY:
+		default:
 
-				handler = fdopen(newDesc, "r");
+			handler = fdopen(newDesc, "r");
 		}
 
 		if (handler == NULL)
@@ -303,9 +306,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void regular::close()
+void
+regular::close()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = REGULAR_OPERATION_CLOSE;
@@ -329,10 +333,11 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void regular::open(const dodoString &a_path,
-				   short            a_mode)
+void
+regular::open(const dodoString &a_path,
+			  short            a_mode)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = REGULAR_OPERATION_OPEN;
@@ -381,32 +386,32 @@ pc::sync::protector pg(keeper);
 
 		switch (mode)
 		{
-			case REGULAR_OPENMODE_READ_WRITE:
+		case REGULAR_OPENMODE_READ_WRITE:
 
-				handler = fopen(path.c_str(), "r+");
-				if (handler == NULL)
-				{
-					handler = fopen(path.c_str(), "w+");
-				}
-
-				break;
-
-			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
-
+			handler = fopen(path.c_str(), "r+");
+			if (handler == NULL)
+			{
 				handler = fopen(path.c_str(), "w+");
+			}
 
-				break;
+			break;
 
-			case REGULAR_OPENMODE_APPEND:
+		case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-				handler = fopen(path.c_str(), "a");
+			handler = fopen(path.c_str(), "w+");
 
-				break;
+			break;
 
-			case REGULAR_OPENMODE_READ_ONLY:
-			default:
+		case REGULAR_OPENMODE_APPEND:
 
-				handler = fopen(path.c_str(), "r");
+			handler = fopen(path.c_str(), "a");
+
+			break;
+
+		case REGULAR_OPENMODE_READ_ONLY:
+		default:
+
+			handler = fopen(path.c_str(), "r");
 		}
 	}
 
@@ -427,7 +432,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void regular::_read(char * const a_data)
+void
+regular::_read(char * const a_data)
 {
 	if (handler == NULL)
 	{
@@ -469,7 +475,8 @@ void regular::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void regular::_write(const char *const a_data)
+void
+regular::_write(const char *const a_data)
 {
 	if (handler == NULL)
 	{
@@ -540,9 +547,10 @@ void regular::_write(const char *const a_data)
 
 //-------------------------------------------------------------------
 
-void regular::erase()
+void
+regular::erase()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	char *empty = new char[outSize];
 
@@ -571,9 +579,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void regular::flush()
+void
+regular::flush()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -588,7 +597,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-unsigned long regular::_readStream(char * const a_data)
+unsigned long
+regular::_readStream(char * const a_data)
 {
 	if (handler == NULL)
 	{
@@ -610,14 +620,14 @@ unsigned long regular::_readStream(char * const a_data)
 			{
 				switch (errno)
 				{
-					case EIO:
-					case EINTR:
-					case EBADF:
-					case EOVERFLOW:
-					case ENOMEM:
-					case ENXIO:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOMEM:
+				case ENXIO:
 
-						throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_FILEISSHORTERTHANGIVENPOSITION, IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
@@ -659,7 +669,8 @@ unsigned long regular::_readStream(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void regular::_writeStream(const char *const a_data)
+void
+regular::_writeStream(const char *const a_data)
 {
 	if (handler == NULL)
 	{

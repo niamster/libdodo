@@ -65,7 +65,8 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-void server::removeSertificates()
+void
+server::removeSertificates()
 {
 	if (sslCtx != NULL)
 	{
@@ -83,7 +84,8 @@ void server::removeSertificates()
 
 //-------------------------------------------------------------------
 
-void server::setSertificates(const io::ssl::__certificates &certs)
+void
+server::setSertificates(const io::ssl::__certificates &certs)
 {
 	if (sslCtx != NULL)
 	{
@@ -125,33 +127,33 @@ void server::setSertificates(const io::ssl::__certificates &certs)
 	{
 		switch (certs.keyType)
 		{
-			case io::ssl::KEYTYPE_PKEY:
+		case io::ssl::KEYTYPE_PKEY:
 
-				if (SSL_CTX_use_PrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
-				{
-					unsigned long nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
+			if (SSL_CTX_use_PrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
+			{
+				unsigned long nerr = ERR_get_error();
+				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+			}
 
-				keySet = true;
+			keySet = true;
 
-				break;
+			break;
 
-			case io::ssl::KEYTYPE_RSA:
+		case io::ssl::KEYTYPE_RSA:
 
-				if (SSL_CTX_use_RSAPrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
-				{
-					unsigned long nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
+			if (SSL_CTX_use_RSAPrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
+			{
+				unsigned long nerr = ERR_get_error();
+				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+			}
 
-				keySet = true;
+			keySet = true;
 
-				break;
+			break;
 
-			default:
+		default:
 
-				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_LIBDODO, SERVEREX_UNKNOWNKEYTYPE, IONETWORKSSLSERVEREX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_LIBDODO, SERVEREX_UNKNOWNKEYTYPE, IONETWORKSSLSERVEREX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
 		}
 	}
 	else
@@ -197,7 +199,8 @@ void server::setSertificates(const io::ssl::__certificates &certs)
 
 //-------------------------------------------------------------------
 
-void server::initSsl()
+void
+server::initSsl()
 {
 	if (sslCtx == NULL)
 	{
@@ -211,7 +214,8 @@ void server::initSsl()
 
 //-------------------------------------------------------------------
 
-void server::acceptSsl(__initialAccept &init)
+void
+server::acceptSsl(__initialAccept &init)
 {
 	io::ssl::__openssl_init_object__.addEntropy();
 
@@ -230,54 +234,55 @@ void server::acceptSsl(__initialAccept &init)
 	int res = SSL_accept(init.sslHandle);
 	switch (res)
 	{
-		case 1:
-			break;
+	case 1:
+		break;
 
-		case 0:
+	case 0:
+	{
+		unsigned long nerr = ERR_get_error();
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+	}
+
+	case - 1:
+	{
+		int nerr = SSL_get_error(init.sslHandle, res);
+		if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
 		{
-			unsigned long nerr = ERR_get_error();
+			break;
+		}
+	}
+
+	default:
+	{
+		unsigned long nerr = ERR_get_error();
+
+		int err = SSL_shutdown(init.sslHandle);
+		if (err < 0)
+		{
+			nerr = ERR_get_error();
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
-
-		case - 1:
+		if (err == 0)
 		{
-			int nerr = SSL_get_error(init.sslHandle, res);
-			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
-			{
-				break;
-			}
-		}
-
-		default:
-		{
-			unsigned long nerr = ERR_get_error();
-
-			int err = SSL_shutdown(init.sslHandle);
+			err = SSL_shutdown(init.sslHandle);
 			if (err < 0)
 			{
 				nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
-			if (err == 0)
-			{
-				err = SSL_shutdown(init.sslHandle);
-				if (err < 0)
-				{
-					nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
-			}
-
-			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
+
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+	}
 	}
 }
 
 //-------------------------------------------------------------------
 
-void server::serve(const dodoString &host,
-				   int              port,
-				   int              numberOfConnections)
+void
+server::serve(const dodoString &host,
+			  int              port,
+			  int              numberOfConnections)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN;
@@ -354,9 +359,10 @@ void server::serve(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-void server::serve(const dodoString &path,
-				   int              numberOfConnections,
-				   bool             force)
+void
+server::serve(const dodoString &path,
+			  int              numberOfConnections,
+			  bool             force)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN_UNIX;
@@ -423,8 +429,9 @@ void server::serve(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-bool server::accept(__initialAccept &init,
-					__peerInfo      &info)
+bool
+server::accept(__initialAccept &init,
+			   __peerInfo      &info)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
@@ -445,83 +452,83 @@ bool server::accept(__initialAccept &init,
 
 	switch (family)
 	{
-		case CONNECTION_PROTO_FAMILY_IPV4:
+	case CONNECTION_PROTO_FAMILY_IPV4:
+	{
+		struct sockaddr_in sa;
+		socklen_t len = sizeof(sockaddr_in);
+		sock = ::accept(socket, (sockaddr *)&sa, &len);
+
+		if (sock == -1)
 		{
-			struct sockaddr_in sa;
-			socklen_t len = sizeof(sockaddr_in);
-			sock = ::accept(socket, (sockaddr *)&sa, &len);
-
-			if (sock == -1)
+			if (errno == EAGAIN)
 			{
-				if (errno == EAGAIN)
-				{
-					return false;
-				}
-				else
-				{
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
+				return false;
 			}
-
-			char temp[INET_ADDRSTRLEN];
-			if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
+			else
 			{
-				info.host.assign(temp);
+				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
-			info.port = ntohs(sa.sin_port);
-
-			break;
 		}
 
-		case CONNECTION_PROTO_FAMILY_IPV6:
+		char temp[INET_ADDRSTRLEN];
+		if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
 		{
-			struct sockaddr_in6 sa;
-			socklen_t len = sizeof(sockaddr_in6);
+			info.host.assign(temp);
+		}
+		info.port = ntohs(sa.sin_port);
 
-			sock = ::accept(socket, (sockaddr *)&sa, &len);
+		break;
+	}
 
-			if (sock == -1)
+	case CONNECTION_PROTO_FAMILY_IPV6:
+	{
+		struct sockaddr_in6 sa;
+		socklen_t len = sizeof(sockaddr_in6);
+
+		sock = ::accept(socket, (sockaddr *)&sa, &len);
+
+		if (sock == -1)
+		{
+			if (errno == EAGAIN)
 			{
-				if (errno == EAGAIN)
-				{
-					return false;
-				}
-				else
-				{
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
+				return false;
 			}
-
-			char temp[INET6_ADDRSTRLEN];
-			if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
+			else
 			{
-				info.host.assign(temp);
+				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
-			info.port = ntohs(sa.sin6_port);
-
-			break;
 		}
 
-		case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
+		char temp[INET6_ADDRSTRLEN];
+		if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
+		{
+			info.host.assign(temp);
+		}
+		info.port = ntohs(sa.sin6_port);
 
-			sock = ::accept(socket, NULL, NULL);
-			if (sock == -1)
+		break;
+	}
+
+	case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
+
+		sock = ::accept(socket, NULL, NULL);
+		if (sock == -1)
+		{
+			if (errno == EAGAIN)
 			{
-				if (errno == EAGAIN)
-				{
-					return false;
-				}
-				else
-				{
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
+				return false;
 			}
+			else
+			{
+				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			}
+		}
 
-			break;
+		break;
 
-		default:
+	default:
 
-			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSSLSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSSLSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	init.socket = sock;
@@ -539,7 +546,8 @@ bool server::accept(__initialAccept &init,
 
 //-------------------------------------------------------------------
 
-bool server::accept(__initialAccept &init)
+bool
+server::accept(__initialAccept &init)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;

@@ -52,9 +52,10 @@ collection::~collection()
 
 //-------------------------------------------------------------------
 
-unsigned long collection::add(void *data)
+unsigned long
+collection::add(void *data)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	pc::sync::data::__info share;
 
@@ -68,9 +69,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void collection::del(unsigned long position)
+void
+collection::del(unsigned long position)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (getShare(position))
 	{
@@ -84,10 +86,11 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void collection::set(unsigned long position,
-					 void          *data)
+void
+collection::set(unsigned long position,
+				void          *data)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (getShare(position))
 	{
@@ -101,9 +104,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-const void *collection::get(unsigned long position)
+const void *
+collection::get(unsigned long position)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (getShare(position))
 	{
@@ -117,7 +121,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-bool collection::getShare(unsigned long position)
+bool
+collection::getShare(unsigned long position)
 {
 	dodoList<pc::sync::data::__info>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
@@ -135,7 +140,8 @@ bool collection::getShare(unsigned long position)
 
 //-------------------------------------------------------------------
 
-dodoList<unsigned long>collection::getIds()
+dodoList<unsigned long>
+collection::getIds()
 {
 	dodoList<unsigned long> ids;
 

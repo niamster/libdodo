@@ -71,22 +71,22 @@ collection::~collection()
 
 		switch (i->action)
 		{
-			case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
+		case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
 
-				waitpid(i->pid, NULL, WNOHANG);
+			waitpid(i->pid, NULL, WNOHANG);
 
-				break;
+			break;
 
-			case COLLECTION_ONDESTRUCT_STOP:
+		case COLLECTION_ONDESTRUCT_STOP:
 
-				kill(i->pid, 2);
+			kill(i->pid, 2);
 
-				break;
+			break;
 
-			case COLLECTION_ONDESTRUCT_WAIT:
-			default:
+		case COLLECTION_ONDESTRUCT_WAIT:
+		default:
 
-				waitpid(i->pid, NULL, 0);
+			waitpid(i->pid, NULL, 0);
 		}
 
 #ifdef DL_EXT
@@ -110,9 +110,10 @@ collection::~collection()
 
 //-------------------------------------------------------------------
 
-unsigned long collection::add(job::routine func,
-							  void         *data,
-							  short        action)
+unsigned long
+collection::add(job::routine func,
+				void         *data,
+				short        action)
 {
 	__processInfo process;
 
@@ -133,26 +134,29 @@ unsigned long collection::add(job::routine func,
 
 //-------------------------------------------------------------------
 
-unsigned long collection::add(job::routine func,
-							  void         *data)
+unsigned long
+collection::add(job::routine func,
+				void         *data)
 {
 	return add(func, data, COLLECTION_ONDESTRUCT_WAIT);
 }
 
 //-------------------------------------------------------------------
 
-unsigned long collection::addNRun(job::routine func,
-								  void         *data)
+unsigned long
+collection::addNRun(job::routine func,
+					void         *data)
 {
 	return addNRun(func, data, 1, COLLECTION_ONDESTRUCT_WAIT);
 }
 
 //-------------------------------------------------------------------
 
-unsigned long collection::addNRun(job::routine  func,
-								  void          *data,
-								  unsigned long limit,
-								  short         action)
+unsigned long
+collection::addNRun(job::routine  func,
+					void          *data,
+					unsigned long limit,
+					short         action)
 {
 	__processInfo process;
 
@@ -194,8 +198,9 @@ unsigned long collection::addNRun(job::routine  func,
 
 //-------------------------------------------------------------------
 
-void collection::del(unsigned long position,
-					 bool          force)
+void
+collection::del(unsigned long position,
+				bool          force)
 {
 	if (getProcess(position))
 	{
@@ -246,7 +251,8 @@ void collection::del(unsigned long position,
 
 //-------------------------------------------------------------------
 
-bool collection::getProcess(unsigned long position) const
+bool
+collection::getProcess(unsigned long position) const
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
@@ -264,7 +270,8 @@ bool collection::getProcess(unsigned long position) const
 
 //-------------------------------------------------------------------
 
-bool collection::_isRunning(dodoList<__processInfo>::iterator &position) const
+bool
+collection::_isRunning(dodoList<__processInfo>::iterator &position) const
 {
 	if (!position->isRunning)
 	{
@@ -289,11 +296,12 @@ bool collection::_isRunning(dodoList<__processInfo>::iterator &position) const
 
 //-------------------------------------------------------------------
 
-void collection::replace(unsigned long position,
-						 job::routine  func,
-						 void          *data,
-						 bool          force,
-						 short         action)
+void
+collection::replace(unsigned long position,
+					job::routine  func,
+					void          *data,
+					bool          force,
+					short         action)
 {
 	if (getProcess(position))
 	{
@@ -348,8 +356,9 @@ void collection::replace(unsigned long position,
 
 //-------------------------------------------------------------------
 
-void collection::run(unsigned long position,
-					 bool          force)
+void
+collection::run(unsigned long position,
+				bool          force)
 {
 	if (getProcess(position))
 	{
@@ -394,7 +403,8 @@ void collection::run(unsigned long position,
 
 //-------------------------------------------------------------------
 
-void collection::stop(unsigned long position)
+void
+collection::stop(unsigned long position)
 {
 	if (getProcess(position))
 	{
@@ -413,7 +423,8 @@ void collection::stop(unsigned long position)
 
 //-------------------------------------------------------------------
 
-void collection::stop()
+void
+collection::stop()
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
@@ -434,7 +445,8 @@ void collection::stop()
 
 //-------------------------------------------------------------------
 
-int collection::wait(unsigned long position)
+int
+collection::wait(unsigned long position)
 {
 	if (getProcess(position))
 	{
@@ -467,7 +479,8 @@ int collection::wait(unsigned long position)
 
 //-------------------------------------------------------------------
 
-void collection::wait()
+void
+collection::wait()
 {
 	int status;
 
@@ -495,7 +508,8 @@ void collection::wait()
 
 //-------------------------------------------------------------------
 
-bool collection::isRunning(unsigned long position) const
+bool
+collection::isRunning(unsigned long position) const
 {
 	if (getProcess(position))
 	{
@@ -509,7 +523,8 @@ bool collection::isRunning(unsigned long position) const
 
 //-------------------------------------------------------------------
 
-unsigned long collection::running() const
+unsigned long
+collection::running() const
 {
 	unsigned long amount(0);
 
@@ -527,7 +542,8 @@ unsigned long collection::running() const
 
 //-------------------------------------------------------------------
 
-void collection::sweepTrash()
+void
+collection::sweepTrash()
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	while (i != j)
@@ -552,8 +568,9 @@ void collection::sweepTrash()
 
 //-------------------------------------------------------------------
 
-void collection::setExecutionLimit(unsigned long position,
-								   unsigned long limit)
+void
+collection::setExecutionLimit(unsigned long position,
+							  unsigned long limit)
 {
 	if (getProcess(position))
 	{
@@ -569,8 +586,9 @@ void collection::setExecutionLimit(unsigned long position,
 
 #ifdef DL_EXT
 
-__processMod collection::getModuleInfo(const dodoString &module,
-									   void             *toInit)
+__processMod
+collection::getModuleInfo(const dodoString &module,
+						  void             *toInit)
 {
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -602,9 +620,10 @@ __processMod collection::getModuleInfo(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-unsigned long collection::add(const dodoString &module,
-							  void             *data,
-							  void             *toInit)
+unsigned long
+collection::add(const dodoString &module,
+				void             *data,
+				void             *toInit)
 {
 	__processInfo process;
 
@@ -648,7 +667,8 @@ unsigned long collection::add(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-dodoList<unsigned long>collection::getIds()
+dodoList<unsigned long>
+collection::getIds()
 {
 	dodoList<unsigned long> ids;
 

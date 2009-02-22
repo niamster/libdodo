@@ -77,8 +77,9 @@ logger::~logger()
 
 //-------------------------------------------------------------------
 
-unsigned long logger::add(short       level,
-						  io::channel *handler)
+unsigned long
+logger::add(short       level,
+			io::channel *handler)
 {
 	pc::sync::protector pg(keeper);
 
@@ -95,7 +96,8 @@ unsigned long logger::add(short       level,
 
 //-------------------------------------------------------------------
 
-void logger::remove(unsigned long position)
+void
+logger::remove(unsigned long position)
 {
 	pc::sync::protector pg(keeper);
 
@@ -113,8 +115,9 @@ void logger::remove(unsigned long position)
 
 //-------------------------------------------------------------------
 
-void logger::log(short            level,
-				 const dodoString &msg)
+void
+logger::log(short            level,
+			const dodoString &msg)
 {
 	pc::sync::protector pg(keeper);
 
@@ -164,7 +167,8 @@ void logger::log(short            level,
 
 //-------------------------------------------------------------------
 
-void logger::setTimeFormat(const dodoString &format)
+void
+logger::setTimeFormat(const dodoString &format)
 {
 	timeFormat = " " + format + ": ";
 }

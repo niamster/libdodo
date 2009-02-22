@@ -170,7 +170,8 @@ single::~single()
 
 //-------------------------------------------------------------------
 
-void single::close()
+void
+single::close()
 {
 #ifdef XSI_IPC
 
@@ -232,7 +233,8 @@ void single::close()
 
 //-------------------------------------------------------------------
 
-void single::open(int a_key)
+void
+single::open(int a_key)
 {
 	close();
 
@@ -297,7 +299,8 @@ void single::open(int a_key)
 
 //-------------------------------------------------------------------
 
-void single::remove(int a_key)
+void
+single::remove(int a_key)
 {
 #ifdef XSI_IPC
 
@@ -331,7 +334,8 @@ void single::remove(int a_key)
 
 //-------------------------------------------------------------------
 
-void single::set(void *a_data)
+void
+single::set(void *a_data)
 {
 #ifdef XSI_IPC
 
@@ -387,14 +391,16 @@ void single::set(void *a_data)
 
 //-------------------------------------------------------------------
 
-void single::del()
+void
+single::del()
 {
 	set(NULL);
 }
 
 //-------------------------------------------------------------------
 
-void *single::acquire(unsigned long microseconds)
+void *
+single::acquire(unsigned long microseconds)
 {
 #ifdef XSI_IPC
 
@@ -526,7 +532,8 @@ void *single::acquire(unsigned long microseconds)
 
 //-------------------------------------------------------------------
 
-void single::release()
+void
+single::release()
 {
 #ifdef XSI_IPC
 

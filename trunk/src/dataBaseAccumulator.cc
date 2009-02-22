@@ -62,9 +62,10 @@ accumulator::~accumulator()
 
 //-------------------------------------------------------------------
 
-void accumulator::callFunction(const dodoString      &name,
-							   const dodoStringArray &arguments,
-							   const dodoString      &as)
+void
+accumulator::callFunction(const dodoString      &name,
+						  const dodoStringArray &arguments,
+						  const dodoString      &as)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CALL_FUNCTION;
 
@@ -86,8 +87,9 @@ void accumulator::callFunction(const dodoString      &name,
 
 //-------------------------------------------------------------------
 
-void accumulator::callProcedure(const dodoString      &name,
-								const dodoStringArray &arguments)
+void
+accumulator::callProcedure(const dodoString      &name,
+						   const dodoStringArray &arguments)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CALL_PROCEDURE;
 
@@ -101,9 +103,10 @@ void accumulator::callProcedure(const dodoString      &name,
 
 //-------------------------------------------------------------------
 
-void accumulator::select(const dodoString      &a_table,
-						 const dodoStringArray &a_fields,
-						 const dodoString      &a_where)
+void
+accumulator::select(const dodoString      &a_table,
+					const dodoStringArray &a_fields,
+					const dodoString      &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_SELECT;
 
@@ -125,8 +128,9 @@ void accumulator::select(const dodoString      &a_table,
 
 //-------------------------------------------------------------------
 
-void accumulator::selectAll(const dodoString &a_table,
-							const dodoString &a_where)
+void
+accumulator::selectAll(const dodoString &a_table,
+					   const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_SELECT;
 
@@ -149,8 +153,9 @@ void accumulator::selectAll(const dodoString &a_table,
 
 //-------------------------------------------------------------------
 
-void accumulator::insert(const dodoString    &a_table,
-						 const dodoStringMap &a_fields)
+void
+accumulator::insert(const dodoString    &a_table,
+					const dodoStringMap &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
@@ -176,8 +181,9 @@ void accumulator::insert(const dodoString    &a_table,
 
 //-------------------------------------------------------------------
 
-void accumulator::insert(const dodoString               &a_table,
-						 const dodoArray<dodoStringMap> &a_fields)
+void
+accumulator::insert(const dodoString               &a_table,
+					const dodoArray<dodoStringMap> &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
@@ -216,9 +222,10 @@ void accumulator::insert(const dodoString               &a_table,
 
 //-------------------------------------------------------------------
 
-void accumulator::insert(const dodoString      &a_table,
-						 const dodoStringArray &a_values,
-						 const dodoStringArray &a_fields)
+void
+accumulator::insert(const dodoString      &a_table,
+					const dodoStringArray &a_values,
+					const dodoStringArray &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
@@ -236,9 +243,10 @@ void accumulator::insert(const dodoString      &a_table,
 
 //-------------------------------------------------------------------
 
-void accumulator::insert(const dodoString                 &a_table,
-						 const dodoArray<dodoStringArray> &a_values,
-						 const dodoStringArray            &a_fields)
+void
+accumulator::insert(const dodoString                 &a_table,
+					const dodoArray<dodoStringArray> &a_values,
+					const dodoStringArray            &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
@@ -258,11 +266,12 @@ void accumulator::insert(const dodoString                 &a_table,
 
 //-------------------------------------------------------------------
 
-void accumulator::insertSelect(const dodoString      &a_tableTo,
-							   const dodoString      &a_tableFrom,
-							   const dodoStringArray &a_fieldsTo,
-							   const dodoStringArray &a_fieldsFrom,
-							   const dodoString      &a_where)
+void
+accumulator::insertSelect(const dodoString      &a_tableTo,
+						  const dodoString      &a_tableFrom,
+						  const dodoStringArray &a_fieldsTo,
+						  const dodoStringArray &a_fieldsFrom,
+						  const dodoString      &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT_SELECT;
 
@@ -289,9 +298,10 @@ void accumulator::insertSelect(const dodoString      &a_tableTo,
 
 //-------------------------------------------------------------------
 
-void accumulator::update(const dodoString    &a_table,
-						 const dodoStringMap &a_fields,
-						 const dodoString    &a_where)
+void
+accumulator::update(const dodoString    &a_table,
+					const dodoStringMap &a_fields,
+					const dodoString    &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_UPDATE;
 
@@ -326,10 +336,11 @@ void accumulator::update(const dodoString    &a_table,
 
 //-------------------------------------------------------------------
 
-void accumulator::update(const dodoString      &a_table,
-						 const dodoStringArray &a_values,
-						 const dodoStringArray &a_fields,
-						 const dodoString      &a_where)
+void
+accumulator::update(const dodoString      &a_table,
+					const dodoStringArray &a_values,
+					const dodoStringArray &a_fields,
+					const dodoString      &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_UPDATE;
 
@@ -355,8 +366,9 @@ void accumulator::update(const dodoString      &a_table,
 
 //-------------------------------------------------------------------
 
-void accumulator::del(const dodoString &a_table,
-					  const dodoString &a_where)
+void
+accumulator::del(const dodoString &a_table,
+				 const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_DELETE;
 
@@ -379,8 +391,9 @@ void accumulator::del(const dodoString &a_table,
 
 //-------------------------------------------------------------------
 
-void accumulator::subquery(const dodoStringArray &sub,
-						   int                   type)
+void
+accumulator::subquery(const dodoStringArray &sub,
+					  int                   type)
 {
 	collectedData.qType = type;
 
@@ -389,7 +402,8 @@ void accumulator::subquery(const dodoStringArray &sub,
 
 //-------------------------------------------------------------------
 
-void accumulator::limit(unsigned int a_number)
+void
+accumulator::limit(unsigned int a_number)
 {
 	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_LIMIT);
 
@@ -397,7 +411,8 @@ void accumulator::limit(unsigned int a_number)
 }
 //-------------------------------------------------------------------
 
-void accumulator::offset(unsigned int a_number)
+void
+accumulator::offset(unsigned int a_number)
 {
 	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
 
@@ -406,7 +421,8 @@ void accumulator::offset(unsigned int a_number)
 
 //-------------------------------------------------------------------
 
-void accumulator::order(const dodoString &order)
+void
+accumulator::order(const dodoString &order)
 {
 	collectedData.order = order;
 
@@ -415,7 +431,8 @@ void accumulator::order(const dodoString &order)
 
 //-------------------------------------------------------------------
 
-void accumulator::group(const dodoString &group)
+void
+accumulator::group(const dodoString &group)
 {
 	collectedData.group = group;
 
@@ -424,7 +441,8 @@ void accumulator::group(const dodoString &group)
 
 //-------------------------------------------------------------------
 
-void accumulator::having(const dodoString &having)
+void
+accumulator::having(const dodoString &having)
 {
 	collectedData.having = having;
 
@@ -433,9 +451,10 @@ void accumulator::having(const dodoString &having)
 
 //-------------------------------------------------------------------
 
-void accumulator::join(const dodoString &table,
-					   int              type,
-					   const dodoString &condition)
+void
+accumulator::join(const dodoString &table,
+				  int              type,
+				  const dodoString &condition)
 {
 	collectedData.joinTables.push_back(table);
 	collectedData.joinConds.push_back(condition);
@@ -446,7 +465,8 @@ void accumulator::join(const dodoString &table,
 
 //-------------------------------------------------------------------
 
-void accumulator::cleanCollected()
+void
+accumulator::cleanCollected()
 {
 	collectedData.qType = -1;
 

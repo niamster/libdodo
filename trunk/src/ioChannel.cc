@@ -64,7 +64,8 @@ channel::~channel()
 
 //-------------------------------------------------------------------
 
-dodoString channel::read()
+dodoString
+channel::read()
 {
 	pc::sync::protector pg(keeper);
 
@@ -124,7 +125,8 @@ dodoString channel::read()
 
 //-------------------------------------------------------------------
 
-dodoString channel::readStream()
+dodoString
+channel::readStream()
 {
 	pc::sync::protector pg(keeper);
 
@@ -190,7 +192,8 @@ dodoString channel::readStream()
 
 //-------------------------------------------------------------------
 
-void channel::write(const dodoString &a_data)
+void
+channel::write(const dodoString &a_data)
 {
 	pc::sync::protector pg(keeper);
 
@@ -227,7 +230,8 @@ void channel::write(const dodoString &a_data)
 
 //-------------------------------------------------------------------
 
-void channel::writeStream(const dodoString &a_data)
+void
+channel::writeStream(const dodoString &a_data)
 {
 	pc::sync::protector pg(keeper);
 

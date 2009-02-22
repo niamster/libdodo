@@ -43,7 +43,8 @@ response::~response()
 
 //-------------------------------------------------------------------
 
-value response::getValue(unsigned long position)
+value
+response::getValue(unsigned long position)
 {
 	if (position >= values.size())
 	{
@@ -55,14 +56,16 @@ value response::getValue(unsigned long position)
 
 //-------------------------------------------------------------------
 
-bool response::isSuccessful()
+bool
+response::isSuccessful()
 {
 	return succ;
 }
 
 //-------------------------------------------------------------------
 
-void response::addArgument(const value &argument)
+void
+response::addArgument(const value &argument)
 {
 	succ = true;
 
@@ -71,7 +74,8 @@ void response::addArgument(const value &argument)
 
 //-------------------------------------------------------------------
 
-void response::fault(const value &argument)
+void
+response::fault(const value &argument)
 {
 	succ = false;
 
@@ -93,21 +97,24 @@ response::operator[](unsigned long position)
 
 //-------------------------------------------------------------------
 
-unsigned long response::getValuesCount()
+unsigned long
+response::getValuesCount()
 {
 	return values.size();
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<value>response::getValues()
+dodoArray<value>
+response::getValues()
 {
 	return values;
 }
 
 //-------------------------------------------------------------------
 
-void response::clear()
+void
+response::clear()
 {
 	values.clear();
 }

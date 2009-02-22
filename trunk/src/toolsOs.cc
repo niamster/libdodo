@@ -142,7 +142,8 @@ os::syncThreadSection::~syncThreadSection()
 
 //-------------------------------------------------------------------
 
-void os::syncThreadSection::acquire()
+void
+os::syncThreadSection::acquire()
 {
 #ifdef PTHREAD_EXT
 
@@ -157,7 +158,8 @@ void os::syncThreadSection::acquire()
 
 //-------------------------------------------------------------------
 
-void os::syncThreadSection::release()
+void
+os::syncThreadSection::release()
 {
 #ifdef PTHREAD_EXT
 
@@ -192,7 +194,8 @@ os::syncThreadStack::~syncThreadStack()
 
 //-------------------------------------------------------------------
 
-dodoString os::getWorkingDir()
+dodoString
+os::getWorkingDir()
 {
 	char wd[MAXPATHLEN];
 
@@ -206,7 +209,8 @@ dodoString os::getWorkingDir()
 
 //-------------------------------------------------------------------
 
-void os::setWorkingDir(const dodoString &path)
+void
+os::setWorkingDir(const dodoString &path)
 {
 	if (chdir(path.c_str()) == -1)
 	{
@@ -217,7 +221,8 @@ void os::setWorkingDir(const dodoString &path)
 //-------------------------------------------------------------------
 
 
-__usage os::getUsageInfo()
+__usage
+os::getUsageInfo()
 {
 	rusage use;
 	if (getrusage(RUSAGE_SELF, &use) == -1)
@@ -234,7 +239,8 @@ __usage os::getUsageInfo()
 
 //-------------------------------------------------------------------
 
-void os::changeRoot(const dodoString &path)
+void
+os::changeRoot(const dodoString &path)
 {
 	setWorkingDir(path);
 
@@ -246,7 +252,8 @@ void os::changeRoot(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-__limits os::getLimit(short type)
+__limits
+os::getLimit(short type)
 {
 	rlimit limit;
 
@@ -254,49 +261,49 @@ __limits os::getLimit(short type)
 
 	switch (type)
 	{
-		case OS_CPUTIME:
+	case OS_CPUTIME:
 
-			realRes = RLIMIT_CPU;
+		realRes = RLIMIT_CPU;
 
-			break;
+		break;
 
-		case OS_MAXFILESIZE:
+	case OS_MAXFILESIZE:
 
-			realRes = RLIMIT_FSIZE;
+		realRes = RLIMIT_FSIZE;
 
-			break;
+		break;
 
-		case OS_MAXMEMUSAGE:
+	case OS_MAXMEMUSAGE:
 
-			realRes = RLIMIT_DATA;
+		realRes = RLIMIT_DATA;
 
-			break;
+		break;
 
-		case OS_MAXSTACK:
+	case OS_MAXSTACK:
 
-			realRes = RLIMIT_STACK;
+		realRes = RLIMIT_STACK;
 
-			break;
+		break;
 
-		case OS_MAXPROC:
+	case OS_MAXPROC:
 
-			realRes = RLIMIT_NPROC;
+		realRes = RLIMIT_NPROC;
 
-			break;
+		break;
 
-		case OS_MAXOPENFILES:
+	case OS_MAXOPENFILES:
 
 #ifdef __FreeBSD__
-			realRes = RLIMIT_NOFILE;
+		realRes = RLIMIT_NOFILE;
 #else
-			realRes = RLIMIT_OFILE;
+		realRes = RLIMIT_OFILE;
 #endif
 
-			break;
+		break;
 
-		default:
+	default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETLIMIT, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETLIMIT, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (getrlimit(realRes, &limit) == -1)
@@ -314,8 +321,9 @@ __limits os::getLimit(short type)
 
 //-------------------------------------------------------------------
 
-void os::setLimit(short          type,
-				  const __limits &lim)
+void
+os::setLimit(short          type,
+			 const __limits &lim)
 {
 	rlimit limit;
 
@@ -323,49 +331,49 @@ void os::setLimit(short          type,
 
 	switch (type)
 	{
-		case OS_CPUTIME:
+	case OS_CPUTIME:
 
-			realRes = RLIMIT_CPU;
+		realRes = RLIMIT_CPU;
 
-			break;
+		break;
 
-		case OS_MAXFILESIZE:
+	case OS_MAXFILESIZE:
 
-			realRes = RLIMIT_FSIZE;
+		realRes = RLIMIT_FSIZE;
 
-			break;
+		break;
 
-		case OS_MAXMEMUSAGE:
+	case OS_MAXMEMUSAGE:
 
-			realRes = RLIMIT_DATA;
+		realRes = RLIMIT_DATA;
 
-			break;
+		break;
 
-		case OS_MAXSTACK:
+	case OS_MAXSTACK:
 
-			realRes = RLIMIT_STACK;
+		realRes = RLIMIT_STACK;
 
-			break;
+		break;
 
-		case OS_MAXPROC:
+	case OS_MAXPROC:
 
-			realRes = RLIMIT_NPROC;
+		realRes = RLIMIT_NPROC;
 
-			break;
+		break;
 
-		case OS_MAXOPENFILES:
+	case OS_MAXOPENFILES:
 
 #ifdef __FreeBSD__
-			realRes = RLIMIT_NOFILE;
+		realRes = RLIMIT_NOFILE;
 #else
-			realRes = RLIMIT_OFILE;
+		realRes = RLIMIT_OFILE;
 #endif
 
-			break;
+		break;
 
-		default:
+	default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETLIMIT, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETLIMIT, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	limit.rlim_cur = lim.current;
@@ -379,7 +387,8 @@ void os::setLimit(short          type,
 
 //-------------------------------------------------------------------
 
-int os::getPriority(short type)
+int
+os::getPriority(short type)
 {
 	int prio = getpriority(PRIO_PROCESS, getUID(type));
 	if (prio == -1)
@@ -392,8 +401,9 @@ int os::getPriority(short type)
 
 //-------------------------------------------------------------------
 
-void os::setPriority(short type,
-					 int   prio)
+void
+os::setPriority(short type,
+				int   prio)
 {
 	if (setpriority(PRIO_PROCESS, getUID(type), prio) == -1)
 	{
@@ -403,48 +413,50 @@ void os::setPriority(short type,
 
 //-------------------------------------------------------------------
 
-int os::getUID(short type)
+int
+os::getUID(short type)
 {
 	switch (type)
 	{
-		case OS_UID:
+	case OS_UID:
 
-			return getuid();
+		return getuid();
 
-		case OS_EUID:
+	case OS_EUID:
 
-			return geteuid();
+		return geteuid();
 
-		default:
+	default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 }
 
 //-------------------------------------------------------------------
 
-void os::setUID(short type,
-				int   uid)
+void
+os::setUID(short type,
+		   int   uid)
 {
 	int res(0);
 
 	switch (type)
 	{
-		case OS_UID:
+	case OS_UID:
 
-			res = setuid(uid);
+		res = setuid(uid);
 
-			break;
+		break;
 
-		case OS_EUID:
+	case OS_EUID:
 
-			res = seteuid(uid);
+		res = seteuid(uid);
 
-			break;
+		break;
 
-		default:
+	default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETUID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETUID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (res == -1)
@@ -455,48 +467,50 @@ void os::setUID(short type,
 
 //-------------------------------------------------------------------
 
-int os::getGID(short type)
+int
+os::getGID(short type)
 {
 	switch (type)
 	{
-		case OS_UID:
+	case OS_UID:
 
-			return getgid();
+		return getgid();
 
-		case OS_EUID:
+	case OS_EUID:
 
-			return getegid();
+		return getegid();
 
-		default:
+	default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 }
 
 //-------------------------------------------------------------------
 
-void os::setGID(short type,
-				int   uid)
+void
+os::setGID(short type,
+		   int   uid)
 {
 	int res(0);
 
 	switch (type)
 	{
-		case OS_UID:
+	case OS_UID:
 
-			res = setgid(uid);
+		res = setgid(uid);
 
-			break;
+		break;
 
-		case OS_EUID:
+	case OS_EUID:
 
-			res = setegid(uid);
+		res = setegid(uid);
 
-			break;
+		break;
 
-		default:
+	default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETGID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETGID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (res == -1)
@@ -507,7 +521,8 @@ void os::setGID(short type,
 
 //-------------------------------------------------------------------
 
-__userInfo os::getUserInfo(int uid)
+__userInfo
+os::getUserInfo(int uid)
 {
 	passwd *in = getpwuid(uid);
 	if (in == NULL)
@@ -522,7 +537,8 @@ __userInfo os::getUserInfo(int uid)
 
 //-------------------------------------------------------------------
 
-__userInfo os::getUserInfo(const dodoString &uid)
+__userInfo
+os::getUserInfo(const dodoString &uid)
 {
 	passwd *in = getpwnam(uid.c_str());
 	if (in == NULL)
@@ -537,7 +553,8 @@ __userInfo os::getUserInfo(const dodoString &uid)
 
 //-------------------------------------------------------------------
 
-dodoArray<__userInfo>os::getUsers()
+dodoArray<__userInfo>
+os::getUsers()
 {
 	dodoArray<__userInfo> users;
 
@@ -552,12 +569,12 @@ dodoArray<__userInfo>os::getUsers()
 
 	switch (errno)
 	{
-		case EIO:
-		case EMFILE:
-		case ENFILE:
-		case ENOMEM:
+	case EIO:
+	case EMFILE:
+	case ENFILE:
+	case ENOMEM:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUSERS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUSERS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	endpwent();
@@ -567,8 +584,9 @@ dodoArray<__userInfo>os::getUsers()
 
 //-------------------------------------------------------------------
 
-__userInfo &os::fillUserInfo(__userInfo &info,
-							 passwd     *in)
+__userInfo &
+os::fillUserInfo(__userInfo &info,
+				 passwd     *in)
 {
 	info.gid = in->pw_gid;
 	info.home = in->pw_dir;
@@ -583,8 +601,9 @@ __userInfo &os::fillUserInfo(__userInfo &info,
 
 //-------------------------------------------------------------------
 
-__groupInfo &os::fillGroupInfo(__groupInfo &info,
-							   group       *pw)
+__groupInfo &
+os::fillGroupInfo(__groupInfo &info,
+				  group       *pw)
 {
 	info.gid = pw->gr_gid;
 	info.name = pw->gr_name;
@@ -603,7 +622,8 @@ __groupInfo &os::fillGroupInfo(__groupInfo &info,
 
 //-------------------------------------------------------------------
 
-__groupInfo os::getGroupInfo(int uid)
+__groupInfo
+os::getGroupInfo(int uid)
 {
 	group *in = getgrgid(uid);
 	if (in == NULL)
@@ -618,7 +638,8 @@ __groupInfo os::getGroupInfo(int uid)
 
 //-------------------------------------------------------------------
 
-__groupInfo os::getGroupInfo(const dodoString &uid)
+__groupInfo
+os::getGroupInfo(const dodoString &uid)
 {
 	group *in = getgrnam(uid.c_str());
 	if (in == NULL)
@@ -633,7 +654,8 @@ __groupInfo os::getGroupInfo(const dodoString &uid)
 
 //-------------------------------------------------------------------
 
-dodoArray<__groupInfo>os::getGroups()
+dodoArray<__groupInfo>
+os::getGroups()
 {
 	dodoArray<__groupInfo> groups;
 
@@ -648,13 +670,13 @@ dodoArray<__groupInfo>os::getGroups()
 
 	switch (errno)
 	{
-		case EIO:
-		case EMFILE:
-		case ENFILE:
-		case EINTR:
-		case ENOMEM:
+	case EIO:
+	case EMFILE:
+	case ENFILE:
+	case EINTR:
+	case ENOMEM:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGROUPS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGROUPS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	endgrent();
@@ -664,8 +686,9 @@ dodoArray<__groupInfo>os::getGroups()
 
 //-------------------------------------------------------------------
 
-void os::die(const dodoString &message,
-			 int              status)
+void
+os::die(const dodoString &message,
+		int              status)
 {
 	fwrite(message.c_str(), message.size(), 1, stderr);
 	fflush(stderr);
@@ -679,7 +702,8 @@ void os::die(const dodoString &message,
 
 //-------------------------------------------------------------------
 
-void os::microSleep(unsigned long period)
+void
+os::microSleep(unsigned long period)
 {
 	if (period < 1000000)
 	{
@@ -693,14 +717,16 @@ void os::microSleep(unsigned long period)
 
 //-------------------------------------------------------------------
 
-void os::sleep(long period)
+void
+os::sleep(long period)
 {
 	::sleep(period);
 }
 
 //-------------------------------------------------------------------
 
-void os::atExit(void (*func)())
+void
+os::atExit(void (*func)())
 {
 	if (atexit(func) != 0)
 	{
@@ -710,28 +736,32 @@ void os::atExit(void (*func)())
 
 //-------------------------------------------------------------------
 
-int os::getPID()
+int
+os::getPID()
 {
 	return getpid();
 }
 
 //-------------------------------------------------------------------
 
-int os::getParentPID()
+int
+os::getParentPID()
 {
 	return getppid();
 }
 
 //-------------------------------------------------------------------
 
-int os::getGroupPID()
+int
+os::getGroupPID()
 {
 	return getpgrp();
 }
 
 //-------------------------------------------------------------------
 
-int os::getGroupPID(int pid)
+int
+os::getGroupPID(int pid)
 {
 	int pgid = getpgid(pid);
 	if (pgid == -1)
@@ -744,7 +774,8 @@ int os::getGroupPID(int pid)
 
 //-------------------------------------------------------------------
 
-void os::setGroupPID(int gpid)
+void
+os::setGroupPID(int gpid)
 {
 	if (setpgid(0, gpid) == 1)
 	{
@@ -754,8 +785,9 @@ void os::setGroupPID(int gpid)
 
 //-------------------------------------------------------------------
 
-void os::setGroupPID(int pid,
-					 int gpid)
+void
+os::setGroupPID(int pid,
+				int gpid)
 {
 	if (setpgid(pid, gpid) == 1)
 	{
@@ -765,8 +797,9 @@ void os::setGroupPID(int pid,
 
 //-------------------------------------------------------------------
 
-void os::sigMask(sigset_t *set,
-				 long     blockSignals)
+void
+os::sigMask(sigset_t *set,
+			long     blockSignals)
 {
 	if (blockSignals != -1)
 	{
@@ -869,9 +902,10 @@ void os::sigMask(sigset_t *set,
 
 //-------------------------------------------------------------------
 
-void os::setSignalHandler(long          signal,
-						  signalHandler handler,
-						  int           blockSignals)
+void
+os::setSignalHandler(long          signal,
+					 signalHandler handler,
+					 int           blockSignals)
 {
 	syncThreadStack tg;
 
@@ -917,9 +951,10 @@ void os::setSignalHandler(long          signal,
 
 //-------------------------------------------------------------------
 
-void os::setMicroTimer(unsigned long timeout,
-					   signalHandler handler,
-					   int           blockSignals)
+void
+os::setMicroTimer(unsigned long timeout,
+				  signalHandler handler,
+				  int           blockSignals)
 {
 	syncThreadStack tg;
 
@@ -984,9 +1019,10 @@ void os::setMicroTimer(unsigned long timeout,
 
 //-------------------------------------------------------------------
 
-void os::setTimer(long          timeout,
-				  signalHandler handler,
-				  int           blockSignals)
+void
+os::setTimer(long          timeout,
+			 signalHandler handler,
+			 int           blockSignals)
 {
 	syncThreadStack tg;
 
@@ -1043,7 +1079,8 @@ void os::setTimer(long          timeout,
 
 //-------------------------------------------------------------------
 
-bool os::isSignalHandled(long signal)
+bool
+os::isSignalHandled(long signal)
 {
 	struct sigaction act;
 	if (sigaction(os::toRealSignal(signal), NULL, &act) == 1)
@@ -1063,8 +1100,9 @@ bool os::isSignalHandled(long signal)
 
 //-------------------------------------------------------------------
 
-void os::sendSignal(int  pid,
-					long signal)
+void
+os::sendSignal(int  pid,
+			   long signal)
 {
 	if (kill(pid, os::toRealSignal(signal)) == -1)
 	{
@@ -1074,7 +1112,8 @@ void os::sendSignal(int  pid,
 
 //-------------------------------------------------------------------
 
-void os::unsetSignalHandler(long signal)
+void
+os::unsetSignalHandler(long signal)
 {
 	syncThreadStack tg;
 
@@ -1114,8 +1153,9 @@ void os::unsetSignalHandler(long signal)
 
 #ifdef DL_EXT
 
-__signalMod os::getModuleInfo(const dodoString &module,
-							  void             *toInit)
+__signalMod
+os::getModuleInfo(const dodoString &module,
+				  void             *toInit)
 {
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -1147,8 +1187,9 @@ __signalMod os::getModuleInfo(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-void os::setSignalHandler(const dodoString &path,
-						  void             *toInit)
+void
+os::setSignalHandler(const dodoString &path,
+					 void             *toInit)
 {
 	syncThreadStack tg;
 
@@ -1220,184 +1261,187 @@ void os::setSignalHandler(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-int os::toSignalNumber(long signal)
+int
+os::toSignalNumber(long signal)
 {
 	switch (signal)
 	{
-		case OS_SIGNAL_HANGUP:
+	case OS_SIGNAL_HANGUP:
 
-			return 0;
+		return 0;
 
-		case OS_SIGNAL_INTERRUPT:
+	case OS_SIGNAL_INTERRUPT:
 
-			return 1;
+		return 1;
 
-		case OS_SIGNAL_QUIT:
+	case OS_SIGNAL_QUIT:
 
-			return 2;
+		return 2;
 
-		case OS_SIGNAL_ILLEGAL_INSTRUCTION:
+	case OS_SIGNAL_ILLEGAL_INSTRUCTION:
 
-			return 3;
+		return 3;
 
-		case OS_SIGNAL_ABORT:
+	case OS_SIGNAL_ABORT:
 
-			return 4;
+		return 4;
 
-		case OS_SIGNAL_BUS_FAULT:
+	case OS_SIGNAL_BUS_FAULT:
 
-			return 5;
+		return 5;
 
-		case OS_SIGNAL_FLOATINGPOINT_FAULT:
+	case OS_SIGNAL_FLOATINGPOINT_FAULT:
 
-			return 6;
+		return 6;
 
-		case OS_SIGNAL_USER_DEFINED1:
+	case OS_SIGNAL_USER_DEFINED1:
 
-			return 7;
+		return 7;
 
-		case OS_SIGNAL_SEGMENTATION_FAULT:
+	case OS_SIGNAL_SEGMENTATION_FAULT:
 
-			return 8;
+		return 8;
 
-		case OS_SIGNAL_USER_DEFINED2:
+	case OS_SIGNAL_USER_DEFINED2:
 
-			return 9;
+		return 9;
 
-		case OS_SIGNAL_PIPE_FAULT:
+	case OS_SIGNAL_PIPE_FAULT:
 
-			return 10;
+		return 10;
 
-		case OS_SIGNAL_ALARM:
+	case OS_SIGNAL_ALARM:
 
-			return 11;
+		return 11;
 
-		case OS_SIGNAL_TERMINATION:
+	case OS_SIGNAL_TERMINATION:
 
-			return 12;
+		return 12;
 
-		case OS_SIGNAL_CHILD_CHANGED:
+	case OS_SIGNAL_CHILD_CHANGED:
 
-			return 13;
+		return 13;
 
-		case OS_SIGNAL_CONTINUE:
+	case OS_SIGNAL_CONTINUE:
 
-			return 14;
+		return 14;
 
-		case OS_SIGNAL_KEYBOARD_STOP:
+	case OS_SIGNAL_KEYBOARD_STOP:
 
-			return 15;
+		return 15;
 
-		case OS_SIGNAL_CPULIMIT_EXCEEDED:
+	case OS_SIGNAL_CPULIMIT_EXCEEDED:
 
-			return 16;
+		return 16;
 
-		case OS_SIGNAL_FILESIZE_EXCEEDED:
+	case OS_SIGNAL_FILESIZE_EXCEEDED:
 
-			return 17;
+		return 17;
 
-		case OS_SIGNAL_BAD_SYSCALL:
+	case OS_SIGNAL_BAD_SYSCALL:
 
-			return 18;
+		return 18;
 
-		default:
+	default:
 
-			return -1;
+		return -1;
 	}
 }
 
 //-------------------------------------------------------------------
 
-int os::toRealSignal(long signal)
+int
+os::toRealSignal(long signal)
 {
 	switch (signal)
 	{
-		case OS_SIGNAL_HANGUP:
+	case OS_SIGNAL_HANGUP:
 
-			return SIGHUP;
+		return SIGHUP;
 
-		case OS_SIGNAL_INTERRUPT:
+	case OS_SIGNAL_INTERRUPT:
 
-			return SIGINT;
+		return SIGINT;
 
-		case OS_SIGNAL_QUIT:
+	case OS_SIGNAL_QUIT:
 
-			return SIGQUIT;
+		return SIGQUIT;
 
-		case OS_SIGNAL_ILLEGAL_INSTRUCTION:
+	case OS_SIGNAL_ILLEGAL_INSTRUCTION:
 
-			return SIGILL;
+		return SIGILL;
 
-		case OS_SIGNAL_ABORT:
+	case OS_SIGNAL_ABORT:
 
-			return SIGABRT;
+		return SIGABRT;
 
-		case OS_SIGNAL_BUS_FAULT:
+	case OS_SIGNAL_BUS_FAULT:
 
-			return SIGBUS;
+		return SIGBUS;
 
-		case OS_SIGNAL_FLOATINGPOINT_FAULT:
+	case OS_SIGNAL_FLOATINGPOINT_FAULT:
 
-			return SIGFPE;
+		return SIGFPE;
 
-		case OS_SIGNAL_USER_DEFINED1:
+	case OS_SIGNAL_USER_DEFINED1:
 
-			return SIGUSR1;
+		return SIGUSR1;
 
-		case OS_SIGNAL_SEGMENTATION_FAULT:
+	case OS_SIGNAL_SEGMENTATION_FAULT:
 
-			return SIGSEGV;
+		return SIGSEGV;
 
-		case OS_SIGNAL_USER_DEFINED2:
+	case OS_SIGNAL_USER_DEFINED2:
 
-			return SIGUSR2;
+		return SIGUSR2;
 
-		case OS_SIGNAL_PIPE_FAULT:
+	case OS_SIGNAL_PIPE_FAULT:
 
-			return SIGPIPE;
+		return SIGPIPE;
 
-		case OS_SIGNAL_ALARM:
+	case OS_SIGNAL_ALARM:
 
-			return SIGALRM;
+		return SIGALRM;
 
-		case OS_SIGNAL_TERMINATION:
+	case OS_SIGNAL_TERMINATION:
 
-			return SIGTERM;
+		return SIGTERM;
 
-		case OS_SIGNAL_CHILD_CHANGED:
+	case OS_SIGNAL_CHILD_CHANGED:
 
-			return SIGCHLD;
+		return SIGCHLD;
 
-		case OS_SIGNAL_CONTINUE:
+	case OS_SIGNAL_CONTINUE:
 
-			return SIGCONT;
+		return SIGCONT;
 
-		case OS_SIGNAL_KEYBOARD_STOP:
+	case OS_SIGNAL_KEYBOARD_STOP:
 
-			return SIGTSTP;
+		return SIGTSTP;
 
-		case OS_SIGNAL_CPULIMIT_EXCEEDED:
+	case OS_SIGNAL_CPULIMIT_EXCEEDED:
 
-			return SIGXCPU;
+		return SIGXCPU;
 
-		case OS_SIGNAL_FILESIZE_EXCEEDED:
+	case OS_SIGNAL_FILESIZE_EXCEEDED:
 
-			return SIGXFSZ;
+		return SIGXFSZ;
 
-		case OS_SIGNAL_BAD_SYSCALL:
+	case OS_SIGNAL_BAD_SYSCALL:
 
-			return SIGSYS;
+		return SIGSYS;
 
-		default:
+	default:
 
-			return -1;
+		return -1;
 	}
 }
 
 //-------------------------------------------------------------------
 
-void os::blockSignal(long signals,
-					 bool block)
+void
+os::blockSignal(long signals,
+				bool block)
 {
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);
@@ -1416,7 +1460,8 @@ void os::blockSignal(long signals,
 
 //-------------------------------------------------------------------
 
-void os::becomeDaemon()
+void
+os::becomeDaemon()
 {
 	pid_t pid = fork();
 
@@ -1460,8 +1505,9 @@ void os::becomeDaemon()
 
 //-------------------------------------------------------------------
 
-void os::releaseDaemon(daemon func,
-					   void   *data)
+void
+os::releaseDaemon(daemon func,
+				  void   *data)
 {
 	pid_t pid = fork();
 

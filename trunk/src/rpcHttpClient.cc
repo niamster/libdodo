@@ -43,14 +43,16 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-dodoString client::sendTextRequest(const dodoString &method)
+dodoString
+client::sendTextRequest(const dodoString &method)
 {
 	return http.POST(method, ct).data;
 }
 
 //-------------------------------------------------------------------
 
-void client::setUrl(const dodoString &url)
+void
+client::setUrl(const dodoString &url)
 {
 	http.setUrl(url);
 }

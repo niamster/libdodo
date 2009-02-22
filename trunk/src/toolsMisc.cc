@@ -33,9 +33,10 @@ using namespace dodo::tools;
 
 //-------------------------------------------------------------------
 
-void misc::random(void          *data,
-				  unsigned long size,
-				  short         strength)
+void
+misc::random(void          *data,
+			 unsigned long size,
+			 short         strength)
 {
 	FILE *file;
 
@@ -94,8 +95,9 @@ void misc::random(void          *data,
 
 //-------------------------------------------------------------------
 
-dodoString misc::stringRandom(unsigned long size,
-							  short         strength)
+dodoString
+misc::stringRandom(unsigned long size,
+				   short         strength)
 {
 	char *data = new char[size + 1];
 	try
@@ -124,7 +126,8 @@ dodoString misc::stringRandom(unsigned long size,
 
 //-------------------------------------------------------------------
 
-unsigned long misc::ulRandom(short strength)
+unsigned long
+misc::ulRandom(short strength)
 {
 	unsigned long rnd;
 
@@ -135,7 +138,8 @@ unsigned long misc::ulRandom(short strength)
 
 //-------------------------------------------------------------------
 
-long misc::lRandom(short strength)
+long
+misc::lRandom(short strength)
 {
 	long rnd;
 
@@ -146,7 +150,8 @@ long misc::lRandom(short strength)
 
 //-------------------------------------------------------------------
 
-unsigned int misc::uiRandom(short strength)
+unsigned int
+misc::uiRandom(short strength)
 {
 	unsigned int rnd;
 
@@ -157,7 +162,8 @@ unsigned int misc::uiRandom(short strength)
 
 //-------------------------------------------------------------------
 
-int misc::iRandom(short strength)
+int
+misc::iRandom(short strength)
 {
 	int rnd;
 
@@ -168,7 +174,8 @@ int misc::iRandom(short strength)
 
 //-------------------------------------------------------------------
 
-unsigned short misc::usRandom(short strength)
+unsigned short
+misc::usRandom(short strength)
 {
 	unsigned short rnd;
 
@@ -179,7 +186,8 @@ unsigned short misc::usRandom(short strength)
 
 //-------------------------------------------------------------------
 
-short misc::sRandom(short strength)
+short
+misc::sRandom(short strength)
 {
 	short rnd;
 
@@ -190,7 +198,8 @@ short misc::sRandom(short strength)
 
 //-------------------------------------------------------------------
 
-unsigned char misc::ucRandom(short strength)
+unsigned char
+misc::ucRandom(short strength)
 {
 	unsigned char rnd;
 
@@ -201,7 +210,8 @@ unsigned char misc::ucRandom(short strength)
 
 //-------------------------------------------------------------------
 
-char misc::cRandom(short strength)
+char
+misc::cRandom(short strength)
 {
 	char rnd;
 
@@ -212,7 +222,8 @@ char misc::cRandom(short strength)
 
 //-------------------------------------------------------------------
 
-double misc::dRandom(short strength)
+double
+misc::dRandom(short strength)
 {
 	double rnd;
 
@@ -223,9 +234,10 @@ double misc::dRandom(short strength)
 
 //-------------------------------------------------------------------
 
-bool misc::isInArray(const dodoStringArray &arr,
-					 const dodoString      &needle,
-					 bool                  icase)
+bool
+misc::isInArray(const dodoStringArray &arr,
+				const dodoString      &needle,
+				bool                  icase)
 {
 	bool (*cmpFunc)(const dodoString &,
 					const dodoString &);
@@ -253,9 +265,10 @@ bool misc::isInArray(const dodoStringArray &arr,
 
 //-------------------------------------------------------------------
 
-bool misc::isInList(const dodoStringList &arr,
-					const dodoString     &needle,
-					bool                 icase)
+bool
+misc::isInList(const dodoStringList &arr,
+			   const dodoString     &needle,
+			   bool                 icase)
 {
 	bool (*cmpFunc)(const dodoString &,
 					const dodoString &);
@@ -283,9 +296,10 @@ bool misc::isInList(const dodoStringList &arr,
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringArray misc::split(const dodoString &fields,
-								  const dodoString &separator,
-								  int              limit)
+dodo::dodoStringArray
+misc::split(const dodoString &fields,
+			const dodoString &separator,
+			int              limit)
 {
 	unsigned long i(0), j(0), sep_size(separator.size());
 	int k(1);
@@ -325,9 +339,10 @@ dodo::dodoStringArray misc::split(const dodoString &fields,
 
 //-------------------------------------------------------------------
 
-dodoString misc::join(const dodoStringArray &fields,
-					  const dodoString      &separator,
-					  int                   limit)
+dodoString
+misc::join(const dodoStringArray &fields,
+		   const dodoString      &separator,
+		   int                   limit)
 {
 	if (fields.size() == 0)
 	{

@@ -31,8 +31,9 @@
 
 using namespace dodo::tools;
 
-void filesystem::unlink(const dodoString &path,
-						bool             force)
+void
+filesystem::unlink(const dodoString &path,
+				   bool             force)
 {
 	int status(0);
 	struct stat st;
@@ -65,8 +66,9 @@ void filesystem::unlink(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-void filesystem::rename(const dodoString &oldPath,
-						const dodoString &newPath)
+void
+filesystem::rename(const dodoString &oldPath,
+				   const dodoString &newPath)
 {
 	if (::rename(oldPath.c_str(), newPath.c_str()) == -1)
 	{
@@ -76,9 +78,10 @@ void filesystem::rename(const dodoString &oldPath,
 
 //-------------------------------------------------------------------
 
-void filesystem::symlink(const dodoString &oldPath,
-						 const dodoString &newPath,
-						 bool             force)
+void
+filesystem::symlink(const dodoString &oldPath,
+					const dodoString &newPath,
+					bool             force)
 {
 	if (force)
 	{
@@ -104,8 +107,9 @@ void filesystem::symlink(const dodoString &oldPath,
 
 //-------------------------------------------------------------------
 
-void filesystem::link(const dodoString &oldPath,
-					  const dodoString &newPath)
+void
+filesystem::link(const dodoString &oldPath,
+				 const dodoString &newPath)
 {
 	if  (::link(oldPath.c_str(), newPath.c_str()) == -1)
 	{
@@ -115,8 +119,9 @@ void filesystem::link(const dodoString &oldPath,
 
 //-------------------------------------------------------------------
 
-void filesystem::chown(const dodoString &path,
-					   int              uid)
+void
+filesystem::chown(const dodoString &path,
+				  int              uid)
 {
 	if (::chown(path.c_str(), uid, (unsigned int)-1) == -1)
 	{
@@ -126,8 +131,9 @@ void filesystem::chown(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-void filesystem::chgrp(const dodoString &path,
-					   int              gid)
+void
+filesystem::chgrp(const dodoString &path,
+				  int              gid)
 {
 	if (::chown(path.c_str(), (unsigned int)-1, gid) == -1)
 	{
@@ -137,7 +143,8 @@ void filesystem::chgrp(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-int filesystem::getUserOwner(const dodoString &path)
+int
+filesystem::getUserOwner(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -150,7 +157,8 @@ int filesystem::getUserOwner(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-int filesystem::getGroupOwner(const dodoString &path)
+int
+filesystem::getGroupOwner(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -163,8 +171,9 @@ int filesystem::getGroupOwner(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-void filesystem::touch(const dodoString &path,
-					   int              a_time)
+void
+filesystem::touch(const dodoString &path,
+				  int              a_time)
 {
 	if (a_time == 1)
 	{
@@ -184,8 +193,9 @@ void filesystem::touch(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-void filesystem::mkfifo(const dodoString &path,
-						int              permissions)
+void
+filesystem::mkfifo(const dodoString &path,
+				   int              permissions)
 {
 	if (::mkfifo(path.c_str(), toRealPermission(permissions)) == -1)
 	{
@@ -195,8 +205,9 @@ void filesystem::mkfifo(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-void filesystem::mkdir(const dodoString &path,
-					   int              permissions)
+void
+filesystem::mkdir(const dodoString &path,
+				  int              permissions)
 {
 	if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
 	{
@@ -239,8 +250,9 @@ void filesystem::mkdir(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-void filesystem::chmod(const dodoString &path,
-					   int              permissions)
+void
+filesystem::chmod(const dodoString &path,
+				  int              permissions)
 {
 	if (::chmod(path.c_str(), toRealPermission(permissions)) == -1)
 	{
@@ -250,7 +262,8 @@ void filesystem::chmod(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-int filesystem::toRealPermission(int permission)
+int
+filesystem::toRealPermission(int permission)
 {
 	int mode(0);
 
@@ -312,8 +325,9 @@ int filesystem::toRealPermission(int permission)
 
 //-------------------------------------------------------------------
 
-void filesystem::rm(const dodoString &path,
-					bool             force)
+void
+filesystem::rm(const dodoString &path,
+			   bool             force)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -403,7 +417,8 @@ void filesystem::rm(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-int filesystem::getPermissions(const dodoString &path)
+int
+filesystem::getPermissions(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -471,7 +486,8 @@ int filesystem::getPermissions(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-int filesystem::getFileType(const dodoString &path)
+int
+filesystem::getFileType(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -483,43 +499,44 @@ int filesystem::getFileType(const dodoString &path)
 
 	switch (st.st_mode)
 	{
-		case S_IFREG:
+	case S_IFREG:
 
-			return FILESYSTEM_FILETYPE_REGULAR_FILE;
+		return FILESYSTEM_FILETYPE_REGULAR_FILE;
 
-		case S_IFDIR:
+	case S_IFDIR:
 
-			return FILESYSTEM_FILETYPE_DIRECTORY;
+		return FILESYSTEM_FILETYPE_DIRECTORY;
 
-		case S_IFLNK:
+	case S_IFLNK:
 
-			return FILESYSTEM_FILETYPE_SYMBOLIC_LINK;
+		return FILESYSTEM_FILETYPE_SYMBOLIC_LINK;
 
-		case S_IFSOCK:
+	case S_IFSOCK:
 
-			return FILESYSTEM_FILETYPE_LOCAL_SOCKET;
+		return FILESYSTEM_FILETYPE_LOCAL_SOCKET;
 
-		case S_IFBLK:
+	case S_IFBLK:
 
-			return FILESYSTEM_FILETYPE_BLOCK_DEVICE;
+		return FILESYSTEM_FILETYPE_BLOCK_DEVICE;
 
-		case S_IFCHR:
+	case S_IFCHR:
 
-			return FILESYSTEM_FILETYPE_CHARACTER_DEVICE;
+		return FILESYSTEM_FILETYPE_CHARACTER_DEVICE;
 
-		case S_IFIFO:
+	case S_IFIFO:
 
-			return FILESYSTEM_FILETYPE_FIFO;
+		return FILESYSTEM_FILETYPE_FIFO;
 
-		default:
+	default:
 
-			return -1;
+		return -1;
 	}
 }
 
 //-------------------------------------------------------------------
 
-long filesystem::getSize(const dodoString &path)
+long
+filesystem::getSize(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -532,7 +549,8 @@ long filesystem::getSize(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-long filesystem::getAccTime(const dodoString &path)
+long
+filesystem::getAccTime(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -545,7 +563,8 @@ long filesystem::getAccTime(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-long filesystem::getModTime(const dodoString &path)
+long
+filesystem::getModTime(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -558,7 +577,8 @@ long filesystem::getModTime(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-__fileInfo filesystem::getFileInfo(const dodoString &path)
+__fileInfo
+filesystem::getFileInfo(const dodoString &path)
 {
 	__fileInfo file;
 
@@ -582,7 +602,8 @@ __fileInfo filesystem::getFileInfo(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoArray<__fileInfo>filesystem::getDirInfo(const dodoString &path)
+dodoArray<__fileInfo>
+filesystem::getDirInfo(const dodoString &path)
 {
 	dodoArray<__fileInfo> dir;
 	struct stat st;
@@ -622,7 +643,8 @@ dodoArray<__fileInfo>filesystem::getDirInfo(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoString filesystem::followSymlink(const dodoString &path)
+dodoString
+filesystem::followSymlink(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -649,7 +671,8 @@ dodoString filesystem::followSymlink(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoString filesystem::getFileContents(const dodoString &path)
+dodoString
+filesystem::getFileContents(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -680,13 +703,13 @@ dodoString filesystem::getFileContents(const dodoString &path)
 		{
 			switch (errno)
 			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
+			case EIO:
+			case EINTR:
+			case ENOMEM:
+			case EOVERFLOW:
+			case EROFS:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 
@@ -698,13 +721,13 @@ dodoString filesystem::getFileContents(const dodoString &path)
 		{
 			switch (errno)
 			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
+			case EIO:
+			case EINTR:
+			case ENOMEM:
+			case EOVERFLOW:
+			case EROFS:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 
@@ -721,7 +744,8 @@ dodoString filesystem::getFileContents(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringArray filesystem::getFileContentsArr(const dodoString &path)
+dodo::dodoStringArray
+filesystem::getFileContentsArr(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -758,7 +782,8 @@ dodo::dodoStringArray filesystem::getFileContentsArr(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoString filesystem::basename(const dodoString &path)
+dodoString
+filesystem::basename(const dodoString &path)
 {
 	if (path.size() >= MAXPATHLEN)
 	{
@@ -774,7 +799,8 @@ dodoString filesystem::basename(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoString filesystem::dirname(const dodoString &path)
+dodoString
+filesystem::dirname(const dodoString &path)
 {
 	if (path.size() >= MAXPATHLEN)
 	{
@@ -790,9 +816,10 @@ dodoString filesystem::dirname(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-void filesystem::copy(const dodoString &from,
-					  const dodoString &a_to,
-					  bool             force)
+void
+filesystem::copy(const dodoString &from,
+				 const dodoString &a_to,
+				 bool             force)
 {
 	dodoString to = a_to;
 
@@ -899,13 +926,13 @@ void filesystem::copy(const dodoString &from,
 			{
 				switch (errno)
 				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:
+				case EROFS:
 
-						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 			}
 
@@ -913,13 +940,13 @@ void filesystem::copy(const dodoString &from,
 			{
 				switch (errno)
 				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:
+				case EROFS:
 
-						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 			}
 		}
@@ -929,13 +956,13 @@ void filesystem::copy(const dodoString &from,
 			{
 				switch (errno)
 				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:
+				case EROFS:
 
-						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 			}
 
@@ -943,13 +970,13 @@ void filesystem::copy(const dodoString &from,
 			{
 				switch (errno)
 				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:
+				case EROFS:
 
-						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 			}
 		}
@@ -968,9 +995,10 @@ void filesystem::copy(const dodoString &from,
 
 //-------------------------------------------------------------------
 
-void filesystem::copyDir(const dodoString &from,
-						 const dodoString &a_to,
-						 bool             force)
+void
+filesystem::copyDir(const dodoString &from,
+					const dodoString &a_to,
+					bool             force)
 {
 	dodoString to = a_to;
 
@@ -1058,7 +1086,8 @@ void filesystem::copyDir(const dodoString &from,
 
 //-------------------------------------------------------------------
 
-bool filesystem::exists(const dodoString &path)
+bool
+filesystem::exists(const dodoString &path)
 {
 	struct stat st;
 
@@ -1072,41 +1101,46 @@ bool filesystem::exists(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-void filesystem::appendToFile(const dodoString &path,
-							  const dodoString &content)
+void
+filesystem::appendToFile(const dodoString &path,
+						 const dodoString &content)
 {
 	_writeToFile(path, content, "a+");
 }
 
 //-------------------------------------------------------------------
 
-void filesystem::appendToFile(const dodoString      &path,
-							  const dodoStringArray &content)
+void
+filesystem::appendToFile(const dodoString      &path,
+						 const dodoStringArray &content)
 {
 	_writeToFile(path, content, "a+");
 }
 
 //-------------------------------------------------------------------
 
-void filesystem::writeToFile(const dodoString &path,
-							 const dodoString &content)
+void
+filesystem::writeToFile(const dodoString &path,
+						const dodoString &content)
 {
 	_writeToFile(path, content, "w+");
 }
 
 //-------------------------------------------------------------------
 
-void filesystem::writeToFile(const dodoString      &path,
-							 const dodoStringArray &content)
+void
+filesystem::writeToFile(const dodoString      &path,
+						const dodoStringArray &content)
 {
 	_writeToFile(path, content, "w+");
 }
 
 //-------------------------------------------------------------------
 
-void filesystem::_writeToFile(const dodoString &path,
-							  const dodoString &content,
-							  const char       *mode)
+void
+filesystem::_writeToFile(const dodoString &path,
+						 const dodoString &content,
+						 const char       *mode)
 {
 	FILE *file = fopen(path.c_str(), mode);
 	if (file == NULL)
@@ -1123,9 +1157,10 @@ void filesystem::_writeToFile(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-void filesystem::_writeToFile(const dodoString      &path,
-							  const dodoStringArray &content,
-							  const char            *mode)
+void
+filesystem::_writeToFile(const dodoString      &path,
+						 const dodoStringArray &content,
+						 const char            *mode)
 {
 	FILE *file = fopen(path.c_str(), mode);
 	if (file == NULL)
@@ -1140,17 +1175,17 @@ void filesystem::_writeToFile(const dodoString      &path,
 		{
 			switch (errno)
 			{
-				case EFBIG:
-				case EIO:
-				case EINTR:
-				case EBADF:
-				case EOVERFLOW:
-				case ENOSPC:
-				case EPIPE:
-				case ENOMEM:
-				case ENXIO:
+			case EFBIG:
+			case EIO:
+			case EINTR:
+			case EBADF:
+			case EOVERFLOW:
+			case ENOSPC:
+			case EPIPE:
+			case ENOMEM:
+			case ENXIO:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 
@@ -1158,17 +1193,17 @@ void filesystem::_writeToFile(const dodoString      &path,
 		{
 			switch (errno)
 			{
-				case EFBIG:
-				case EIO:
-				case EINTR:
-				case EBADF:
-				case EOVERFLOW:
-				case ENOSPC:
-				case EPIPE:
-				case ENOMEM:
-				case ENXIO:
+			case EFBIG:
+			case EIO:
+			case EINTR:
+			case EBADF:
+			case EOVERFLOW:
+			case ENOSPC:
+			case EPIPE:
+			case ENOMEM:
+			case ENXIO:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 	}

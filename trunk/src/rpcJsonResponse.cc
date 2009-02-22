@@ -31,9 +31,10 @@
 
 using namespace dodo::rpc::json;
 
-dodo::rpc::response response::jsonToResponse(dodo::data::format::json::node &node,
-											 dodoString                     &version,
-											 long                           &id)
+dodo::rpc::response
+response::jsonToResponse(dodo::data::format::json::node &node,
+						 dodoString                     &version,
+						 long                           &id)
 {
 	if (node.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
 	{
@@ -79,9 +80,10 @@ dodo::rpc::response response::jsonToResponse(dodo::data::format::json::node &nod
 
 //-------------------------------------------------------------------
 
-dodo::data::format::json::node response::responseToJson(const rpc::response &data,
-														const dodoString    &version,
-														long                id)
+dodo::data::format::json::node
+response::responseToJson(const rpc::response &data,
+						 const dodoString    &version,
+						 long                id)
 {
 	dodo::data::format::json::node resp;
 

@@ -39,7 +39,8 @@ __xexecCollectedData::__xexecCollectedData(xexec *executor,
 	executor->execObject = execObject;
 }
 
-void __xexecCollectedData::setExecObject(short execObject)
+void
+__xexecCollectedData::setExecObject(short execObject)
 {
 	executor->execObject = execObject;
 }
@@ -114,9 +115,10 @@ xexec::~xexec()
 
 //-------------------------------------------------------------------
 
-int xexec::addXExec(dodoList<__xexecItem> &list,
-					inExec                func,
-					void                  *data)
+int
+xexec::addXExec(dodoList<__xexecItem> &list,
+				inExec                func,
+				void                  *data)
 {
 	__xexecItem temp;
 
@@ -136,9 +138,10 @@ int xexec::addXExec(dodoList<__xexecItem> &list,
 
 //-------------------------------------------------------------------
 
-void xexec::setStatXExec(dodoList<__xexecItem> &list,
-						 int                   position,
-						 bool                  stat)
+void
+xexec::setStatXExec(dodoList<__xexecItem> &list,
+					int                   position,
+					bool                  stat)
 {
 	if (getXexec(list, position))
 	{
@@ -148,8 +151,9 @@ void xexec::setStatXExec(dodoList<__xexecItem> &list,
 
 //-------------------------------------------------------------------
 
-void xexec::delXExec(dodoList<__xexecItem> &list,
-					 int                   position)
+void
+xexec::delXExec(dodoList<__xexecItem> &list,
+				int                   position)
 {
 	if (getXexec(list, position))
 	{
@@ -181,121 +185,138 @@ void xexec::delXExec(dodoList<__xexecItem> &list,
 
 //-------------------------------------------------------------------
 
-int xexec::addPreExec(inExec func,
-					  void   *data)
+int
+xexec::addPreExec(inExec func,
+				  void   *data)
 {
 	return addXExec(preExec.exec, func, data);
 }
 
 //-------------------------------------------------------------------
 
-void xexec::disablePreExec(int position)
+void
+xexec::disablePreExec(int position)
 {
 	setStatXExec(preExec.exec, position, false);
 }
 
 //-------------------------------------------------------------------
 
-void xexec::delPreExec(int position)
+void
+xexec::delPreExec(int position)
 {
 	delXExec(preExec.exec, position);
 }
 
 //-------------------------------------------------------------------
 
-void xexec::enablePreExec(int position)
+void
+xexec::enablePreExec(int position)
 {
 	setStatXExec(preExec.exec, position, true);
 }
 
 //-------------------------------------------------------------------
 
-int xexec::addPostExec(inExec func,
-					   void   *data)
+int
+xexec::addPostExec(inExec func,
+				   void   *data)
 {
 	return addXExec(postExec.exec, func, data);
 }
 
 //-------------------------------------------------------------------
 
-void xexec::disablePostExec(int position)
+void
+xexec::disablePostExec(int position)
 {
 	setStatXExec(postExec.exec, position, false);
 }
 
 //-------------------------------------------------------------------
 
-void xexec::delPostExec(int position)
+void
+xexec::delPostExec(int position)
 {
 	delXExec(postExec.exec, position);
 }
 
 //-------------------------------------------------------------------
 
-void xexec::enablePostExec(int position)
+void
+xexec::enablePostExec(int position)
 {
 	setStatXExec(postExec.exec, position, true);
 }
 
 //-------------------------------------------------------------------
 
-void xexec::enableAllPreExec() const
+void
+xexec::enableAllPreExec() const
 {
 	preExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
 
-void xexec::enableAllPostExec() const
+void
+xexec::enableAllPostExec() const
 {
 	postExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
 
-void xexec::disableAllPreExec() const
+void
+xexec::disableAllPreExec() const
 {
 	preExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
 
-void xexec::disableAllPostExec() const
+void
+xexec::disableAllPostExec() const
 {
 	postExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
 
-void xexec::enableAllPreExec()
+void
+xexec::enableAllPreExec()
 {
 	preExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
 
-void xexec::enableAllPostExec()
+void
+xexec::enableAllPostExec()
 {
 	postExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
 
-void xexec::disableAllPreExec()
+void
+xexec::disableAllPreExec()
 {
 	preExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
 
-void xexec::disableAllPostExec()
+void
+xexec::disableAllPostExec()
 {
 	postExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
 
-void xexec::disableAll()
+void
+xexec::disableAll()
 {
 	postExec.execDisabled = true;
 	preExec.execDisabled = true;
@@ -303,7 +324,8 @@ void xexec::disableAll()
 
 //-------------------------------------------------------------------
 
-void xexec::enableAll()
+void
+xexec::enableAll()
 {
 	postExec.execDisabled = false;
 	preExec.execDisabled = false;
@@ -311,28 +333,31 @@ void xexec::enableAll()
 
 //-------------------------------------------------------------------
 
-void xexec::replacePostExec(int    position,
-							inExec func,
-							void   *data)
+void
+xexec::replacePostExec(int    position,
+					   inExec func,
+					   void   *data)
 {
 	replaceXExec(postExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
 
-void xexec::replacePreExec(int    position,
-						   inExec func,
-						   void   *data)
+void
+xexec::replacePreExec(int    position,
+					  inExec func,
+					  void   *data)
 {
 	replaceXExec(preExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
 
-void xexec::replaceXExec(dodoList<__xexecItem> &list,
-						 int                   position,
-						 inExec                func,
-						 void                  *data)
+void
+xexec::replaceXExec(dodoList<__xexecItem> &list,
+					int                   position,
+					inExec                func,
+					void                  *data)
 {
 	if (getXexec(list, position))
 	{
@@ -375,7 +400,8 @@ void xexec::replaceXExec(dodoList<__xexecItem> &list,
 }
 
 //-------------------------------------------------------------------
-void xexec::performXExec(__xexecItemList &list) const
+void
+xexec::performXExec(__xexecItemList &list) const
 {
 	if (list.execDisabled)
 	{
@@ -414,10 +440,11 @@ __xexecCounts::__xexecCounts() : pre(-1),
 
 //-------------------------------------------------------------------
 
-int xexec::addXExecModule(dodoList<__xexecItem> &list,
-						  const dodoString      &module,
-						  void                  *data,
-						  void                  *toInit)
+int
+xexec::addXExecModule(dodoList<__xexecItem> &list,
+					  const dodoString      &module,
+					  void                  *data,
+					  void                  *toInit)
 {
 	__xexecItem temp;
 
@@ -456,26 +483,29 @@ int xexec::addXExecModule(dodoList<__xexecItem> &list,
 
 //-------------------------------------------------------------------
 
-int xexec::addPostExec(const dodoString &module,
-					   void             *data,
-					   void             *toInit)
+int
+xexec::addPostExec(const dodoString &module,
+				   void             *data,
+				   void             *toInit)
 {
 	return addXExecModule(postExec.exec, module, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-int xexec::addPreExec(const dodoString &module,
-					  void             *data,
-					  void             *toInit)
+int
+xexec::addPreExec(const dodoString &module,
+				  void             *data,
+				  void             *toInit)
 {
 	return addXExecModule(preExec.exec, module, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-__xexecMod xexec::getModuleInfo(const dodoString &module,
-								void             *toInit)
+__xexecMod
+xexec::getModuleInfo(const dodoString &module,
+					 void             *toInit)
 {
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -507,9 +537,10 @@ __xexecMod xexec::getModuleInfo(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecCounts xexec::addExec(const dodoString &module,
-							 void             *data,
-							 void             *toInit)
+__xexecCounts
+xexec::addExec(const dodoString &module,
+			   void             *data,
+			   void             *toInit)
 {
 	__xexecItem temp;
 
@@ -546,33 +577,33 @@ __xexecCounts xexec::addExec(const dodoString &module,
 
 	switch (info.execType)
 	{
-		case XEXEC_MODULEACTIONTYPE_POST:
+	case XEXEC_MODULEACTIONTYPE_POST:
 
-			temp.position = ++execs;
-			postExec.exec.push_back(temp);
-			count.post = temp.position;
+		temp.position = ++execs;
+		postExec.exec.push_back(temp);
+		count.post = temp.position;
 
-			break;
+		break;
 
-		case XEXEC_MODULEACTIONTYPE_PRE:
+	case XEXEC_MODULEACTIONTYPE_PRE:
 
-			temp.position = ++execs;
-			preExec.exec.push_back(temp);
-			count.pre = temp.position;
+		temp.position = ++execs;
+		preExec.exec.push_back(temp);
+		count.pre = temp.position;
 
-			break;
+		break;
 
-		case XEXEC_MODULEACTIONTYPE_BOTH:
+	case XEXEC_MODULEACTIONTYPE_BOTH:
 
-			temp.position = ++execs;
-			postExec.exec.push_back(temp);
-			count.post = temp.position;
+		temp.position = ++execs;
+		postExec.exec.push_back(temp);
+		count.post = temp.position;
 
-			temp.position = ++execs;
-			preExec.exec.push_back(temp);
-			count.pre = temp.position;
+		temp.position = ++execs;
+		preExec.exec.push_back(temp);
+		count.pre = temp.position;
 
-			break;
+		break;
 	}
 
 	return count;
@@ -582,8 +613,9 @@ __xexecCounts xexec::addExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-bool xexec::getXexec(dodoList<__xexecItem> &list,
-					 int                   position)
+bool
+xexec::getXexec(dodoList<__xexecItem> &list,
+				int                   position)
 {
 	dodoList<__xexecItem>::iterator i(list.begin()), j(list.end());
 	for (; i != j; ++i)

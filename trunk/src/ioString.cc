@@ -81,7 +81,8 @@ string::~string()
 
 //-------------------------------------------------------------------
 
-int string::getInDescriptor() const
+int
+string::getInDescriptor() const
 {
 	throw exception::basic(exception::ERRMODULE_IOSTRING, STRINGEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, STRINGEX_CANTBEUSEDWITHIOEVENT, IOSTRINGEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 
@@ -90,7 +91,8 @@ int string::getInDescriptor() const
 
 //-------------------------------------------------------------------
 
-int string::getOutDescriptor() const
+int
+string::getOutDescriptor() const
 {
 	throw exception::basic(exception::ERRMODULE_IOSTRING, STRINGEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, STRINGEX_CANTBEUSEDWITHIOEVENT, IOSTRINGEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 
@@ -99,29 +101,33 @@ int string::getOutDescriptor() const
 
 //-------------------------------------------------------------------
 
-void string::flush()
+void
+string::flush()
 {
 }
 
 //-------------------------------------------------------------------
 
-string::operator const dodoString & ()
+string::operator const dodoString
+& ()
 {
 	return buffer;
 }
 
 //-------------------------------------------------------------------
 
-string::operator const char*()
+string::operator const char
+*()
 {
 	return buffer.data();
 }
 
 //-------------------------------------------------------------------
 
-void string::clone(const string &fd)
+void
+string::clone(const string &fd)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	pos = fd.pos;
 	blockOffset = fd.blockOffset;
@@ -134,7 +140,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void string::_read(char * const a_data)
+void
+string::_read(char * const a_data)
 {
 	unsigned long pos = blockOffset ? this->pos * inSize : this->pos;
 
@@ -150,7 +157,8 @@ void string::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void string::_write(const char *const a_data)
+void
+string::_write(const char *const a_data)
 {
 	if (append)
 	{
@@ -172,9 +180,10 @@ void string::_write(const char *const a_data)
 
 //-------------------------------------------------------------------
 
-void string::erase()
+void
+string::erase()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
 
@@ -189,7 +198,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-unsigned long string::_readStream(char * const a_data)
+unsigned long
+string::_readStream(char * const a_data)
 {
 	unsigned long readSize = inSize + 1;
 
@@ -251,7 +261,8 @@ unsigned long string::_readStream(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void string::_writeStream(const char *const a_data)
+void
+string::_writeStream(const char *const a_data)
 {
 	unsigned long _outSize = outSize;
 	unsigned int bufSize = strlen(a_data);

@@ -50,14 +50,16 @@ node::node(const dodoString    &name,
 
 //-------------------------------------------------------------------
 
-void node::addChild(const node &child)
+void
+node::addChild(const node &child)
 {
 	children[child.name].push_back(child);
 }
 
 //-------------------------------------------------------------------
 
-void node::setChildren(const dodoArray<node> &a_children)
+void
+node::setChildren(const dodoArray<node> &a_children)
 {
 	dodoArray<node>::const_iterator i = a_children.begin(), j = a_children.end();
 	for (; i != j; ++i)
@@ -68,8 +70,9 @@ void node::setChildren(const dodoArray<node> &a_children)
 
 //-------------------------------------------------------------------
 
-dodoArray<node>node::getChildren(const dodoString &name,
-								 bool             recursive)
+dodoArray<node>
+node::getChildren(const dodoString &name,
+				  bool             recursive)
 {
 	dodoArray<node> nodes = children[name];
 
@@ -91,7 +94,8 @@ dodoArray<node>node::getChildren(const dodoString &name,
 
 //-------------------------------------------------------------------
 
-dodo::dodoStringArray node::getChildrenNames(bool recursive)
+dodo::dodoStringArray
+node::getChildrenNames(bool recursive)
 {
 	dodoStringArray names;
 
@@ -150,8 +154,9 @@ node::operator[](const dodoString &name)
 
 //-------------------------------------------------------------------
 
-void node::setValue(const dodoString &a_value,
-					bool             a_CDATA)
+void
+node::setValue(const dodoString &a_value,
+			   bool             a_CDATA)
 {
 	CDATA = a_CDATA;
 	value = a_value;
@@ -159,7 +164,8 @@ void node::setValue(const dodoString &a_value,
 
 //-------------------------------------------------------------------
 
-dodoString node::getValue()
+dodoString
+node::getValue()
 {
 	return value;
 }

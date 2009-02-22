@@ -108,9 +108,10 @@ temp::~temp()
 
 //-------------------------------------------------------------------
 
-int temp::getInDescriptor() const
+int
+temp::getInDescriptor() const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -122,9 +123,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-int temp::getOutDescriptor() const
+int
+temp::getOutDescriptor() const
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -136,9 +138,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void temp::clone(const temp &fd)
+void
+temp::clone(const temp &fd)
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (handler != NULL)
 	{
@@ -184,9 +187,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void temp::close()
+void
+temp::close()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = TEMP_OPERATION_CLOSE;
@@ -210,9 +214,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void temp::open()
+void
+temp::open()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	operType = TEMP_OPERATION_OPEN;
@@ -242,7 +247,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void temp::_read(char * const a_data)
+void
+temp::_read(char * const a_data)
 {
 	if (handler == NULL)
 	{
@@ -284,7 +290,8 @@ void temp::_read(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void temp::_write(const char *const a_data)
+void
+temp::_write(const char *const a_data)
 {
 	if (handler == NULL)
 	{
@@ -352,9 +359,10 @@ void temp::_write(const char *const a_data)
 
 //-------------------------------------------------------------------
 
-void temp::erase()
+void
+temp::erase()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	char *empty = new char[outSize];
 
@@ -383,9 +391,10 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-void temp::flush()
+void
+temp::flush()
 {
-pc::sync::protector pg(keeper);
+	pc::sync::protector pg(keeper);
 
 	if (handler == NULL)
 	{
@@ -400,7 +409,8 @@ pc::sync::protector pg(keeper);
 
 //-------------------------------------------------------------------
 
-unsigned long temp::_readStream(char * const a_data)
+unsigned long
+temp::_readStream(char * const a_data)
 {
 	if (handler == NULL)
 	{
@@ -422,14 +432,14 @@ unsigned long temp::_readStream(char * const a_data)
 			{
 				switch (errno)
 				{
-					case EIO:
-					case EINTR:
-					case EBADF:
-					case EOVERFLOW:
-					case ENOMEM:
-					case ENXIO:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOMEM:
+				case ENXIO:
 
-						throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_FILEISSHORTERTHANGIVENPOSITION, IOFILETEMPEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__);
@@ -471,7 +481,8 @@ unsigned long temp::_readStream(char * const a_data)
 
 //-------------------------------------------------------------------
 
-void temp::_writeStream(const char *const a_data)
+void
+temp::_writeStream(const char *const a_data)
 {
 	if (handler == NULL)
 	{

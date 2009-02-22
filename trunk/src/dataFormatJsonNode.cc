@@ -78,7 +78,8 @@ node::~node()
 
 //-------------------------------------------------------------------
 
-void node::setString(const dodoString &value)
+void
+node::setString(const dodoString &value)
 {
 	valueDataType = DATATYPE_STRING;
 
@@ -87,7 +88,8 @@ void node::setString(const dodoString &value)
 
 //-------------------------------------------------------------------
 
-void node::setBoolean(bool value)
+void
+node::setBoolean(bool value)
 {
 	valueDataType = DATATYPE_BOOLEAN;
 
@@ -96,7 +98,8 @@ void node::setBoolean(bool value)
 
 //-------------------------------------------------------------------
 
-void node::setNumeric(long value)
+void
+node::setNumeric(long value)
 {
 	valueDataType = DATATYPE_NUMERIC;
 
@@ -105,14 +108,16 @@ void node::setNumeric(long value)
 
 //-------------------------------------------------------------------
 
-void node::setNull()
+void
+node::setNull()
 {
 	valueDataType = DATATYPE_NULL;
 }
 
 //-------------------------------------------------------------------
 
-void node::addArrayElement(const node &value)
+void
+node::addArrayElement(const node &value)
 {
 	valueDataType = DATATYPE_ARRAY;
 
@@ -121,8 +126,9 @@ void node::addArrayElement(const node &value)
 
 //-------------------------------------------------------------------
 
-void node::addObjectMember(const dodoString &name,
-						   const node       &value)
+void
+node::addObjectMember(const dodoString &name,
+					  const node       &value)
 {
 	valueDataType = DATATYPE_OBJECT;
 
@@ -131,7 +137,8 @@ void node::addObjectMember(const dodoString &name,
 
 //-------------------------------------------------------------------
 
-void node::setArray(const dodoArray<node> &value)
+void
+node::setArray(const dodoArray<node> &value)
 {
 	valueDataType = DATATYPE_ARRAY;
 
@@ -140,7 +147,8 @@ void node::setArray(const dodoArray<node> &value)
 
 //-------------------------------------------------------------------
 
-void node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
+void
+node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
 {
 	valueDataType = DATATYPE_OBJECT;
 
@@ -180,14 +188,16 @@ node::operator[](unsigned long key)
 
 //-------------------------------------------------------------------
 
-short node::getType()
+short
+node::getType()
 {
 	return valueDataType;
 }
 
 //-------------------------------------------------------------------
 
-dodoString node::getString()
+dodoString
+node::getString()
 {
 	if (valueDataType != DATATYPE_STRING)
 	{
@@ -199,7 +209,8 @@ dodoString node::getString()
 
 //-------------------------------------------------------------------
 
-bool node::getBoolean()
+bool
+node::getBoolean()
 {
 	if (valueDataType != DATATYPE_BOOLEAN)
 	{
@@ -211,7 +222,8 @@ bool node::getBoolean()
 
 //-------------------------------------------------------------------
 
-long node::getNumeric()
+long
+node::getNumeric()
 {
 	if (valueDataType != DATATYPE_NUMERIC)
 	{
@@ -223,7 +235,8 @@ long node::getNumeric()
 
 //-------------------------------------------------------------------
 
-dodoArray<node>node::getArray()
+dodoArray<node>
+node::getArray()
 {
 	if (valueDataType != DATATYPE_ARRAY)
 	{
@@ -235,7 +248,8 @@ dodoArray<node>node::getArray()
 
 //-------------------------------------------------------------------
 
-dodoMap<dodoString, node, dodo::dodoMapStringCompare>node::getObject()
+dodoMap<dodoString, node, dodo::dodoMapStringCompare>
+node::getObject()
 {
 	if (valueDataType != DATATYPE_OBJECT)
 	{
@@ -247,14 +261,16 @@ dodoMap<dodoString, node, dodo::dodoMapStringCompare>node::getObject()
 
 //-------------------------------------------------------------------
 
-bool node::isNull()
+bool
+node::isNull()
 {
 	return (valueDataType == DATATYPE_NULL);
 }
 
 //-------------------------------------------------------------------
 
-void node::clear()
+void
+node::clear()
 {
 	stringValue.clear();
 	objectValue.clear();

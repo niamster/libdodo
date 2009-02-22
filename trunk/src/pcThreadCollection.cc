@@ -52,7 +52,8 @@ __threadInfo::__threadInfo() :
 
 #ifdef PTHREAD_EXT
 
-void *__threadInfo::routine(void *data)
+void *
+__threadInfo::routine(void *data)
 {
 	__threadInfo *ti = (__threadInfo *)data;
 
@@ -105,36 +106,36 @@ collection::~collection()
 
 		switch (i->action)
 		{
-			case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
+		case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
 
 #ifdef PTHREAD_EXT
 
-				pthread_detach(i->thread);
+			pthread_detach(i->thread);
 
 #endif
 
-				break;
+			break;
 
-			case COLLECTION_ONDESTRUCT_STOP:
+		case COLLECTION_ONDESTRUCT_STOP:
 
 #ifdef PTHREAD_EXT
 
-				pthread_cancel(i->thread);
+			pthread_cancel(i->thread);
 
 #endif
 
-				break;
+			break;
 
-			case COLLECTION_ONDESTRUCT_WAIT:
-			default:
+		case COLLECTION_ONDESTRUCT_WAIT:
+		default:
 
 #ifdef PTHREAD_EXT
 
-				pthread_join(i->thread, NULL);
+			pthread_join(i->thread, NULL);
 
 #endif
 
-				break;
+			break;
 		}
 
 #ifdef DL_EXT
@@ -158,19 +159,21 @@ collection::~collection()
 
 //-------------------------------------------------------------------
 
-unsigned long collection::add(job::routine func,
-							  void         *data)
+unsigned long
+collection::add(job::routine func,
+				void         *data)
 {
 	return add(func, data, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
 }
 
 //-------------------------------------------------------------------
 
-unsigned long collection::add(job::routine func,
-							  void         *data,
-							  bool         detached,
-							  short        action,
-							  int          stackSize)
+unsigned long
+collection::add(job::routine func,
+				void         *data,
+				bool         detached,
+				short        action,
+				int          stackSize)
 {
 	__threadInfo thread;
 
@@ -193,7 +196,8 @@ unsigned long collection::add(job::routine func,
 
 //-------------------------------------------------------------------
 
-bool collection::getThread(unsigned long position) const
+bool
+collection::getThread(unsigned long position) const
 {
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
@@ -211,8 +215,9 @@ bool collection::getThread(unsigned long position) const
 
 //-------------------------------------------------------------------
 
-void collection::del(unsigned long position,
-					 bool          force)
+void
+collection::del(unsigned long position,
+				bool          force)
 {
 	if (getThread(position))
 	{
@@ -268,13 +273,14 @@ void collection::del(unsigned long position,
 
 //-------------------------------------------------------------------
 
-void collection::replace(unsigned long position,
-						 job::routine  func,
-						 void          *data,
-						 bool          force,
-						 bool          detached,
-						 short         action,
-						 int           stackSize)
+void
+collection::replace(unsigned long position,
+					job::routine  func,
+					void          *data,
+					bool          force,
+					bool          detached,
+					short         action,
+					int           stackSize)
 {
 	if (getThread(position))
 	{
@@ -338,8 +344,9 @@ void collection::replace(unsigned long position,
 
 //-------------------------------------------------------------------
 
-void collection::run(unsigned long position,
-					 bool          force)
+void
+collection::run(unsigned long position,
+				bool          force)
 {
 	if (getThread(position))
 	{
@@ -391,7 +398,8 @@ void collection::run(unsigned long position,
 
 //-------------------------------------------------------------------
 
-int collection::wait(unsigned long position)
+int
+collection::wait(unsigned long position)
 {
 	if (getThread(position))
 	{
@@ -432,7 +440,8 @@ int collection::wait(unsigned long position)
 
 //-------------------------------------------------------------------
 
-void collection::wait()
+void
+collection::wait()
 {
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
@@ -459,7 +468,8 @@ void collection::wait()
 
 //-------------------------------------------------------------------
 
-void collection::stop(unsigned long position)
+void
+collection::stop(unsigned long position)
 {
 	if (getThread(position))
 	{
@@ -483,7 +493,8 @@ void collection::stop(unsigned long position)
 
 //-------------------------------------------------------------------
 
-void collection::stop()
+void
+collection::stop()
 {
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
@@ -510,7 +521,8 @@ void collection::stop()
 //-------------------------------------------------------------------
 
 
-bool collection::isRunning(unsigned long position) const
+bool
+collection::isRunning(unsigned long position) const
 {
 	if (getThread(position))
 	{
@@ -524,7 +536,8 @@ bool collection::isRunning(unsigned long position) const
 
 //-------------------------------------------------------------------
 
-bool collection::_isRunning(dodoList<__threadInfo>::iterator &position) const
+bool
+collection::_isRunning(dodoList<__threadInfo>::iterator &position) const
 {
 	if (!position->isRunning)
 	{
@@ -553,7 +566,8 @@ bool collection::_isRunning(dodoList<__threadInfo>::iterator &position) const
 
 //-------------------------------------------------------------------
 
-void collection::sweepTrash()
+void
+collection::sweepTrash()
 {
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	while (i != j)
@@ -578,8 +592,9 @@ void collection::sweepTrash()
 
 //-------------------------------------------------------------------
 
-void collection::setExecutionLimit(unsigned long position,
-								   unsigned long limit)
+void
+collection::setExecutionLimit(unsigned long position,
+							  unsigned long limit)
 {
 	if (getThread(position))
 	{
@@ -593,7 +608,8 @@ void collection::setExecutionLimit(unsigned long position,
 
 //-------------------------------------------------------------------
 
-unsigned long collection::running() const
+unsigned long
+collection::running() const
 {
 	unsigned long amount(0);
 
@@ -613,8 +629,9 @@ unsigned long collection::running() const
 
 #ifdef DL_EXT
 
-__threadMod collection::getModuleInfo(const dodoString &module,
-									  void             *toInit)
+__threadMod
+collection::getModuleInfo(const dodoString &module,
+						  void             *toInit)
 {
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -646,9 +663,10 @@ __threadMod collection::getModuleInfo(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-unsigned long collection::add(const dodoString &module,
-							  void             *data,
-							  void             *toInit)
+unsigned long
+collection::add(const dodoString &module,
+				void             *data,
+				void             *toInit)
 {
 	__threadInfo thread;
 
@@ -694,8 +712,9 @@ unsigned long collection::add(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-void collection::blockSignal(int  signals,
-							 bool block)
+void
+collection::blockSignal(int  signals,
+						bool block)
 {
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);
@@ -718,20 +737,22 @@ void collection::blockSignal(int  signals,
 
 //-------------------------------------------------------------------
 
-unsigned long collection::addNRun(job::routine func,
-								  void         *data)
+unsigned long
+collection::addNRun(job::routine func,
+					void         *data)
 {
 	return addNRun(func, data, 1, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
 }
 
 //-------------------------------------------------------------------
 
-unsigned long collection::addNRun(job::routine  func,
-								  void          *data,
-								  unsigned long limit,
-								  bool          detached,
-								  short         action,
-								  int           stackSize)
+unsigned long
+collection::addNRun(job::routine  func,
+					void          *data,
+					unsigned long limit,
+					bool          detached,
+					short         action,
+					int           stackSize)
 {
 	__threadInfo thread;
 
@@ -783,7 +804,8 @@ unsigned long collection::addNRun(job::routine  func,
 
 //-------------------------------------------------------------------
 
-dodoList<unsigned long>collection::getIds()
+dodoList<unsigned long>
+collection::getIds()
 {
 	dodoList<unsigned long> ids;
 

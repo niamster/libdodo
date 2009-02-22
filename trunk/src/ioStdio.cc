@@ -57,19 +57,22 @@ stdio::~stdio()
 
 //-------------------------------------------------------------------
 
-void stdio::open()
+void
+stdio::open()
 {
 }
 
 //-------------------------------------------------------------------
 
-void stdio::close()
+void
+stdio::close()
 {
 }
 
 //-------------------------------------------------------------------
 
-void stdio::redirectToStderr(bool toStderr)
+void
+stdio::redirectToStderr(bool toStderr)
 {
 	if (err == toStderr)
 	{
@@ -90,14 +93,16 @@ void stdio::redirectToStderr(bool toStderr)
 
 //-------------------------------------------------------------------
 
-bool stdio::isRedirectedToStderr()
+bool
+stdio::isRedirectedToStderr()
 {
 	return err;
 }
 
 //-------------------------------------------------------------------
 
-void stdio::_writeStream(const char * const data)
+void
+stdio::_writeStream(const char * const data)
 {
 	unsigned long _outSize = outSize;
 

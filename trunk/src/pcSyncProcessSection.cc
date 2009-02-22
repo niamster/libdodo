@@ -169,7 +169,8 @@ section::~section()
 
 //-------------------------------------------------------------------
 
-void section::close()
+void
+section::close()
 {
 #ifdef XSI_IPC
 
@@ -231,7 +232,8 @@ void section::close()
 
 //-------------------------------------------------------------------
 
-void section::open(int a_key)
+void
+section::open(int a_key)
 {
 	close();
 
@@ -296,7 +298,8 @@ void section::open(int a_key)
 
 //-------------------------------------------------------------------
 
-void section::remove(int a_key)
+void
+section::remove(int a_key)
 {
 #ifdef XSI_IPC
 
@@ -330,7 +333,8 @@ void section::remove(int a_key)
 
 //-------------------------------------------------------------------
 
-void section::acquire()
+void
+section::acquire()
 {
 #ifdef XSI_IPC
 
@@ -372,7 +376,8 @@ void section::acquire()
 
 //-------------------------------------------------------------------
 
-void section::release()
+void
+section::release()
 {
 #ifdef XSI_IPC
 
