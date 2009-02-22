@@ -195,68 +195,68 @@ sqlite::fetchRows() const
 	{
 		switch (sqlite3_step(sqliteResult))
 		{
-		case SQLITE_BUSY:
+			case SQLITE_BUSY:
 
-			continue;
+				continue;
 
-		case SQLITE_DONE:
+			case SQLITE_DONE:
 
-			iterate = false;
+				iterate = false;
 
-			break;
+				break;
 
-		case SQLITE_ERROR:
+			case SQLITE_ERROR:
 
-			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHROWS, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHROWS, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
-		case SQLITE_ROW:
+			case SQLITE_ROW:
 
-			rowsPart.clear();
+				rowsPart.clear();
 
 #ifndef USE_DEQUE
-			rowsPart.reserve(numFields);
+				rowsPart.reserve(numFields);
 #endif
 
-			for (i = 0; i < numFields; ++i)
-			{
-				switch (sqlite3_column_type(sqliteResult, i))
+				for (i = 0; i < numFields; ++i)
 				{
-				case SQLITE_INTEGER:
+					switch (sqlite3_column_type(sqliteResult, i))
+					{
+						case SQLITE_INTEGER:
 
-					rowsPart.push_back(tools::string::iToString(sqlite3_column_int(sqliteResult, i)));
+							rowsPart.push_back(tools::string::iToString(sqlite3_column_int(sqliteResult, i)));
 
-					break;
+							break;
 
-				case SQLITE_FLOAT:
+						case SQLITE_FLOAT:
 
-					rowsPart.push_back(tools::string::dToString(sqlite3_column_double(sqliteResult, i)));
+							rowsPart.push_back(tools::string::dToString(sqlite3_column_double(sqliteResult, i)));
 
-					break;
+							break;
 
-				case SQLITE_TEXT:
+						case SQLITE_TEXT:
 
-					rowsPart.push_back(dodoString((const char *)sqlite3_column_text(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i)));
+							rowsPart.push_back(dodoString((const char *)sqlite3_column_text(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i)));
 
-					break;
+							break;
 
-				case SQLITE_BLOB:
+						case SQLITE_BLOB:
 
-					rowsPart.push_back(dodoString((const char *)sqlite3_column_blob(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i)));
+							rowsPart.push_back(dodoString((const char *)sqlite3_column_blob(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i)));
 
-					break;
+							break;
 
-				case SQLITE_NULL:
-				default:
+						case SQLITE_NULL:
+						default:
 
-					rowsPart.push_back(statements[SQLCONSTRUCTOR_STATEMENT_NULL]);
+							rowsPart.push_back(statements[SQLCONSTRUCTOR_STATEMENT_NULL]);
 
-					break;
+							break;
+					}
 				}
-			}
 
-			rows.push_back(rowsPart);
+				rows.push_back(rowsPart);
 
-			break;
+				break;
 		}
 	}
 
@@ -338,25 +338,25 @@ sqlite::rowsCount() const
 			result = sqlite3_step(sqliteResult);
 			switch (result)
 			{
-			case SQLITE_BUSY:
+				case SQLITE_BUSY:
 
-				continue;
+					continue;
 
-			case SQLITE_DONE:
+				case SQLITE_DONE:
 
-				iterate = false;
+					iterate = false;
 
-				break;
+					break;
 
-			case SQLITE_ERROR:
+				case SQLITE_ERROR:
 
-				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHROWS, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHROWS, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
-			case SQLITE_ROW:
+				case SQLITE_ROW:
 
-				++numRows;
+					++numRows;
 
-				break;
+					break;
 			}
 		}
 
@@ -566,75 +566,75 @@ sqlite::getFieldsTypes(const dodoString &table)
 	{
 		switch (sqlite3_step(sqliteResult))
 		{
-		case SQLITE_BUSY:
+			case SQLITE_BUSY:
 
-			continue;
+				continue;
 
-		case SQLITE_DONE:
+			case SQLITE_DONE:
 
-			iterate = false;
+				iterate = false;
 
-			break;
+				break;
 
-		case SQLITE_ERROR:
+			case SQLITE_ERROR:
 
-			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
-		case SQLITE_ROW:
+			case SQLITE_ROW:
 
-			columnName = (const char *)sqlite3_column_text(sqliteResult, 1);
-			columnType = (const char *)sqlite3_column_text(sqliteResult, 2);
+				columnName = (const char *)sqlite3_column_text(sqliteResult, 1);
+				columnType = (const char *)sqlite3_column_text(sqliteResult, 2);
 
-			field = types->second.find(columnName);
+				field = types->second.find(columnName);
 
-			if (field == fieldsEnd)
-			{
-				if (strcasestr(columnType, "char") != NULL ||
-					strcasestr(columnType, "date") != NULL ||
-					strcasestr(columnType, "time") != NULL ||
-					strcasestr(columnType, "text") != NULL ||
-					strcasestr(columnType, "enum") != NULL ||
-					strcasestr(columnType, "set") != NULL)
+				if (field == fieldsEnd)
 				{
-					types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_TEXT));
-				}
-				else
-				{
-					if (strcasestr(columnType, "blob") != NULL)
+					if (strcasestr(columnType, "char") != NULL ||
+						strcasestr(columnType, "date") != NULL ||
+						strcasestr(columnType, "time") != NULL ||
+						strcasestr(columnType, "text") != NULL ||
+						strcasestr(columnType, "enum") != NULL ||
+						strcasestr(columnType, "set") != NULL)
 					{
-						types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_BINARY));
+						types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_TEXT));
 					}
 					else
 					{
-						types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_NUMERIC));
+						if (strcasestr(columnType, "blob") != NULL)
+						{
+							types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_BINARY));
+						}
+						else
+						{
+							types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_NUMERIC));
+						}
 					}
-				}
-			}
-			else
-			{
-				if (strcasestr(columnType, "char") != NULL ||
-					strcasestr(columnType, "date") != NULL ||
-					strcasestr(columnType, "time") != NULL ||
-					strcasestr(columnType, "text") != NULL ||
-					strcasestr(columnType, "enum") != NULL ||
-					strcasestr(columnType, "set") != NULL)
-				{
-					field->second = sql::FIELDTYPE_TEXT;
 				}
 				else
 				{
-					if (strcasestr(columnType, "blob") != NULL)
+					if (strcasestr(columnType, "char") != NULL ||
+						strcasestr(columnType, "date") != NULL ||
+						strcasestr(columnType, "time") != NULL ||
+						strcasestr(columnType, "text") != NULL ||
+						strcasestr(columnType, "enum") != NULL ||
+						strcasestr(columnType, "set") != NULL)
 					{
-						field->second = sql::FIELDTYPE_BINARY;
+						field->second = sql::FIELDTYPE_TEXT;
 					}
 					else
 					{
-						field->second = sql::FIELDTYPE_NUMERIC;
+						if (strcasestr(columnType, "blob") != NULL)
+						{
+							field->second = sql::FIELDTYPE_BINARY;
+						}
+						else
+						{
+							field->second = sql::FIELDTYPE_NUMERIC;
+						}
 					}
 				}
-			}
 
-			break;
+				break;
 		}
 	}
 
@@ -1077,64 +1077,64 @@ sqlite::fetchFieldsToRows() const
 	{
 		switch (sqlite3_step(sqliteResult))
 		{
-		case SQLITE_BUSY:
+			case SQLITE_BUSY:
 
-			continue;
+				continue;
 
-		case SQLITE_DONE:
+			case SQLITE_DONE:
 
-			iterate = false;
+				iterate = false;
 
-			break;
+				break;
 
-		case SQLITE_ERROR:
+			case SQLITE_ERROR:
 
-			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHFIELDSTOROWS, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHFIELDSTOROWS, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
-		case SQLITE_ROW:
+			case SQLITE_ROW:
 
-			rowFieldsPart.clear();
+				rowFieldsPart.clear();
 
-			for (i = 0; i < numFields; ++i)
-			{
-				switch (sqlite3_column_type(sqliteResult, i))
+				for (i = 0; i < numFields; ++i)
 				{
-				case SQLITE_INTEGER:
+					switch (sqlite3_column_type(sqliteResult, i))
+					{
+						case SQLITE_INTEGER:
 
-					rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), tools::string::iToString(sqlite3_column_int(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), tools::string::iToString(sqlite3_column_int(sqliteResult, i))));
 
-					break;
+							break;
 
-				case SQLITE_FLOAT:
+						case SQLITE_FLOAT:
 
-					rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), tools::string::dToString(sqlite3_column_double(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), tools::string::dToString(sqlite3_column_double(sqliteResult, i))));
 
-					break;
+							break;
 
-				case SQLITE_TEXT:
+						case SQLITE_TEXT:
 
-					rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), dodoString((const char *)sqlite3_column_text(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), dodoString((const char *)sqlite3_column_text(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i))));
 
-					break;
+							break;
 
-				case SQLITE_BLOB:
+						case SQLITE_BLOB:
 
-					rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), dodoString((const char *)sqlite3_column_blob(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), dodoString((const char *)sqlite3_column_blob(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i))));
 
-					break;
+							break;
 
-				case SQLITE_NULL:
-				default:
+						case SQLITE_NULL:
+						default:
 
-					rowFieldsPart.insert(make_pair(dodoString(sqlite3_column_name(sqliteResult, i)), statements[SQLCONSTRUCTOR_STATEMENT_NULL]));
+							rowFieldsPart.insert(make_pair(dodoString(sqlite3_column_name(sqliteResult, i)), statements[SQLCONSTRUCTOR_STATEMENT_NULL]));
 
-					break;
+							break;
+					}
 				}
-			}
 
-			rowsFields.push_back(rowFieldsPart);
+				rowsFields.push_back(rowFieldsPart);
 
-			break;
+				break;
 		}
 	}
 

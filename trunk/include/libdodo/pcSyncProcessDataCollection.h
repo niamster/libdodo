@@ -123,7 +123,7 @@ namespace dodo
 
 						dodoList<pc::sync::data::__info>::iterator current; ///< iterator for list of shared data[for matched with getShare method]
 
-						section *keeper;									///< section locker
+						section *keeper;                                    ///< section locker
 					};
 				};
 			};

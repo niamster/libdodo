@@ -33,13 +33,17 @@
 
 using namespace dodo::cgi::fast;
 
-exchange::exchange(exchange &cf)
+exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
+								   channel(cf.protection)
 {
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange(FCGX_Request *a_request) : request(a_request)
+exchange::exchange(FCGX_Request *a_request,
+				   short        protection) : request(a_request),
+											  dodo::cgi::exchange(protection),
+											  channel(protection)
 {
 #ifndef IO_WO_XEXEC
 

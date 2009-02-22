@@ -438,56 +438,56 @@ code::hexToChar(char first,
 
 	switch (first)
 	{
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
 
-		val = 16 * (int(first) - 48);
+			val = 16 * (int(first) - 48);
 
-		break;
+			break;
 
-	default:
+		default:
 
-		if (first > 90)
-		{
-			first -= 32;
-		}
+			if (first > 90)
+			{
+				first -= 32;
+			}
 
-		val = 16 * int(first) - 55;
+			val = 16 * int(first) - 55;
 	}
 
 	switch (second)
 	{
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
 
-		val += int(second) - 48;
+			val += int(second) - 48;
 
-		break;
+			break;
 
-	default:
+		default:
 
-		if (second > 90)
-		{
-			second -= 32;
-		}
+			if (second > 90)
+			{
+				second -= 32;
+			}
 
-		val += int(second) - 55;
+			val += int(second) - 55;
 	}
 
 	return char(val);
@@ -509,37 +509,6 @@ code::hexToLong(const dodoString &string)
 	char first = string[i];
 	switch (first)
 	{
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-
-		val = int(first) - 48;
-
-		break;
-
-	default:
-
-		if (first > 90)
-		{
-			first -= 32;
-		}
-
-		val = int(first) - 55;
-	}
-	--i;
-
-	for (long j = 1; i >= 0; --i, ++j)
-	{
-		first = string[i];
-		switch (first)
-		{
 		case '0':
 		case '1':
 		case '2':
@@ -551,7 +520,7 @@ code::hexToLong(const dodoString &string)
 		case '8':
 		case '9':
 
-			val += (2 << ((4 * j) - 1)) * (int(first) - 48);
+			val = int(first) - 48;
 
 			break;
 
@@ -562,7 +531,38 @@ code::hexToLong(const dodoString &string)
 				first -= 32;
 			}
 
-			val += (2 << ((4 * j) - 1)) * (int(first) - 55);
+			val = int(first) - 55;
+	}
+	--i;
+
+	for (long j = 1; i >= 0; --i, ++j)
+	{
+		first = string[i];
+		switch (first)
+		{
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+
+				val += (2 << ((4 * j) - 1)) * (int(first) - 48);
+
+				break;
+
+			default:
+
+				if (first > 90)
+				{
+					first -= 32;
+				}
+
+				val += (2 << ((4 * j) - 1)) * (int(first) - 55);
 		}
 	}
 
@@ -608,29 +608,29 @@ code::decodeUrl(const dodoString &string)
 	{
 		switch (string[o])
 		{
-		case '+':
+			case '+':
 
-			result.append(1, ' ');
+				result.append(1, ' ');
 
-			break;
+				break;
 
-		case '%':
+			case '%':
 
-			if ((k - o) >= 2 && std::isxdigit(string[o + 1]) && std::isxdigit(string[o + 2]))
-			{
-				result.append(1, code::hexToChar(string[o + 1], string[o + 2]));
-				o += 2;
-			}
-			else
-			{
-				result.append(1, '%');
-			}
+				if ((k - o) >= 2 && std::isxdigit(string[o + 1]) && std::isxdigit(string[o + 2]))
+				{
+					result.append(1, code::hexToChar(string[o + 1], string[o + 2]));
+					o += 2;
+				}
+				else
+				{
+					result.append(1, '%');
+				}
 
-			break;
+				break;
 
-		default:
+			default:
 
-			result.append(1, string[o]);
+				result.append(1, string[o]);
 		}
 	}
 
@@ -651,88 +651,88 @@ code::encodeUrl(const dodoString &string)
 	{
 		switch (string[i])
 		{
-		case ' ':
+			case ' ':
 
-			result.append(1, '+');
+				result.append(1, '+');
 
-			break;
+				break;
 
-		case 'A':
-		case 'B':
-		case 'C':
-		case 'D':
-		case 'E':
-		case 'F':
-		case 'G':
-		case 'H':
-		case 'I':
-		case 'J':
-		case 'K':
-		case 'L':
-		case 'M':
-		case 'N':
-		case 'O':
-		case 'P':
-		case 'Q':
-		case 'R':
-		case 'S':
-		case 'T':
-		case 'U':
-		case 'V':
-		case 'W':
-		case 'X':
-		case 'Y':
-		case 'Z':
-		case 'a':
-		case 'b':
-		case 'c':
-		case 'd':
-		case 'e':
-		case 'f':
-		case 'g':
-		case 'h':
-		case 'i':
-		case 'j':
-		case 'k':
-		case 'l':
-		case 'm':
-		case 'n':
-		case 'o':
-		case 'p':
-		case 'q':
-		case 'r':
-		case 's':
-		case 't':
-		case 'u':
-		case 'v':
-		case 'w':
-		case 'x':
-		case 'y':
-		case 'z':
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-		case '-':
-		case '_':
-		case '.':
-		case '~':
+			case 'A':
+			case 'B':
+			case 'C':
+			case 'D':
+			case 'E':
+			case 'F':
+			case 'G':
+			case 'H':
+			case 'I':
+			case 'J':
+			case 'K':
+			case 'L':
+			case 'M':
+			case 'N':
+			case 'O':
+			case 'P':
+			case 'Q':
+			case 'R':
+			case 'S':
+			case 'T':
+			case 'U':
+			case 'V':
+			case 'W':
+			case 'X':
+			case 'Y':
+			case 'Z':
+			case 'a':
+			case 'b':
+			case 'c':
+			case 'd':
+			case 'e':
+			case 'f':
+			case 'g':
+			case 'h':
+			case 'i':
+			case 'j':
+			case 'k':
+			case 'l':
+			case 'm':
+			case 'n':
+			case 'o':
+			case 'p':
+			case 'q':
+			case 'r':
+			case 's':
+			case 't':
+			case 'u':
+			case 'v':
+			case 'w':
+			case 'x':
+			case 'y':
+			case 'z':
+			case '0':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+			case '-':
+			case '_':
+			case '.':
+			case '~':
 
-			result.append(1, string[i]);
+				result.append(1, string[i]);
 
-			break;
+				break;
 
-		default:
+			default:
 
-			result.append(1, '%');
-			charToHex(temp, string[i]);
-			result.append(temp);
+				result.append(1, '%');
+				charToHex(temp, string[i]);
+				result.append(temp);
 		}
 	}
 
@@ -746,7 +746,7 @@ code::_encodeASCII85(dodoString    &result,
 					 unsigned long tuple,
 					 int           count)
 {
-	short int i(5);
+	short i(5);
 	char buf[5], *s = buf;
 
 	do
@@ -777,41 +777,41 @@ code::encodeASCII85(const dodoString &string)
 	{
 		switch (count++)
 		{
-		case 0:
+			case 0:
 
-			tuple |= (string[k] << 24);
+				tuple |= (string[k] << 24);
 
-			break;
+				break;
 
-		case 1:
+			case 1:
 
-			tuple |= (string[k] << 16);
+				tuple |= (string[k] << 16);
 
-			break;
+				break;
 
-		case 2:
+			case 2:
 
-			tuple |= (string[k] <<  8);
+				tuple |= (string[k] <<  8);
 
-			break;
+				break;
 
-		case 3:
+			case 3:
 
-			tuple |= string[k];
+				tuple |= string[k];
 
-			if (tuple == 0)
-			{
-				result.append(1, 'z');
-			}
-			else
-			{
-				code::_encodeASCII85(result, tuple, count);
-			}
+				if (tuple == 0)
+				{
+					result.append(1, 'z');
+				}
+				else
+				{
+					code::_encodeASCII85(result, tuple, count);
+				}
 
-			tuple = 0;
-			count = 0;
+				tuple = 0;
+				count = 0;
 
-			break;
+				break;
 		}
 	}
 
@@ -834,35 +834,35 @@ code::_decodeASCII85(dodoString    &result,
 {
 	switch (count)
 	{
-	case 4:
+		case 4:
 
-		result.append(1, (char)(tuple >> 24));
-		result.append(1, (char)(tuple >> 16));
-		result.append(1, (char)(tuple >>  8));
-		result.append(1, (char)(tuple));
+			result.append(1, (char)(tuple >> 24));
+			result.append(1, (char)(tuple >> 16));
+			result.append(1, (char)(tuple >>  8));
+			result.append(1, (char)(tuple));
 
-		break;
+			break;
 
-	case 3:
+		case 3:
 
-		result.append(1, (char)(tuple >> 24));
-		result.append(1, (char)(tuple >> 16));
-		result.append(1, (char)(tuple >>  8));
+			result.append(1, (char)(tuple >> 24));
+			result.append(1, (char)(tuple >> 16));
+			result.append(1, (char)(tuple >>  8));
 
-		break;
+			break;
 
-	case 2:
+		case 2:
 
-		result.append(1, (char)(tuple >> 24));
-		result.append(1, (char)(tuple >> 16));
+			result.append(1, (char)(tuple >> 24));
+			result.append(1, (char)(tuple >> 16));
 
-		break;
+			break;
 
-	case 1:
+		case 1:
 
-		result.append(1, (char)(tuple >> 24));
+			result.append(1, (char)(tuple >> 24));
 
-		break;
+			break;
 	}
 }
 
@@ -886,60 +886,60 @@ code::decodeASCII85(const dodoString &string)
 				{
 					switch (string[++k])
 					{
-					case 'z':
+						case 'z':
 
-						if (count != 0)
-						{
-							throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
-						}
-
-						result.append(4, '\0');
-
-						break;
-
-					case '~':
-
-						if ((k - j) >= 1 && string[++k] == '>')
-						{
-							if (count > 0)
+							if (count != 0)
 							{
-								count--;
-								tuple += powASCII85[count];
-								_decodeASCII85(result, tuple, count);
+								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 							}
-							++k;
-							_break = true;
+
+							result.append(4, '\0');
 
 							break;
-						}
 
-						throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+						case '~':
 
-					case '\n':
-					case '\r':
-					case '\t':
-					case ' ':
-					case '\0':
-					case '\f':
-					case '\b':
-					case 0177:
+							if ((k - j) >= 1 && string[++k] == '>')
+							{
+								if (count > 0)
+								{
+									count--;
+									tuple += powASCII85[count];
+									_decodeASCII85(result, tuple, count);
+								}
+								++k;
+								_break = true;
 
-						break;
+								break;
+							}
 
-					default:
-
-						if (string[k] < '!' || string[k] > 'u')
-						{
 							throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
-						}
 
-						tuple += (string[k] - '!') * powASCII85[count++];
-						if (count == 5)
-						{
-							_decodeASCII85(result, tuple, 4);
-							count = 0;
-							tuple = 0;
-						}
+						case '\n':
+						case '\r':
+						case '\t':
+						case ' ':
+						case '\0':
+						case '\f':
+						case '\b':
+						case 0177:
+
+							break;
+
+						default:
+
+							if (string[k] < '!' || string[k] > 'u')
+							{
+								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+							}
+
+							tuple += (string[k] - '!') * powASCII85[count++];
+							if (count == 5)
+							{
+								_decodeASCII85(result, tuple, 4);
+								count = 0;
+								tuple = 0;
+							}
 					}
 				}
 			}

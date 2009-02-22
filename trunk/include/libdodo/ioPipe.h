@@ -76,8 +76,10 @@ namespace dodo
 			/**
 			 * constructor
 			 * @param open defines whether pipe should be opened in constructor
+			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 			 */
-			pipe(bool open = false);
+			pipe(bool  open = false,
+				 short protection = CHANNEL_PROTECTION_PROCESS);
 
 			/**
 			 * destructor

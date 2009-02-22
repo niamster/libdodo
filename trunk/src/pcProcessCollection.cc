@@ -71,22 +71,22 @@ collection::~collection()
 
 		switch (i->action)
 		{
-		case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
+			case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
 
-			waitpid(i->pid, NULL, WNOHANG);
+				waitpid(i->pid, NULL, WNOHANG);
 
-			break;
+				break;
 
-		case COLLECTION_ONDESTRUCT_STOP:
+			case COLLECTION_ONDESTRUCT_STOP:
 
-			kill(i->pid, 2);
+				kill(i->pid, 2);
 
-			break;
+				break;
 
-		case COLLECTION_ONDESTRUCT_WAIT:
-		default:
+			case COLLECTION_ONDESTRUCT_WAIT:
+			default:
 
-			waitpid(i->pid, NULL, 0);
+				waitpid(i->pid, NULL, 0);
 		}
 
 #ifdef DL_EXT

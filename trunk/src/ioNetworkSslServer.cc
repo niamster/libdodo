@@ -127,33 +127,33 @@ server::setSertificates(const io::ssl::__certificates &certs)
 	{
 		switch (certs.keyType)
 		{
-		case io::ssl::KEYTYPE_PKEY:
+			case io::ssl::KEYTYPE_PKEY:
 
-			if (SSL_CTX_use_PrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
-			{
-				unsigned long nerr = ERR_get_error();
-				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-			}
+				if (SSL_CTX_use_PrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
+				{
+					unsigned long nerr = ERR_get_error();
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
 
-			keySet = true;
+				keySet = true;
 
-			break;
+				break;
 
-		case io::ssl::KEYTYPE_RSA:
+			case io::ssl::KEYTYPE_RSA:
 
-			if (SSL_CTX_use_RSAPrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
-			{
-				unsigned long nerr = ERR_get_error();
-				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-			}
+				if (SSL_CTX_use_RSAPrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
+				{
+					unsigned long nerr = ERR_get_error();
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
 
-			keySet = true;
+				keySet = true;
 
-			break;
+				break;
 
-		default:
+			default:
 
-			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_LIBDODO, SERVEREX_UNKNOWNKEYTYPE, IONETWORKSSLSERVEREX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_LIBDODO, SERVEREX_UNKNOWNKEYTYPE, IONETWORKSSLSERVEREX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
 		}
 	}
 	else
@@ -234,46 +234,46 @@ server::acceptSsl(__initialAccept &init)
 	int res = SSL_accept(init.sslHandle);
 	switch (res)
 	{
-	case 1:
-		break;
-
-	case 0:
-	{
-		unsigned long nerr = ERR_get_error();
-		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-	}
-
-	case - 1:
-	{
-		int nerr = SSL_get_error(init.sslHandle, res);
-		if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
-		{
+		case 1:
 			break;
-		}
-	}
 
-	default:
-	{
-		unsigned long nerr = ERR_get_error();
-
-		int err = SSL_shutdown(init.sslHandle);
-		if (err < 0)
+		case 0:
 		{
-			nerr = ERR_get_error();
+			unsigned long nerr = ERR_get_error();
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
-		if (err == 0)
+
+		case - 1:
 		{
-			err = SSL_shutdown(init.sslHandle);
+			int nerr = SSL_get_error(init.sslHandle, res);
+			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
+			{
+				break;
+			}
+		}
+
+		default:
+		{
+			unsigned long nerr = ERR_get_error();
+
+			int err = SSL_shutdown(init.sslHandle);
 			if (err < 0)
 			{
 				nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
-		}
+			if (err == 0)
+			{
+				err = SSL_shutdown(init.sslHandle);
+				if (err < 0)
+				{
+					nerr = ERR_get_error();
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
+			}
 
-		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-	}
+			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+		}
 	}
 }
 
@@ -452,83 +452,83 @@ server::accept(__initialAccept &init,
 
 	switch (family)
 	{
-	case CONNECTION_PROTO_FAMILY_IPV4:
-	{
-		struct sockaddr_in sa;
-		socklen_t len = sizeof(sockaddr_in);
-		sock = ::accept(socket, (sockaddr *)&sa, &len);
-
-		if (sock == -1)
+		case CONNECTION_PROTO_FAMILY_IPV4:
 		{
-			if (errno == EAGAIN)
+			struct sockaddr_in sa;
+			socklen_t len = sizeof(sockaddr_in);
+			sock = ::accept(socket, (sockaddr *)&sa, &len);
+
+			if (sock == -1)
 			{
-				return false;
+				if (errno == EAGAIN)
+				{
+					return false;
+				}
+				else
+				{
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 			}
-			else
+
+			char temp[INET_ADDRSTRLEN];
+			if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
 			{
-				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				info.host.assign(temp);
 			}
+			info.port = ntohs(sa.sin_port);
+
+			break;
 		}
 
-		char temp[INET_ADDRSTRLEN];
-		if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
+		case CONNECTION_PROTO_FAMILY_IPV6:
 		{
-			info.host.assign(temp);
-		}
-		info.port = ntohs(sa.sin_port);
+			struct sockaddr_in6 sa;
+			socklen_t len = sizeof(sockaddr_in6);
 
-		break;
-	}
+			sock = ::accept(socket, (sockaddr *)&sa, &len);
 
-	case CONNECTION_PROTO_FAMILY_IPV6:
-	{
-		struct sockaddr_in6 sa;
-		socklen_t len = sizeof(sockaddr_in6);
-
-		sock = ::accept(socket, (sockaddr *)&sa, &len);
-
-		if (sock == -1)
-		{
-			if (errno == EAGAIN)
+			if (sock == -1)
 			{
-				return false;
+				if (errno == EAGAIN)
+				{
+					return false;
+				}
+				else
+				{
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 			}
-			else
+
+			char temp[INET6_ADDRSTRLEN];
+			if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
 			{
-				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				info.host.assign(temp);
 			}
-		}
+			info.port = ntohs(sa.sin6_port);
 
-		char temp[INET6_ADDRSTRLEN];
-		if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
-		{
-			info.host.assign(temp);
-		}
-		info.port = ntohs(sa.sin6_port);
-
-		break;
-	}
-
-	case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
-
-		sock = ::accept(socket, NULL, NULL);
-		if (sock == -1)
-		{
-			if (errno == EAGAIN)
-			{
-				return false;
-			}
-			else
-			{
-				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
+			break;
 		}
 
-		break;
+		case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
 
-	default:
+			sock = ::accept(socket, NULL, NULL);
+			if (sock == -1)
+			{
+				if (errno == EAGAIN)
+				{
+					return false;
+				}
+				else
+				{
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
+			}
 
-		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSSLSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			break;
+
+		default:
+
+			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSSLSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	init.socket = sock;

@@ -118,46 +118,46 @@ client::makeSocket()
 
 	switch (family)
 	{
-	case CONNECTION_PROTO_FAMILY_IPV4:
+		case CONNECTION_PROTO_FAMILY_IPV4:
 
-		real_domain = PF_INET;
+			real_domain = PF_INET;
 
-		break;
+			break;
 
-	case CONNECTION_PROTO_FAMILY_IPV6:
+		case CONNECTION_PROTO_FAMILY_IPV6:
 
-		real_domain = PF_INET6;
+			real_domain = PF_INET6;
 
-		break;
+			break;
 
-	case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
+		case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
 
-		real_domain = PF_UNIX;
+			real_domain = PF_UNIX;
 
-		break;
+			break;
 
-	default:
+		default:
 
-		throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	switch (type)
 	{
-	case CONNECTION_TRANSFER_TYPE_STREAM:
+		case CONNECTION_TRANSFER_TYPE_STREAM:
 
-		real_type = SOCK_STREAM;
+			real_type = SOCK_STREAM;
 
-		break;
+			break;
 
-	case CONNECTION_TRANSFER_TYPE_DATAGRAM:
+		case CONNECTION_TRANSFER_TYPE_DATAGRAM:
 
-		real_type = SOCK_DGRAM;
+			real_type = SOCK_DGRAM;
 
-		break;
+			break;
 
-	default:
+		default:
 
-		throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	socket = ::socket(real_domain, real_type, 0);

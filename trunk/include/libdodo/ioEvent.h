@@ -138,7 +138,7 @@ namespace dodo
 
 			int descs;                                  ///< descriptors counter
 
-			pc::sync::section *keeper;					///< section locker
+			pc::sync::section *keeper;                  ///< section locker
 		};
 	};
 };

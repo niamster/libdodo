@@ -42,17 +42,29 @@ __xexecIoChannelCollectedData::__xexecIoChannelCollectedData(xexec *a_executor,
 
 //-------------------------------------------------------------------
 
-channel::channel() : inSize(IO_INSIZE),
-					 outSize(IO_OUTSIZE),
-					 keeper(new pc::sync::process::section)
+channel::channel(short protection) : inSize(IO_INSIZE),
+									 outSize(IO_OUTSIZE),
+									 keeper(NULL),
+									 protection(protection)
 
 #ifndef IO_WO_XEXEC
 
-					 ,
-					 collectedData(this, XEXEC_OBJECT_XEXEC)
+									 ,
+									 collectedData(this, XEXEC_OBJECT_XEXEC)
 
 #endif
 {
+	if (protection == CHANNEL_PROTECTION_THREAD)
+	{
+		keeper = new pc::sync::thread::section;
+	}
+	else
+	{
+		if (protection == CHANNEL_PROTECTION_PROCESS)
+		{
+			keeper = new pc::sync::process::section;
+		}
+	}
 }
 
 //-------------------------------------------------------------------

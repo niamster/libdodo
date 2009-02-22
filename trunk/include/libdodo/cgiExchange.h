@@ -48,6 +48,11 @@ namespace dodo
 		  public:
 
 			/**
+			 * constructor
+			 */
+			exchange(short protection);
+
+			/**
 			 * destructor
 			 */
 			virtual ~exchange() = 0;

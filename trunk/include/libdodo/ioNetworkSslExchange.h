@@ -110,8 +110,9 @@ namespace dodo
 
 					/**
 					 * constructor
+					 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 					 */
-					exchange();
+					exchange(short protection = CHANNEL_PROTECTION_PROCESS);
 
 					/**
 					 * copy constructor
@@ -123,9 +124,11 @@ namespace dodo
 					/**
 					 * constructor
 					 * @param init is initial data[got from the ::accept method]
+					 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 					 * @note the object that has inited the object of current instance can be used for another connections
 					 */
-					exchange(__initialAccept &init);
+					exchange(__initialAccept &init,
+							 short           protection = CHANNEL_PROTECTION_PROCESS);
 
 					/**
 					 * destructor

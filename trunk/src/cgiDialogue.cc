@@ -861,29 +861,29 @@ dialogue::makePost()
 								{
 									switch (errno)
 									{
-									case EACCES:
-									case EISDIR:
+										case EACCES:
+										case EISDIR:
 
-										file.error = CGI_POSTFILEERR_ACCESS_DENY;
+											file.error = CGI_POSTFILEERR_ACCESS_DENY;
 
-										break;
+											break;
 
-									case ENAMETOOLONG:
-									case ENOTDIR:
+										case ENAMETOOLONG:
+										case ENOTDIR:
 
-										file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
+											file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
 
-										break;
+											break;
 
-									case ENOMEM:
+										case ENOMEM:
 
-										file.error = CGI_POSTFILEERR_NO_SPACE;
+											file.error = CGI_POSTFILEERR_NO_SPACE;
 
-										break;
+											break;
 
-									default:
+										default:
 
-										throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+											throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 									}
 								}
 								else

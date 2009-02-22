@@ -237,49 +237,49 @@ connection::setOption(short option,
 
 	switch (option)
 	{
-	case CONNECTION_OPTION_KEEP_ALIVE:
+		case CONNECTION_OPTION_KEEP_ALIVE:
 
-		real_option = SO_KEEPALIVE;
+			real_option = SO_KEEPALIVE;
 
-		break;
+			break;
 
-	case CONNECTION_OPTION_REUSE_ADDRESS:
+		case CONNECTION_OPTION_REUSE_ADDRESS:
 
-		real_option = SO_REUSEADDR;
+			real_option = SO_REUSEADDR;
 
-		break;
+			break;
 
-	case CONNECTION_OPTION_DONOT_USE_GATEWAY:
+		case CONNECTION_OPTION_DONOT_USE_GATEWAY:
 
-		real_option = SO_DONTROUTE;
+			real_option = SO_DONTROUTE;
 
-		break;
+			break;
 
-	case CONNECTION_OPTION_BROADCAST:
+		case CONNECTION_OPTION_BROADCAST:
 
-		real_option = SO_BROADCAST;
+			real_option = SO_BROADCAST;
 
-		break;
+			break;
 
-	case CONNECTION_OPTION_OOB_INLINE:
+		case CONNECTION_OPTION_OOB_INLINE:
 
-		real_option = SO_OOBINLINE;
+			real_option = SO_OOBINLINE;
 
-		break;
+			break;
 
 #ifdef SO_REUSEPORT
 
-	case CONNECTION_OPTION_REUSE_PORT:
+		case CONNECTION_OPTION_REUSE_PORT:
 
-		real_option = SO_REUSEPORT;
+			real_option = SO_REUSEPORT;
 
-		break;
+			break;
 
 #endif
 
-	default:
+		default:
 
-		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_WRONGPARAMETER, IONETWORKCONNECTIONEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_WRONGPARAMETER, IONETWORKCONNECTIONEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, real_option, &sockFlag, sizeof(int)) == 1)
@@ -312,29 +312,29 @@ connection::setLingerOption(short option,
 
 	switch (option)
 	{
-	case CONNECTION_LINGEROPTION_GRACEFUL_CLOSE:
+		case CONNECTION_LINGEROPTION_GRACEFUL_CLOSE:
 
-		lin.l_onoff = 0;
+			lin.l_onoff = 0;
 
-		break;
+			break;
 
-	case CONNECTION_LINGEROPTION_HARD_CLOSE:
+		case CONNECTION_LINGEROPTION_HARD_CLOSE:
 
-		lin.l_onoff = 1;
-		lin.l_linger = 0;
+			lin.l_onoff = 1;
+			lin.l_linger = 0;
 
-		break;
+			break;
 
-	case CONNECTION_LINGEROPTION_WAIT_CLOSE:
+		case CONNECTION_LINGEROPTION_WAIT_CLOSE:
 
-		lin.l_onoff = 1;
-		lin.l_linger = seconds;
+			lin.l_onoff = 1;
+			lin.l_linger = seconds;
 
-		break;
+			break;
 
-	default:
+		default:
 
-		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETLINGERSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_WRONGPARAMETER, IONETWORKCONNECTIONEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETLINGERSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_WRONGPARAMETER, IONETWORKCONNECTIONEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, SO_LINGER, &lin, sizeof(linger)) == 1)

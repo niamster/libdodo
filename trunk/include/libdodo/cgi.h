@@ -213,19 +213,19 @@ namespace dodo
 			 * @note defines struct data with user data
 			 */
 			__cgiCookie(const dodoString &name,
-						const dodoString &value,
-						const dodoString &exDate,
-						const dodoString &path,
-						const dodoString &domain,
-						bool			 secure);
+						const            dodoString &value,
+						const            dodoString &exDate,
+						const            dodoString &path,
+						const            dodoString &domain,
+						bool             secure);
 
-			dodoString name;                            ///< name of the cookie
-			dodoString value;                           ///< value of the cookie
+			dodoString name;            ///< name of the cookie
+			dodoString value;           ///< value of the cookie
 
-			dodoString expires;                         ///< expiration date
-			dodoString path;                            ///< cookie path
-			dodoString domain;                          ///< cookie domain
-			bool       secure;                          ///< defines cookie security; false by default
+			dodoString expires;         ///< expiration date
+			dodoString path;            ///< cookie path
+			dodoString domain;          ///< cookie domain
+			bool       secure;          ///< defines cookie security; false by default
 		};
 
 		/**
@@ -235,7 +235,7 @@ namespace dodo
 		{
 			CGI_REQUESTMETHOD_GET,
 			CGI_REQUESTMETHOD_POST,
-			CGI_REQUESTMETHOD_GET_POST                  ///< if POST method and request Url also contains ?name=value&.... format data
+			CGI_REQUESTMETHOD_GET_POST  ///< if POST method and request Url also contains ?name=value&.... format data
 		};
 
 		/**
@@ -254,8 +254,8 @@ namespace dodo
 		 */
 		struct __cgiAuthInfo
 		{
-			dodoString user;                            ///< user name
-			short      type;                            ///< authenfication type[see cgiAuthTypeEnum]
+			dodoString user;            ///< user name
+			short      type;            ///< authenfication type[see cgiAuthTypeEnum]
 		};
 	};
 };

@@ -31,11 +31,12 @@
 
 using namespace dodo::io::file;
 
-regular::regular() : overwrite(false),
-					 pos(0),
-					 blockOffset(true),
-					 append(false),
-					 handler(NULL)
+regular::regular(short protection) : overwrite(false),
+									 pos(0),
+									 blockOffset(true),
+									 append(false),
+									 handler(NULL),
+									 channel(protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -47,13 +48,15 @@ regular::regular() : overwrite(false),
 //-------------------------------------------------------------------
 
 regular::regular(const dodoString &a_path,
-				 short            a_mode) : overwrite(false),
-											pos(0),
-											blockOffset(true),
-											append(false),
-											handler(NULL),
-											path(a_path),
-											mode(a_mode)
+				 short            a_mode,
+				 short            protection) : overwrite(false),
+												pos(0),
+												blockOffset(true),
+												append(false),
+												handler(NULL),
+												path(a_path),
+												mode(a_mode),
+												channel(protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -90,32 +93,32 @@ regular::regular(const dodoString &a_path,
 
 		switch (mode)
 		{
-		case REGULAR_OPENMODE_READ_WRITE:
+			case REGULAR_OPENMODE_READ_WRITE:
 
-			handler = fopen(path.c_str(), "r+");
-			if (handler == NULL)
-			{
+				handler = fopen(path.c_str(), "r+");
+				if (handler == NULL)
+				{
+					handler = fopen(path.c_str(), "w+");
+				}
+
+				break;
+
+			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+
 				handler = fopen(path.c_str(), "w+");
-			}
 
-			break;
+				break;
 
-		case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+			case REGULAR_OPENMODE_APPEND:
 
-			handler = fopen(path.c_str(), "w+");
+				handler = fopen(path.c_str(), "a");
 
-			break;
+				break;
 
-		case REGULAR_OPENMODE_APPEND:
+			case REGULAR_OPENMODE_READ_ONLY:
+			default:
 
-			handler = fopen(path.c_str(), "a");
-
-			break;
-
-		case REGULAR_OPENMODE_READ_ONLY:
-		default:
-
-			handler = fopen(path.c_str(), "r");
+				handler = fopen(path.c_str(), "r");
 		}
 	}
 
@@ -138,7 +141,8 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 									  blockOffset(fd.blockOffset),
 									  append(fd.append),
 									  mode(fd.mode),
-									  handler(NULL)
+									  handler(NULL),
+									  channel(fd.protection)
 
 {
 #ifndef IO_WO_XEXEC
@@ -168,23 +172,23 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 
 		switch (mode)
 		{
-		case REGULAR_OPENMODE_READ_WRITE:
-		case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+			case REGULAR_OPENMODE_READ_WRITE:
+			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-			handler = fdopen(newDesc, "r+");
+				handler = fdopen(newDesc, "r+");
 
-			break;
+				break;
 
-		case REGULAR_OPENMODE_APPEND:
+			case REGULAR_OPENMODE_APPEND:
 
-			handler = fdopen(newDesc, "a");
+				handler = fdopen(newDesc, "a");
 
-			break;
+				break;
 
-		case REGULAR_OPENMODE_READ_ONLY:
-		default:
+			case REGULAR_OPENMODE_READ_ONLY:
+			default:
 
-			handler = fdopen(newDesc, "r");
+				handler = fdopen(newDesc, "r");
 		}
 
 		if (handler == NULL)
@@ -278,23 +282,23 @@ regular::clone(const regular &fd)
 
 		switch (mode)
 		{
-		case REGULAR_OPENMODE_READ_WRITE:
-		case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+			case REGULAR_OPENMODE_READ_WRITE:
+			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-			handler = fdopen(newDesc, "r+");
+				handler = fdopen(newDesc, "r+");
 
-			break;
+				break;
 
-		case REGULAR_OPENMODE_APPEND:
+			case REGULAR_OPENMODE_APPEND:
 
-			handler = fdopen(newDesc, "a");
+				handler = fdopen(newDesc, "a");
 
-			break;
+				break;
 
-		case REGULAR_OPENMODE_READ_ONLY:
-		default:
+			case REGULAR_OPENMODE_READ_ONLY:
+			default:
 
-			handler = fdopen(newDesc, "r");
+				handler = fdopen(newDesc, "r");
 		}
 
 		if (handler == NULL)
@@ -386,32 +390,32 @@ regular::open(const dodoString &a_path,
 
 		switch (mode)
 		{
-		case REGULAR_OPENMODE_READ_WRITE:
+			case REGULAR_OPENMODE_READ_WRITE:
 
-			handler = fopen(path.c_str(), "r+");
-			if (handler == NULL)
-			{
+				handler = fopen(path.c_str(), "r+");
+				if (handler == NULL)
+				{
+					handler = fopen(path.c_str(), "w+");
+				}
+
+				break;
+
+			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+
 				handler = fopen(path.c_str(), "w+");
-			}
 
-			break;
+				break;
 
-		case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
+			case REGULAR_OPENMODE_APPEND:
 
-			handler = fopen(path.c_str(), "w+");
+				handler = fopen(path.c_str(), "a");
 
-			break;
+				break;
 
-		case REGULAR_OPENMODE_APPEND:
+			case REGULAR_OPENMODE_READ_ONLY:
+			default:
 
-			handler = fopen(path.c_str(), "a");
-
-			break;
-
-		case REGULAR_OPENMODE_READ_ONLY:
-		default:
-
-			handler = fopen(path.c_str(), "r");
+				handler = fopen(path.c_str(), "r");
 		}
 	}
 
@@ -620,14 +624,14 @@ regular::_readStream(char * const a_data)
 			{
 				switch (errno)
 				{
-				case EIO:
-				case EINTR:
-				case EBADF:
-				case EOVERFLOW:
-				case ENOMEM:
-				case ENXIO:
+					case EIO:
+					case EINTR:
+					case EBADF:
+					case EOVERFLOW:
+					case ENOMEM:
+					case ENXIO:
 
-					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_FILEISSHORTERTHANGIVENPOSITION, IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);

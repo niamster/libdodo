@@ -82,16 +82,19 @@ namespace dodo
 
 				/**
 				 * constructor
+				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
-				fifo();
+				fifo(short protection = CHANNEL_PROTECTION_PROCESS);
 
 				/**
 				 * constructor
 				 * @param path defines path to the file
 				 * @param mode defines mode to open file[see fifoOpenmodeEnum]
+				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
 				fifo(const dodoString &path,
-					 short			  mode);
+					 short            mode,
+					 short            protection = CHANNEL_PROTECTION_PROCESS);
 
 				/**
 				 * copy constructor

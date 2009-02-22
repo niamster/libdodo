@@ -499,37 +499,37 @@ filesystem::getFileType(const dodoString &path)
 
 	switch (st.st_mode)
 	{
-	case S_IFREG:
+		case S_IFREG:
 
-		return FILESYSTEM_FILETYPE_REGULAR_FILE;
+			return FILESYSTEM_FILETYPE_REGULAR_FILE;
 
-	case S_IFDIR:
+		case S_IFDIR:
 
-		return FILESYSTEM_FILETYPE_DIRECTORY;
+			return FILESYSTEM_FILETYPE_DIRECTORY;
 
-	case S_IFLNK:
+		case S_IFLNK:
 
-		return FILESYSTEM_FILETYPE_SYMBOLIC_LINK;
+			return FILESYSTEM_FILETYPE_SYMBOLIC_LINK;
 
-	case S_IFSOCK:
+		case S_IFSOCK:
 
-		return FILESYSTEM_FILETYPE_LOCAL_SOCKET;
+			return FILESYSTEM_FILETYPE_LOCAL_SOCKET;
 
-	case S_IFBLK:
+		case S_IFBLK:
 
-		return FILESYSTEM_FILETYPE_BLOCK_DEVICE;
+			return FILESYSTEM_FILETYPE_BLOCK_DEVICE;
 
-	case S_IFCHR:
+		case S_IFCHR:
 
-		return FILESYSTEM_FILETYPE_CHARACTER_DEVICE;
+			return FILESYSTEM_FILETYPE_CHARACTER_DEVICE;
 
-	case S_IFIFO:
+		case S_IFIFO:
 
-		return FILESYSTEM_FILETYPE_FIFO;
+			return FILESYSTEM_FILETYPE_FIFO;
 
-	default:
+		default:
 
-		return -1;
+			return -1;
 	}
 }
 
@@ -703,13 +703,13 @@ filesystem::getFileContents(const dodoString &path)
 		{
 			switch (errno)
 			{
-			case EIO:
-			case EINTR:
-			case ENOMEM:
-			case EOVERFLOW:
-			case EROFS:
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:
+				case EROFS:
 
-				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 
@@ -721,13 +721,13 @@ filesystem::getFileContents(const dodoString &path)
 		{
 			switch (errno)
 			{
-			case EIO:
-			case EINTR:
-			case ENOMEM:
-			case EOVERFLOW:
-			case EROFS:
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:
+				case EROFS:
 
-				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 
@@ -926,13 +926,13 @@ filesystem::copy(const dodoString &from,
 			{
 				switch (errno)
 				{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 			}
 
@@ -940,13 +940,13 @@ filesystem::copy(const dodoString &from,
 			{
 				switch (errno)
 				{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 			}
 		}
@@ -956,13 +956,13 @@ filesystem::copy(const dodoString &from,
 			{
 				switch (errno)
 				{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 			}
 
@@ -970,13 +970,13 @@ filesystem::copy(const dodoString &from,
 			{
 				switch (errno)
 				{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 			}
 		}
@@ -1175,17 +1175,17 @@ filesystem::_writeToFile(const dodoString      &path,
 		{
 			switch (errno)
 			{
-			case EFBIG:
-			case EIO:
-			case EINTR:
-			case EBADF:
-			case EOVERFLOW:
-			case ENOSPC:
-			case EPIPE:
-			case ENOMEM:
-			case ENXIO:
+				case EFBIG:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOSPC:
+				case EPIPE:
+				case ENOMEM:
+				case ENXIO:
 
-				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 
@@ -1193,17 +1193,17 @@ filesystem::_writeToFile(const dodoString      &path,
 		{
 			switch (errno)
 			{
-			case EFBIG:
-			case EIO:
-			case EINTR:
-			case EBADF:
-			case EOVERFLOW:
-			case ENOSPC:
-			case EPIPE:
-			case ENOMEM:
-			case ENXIO:
+				case EFBIG:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOSPC:
+				case EPIPE:
+				case ENOMEM:
+				case ENXIO:
 
-				throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 	}

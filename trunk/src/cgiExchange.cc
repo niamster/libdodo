@@ -31,6 +31,13 @@
 
 using namespace dodo::cgi;
 
+
+exchange::exchange(short protection) : channel(protection)
+{
+}
+
+//-------------------------------------------------------------------
+
 exchange::~exchange()
 {
 }

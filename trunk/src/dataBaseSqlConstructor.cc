@@ -484,65 +484,65 @@ constructor::queryCollect()
 
 	switch (collectedData.qType)
 	{
-	case ACCUMULATOR_REQUEST_SELECT:
+		case ACCUMULATOR_REQUEST_SELECT:
 
-		selectCollect();
-		selectAction = true;
+			selectCollect();
+			selectAction = true;
 
-		break;
+			break;
 
-	case ACCUMULATOR_REQUEST_INSERT:
+		case ACCUMULATOR_REQUEST_INSERT:
 
-		insertCollect();
-		additionalActions = false;
+			insertCollect();
+			additionalActions = false;
 
-		break;
+			break;
 
-	case ACCUMULATOR_REQUEST_UPDATE:
+		case ACCUMULATOR_REQUEST_UPDATE:
 
-		updateCollect();
+			updateCollect();
 
-		break;
+			break;
 
-	case ACCUMULATOR_REQUEST_DELETE:
+		case ACCUMULATOR_REQUEST_DELETE:
 
-		delCollect();
+			delCollect();
 
-		break;
+			break;
 
-	case ACCUMULATOR_REQUEST_INSERT_SELECT:
+		case ACCUMULATOR_REQUEST_INSERT_SELECT:
 
-		insertSelectCollect();
-		selectAction = true;
+			insertSelectCollect();
+			selectAction = true;
 
-		break;
+			break;
 
-	case SUBREQUEST_UNION:
-	case SUBREQUEST_UNION_ALL:
-	case SUBREQUEST_MINUS:
-	case SUBREQUEST_INTERSECT:
+		case SUBREQUEST_UNION:
+		case SUBREQUEST_UNION_ALL:
+		case SUBREQUEST_MINUS:
+		case SUBREQUEST_INTERSECT:
 
-		subCollect();
-		additionalActions = false;
+			subCollect();
+			additionalActions = false;
 
-		break;
+			break;
 
-	case ACCUMULATOR_REQUEST_CALL_FUNCTION:
+		case ACCUMULATOR_REQUEST_CALL_FUNCTION:
 
-		callFunctionCollect();
-		selectAction = true;
+			callFunctionCollect();
+			selectAction = true;
 
-		break;
+			break;
 
-	case ACCUMULATOR_REQUEST_CALL_PROCEDURE:
+		case ACCUMULATOR_REQUEST_CALL_PROCEDURE:
 
-		callProcedureCollect();
+			callProcedureCollect();
 
-		break;
+			break;
 
-	default:
+		default:
 
-		additionalActions = false;
+			additionalActions = false;
 	}
 
 	if (additionalActions)

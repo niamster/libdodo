@@ -59,8 +59,9 @@ namespace dodo
 
 			/**
 			 * constructor
+			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 			 */
-			memory();
+			memory(short protection = CHANNEL_PROTECTION_PROCESS);
 
 			/**
 			 * copy constructor
@@ -69,10 +70,11 @@ namespace dodo
 			memory(const memory &fd);
 
 			/**
-			 * copy constructor
-			 * @note xexec object is not copied
+			 * constructor
+			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 			 */
-			memory(const dodoString &data);
+			memory(const dodoString &data,
+				   short            protection = CHANNEL_PROTECTION_PROCESS);
 
 			/**
 			 * destructor

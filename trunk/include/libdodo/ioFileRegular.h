@@ -87,16 +87,19 @@ namespace dodo
 
 				/**
 				 * constructor
-				 * @param path defines path to the file
-				 * @param mode defines mode to open file[see regularOpenmodeEnum]
+				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
-				regular(const dodoString &path,
-						short			 mode);
+				regular(short protection = CHANNEL_PROTECTION_PROCESS);
 
 				/**
 				 * constructor
+				 * @param path defines path to the file
+				 * @param mode defines mode to open file[see regularOpenmodeEnum]
+				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
-				regular();
+				regular(const dodoString &path,
+						short            mode,
+						short            protection = CHANNEL_PROTECTION_PROCESS);
 
 				/**
 				 * copy constructor

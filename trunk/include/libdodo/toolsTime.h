@@ -94,7 +94,7 @@ namespace dodo
 				   unsigned int day,
 				   unsigned int month,
 				   unsigned int year,
-				   bool			daylight = true);
+				   bool         daylight = true);
 
 			unsigned int sec;       ///< seconds [0, 60]
 			unsigned int min;       ///< minutes [0, 59]
@@ -119,8 +119,8 @@ namespace dodo
 			 * @param year defines year
 			 * @param month defines month[1, 12]
 			 */
-			static unsigned short int daysInMonth(unsigned int       year,
-												  unsigned short int month);
+			static unsigned short daysInMonth(unsigned int   year,
+											  unsigned short month);
 
 			/**
 			 * @return formated time/date/...

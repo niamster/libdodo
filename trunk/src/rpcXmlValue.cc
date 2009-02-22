@@ -182,102 +182,102 @@ value::valueToXml(const rpc::value &data)
 
 	switch (data.valueDataType)
 	{
-	case DATATYPE_STRING:
+		case DATATYPE_STRING:
 
-		subNode.name = "string";
-		subNode.value = data.stringValue;
+			subNode.name = "string";
+			subNode.value = data.stringValue;
 
-		nodeArr.assign(1, subNode);
-		node.children.insert(make_pair(subNode.name, nodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 
-		break;
+			break;
 
-	case DATATYPE_BOOLEAN:
+		case DATATYPE_BOOLEAN:
 
-		subNode.name = "boolean";
-		subNode.value = data.booleanValue ? "1" : "0";
+			subNode.name = "boolean";
+			subNode.value = data.booleanValue ? "1" : "0";
 
-		nodeArr.assign(1, subNode);
-		node.children.insert(make_pair(subNode.name, nodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 
-		break;
+			break;
 
-	case DATATYPE_INTEGER:
+		case DATATYPE_INTEGER:
 
-		subNode.name = "int";
-		subNode.value = tools::string::iToString(data.integerValue);
+			subNode.name = "int";
+			subNode.value = tools::string::iToString(data.integerValue);
 
-		nodeArr.assign(1, subNode);
-		node.children.insert(make_pair(subNode.name, nodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 
-		break;
+			break;
 
-	case DATATYPE_DOUBLE:
+		case DATATYPE_DOUBLE:
 
-		subNode.name = "double";
-		subNode.value = tools::string::dToString(data.doubleValue);
+			subNode.name = "double";
+			subNode.value = tools::string::dToString(data.doubleValue);
 
-		nodeArr.assign(1, subNode);
-		node.children.insert(make_pair(subNode.name, nodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 
-		break;
+			break;
 
-	case DATATYPE_ARRAY:
-	{
-		subNode.name = "array";
-
-		dodo::data::format::xml::node dataNode;
-		dataNode.name = "data";
-
-		dodoArray<rpc::value>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
-		for (; i != j; ++i)
+		case DATATYPE_ARRAY:
 		{
-			nodeArr.push_back(valueToXml(*i));
+			subNode.name = "array";
+
+			dodo::data::format::xml::node dataNode;
+			dataNode.name = "data";
+
+			dodoArray<rpc::value>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
+			for (; i != j; ++i)
+			{
+				nodeArr.push_back(valueToXml(*i));
+			}
+			dataNode.children.insert(make_pair("value", nodeArr));
+
+			nodeArr.assign(1, dataNode);
+			subNode.children.insert(make_pair(dataNode.name, nodeArr));
+
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
+
+			break;
 		}
-		dataNode.children.insert(make_pair("value", nodeArr));
 
-		nodeArr.assign(1, dataNode);
-		subNode.children.insert(make_pair(dataNode.name, nodeArr));
-
-		nodeArr.assign(1, subNode);
-		node.children.insert(make_pair(subNode.name, nodeArr));
-
-		break;
-	}
-
-	case DATATYPE_STRUCT:
-	{
-		subNode.name = "struct";
-
-		dodo::data::format::xml::node memberNode, memberNameNode, memberValueNode;
-		memberNode.name = "member";
-		memberNameNode.name = "name";
-		memberValueNode.name = "value";
-
-		dodoArray<dodo::data::format::xml::node> subNodeArr;
-
-		dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator i = data.structValue.begin(), j = data.structValue.end();
-		for (; i != j; ++i)
+		case DATATYPE_STRUCT:
 		{
-			memberNode.children.clear();
-			memberValueNode.children.clear();
+			subNode.name = "struct";
 
-			memberNameNode.value = i->first;
-			nodeArr.assign(1, memberNameNode);
-			memberNode.children.insert(make_pair(memberNameNode.name, nodeArr));
+			dodo::data::format::xml::node memberNode, memberNameNode, memberValueNode;
+			memberNode.name = "member";
+			memberNameNode.name = "name";
+			memberValueNode.name = "value";
 
-			nodeArr.assign(1, valueToXml(i->second));
-			memberNode.children.insert(make_pair(memberValueNode.name, nodeArr));
+			dodoArray<dodo::data::format::xml::node> subNodeArr;
 
-			subNodeArr.push_back(memberNode);
+			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator i = data.structValue.begin(), j = data.structValue.end();
+			for (; i != j; ++i)
+			{
+				memberNode.children.clear();
+				memberValueNode.children.clear();
+
+				memberNameNode.value = i->first;
+				nodeArr.assign(1, memberNameNode);
+				memberNode.children.insert(make_pair(memberNameNode.name, nodeArr));
+
+				nodeArr.assign(1, valueToXml(i->second));
+				memberNode.children.insert(make_pair(memberValueNode.name, nodeArr));
+
+				subNodeArr.push_back(memberNode);
+			}
+			subNode.children.insert(make_pair(memberNode.name, subNodeArr));
+
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
+
+			break;
 		}
-		subNode.children.insert(make_pair(memberNode.name, subNodeArr));
-
-		nodeArr.assign(1, subNode);
-		node.children.insert(make_pair(subNode.name, nodeArr));
-
-		break;
-	}
 	}
 
 	return node;

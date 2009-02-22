@@ -31,11 +31,13 @@
 
 using namespace dodo::io::file;
 
-temp::temp(bool open) : overwrite(false),
-						pos(0),
-						blockOffset(true),
-						append(false),
-						handler(NULL)
+temp::temp(bool  open,
+		   short protection) : overwrite(false),
+							   pos(0),
+							   blockOffset(true),
+							   append(false),
+							   handler(NULL),
+							   channel(protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -59,7 +61,8 @@ temp::temp(const temp &fd) : overwrite(fd.overwrite),
 							 pos(fd.pos),
 							 blockOffset(fd.blockOffset),
 							 append(fd.append),
-							 handler(NULL)
+							 handler(NULL),
+							 channel(protection)
 
 {
 #ifndef IO_WO_XEXEC
@@ -432,14 +435,14 @@ temp::_readStream(char * const a_data)
 			{
 				switch (errno)
 				{
-				case EIO:
-				case EINTR:
-				case EBADF:
-				case EOVERFLOW:
-				case ENOMEM:
-				case ENXIO:
+					case EIO:
+					case EINTR:
+					case EBADF:
+					case EOVERFLOW:
+					case ENOMEM:
+					case ENXIO:
 
-					throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_FILEISSHORTERTHANGIVENPOSITION, IOFILETEMPEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__);

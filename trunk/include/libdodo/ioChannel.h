@@ -36,6 +36,7 @@
 #include <libdodo/types.h>
 #include <libdodo/ioEventInfo.h>
 #include <libdodo/pcSyncProcessSection.h>
+#include <libdodo/pcSyncThreadSection.h>
 #include <libdodo/pcSyncProtector.h>
 
 namespace dodo
@@ -43,9 +44,19 @@ namespace dodo
 	namespace io
 	{
 		/**
-		 * @enum exchangeOperationTypeEnum describes type of operation for hook
+		 * @enum channelProtectionTypeEnum defines type of protection for io objects
+		 * in IO interaction in parallel environment
 		 */
-		enum exchangeOperationTypeEnum
+		enum channelProtectionTypeEnum
+		{
+			CHANNEL_PROTECTION_NONE,
+			CHANNEL_PROTECTION_THREAD,
+			CHANNEL_PROTECTION_PROCESS
+		};
+		/**
+		 * @enum ioOperationTypeEnum describes type of operation for hook
+		 */
+		enum ioOperationTypeEnum
 		{
 			IO_OPERATION_READ,
 			IO_OPERATION_READSTRING,
@@ -94,8 +105,9 @@ namespace dodo
 
 			/**
 			 * constructor
+			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 			 */
-			channel();
+			channel(short protection);
 
 			/**
 			 * destructor
@@ -166,10 +178,11 @@ namespace dodo
 
 #ifndef IO_WO_XEXEC
 
-			__xexecIoChannelCollectedData collectedData; ///< data collected for xexec
+			__xexecIoChannelCollectedData collectedData;    ///< data collected for xexec
 
 #endif
-			pc::sync::section *keeper;							 ///< section locker
+			pc::sync::section *keeper;                      ///< section locker
+			short protection;                               ///< type of IO protection[see channelProtectionTypeEnum]
 		};
 	};
 };

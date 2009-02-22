@@ -48,78 +48,78 @@ processor::make(const node &root)
 {
 	switch (root.valueDataType)
 	{
-	case DATATYPE_STRING:
-	{
-		dodoString jsonObject = "\"";
-		dodoString stringValue = root.stringValue;
-		tools::string::replace("\"", "\\\"", stringValue);
-		jsonObject.append(stringValue);
-		jsonObject.append("\"");
-
-		return jsonObject;
-	}
-
-	case DATATYPE_OBJECT:
-	{
-		dodoString jsonObject = "{";
-
-		dodoMap<dodoString, node, dodoMapStringCompare>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
-		if (i != j)
+		case DATATYPE_STRING:
 		{
-			for (--j; i != j; ++i)
+			dodoString jsonObject = "\"";
+			dodoString stringValue = root.stringValue;
+			tools::string::replace("\"", "\\\"", stringValue);
+			jsonObject.append(stringValue);
+			jsonObject.append("\"");
+
+			return jsonObject;
+		}
+
+		case DATATYPE_OBJECT:
+		{
+			dodoString jsonObject = "{";
+
+			dodoMap<dodoString, node, dodoMapStringCompare>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
+			if (i != j)
 			{
+				for (--j; i != j; ++i)
+				{
+					jsonObject.append("\"");
+					jsonObject.append(i->first);
+					jsonObject.append("\":");
+
+					jsonObject.append(make(i->second));
+					jsonObject.append(",");
+				}
 				jsonObject.append("\"");
 				jsonObject.append(i->first);
 				jsonObject.append("\":");
 
 				jsonObject.append(make(i->second));
-				jsonObject.append(",");
 			}
-			jsonObject.append("\"");
-			jsonObject.append(i->first);
-			jsonObject.append("\":");
 
-			jsonObject.append(make(i->second));
+			jsonObject.append("}");
+
+			return jsonObject;
 		}
 
-		jsonObject.append("}");
-
-		return jsonObject;
-	}
-
-	case DATATYPE_ARRAY:
-	{
-		dodoString jsonObject = "[";
-
-		dodoArray<node>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end();
-		if (i != j)
+		case DATATYPE_ARRAY:
 		{
-			--j;
-			for (; i != j; ++i)
+			dodoString jsonObject = "[";
+
+			dodoArray<node>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end();
+			if (i != j)
 			{
+				--j;
+				for (; i != j; ++i)
+				{
+					jsonObject.append(make(*i));
+					jsonObject.append(",");
+				}
 				jsonObject.append(make(*i));
-				jsonObject.append(",");
 			}
-			jsonObject.append(make(*i));
+
+			jsonObject.append("]");
+
+			return jsonObject;
 		}
 
-		jsonObject.append("]");
+		case DATATYPE_NUMERIC:
 
-		return jsonObject;
-	}
+			return tools::string::lToString(root.numericValue);
 
-	case DATATYPE_NUMERIC:
+		case DATATYPE_BOOLEAN:
 
-		return tools::string::lToString(root.numericValue);
+			return root.booleanValue ? "true" : "false";
 
-	case DATATYPE_BOOLEAN:
+		case DATATYPE_NULL:
+		default:
 
-		return root.booleanValue ? "true" : "false";
-
-	case DATATYPE_NULL:
-	default:
-
-		return "null";
+			return "null";
 	}
 
 	return "null";
@@ -143,41 +143,41 @@ processor::processArray(dodoArray<node>  &jnode,
 	{
 		switch (root[i])
 		{
-		case ' ':
-		case '\r':
-		case '\n':
-		case '\t':
+			case ' ':
+			case '\r':
+			case '\n':
+			case '\t':
 
-			break;
+				break;
 
-		case '[':
+			case '[':
 
-			if (initial)
-			{
-				initial = false;
-			}
-			else
-			{
+				if (initial)
+				{
+					initial = false;
+				}
+				else
+				{
+					i = processValue(subNode, root, i);
+
+					jnode.push_back(subNode);
+				}
+
+				break;
+
+			case ']':
+
+				return i;
+
+			case ',':
+
+				break;
+
+			default:
+
 				i = processValue(subNode, root, i);
 
 				jnode.push_back(subNode);
-			}
-
-			break;
-
-		case ']':
-
-			return i;
-
-		case ',':
-
-			break;
-
-		default:
-
-			i = processValue(subNode, root, i);
-
-			jnode.push_back(subNode);
 		}
 	}
 
@@ -198,49 +198,49 @@ processor::processValue(node             &node,
 	{
 		switch (root[i])
 		{
-		case ' ':
-		case '\r':
-		case '\n':
-		case '\t':
+			case ' ':
+			case '\r':
+			case '\n':
+			case '\t':
 
-			break;
+				break;
 
-		case '"':
+			case '"':
 
-			node.valueDataType = DATATYPE_STRING;
+				node.valueDataType = DATATYPE_STRING;
 
-			return processString(node.stringValue, root, i);
+				return processString(node.stringValue, root, i);
 
-		case '{':
+			case '{':
 
-			node.valueDataType = DATATYPE_OBJECT;
+				node.valueDataType = DATATYPE_OBJECT;
 
-			return processObject(node.objectValue, root, i);
+				return processObject(node.objectValue, root, i);
 
-		case '[':
+			case '[':
 
-			node.valueDataType = DATATYPE_ARRAY;
+				node.valueDataType = DATATYPE_ARRAY;
 
-			return processArray(node.arrayValue, root, i);
+				return processArray(node.arrayValue, root, i);
 
-		case 't':
-		case 'f':
+			case 't':
+			case 'f':
 
-			node.valueDataType = DATATYPE_BOOLEAN;
+				node.valueDataType = DATATYPE_BOOLEAN;
 
-			return processBoolean(node.booleanValue, root, i);
+				return processBoolean(node.booleanValue, root, i);
 
-		case 'n':
+			case 'n':
 
-			node.valueDataType = DATATYPE_NULL;
+				node.valueDataType = DATATYPE_NULL;
 
-			return processNull(root, i);
+				return processNull(root, i);
 
-		default:
+			default:
 
-			node.valueDataType = DATATYPE_NUMERIC;
+				node.valueDataType = DATATYPE_NUMERIC;
 
-			return processNumeric(node.numericValue, root, i);
+				return processNumeric(node.numericValue, root, i);
 		}
 	}
 }
@@ -317,43 +317,43 @@ processor::processNumeric(long             &node,
 	{
 		switch (root[i])
 		{
-		case ' ':
-		case '\r':
-		case '\n':
-		case '\t':
+			case ' ':
+			case '\r':
+			case '\n':
+			case '\t':
 
-			break;
+				break;
 
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-		case '0':
-		case '+':
-		case '-':
-		case 'e':
-		case 'E':
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+			case '0':
+			case '+':
+			case '-':
+			case 'e':
+			case 'E':
 
-			numeric.append(1, root[i]);
+				numeric.append(1, root[i]);
 
-			break;
+				break;
 
-		case ',':
-		case ']':
-		case '}':
+			case ',':
+			case ']':
+			case '}':
 
-			node = tools::string::stringToL(numeric);
+				node = tools::string::stringToL(numeric);
 
-			return i - 1;
+				return i - 1;
 
-		default:
+			default:
 
-			throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSNUMERIC, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNUMERIC, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_DATAFORMATJSONPROCESSOR, PROCESSOREX_PROCESSNUMERIC, exception::ERRNO_LIBDODO, PROCESSOREX_MALFORMEDJSONNUMERIC, DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR, __LINE__, __FILE__);
 		}
 	}
 
@@ -380,80 +380,80 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
 	{
 		switch (root[i])
 		{
-		case ' ':
-		case '\r':
-		case '\n':
-		case '\t':
-		case ':':
-		case ',':
-
-			break;
-
-		case '{':
-
-			if (state == JSON_STATE_OBJECT_INITIAL)
-			{
-				state = JSON_STATE_OBJECT_OBJECTNAME;
+			case ' ':
+			case '\r':
+			case '\n':
+			case '\t':
+			case ':':
+			case ',':
 
 				break;
-			}
-			else
-			{
-				if (state == JSON_STATE_OBJECT_OBJECTVALUE)
+
+			case '{':
+
+				if (state == JSON_STATE_OBJECT_INITIAL)
 				{
-					subNodeValue.clear();
-
-					subNodeValue.valueDataType = DATATYPE_OBJECT;
-
-					i = processObject(subNodeValue.objectValue, root, i);
-					jnode.insert(make_pair(subNodeName, subNodeValue));
-
 					state = JSON_STATE_OBJECT_OBJECTNAME;
 
 					break;
 				}
-			}
-
-		case '}':
-
-			return i;
-
-		case '"':
-
-			if (state == JSON_STATE_OBJECT_OBJECTNAME)
-			{
-				i = processString(subNodeName, root, i);
-
-				state = JSON_STATE_OBJECT_OBJECTVALUE;
-
-				break;
-			}
-			else
-			{
-				if (state == JSON_STATE_OBJECT_OBJECTVALUE)
+				else
 				{
-					subNodeValue.clear();
+					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
+					{
+						subNodeValue.clear();
 
-					subNodeValue.valueDataType = DATATYPE_STRING;
+						subNodeValue.valueDataType = DATATYPE_OBJECT;
 
-					i = processString(subNodeValue.stringValue, root, i);
-					jnode.insert(make_pair(subNodeName, subNodeValue));
+						i = processObject(subNodeValue.objectValue, root, i);
+						jnode.insert(make_pair(subNodeName, subNodeValue));
 
-					state = JSON_STATE_OBJECT_OBJECTNAME;
+						state = JSON_STATE_OBJECT_OBJECTNAME;
+
+						break;
+					}
+				}
+
+			case '}':
+
+				return i;
+
+			case '"':
+
+				if (state == JSON_STATE_OBJECT_OBJECTNAME)
+				{
+					i = processString(subNodeName, root, i);
+
+					state = JSON_STATE_OBJECT_OBJECTVALUE;
 
 					break;
 				}
-			}
+				else
+				{
+					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
+					{
+						subNodeValue.clear();
 
-		default:
+						subNodeValue.valueDataType = DATATYPE_STRING;
 
-			if (state == JSON_STATE_OBJECT_OBJECTVALUE)
-			{
-				i = processValue(subNodeValue, root, i);
-				jnode.insert(make_pair(subNodeName, subNodeValue));
+						i = processString(subNodeValue.stringValue, root, i);
+						jnode.insert(make_pair(subNodeName, subNodeValue));
 
-				state = JSON_STATE_OBJECT_OBJECTNAME;
-			}
+						state = JSON_STATE_OBJECT_OBJECTNAME;
+
+						break;
+					}
+				}
+
+			default:
+
+				if (state == JSON_STATE_OBJECT_OBJECTVALUE)
+				{
+					i = processValue(subNodeValue, root, i);
+					jnode.insert(make_pair(subNodeName, subNodeValue));
+
+					state = JSON_STATE_OBJECT_OBJECTNAME;
+				}
 		}
 	}
 
@@ -542,44 +542,44 @@ processor::processString(dodoString       &jnode,
 	{
 		switch (root[i])
 		{
-		case '\\':
+			case '\\':
 
-			if (!escape)
-			{
-				escape = true;
-
-				break;
-			}
-
-		case '"':
-
-			if (!escape)
-			{
-				if (initial)
+				if (!escape)
 				{
-					initial = false;
+					escape = true;
 
 					break;
 				}
+
+			case '"':
+
+				if (!escape)
+				{
+					if (initial)
+					{
+						initial = false;
+
+						break;
+					}
+					else
+					{
+						return i;
+					}
+				}
+
+			default:
+
+				if (escape)
+				{
+					escape = false;
+
+					jnode.append(1, '\\');
+					jnode.append(1, root[i]);
+				}
 				else
 				{
-					return i;
+					jnode.append(1, root[i]);
 				}
-			}
-
-		default:
-
-			if (escape)
-			{
-				escape = false;
-
-				jnode.append(1, '\\');
-				jnode.append(1, root[i]);
-			}
-			else
-			{
-				jnode.append(1, root[i]);
-			}
 		}
 	}
 

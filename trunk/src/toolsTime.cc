@@ -119,7 +119,7 @@ tools::time::week(long             date,
 	dodoStringArray week;
 	long mon = date - (daynum - 1) * 86400;
 
-	for (short int i(0); i < 7; ++i, mon += 86400)
+	for (short i(0); i < 7; ++i, mon += 86400)
 	{
 		week.push_back(tools::time::byFormat(format, mon, local));
 	}
@@ -215,55 +215,55 @@ tools::time::timestamp(long seconds,
 
 //-------------------------------------------------------------------
 
-unsigned short int
-tools::time::daysInMonth(unsigned int       year,
-						 unsigned short int month)
+unsigned short
+tools::time::daysInMonth(unsigned int   year,
+						 unsigned short month)
 {
-	unsigned short int day(0);
+	unsigned short day(0);
 
 	switch (month)
 	{
-	case 1:
-	case 3:
-	case 5:
-	case 7:
-	case 8:
-	case 10:
-	case 12:
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
 
-		day = 31;
+			day = 31;
 
-		break;
+			break;
 
-	case 4:
-	case 6:
-	case 9:
-	case 11:
+		case 4:
+		case 6:
+		case 9:
+		case 11:
 
-		day = 30;
+			day = 30;
 
-		break;
+			break;
 
-	case 2:
+		case 2:
 
-		unsigned int isleap = 0;
-		if (year % 4 == 0)
-		{
-			isleap = 1;
-			if (year % 100 == 0 && year % 400 != 0)
+			unsigned int isleap = 0;
+			if (year % 4 == 0)
 			{
-				isleap = 0;
+				isleap = 1;
+				if (year % 100 == 0 && year % 400 != 0)
+				{
+					isleap = 0;
+				}
 			}
-		}
-		if (isleap == 1)
-		{
-			day = 29;
-		}
-		else
-		{
-			day = 28;
-		}
-		break;
+			if (isleap == 1)
+			{
+				day = 29;
+			}
+			else
+			{
+				day = 28;
+			}
+			break;
 	}
 
 	return day;

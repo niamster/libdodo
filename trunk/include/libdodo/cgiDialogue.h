@@ -92,10 +92,10 @@ namespace dodo
 			 * @param postFilesInMem defines place of POST files[disk or memory]
 			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
-			dialogue(exchange &cf,
-					 bool		silent = false,
-					 bool		autocleanFiles = true,
-					 bool		postFilesInMem = true,
+			dialogue(exchange   &cf,
+					 bool       silent = false,
+					 bool       autocleanFiles = true,
+					 bool       postFilesInMem = true,
 					 dodoString postFilesTmpDir = "/tmp/");
 
 			/**
@@ -107,12 +107,12 @@ namespace dodo
 			 * @param postFilesInMem defines place of POST files[disk or memory]
 			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
-			dialogue(exchange					&cf,
+			dialogue(exchange &cf,
 					 dodoMap<short, dodoString> &headers,
-					 bool						silent = false,
-					 bool						autocleanFiles = true,
-					 bool						postFilesInMem = true,
-					 dodoString					postFilesTmpDir = "/tmp/");
+					 bool silent = false,
+					 bool autocleanFiles = true,
+					 bool postFilesInMem = true,
+					 dodoString postFilesTmpDir = "/tmp/");
 
 			/**
 			 * destructor

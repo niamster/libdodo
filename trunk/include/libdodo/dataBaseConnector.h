@@ -81,7 +81,7 @@ namespace dodo
 				 * @param fields defines names of fields
 				 */
 				__tuples(dodoArray<dodoStringArray> rows,
-						 dodoStringArray			fields);
+						 dodoStringArray            fields);
 
 				/**
 				 * constructor
@@ -113,18 +113,18 @@ namespace dodo
 				 * @param port defines port
 				 */
 				__connectionInfo(const dodoString &db,
-								 const dodoString &host,
-								 const dodoString &user,
-								 const dodoString &password,
-								 const dodoString &path = __dodostring__,
-								 int			  port = 0);
+								 const            dodoString &host,
+								 const            dodoString &user,
+								 const            dodoString &password,
+								 const            dodoString &path = __dodostring__,
+								 int              port = 0);
 
-				dodoString   db;                    ///< database name
-				dodoString   host;                  ///< hostname
-				dodoString   user;                  ///< username
-				dodoString   password;              ///< password
-				dodoString   path;                  ///< path to db or unix socket
-				unsigned int port;                  ///< port
+				dodoString   db;        ///< database name
+				dodoString   host;      ///< hostname
+				dodoString   user;      ///< username
+				dodoString   password;  ///< password
+				dodoString   path;      ///< path to db or unix socket
+				unsigned int port;      ///< port
 			};
 
 			/**

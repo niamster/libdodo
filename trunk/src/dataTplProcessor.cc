@@ -355,143 +355,143 @@ processor::_processString(const dodoString &buffer,
 
 		switch (temp[0])
 		{
-		case 'p':
+			case 'p':
 
-			k = temp.find(statements[PROCESSOR_STATEMENT_PRINT]);
-			if (k == 0)
-			{
-				j = _print(j, dodoString(temp.data() + 5, temp.size() - 5), tpl, path);
-			}
-			else
-			{
-				keywordNotFound = true;
-			}
-
-			break;
-
-		case 'i':
-
-			k = temp.find(statements[PROCESSOR_STATEMENT_OPEN_IF]);
-			if (k == 0)
-			{
-				++namespaceDeepness;
-
-				j = _if(buffer, j, dodoString(temp.data() + 2, temp.size() - 2), tpl, path);
-
-				cleanNamespace();
-
-				--namespaceDeepness;
-			}
-			else
-			{
-				k = temp.find(statements[PROCESSOR_STATEMENT_INCLUDE]);
+				k = temp.find(statements[PROCESSOR_STATEMENT_PRINT]);
 				if (k == 0)
 				{
-					j = _include(j, dodoString(temp.data() + 8, temp.size() - 8), tpl, path);
+					j = _print(j, dodoString(temp.data() + 5, temp.size() - 5), tpl, path);
 				}
 				else
 				{
 					keywordNotFound = true;
 				}
-			}
 
-			break;
+				break;
 
-		case 'f':
+			case 'i':
 
-			k = temp.find(statements[PROCESSOR_STATEMENT_OPEN_FOR]);
-			if (k == 0)
-			{
-				++loopDeepness;
-				++namespaceDeepness;
-
-				j = _for(buffer, j, dodoString(temp.data() + 3, temp.size() - 3), tpl, path);
-
-				cleanNamespace();
-
-				--namespaceDeepness;
-				--loopDeepness;
-			}
-			else
-			{
-				keywordNotFound = true;
-			}
-
-			break;
-
-		case 'b':
-
-			k = temp.find(statements[PROCESSOR_STATEMENT_BREAK]);
-			if (k == 0)
-			{
-				if (_break(j, dodoString(temp.data() + 5, temp.size() - 5), path))
+				k = temp.find(statements[PROCESSOR_STATEMENT_OPEN_IF]);
+				if (k == 0)
 				{
-					breakLoop = true;
+					++namespaceDeepness;
+
+					j = _if(buffer, j, dodoString(temp.data() + 2, temp.size() - 2), tpl, path);
+
+					cleanNamespace();
+
+					--namespaceDeepness;
 				}
-			}
-			else
-			{
-				keywordNotFound = true;
-			}
-
-			break;
-
-		case 'c':
-
-			k = temp.find(statements[PROCESSOR_STATEMENT_CONT]);
-			if (k == 0)
-			{
-				if (loopDeepness > 0)
+				else
 				{
-					continueFlag = true;
-
-					breakLoop = true;
+					k = temp.find(statements[PROCESSOR_STATEMENT_INCLUDE]);
+					if (k == 0)
+					{
+						j = _include(j, dodoString(temp.data() + 8, temp.size() - 8), tpl, path);
+					}
+					else
+					{
+						keywordNotFound = true;
+					}
 				}
-			}
-			else
-			{
+
+				break;
+
+			case 'f':
+
+				k = temp.find(statements[PROCESSOR_STATEMENT_OPEN_FOR]);
+				if (k == 0)
+				{
+					++loopDeepness;
+					++namespaceDeepness;
+
+					j = _for(buffer, j, dodoString(temp.data() + 3, temp.size() - 3), tpl, path);
+
+					cleanNamespace();
+
+					--namespaceDeepness;
+					--loopDeepness;
+				}
+				else
+				{
+					keywordNotFound = true;
+				}
+
+				break;
+
+			case 'b':
+
+				k = temp.find(statements[PROCESSOR_STATEMENT_BREAK]);
+				if (k == 0)
+				{
+					if (_break(j, dodoString(temp.data() + 5, temp.size() - 5), path))
+					{
+						breakLoop = true;
+					}
+				}
+				else
+				{
+					keywordNotFound = true;
+				}
+
+				break;
+
+			case 'c':
+
+				k = temp.find(statements[PROCESSOR_STATEMENT_CONT]);
+				if (k == 0)
+				{
+					if (loopDeepness > 0)
+					{
+						continueFlag = true;
+
+						breakLoop = true;
+					}
+				}
+				else
+				{
+					keywordNotFound = true;
+				}
+
+				break;
+
+			case 'a':
+
+				k = temp.find(statements[PROCESSOR_STATEMENT_ASSIGN]);
+				if (k == 0)
+				{
+					j = _assign(j, dodoString(temp.data() + 6, temp.size() - 6), path);
+				}
+				else
+				{
+					keywordNotFound = true;
+				}
+
+				break;
+
+			case 'n':
+
+				k = temp.find(statements[PROCESSOR_STATEMENT_OPEN_NS]);
+				if (k == 0)
+				{
+					++namespaceDeepness;
+
+					j = _ns(buffer, j, tpl, path);
+
+					cleanNamespace();
+
+					--namespaceDeepness;
+				}
+				else
+				{
+					keywordNotFound = true;
+				}
+
+				break;
+
+			default:
+
 				keywordNotFound = true;
-			}
-
-			break;
-
-		case 'a':
-
-			k = temp.find(statements[PROCESSOR_STATEMENT_ASSIGN]);
-			if (k == 0)
-			{
-				j = _assign(j, dodoString(temp.data() + 6, temp.size() - 6), path);
-			}
-			else
-			{
-				keywordNotFound = true;
-			}
-
-			break;
-
-		case 'n':
-
-			k = temp.find(statements[PROCESSOR_STATEMENT_OPEN_NS]);
-			if (k == 0)
-			{
-				++namespaceDeepness;
-
-				j = _ns(buffer, j, tpl, path);
-
-				cleanNamespace();
-
-				--namespaceDeepness;
-			}
-			else
-			{
-				keywordNotFound = true;
-			}
-
-			break;
-
-		default:
-
-			keywordNotFound = true;
 		}
 
 		if (keywordNotFound)
@@ -710,29 +710,29 @@ processor::_if(const dodoString &buffer,
 
 			switch (oper)
 			{
-			case OPERTYPE_LE:
+				case OPERTYPE_LE:
 
-				accept = (first <= second);
+					accept = (first <= second);
 
-				break;
+					break;
 
-			case OPERTYPE_GE:
+				case OPERTYPE_GE:
 
-				accept = (first >= second);
+					accept = (first >= second);
 
-				break;
+					break;
 
-			case OPERTYPE_LT:
+				case OPERTYPE_LT:
 
-				accept = (first < second);
+					accept = (first < second);
 
-				break;
+					break;
 
-			case OPERTYPE_GT:
+				case OPERTYPE_GT:
 
-				accept = (first > second);
+					accept = (first > second);
 
-				break;
+					break;
 			}
 		}
 		else

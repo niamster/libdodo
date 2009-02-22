@@ -66,8 +66,10 @@ namespace dodo
 				/**
 				 * constructor
 				 * @param request defines CGI request descriptor
+				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
-				exchange(FCGX_Request *request);
+				exchange(FCGX_Request *request,
+						 short        protection = io::CHANNEL_PROTECTION_PROCESS);
 
 				/**
 				 * destructor

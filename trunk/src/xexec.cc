@@ -577,33 +577,33 @@ xexec::addExec(const dodoString &module,
 
 	switch (info.execType)
 	{
-	case XEXEC_MODULEACTIONTYPE_POST:
+		case XEXEC_MODULEACTIONTYPE_POST:
 
-		temp.position = ++execs;
-		postExec.exec.push_back(temp);
-		count.post = temp.position;
+			temp.position = ++execs;
+			postExec.exec.push_back(temp);
+			count.post = temp.position;
 
-		break;
+			break;
 
-	case XEXEC_MODULEACTIONTYPE_PRE:
+		case XEXEC_MODULEACTIONTYPE_PRE:
 
-		temp.position = ++execs;
-		preExec.exec.push_back(temp);
-		count.pre = temp.position;
+			temp.position = ++execs;
+			preExec.exec.push_back(temp);
+			count.pre = temp.position;
 
-		break;
+			break;
 
-	case XEXEC_MODULEACTIONTYPE_BOTH:
+		case XEXEC_MODULEACTIONTYPE_BOTH:
 
-		temp.position = ++execs;
-		postExec.exec.push_back(temp);
-		count.post = temp.position;
+			temp.position = ++execs;
+			postExec.exec.push_back(temp);
+			count.post = temp.position;
 
-		temp.position = ++execs;
-		preExec.exec.push_back(temp);
-		count.pre = temp.position;
+			temp.position = ++execs;
+			preExec.exec.push_back(temp);
+			count.pre = temp.position;
 
-		break;
+			break;
 	}
 
 	return count;

@@ -49,7 +49,8 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
 
 //-------------------------------------------------------------------
 
-exchange::exchange(exchange &fse) : network::exchange(fse)
+exchange::exchange(exchange &fse) : network::exchange(fse),
+									channel(fse.protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -64,7 +65,8 @@ exchange::exchange(exchange &fse) : network::exchange(fse)
 
 //-------------------------------------------------------------------
 
-exchange::exchange() : sslHandle(NULL)
+exchange::exchange(short protection) : sslHandle(NULL),
+									   channel(protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -75,7 +77,8 @@ exchange::exchange() : sslHandle(NULL)
 
 //-------------------------------------------------------------------
 
-exchange::exchange(__initialAccept &a_init)
+exchange::exchange(__initialAccept &a_init,
+				   short           protection) : channel(protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -266,24 +269,24 @@ exchange::_write(const char * const a_data)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
-				case SSL_ERROR_WANT_READ:
-				case SSL_ERROR_WANT_WRITE:
-				case SSL_ERROR_WANT_X509_LOOKUP:
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+					case SSL_ERROR_WANT_X509_LOOKUP:
 
-					continue;
-
-				case SSL_ERROR_SYSCALL:
-
-					if (errno == 0)
-					{
 						continue;
-					}
 
-				default:
-				{
-					unsigned long nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
+					case SSL_ERROR_SYSCALL:
+
+						if (errno == 0)
+						{
+							continue;
+						}
+
+					default:
+					{
+						unsigned long nerr = ERR_get_error();
+						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+					}
 				}
 			}
 
@@ -301,24 +304,24 @@ exchange::_write(const char * const a_data)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
-				case SSL_ERROR_WANT_READ:
-				case SSL_ERROR_WANT_WRITE:
-				case SSL_ERROR_WANT_X509_LOOKUP:
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+					case SSL_ERROR_WANT_X509_LOOKUP:
 
-					continue;
-
-				case SSL_ERROR_SYSCALL:
-
-					if (errno == 0)
-					{
 						continue;
-					}
 
-				default:
-				{
-					unsigned long nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
+					case SSL_ERROR_SYSCALL:
+
+						if (errno == 0)
+						{
+							continue;
+						}
+
+					default:
+					{
+						unsigned long nerr = ERR_get_error();
+						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+					}
 				}
 			}
 
@@ -354,24 +357,24 @@ exchange::_read(char * const a_data)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
-				case SSL_ERROR_WANT_READ:
-				case SSL_ERROR_WANT_WRITE:
-				case SSL_ERROR_WANT_X509_LOOKUP:
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+					case SSL_ERROR_WANT_X509_LOOKUP:
 
-					continue;
-
-				case SSL_ERROR_SYSCALL:
-
-					if (errno == 0)
-					{
 						continue;
-					}
 
-				default:
-				{
-					unsigned long nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
+					case SSL_ERROR_SYSCALL:
+
+						if (errno == 0)
+						{
+							continue;
+						}
+
+					default:
+					{
+						unsigned long nerr = ERR_get_error();
+						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+					}
 				}
 			}
 
@@ -389,24 +392,24 @@ exchange::_read(char * const a_data)
 			{
 				switch (SSL_get_error(sslHandle, n))
 				{
-				case SSL_ERROR_WANT_READ:
-				case SSL_ERROR_WANT_WRITE:
-				case SSL_ERROR_WANT_X509_LOOKUP:
+					case SSL_ERROR_WANT_READ:
+					case SSL_ERROR_WANT_WRITE:
+					case SSL_ERROR_WANT_X509_LOOKUP:
 
-					continue;
-
-				case SSL_ERROR_SYSCALL:
-
-					if (errno == 0)
-					{
 						continue;
-					}
 
-				default:
-				{
-					unsigned long nerr = ERR_get_error();
-					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
+					case SSL_ERROR_SYSCALL:
+
+						if (errno == 0)
+						{
+							continue;
+						}
+
+					default:
+					{
+						unsigned long nerr = ERR_get_error();
+						throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+					}
 				}
 			}
 
@@ -435,25 +438,25 @@ exchange::_readStream(char * const data)
 		{
 			switch (SSL_get_error(sslHandle, n))
 			{
-			case SSL_ERROR_WANT_READ:
-			case SSL_ERROR_WANT_WRITE:
-			case SSL_ERROR_WANT_X509_LOOKUP:
-			case SSL_ERROR_ZERO_RETURN:
+				case SSL_ERROR_WANT_READ:
+				case SSL_ERROR_WANT_WRITE:
+				case SSL_ERROR_WANT_X509_LOOKUP:
+				case SSL_ERROR_ZERO_RETURN:
 
-				continue;
-
-			case SSL_ERROR_SYSCALL:
-
-				if (errno == 0)
-				{
 					continue;
-				}
 
-			default:
-			{
-				unsigned long nerr = ERR_get_error();
-				throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-			}
+				case SSL_ERROR_SYSCALL:
+
+					if (errno == 0)
+					{
+						continue;
+					}
+
+				default:
+				{
+					unsigned long nerr = ERR_get_error();
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
 			}
 		}
 

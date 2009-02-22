@@ -33,7 +33,10 @@ using namespace dodo::pc::sync;
 
 protector::protector(section *a_keeper) : keeper(a_keeper)
 {
-	keeper->acquire();
+	if (keeper != NULL)
+	{
+		keeper->acquire();
+	}
 }
 
 //-------------------------------------------------------------------
@@ -42,7 +45,10 @@ protector::~protector()
 {
 	try
 	{
-		keeper->release();
+		if (keeper != NULL)
+		{
+			keeper->release();
+		}
 	}
 	catch (exception::basic &ex)
 	{

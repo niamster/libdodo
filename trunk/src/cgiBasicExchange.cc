@@ -31,13 +31,15 @@
 
 using namespace dodo::cgi::basic;
 
-exchange::exchange(exchange &cf)
+exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
+								   io::channel(cf.protection)
 {
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange()
+exchange::exchange(short protection) : dodo::cgi::exchange(protection),
+									   io::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 

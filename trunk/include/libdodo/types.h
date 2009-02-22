@@ -121,7 +121,8 @@ namespace dodo
 		/**
 		 * @return logger instance which can be used globally
 		 */
-		static T &getInstance()
+		static T &
+		getInstance()
 		{
 			static T t;
 

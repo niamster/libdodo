@@ -31,9 +31,10 @@
 
 using namespace dodo::io;
 
-memory::memory() : pos(0),
-				   blockOffset(false),
-				   append(false)
+memory::memory(short protection) : pos(0),
+								   blockOffset(false),
+								   append(false),
+								   channel(protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -47,7 +48,8 @@ memory::memory() : pos(0),
 memory::memory(const memory &fd) : pos(fd.pos),
 								   blockOffset(fd.blockOffset),
 								   append(fd.append),
-								   buffer(fd.buffer)
+								   buffer(fd.buffer),
+								   channel(fd.protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -61,10 +63,12 @@ memory::memory(const memory &fd) : pos(fd.pos),
 
 //-------------------------------------------------------------------
 
-memory::memory(const dodoString &data) : pos(0),
-										 blockOffset(false),
-										 append(false),
-										 buffer(data)
+memory::memory(const dodoString &data,
+			   short            protection) : pos(0),
+											  blockOffset(false),
+											  append(false),
+											  buffer(data),
+											  channel(protection)
 {
 #ifndef IO_WO_XEXEC
 

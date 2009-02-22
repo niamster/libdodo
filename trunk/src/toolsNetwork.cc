@@ -58,27 +58,27 @@ network::getHostInfo(const dodoString &host)
 	{
 		switch (ent->h_addrtype)
 		{
-		case AF_INET:
+			case AF_INET:
 
-			if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN) == NULL)
-			{
-				++i;
+				if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN) == NULL)
+				{
+					++i;
 
-				continue;
-			}
+					continue;
+				}
 
-			break;
+				break;
 
-		case AF_INET6:
+			case AF_INET6:
 
-			if (inet_ntop(AF_INET6, ent->h_addr_list[i], temp, INET6_ADDRSTRLEN) == NULL)
-			{
-				++i;
+				if (inet_ntop(AF_INET6, ent->h_addr_list[i], temp, INET6_ADDRSTRLEN) == NULL)
+				{
+					++i;
 
-				continue;
-			}
+					continue;
+				}
 
-			break;
+				break;
 		}
 
 		info.addresses.push_back(temp);
@@ -106,23 +106,23 @@ network::getHostPrimaryIp(const dodoString &host)
 	{
 		switch (ent->h_addrtype)
 		{
-		case AF_INET:
+			case AF_INET:
 
-			if (inet_ntop(AF_INET, ent->h_addr_list[0], temp, INET_ADDRSTRLEN) == NULL)
-			{
-				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
-			}
+				if (inet_ntop(AF_INET, ent->h_addr_list[0], temp, INET_ADDRSTRLEN) == NULL)
+				{
+					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+				}
 
-			break;
+				break;
 
-		case AF_INET6:
+			case AF_INET6:
 
-			if (inet_ntop(AF_INET6, ent->h_addr_list[0], temp, INET6_ADDRSTRLEN) == NULL)
-			{
-				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
-			}
+				if (inet_ntop(AF_INET6, ent->h_addr_list[0], temp, INET6_ADDRSTRLEN) == NULL)
+				{
+					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+				}
 
-			break;
+				break;
 		}
 	}
 

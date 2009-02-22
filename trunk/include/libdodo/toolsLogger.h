@@ -135,7 +135,7 @@ namespace dodo
 			static const dodoString levels[LOGGER_LEVELS];  ///< log levels statements
 			static const int syslogLevels[LOGGER_LEVELS];   ///< syslog log levels
 
-			pc::sync::section *keeper;						///< section locker
+			pc::sync::section *keeper;                      ///< section locker
 		};
 	};
 };

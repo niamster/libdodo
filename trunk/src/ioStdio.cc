@@ -31,7 +31,8 @@
 
 using namespace dodo::io;
 
-stdio::stdio()
+stdio::stdio(short protection) : pipe(false, protection),
+								 channel(protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -45,7 +46,7 @@ stdio::stdio()
 
 //-------------------------------------------------------------------
 
-stdio::stdio(stdio &fd)
+stdio::stdio(stdio &fd) : channel(protection)
 {
 }
 

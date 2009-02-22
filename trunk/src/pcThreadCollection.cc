@@ -106,36 +106,36 @@ collection::~collection()
 
 		switch (i->action)
 		{
-		case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
+			case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
 
 #ifdef PTHREAD_EXT
 
-			pthread_detach(i->thread);
+				pthread_detach(i->thread);
 
 #endif
 
-			break;
+				break;
 
-		case COLLECTION_ONDESTRUCT_STOP:
+			case COLLECTION_ONDESTRUCT_STOP:
 
 #ifdef PTHREAD_EXT
 
-			pthread_cancel(i->thread);
+				pthread_cancel(i->thread);
 
 #endif
 
-			break;
+				break;
 
-		case COLLECTION_ONDESTRUCT_WAIT:
-		default:
+			case COLLECTION_ONDESTRUCT_WAIT:
+			default:
 
 #ifdef PTHREAD_EXT
 
-			pthread_join(i->thread, NULL);
+				pthread_join(i->thread, NULL);
 
 #endif
 
-			break;
+				break;
 		}
 
 #ifdef DL_EXT

@@ -426,12 +426,12 @@ postgresql::getFieldsTypes(const dodoString &table)
 
 	switch (status)
 	{
-	case PGRES_EMPTY_QUERY:
-	case PGRES_BAD_RESPONSE:
-	case PGRES_NONFATAL_ERROR:
-	case PGRES_FATAL_ERROR:
+		case PGRES_EMPTY_QUERY:
+		case PGRES_BAD_RESPONSE:
+		case PGRES_NONFATAL_ERROR:
+		case PGRES_FATAL_ERROR:
 
-		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 	}
 
 	empty = false;
@@ -575,12 +575,12 @@ postgresql::exec(const dodoString &query,
 	status = PQresultStatus(pgResult);
 	switch (status)
 	{
-	case PGRES_EMPTY_QUERY:
-	case PGRES_BAD_RESPONSE:
-	case PGRES_NONFATAL_ERROR:
-	case PGRES_FATAL_ERROR:
+		case PGRES_EMPTY_QUERY:
+		case PGRES_BAD_RESPONSE:
+		case PGRES_NONFATAL_ERROR:
+		case PGRES_FATAL_ERROR:
 
-		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 	}
 
 	empty = false;

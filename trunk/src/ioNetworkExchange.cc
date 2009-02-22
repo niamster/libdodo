@@ -44,7 +44,7 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket)
 
 //-------------------------------------------------------------------
 
-exchange::exchange(exchange &fse)
+exchange::exchange(exchange &fse) : channel(fse.protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -69,7 +69,7 @@ exchange::exchange(exchange &fse)
 
 //-------------------------------------------------------------------
 
-exchange::exchange()
+exchange::exchange(short protection) : channel(protection)
 {
 #ifndef IO_WO_XEXEC
 
@@ -80,7 +80,8 @@ exchange::exchange()
 
 //-------------------------------------------------------------------
 
-exchange::exchange(__initialAccept &a_init)
+exchange::exchange(__initialAccept &a_init,
+				   short           protection) : channel(protection)
 {
 #ifndef IO_WO_XEXEC
 
