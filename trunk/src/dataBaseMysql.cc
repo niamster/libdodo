@@ -91,6 +91,8 @@ mysql::mysql(const __connectionInfo &info) : empty(true),
 							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
 							type))
 	{
+		delete handle;
+
 		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_MYSQL, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
 	}
 

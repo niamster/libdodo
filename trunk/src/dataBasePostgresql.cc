@@ -141,6 +141,8 @@ postgresql::postgresql(const __connectionInfo &info) : empty(true),
 
 	if (status != CONNECTION_OK)
 	{
+		delete handle;
+
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_POSTGRESQL, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
 	}
 }
