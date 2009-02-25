@@ -34,12 +34,8 @@
 
 #ifdef FASTCGI_EXT
 
-#include <fcgiapp.h>
-
-#include <libdodo/types.h>
-#include <libdodo/cgiFastExchangeEx.h>
 #include <libdodo/cgiExchange.h>
-#include <libdodo/ioChannel.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
@@ -47,6 +43,12 @@ namespace dodo
 	{
 		namespace fast
 		{
+			/**
+			 * @struct __request
+			 * @brief defines fast CGI request interface
+			 */
+			struct __request;
+
 			/**
 			 * @class exchange
 			 * @brief provides interface to fast CGI I/O functionality
@@ -68,8 +70,8 @@ namespace dodo
 				 * @param request defines CGI request descriptor
 				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
-				exchange(FCGX_Request *request,
-						 short        protection = io::CHANNEL_PROTECTION_PROCESS);
+				exchange(const __request &req,
+						 short			 protection = io::CHANNEL_PROTECTION_PROCESS);
 
 				/**
 				 * destructor
@@ -128,7 +130,7 @@ namespace dodo
 
 			  private:
 
-				FCGX_Request *request; ///< fast CGI descriptor
+				__request *request; ///< fast CGI descriptor
 			};
 		};
 	};

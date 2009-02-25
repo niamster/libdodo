@@ -27,40 +27,64 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/dataBaseSqlite.h>
+#include <libdodo/directives.h>
 
 #ifdef SQLITE3_EXT
+
+#include <sqlite3.h>
+
+namespace dodo
+{
+	namespace data
+	{
+		namespace base
+		{
+			struct __sqliteHandle
+			{
+				sqlite3 *handle; ///< DB handle
+				sqlite3_stmt *result; ///< handlde to result
+			};
+		};
+	};
+};
+
+#include <libdodo/dataBaseSqlite.h>
+#include <libdodo/toolsMisc.h>
+#include <libdodo/dataBaseSqliteEx.h>
+#include <libdodo/xexec.h>
 
 using namespace dodo::data::base;
 
 sqlite::sqlite() : empty(true),
-				   sqliteHandle(NULL)
+				   handle(new __sqliteHandle)
 {
+	handle->handle = NULL;
+
 #ifndef DATABASE_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
-
 #endif
 }
 
 //-------------------------------------------------------------------
 
 sqlite::sqlite(const __connectionInfo &info) : empty(true),
-											   sqliteHandle(NULL)
+											   handle(new __sqliteHandle)
 {
+	handle->handle = NULL;
+
 #ifndef DATABASE_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
-
 #endif
 
 	collectedData.dbInfo = info;
 
-	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &sqliteHandle) != SQLITE_OK)
+	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &handle->handle) != SQLITE_OK)
 	{
-		sqlite3_close(sqliteHandle);
+		sqlite3_close(handle->handle);
 
-		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_SQLITE, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+		delete handle;
+
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_SQLITE, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 	}
 }
 
@@ -74,15 +98,17 @@ sqlite::sqlite(sqlite &a_pp)
 
 sqlite::~sqlite()
 {
-	if (sqliteHandle != NULL)
+	if (handle->handle != NULL)
 	{
 		if (!empty)
 		{
-			sqlite3_finalize(sqliteResult);
+			sqlite3_finalize(handle->result);
 		}
 
-		sqlite3_close(sqliteHandle);
+		sqlite3_close(handle->handle);
 	}
+
+	delete handle;
 }
 
 //-------------------------------------------------------------------
@@ -97,27 +123,27 @@ sqlite::connect(const __connectionInfo &info)
 	performXExec(preExec);
 #endif
 
-	if (sqliteHandle != NULL)
+	if (handle->handle != NULL)
 	{
 		if (!empty)
 		{
 			empty = true;
-			sqlite3_finalize(sqliteResult);
+			sqlite3_finalize(handle->result);
 		}
 
-		if (sqlite3_close(sqliteHandle) != SQLITE_OK)
+		if (sqlite3_close(handle->handle) != SQLITE_OK)
 		{
-			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 		}
 
-		sqliteHandle = NULL;
+		handle->handle = NULL;
 	}
 
-	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &sqliteHandle) != SQLITE_OK)
+	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &handle->handle) != SQLITE_OK)
 	{
-		sqlite3_close(sqliteHandle);
+		sqlite3_close(handle->handle);
 
-		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 	}
 
 #ifndef DATABASE_WO_XEXEC
@@ -130,7 +156,7 @@ sqlite::connect(const __connectionInfo &info)
 void
 sqlite::disconnect()
 {
-	if (sqliteHandle != NULL)
+	if (handle->handle != NULL)
 	{
 #ifndef DATABASE_WO_XEXEC
 		operType = DATABASE_OPERATION_DISCONNECT;
@@ -140,19 +166,19 @@ sqlite::disconnect()
 		if (!empty)
 		{
 			empty = true;
-			sqlite3_finalize(sqliteResult);
+			sqlite3_finalize(handle->result);
 		}
 
-		if (sqlite3_close(sqliteHandle) != SQLITE_OK)
+		if (sqlite3_close(handle->handle) != SQLITE_OK)
 		{
-			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_DISCONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_DISCONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 		}
 
 #ifndef DATABASE_WO_XEXEC
 		performXExec(postExec);
 #endif
 
-		sqliteHandle = NULL;
+		handle->handle = NULL;
 	}
 }
 
@@ -161,7 +187,7 @@ sqlite::disconnect()
 dodoArray<dodo::dodoStringArray>
 sqlite::fetchRows() const
 {
-	if (sqliteHandle == NULL)
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -178,22 +204,22 @@ sqlite::fetchRows() const
 		return rows;
 	}
 
-	sqlite3_reset(sqliteResult);
+	sqlite3_reset(handle->result);
 
-	unsigned int numFields = sqlite3_column_count(sqliteResult);
+	unsigned int numFields = sqlite3_column_count(handle->result);
 
 	bool iterate = true;
 	unsigned int i = 0;
 
 #ifndef USE_DEQUE
-	rows.reserve(sqlite3_data_count(sqliteResult));
+	rows.reserve(sqlite3_data_count(handle->result));
 #endif
 
 	dodoStringArray rowsPart;
 
 	while (iterate)
 	{
-		switch (sqlite3_step(sqliteResult))
+		switch (sqlite3_step(handle->result))
 		{
 			case SQLITE_BUSY:
 
@@ -207,7 +233,7 @@ sqlite::fetchRows() const
 
 			case SQLITE_ERROR:
 
-				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHROWS, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHROWS, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 			case SQLITE_ROW:
 
@@ -219,29 +245,29 @@ sqlite::fetchRows() const
 
 				for (i = 0; i < numFields; ++i)
 				{
-					switch (sqlite3_column_type(sqliteResult, i))
+					switch (sqlite3_column_type(handle->result, i))
 					{
 						case SQLITE_INTEGER:
 
-							rowsPart.push_back(tools::string::iToString(sqlite3_column_int(sqliteResult, i)));
+							rowsPart.push_back(tools::string::iToString(sqlite3_column_int(handle->result, i)));
 
 							break;
 
 						case SQLITE_FLOAT:
 
-							rowsPart.push_back(tools::string::dToString(sqlite3_column_double(sqliteResult, i)));
+							rowsPart.push_back(tools::string::dToString(sqlite3_column_double(handle->result, i)));
 
 							break;
 
 						case SQLITE_TEXT:
 
-							rowsPart.push_back(dodoString((const char *)sqlite3_column_text(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i)));
+							rowsPart.push_back(dodoString((const char *)sqlite3_column_text(handle->result, i), sqlite3_column_bytes(handle->result, i)));
 
 							break;
 
 						case SQLITE_BLOB:
 
-							rowsPart.push_back(dodoString((const char *)sqlite3_column_blob(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i)));
+							rowsPart.push_back(dodoString((const char *)sqlite3_column_blob(handle->result, i), sqlite3_column_bytes(handle->result, i)));
 
 							break;
 
@@ -272,7 +298,7 @@ sqlite::fetchRows() const
 dodo::dodoStringArray
 sqlite::fetchFields() const
 {
-	if (sqliteHandle == NULL)
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -289,7 +315,7 @@ sqlite::fetchFields() const
 		return fields;
 	}
 
-	unsigned int numFields = sqlite3_column_count(sqliteResult);
+	unsigned int numFields = sqlite3_column_count(handle->result);
 
 #ifndef USE_DEQUE
 	fields.reserve(numFields);
@@ -297,7 +323,7 @@ sqlite::fetchFields() const
 
 	for (unsigned int i(0); i < numFields; ++i)
 	{
-		fields.push_back(sqlite3_column_name(sqliteResult, i));
+		fields.push_back(sqlite3_column_name(handle->result, i));
 	}
 
 #ifndef DATABASE_WO_XEXEC
@@ -320,14 +346,14 @@ sqlite::fetch() const
 unsigned int
 sqlite::rowsCount() const
 {
-	if (sqliteHandle == NULL)
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
 	if (show)
 	{
-		sqlite3_reset(sqliteResult);
+		sqlite3_reset(handle->result);
 
 		unsigned int numRows = 0;
 		bool iterate = true;
@@ -335,7 +361,7 @@ sqlite::rowsCount() const
 
 		while (iterate)
 		{
-			result = sqlite3_step(sqliteResult);
+			result = sqlite3_step(handle->result);
 			switch (result)
 			{
 				case SQLITE_BUSY:
@@ -350,7 +376,7 @@ sqlite::rowsCount() const
 
 				case SQLITE_ERROR:
 
-					throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHROWS, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHROWS, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 				case SQLITE_ROW:
 
@@ -373,14 +399,14 @@ sqlite::rowsCount() const
 unsigned int
 sqlite::fieldsCount() const
 {
-	if (sqliteHandle == NULL)
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
 	if (show)
 	{
-		return sqlite3_column_count(sqliteResult);
+		return sqlite3_column_count(handle->result);
 	}
 	else
 	{
@@ -393,14 +419,14 @@ sqlite::fieldsCount() const
 unsigned int
 sqlite::affectedRowsCount() const
 {
-	if (sqliteHandle == NULL)
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
 	if (!show)
 	{
-		return sqlite3_changes(sqliteHandle);
+		return sqlite3_changes(handle->handle);
 	}
 	else
 	{
@@ -413,7 +439,7 @@ sqlite::affectedRowsCount() const
 void
 sqlite::getFieldsTypes(const dodoString &table)
 {
-	if (sqliteHandle == NULL)
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -428,28 +454,27 @@ sqlite::getFieldsTypes(const dodoString &table)
 	}
 
 #ifdef SQLITE_ENABLE_COLUMN_METADATA
-
 	request = "select * from " + table + " limit 1";
 
 	if (!empty)
 	{
-		sqlite3_finalize(sqliteResult);
+		sqlite3_finalize(handle->result);
 		empty = true;
 	}
 
-	if (sqlite3_prepare(sqliteHandle, request.c_str(), request.size(), &sqliteResult, NULL) != SQLITE_OK)
+	if (sqlite3_prepare(handle->handle, request.c_str(), request.size(), &handle->result, NULL) != SQLITE_OK)
 	{
-		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
 	}
 
-	if (sqliteResult == NULL)
+	if (handle->result == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 	}
 
 	empty = false;
 
-	unsigned int numFields = sqlite3_column_count(sqliteResult);
+	unsigned int numFields = sqlite3_column_count(handle->result);
 
 	const char *columnType, *columnName;
 
@@ -457,9 +482,9 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 	for (unsigned int i(0); i < numFields; ++i)
 	{
-		columnName = sqlite3_column_name(sqliteResult, i);
+		columnName = sqlite3_column_name(handle->result, i);
 
-		if (sqlite3_table_column_metadata(sqliteHandle,
+		if (sqlite3_table_column_metadata(handle->handle,
 										  NULL,
 										  table.c_str(),
 										  columnName,
@@ -471,11 +496,11 @@ sqlite::getFieldsTypes(const dodoString &table)
 		{
 			if (!empty)
 			{
-				sqlite3_finalize(sqliteResult);
+				sqlite3_finalize(handle->result);
 				empty = true;
 			}
 
-			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
+			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
 		}
 
 		field = types->second.find(columnName);
@@ -530,28 +555,26 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 	if (!empty)
 	{
-		sqlite3_finalize(sqliteResult);
+		sqlite3_finalize(handle->result);
 		empty = true;
 	}
-
 #else
-
 	request = "pragma table_info(" + table + ")";
 
 	if (!empty)
 	{
-		sqlite3_finalize(sqliteResult);
+		sqlite3_finalize(handle->result);
 		empty = true;
 	}
 
-	if (sqlite3_prepare(sqliteHandle, request.c_str(), request.size(), &sqliteResult, NULL) != SQLITE_OK)
+	if (sqlite3_prepare(handle->handle, request.c_str(), request.size(), &handle->result, NULL) != SQLITE_OK)
 	{
-		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
 	}
 
-	if (sqliteResult == NULL)
+	if (handle->result == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 	}
 
 	empty = false;
@@ -564,7 +587,7 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 	while (iterate)
 	{
-		switch (sqlite3_step(sqliteResult))
+		switch (sqlite3_step(handle->result))
 		{
 			case SQLITE_BUSY:
 
@@ -578,12 +601,12 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 			case SQLITE_ERROR:
 
-				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 			case SQLITE_ROW:
 
-				columnName = (const char *)sqlite3_column_text(sqliteResult, 1);
-				columnType = (const char *)sqlite3_column_text(sqliteResult, 2);
+				columnName = (const char *)sqlite3_column_text(handle->result, 1);
+				columnType = (const char *)sqlite3_column_text(handle->result, 2);
 
 				field = types->second.find(columnName);
 
@@ -640,10 +663,9 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 	if (!empty)
 	{
-		sqlite3_finalize(sqliteResult);
+		sqlite3_finalize(handle->result);
 		empty = true;
 	}
-
 #endif
 
 	request.clear();
@@ -655,7 +677,7 @@ void
 sqlite::exec(const dodoString &query,
 			 bool             result)
 {
-	if (sqliteHandle == NULL)
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -677,40 +699,40 @@ sqlite::exec(const dodoString &query,
 
 	if (!empty)
 	{
-		sqlite3_finalize(sqliteResult);
+		sqlite3_finalize(handle->result);
 		empty = true;
 	}
 
-	if (sqlite3_prepare(sqliteHandle, request.c_str(), request.size(), &sqliteResult, NULL) != SQLITE_OK)
+	if (sqlite3_prepare(handle->handle, request.c_str(), request.size(), &handle->result, NULL) != SQLITE_OK)
 	{
-		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
 	}
 
 	dodoList<__blob>::iterator i(blobs.begin()), j(blobs.end());
 	for (; i != j; ++i)
 	{
-		if (sqlite3_bind_blob(sqliteResult, i->reference, i->value->c_str(), i->value->size(), SQLITE_TRANSIENT) != SQLITE_OK)
+		if (sqlite3_bind_blob(handle->result, i->reference, i->value->c_str(), i->value->size(), SQLITE_TRANSIENT) != SQLITE_OK)
 		{
 			blobs.clear();
 
-			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 		}
 	}
 
 	blobs.clear();
 
-	if (sqliteResult == NULL)
+	if (handle->result == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 	}
 
 	empty = false;
 
 	if (!show)
 	{
-		if (sqlite3_step(sqliteResult) != SQLITE_DONE)
+		if (sqlite3_step(handle->result) != SQLITE_DONE)
 		{
-			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 		}
 	}
 
@@ -1047,7 +1069,7 @@ sqlite::insertCollect()
 dodo::dodoStringMapArray
 sqlite::fetchFieldsToRows() const
 {
-	if (sqliteHandle == NULL)
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -1059,9 +1081,9 @@ sqlite::fetchFieldsToRows() const
 		return rowsFields;
 	}
 
-	sqlite3_reset(sqliteResult);
+	sqlite3_reset(handle->result);
 
-	unsigned int numFields = sqlite3_column_count(sqliteResult);
+	unsigned int numFields = sqlite3_column_count(handle->result);
 
 	bool iterate = true;
 	unsigned int i = 0;
@@ -1070,12 +1092,12 @@ sqlite::fetchFieldsToRows() const
 	dodoString rowPart;
 
 #ifndef USE_DEQUE
-	rowsFields.reserve(sqlite3_data_count(sqliteResult));
+	rowsFields.reserve(sqlite3_data_count(handle->result));
 #endif
 
 	while (iterate)
 	{
-		switch (sqlite3_step(sqliteResult))
+		switch (sqlite3_step(handle->result))
 		{
 			case SQLITE_BUSY:
 
@@ -1089,7 +1111,7 @@ sqlite::fetchFieldsToRows() const
 
 			case SQLITE_ERROR:
 
-				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHFIELDSTOROWS, exception::ERRNO_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_FETCHFIELDSTOROWS, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 			case SQLITE_ROW:
 
@@ -1097,36 +1119,36 @@ sqlite::fetchFieldsToRows() const
 
 				for (i = 0; i < numFields; ++i)
 				{
-					switch (sqlite3_column_type(sqliteResult, i))
+					switch (sqlite3_column_type(handle->result, i))
 					{
 						case SQLITE_INTEGER:
 
-							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), tools::string::iToString(sqlite3_column_int(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(handle->result, i), tools::string::iToString(sqlite3_column_int(handle->result, i))));
 
 							break;
 
 						case SQLITE_FLOAT:
 
-							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), tools::string::dToString(sqlite3_column_double(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(handle->result, i), tools::string::dToString(sqlite3_column_double(handle->result, i))));
 
 							break;
 
 						case SQLITE_TEXT:
 
-							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), dodoString((const char *)sqlite3_column_text(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(handle->result, i), dodoString((const char *)sqlite3_column_text(handle->result, i), sqlite3_column_bytes(handle->result, i))));
 
 							break;
 
 						case SQLITE_BLOB:
 
-							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), dodoString((const char *)sqlite3_column_blob(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(handle->result, i), dodoString((const char *)sqlite3_column_blob(handle->result, i), sqlite3_column_bytes(handle->result, i))));
 
 							break;
 
 						case SQLITE_NULL:
 						default:
 
-							rowFieldsPart.insert(make_pair(dodoString(sqlite3_column_name(sqliteResult, i)), statements[SQLCONSTRUCTOR_STATEMENT_NULL]));
+							rowFieldsPart.insert(make_pair(dodoString(sqlite3_column_name(handle->result, i)), statements[SQLCONSTRUCTOR_STATEMENT_NULL]));
 
 							break;
 					}

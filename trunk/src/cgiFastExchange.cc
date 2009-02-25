@@ -27,28 +27,38 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/cgiFastExchange.h>
+#include <libdodo/directives.h>
 
 #ifdef FASTCGI_EXT
+
+#include <fcgiapp.h>
+
+#include "cgiFastExchange.inline"
+
+#include <libdodo/cgiFastExchange.h>
+#include <libdodo/cgiFastExchangeEx.h>
+#include <libdodo/types.h>
+#include <libdodo/cgiExchange.h>
+#include <libdodo/ioChannel.h>
 
 using namespace dodo::cgi::fast;
 
 exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
-								   channel(cf.protection)
+								   channel(cf.protection),
+								   request(new __request)
 {
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange(FCGX_Request *a_request,
-				   short        protection) : request(a_request),
-											  dodo::cgi::exchange(protection),
-											  channel(protection)
+exchange::exchange(const __request &req,
+				   short		   protection) : dodo::cgi::exchange(protection),
+												 channel(protection)
 {
+	request->request = req.request;
+
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_CGIFASTEXCHANGE);
-
 #endif
 }
 
@@ -56,6 +66,7 @@ exchange::exchange(FCGX_Request *a_request,
 
 exchange::~exchange()
 {
+	delete request;
 }
 
 //-------------------------------------------------------------------
@@ -63,7 +74,7 @@ exchange::~exchange()
 void
 exchange::flush()
 {
-	if (FCGX_FFlush(request->out) == -1)
+	if (FCGX_FFlush(request->request->out) == -1)
 	{
 		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_FLUSH, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOFLUSH, CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
 	}
@@ -74,7 +85,7 @@ exchange::flush()
 char *
 exchange::getenv(const char *buf)
 {
-	return FCGX_GetParam(buf, request->envp);
+	return FCGX_GetParam(buf, request->request->envp);
 }
 
 //-------------------------------------------------------------------
@@ -100,7 +111,7 @@ exchange::_read(char * const a_data)
 {
 	memset(a_data, '\0', inSize);
 
-	FCGX_GetStr(a_data, inSize, request->in);
+	FCGX_GetStr(a_data, inSize, request->request->in);
 }
 
 //-------------------------------------------------------------------
@@ -108,7 +119,7 @@ exchange::_read(char * const a_data)
 void
 exchange::_write(const char *const buf)
 {
-	if (FCGX_PutStr(buf, outSize, request->out) == -1)
+	if (FCGX_PutStr(buf, outSize, request->request->out) == -1)
 	{
 		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 	}

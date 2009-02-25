@@ -34,19 +34,10 @@
 
 #ifdef FASTCGI_EXT
 
-#ifdef PTHREAD_EXT
+#include <libdodo/pcSyncThreadSection.h>
 
-#include <pthread.h>
-
-#endif
-
-#include <fcgiapp.h>
-
-#include <libdodo/types.h>
 #include <libdodo/cgiServer.h>
-#include <libdodo/cgiFastServerEx.h>
-#include <libdodo/cgiFastExchange.h>
-#include <libdodo/ioChannel.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
@@ -70,8 +61,6 @@ namespace dodo
 
 			  public:
 
-#ifdef PTHREAD_EXT
-
 				/**
 				 * constructor
 				 * @param limit defines limit of incoming requests
@@ -83,18 +72,6 @@ namespace dodo
 				server(unsigned long limit = 0,
 					   bool          threading = true,
 					   unsigned int  threadsNum = 10);
-
-#else
-
-				/**
-				 * constructor
-				 * @param limit defines limit of incoming requests
-				 * @note if limit is exhausted `listen` will return
-				 * if limit is 0 `listen` never returns
-				 */
-				server(unsigned long limit = 0);
-
-#endif
 
 				/**
 				 * destructor
@@ -114,7 +91,6 @@ namespace dodo
 
 			  private:
 
-#ifdef PTHREAD_EXT
 
 				bool threading;                     ///< true use threading
 
@@ -124,17 +100,14 @@ namespace dodo
 				 * thread that holds one queue of CGI requests
 				 * @param data defines the data that will be passed to the thread
 				 */
-				static void *stackThread(void *data);
+				static void *fastCGIThread(void *data);
 
-				static pthread_mutex_t acceptM;     ///< accept request mutex
-				static pthread_mutex_t requestsM;   ///< request conter mutex
-
-#endif
+				static pc::sync::thread::section acceptLock; ///< accept request mutex
+				static pc::sync::thread::section requestLock; ///< accept request mutex
 
 				static serverHandler handler;       ///< function to be called on new request
 
-				static unsigned long limit;         ///< limit of requests to serve; if 0 server forever[0 by default]
-				static unsigned long requests;      ///< counter of requests
+				unsigned long limit;         ///< limit of requests to serve; if 0 server forever[0 by default]
 			};
 		};
 	};

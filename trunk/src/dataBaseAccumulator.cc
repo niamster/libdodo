@@ -27,7 +27,12 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <libdodo/types.h>
 #include <libdodo/dataBaseAccumulator.h>
+#include <libdodo/toolsString.h>
+#include <libdodo/xexec.h>
 
 using namespace dodo::data::base;
 
@@ -46,7 +51,6 @@ accumulator::accumulator() : show(false)
 #ifndef DATABASE_WO_XEXEC
 							 ,
 							 collectedData(this, XEXEC_OBJECT_XEXEC)
-
 #endif
 {
 	collectedData.qType = -1;

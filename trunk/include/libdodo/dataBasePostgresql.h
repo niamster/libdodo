@@ -34,13 +34,8 @@
 
 #ifdef POSTGRESQL_EXT
 
-#include <libpq-fe.h>
-#include <stdlib.h>
-
-#include <libdodo/toolsMisc.h>
-#include <libdodo/dataBasePostgresqlEx.h>
+#include <libdodo/types.h>
 #include <libdodo/dataBaseSqlConstructor.h>
-#include <libdodo/xexec.h>
 
 namespace dodo
 {
@@ -48,6 +43,12 @@ namespace dodo
 	{
 		namespace base
 		{
+			/**
+			 * @struct __postgresqlHandle
+			 * @brief defines internal handlers for MySQL DBMS interaction
+			 */
+			struct __postgresqlHandle;
+
 			/**
 			 * @class postgresql
 			 * @brief provides an interface to postgresql db
@@ -238,8 +239,7 @@ namespace dodo
 
 				bool empty;                                                                 ///< true id pgResult is empty
 
-				PGconn *pgHandle;                                                           ///< DB handle
-				PGresult *pgResult;                                                         ///< handlde to result
+				__postgresqlHandle *handle; ///< DB handle
 			};
 		};
 	};

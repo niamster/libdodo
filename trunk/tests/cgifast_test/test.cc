@@ -88,7 +88,7 @@ cgif(exchange &fcgi)
 	}
 
 	fcgi.writeStream("<br>");
-	
+
 	inc = (int *)sh.acquire();
 	(*inc)++;
 	sh.release();

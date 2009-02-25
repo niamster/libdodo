@@ -32,9 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
 #include <libdodo/cgiServer.h>
-#include <libdodo/cgiBasicExchange.h>
 
 namespace dodo
 {

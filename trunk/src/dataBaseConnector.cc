@@ -27,6 +27,9 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <libdodo/types.h>
 #include <libdodo/dataBaseConnector.h>
 
 using namespace dodo::data::base;

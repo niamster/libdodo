@@ -1,8 +1,8 @@
 /***************************************************************************
- *            pcSyncProtector.cc
+ *            cgiFastExchange.inline
  *
- *  Sat Oct 20 11:00:55 2007
- *  Copyright  2007  Ni@m
+ *  Wed Feb  25 06:51:19 2009
+ *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,33 +27,29 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/pcSyncProtector.h>
+#ifndef _CGIFASTEXCHANGE_INLINE_
+#define _CGIFASTEXCHANGE_INLINE_ 1
 
-using namespace dodo::pc::sync;
+#include <libdodo/directives.h>
 
-protector::protector(section *keeper) : keeper(keeper)
+#ifdef FASTCGI_EXT
+
+#include <fcgiapp.h>
+
+namespace dodo
 {
-	if (keeper != NULL)
+	namespace cgi
 	{
-		keeper->acquire();
-	}
-}
-
-//-------------------------------------------------------------------
-
-protector::~protector()
-{
-	try
-	{
-		if (keeper != NULL)
+		namespace fast
 		{
-			keeper->release();
-		}
-	}
-	catch (exception::basic &ex)
-	{
-	}
-}
+			struct __request
+			{
+				FCGX_Request *request; ///< fast-CGI request handler
+			};
+		};
+	};
+};
 
-//-------------------------------------------------------------------
+#endif
 
+#endif

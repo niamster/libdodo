@@ -34,12 +34,7 @@
 
 #ifdef SQLITE3_EXT
 
-#include <sqlite3.h>
-
-#include <libdodo/toolsMisc.h>
-#include <libdodo/dataBaseSqliteEx.h>
 #include <libdodo/dataBaseSqlConstructor.h>
-#include <libdodo/xexec.h>
 
 namespace dodo
 {
@@ -47,6 +42,12 @@ namespace dodo
 	{
 		namespace base
 		{
+			/**
+			 * @struct __mysqlHandle
+			 * @brief defines internal handlers for MySQL DBMS interaction
+			 */
+			struct __sqliteHandle;
+
 			/**
 			 * @class sqlite
 			 * @brief provides an interface to sqlite db
@@ -165,8 +166,7 @@ namespace dodo
 
 			  private:
 
-				sqlite3 *sqliteHandle;          ///< DB handle
-				sqlite3_stmt *sqliteResult;     ///< handlde to result
+				__sqliteHandle *handle; ///< DB handle
 
 				bool empty;                     ///< true if liteStmt is empty
 			};

@@ -27,40 +27,39 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/cgiFastServer.h>
+#include <libdodo/directives.h>
 
 #ifdef FASTCGI_EXT
 
+#include <fcgiapp.h>
+
+#include "cgiFastExchange.inline"
+
+#include <libdodo/types.h>
+#include <libdodo/cgiFastServer.h>
+#include <libdodo/cgiFastServerEx.h>
+#include <libdodo/cgiFastExchange.h>
+#include <libdodo/pcSyncThreadSection.h>
+#include <libdodo/pcSyncProtector.h>
+
 using namespace dodo::cgi::fast;
 
-#ifdef PTHREAD_EXT
-
-pthread_mutex_t server::acceptM = PTHREAD_MUTEX_INITIALIZER;
+dodo::pc::sync::thread::section server::acceptLock;
 
 //-------------------------------------------------------------------
 
-pthread_mutex_t server::requestsM = PTHREAD_MUTEX_INITIALIZER;
-
-#endif
-
-//-------------------------------------------------------------------
-
-unsigned long server::limit = 0;
-
-//-------------------------------------------------------------------
-
-unsigned long server::requests = -1;
+dodo::pc::sync::thread::section server::requestLock;
 
 //-------------------------------------------------------------------
 
 void
-dummyStackThread(dodo::cgi::exchange &data)
+dummyfastCGIThread(dodo::cgi::exchange &data)
 {
 }
 
 //-------------------------------------------------------------------
 
-dodo::cgi::serverHandler server::handler = &dummyStackThread;
+dodo::cgi::serverHandler server::handler = &dummyfastCGIThread;
 
 //-------------------------------------------------------------------
 
@@ -70,8 +69,6 @@ server::server(server &cf)
 
 //-------------------------------------------------------------------
 
-#ifdef PTHREAD_EXT
-
 server::server(unsigned long a_limit,
 			   bool          threading,
 			   unsigned int  threadsNum) : threading(threading),
@@ -79,31 +76,8 @@ server::server(unsigned long a_limit,
 {
 	limit = a_limit;
 
-	pthread_mutexattr_t attr;
-
-	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
-
-	pthread_mutex_init(&acceptM, &attr);
-	pthread_mutex_init(&requestsM, &attr);
-
-	pthread_mutexattr_destroy(&attr);
-
 	FCGX_Init();
 }
-
-//-------------------------------------------------------------------
-
-#else
-
-server::server(unsigned long a_limit)
-{
-	limit = a_limit;
-
-	FCGX_Init();
-}
-
-#endif
 
 //-------------------------------------------------------------------
 
@@ -114,15 +88,17 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-#ifdef PTHREAD_EXT
-
 void *
-server::stackThread(void *data)
+server::fastCGIThread(void *data)
 {
-	FCGX_Request request;
-	FCGX_InitRequest(&request, 0, 0);
+	FCGX_Request req;
+	__request request = {&req};
+	FCGX_InitRequest(request.request, 0, 0);
 
-	exchange cfSTD(&request);
+	exchange cfSTD(request);
+
+	unsigned long limit = *(unsigned long *)data;
+	unsigned long requests = 0;
 
 	int res = 0;
 
@@ -130,23 +106,19 @@ server::stackThread(void *data)
 	{
 		if (limit != 0)
 		{
-			pthread_mutex_lock(&requestsM);
+			pc::sync::protector rp(&requestLock);
 
 			++requests;
 
 			if (requests >= limit)
 			{
-				pthread_mutex_unlock(&requestsM);
-
 				break;
 			}
-
-			pthread_mutex_lock(&requestsM);
 		}
 
-		pthread_mutex_lock(&acceptM);
-		res = FCGX_Accept_r(&request);
-		pthread_mutex_unlock(&acceptM);
+		acceptLock.acquire();
+		res = FCGX_Accept_r(request.request);
+		acceptLock.release();
 
 		if (res == -1)
 		{
@@ -155,13 +127,11 @@ server::stackThread(void *data)
 
 		handler(cfSTD);
 
-		FCGX_Finish_r(&request);
+		FCGX_Finish_r(request.request);
 	}
 
 	return NULL;
 }
-
-#endif
 
 //-------------------------------------------------------------------
 
@@ -175,9 +145,6 @@ server::serve(serverHandler func)
 
 	handler = func;
 
-	requests = 0;
-
-#ifdef PTHREAD_EXT
 	if (threading)
 	{
 		pthread_t *id = new pthread_t[threadsNum];
@@ -186,7 +153,7 @@ server::serve(serverHandler func)
 
 		for (; i < threadsNum; ++i)
 		{
-			pthread_create(&id[i], NULL, stackThread, NULL);
+			pthread_create(&id[i], NULL, fastCGIThread, &limit);
 		}
 
 		for (i = 0; i < threadsNum; ++i)
@@ -197,12 +164,14 @@ server::serve(serverHandler func)
 		delete [] id;
 	}
 	else
-#endif
 	{
-		FCGX_Request request;
-		FCGX_InitRequest(&request, 0, 0);
+		unsigned long requests = 0;
 
-		exchange cfSTD(&request);
+		FCGX_Request req;
+		__request request = {&req};
+		FCGX_InitRequest(request.request, 0, 0);
+
+		exchange cfSTD(request);
 
 		while (true)
 		{
@@ -216,14 +185,14 @@ server::serve(serverHandler func)
 				}
 			}
 
-			if (FCGX_Accept_r(&request) == -1)
+			if (FCGX_Accept_r(request.request) == -1)
 			{
 				throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 			}
 
 			handler(cfSTD);
 
-			FCGX_Finish_r(&request);
+			FCGX_Finish_r(request.request);
 		}
 	}
 }

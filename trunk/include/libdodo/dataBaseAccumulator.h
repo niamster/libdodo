@@ -33,8 +33,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/toolsMisc.h>
-#include <libdodo/toolsString.h>
+#include <libdodo/xexec.h>
 #include <libdodo/dataBaseConnector.h>
 
 namespace dodo
@@ -48,11 +47,8 @@ namespace dodo
 			 * @brief defines data that could be retrieved from the db object
 			 */
 			class __xexecDataBaseAccumulatorCollectedData
-
 #ifndef DATABASE_WO_XEXEC
-
 				: public __xexecCollectedData
-
 #endif
 			{
 			  public:

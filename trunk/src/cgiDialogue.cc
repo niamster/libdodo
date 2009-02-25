@@ -27,7 +27,19 @@
  * set shiftwidth=4
  */
 
+#include <string.h>
+#include <stdlib.h>
+
 #include <libdodo/cgiDialogue.h>
+
+#include <libdodo/directives.h>
+
+#include <libdodo/types.h>
+
+#include <libdodo/cgi.h>
+#include <libdodo/cgiExchange.h>
+#include <libdodo/cgiDialogueEx.h>
+
 
 using namespace dodo::cgi;
 

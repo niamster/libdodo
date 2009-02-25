@@ -32,17 +32,10 @@
 
 #include <libdodo/directives.h>
 
-#include <string.h>
-#include <stdlib.h>
+#include <libdodo/types.h>
 
 #include <libdodo/cgi.h>
-#include <libdodo/cgiDialogueEx.h>
-#include <libdodo/toolsMisc.h>
-#include <libdodo/toolsCode.h>
-#include <libdodo/types.h>
-#include <libdodo/toolsString.h>
 #include <libdodo/cgiExchange.h>
-#include <libdodo/ioStdio.h>
 
 namespace dodo
 {

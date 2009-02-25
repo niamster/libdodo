@@ -29,6 +29,10 @@
 
 #include <libdodo/cgi.h>
 
+#include <libdodo/directives.h>
+
+#include <libdodo/types.h>
+
 using namespace dodo::cgi;
 
 __cgiFile::__cgiFile() : size(0),

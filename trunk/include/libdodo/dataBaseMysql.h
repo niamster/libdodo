@@ -34,14 +34,8 @@
 
 #ifdef MYSQL_EXT
 
-#include <mysql.h>
-#include <errmsg.h>
-#include <sys/socket.h>
-
-#include <libdodo/toolsMisc.h>
-#include <libdodo/dataBaseMysqlEx.h>
+#include <libdodo/types.h>
 #include <libdodo/dataBaseSqlConstructor.h>
-#include <libdodo/xexec.h>
 
 namespace dodo
 {
@@ -49,6 +43,12 @@ namespace dodo
 	{
 		namespace base
 		{
+			/**
+			 * @struct __mysqlHandle
+			 * @brief defines internal handlers for MySQL DBMS interaction
+			 */
+			struct __mysqlHandle;
+
 			/**
 			 * @struct __mysqlSslOptions
 			 * @brief defines SSL mySQL options
@@ -186,8 +186,7 @@ namespace dodo
 
 				bool empty;             ///< true id mysqlRes is empty
 
-				MYSQL *mysqlHandle;     ///< DB handle
-				MYSQL_RES *mysqlResult; ///< handle to result
+				__mysqlHandle *handle; ///< DB handle
 
 				unsigned long type;     ///< connection type
 			};

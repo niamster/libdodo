@@ -29,6 +29,10 @@
 
 #include <libdodo/cgiExchange.h>
 
+#include <libdodo/directives.h>
+
+#include <libdodo/ioChannel.h>
+
 using namespace dodo::cgi;
 
 

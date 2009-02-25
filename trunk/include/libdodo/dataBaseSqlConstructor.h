@@ -32,8 +32,6 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/toolsMisc.h>
-#include <libdodo/dataBaseSqlConstructorEx.h>
 #include <libdodo/types.h>
 #include <libdodo/dataBaseAccumulator.h>
 

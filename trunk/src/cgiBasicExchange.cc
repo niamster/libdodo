@@ -29,6 +29,11 @@
 
 #include <libdodo/cgiBasicExchange.h>
 
+#include <libdodo/directives.h>
+
+#include <libdodo/cgiExchange.h>
+#include <libdodo/ioStdio.h>
+
 using namespace dodo::cgi::basic;
 
 exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
@@ -42,9 +47,7 @@ exchange::exchange(short protection) : dodo::cgi::exchange(protection),
 									   io::channel(protection)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_CGIBASICEXCHANGE);
-
 #endif
 }
 

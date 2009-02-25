@@ -27,7 +27,13 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <libdodo/types.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/dataBaseSqlConstructor.h>
+#include <libdodo/dataBaseSqlConstructorEx.h>
+#include <libdodo/dataBaseAccumulator.h>
 
 using namespace dodo::data::base::sql;
 
