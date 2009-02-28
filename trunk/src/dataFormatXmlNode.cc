@@ -27,8 +27,9 @@
  * set shiftwidth=4
  */
 
-
 #include <libdodo/dataFormatXmlNode.h>
+#include <libdodo/toolsMisc.h>
+#include <libdodo/types.h>
 
 using namespace dodo::data::format::xml;
 

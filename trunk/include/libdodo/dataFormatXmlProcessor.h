@@ -32,16 +32,8 @@
 
 #include <libdodo/directives.h>
 
-#ifdef LIBXML2_EXT
-
-#include <libxml/parser.h>
-#include <libxml/xmlmemory.h>
-
-#endif
-
-#include <libdodo/dataFormatXmlProcessorEx.h>
-#include <libdodo/dataFormatXmlNode.h>
 #include <libdodo/types.h>
+#include <libdodo/dataFormatXmlNode.h>
 
 namespace dodo
 {
@@ -51,6 +43,24 @@ namespace dodo
 		{
 			namespace xml
 			{
+				/**
+				 * @struct __node
+				 * @brief defines XML node properties
+				 */
+				struct __node;
+
+				/**
+				 * @struct __document
+				 * @brief defines XML document properties
+				 */
+				struct __doc;
+
+				/**
+				 * @struct __attribute
+				 * @brief defines XML attribute properties
+				 */
+				struct __attr;
+
 				/**
 				 * @struct __nodeDef
 				 * @brief defines processor tree definition
@@ -171,13 +181,13 @@ namespace dodo
 					 * @return XML info
 					 * @param file defines path to XML file
 					 */
-					virtual __info getFileInfo(const dodoString &file);
+					static __info getFileInfo(const dodoString &file);
 
 					/**
 					 * @return XML info
 					 * @param buffer defines XML buffer
 					 */
-					virtual __info getBufferInfo(const dodoString &buffer);
+					static __info getBufferInfo(const dodoString &buffer);
 
 					/**
 					 * clear parameters of the give node
@@ -222,19 +232,18 @@ namespace dodo
 					virtual node parse(const __nodeDef &definition);
 
 #ifdef LIBXML2_EXT
-
 					/**
 					 * @return true if content is in CDATA
 					 * @param xnode defines XML tree node
 					 */
-					bool isCDATA(xmlNodePtr xnode);
+					bool isCDATA(const __node &xnode);
 
 					/**
 					 * parse XML
 					 * @return parsed XML in node structure
 					 * @param xnode defines XML tree node
 					 */
-					virtual dodoArray<node> parse(xmlNodePtr xnode);
+					virtual dodoArray<node> parse(__node xnode);
 
 					/**
 					 * parses XML using __nodeDef XML definition
@@ -242,15 +251,15 @@ namespace dodo
 					 * @param definition defines structure of XML
 					 * @param chNode defines XML tree node
 					 */
-					virtual dodoArray<node> parse(const __nodeDef  &definition,
-												  const xmlNodePtr chNode);
+					virtual dodoArray<node> parse(const __nodeDef &definition,
+												  const __node	  &xnode);
 
 					/**
 					 * get node attributes
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					virtual void getAttributes(const xmlNodePtr xnode,
+					virtual void getAttributes(const __node		&xnode,
 											   dodoStringMap    &attributes);
 
 					/**
@@ -260,7 +269,7 @@ namespace dodo
 					 * @param attributes defines buffer for attributes
 					 */
 					virtual void getAttributes(const __nodeDef  &definition,
-											   const xmlNodePtr xnode,
+											   const __node		&xnode,
 											   dodoStringMap    &attributes);
 
 					/**
@@ -268,44 +277,31 @@ namespace dodo
 					 * @param xnode defines node content
 					 * @param sample defines buffer for node
 					 */
-					virtual void getNodeInfo(const xmlNodePtr xnode,
-											 node             &sample);
-
+					virtual void getNodeInfo(const __node &xnode,
+											 node		  &sample);
 #endif
 
 				  private:
 
 #ifdef LIBXML2_EXT
-
 					/**
-					 * @typedef xcharCmp
+					 * @typedef strCmp
 					 * @brief defines name compare function
 					 * @param one defines string to compare
 					 * @param two defines string to compare
 					 */
-					typedef int (*xcharCmp)(const xmlChar *one, const xmlChar *two);
-
-					xcharCmp cmpFunc;   ///< name compare function
+					typedef int (*strCmp)(const unsigned char *one, const unsigned char *two);
+					strCmp cmpFunc;   ///< name compare function
 
 					/**
 					 * find node by definition
 					 * @param definition defines structure of XML
 					 * @param node defines node content
 					 */
-					xmlNodePtr findNode(const __nodeDef &definition,
-										xmlNodePtr      node);
+					__node findNode(const __nodeDef &definition,
+									const __node	&node);
 
-					xmlDocPtr document; ///< XML Document
-					xmlAttr *attribute; ///< XML attributes
-
-					/**
-					 * catche libprocessor2 warnings
-					 * @param data defines user-defined data
-					 * @param error defines error descriptor
-					 */
-					static void errHandler(void        *data,
-										   xmlErrorPtr error);
-
+					__doc *document; ///< XML Document
 #endif
 
 #define PROCESSOR_STATEMENTS 11

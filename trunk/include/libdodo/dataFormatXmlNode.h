@@ -32,10 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#include <algorithm>
-
 #include <libdodo/types.h>
-#include <libdodo/toolsMisc.h>
 
 namespace dodo
 {

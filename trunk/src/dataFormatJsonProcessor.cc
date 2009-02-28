@@ -27,6 +27,13 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <libdodo/types.h>
+#include <libdodo/toolsString.h>
+#include <libdodo/toolsFilesystem.h>
+#include <libdodo/dataFormatJsonProcessorEx.h>
+#include <libdodo/dataFormatJsonNode.h>
 #include <libdodo/dataFormatJsonProcessor.h>
 
 using namespace dodo::data::format::json;
