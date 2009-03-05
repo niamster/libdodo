@@ -30,10 +30,14 @@
 #include <libdodo/directives.h>
 
 #ifdef LIBXML2_EXT
-
 #include <libxml/parser.h>
 #include <libxml/xmlmemory.h>
+#endif
 
+#include <libdodo/dataFormatXmlProcessor.h>
+#include <libdodo/dataFormatXmlProcessorEx.h>
+
+#ifdef LIBXML2_EXT
 namespace dodo
 {
 	namespace data
@@ -48,7 +52,6 @@ namespace dodo
 					 * constructor
 					 */
 					__node();
-
 
 					/**
 					 * constructor
@@ -66,11 +69,7 @@ namespace dodo
 		};
 	};
 };
-
 #endif
-
-#include <libdodo/dataFormatXmlProcessorEx.h>
-#include <libdodo/dataFormatXmlProcessor.h>
 
 using namespace dodo::data::format::xml;
 
@@ -139,13 +138,11 @@ const dodoString processor::statements[] =
 //-------------------------------------------------------------------
 
 #ifdef LIBXML2_EXT
-
 void
 errHandler(void        *data,
 		   xmlErrorPtr error)
 {
 }
-
 #endif
 
 //-------------------------------------------------------------------
@@ -185,7 +182,6 @@ processor::~processor()
 //-------------------------------------------------------------------
 
 #ifdef LIBXML2_EXT
-
 bool
 processor::isCDATA(const __node &a_xnode)
 {
@@ -202,7 +198,6 @@ processor::isCDATA(const __node &a_xnode)
 
 	return false;
 }
-
 #endif
 
 //-------------------------------------------------------------------
@@ -364,7 +359,6 @@ processor::parse(const __nodeDef &definition)
 //-------------------------------------------------------------------
 
 #ifdef LIBXML2_EXT
-
 dodoArray<node>
 processor::parse(const __nodeDef &definition,
 				 const __node	 &a_xnode)
@@ -477,13 +471,11 @@ processor::parse(const __nodeDef &definition,
 
 	return sampleArr;
 }
-
 #endif
 
 //-------------------------------------------------------------------
 
 #ifdef LIBXML2_EXT
-
 void
 processor::getAttributes(const __nodeDef  &definition,
 						 const __node &xnode,
@@ -599,7 +591,6 @@ processor::getNodeInfo(const __node &xnode,
 		xmlFree(xChar);
 	}
 }
-
 #endif
 
 //-------------------------------------------------------------------
@@ -673,7 +664,6 @@ processor::getBufferInfo(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 #ifdef LIBXML2_EXT
-
 dodoArray<node>
 processor::parse(__node xnode)
 {
@@ -719,7 +709,6 @@ processor::parse(__node xnode)
 
 	return sample;
 }
-
 #endif
 
 //-------------------------------------------------------------------
@@ -839,7 +828,6 @@ processor::initNodeDef(__nodeDef &xnode)
 //-------------------------------------------------------------------
 
 #ifdef LIBXML2_EXT
-
 __node
 processor::findNode(const __nodeDef &definition,
 					const __node	&a_xnode)
@@ -892,7 +880,6 @@ processor::findNode(const __nodeDef &definition,
 
 	return __node(NULL);
 }
-
 #endif
 
 //-------------------------------------------------------------------

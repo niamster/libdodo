@@ -27,7 +27,14 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/dataTplProcessor.h>
+#include <libdodo/dataTplProcessorEx.h>
+#include <libdodo/types.h>
+#include <libdodo/toolsFilesystem.h>
+#include <libdodo/toolsMisc.h>
+#include <libdodo/ioChannel.h>
 
 using namespace dodo::data::tpl;
 

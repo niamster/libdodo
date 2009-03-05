@@ -28,7 +28,6 @@
  */
 
 #include <libdodo/directives.h>
-#include <libdodo/types.h>
 
 #include <sys/types.h>
 #include <sys/mman.h>
@@ -39,6 +38,12 @@
 #else /*POSIX_SEMAPHORES*/
 #include <fcntl.h>
 #endif
+
+#include <libdodo/dataMemoryShared.h>
+#include <libdodo/toolsMisc.h>
+#include <libdodo/types.h>
+#include <libdodo/toolsCode.h>
+#include <libdodo/dataMemorySharedEx.h>
 
 namespace dodo
 {
@@ -57,11 +62,6 @@ namespace dodo
 		};
 	};
 };
-
-#include <libdodo/toolsMisc.h>
-#include <libdodo/toolsCode.h>
-#include <libdodo/dataMemoryShared.h>
-#include <libdodo/dataMemorySharedEx.h>
 
 using namespace dodo::data::memory;
 

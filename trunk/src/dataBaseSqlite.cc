@@ -30,8 +30,12 @@
 #include <libdodo/directives.h>
 
 #ifdef SQLITE3_EXT
-
 #include <sqlite3.h>
+
+#include <libdodo/dataBaseSqlite.h>
+#include <libdodo/toolsMisc.h>
+#include <libdodo/dataBaseSqliteEx.h>
+#include <libdodo/xexec.h>
 
 namespace dodo
 {
@@ -47,11 +51,6 @@ namespace dodo
 		};
 	};
 };
-
-#include <libdodo/dataBaseSqlite.h>
-#include <libdodo/toolsMisc.h>
-#include <libdodo/dataBaseSqliteEx.h>
-#include <libdodo/xexec.h>
 
 using namespace dodo::data::base;
 
@@ -1162,7 +1161,6 @@ sqlite::fetchFieldsToRows() const
 
 	return rowsFields;
 }
-
 #endif
 
 //-------------------------------------------------------------------

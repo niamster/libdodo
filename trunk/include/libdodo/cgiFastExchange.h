@@ -33,7 +33,6 @@
 #include <libdodo/directives.h>
 
 #ifdef FASTCGI_EXT
-
 #include <libdodo/cgiExchange.h>
 #include <libdodo/types.h>
 
@@ -135,7 +134,6 @@ namespace dodo
 		};
 	};
 };
-
 #endif
 
 #endif

@@ -30,13 +30,12 @@
 #include <libdodo/directives.h>
 
 #ifdef FASTCGI_EXT
-
 #include <fcgiapp.h>
 
 #include "cgiFastExchange.inline"
 
-#include <libdodo/types.h>
 #include <libdodo/cgiFastServer.h>
+#include <libdodo/types.h>
 #include <libdodo/cgiFastServerEx.h>
 #include <libdodo/cgiFastExchange.h>
 #include <libdodo/pcSyncThreadSection.h>

@@ -27,9 +27,10 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/graphicsColor.h>
+#include <libdodo/directives.h>
 
 #ifdef IMAGEMAGICK_EXT
+#include <libdodo/graphicsColor.h>
 
 using namespace dodo::graphics;
 
@@ -72,7 +73,6 @@ __color color::transparent =
 {
 	65535, 65535, 65535, 65535
 };
-
 #endif
 
 //-------------------------------------------------------------------

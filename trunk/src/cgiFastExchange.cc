@@ -30,7 +30,6 @@
 #include <libdodo/directives.h>
 
 #ifdef FASTCGI_EXT
-
 #include <fcgiapp.h>
 
 #include "cgiFastExchange.inline"

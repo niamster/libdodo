@@ -33,7 +33,6 @@
 #include <libdodo/directives.h>
 
 #ifdef FASTCGI_EXT
-
 #include <libdodo/pcSyncThreadSection.h>
 
 #include <libdodo/cgiServer.h>
@@ -112,7 +111,6 @@ namespace dodo
 		};
 	};
 };
-
 #endif
 
 #endif

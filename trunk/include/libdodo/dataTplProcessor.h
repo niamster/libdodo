@@ -32,12 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/dataTplProcessorEx.h>
 #include <libdodo/types.h>
-#include <libdodo/toolsMisc.h>
-#include <libdodo/cgiFastServer.h>
-#include <libdodo/cgiServer.h>
-#include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioChannel.h>
 
 namespace dodo
@@ -139,7 +134,7 @@ namespace dodo
 			 *
 			 *              example:
 			 * //c++ code:
-			 *                      cgiProcessor cgip;
+			 *                      dodo::data::tpl::processor cgip;
 			 *
 			 *                      dodoStringArray arr;
 			 *                      arr.push_back("one");

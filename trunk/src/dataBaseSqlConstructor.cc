@@ -29,9 +29,9 @@
 
 #include <libdodo/directives.h>
 
+#include <libdodo/dataBaseSqlConstructor.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/dataBaseSqlConstructor.h>
 #include <libdodo/dataBaseSqlConstructorEx.h>
 #include <libdodo/dataBaseAccumulator.h>
 

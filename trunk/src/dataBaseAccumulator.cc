@@ -29,8 +29,8 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
 #include <libdodo/dataBaseAccumulator.h>
+#include <libdodo/types.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/xexec.h>
 

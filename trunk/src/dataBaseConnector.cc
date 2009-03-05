@@ -29,8 +29,8 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
 #include <libdodo/dataBaseConnector.h>
+#include <libdodo/types.h>
 
 using namespace dodo::data::base;
 

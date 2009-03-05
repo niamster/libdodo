@@ -30,8 +30,11 @@
 #include <libdodo/directives.h>
 
 #ifdef MYSQL_EXT
-
 #include <mysql.h>
+#include <errmsg.h>
+
+#include <libdodo/dataBaseMysql.h>
+#include <libdodo/dataBaseMysqlEx.h>
 
 namespace dodo
 {
@@ -47,11 +50,6 @@ namespace dodo
 		};
 	};
 };
-
-#include <errmsg.h>
-
-#include <libdodo/dataBaseMysql.h>
-#include <libdodo/dataBaseMysqlEx.h>
 
 using namespace dodo::data::base;
 
@@ -682,7 +680,6 @@ mysql::fetchFieldsToRows() const
 
 	return rowsFields;
 }
-
 #endif
 
 //-------------------------------------------------------------------

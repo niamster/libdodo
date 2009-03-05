@@ -27,10 +27,9 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/cgiBasicExchange.h>
-
 #include <libdodo/directives.h>
 
+#include <libdodo/cgiBasicExchange.h>
 #include <libdodo/cgiExchange.h>
 #include <libdodo/ioStdio.h>
 

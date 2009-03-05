@@ -33,7 +33,6 @@
 #include <libdodo/directives.h>
 
 #ifdef POSTGRESQL_EXT
-
 #include <libdodo/types.h>
 #include <libdodo/dataBaseSqlConstructor.h>
 
@@ -165,7 +164,6 @@ namespace dodo
 				virtual void updateCollect();
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
-
 #define POSTGRESQL_ENCODINGSTATEMENTS 39
 
 				/**
@@ -244,7 +242,6 @@ namespace dodo
 		};
 	};
 };
-
 #endif
 
 #endif

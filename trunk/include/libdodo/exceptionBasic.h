@@ -32,31 +32,9 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
-
 #include <exception>
 
-#ifdef DL_EXT
-
-#include <dlfcn.h>
-
-#endif
-
-#ifdef CALLSTACK_EX
-
-#include <dlfcn.h>
-#include <execinfo.h>
-#include <cxxabi.h>
-
-#endif
-
-#ifdef PTHREAD_EXT
-
-#include <pthread.h>
-
-#endif
-
-#include <stdlib.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
@@ -145,7 +123,6 @@ namespace dodo
 #define BASEEX_MODULES    51
 
 #ifdef DL_EXT
-
 		/**
 		 * @struct __basicMod
 		 * @brief is returned from initBaseExModule in the library
@@ -170,7 +147,6 @@ namespace dodo
 		 * @brief defines type of deinit function for library
 		 */
 		typedef void (*deinitBaseExModule)();
-
 #endif
 
 		class basic;
@@ -185,7 +161,6 @@ namespace dodo
 		typedef void (*errorHandler)(int module, basic *ex, void *data);
 
 #ifdef CALLSTACK_EX
-
 		/**
 		 * @struct __call
 		 * @brief describes function call in call stack
@@ -196,7 +171,6 @@ namespace dodo
 			dodoString symbol;      ///< name of the call
 			void       *address;    ///< address of the call
 		};
-
 #endif
 
 		/**
@@ -253,12 +227,10 @@ namespace dodo
 			virtual const char *what() const throw ();
 
 #ifdef CALLSTACK_EX
-
 			/**
 			 * @return call stack to the exception point
 			 */
 			virtual dodoString getCallStack();
-
 #endif
 
 			int errModule;                  ///< module where exception has been thrown
@@ -274,9 +246,7 @@ namespace dodo
 			dodoString message;             ///< custom message that might clarify the exception
 
 #ifdef CALLSTACK_EX
-
 			dodoArray<__call> callStack;    ///< call stack of the raised exception
-
 #endif
 
 			/**
@@ -309,7 +279,6 @@ namespace dodo
 			static void unsetErrorHandlers();
 
 #ifdef DL_EXT
-
 			/**
 			 * @return information about module
 			 * @param path defines path to the library[if not in ldconfig db] or library name
@@ -340,7 +309,6 @@ namespace dodo
 			static bool setErrorHandlers(const dodoString &path,
 										 void             *data,
 										 void             *toInit = NULL);
-
 #endif
 
 		  protected:
@@ -352,11 +320,9 @@ namespace dodo
 			static void *handlerDataEx[BASEEX_MODULES];     ///< data that will be passed to the handler
 
 #ifdef DL_EXT
-
 			static void *handlesEx[BASEEX_MODULES];         ///< handles to the libraries
 
 			static bool handlesOpenedEx[BASEEX_MODULES];    ///< map of the opened libraries
-
 #endif
 
 			/**
@@ -390,9 +356,7 @@ namespace dodo
 			  protected:
 
 #ifdef PTHREAD_EXT
-
 				static pthread_mutex_t keeper;  ///< mutex
-
 #endif
 			};
 

@@ -33,7 +33,6 @@
 #include <libdodo/directives.h>
 
 #ifdef MYSQL_EXT
-
 #include <libdodo/types.h>
 #include <libdodo/dataBaseSqlConstructor.h>
 
@@ -193,7 +192,6 @@ namespace dodo
 		};
 	};
 };
-
 #endif
 
 #endif

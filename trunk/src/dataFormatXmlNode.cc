@@ -27,6 +27,8 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/dataFormatXmlNode.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/types.h>

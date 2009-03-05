@@ -48,9 +48,6 @@
 #define _GNU_SOURCE
 #endif
 
-#include <stdio.h>
-#include <unistd.h>
-
 /**
  * size of key for shm_open and sem_open
  * @note including leading '/'

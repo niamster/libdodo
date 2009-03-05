@@ -30,9 +30,14 @@
 #include <libdodo/directives.h>
 
 #ifdef POSTGRESQL_EXT
-
 #include <libpq-fe.h>
 #include <stdlib.h>
+
+#include <libdodo/dataBasePostgresql.h>
+#include <libdodo/toolsString.h>
+#include <libdodo/toolsMisc.h>
+#include <libdodo/dataBasePostgresqlEx.h>
+#include <libdodo/xexec.h>
 
 namespace dodo
 {
@@ -50,16 +55,9 @@ namespace dodo
 	};
 };
 
-#include <libdodo/toolsString.h>
-#include <libdodo/toolsMisc.h>
-#include <libdodo/dataBasePostgresql.h>
-#include <libdodo/dataBasePostgresqlEx.h>
-#include <libdodo/xexec.h>
-
 using namespace dodo::data::base;
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
-
 const dodoString postgresql::encodingStatements[] =
 {
 	"SQL_ASCII",
@@ -102,7 +100,6 @@ const dodoString postgresql::encodingStatements[] =
 	"UHC",
 	"GB18030"
 };
-
 #endif
 
 //-------------------------------------------------------------------
@@ -1024,7 +1021,6 @@ postgresql::getCharset() const
 	return pg_encoding_to_char(PQclientEncoding(handle->handle));
 #endif
 }
-
 #endif
 
 //-------------------------------------------------------------------
