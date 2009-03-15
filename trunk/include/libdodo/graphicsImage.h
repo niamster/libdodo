@@ -388,7 +388,6 @@ namespace dodo
 		extern __image_init__ __image_init_object__;
 	};
 };
-
 #endif
 
 #endif

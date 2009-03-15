@@ -33,28 +33,12 @@
 #include <libdodo/directives.h>
 
 #ifdef IMAGEMAGICK_EXT
-
-#ifndef IMAGEMAGICK_PRE_63
-
-#include <magick/MagickCore.h>
-
-#else
-
-#include <magick/ImageMagick.h>
-
-#endif
-
-#include <math.h>
-
-#include <libdodo/types.h>
-#include <libdodo/graphicsImage.h>
-#include <libdodo/graphicsTransformEx.h>
-#include <libdodo/xexec.h>
-
 namespace dodo
 {
 	namespace graphics
 	{
+		class image;
+
 		/**
 		 * @enum transformRotateDirectionAngleEnum defines rotation options
 		 */
@@ -132,7 +116,6 @@ namespace dodo
 		};
 	};
 };
-
 #endif
 
 #endif

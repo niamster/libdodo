@@ -27,9 +27,20 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/graphicsTransform.h>
+#include <libdodo/directives.h>
 
 #ifdef IMAGEMAGICK_EXT
+#ifndef IMAGEMAGICK_PRE_63
+#include <magick/MagickCore.h>
+#else
+#include <magick/ImageMagick.h>
+#endif
+
+#include <math.h>
+
+#include <libdodo/graphicsTransform.h>
+#include <libdodo/graphicsImage.h>
+#include <libdodo/graphicsTransformEx.h>
 
 using namespace dodo::graphics;
 

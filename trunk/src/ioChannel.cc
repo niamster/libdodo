@@ -27,17 +27,23 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/ioChannel.h>
+#include <libdodo/xexec.h>
+#include <libdodo/types.h>
+#include <libdodo/ioEventInfo.h>
+#include <libdodo/pcSyncProcessSection.h>
+#include <libdodo/pcSyncThreadSection.h>
+#include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io;
 
 #ifndef IO_WO_XEXEC
-
 __xexecIoChannelCollectedData::__xexecIoChannelCollectedData(xexec *a_executor,
 															 short execObject) : __xexecCollectedData(a_executor, execObject)
 {
 }
-
 #endif
 
 //-------------------------------------------------------------------
@@ -46,12 +52,9 @@ channel::channel(short protection) : inSize(IO_INSIZE),
 									 outSize(IO_OUTSIZE),
 									 keeper(NULL),
 									 protection(protection)
-
 #ifndef IO_WO_XEXEC
-
 									 ,
 									 collectedData(this, XEXEC_OBJECT_XEXEC)
-
 #endif
 {
 	if (protection == CHANNEL_PROTECTION_THREAD)
@@ -114,7 +117,6 @@ channel::read()
 	}
 
 #ifndef IO_WO_XEXEC
-
 	collectedData.buffer.assign(data, inSize);
 	delete [] data;
 
@@ -123,13 +125,10 @@ channel::read()
 	a_str = collectedData.buffer;
 
 	collectedData.buffer.clear();
-
 #else
-
 	a_str.assign(data, inSize);
 
 	delete [] data;
-
 #endif
 
 	return a_str;
@@ -166,7 +165,6 @@ channel::readStream()
 	}
 
 #ifndef IO_WO_XEXEC
-
 	if (n > 0)
 	{
 		collectedData.buffer.assign(data, n);
@@ -183,9 +181,7 @@ channel::readStream()
 	a_str = collectedData.buffer;
 
 	collectedData.buffer.clear();
-
 #else
-
 	if (n > 0)
 	{
 		a_str.assign(data, n);
@@ -196,7 +192,6 @@ channel::readStream()
 	}
 
 	delete [] data;
-
 #endif
 
 	return a_str;
@@ -210,7 +205,6 @@ channel::write(const dodoString &a_data)
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-
 	collectedData.buffer.assign(a_data, 0, outSize);
 
 	operType = IO_OPERATION_WRITESTREAM;
@@ -226,11 +220,8 @@ channel::write(const dodoString &a_data)
 
 		throw;
 	}
-
 #else
-
 	_write(a_data.c_str());
-
 #endif
 
 #ifndef IO_WO_XEXEC
@@ -248,7 +239,6 @@ channel::writeStream(const dodoString &a_data)
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-
 	collectedData.buffer = a_data;
 
 	operType = IO_OPERATION_WRITESTREAMSTRING;
@@ -264,11 +254,8 @@ channel::writeStream(const dodoString &a_data)
 
 		throw;
 	}
-
 #else
-
 	_writeStream(a_data.c_str());
-
 #endif
 
 #ifndef IO_WO_XEXEC

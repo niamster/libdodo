@@ -35,12 +35,17 @@
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
 #include <libdodo/ioEventInfo.h>
-#include <libdodo/pcSyncProcessSection.h>
-#include <libdodo/pcSyncThreadSection.h>
-#include <libdodo/pcSyncProtector.h>
 
 namespace dodo
 {
+	namespace pc
+	{
+		namespace sync
+		{
+			class section;
+		};
+	};
+
 	namespace io
 	{
 		/**
@@ -69,7 +74,6 @@ namespace dodo
 		};
 
 #ifndef IO_WO_XEXEC
-
 		/**
 		 * @class __xexecIoChannelCollectedData
 		 * @brief defines data that could be retrieved from io::channel(to modificate)
@@ -88,7 +92,6 @@ namespace dodo
 
 			dodoString buffer; ///< data buffer
 		};
-
 #endif
 
 		/**
@@ -177,10 +180,9 @@ namespace dodo
 			virtual void _writeStream(const char * const data) = 0;
 
 #ifndef IO_WO_XEXEC
-
 			__xexecIoChannelCollectedData collectedData;    ///< data collected for xexec
-
 #endif
+
 			pc::sync::section *keeper;                      ///< section locker
 			short protection;                               ///< type of IO protection[see channelProtectionTypeEnum]
 		};
