@@ -641,6 +641,7 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 CXXCPP
 DEBUG
+TAGS
 INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
@@ -5318,6 +5319,24 @@ function add_ldflags_libdir()
 ##
 # checking dependencies/build options
 ##
+
+
+TAGS=$(which etags)
+if test -z "$TAGS" -o ! -x "$TAGS"
+then
+	TAGS=$(which ctags)
+	if test -z "$TAGS" -o ! -x "$TAGS"
+	then
+		{ $as_echo "$as_me:$LINENO: WARNING: No application was found for generating tags" >&5
+$as_echo "$as_me: WARNING: No application was found for generating tags" >&2;}
+	else
+		{ $as_echo "$as_me:$LINENO: result: ctags will be used for generating tags" >&5
+$as_echo "ctags will be used for generating tags" >&6; }
+	fi
+else
+	{ $as_echo "$as_me:$LINENO: result: etags will be used for generating tags" >&5
+$as_echo "etags will be used for generating tags" >&6; }
+fi
 
 cat > include/libdodo/directives.runtime.h  <<EOF
 /***************************************************************************

@@ -61,6 +61,21 @@ function add_ldflags_libdir()
 # checking dependencies/build options
 ##
 
+AC_SUBST(TAGS)
+TAGS=$(which etags)
+if test -z "$TAGS" -o ! -x "$TAGS"
+then
+	TAGS=$(which ctags)
+	if test -z "$TAGS" -o ! -x "$TAGS"
+	then
+		AC_MSG_WARN(No application was found for generating tags)
+	else
+		AC_MSG_RESULT(ctags will be used for generating tags)
+	fi
+else
+	AC_MSG_RESULT(etags will be used for generating tags)
+fi
+
 cat > include/libdodo/directives.runtime.h  <<EOF
 /***************************************************************************
 *            directives.runtime.h

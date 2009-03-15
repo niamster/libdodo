@@ -10,9 +10,11 @@ CXX:=@CXX@
 INSTALL:=@INSTALL@
 LN_S:=@LN_S@
 
+TAGS:=@TAGS@
+
 CPPFLAGS:=-I./include @CPPFLAGS@
 LDFLAGS:=-L./ @LDFLAGS@
-CFLAGS:=@CFLAGS@ @DEFS@
+CFLAGS:=@CFLAGS@
 
 ###########################################################
 
@@ -155,6 +157,14 @@ install: @PACKAGE_NAME@
 	@echo "Use libdodo with pleasure"
 	@echo ""
 	@echo ""
+
+tags:
+	@if test -n "${TAGS}" -a -x "${TAGS}";\
+	then\
+		${TAGS} include/libdodo/* src/*;\
+	else\
+		echo "No application was found for generating tags";\
+	fi
 
 clean:
 	@rm -rf *.o *.so* *.a*
