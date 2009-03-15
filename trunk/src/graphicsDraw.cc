@@ -37,6 +37,8 @@
 #endif
 #include <math.h>
 
+#include "graphicsImage.inline"
+
 #include <libdodo/graphicsDraw.h>
 #include <libdodo/types.h>
 #include <libdodo/graphicsImage.h>
@@ -91,7 +93,7 @@ draw::primitive(char           *description,
 				const __color  &borderColor,
 				unsigned short borderWidth)
 {
-	if (im == NULL || im->collectedData.imHandle == NULL)
+	if (im == NULL || im->collectedData.handle->imHandle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 	}
@@ -99,7 +101,7 @@ draw::primitive(char           *description,
 #ifndef IMAGEMAGICK_PRE_63
 	DrawInfo *di = AcquireDrawInfo();
 #else
-	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
+	DrawInfo *di = CloneDrawInfo(im->collectedData.handle->imInfo, NULL);
 #endif
 
 	di->primitive = description;
@@ -116,7 +118,7 @@ draw::primitive(char           *description,
 	di->fill.blue = fillColor.blue;
 	di->fill.opacity = fillColor.opacity;
 
-	if (DrawImage(im->collectedData.imHandle, di) == MagickFalse)
+	if (DrawImage(im->collectedData.handle->imHandle, di) == MagickFalse)
 	{
 		di->primitive = NULL;
 		DestroyDrawInfo(di);
@@ -193,7 +195,7 @@ draw::text(const graphics::point &position,
 		   unsigned short        borderWidth,
 		   double                angle)
 {
-	if (im == NULL || im->collectedData.imHandle == NULL)
+	if (im == NULL || im->collectedData.handle->imHandle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 	}
@@ -205,7 +207,7 @@ draw::text(const graphics::point &position,
 #ifndef IMAGEMAGICK_PRE_63
 	DrawInfo *di = AcquireDrawInfo();
 #else
-	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
+	DrawInfo *di = CloneDrawInfo(im->collectedData.handle->imInfo, NULL);
 #endif
 
 	double radians = angle * M_PI / 180;
@@ -249,7 +251,7 @@ draw::text(const graphics::point &position,
 	di->fill.blue = fillColor.blue;
 	di->fill.opacity = fillColor.opacity;
 
-	if (DrawImage(im->collectedData.imHandle, di) == MagickFalse)
+	if (DrawImage(im->collectedData.handle->imHandle, di) == MagickFalse)
 	{
 		di->primitive = NULL;
 		di->font = NULL;
@@ -270,7 +272,7 @@ draw::image(const graphics::point &position,
 			const graphics::image &a_im,
 			double                angle)
 {
-	if (im == NULL || im->collectedData.imHandle == NULL)
+	if (im == NULL || im->collectedData.handle->imHandle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 	}
@@ -302,7 +304,7 @@ draw::image(const graphics::point &position,
 	current.tx = _current.sx * affine.tx + _current.ry * affine.ty + _current.tx;
 	current.ty = _current.rx * affine.tx + _current.sy * affine.ty + _current.ty;
 
-	if (DrawAffineImage(im->collectedData.imHandle, a_im.collectedData.imHandle, &current) == MagickFalse)
+	if (DrawAffineImage(im->collectedData.handle->imHandle, a_im.collectedData.handle->imHandle, &current) == MagickFalse)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
 	}
@@ -315,7 +317,7 @@ draw::point(const graphics::point &position,
 			const __color         &pointColor,
 			unsigned short        pointWidth)
 {
-	if (im == NULL || im->collectedData.imHandle == NULL)
+	if (im == NULL || im->collectedData.handle->imHandle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 	}
@@ -334,7 +336,7 @@ draw::point(const graphics::point &position,
 #ifndef IMAGEMAGICK_PRE_63
 	DrawInfo *di = AcquireDrawInfo();
 #else
-	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
+	DrawInfo *di = CloneDrawInfo(im->collectedData.handle->imInfo, NULL);
 #endif
 
 	di->primitive = description;
@@ -344,7 +346,7 @@ draw::point(const graphics::point &position,
 	di->fill.blue = pointColor.blue;
 	di->fill.opacity = pointColor.opacity;
 
-	if (DrawImage(im->collectedData.imHandle, di) == MagickFalse)
+	if (DrawImage(im->collectedData.handle->imHandle, di) == MagickFalse)
 	{
 		di->primitive = NULL;
 		DestroyDrawInfo(di);

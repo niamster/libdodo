@@ -14,7 +14,7 @@ TAGS:=@TAGS@
 
 CPPFLAGS:=-I./include @CPPFLAGS@
 LDFLAGS:=-L./ @LDFLAGS@
-CFLAGS:=@CFLAGS@
+CFLAGS:=@CFLAGS@ @DEFS@
 
 ###########################################################
 

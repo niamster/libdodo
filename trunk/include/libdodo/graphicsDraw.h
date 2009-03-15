@@ -34,6 +34,7 @@
 
 #ifdef IMAGEMAGICK_EXT
 #include <libdodo/types.h>
+#include <libdodo/graphicsColor.h>
 
 namespace dodo
 {

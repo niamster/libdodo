@@ -10,6 +10,7 @@
 #include <libdodo/graphicsDraw.h>
 #include <libdodo/ioFile.h>
 
+#include <math.h>
 #include <iostream>
 
 using namespace dodo;

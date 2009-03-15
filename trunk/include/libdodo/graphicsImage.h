@@ -68,11 +68,6 @@ namespace dodo
 		{
 		  public:
 
-			/**
-			 * constructor
-			 */
-			__xexecImageCollectedData();
-
 #ifndef GRAPHICS_WO_XEXEC
 			/**
 			 * constructor
@@ -81,6 +76,11 @@ namespace dodo
 			 */
 			__xexecImageCollectedData(xexec *executor,
 									  short execObject);
+#else
+			/**
+			 * constructor
+			 */
+			__xexecImageCollectedData();
 #endif
 
 			/**
@@ -88,7 +88,7 @@ namespace dodo
 			 */
 			~__xexecImageCollectedData();
 
-			__imagecHandle *handle; ///< ImageMagic handle
+			__imageHandle *handle; ///< ImageMagic handle
 		};
 
 #define IMAGE_MAPPINGSTATEMENTS 2
@@ -331,61 +331,18 @@ namespace dodo
 
 		  protected:
 
-			ExceptionInfo exInfo;                                                       ///< exception info handler
+			void *exInfo;                                                       ///< exception info handler
 
 			__xexecImageCollectedData collectedData;                                    ///< data collected for xexec
 
 		  private:
 
 			static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                   ///< image mapping statements
-			static const StorageType pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];         ///< pixel type statements
-			static const ImageType typeStArr[IMAGE_TYPESTATEMENTS];                     ///< color space statements
+			static const int pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];         ///< pixel type statements
+			static const int typeStArr[IMAGE_TYPESTATEMENTS];                     ///< color space statements
 			static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                   ///< image encoder
-			static const CompressionType compressionStArr[IMAGE_COMPRESSIONSTATEMENTS]; ///< image compression
+			static const int compressionStArr[IMAGE_COMPRESSIONSTATEMENTS]; ///< image compression
 		};
-
-		/**
-		 * @class __image_init__
-		 * @brief initializes image evironment
-		 */
-		class __image_init__
-		{
-		  public:
-
-			/**
-			 * contructor
-			 */
-			__image_init__();
-
-			/**
-			 * destructor
-			 */
-			~__image_init__();
-
-		  private:
-
-			/**
-			 * ImageMagic error handler
-			 * @param et defines error category
-			 * @param reason defines the reason of the error
-			 * @param description defines description to the reason
-			 */
-			static void imErrorHandler(const ExceptionType et,
-									   const char          *reason,
-									   const char          *description);
-
-			/**
-			 * ImageMagic warning handler
-			 * @param et defines warning category
-			 * @param reason defines the reason of the warning
-			 * @param description defines description to the reason
-			 */
-			static void imWarningHandler(const ExceptionType et,
-										 const char          *reason,
-										 const char          *description);
-		};
-
-		extern __image_init__ __image_init_object__;
 	};
 };
 #endif
