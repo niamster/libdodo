@@ -35,7 +35,6 @@
 #include <libdodo/types.h>
 
 #include <libdodo/cgi.h>
-#include <libdodo/cgiExchange.h>
 
 namespace dodo
 {
@@ -49,6 +48,8 @@ namespace dodo
 
 	namespace cgi
 	{
+		class exchange;
+
 		/**
 		 * @note
 		 * headers that will be printed calling prinHeaders method:

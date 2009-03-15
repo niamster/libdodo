@@ -35,6 +35,7 @@
 #endif
 
 #include <libdodo/dataFormatXmlProcessor.h>
+#include <libdodo/dataFormatXmlNode.h>
 #include <libdodo/dataFormatXmlProcessorEx.h>
 
 #ifdef LIBXML2_EXT
@@ -73,6 +74,7 @@ namespace dodo
 
 using namespace dodo::data::format::xml;
 
+#ifdef LIBXML2_EXT
 __node::__node(xmlNodePtr node) : node(node)
 {
 }
@@ -82,6 +84,7 @@ __node::__node(xmlNodePtr node) : node(node)
 __node::__node()
 {
 }
+#endif
 
 //-------------------------------------------------------------------
 

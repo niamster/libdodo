@@ -33,7 +33,6 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/dataFormatXmlNode.h>
 
 namespace dodo
 {
@@ -43,6 +42,8 @@ namespace dodo
 		{
 			namespace xml
 			{
+				class node;
+
 				/**
 				 * @struct __node
 				 * @brief defines XML node properties

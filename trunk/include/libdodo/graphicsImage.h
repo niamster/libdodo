@@ -33,28 +33,20 @@
 #include <libdodo/directives.h>
 
 #ifdef IMAGEMAGICK_EXT
-
-#ifndef IMAGEMAGICK_PRE_63
-
-#include <magick/MagickCore.h>
-
-#else
-
-#include <magick/ImageMagick.h>
-
-#endif
-
-#include <math.h>
-
 #include <libdodo/types.h>
 #include <libdodo/graphicsColor.h>
-#include <libdodo/graphicsImageEx.h>
 #include <libdodo/xexec.h>
 
 namespace dodo
 {
 	namespace graphics
 	{
+		/**
+		 * @struct __imageHandle
+		 * @brief defines internal handlers for image processing library
+		 */
+		struct __imageHandle;
+
 		/**
 		 * @enum imageOperTypeEnum defines type of operation for hook
 		 */
@@ -70,17 +62,18 @@ namespace dodo
 		 * @brief defines data that could be retrieved from the image object
 		 */
 		class __xexecImageCollectedData
-
 #ifndef GRAPHICS_WO_XEXEC
-
 			: public __xexecCollectedData
-
 #endif
 		{
 		  public:
 
-#ifndef GRAPHICS_WO_XEXEC
+			/**
+			 * constructor
+			 */
+			__xexecImageCollectedData();
 
+#ifndef GRAPHICS_WO_XEXEC
 			/**
 			 * constructor
 			 * @param executor defines class that executed hook
@@ -88,11 +81,14 @@ namespace dodo
 			 */
 			__xexecImageCollectedData(xexec *executor,
 									  short execObject);
-
 #endif
 
-			ImageInfo * imInfo; ///< image info handler
-			Image *imHandle;    ///< image handler
+			/**
+			 * destructor
+			 */
+			~__xexecImageCollectedData();
+
+			__imagecHandle *handle; ///< ImageMagic handle
 		};
 
 #define IMAGE_MAPPINGSTATEMENTS 2
@@ -192,11 +188,8 @@ namespace dodo
 		 * @brief provides simple image manipulations
 		 */
 		class image
-
 #ifndef GRAPHICS_WO_XEXEC
-
 			: public xexec
-
 #endif
 		{
 			friend class transform;

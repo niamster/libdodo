@@ -33,29 +33,14 @@
 #include <libdodo/directives.h>
 
 #ifdef IMAGEMAGICK_EXT
-
-#ifndef IMAGEMAGICK_PRE_63
-
-#include <magick/MagickCore.h>
-
-#else
-
-#include <magick/ImageMagick.h>
-
-#endif
-
-#include <math.h>
-
 #include <libdodo/types.h>
-#include <libdodo/graphicsImage.h>
-#include <libdodo/graphicsColor.h>
-#include <libdodo/graphicsDrawEx.h>
-#include <libdodo/xexec.h>
 
 namespace dodo
 {
 	namespace graphics
 	{
+		class image;
+
 		/**
 		 * class point
 		 * @brief defines x and y position of the point
@@ -212,7 +197,6 @@ namespace dodo
 		};
 	};
 };
-
 #endif
 
 #endif

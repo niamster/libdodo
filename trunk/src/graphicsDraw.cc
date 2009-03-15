@@ -27,9 +27,21 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/graphicsDraw.h>
+#include <libdodo/directives.h>
 
 #ifdef IMAGEMAGICK_EXT
+#ifndef IMAGEMAGICK_PRE_63
+#include <magick/MagickCore.h>
+#else
+#include <magick/ImageMagick.h>
+#endif
+#include <math.h>
+
+#include <libdodo/graphicsDraw.h>
+#include <libdodo/types.h>
+#include <libdodo/graphicsImage.h>
+#include <libdodo/graphicsColor.h>
+#include <libdodo/graphicsDrawEx.h>
 
 using namespace dodo::graphics;
 
@@ -85,13 +97,9 @@ draw::primitive(char           *description,
 	}
 
 #ifndef IMAGEMAGICK_PRE_63
-
 	DrawInfo *di = AcquireDrawInfo();
-
 #else
-
 	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
-
 #endif
 
 	di->primitive = description;
@@ -195,13 +203,9 @@ draw::text(const graphics::point &position,
 	txt.append("\"");
 
 #ifndef IMAGEMAGICK_PRE_63
-
 	DrawInfo *di = AcquireDrawInfo();
-
 #else
-
 	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
-
 #endif
 
 	double radians = angle * M_PI / 180;
@@ -328,13 +332,9 @@ draw::point(const graphics::point &position,
 	}
 
 #ifndef IMAGEMAGICK_PRE_63
-
 	DrawInfo *di = AcquireDrawInfo();
-
 #else
-
 	DrawInfo *di = CloneDrawInfo(im->collectedData.imInfo, NULL);
-
 #endif
 
 	di->primitive = description;
@@ -355,7 +355,6 @@ draw::point(const graphics::point &position,
 	di->primitive = NULL;
 	DestroyDrawInfo(di);
 }
-
 #endif
 
 //-------------------------------------------------------------------

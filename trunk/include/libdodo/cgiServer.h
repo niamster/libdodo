@@ -32,12 +32,12 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/cgiExchange.h>
-
 namespace dodo
 {
 	namespace cgi
 	{
+		class exchange;
+
 		/**
 		 * @typedef serverHandler
 		 * @brief defines type of function that will be called on new cgi request

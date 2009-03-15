@@ -33,7 +33,6 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/dataFormatJsonNode.h>
 
 namespace dodo
 {
@@ -43,6 +42,8 @@ namespace dodo
 		{
 			namespace json
 			{
+				class node;
+
 				/**
 				 * @class processor
 				 * @brief provides JSON operations

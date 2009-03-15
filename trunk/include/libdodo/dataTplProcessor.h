@@ -33,10 +33,14 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/ioChannel.h>
 
 namespace dodo
 {
+	namespace io
+	{
+		class channel;
+	};
+
 	namespace data
 	{
 		namespace tpl

@@ -33,6 +33,7 @@
 #include <libdodo/directives.h>
 
 #ifdef SQLITE3_EXT
+#include <libdodo/types.h>
 #include <libdodo/dataBaseSqlConstructor.h>
 
 namespace dodo
