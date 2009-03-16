@@ -76,6 +76,9 @@ else
 	AC_MSG_RESULT(etags will be used for generating tags)
 fi
 
+AC_SUBST(OBJECTS)
+OBJECTS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/o} "; done)
+
 cat > include/libdodo/directives.runtime.h  <<EOF
 /***************************************************************************
 *            directives.runtime.h
