@@ -27,7 +27,13 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/ioMemory.h>
+#include <libdodo/types.h>
+#include <libdodo/ioChannel.h>
+#include <libdodo/ioMemoryEx.h>
+#include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io;
 
@@ -37,9 +43,7 @@ memory::memory(short protection) : pos(0),
 								   channel(protection)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
-
 #endif
 }
 
@@ -52,9 +56,7 @@ memory::memory(const memory &fd) : pos(fd.pos),
 								   channel(fd.protection)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
-
 #endif
 
 	inSize = fd.inSize;
@@ -71,9 +73,7 @@ memory::memory(const dodoString &data,
 											  channel(protection)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
-
 #endif
 }
 
@@ -89,8 +89,6 @@ int
 memory::getInDescriptor() const
 {
 	throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
-
-	return -1;
 }
 
 //-------------------------------------------------------------------
@@ -99,8 +97,6 @@ int
 memory::getOutDescriptor() const
 {
 	throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
-
-	return -1;
 }
 
 //-------------------------------------------------------------------

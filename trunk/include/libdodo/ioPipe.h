@@ -30,25 +30,19 @@
 #ifndef _IOPIPE_H_
 #define _IOPIPE_H_ 1
 
-#include <fcntl.h>
-#include <sys/un.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-
 #include <libdodo/directives.h>
 
-#include <libdodo/toolsMisc.h>
-#include <libdodo/ioPipeEx.h>
-#include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/ioNetwork.h>
 
 namespace dodo
 {
 	namespace io
 	{
+		namespace network
+		{
+			struct __peerInfo;
+		};
+
 		/**
 		 * @enum pipeOperationTypeEnum defines type of operation for hook
 		 */
@@ -165,8 +159,8 @@ namespace dodo
 			 */
 			virtual void _writeStream(const char * const data);
 
-			FILE *inHandle;     ///< input stream descriptor
-			FILE *outHandle;    ///< output stream descriptor
+			void *inHandle;     ///< input stream descriptor
+			void *outHandle;    ///< output stream descriptor
 
 		  private:
 

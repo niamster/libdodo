@@ -64,7 +64,7 @@ const int logger::syslogLevels[] =
 logger::logger() : handlersNum(0),
 				   timeFormat(" %d/%m/%Y.%H-%M-%S: "),
 				   forward(false),
-				   keeper(new pc::sync::process::section)
+				   keeper(new pc::sync::process::section(0))
 {
 }
 

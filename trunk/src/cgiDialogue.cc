@@ -37,6 +37,9 @@
 #include <libdodo/cgi.h>
 #include <libdodo/cgiExchange.h>
 #include <libdodo/cgiDialogueEx.h>
+#include <libdodo/toolsString.h>
+#include <libdodo/toolsCode.h>
+#include <libdodo/toolsMisc.h>
 
 using namespace dodo::cgi;
 

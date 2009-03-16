@@ -36,6 +36,7 @@
 #include <libdodo/toolsString.h>
 #include <libdodo/rpcClient.h>
 #include <libdodo/rpcJsonMethod.h>
+#include <libdodo/dataFormatJsonNode.h>
 #include <libdodo/rpcJsonResponse.h>
 
 namespace dodo

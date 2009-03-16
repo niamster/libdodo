@@ -27,7 +27,13 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <sys/socket.h>
+#include <fcntl.h>
+
 #include <libdodo/ioNetworkConnection.h>
+#include <libdodo/ioNetworkConnectionEx.h>
 
 using namespace dodo::io::network;
 
@@ -266,16 +272,6 @@ connection::setOption(short option,
 			real_option = SO_OOBINLINE;
 
 			break;
-
-#ifdef SO_REUSEPORT
-
-		case CONNECTION_OPTION_REUSE_PORT:
-
-			real_option = SO_REUSEPORT;
-
-			break;
-
-#endif
 
 		default:
 

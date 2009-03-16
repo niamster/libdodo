@@ -154,7 +154,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
+		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl << ex.getCallStack() <<  endl;
 	}
 
 	return 0;

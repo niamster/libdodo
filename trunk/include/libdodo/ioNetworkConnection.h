@@ -32,13 +32,6 @@
 
 #include <libdodo/directives.h>
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <fcntl.h>
-
-#include <libdodo/toolsFilesystem.h>
-#include <libdodo/ioNetworkConnectionEx.h>
 #include <libdodo/types.h>
 
 namespace dodo
@@ -76,9 +69,6 @@ namespace dodo
 				CONNECTION_OPTION_DONOT_USE_GATEWAY,    ///< Requests  that outgoing messages bypass the standard routing facilities.
 				CONNECTION_OPTION_BROADCAST,            ///< Permits  sending of broadcast messages, if this is supported by the protocol.
 				CONNECTION_OPTION_OOB_INLINE,           ///< Out-of-band(marked urgent) data keep inline in recieve operation.
-#ifdef SO_REUSEPORT
-				CONNECTION_OPTION_REUSE_PORT,           ///< Should allow reuse of local port.
-#endif
 			};
 
 			/**

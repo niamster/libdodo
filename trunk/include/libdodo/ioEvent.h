@@ -33,19 +33,22 @@
 
 #include <libdodo/directives.h>
 
-#include <poll.h>
-
-#include <libdodo/ioEventEx.h>
 #include <libdodo/types.h>
-#include <libdodo/toolsMisc.h>
-#include <libdodo/ioEventInfo.h>
-#include <libdodo/pcSyncProcessSection.h>
-#include <libdodo/pcSyncProtector.h>
 
 namespace dodo
 {
+	namespace pc
+	{
+		namespace sync
+		{
+			class section;
+		};
+	};
+
 	namespace io
 	{
+		class eventInfo;
+
 		/**
 		 * @struct __eventInOutDescriptors
 		 * @brief defines input and output descriptors of the io::* classes

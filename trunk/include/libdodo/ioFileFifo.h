@@ -32,13 +32,6 @@
 
 #include <libdodo/directives.h>
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-
-#include <libdodo/toolsMisc.h>
-#include <libdodo/toolsFilesystem.h>
-#include <libdodo/ioFileFifoEx.h>
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 
@@ -49,7 +42,6 @@ namespace dodo
 		namespace file
 		{
 #ifndef IO_WO_XEXEC
-
 			/**
 			 * @enum fileOperationTypeEnum defines type of operation for hook
 			 */
@@ -58,7 +50,6 @@ namespace dodo
 				FIFO_OPERATION_OPEN = 128,
 				FIFO_OPERATION_CLOSE
 			};
-
 #endif
 
 			/**
@@ -188,7 +179,7 @@ namespace dodo
 				dodoString path;    ///< file path
 				short mode;         ///< file open mode[see fileOpenmodeEnum]
 
-				FILE *handler;      ///< file handler
+				void *handler;      ///< file handler
 
 				bool blocked;       ///< true if stream is blocked
 			};

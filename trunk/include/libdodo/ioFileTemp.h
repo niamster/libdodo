@@ -32,14 +32,6 @@
 
 #include <libdodo/directives.h>
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-
-#include <libdodo/toolsMisc.h>
-#include <libdodo/toolsFilesystem.h>
-#include <libdodo/ioFileTempEx.h>
-#include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 
 namespace dodo
@@ -49,7 +41,6 @@ namespace dodo
 		namespace file
 		{
 #ifndef IO_WO_XEXEC
-
 			/**
 			 * @enum tempOperationTypeEnum defines type of operation for hook
 			 */
@@ -58,7 +49,6 @@ namespace dodo
 				TEMP_OPERATION_OPEN = 128,
 				TEMP_OPERATION_CLOSE
 			};
-
 #endif
 
 			/**
@@ -168,7 +158,7 @@ namespace dodo
 
 			  private:
 
-				FILE *handler; ///< file handler
+				void *handler; ///< file handler
 			};
 		};
 	};

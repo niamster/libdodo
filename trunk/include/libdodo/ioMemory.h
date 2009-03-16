@@ -32,13 +32,8 @@
 
 #include <libdodo/directives.h>
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/ioMemoryEx.h>
 
 namespace dodo
 {

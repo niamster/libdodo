@@ -33,6 +33,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
+#include <libdodo/dataFormatXmlNode.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/rpcResponse.h>
 #include <libdodo/rpcXmlValue.h>

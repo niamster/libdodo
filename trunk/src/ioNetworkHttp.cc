@@ -27,7 +27,22 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 #include <libdodo/ioNetworkHttp.h>
+#include <libdodo/toolsCode.h>
+#include <libdodo/ioNetworkClient.h>
+#include <libdodo/ioNetworkSslClient.h>
+#include <libdodo/toolsNetwork.h>
+#include <libdodo/ioNetworkHttpEx.h>
+#include <libdodo/ioNetworkClientEx.h>
+#include <libdodo/ioNetworkExchangeEx.h>
+#include <libdodo/types.h>
+#include <libdodo/cgi.h>
 
 using namespace dodo::io::network;
 

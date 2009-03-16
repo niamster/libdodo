@@ -32,24 +32,23 @@
 
 #include <libdodo/directives.h>
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-
-#include <libdodo/toolsMisc.h>
-#include <libdodo/ioNetworkClient.h>
-#include <libdodo/ioNetworkSslClient.h>
-#include <libdodo/toolsNetwork.h>
-#include <libdodo/ioNetworkHttpEx.h>
+#include <libdodo/toolsCode.h>
+#include <libdodo/ioSsl.h>
 #include <libdodo/types.h>
-#include <libdodo/cgiDialogue.h>
 
 namespace dodo
 {
+	namespace cgi
+	{
+		struct __cgiCookie;
+	};
+
 	namespace io
 	{
 		namespace network
 		{
+			class exchange;
+
 #define HTTP_REQUESTHEADERSTATEMENTS 12
 
 			/**
@@ -168,7 +167,6 @@ namespace dodo
 				virtual ~http();
 
 #ifdef OPENSSL_EXT
-
 				/**
 				 * set certificates information
 				 * @param certs defines certificates information
@@ -179,7 +177,6 @@ namespace dodo
 				 * remove certificates information
 				 */
 				virtual void removeSertificates();
-
 #endif
 
 				dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see httpRequestHeaderEnum]
@@ -395,9 +392,7 @@ namespace dodo
 					SCHEME_HTTP,
 
 #ifdef OPENSSL_EXT
-
 					SCHEME_HTTPS,
-
 #endif
 				};
 
@@ -436,10 +431,8 @@ namespace dodo
 				dodoStringMap httpAuth;         ///< cached HTTP auth info
 
 #ifdef OPENSSL_EXT
-
 				io::ssl::__certificates certs;  ///< SSL certificates
 				bool certsSet;
-
 #endif
 			};
 		};

@@ -27,7 +27,17 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <arpa/inet.h>
+#include <poll.h>
+
 #include <libdodo/ioNetworkExchange.h>
+#include <libdodo/ioNetworkConnection.h>
+#include <libdodo/ioChannel.h>
+#include <libdodo/ioNetworkExchangeEx.h>
+#include <libdodo/types.h>
+#include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io::network;
 
@@ -47,9 +57,7 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket)
 exchange::exchange(exchange &fse) : channel(fse.protection)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
-
 #endif
 
 	inSize = fse.inSize;
@@ -72,9 +80,7 @@ exchange::exchange(exchange &fse) : channel(fse.protection)
 exchange::exchange(short protection) : channel(protection)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
-
 #endif
 }
 
@@ -84,9 +90,7 @@ exchange::exchange(__initialAccept &a_init,
 				   short           protection) : channel(protection)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
-
 #endif
 
 	init(a_init);

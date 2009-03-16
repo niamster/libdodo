@@ -27,7 +27,18 @@
  * set shiftwidth=4
  */
 
+
+#include <libdodo/directives.h>
+
+#include <poll.h>
+
 #include <libdodo/ioEvent.h>
+#include <libdodo/ioEventEx.h>
+#include <libdodo/types.h>
+#include <libdodo/toolsMisc.h>
+#include <libdodo/ioEventInfo.h>
+#include <libdodo/pcSyncProcessSection.h>
+#include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io;
 
@@ -40,7 +51,7 @@ event::event(event &rt)
 //-------------------------------------------------------------------
 
 event::event() : descs(0),
-				 keeper(new pc::sync::process::section)
+				 keeper(new pc::sync::process::section(0))
 {
 }
 

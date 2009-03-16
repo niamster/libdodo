@@ -32,6 +32,7 @@
 
 #include <libdodo/directives.h>
 
+#include <libdodo/cgi.h>
 #include <libdodo/types.h>
 #include <libdodo/ioNetworkHttp.h>
 #include <libdodo/rpcClient.h>

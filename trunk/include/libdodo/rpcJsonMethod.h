@@ -33,6 +33,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
+#include <libdodo/dataFormatJsonNode.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/rpcMethod.h>
 #include <libdodo/rpcJsonMethodEx.h>

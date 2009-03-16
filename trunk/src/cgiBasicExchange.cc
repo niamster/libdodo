@@ -29,6 +29,8 @@
 
 #include <libdodo/directives.h>
 
+#include <stdlib.h>
+
 #include <libdodo/cgiBasicExchange.h>
 #include <libdodo/cgiExchange.h>
 #include <libdodo/ioStdio.h>
