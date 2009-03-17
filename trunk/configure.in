@@ -281,9 +281,10 @@ then
 	then
 		MOD_BFD_DIR=/usr
 	fi
+	BFD_SO=$(ldconfig -p | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
 	CPPFLAGS="$CPPFLAGS -I$MOD_BFD_DIR/include"
-	LDFLAGS="$LDFLAGS -L$MOD_BFD_DIR/lib -lbfd"
-	AC_CHECK_LIB([bfd], [bfd_fopen], [], AC_MSG_ERROR(bfd lib was not found))
+	LDFLAGS="$LDFLAGS -L$MOD_BFD_DIR/lib -l$BFD_SO"
+	AC_CHECK_LIB([$BFD_SO], [bfd_fopen], [], AC_MSG_ERROR(bfd lib was not found))
 	AC_CHECK_HEADER([bfd.h], [], AC_MSG_ERROR(bfd header was not found))
 	echo -n -e "#define BFD_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
