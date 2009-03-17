@@ -33,14 +33,20 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "ioSsl.inline"
+
 #include <libdodo/ioNetworkHttp.h>
 #include <libdodo/toolsCode.h>
+#include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkClient.h>
 #include <libdodo/ioNetworkSslClient.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/ioNetworkHttpEx.h>
 #include <libdodo/ioNetworkClientEx.h>
+#include <libdodo/ioNetworkSslClientEx.h>
 #include <libdodo/ioNetworkExchangeEx.h>
+#include <libdodo/ioNetworkSslExchangeEx.h>
+#include <libdodo/ioNetworkSslExchange.h>
 #include <libdodo/types.h>
 #include <libdodo/cgi.h>
 
@@ -415,10 +421,10 @@ http::GET()
 			((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
 			((ssl::client *)net)->connectSsl();
 
-			((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
+			((ssl::exchange *)ex)->handle->handle = ((ssl::client *)net)->handle->handle;
 
 			((ssl::client *)net)->socket = -1;
-			((ssl::client *)net)->sslHandle = NULL;
+			((ssl::client *)net)->handle->handle = NULL;
 		}
 #endif
 	}
@@ -931,10 +937,10 @@ http::POST(const dodoString &a_data,
 			((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
 			((ssl::client *)net)->connectSsl();
 
-			((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
+			((ssl::exchange *)ex)->handle->handle = ((ssl::client *)net)->handle->handle;
 
 			((ssl::client *)net)->socket = -1;
-			((ssl::client *)net)->sslHandle = NULL;
+			((ssl::client *)net)->handle->handle = NULL;
 		}
 
 #endif

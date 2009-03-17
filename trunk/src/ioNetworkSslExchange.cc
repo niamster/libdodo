@@ -27,24 +27,48 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/ioNetworkSslExchange.h>
+#include <libdodo/directives.h>
 
 #ifdef OPENSSL_EXT
+#include <poll.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+
+#include "ioSsl.inline"
+
+#include <libdodo/ioNetworkSslExchange.h>
+#include <libdodo/ioChannel.h>
+#include <libdodo/ioNetworkSslExchangeEx.h>
+#include <libdodo/ioNetworkExchange.h>
+#include <libdodo/ioSsl.h>
+#include <libdodo/types.h>
+#include <libdodo/xexec.h>
+#include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io::network::ssl;
 
 __initialAccept::__initialAccept() : socket(-1),
-									 sslHandle(NULL)
+									 handle(new io::ssl::__sslHandle)
 {
+	handle->handle = NULL;
 }
 
 //-------------------------------------------------------------------
 
 __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
-														  sslHandle(init.sslHandle)
+														  handle(new io::ssl::__sslHandle)
 {
+	handle->handle = init.handle->handle;
+
 	init.socket = -1;
-	init.sslHandle = NULL;
+	init.handle = NULL;
+}
+
+//-------------------------------------------------------------------
+
+__initialAccept::~__initialAccept()
+{
+	delete handle;
 }
 
 //-------------------------------------------------------------------
@@ -53,37 +77,34 @@ exchange::exchange(exchange &fse) : network::exchange(fse),
 									channel(fse.protection)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
-
 #endif
 
-	sslHandle = fse.sslHandle;
+	handle = fse.handle;
 
-	fse.sslHandle = NULL;
+	fse.handle = NULL;
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange(short protection) : sslHandle(NULL),
-									   channel(protection)
+exchange::exchange(short protection) : channel(protection),
+									   handle(new io::ssl::__sslHandle)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
-
 #endif
+
+	handle->handle = NULL;
 }
 
 //-------------------------------------------------------------------
 
 exchange::exchange(__initialAccept &a_init,
-				   short           protection) : channel(protection)
+				   short           protection) : channel(protection),
+												 handle(new io::ssl::__sslHandle)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
-
 #endif
 
 	init(a_init);
@@ -93,15 +114,17 @@ exchange::exchange(__initialAccept &a_init,
 
 exchange::~exchange()
 {
-	if (sslHandle != NULL)
+	if (handle->handle != NULL)
 	{
-		if (SSL_shutdown(sslHandle) == 0)
+		if (SSL_shutdown(handle->handle) == 0)
 		{
-			SSL_shutdown(sslHandle);
+			SSL_shutdown(handle->handle);
 		}
 
-		SSL_free(sslHandle);
+		SSL_free(handle->handle);
 	}
+
+	delete handle;
 }
 
 //-------------------------------------------------------------------
@@ -109,19 +132,19 @@ exchange::~exchange()
 void
 exchange::init(__initialAccept &a_init)
 {
-	init(a_init.socket, a_init.sslHandle, a_init.blocked, a_init.blockInherited);
+	init(a_init.socket, a_init.handle, a_init.blocked, a_init.blockInherited);
 
 	a_init.socket = -1;
-	a_init.sslHandle = NULL;
+	a_init.handle->handle = NULL;
 }
 
 //-------------------------------------------------------------------
 
 void
 exchange::_close(int socket,
-				 SSL *sslHandle)
+				 io::ssl::__sslHandle *handle)
 {
-	int err = SSL_shutdown(sslHandle);
+	int err = SSL_shutdown(handle->handle);
 	if (err < 0)
 	{
 		unsigned long nerr = ERR_get_error();
@@ -129,7 +152,7 @@ exchange::_close(int socket,
 	}
 	if (err == 0)
 	{
-		err = SSL_shutdown(sslHandle);
+		err = SSL_shutdown(handle->handle);
 		if (err < 0)
 		{
 			unsigned long nerr = ERR_get_error();
@@ -154,10 +177,10 @@ exchange::close()
 
 	if (socket != -1)
 	{
-		_close(socket, sslHandle);
+		_close(socket, handle);
 
 		socket = -1;
-		sslHandle = NULL;
+		handle->handle = NULL;
 	}
 
 #ifndef IO_WO_XEXEC
@@ -169,7 +192,7 @@ exchange::close()
 
 void
 exchange::init(int  a_socket,
-			   SSL  *a_sslHandle,
+			   io::ssl::__sslHandle  *a_handle,
 			   bool a_blocked,
 			   bool blockInherited)
 {
@@ -177,15 +200,15 @@ exchange::init(int  a_socket,
 
 	if (socket != -1)
 	{
-		_close(socket, sslHandle);
+		_close(socket, handle);
 
 		socket = -1;
-		sslHandle = NULL;
+		handle->handle = NULL;
 	}
 
 	blocked = a_blocked;
 	socket = a_socket;
-	sslHandle = a_sslHandle;
+	handle->handle = a_handle->handle;
 
 	setInBufferSize(inSocketBuffer);
 	setOutBufferSize(outSocketBuffer);
@@ -236,10 +259,10 @@ exchange::isAlive()
 		}
 	}
 
-	_close(socket, sslHandle);
+	_close(socket, handle);
 
 	socket = -1;
-	sslHandle = NULL;
+	handle->handle = NULL;
 
 	return false;
 }
@@ -265,9 +288,9 @@ exchange::_write(const char * const a_data)
 	{
 		while (true)
 		{
-			if ((n = SSL_write(sslHandle, data, outSocketBuffer)) <= 0)
+			if ((n = SSL_write(handle->handle, data, outSocketBuffer)) <= 0)
 			{
-				switch (SSL_get_error(sslHandle, n))
+				switch (SSL_get_error(handle->handle, n))
 				{
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
@@ -300,9 +323,9 @@ exchange::_write(const char * const a_data)
 	{
 		while (true)
 		{
-			if ((n = SSL_write(sslHandle, data, rest)) <= 0)
+			if ((n = SSL_write(handle->handle, data, rest)) <= 0)
 			{
-				switch (SSL_get_error(sslHandle, n))
+				switch (SSL_get_error(handle->handle, n))
 				{
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
@@ -353,9 +376,9 @@ exchange::_read(char * const a_data)
 	{
 		while (true)
 		{
-			if ((n = SSL_read(sslHandle, data, inSocketBuffer)) <= 0)
+			if ((n = SSL_read(handle->handle, data, inSocketBuffer)) <= 0)
 			{
-				switch (SSL_get_error(sslHandle, n))
+				switch (SSL_get_error(handle->handle, n))
 				{
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
@@ -388,9 +411,9 @@ exchange::_read(char * const a_data)
 	{
 		while (true)
 		{
-			if ((n = SSL_read(sslHandle, data, rest)) <= 0)
+			if ((n = SSL_read(handle->handle, data, rest)) <= 0)
 			{
-				switch (SSL_get_error(sslHandle, n))
+				switch (SSL_get_error(handle->handle, n))
 				{
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
@@ -434,9 +457,9 @@ exchange::_readStream(char * const data)
 
 	while (true)
 	{
-		if ((n = SSL_read(sslHandle, data, inSize)) <= 0)
+		if ((n = SSL_read(handle->handle, data, inSize)) <= 0)
 		{
-			switch (SSL_get_error(sslHandle, n))
+			switch (SSL_get_error(handle->handle, n))
 			{
 				case SSL_ERROR_WANT_READ:
 				case SSL_ERROR_WANT_WRITE:

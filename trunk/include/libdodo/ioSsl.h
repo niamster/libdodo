@@ -33,16 +33,7 @@
 #include <libdodo/directives.h>
 
 #ifdef OPENSSL_EXT
-
-#include <openssl/ssl.h>
-#include <openssl/err.h>
-#include <openssl/rand.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <sys/time.h>
-
-#include <libdodo/toolsMisc.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
@@ -50,6 +41,18 @@ namespace dodo
 	{
 		namespace ssl
 		{
+			/**
+			 * @struct __sslHandle
+			 * @brief defines internal handlers for SSL
+			 */
+			struct __sslHandle;
+
+			/**
+			 * @struct __sslContext
+			 * @brief defines internal context for SSL
+			 */
+			struct __sslContext;
+
 			enum keyTypeEnum
 			{
 				KEYTYPE_PKEY,
@@ -89,37 +92,9 @@ namespace dodo
 				dodoString caPath;      ///< pathname to a directory that contains trusted SSL CA certificates in PEM format or to a file of CA certificates in PEM format
 				dodoString cipher;      ///< allowed SSL ciphers
 			};
-
-			/**
-			 * @class __openssl_init__
-			 * @brief initializes openssl evironment
-			 */
-			class __openssl_init__
-			{
-			  public:
-
-				/**
-				 * contructor
-				 */
-				__openssl_init__();
-
-				/**
-				 * destructor
-				 */
-				~__openssl_init__();
-
-				/**
-				 * add entropy for randomness
-				 */
-				void addEntropy();
-			};
-
-			extern __openssl_init__ __openssl_init_object__;
 		};
 	};
 };
-
-
 #endif
 
 #endif

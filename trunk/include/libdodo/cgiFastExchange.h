@@ -34,13 +34,12 @@
 
 #ifdef FASTCGI_EXT
 #include <libdodo/types.h>
+#include <libdodo/cgiExchange.h>
 
 namespace dodo
 {
 	namespace cgi
 	{
-		class exchange;
-
 		namespace fast
 		{
 			/**

@@ -8,6 +8,8 @@
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetworkHttp.h>
 #include <libdodo/types.h>
+#include <libdodo/cgi.h>
+#include <libdodo/toolsFilesystem.h>
 
 #include <iostream>
 

@@ -32,22 +32,8 @@
 
 #include <libdodo/directives.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/un.h>
-#include <sys/socket.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
-
-#include <libdodo/toolsFilesystem.h>
-#include <libdodo/ioNetworkServerEx.h>
 #include <libdodo/types.h>
 #include <libdodo/ioNetworkConnection.h>
-#include <libdodo/ioNetworkExchange.h>
 #include <libdodo/xexec.h>
 #include <libdodo/ioEventInfo.h>
 
@@ -61,6 +47,8 @@ namespace dodo
 			{
 				class server;
 			};
+
+			class __initialAccept;
 
 			/**
 			 * @enum serverOperationTypeEnum defines type of operation for hook
@@ -76,7 +64,6 @@ namespace dodo
 			};
 
 #ifndef IO_WO_XEXEC
-
 			/**
 			 * @class __xexecIoNetworkServerCollectedData
 			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
@@ -92,7 +79,6 @@ namespace dodo
 				 */
 				__xexecIoNetworkServerCollectedData(xexec *executor, short execObject);
 			};
-
 #endif
 
 			/**
@@ -204,9 +190,7 @@ namespace dodo
 				dodoString unixSock;                                ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
-
 				__xexecIoNetworkServerCollectedData collectedData;  ///< data collected for xexec
-
 #endif
 			};
 		};

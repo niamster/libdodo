@@ -27,9 +27,18 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/ioSsl.h>
+#include <libdodo/directives.h>
 
 #ifdef OPENSSL_EXT
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <openssl/ssl.h>
+#include <openssl/rand.h>
+#include <openssl/err.h>
+
+#include "ioSsl.inline"
+
+#include <libdodo/ioSsl.h>
 
 namespace dodo
 {
@@ -92,6 +101,8 @@ __openssl_init__::~__openssl_init__()
 	RAND_cleanup();
 }
 
+//-------------------------------------------------------------------
+
 void
 __openssl_init__::addEntropy()
 {
@@ -122,6 +133,5 @@ __openssl_init__::addEntropy()
 }
 
 //-------------------------------------------------------------------
-
 #endif
 

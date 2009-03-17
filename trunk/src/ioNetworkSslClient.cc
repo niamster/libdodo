@@ -27,9 +27,25 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/ioNetworkSslClient.h>
+#include <libdodo/directives.h>
 
 #ifdef OPENSSL_EXT
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <arpa/inet.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+
+#include "ioSsl.inline"
+
+#include <libdodo/ioNetworkSslClient.h>
+#include <libdodo/toolsFilesystem.h>
+#include <libdodo/ioNetworkSslClientEx.h>
+#include <libdodo/ioSsl.h>
+#include <libdodo/types.h>
+#include <libdodo/ioNetworkSslExchange.h>
+#include <libdodo/xexec.h>
+#include <libdodo/ioEventInfo.h>
 
 using namespace dodo::io::network::ssl;
 
@@ -42,35 +58,39 @@ client::client(client &fs) : network::client(fs)
 client::client(short a_family,
 			   short a_type) : network::client(a_family,
 											   a_type),
-							   sslCtx(NULL),
-							   sslHandle(NULL),
-							   sslConnected(false)
+							   sslConnected(false),
+							   handle(new io::ssl::__sslHandle),
+							   ctx(new io::ssl::__sslContext)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLCLIENT);
-
 #endif
+
+	ctx->ctx = NULL;
+	handle->handle = NULL;
 }
 
 //-------------------------------------------------------------------
 
 client::~client()
 {
-	if (sslHandle != NULL)
+	if (handle->handle != NULL)
 	{
-		if (sslConnected && SSL_shutdown(sslHandle) == 0)
+		if (sslConnected && SSL_shutdown(handle->handle) == 0)
 		{
-			SSL_shutdown(sslHandle);
+			SSL_shutdown(handle->handle);
 		}
 
-		SSL_free(sslHandle);
+		SSL_free(handle->handle);
 	}
 
-	if (sslCtx != NULL)
+	if (ctx->ctx != NULL)
 	{
-		SSL_CTX_free(sslCtx);
+		SSL_CTX_free(ctx->ctx);
 	}
+
+	delete handle;
+	delete ctx;
 }
 
 //-------------------------------------------------------------------
@@ -78,11 +98,11 @@ client::~client()
 void
 client::removeSertificates()
 {
-	if (sslHandle != NULL)
+	if (handle->handle != NULL)
 	{
 		if (sslConnected)
 		{
-			int err = SSL_shutdown(sslHandle);
+			int err = SSL_shutdown(handle->handle);
 			if (err < 0)
 			{
 				unsigned long nerr = ERR_get_error();
@@ -90,7 +110,7 @@ client::removeSertificates()
 			}
 			if (err == 0)
 			{
-				err = SSL_shutdown(sslHandle);
+				err = SSL_shutdown(handle->handle);
 				if (err < 0)
 				{
 					unsigned long nerr = ERR_get_error();
@@ -101,26 +121,26 @@ client::removeSertificates()
 			sslConnected = false;
 		}
 
-		SSL_free(sslHandle);
+		SSL_free(handle->handle);
 
-		sslHandle = NULL;
+		handle->handle = NULL;
 	}
 
-	if (sslCtx != NULL)
+	if (ctx->ctx != NULL)
 	{
-		SSL_CTX_free(sslCtx);
+		SSL_CTX_free(ctx->ctx);
 
-		sslCtx = NULL;
+		ctx->ctx = NULL;
 	}
 
-	sslCtx = SSL_CTX_new(SSLv23_client_method());
-	if (sslCtx == NULL)
+	ctx->ctx = SSL_CTX_new(SSLv23_client_method());
+	if (ctx->ctx == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
 	}
 
-	sslHandle = SSL_new(sslCtx);
-	if (sslHandle == NULL)
+	handle->handle = SSL_new(ctx->ctx);
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
 	}
@@ -131,11 +151,11 @@ client::removeSertificates()
 void
 client::setSertificates(const io::ssl::__certificates &certs)
 {
-	if (sslHandle != NULL)
+	if (handle->handle != NULL)
 	{
 		if (sslConnected)
 		{
-			int err = SSL_shutdown(sslHandle);
+			int err = SSL_shutdown(handle->handle);
 			if (err < 0)
 			{
 				unsigned long nerr = ERR_get_error();
@@ -143,7 +163,7 @@ client::setSertificates(const io::ssl::__certificates &certs)
 			}
 			if (err == 0)
 			{
-				err = SSL_shutdown(sslHandle);
+				err = SSL_shutdown(handle->handle);
 				if (err < 0)
 				{
 					unsigned long nerr = ERR_get_error();
@@ -154,37 +174,37 @@ client::setSertificates(const io::ssl::__certificates &certs)
 			sslConnected = false;
 		}
 
-		SSL_free(sslHandle);
+		SSL_free(handle->handle);
 
-		sslHandle = NULL;
+		handle->handle = NULL;
 	}
 
-	if (sslCtx != NULL)
+	if (ctx->ctx != NULL)
 	{
-		SSL_CTX_free(sslCtx);
+		SSL_CTX_free(ctx->ctx);
 
-		sslCtx = NULL;
+		ctx->ctx = NULL;
 	}
 
-	sslCtx = SSL_CTX_new(SSLv23_client_method());
-	if (sslCtx == NULL)
+	ctx->ctx = SSL_CTX_new(SSLv23_client_method());
+	if (ctx->ctx == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
 	}
 
-	if (certs.cipher.size() > 0 && SSL_CTX_set_cipher_list(sslCtx, certs.cipher.c_str()) != 1)
+	if (certs.cipher.size() > 0 && SSL_CTX_set_cipher_list(ctx->ctx, certs.cipher.c_str()) != 1)
 	{
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	if (certs.ca.size() > 0 && SSL_CTX_use_certificate_chain_file(sslCtx, certs.ca.c_str()) != 1)
+	if (certs.ca.size() > 0 && SSL_CTX_use_certificate_chain_file(ctx->ctx, certs.ca.c_str()) != 1)
 	{
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	if (certs.cert.size() > 0 && SSL_CTX_use_certificate_file(sslCtx, certs.cert.c_str(), SSL_FILETYPE_PEM) != 1)
+	if (certs.cert.size() > 0 && SSL_CTX_use_certificate_file(ctx->ctx, certs.cert.c_str(), SSL_FILETYPE_PEM) != 1)
 	{
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
@@ -192,7 +212,7 @@ client::setSertificates(const io::ssl::__certificates &certs)
 
 	if (certs.keyPassword.size() > 0)
 	{
-		SSL_CTX_set_default_passwd_cb_userdata(sslCtx, (void *)certs.keyPassword.c_str());
+		SSL_CTX_set_default_passwd_cb_userdata(ctx->ctx, (void *)certs.keyPassword.c_str());
 	}
 
 	bool keySet = false;
@@ -203,7 +223,7 @@ client::setSertificates(const io::ssl::__certificates &certs)
 		{
 			case io::ssl::KEYTYPE_PKEY:
 
-				if (SSL_CTX_use_PrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
+				if (SSL_CTX_use_PrivateKey_file(ctx->ctx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
 				{
 					unsigned long nerr = ERR_get_error();
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
@@ -215,7 +235,7 @@ client::setSertificates(const io::ssl::__certificates &certs)
 
 			case io::ssl::KEYTYPE_RSA:
 
-				if (SSL_CTX_use_RSAPrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
+				if (SSL_CTX_use_RSAPrivateKey_file(ctx->ctx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
 				{
 					unsigned long nerr = ERR_get_error();
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
@@ -234,7 +254,7 @@ client::setSertificates(const io::ssl::__certificates &certs)
 	{
 		if (certs.ca.size() > 0)
 		{
-			if (SSL_CTX_use_PrivateKey_file(sslCtx, certs.ca.c_str(), SSL_FILETYPE_PEM) != 1)
+			if (SSL_CTX_use_PrivateKey_file(ctx->ctx, certs.ca.c_str(), SSL_FILETYPE_PEM) != 1)
 			{
 				unsigned long nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
@@ -248,7 +268,7 @@ client::setSertificates(const io::ssl::__certificates &certs)
 	{
 		if (tools::filesystem::getFileInfo(certs.caPath).type == tools::FILESYSTEM_FILETYPE_DIRECTORY)
 		{
-			if (SSL_CTX_load_verify_locations(sslCtx, NULL, certs.caPath.c_str()) != 1)
+			if (SSL_CTX_load_verify_locations(ctx->ctx, NULL, certs.caPath.c_str()) != 1)
 			{
 				unsigned long nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
@@ -256,7 +276,7 @@ client::setSertificates(const io::ssl::__certificates &certs)
 		}
 		else
 		{
-			if (SSL_CTX_load_verify_locations(sslCtx, certs.caPath.c_str(), NULL) != 1)
+			if (SSL_CTX_load_verify_locations(ctx->ctx, certs.caPath.c_str(), NULL) != 1)
 			{
 				unsigned long nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
@@ -264,14 +284,14 @@ client::setSertificates(const io::ssl::__certificates &certs)
 		}
 	}
 
-	if (keySet && SSL_CTX_check_private_key(sslCtx) != 1)
+	if (keySet && SSL_CTX_check_private_key(ctx->ctx) != 1)
 	{
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	sslHandle = SSL_new(sslCtx);
-	if (sslHandle == NULL)
+	handle->handle = SSL_new(ctx->ctx);
+	if (handle->handle == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
 	}
@@ -282,19 +302,19 @@ client::setSertificates(const io::ssl::__certificates &certs)
 void
 client::initSsl()
 {
-	if (sslCtx == NULL)
+	if (ctx->ctx == NULL)
 	{
-		sslCtx = SSL_CTX_new(SSLv23_client_method());
-		if (sslCtx == NULL)
+		ctx->ctx = SSL_CTX_new(SSLv23_client_method());
+		if (ctx->ctx == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_INITSSL, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
 		}
 	}
 
-	if (sslHandle == NULL)
+	if (handle->handle == NULL)
 	{
-		sslHandle = SSL_new(sslCtx);
-		if (sslHandle == NULL)
+		handle->handle = SSL_new(ctx->ctx);
+		if (handle->handle == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_INITSSL, exception::ERRNO_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
 		}
@@ -310,7 +330,7 @@ client::connectSsl()
 
 	if (sslConnected)
 	{
-		int err = SSL_shutdown(sslHandle);
+		int err = SSL_shutdown(handle->handle);
 		if (err < 0)
 		{
 			unsigned long nerr = ERR_get_error();
@@ -318,7 +338,7 @@ client::connectSsl()
 		}
 		if (err == 0)
 		{
-			err = SSL_shutdown(sslHandle);
+			err = SSL_shutdown(handle->handle);
 			if (err < 0)
 			{
 				unsigned long nerr = ERR_get_error();
@@ -329,19 +349,19 @@ client::connectSsl()
 		sslConnected = false;
 	}
 
-	if (SSL_clear(sslHandle) == 0)
+	if (SSL_clear(handle->handle) == 0)
 	{
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	if (SSL_set_fd(sslHandle, socket) == 0)
+	if (SSL_set_fd(handle->handle, socket) == 0)
 	{
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	int res = SSL_connect(sslHandle);
+	int res = SSL_connect(handle->handle);
 	switch (res)
 	{
 		case 1:
@@ -355,7 +375,7 @@ client::connectSsl()
 
 		case - 1:
 		{
-			int nerr = SSL_get_error(sslHandle, res);
+			int nerr = SSL_get_error(handle->handle, res);
 			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
 			{
 				break;
@@ -366,7 +386,7 @@ client::connectSsl()
 		{
 			unsigned long nerr = ERR_get_error();
 
-			int err = SSL_shutdown(sslHandle);
+			int err = SSL_shutdown(handle->handle);
 			if (err < 0)
 			{
 				nerr = ERR_get_error();
@@ -374,7 +394,7 @@ client::connectSsl()
 			}
 			if (err == 0)
 			{
-				err = SSL_shutdown(sslHandle);
+				err = SSL_shutdown(handle->handle);
 				if (err < 0)
 				{
 					nerr = ERR_get_error();
@@ -447,10 +467,10 @@ client::connect(const dodoString &host,
 
 	connectSsl();
 
-	exchange.init(socket, sslHandle, blocked, blockInherited);
+	exchange.init(socket, handle, blocked, blockInherited);
 
 	socket = -1;
-	sslHandle = NULL;
+	handle->handle = NULL;
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
@@ -540,10 +560,10 @@ client::connectFrom(const dodoString &local,
 
 	connectSsl();
 
-	exchange.init(socket, sslHandle, blocked, blockInherited);
+	exchange.init(socket, handle, blocked, blockInherited);
 
 	socket = -1;
-	sslHandle = NULL;
+	handle->handle = NULL;
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
@@ -570,7 +590,7 @@ client::connect(const dodoString &path,
 
 	if (size >= 108)
 	{
-		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECT, exception::ERRNO_LIBDODO, CLIENTEX_LONGPATH, IONETWORKCLIENTEX_LONGPATH_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECT, exception::ERRNO_LIBDODO, CLIENTEX_LONGPATH, IONETWORKSSLCLIENTEX_LONGPATH_STR, __LINE__, __FILE__);
 	}
 
 	strncpy(sa.sun_path, path.c_str(), size);
@@ -590,10 +610,10 @@ client::connect(const dodoString &path,
 
 	connectSsl();
 
-	exchange.init(socket, sslHandle, blocked, blockInherited);
+	exchange.init(socket, handle, blocked, blockInherited);
 
 	socket = -1;
-	sslHandle = NULL;
+	handle->handle = NULL;
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
@@ -601,6 +621,5 @@ client::connect(const dodoString &path,
 }
 
 //-------------------------------------------------------------------
-
 #endif
 

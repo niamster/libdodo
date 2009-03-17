@@ -33,36 +33,26 @@
 #include <libdodo/directives.h>
 
 #ifdef OPENSSL_EXT
-
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/un.h>
-#include <sys/socket.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
-#include <openssl/ssl.h>
-
-#include <libdodo/toolsFilesystem.h>
-#include <libdodo/ioNetworkSslServerEx.h>
 #include <libdodo/ioNetworkServer.h>
-#include <libdodo/ioSsl.h>
 #include <libdodo/types.h>
-#include <libdodo/ioNetworkSslExchange.h>
-#include <libdodo/xexec.h>
-#include <libdodo/ioEventInfo.h>
 
 namespace dodo
 {
 	namespace io
 	{
+		namespace ssl
+		{
+			struct __sslContext;
+			struct __certificates;
+		};
+
 		namespace network
 		{
 			namespace ssl
 			{
+				class exchange;
+				class __initialAccept;
+
 				/**
 				 * @class server
 				 * @brief provides SSL network connection interface
@@ -160,13 +150,12 @@ namespace dodo
 					 */
 					virtual void acceptSsl(__initialAccept &init);
 
-					SSL_CTX *sslCtx; ///< SSL context
+					io::ssl::__sslContext *ctx; ///< SSL context
 				};
 			};
 		};
 	};
 };
-
 #endif
 
 #endif

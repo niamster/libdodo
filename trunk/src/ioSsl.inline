@@ -1,8 +1,8 @@
 /***************************************************************************
- *            ioNetwork.h
+ *            ioSsl.inline
  *
- *  Thu Oct 04 02:02:24 2005
- *  Copyright  2005  Ni@m
+ *  Tue Mar 17 01:48:47 2009
+ *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,11 +27,54 @@
  * set shiftwidth=4
  */
 
-#ifndef _IONETWORK_H_
-#define _IONETWORK_H_ 1
+#include <libdodo/directives.h>
 
-#include <libdodo/ioNetworkClient.h>
-#include <libdodo/ioNetworkServer.h>
-#include <libdodo/ioNetworkExchange.h>
+#ifdef OPENSSL_EXT
+#include <openssl/ssl.h>
 
+namespace dodo
+{
+	namespace io
+	{
+		namespace ssl
+		{
+			struct __sslHandle
+			{
+				SSL *handle;     ///< SSL connection handle
+			};
+
+			struct __sslContext
+			{
+				SSL_CTX *ctx;    ///< SSL context
+			};
+
+			/**
+			 * @class __openssl_init__
+			 * @brief initializes openssl evironment
+			 */
+			class __openssl_init__
+			{
+			  public:
+
+				/**
+				 * contructor
+				 */
+				__openssl_init__();
+
+				/**
+				 * destructor
+				 */
+				~__openssl_init__();
+
+				/**
+				 * add entropy for randomness
+				 */
+				void addEntropy();
+			};
+
+			extern __openssl_init__ __openssl_init_object__;
+		};
+	};
+};
 #endif
+

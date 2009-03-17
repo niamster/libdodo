@@ -30,6 +30,8 @@
 #ifndef _PCPROCESSCOLLECTION_H_
 #define _PCPROCESSCOLLECTION_H_ 1
 
+#include <libdodo/directives.h>
+
 #ifdef DL_EXT
 
 #include <dlfcn.h>
@@ -41,7 +43,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#include <libdodo/directives.h>
 #include <libdodo/types.h>
 #include <libdodo/pcJobCollection.h>
 #include <libdodo/pcProcessCollectionEx.h>

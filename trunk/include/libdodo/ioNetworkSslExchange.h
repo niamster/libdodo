@@ -33,25 +33,8 @@
 #include <libdodo/directives.h>
 
 #ifdef OPENSSL_EXT
-
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/un.h>
-#include <sys/socket.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
-#include <poll.h>
-#include <openssl/ssl.h>
-
-#include <libdodo/ioChannel.h>
-#include <libdodo/ioNetworkSslExchangeEx.h>
 #include <libdodo/ioNetworkExchange.h>
-#include <libdodo/ioSsl.h>
 #include <libdodo/types.h>
-#include <libdodo/xexec.h>
 
 namespace dodo
 {
@@ -63,6 +46,8 @@ namespace dodo
 
 			namespace ssl
 			{
+				struct __sslHandle;
+
 				/**
 				 * @class __initialAccept
 				 * @brief holds info that passes to accept call, and then inits exchange;
@@ -86,11 +71,16 @@ namespace dodo
 					 */
 					__initialAccept(__initialAccept &init);
 
+					/**
+					 * destructor
+					 */
+					~__initialAccept();
+
 				  private:
 
 					int socket;             ///< socket
 
-					SSL *sslHandle;         ///< SSL connection handle
+					io::ssl::__sslHandle *handle;         ///< SSL connection handle
 
 					bool blocked;           ///< true if blocked
 					bool blockInherited;    ///< true if block flag is inherited
@@ -153,7 +143,7 @@ namespace dodo
 
 				  protected:
 
-					SSL *sslHandle; ///< SSL connection handle
+					io::ssl::__sslHandle *handle; ///< SSL connection handle
 
 					/**
 					 * close socket connection
@@ -161,7 +151,7 @@ namespace dodo
 					 * @param sslHandle defines SSL handle
 					 */
 					virtual void _close(int socket,
-										SSL *sslHandle);
+										io::ssl::__sslHandle *handle);
 
 					/**
 					 * init current instance
@@ -171,7 +161,7 @@ namespace dodo
 					 * @param blockInherited defines block flag inheritance
 					 */
 					virtual void init(int  socket,
-									  SSL  *handle,
+									  io::ssl::__sslHandle  *handle,
 									  bool blocked,
 									  bool blockInherited);
 
@@ -197,7 +187,6 @@ namespace dodo
 		};
 	};
 };
-
 #endif
 
 #endif

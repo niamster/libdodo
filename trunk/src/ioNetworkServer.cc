@@ -27,27 +27,34 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <arpa/inet.h>
+#include <sys/un.h>
+#include <fcntl.h>
+
 #include <libdodo/ioNetworkServer.h>
+#include <libdodo/ioNetworkServerEx.h>
+#include <libdodo/types.h>
+#include <libdodo/ioNetworkConnection.h>
+#include <libdodo/ioNetworkExchange.h>
+#include <libdodo/xexec.h>
+#include <libdodo/ioEventInfo.h>
 
 using namespace dodo::io::network;
 
 #ifndef IO_WO_XEXEC
-
 __xexecIoNetworkServerCollectedData::__xexecIoNetworkServerCollectedData(xexec *a_executor,
 																		 short execObject) : __xexecCollectedData(a_executor, execObject)
 {
 }
-
 #endif
 
 //-------------------------------------------------------------------
 
 server::server(server &fs)
-
-#ifndef IO_WO_XEXEC
-
+#ifndef IO_WO_XEXE
 	: collectedData(this, XEXEC_OBJECT_IONETWORKSERVER)
-
 #endif
 {
 }
@@ -59,10 +66,8 @@ server::server(short a_family,
 							   type(a_type),
 							   blockInherited(false)
 #ifndef IO_WO_XEXEC
-
 							   ,
 							   collectedData(this, XEXEC_OBJECT_IONETWORKSERVER)
-
 #endif
 {
 }
