@@ -73,7 +73,7 @@ single::single(int a_key) : data(NULL),
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SINGLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	control.val = 0;
+	control.val = 1;
 
 	if (semctl(keeper, 0, SETVAL, control) == -1)
 	{
@@ -143,7 +143,7 @@ single::~single()
 		{
 			if (acquired)
 			{
-				operations[0].sem_op = -1;
+				operations[0].sem_op = 1;
 
 				semop(keeper, operations, 1);
 			}
@@ -188,7 +188,7 @@ single::close()
 		{
 			if (acquired)
 			{
-				operations[0].sem_op = -1;
+				operations[0].sem_op = 1;
 
 				if (semop(keeper, operations, 1) == -1)
 				{
@@ -260,7 +260,7 @@ single::open(int a_key)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	control.val = 0;
+	control.val = 1;
 
 	if (semctl(keeper, 0, SETVAL, control) == -1)
 	{
@@ -344,14 +344,7 @@ single::set(void *a_data)
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SET, exception::ERRNO_LIBDODO, SINGLEEX_NOTOPENED, PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
-	operations[0].sem_op = 0;
-
-	if (semop(keeper, operations, 1) != 0)
-	{
-		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
-
-	operations[0].sem_op = 1;
+	operations[0].sem_op = -1;
 
 	if (semop(keeper, operations, 1) != 0)
 	{
@@ -360,7 +353,7 @@ single::set(void *a_data)
 
 	data = a_data;
 
-	operations[0].sem_op = -1;
+	operations[0].sem_op = 1;
 
 	if (semop(keeper, operations, 1) != 0)
 	{
@@ -411,14 +404,7 @@ single::acquire(unsigned long microseconds)
 
 	if (microseconds == 0)
 	{
-		operations[0].sem_op = 0;
-
-		if (semop(keeper, operations, 1) != 0)
-		{
-			throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-
-		operations[0].sem_op = 1;
+		operations[0].sem_op = -1;
 
 		if (semop(keeper, operations, 1) != 0)
 		{
@@ -430,7 +416,7 @@ single::acquire(unsigned long microseconds)
 		bool locked = true;
 		unsigned long slept = 0;
 
-		operations[0].sem_op = 0;
+		operations[0].sem_op = -1;
 		operations[0].sem_flg = IPC_NOWAIT;
 
 		while (locked)
@@ -464,14 +450,6 @@ single::acquire(unsigned long microseconds)
 			{
 				locked = false;
 			}
-		}
-
-		operations[0].sem_op = 1;
-		operations[0].sem_flg = 0;
-
-		if (semop(keeper, operations, 1) != 0)
-		{
-			throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 
@@ -542,7 +520,7 @@ single::release()
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSDATASINGLE, SINGLEEX_RELEASE, exception::ERRNO_LIBDODO, SINGLEEX_NOTOPENED, PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
-	operations[0].sem_op = -1;
+	operations[0].sem_op = 1;
 
 	if (semop(keeper, operations, 1) != 0)
 	{
