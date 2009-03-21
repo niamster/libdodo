@@ -11,6 +11,7 @@
 #include <libdodo/toolsMisc.h>
 #include <libdodo/dataMemoryShared.h>
 #include <libdodo/pcSyncProcessDataSingle.h>
+#include <libdodo/pcSyncProcessSection.h>
 #include <libdodo/pcSyncProcessDataCollection.h>
 #include <libdodo/pcSyncProtector.h>
 

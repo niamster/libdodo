@@ -34,9 +34,6 @@
 
 #include <libdodo/types.h>
 #include <libdodo/pcSyncDataCollection.h>
-#include <libdodo/pcSyncProcessDataCollectionEx.h>
-#include <libdodo/pcSyncProcessSection.h>
-#include <libdodo/pcSyncProtector.h>
 
 namespace dodo
 {
@@ -44,6 +41,8 @@ namespace dodo
 	{
 		namespace sync
 		{
+			class section;
+
 			namespace process
 			{
 				namespace data

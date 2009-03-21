@@ -27,8 +27,21 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#ifdef DL_EXT
+#include <dlfcn.h>
+#endif
+
+#include <sys/types.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #include <libdodo/pcProcessCollection.h>
+#include <libdodo/types.h>
+#include <libdodo/pcJobCollection.h>
+#include <libdodo/pcProcessCollectionEx.h>
 
 using namespace dodo::pc::process;
 
@@ -90,7 +103,6 @@ collection::~collection()
 		}
 
 #ifdef DL_EXT
-
 		if (i->handle != NULL)
 		{
 			deinit = (deinitIpcProcessCollectionModule)dlsym(i->handle, "deinitIpcProcessCollectionModule");
@@ -103,7 +115,6 @@ collection::~collection()
 			dlclose(i->handle);
 #endif
 		}
-
 #endif
 	}
 }
@@ -220,7 +231,6 @@ collection::del(unsigned long position,
 		}
 
 #ifdef DL_EXT
-
 		if (current->handle != NULL)
 		{
 			deinitIpcProcessCollectionModule deinit;
@@ -238,7 +248,6 @@ collection::del(unsigned long position,
 			}
 #endif
 		}
-
 #endif
 
 		processes.erase(current);
@@ -322,7 +331,6 @@ collection::replace(unsigned long position,
 
 
 #ifdef DL_EXT
-
 		if (current->handle != NULL)
 		{
 			deinitIpcProcessCollectionModule deinit;
@@ -340,7 +348,6 @@ collection::replace(unsigned long position,
 			}
 #endif
 		}
-
 #endif
 
 		current->data = data;
@@ -585,7 +592,6 @@ collection::setExecutionLimit(unsigned long position,
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
-
 __processMod
 collection::getModuleInfo(const dodoString &module,
 						  void             *toInit)
@@ -662,7 +668,6 @@ collection::add(const dodoString &module,
 
 	return process.position;
 }
-
 #endif
 
 //-------------------------------------------------------------------

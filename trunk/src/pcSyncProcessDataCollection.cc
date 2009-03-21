@@ -27,8 +27,14 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
 
 #include <libdodo/pcSyncProcessDataCollection.h>
+#include <libdodo/types.h>
+#include <libdodo/pcSyncDataCollection.h>
+#include <libdodo/pcSyncProcessDataCollectionEx.h>
+#include <libdodo/pcSyncProcessSection.h>
+#include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::pc::sync::process::data;
 

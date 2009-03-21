@@ -32,20 +32,8 @@
 
 #include <libdodo/directives.h>
 
-#ifdef DL_EXT
-
-#include <dlfcn.h>
-
-#endif
-
-#include <sys/types.h>
-#include <signal.h>
-#include <unistd.h>
-#include <sys/wait.h>
-
 #include <libdodo/types.h>
 #include <libdodo/pcJobCollection.h>
-#include <libdodo/pcProcessCollectionEx.h>
 
 namespace dodo
 {
@@ -91,7 +79,6 @@ namespace dodo
 			};
 
 #ifdef DL_EXT
-
 			/**
 			 * @struct __processMod
 			 * @brief defines data that is returned from initIpcProcessCollectionModule in the library
@@ -117,7 +104,6 @@ namespace dodo
 			 * @brief defines type of deinit function for library
 			 */
 			typedef void (*deinitIpcProcessCollectionModule)();
-
 #endif
 
 			/**
@@ -280,7 +266,6 @@ namespace dodo
 											   unsigned long limit = 1);
 
 #ifdef DL_EXT
-
 				/**
 				 * add function as a process from library
 				 * @return process identificator
@@ -299,7 +284,6 @@ namespace dodo
 				 */
 				static __processMod getModuleInfo(const dodoString &module,
 												  void             *toInit = NULL);
-
 #endif
 
 			  protected:

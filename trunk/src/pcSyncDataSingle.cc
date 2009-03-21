@@ -27,6 +27,7 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
 
 #include <libdodo/pcSyncDataSingle.h>
 

@@ -73,10 +73,8 @@ namespace dodo
 				COLLECTIONEX_ISRUNNING,
 
 #ifdef DL_EXT
-
 				COLLECTIONEX_GETMODULEINFO,
 				COLLECTIONEX_ADD,
-
 #endif
 			};
 		};

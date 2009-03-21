@@ -31,6 +31,7 @@
 #define _PCJOBCOLLECTION_H_ 1
 
 #include <libdodo/directives.h>
+
 #include <libdodo/types.h>
 
 namespace dodo
@@ -147,7 +148,6 @@ namespace dodo
 											   unsigned long limit = 1) = 0;
 
 #ifdef DL_EXT
-
 				/**
 				 * add function as a job from library
 				 * @return job identificator
@@ -158,7 +158,6 @@ namespace dodo
 				virtual unsigned long add(const dodoString &module,
 										  void             *data,
 										  void             *toInit = NULL) = 0;
-
 #endif
 			};
 		};
