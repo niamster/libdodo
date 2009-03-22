@@ -32,7 +32,7 @@
 #ifdef FASTCGI_EXT
 #include <fcgiapp.h>
 
-#include "cgiFastExchange.inline"
+#include "cgiFastRequest.inline"
 
 #include <libdodo/cgiFastServer.h>
 #include <libdodo/types.h>
@@ -91,7 +91,7 @@ void *
 server::fastCGIThread(void *data)
 {
 	FCGX_Request req;
-	__request request = {&req};
+	__requestHandle request = {&req};
 	FCGX_InitRequest(request.request, 0, 0);
 
 	exchange cfSTD(request);
@@ -167,7 +167,7 @@ server::serve(serverHandler func)
 		unsigned long requests = 0;
 
 		FCGX_Request req;
-		__request request = {&req};
+		__requestHandle request = {&req};
 		FCGX_InitRequest(request.request, 0, 0);
 
 		exchange cfSTD(request);

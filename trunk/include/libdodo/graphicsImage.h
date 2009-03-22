@@ -41,10 +41,6 @@ namespace dodo
 {
 	namespace graphics
 	{
-		/**
-		 * @struct __imageHandle
-		 * @brief defines internal handlers for image processing library
-		 */
 		struct __imageHandle;
 
 		/**

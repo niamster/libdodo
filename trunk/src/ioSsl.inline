@@ -38,11 +38,19 @@ namespace dodo
 	{
 		namespace ssl
 		{
+			/**
+			 * @struct __sslHandle
+			 * @brief defines internal handlers for SSL
+			 */
 			struct __sslHandle
 			{
 				SSL *handle;     ///< SSL connection handle
 			};
 
+			/**
+			 * @struct __sslContext
+			 * @brief defines internal context for SSL
+			 */
 			struct __sslContext
 			{
 				SSL_CTX *ctx;    ///< SSL context

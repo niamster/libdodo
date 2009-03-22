@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFastExchange.inline
+ *            cgiFastRequest.inline
  *
  *  Wed Feb  25 06:51:19 2009
  *  Copyright  2009  Ni@m
@@ -27,9 +27,6 @@
  * set shiftwidth=4
  */
 
-#ifndef _CGIFASTEXCHANGE_INLINE_
-#define _CGIFASTEXCHANGE_INLINE_ 1
-
 #include <libdodo/directives.h>
 
 #ifdef FASTCGI_EXT
@@ -41,13 +38,15 @@ namespace dodo
 	{
 		namespace fast
 		{
-			struct __request
+			/**
+			 * @struct __requestHandle
+			 * @brief defines fast CGI request interface
+			 */
+			struct __requestHandle
 			{
 				FCGX_Request *request; ///< fast-CGI request handler
 			};
 		};
 	};
 };
-#endif
-
 #endif

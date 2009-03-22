@@ -42,10 +42,6 @@ namespace dodo
 	{
 		namespace base
 		{
-			/**
-			 * @struct __postgresqlHandle
-			 * @brief defines internal handlers for MySQL DBMS interaction
-			 */
 			struct __postgresqlHandle;
 
 			/**

@@ -42,6 +42,10 @@ namespace dodo
 	{
 		namespace base
 		{
+			/**
+			 * @struct __mysqlHandle
+			 * @brief defines internal handlers for MySQL DBMS interaction
+			 */
 			struct __mysqlHandle
 			{
 				MYSQL	  *handle; ///< DB handle

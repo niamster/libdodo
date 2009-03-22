@@ -1,7 +1,7 @@
 /***************************************************************************
- *            graphicsImage.inline
+ *            pcSyncProcessSemaphore.inline
  *
- *  Sun Mar 15 20:44:57 2009
+ *  Sat Mar 21 02:36:14 2009
  *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -29,29 +29,59 @@
 
 #include <libdodo/directives.h>
 
-#ifdef IMAGEMAGICK_EXT
-#ifndef IMAGEMAGICK_PRE_63
-#include <magick/MagickCore.h>
-#else
-#include <magick/ImageMagick.h>
+#ifdef XSI_IPC
+#include <sys/ipc.h>
+#include <sys/sem.h>
+#else /*POSIX_SEMAPHORES*/
+#include <fcntl.h>
+#include <semaphore.h>
 #endif
+
+#include <libdodo/types.h>
 
 namespace dodo
 {
-	namespace graphics
+	namespace pc
 	{
- 		/**
-		 * @struct __imageHandle
-		 * @brief defines internal handlers for image processing library
-		 */
-		struct __imageHandle
+		namespace sync
 		{
-			ImageInfo *imInfo; ///< image info handler
-			Image	  *imHandle;    ///< image handler
+			namespace process
+			{
+				/**
+				 * @struct __semaphoreHandle
+				 * @brief defines system semaphore
+				 */
+				struct __semaphoreHandle
+				{
+					/**
+					 * constructor
+					 */
+					__semaphoreHandle() :
+#ifdef XSI_IPC
+					keeper(-1)
+#else
+					keeper(NULL)
+#endif
+					{
+					}
+
+#ifdef XSI_IPC
+					int keeper;             ///< semaphore
+					int key;                ///< key for the semaphore
+					union semun
+					{
+						int             val;
+						struct semid_ds *buf;
+						ushort          * array;
+					} control;              ///< semaphore semaphore->control structure
+
+					sembuf operations[1];   ///< semaphore semaphore->operations
+#else
+					sem_t *keeper;          ///< semaphore
+					dodoString key;         ///< key for the semaphore
+#endif
+				};
+			};
 		};
 	};
 };
-#endif
-
-//-------------------------------------------------------------------
-

@@ -41,16 +41,8 @@ namespace dodo
 	{
 		namespace ssl
 		{
-			/**
-			 * @struct __sslHandle
-			 * @brief defines internal handlers for SSL
-			 */
 			struct __sslHandle;
 
-			/**
-			 * @struct __sslContext
-			 * @brief defines internal context for SSL
-			 */
 			struct __sslContext;
 
 			enum keyTypeEnum

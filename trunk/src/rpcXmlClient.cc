@@ -76,7 +76,7 @@ client::processCallResult(const dodoString &data)
 
 	rpEncoding = xmlValue.getBufferInfo(data).encoding;
 
-	dodo::data::format::xml::__nodeDef xmlMethodResponse;
+	dodo::data::format::xml::__nodeHandleDef xmlMethodResponse;
 	xmlMethodResponse.name = "methodResponse";
 	xmlMethodResponse.allChildren = true;
 

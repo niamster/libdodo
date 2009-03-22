@@ -42,11 +42,7 @@ namespace dodo
 	{
 		namespace fast
 		{
-			/**
-			 * @struct __request
-			 * @brief defines fast CGI request interface
-			 */
-			struct __request;
+			struct __requestHandle;
 
 			/**
 			 * @class exchange
@@ -69,7 +65,7 @@ namespace dodo
 				 * @param request defines CGI request descriptor
 				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
-				exchange(const __request &req,
+				exchange(const __requestHandle &req,
 						 short			 protection = io::CHANNEL_PROTECTION_PROCESS);
 
 				/**
@@ -129,7 +125,7 @@ namespace dodo
 
 			  private:
 
-				__request *request; ///< fast CGI descriptor
+				__requestHandle *request; ///< fast CGI descriptor
 			};
 		};
 	};

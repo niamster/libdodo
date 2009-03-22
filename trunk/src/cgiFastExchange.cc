@@ -32,7 +32,7 @@
 #ifdef FASTCGI_EXT
 #include <fcgiapp.h>
 
-#include "cgiFastExchange.inline"
+#include "cgiFastRequest.inline"
 
 #include <libdodo/cgiFastExchange.h>
 #include <libdodo/cgiFastExchangeEx.h>
@@ -44,13 +44,13 @@ using namespace dodo::cgi::fast;
 
 exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
 								   channel(cf.protection),
-								   request(new __request)
+								   request(new __requestHandle)
 {
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange(const __request &req,
+exchange::exchange(const __requestHandle &req,
 				   short		   protection) : dodo::cgi::exchange(protection),
 												 channel(protection)
 {
