@@ -9,6 +9,8 @@ groups = <group1, group2>
 allow_archive = zip gz bz2
 style = paper
 baseurl = <ulr to repository>
+allow_push = <user1, user1>
+push_ssl = false
 
 [extensions]
 hgext.notify =
