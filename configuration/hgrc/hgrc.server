@@ -8,7 +8,7 @@ groups = <group1, group2>
 [web]
 allow_archive = zip gz bz2
 style = paper
-baseurl = <ulr to repository>
+baseurl = <url to repository>
 allow_push = <user1, user1>
 push_ssl = false
 
@@ -18,7 +18,7 @@ hgext.notify =
 [hooks]
 changegroup.notify = python:hgext.notify.hook
 changegroup.mirror = for i in $(cat <path to list with mirrors>); do hg push -f $i; done
-incoming.mantis = /usr/bin/php /var/www/libdodo.org/issues/core/checkin.php <<< $(hg log -r $HG_NODE --template '{desc}\n\n(changeset: {rev}:{node|short})'); /bin/true
+incoming.mantis = /usr/bin/php /</path/to/mantis>/core/checkin.php <<< $(hg log -r $HG_NODE --template '{desc}\n\n(changeset: {rev}:{node|short})'); /bin/true
 
 [email]
 method = /usr/sbin/sendmail
