@@ -42,7 +42,7 @@ namespace dodo
 	{
 		namespace base
 		{
-			struct __postgresqlHandle;
+			struct __postgresql;
 
 			/**
 			 * @class postgresql
@@ -233,7 +233,7 @@ namespace dodo
 
 				bool empty;                                                                 ///< true id pgResult is empty
 
-				__postgresqlHandle *handle; ///< DB handle
+				__postgresql *handle; ///< DB handle
 			};
 		};
 	};

@@ -47,7 +47,7 @@ namespace dodo
 
 		namespace ssl
 		{
-			struct __sslHandle;
+			struct __sslConnection;
 			struct __sslContext;
 			struct __certificates;
 		};
@@ -143,7 +143,7 @@ namespace dodo
 					 */
 					virtual void connectSsl();
 
-					io::ssl::__sslHandle *handle; ///< ssl connection handle
+					io::ssl::__sslConnection *handle; ///< ssl connection handle
 					io::ssl::__sslContext *ctx; ///< ssl connection context
 
 					bool sslConnected;  ///< true if SSL connection established

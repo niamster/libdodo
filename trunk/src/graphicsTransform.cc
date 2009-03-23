@@ -82,23 +82,23 @@ void
 transform::scale(unsigned long width,
 				 unsigned long height)
 {
-	if (im == NULL || im->collectedData.handle->imHandle == NULL)
+	if (im == NULL || im->collectedData.handle->im == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 	}
 
 	GetExceptionInfo((ExceptionInfo *)im->exInfo);
 
-	Image *image = ScaleImage(im->collectedData.handle->imHandle, width, height, (ExceptionInfo *)im->exInfo);
+	Image *image = ScaleImage(im->collectedData.handle->im, width, height, (ExceptionInfo *)im->exInfo);
 
 	if (image == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description);
 	}
 
-	DestroyImage(im->collectedData.handle->imHandle);
+	DestroyImage(im->collectedData.handle->im);
 
-	im->collectedData.handle->imHandle = image;
+	im->collectedData.handle->im = image;
 }
 
 //-------------------------------------------------------------------
@@ -106,25 +106,25 @@ transform::scale(unsigned long width,
 void
 transform::scale(unsigned long size)
 {
-	if (im == NULL || im->collectedData.handle->imHandle == NULL)
+	if (im == NULL || im->collectedData.handle->im == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 	}
 
-	float mult = (float)size / (float)((im->collectedData.handle->imHandle->columns > im->collectedData.handle->imHandle->rows) ? im->collectedData.handle->imHandle->columns : im->collectedData.handle->imHandle->rows);
+	float mult = (float)size / (float)((im->collectedData.handle->im->columns > im->collectedData.handle->im->rows) ? im->collectedData.handle->im->columns : im->collectedData.handle->im->rows);
 
 	GetExceptionInfo((ExceptionInfo *)im->exInfo);
 
-	Image *image = ScaleImage(im->collectedData.handle->imHandle, (unsigned long)floor(im->collectedData.handle->imHandle->columns * mult), (unsigned long)floor(im->collectedData.handle->imHandle->rows * mult), (ExceptionInfo *)im->exInfo);
+	Image *image = ScaleImage(im->collectedData.handle->im, (unsigned long)floor(im->collectedData.handle->im->columns * mult), (unsigned long)floor(im->collectedData.handle->im->rows * mult), (ExceptionInfo *)im->exInfo);
 
 	if (image == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description);
 	}
 
-	DestroyImage(im->collectedData.handle->imHandle);
+	DestroyImage(im->collectedData.handle->im);
 
-	im->collectedData.handle->imHandle = image;
+	im->collectedData.handle->im = image;
 }
 
 //-------------------------------------------------------------------
@@ -132,23 +132,23 @@ transform::scale(unsigned long size)
 void
 transform::rotate(double angle)
 {
-	if (im == NULL || im->collectedData.handle->imHandle == NULL)
+	if (im == NULL || im->collectedData.handle->im == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 	}
 
 	GetExceptionInfo((ExceptionInfo *)im->exInfo);
 
-	Image *image = RotateImage(im->collectedData.handle->imHandle, angle, (ExceptionInfo *)im->exInfo);
+	Image *image = RotateImage(im->collectedData.handle->im, angle, (ExceptionInfo *)im->exInfo);
 
 	if (image == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description);
 	}
 
-	DestroyImage(im->collectedData.handle->imHandle);
+	DestroyImage(im->collectedData.handle->im);
 
-	im->collectedData.handle->imHandle = image;
+	im->collectedData.handle->im = image;
 }
 
 #endif

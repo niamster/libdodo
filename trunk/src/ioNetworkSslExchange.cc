@@ -48,7 +48,7 @@
 using namespace dodo::io::network::ssl;
 
 __initialAccept::__initialAccept() : socket(-1),
-									 handle(new io::ssl::__sslHandle)
+									 handle(new io::ssl::__sslConnection)
 {
 	handle->handle = NULL;
 }
@@ -56,7 +56,7 @@ __initialAccept::__initialAccept() : socket(-1),
 //-------------------------------------------------------------------
 
 __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
-														  handle(new io::ssl::__sslHandle)
+														  handle(new io::ssl::__sslConnection)
 {
 	handle->handle = init.handle->handle;
 
@@ -88,7 +88,7 @@ exchange::exchange(exchange &fse) : network::exchange(fse),
 //-------------------------------------------------------------------
 
 exchange::exchange(short protection) : channel(protection),
-									   handle(new io::ssl::__sslHandle)
+									   handle(new io::ssl::__sslConnection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
@@ -101,7 +101,7 @@ exchange::exchange(short protection) : channel(protection),
 
 exchange::exchange(__initialAccept &a_init,
 				   short           protection) : channel(protection),
-												 handle(new io::ssl::__sslHandle)
+												 handle(new io::ssl::__sslConnection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
@@ -142,7 +142,7 @@ exchange::init(__initialAccept &a_init)
 
 void
 exchange::_close(int socket,
-				 io::ssl::__sslHandle *handle)
+				 io::ssl::__sslConnection *handle)
 {
 	int err = SSL_shutdown(handle->handle);
 	if (err < 0)
@@ -192,7 +192,7 @@ exchange::close()
 
 void
 exchange::init(int  a_socket,
-			   io::ssl::__sslHandle  *a_handle,
+			   io::ssl::__sslConnection  *a_handle,
 			   bool a_blocked,
 			   bool blockInherited)
 {

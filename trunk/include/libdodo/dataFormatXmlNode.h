@@ -55,10 +55,10 @@ namespace dodo
 				class processor;
 
 				/**
-				 * @struct __nodeHandleNamespace
+				 * @struct __nodeNamespace
 				 * @brief defines node namespace
 				 */
-				struct __nodeHandleNamespace
+				struct __nodeNamespace
 				{
 					dodoString prefix;  ///< prefix for the namespace
 					dodoString href;    ///< URL for the namespace
@@ -144,8 +144,8 @@ namespace dodo
 
 					dodoString name;                                                        ///< name of the node [[tag]]
 
-					__nodeHandleNamespace ns;                                                     ///< namespace of the node
-					__nodeHandleNamespace nsDef;                                                  ///< namespace definition of the node
+					__nodeNamespace ns;                                                     ///< namespace of the node
+					__nodeNamespace nsDef;                                                  ///< namespace definition of the node
 
 				  protected:
 

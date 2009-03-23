@@ -41,7 +41,7 @@ namespace dodo
 {
 	namespace graphics
 	{
-		struct __imageHandle;
+		struct __image;
 
 		/**
 		 * @enum imageOperTypeEnum defines type of operation for hook
@@ -84,7 +84,7 @@ namespace dodo
 			 */
 			~__xexecImageCollectedData();
 
-			__imageHandle *handle; ///< ImageMagic handle
+			__image *handle; ///< ImageMagic handle
 		};
 
 #define IMAGE_MAPPINGSTATEMENTS 2

@@ -41,13 +41,13 @@ namespace dodo
 	namespace graphics
 	{
  		/**
-		 * @struct __imageHandle
+		 * @struct __image
 		 * @brief defines internal handlers for image processing library
 		 */
-		struct __imageHandle
+		struct __image
 		{
 			ImageInfo *imInfo; ///< image info handler
-			Image	  *imHandle;    ///< image handler
+			Image	  *im;    ///< image handler
 		};
 	};
 };

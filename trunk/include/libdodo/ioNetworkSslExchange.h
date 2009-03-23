@@ -46,7 +46,7 @@ namespace dodo
 
 			namespace ssl
 			{
-				struct __sslHandle;
+				struct __sslConnection;
 
 				/**
 				 * @class __initialAccept
@@ -80,7 +80,7 @@ namespace dodo
 
 					int socket;             ///< socket
 
-					io::ssl::__sslHandle *handle;         ///< SSL connection handle
+					io::ssl::__sslConnection *handle;         ///< SSL connection handle
 
 					bool blocked;           ///< true if blocked
 					bool blockInherited;    ///< true if block flag is inherited
@@ -143,15 +143,15 @@ namespace dodo
 
 				  protected:
 
-					io::ssl::__sslHandle *handle; ///< SSL connection handle
+					io::ssl::__sslConnection *handle; ///< SSL connection handle
 
 					/**
 					 * close socket connection
 					 * @param socket defines socket descriptor
-					 * @param sslHandle defines SSL handle
+					 * @param ssl defines SSL handle
 					 */
 					virtual void _close(int socket,
-										io::ssl::__sslHandle *handle);
+										io::ssl::__sslConnection *handle);
 
 					/**
 					 * init current instance
@@ -161,7 +161,7 @@ namespace dodo
 					 * @param blockInherited defines block flag inheritance
 					 */
 					virtual void init(int  socket,
-									  io::ssl::__sslHandle  *handle,
+									  io::ssl::__sslConnection  *handle,
 									  bool blocked,
 									  bool blockInherited);
 

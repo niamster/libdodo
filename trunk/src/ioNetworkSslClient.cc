@@ -59,7 +59,7 @@ client::client(short a_family,
 			   short a_type) : network::client(a_family,
 											   a_type),
 							   sslConnected(false),
-							   handle(new io::ssl::__sslHandle),
+							   handle(new io::ssl::__sslConnection),
 							   ctx(new io::ssl::__sslContext)
 {
 #ifndef IO_WO_XEXEC

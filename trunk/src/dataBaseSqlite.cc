@@ -44,10 +44,10 @@ namespace dodo
 		namespace base
 		{
 			/**
-			 * @struct __mysqlHandle
-			 * @brief defines internal handlers for MySQL DBMS interaction
+			 * @struct __sqlite
+			 * @brief defines internal handlers for SQLite DBMS interaction
 			 */
-			struct __sqliteHandle
+			struct __sqlite
 			{
 				sqlite3 *handle; ///< DB handle
 				sqlite3_stmt *result; ///< handlde to result
@@ -59,7 +59,7 @@ namespace dodo
 using namespace dodo::data::base;
 
 sqlite::sqlite() : empty(true),
-				   handle(new __sqliteHandle)
+				   handle(new __sqlite)
 {
 	handle->handle = NULL;
 
@@ -71,7 +71,7 @@ sqlite::sqlite() : empty(true),
 //-------------------------------------------------------------------
 
 sqlite::sqlite(const __connectionInfo &info) : empty(true),
-											   handle(new __sqliteHandle)
+											   handle(new __sqlite)
 {
 	handle->handle = NULL;
 

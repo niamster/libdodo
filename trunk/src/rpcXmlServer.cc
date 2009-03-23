@@ -64,7 +64,7 @@ server::processCall(const dodoString &data)
 
 	rqEncoding = xmlValue.getBufferInfo(data).encoding;
 
-	dodo::data::format::xml::__nodeHandleDef xmlMethodCall;
+	dodo::data::format::xml::__nodeDef xmlMethodCall;
 	xmlMethodCall.name = "methodCall";
 	xmlMethodCall.allChildren = true;
 

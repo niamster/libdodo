@@ -159,8 +159,8 @@ namespace dodo
 			 */
 			virtual void _writeStream(const char * const data);
 
-			void *inHandle;     ///< input stream descriptor
-			void *outHandle;    ///< output stream descriptor
+			void *in;     ///< input stream descriptor
+			void *out;    ///< output stream descriptor
 
 		  private:
 

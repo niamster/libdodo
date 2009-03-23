@@ -42,7 +42,7 @@ namespace dodo
 	{
 		namespace base
 		{
-			struct __mysqlHandle;
+			struct __mysql;
 
 			/**
 			 * @struct __mysqlSslOptions
@@ -181,7 +181,7 @@ namespace dodo
 
 				bool empty;             ///< true id mysqlRes is empty
 
-				__mysqlHandle *handle; ///< DB handle
+				__mysql *handle; ///< DB handle
 
 				unsigned long type;     ///< connection type
 			};

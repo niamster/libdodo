@@ -41,7 +41,7 @@ namespace dodo
 	{
 		namespace ssl
 		{
-			struct __sslHandle;
+			struct __sslConnection;
 
 			struct __sslContext;
 

@@ -46,10 +46,10 @@ namespace dodo
 		namespace base
 		{
 			/**
-			 * @struct __postgresqlHandle
+			 * @struct __postgresql
 			 * @brief defines internal handlers for MySQL DBMS interaction
 			 */
-			struct __postgresqlHandle
+			struct __postgresql
 			{
 				PGconn *handle; ///< DB handle
 				PGresult *result; ///< handlde to result
@@ -108,7 +108,7 @@ const dodoString postgresql::encodingStatements[] =
 //-------------------------------------------------------------------
 
 postgresql::postgresql() : empty(true),
-						   handle(new __postgresqlHandle)
+						   handle(new __postgresql)
 {
 	handle->handle = NULL;
 
@@ -120,7 +120,7 @@ postgresql::postgresql() : empty(true),
 //-------------------------------------------------------------------
 
 postgresql::postgresql(const __connectionInfo &info) : empty(true),
-													   handle(new __postgresqlHandle)
+													   handle(new __postgresql)
 {
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASEPOSTGRESQL);

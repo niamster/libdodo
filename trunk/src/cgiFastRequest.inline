@@ -39,10 +39,10 @@ namespace dodo
 		namespace fast
 		{
 			/**
-			 * @struct __requestHandle
+			 * @struct __request
 			 * @brief defines fast CGI request interface
 			 */
-			struct __requestHandle
+			struct __request
 			{
 				FCGX_Request *request; ///< fast-CGI request handler
 			};

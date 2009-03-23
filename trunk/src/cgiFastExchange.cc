@@ -44,13 +44,13 @@ using namespace dodo::cgi::fast;
 
 exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
 								   channel(cf.protection),
-								   request(new __requestHandle)
+								   request(new __request)
 {
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange(const __requestHandle &req,
+exchange::exchange(const __request &req,
 				   short		   protection) : dodo::cgi::exchange(protection),
 												 channel(protection)
 {

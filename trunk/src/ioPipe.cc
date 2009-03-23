@@ -45,8 +45,8 @@ io::pipe::pipe(bool  open,
 			   short protection) : inPipeBuffer(IOPIPE_INSIZE),
 								   outPipeBuffer(IOPIPE_OUTSIZE),
 								   blocked(true),
-								   inHandle(NULL),
-								   outHandle(NULL),
+								   in(NULL),
+								   out(NULL),
 								   channel(protection)
 {
 #ifndef IO_WO_XEXEC
@@ -62,14 +62,14 @@ io::pipe::pipe(bool  open,
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		inHandle = fdopen(pipefd[0], "r");
-		if (inHandle == NULL)
+		in = fdopen(pipefd[0], "r");
+		if (in == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		outHandle = fdopen(pipefd[1], "w");
-		if (outHandle == NULL)
+		out = fdopen(pipefd[1], "w");
+		if (out == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
@@ -81,8 +81,8 @@ io::pipe::pipe(bool  open,
 io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 								 outPipeBuffer(fd.outPipeBuffer),
 								 blocked(fd.blocked),
-								 inHandle(NULL),
-								 outHandle(NULL),
+								 in(NULL),
+								 out(NULL),
 								 channel(protection)
 {
 #ifndef IO_WO_XEXEC
@@ -92,11 +92,11 @@ io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.inHandle != NULL && fd.outHandle != NULL)
+	if (fd.in != NULL && fd.out != NULL)
 	{
 		int oldDesc, newDesc;
 
-		oldDesc = fileno((FILE *)fd.inHandle);
+		oldDesc = fileno((FILE *)fd.in);
 		if (oldDesc == -1)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -108,13 +108,13 @@ io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		inHandle = fdopen(newDesc, "r");
-		if (inHandle == NULL)
+		in = fdopen(newDesc, "r");
+		if (in == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		oldDesc = fileno((FILE *)fd.outHandle);
+		oldDesc = fileno((FILE *)fd.out);
 		if (oldDesc == -1)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -126,8 +126,8 @@ io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		outHandle = fdopen(newDesc, "w");
-		if (outHandle == NULL)
+		out = fdopen(newDesc, "w");
+		if (out == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
@@ -138,14 +138,14 @@ io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 
 io::pipe::~pipe()
 {
-	if (inHandle != NULL)
+	if (in != NULL)
 	{
-		fclose((FILE *)inHandle);
+		fclose((FILE *)in);
 	}
 
-	if (outHandle != NULL)
+	if (out != NULL)
 	{
-		fclose((FILE *)outHandle);
+		fclose((FILE *)out);
 	}
 }
 
@@ -156,24 +156,24 @@ io::pipe::clone(const pipe &fd)
 {
 	pc::sync::protector pg(keeper);
 
-	if (inHandle != NULL)
+	if (in != NULL)
 	{
-		if (fclose((FILE *)inHandle) != 0)
+		if (fclose((FILE *)in) != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		inHandle = NULL;
+		in = NULL;
 	}
 
-	if (outHandle != NULL)
+	if (out != NULL)
 	{
-		if (fclose((FILE *)outHandle) != 0)
+		if (fclose((FILE *)out) != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		outHandle = NULL;
+		out = NULL;
 	}
 
 	inPipeBuffer = fd.inPipeBuffer;
@@ -182,11 +182,11 @@ io::pipe::clone(const pipe &fd)
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.inHandle != NULL && fd.outHandle != NULL)
+	if (fd.in != NULL && fd.out != NULL)
 	{
 		int oldDesc, newDesc;
 
-		oldDesc = fileno((FILE *)fd.inHandle);
+		oldDesc = fileno((FILE *)fd.in);
 		if (oldDesc == -1)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -198,13 +198,13 @@ io::pipe::clone(const pipe &fd)
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		inHandle = fdopen(newDesc, "r");
-		if (inHandle == NULL)
+		in = fdopen(newDesc, "r");
+		if (in == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		oldDesc = fileno((FILE *)fd.outHandle);
+		oldDesc = fileno((FILE *)fd.out);
 		if (oldDesc == -1)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -216,8 +216,8 @@ io::pipe::clone(const pipe &fd)
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		outHandle = fdopen(newDesc, "w");
-		if (outHandle == NULL)
+		out = fdopen(newDesc, "w");
+		if (out == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
@@ -231,12 +231,12 @@ io::pipe::getInDescriptor() const
 {
 	pc::sync::protector pg(keeper);
 
-	if (inHandle == NULL)
+	if (in == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
-	return fileno((FILE *)inHandle);
+	return fileno((FILE *)in);
 }
 
 //-------------------------------------------------------------------
@@ -246,12 +246,12 @@ io::pipe::getOutDescriptor() const
 {
 	pc::sync::protector pg(keeper);
 
-	if (outHandle == NULL)
+	if (out == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
-	return fileno((FILE *)outHandle);
+	return fileno((FILE *)out);
 }
 
 //-------------------------------------------------------------------
@@ -266,24 +266,24 @@ io::pipe::close()
 	performXExec(preExec);
 #endif
 
-	if (inHandle != NULL)
+	if (in != NULL)
 	{
-		if (fclose((FILE *)inHandle) != 0)
+		if (fclose((FILE *)in) != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		inHandle = NULL;
+		in = NULL;
 	}
 
-	if (outHandle != NULL)
+	if (out != NULL)
 	{
-		if (fclose((FILE *)outHandle) != 0)
+		if (fclose((FILE *)out) != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		outHandle = NULL;
+		out = NULL;
 	}
 
 #ifndef IO_WO_XEXEC
@@ -303,24 +303,24 @@ io::pipe::open()
 	performXExec(preExec);
 #endif
 
-	if (inHandle != NULL)
+	if (in != NULL)
 	{
-		if (fclose((FILE *)inHandle) != 0)
+		if (fclose((FILE *)in) != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		inHandle = NULL;
+		in = NULL;
 	}
 
-	if (outHandle != NULL)
+	if (out != NULL)
 	{
-		if (fclose((FILE *)outHandle) != 0)
+		if (fclose((FILE *)out) != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		outHandle = NULL;
+		out = NULL;
 	}
 
 	int pipefd[2];
@@ -330,14 +330,14 @@ io::pipe::open()
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	inHandle = fdopen(pipefd[0], "r");
-	if (inHandle == NULL)
+	in = fdopen(pipefd[0], "r");
+	if (in == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	outHandle = fdopen(pipefd[1], "w");
-	if (outHandle == NULL)
+	out = fdopen(pipefd[1], "w");
+	if (out == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
@@ -352,7 +352,7 @@ io::pipe::open()
 void
 io::pipe::_read(char * const a_data)
 {
-	if (inHandle == NULL)
+	if (in == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -373,9 +373,9 @@ io::pipe::_read(char * const a_data)
 		{
 			while (true)
 			{
-				if ((n = fread(data, 1, batch, (FILE *)inHandle)) == 0)
+				if ((n = fread(data, 1, batch, (FILE *)in)) == 0)
 				{
-					if (feof((FILE *)inHandle) != 0 || errno == EAGAIN)
+					if (feof((FILE *)in) != 0 || errno == EAGAIN)
 					{
 						break;
 					}
@@ -385,7 +385,7 @@ io::pipe::_read(char * const a_data)
 						continue;
 					}
 
-					if (ferror((FILE *)inHandle) != 0)
+					if (ferror((FILE *)in) != 0)
 					{
 						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
@@ -406,9 +406,9 @@ io::pipe::_read(char * const a_data)
 		{
 			while (true)
 			{
-				if ((n = fread(data, 1, batch, (FILE *)inHandle)) == 0)
+				if ((n = fread(data, 1, batch, (FILE *)in)) == 0)
 				{
-					if (feof((FILE *)inHandle) != 0 || errno == EAGAIN)
+					if (feof((FILE *)in) != 0 || errno == EAGAIN)
 					{
 						break;
 					}
@@ -418,7 +418,7 @@ io::pipe::_read(char * const a_data)
 						continue;
 					}
 
-					if (ferror((FILE *)inHandle) != 0)
+					if (ferror((FILE *)in) != 0)
 					{
 						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
@@ -438,7 +438,7 @@ io::pipe::_read(char * const a_data)
 void
 io::pipe::_write(const char *const buf)
 {
-	if (outHandle == NULL)
+	if (out == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -457,7 +457,7 @@ io::pipe::_write(const char *const buf)
 		{
 			while (true)
 			{
-				if ((n = fwrite(data, 1, batch, (FILE *)outHandle)) == 0)
+				if ((n = fwrite(data, 1, batch, (FILE *)out)) == 0)
 				{
 					if (errno == EINTR)
 					{
@@ -469,7 +469,7 @@ io::pipe::_write(const char *const buf)
 						break;
 					}
 
-					if (ferror((FILE *)outHandle) != 0)
+					if (ferror((FILE *)out) != 0)
 					{
 						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
@@ -490,7 +490,7 @@ io::pipe::_write(const char *const buf)
 		{
 			while (true)
 			{
-				if ((n = fwrite(data, 1, batch, (FILE *)outHandle)) == 0)
+				if ((n = fwrite(data, 1, batch, (FILE *)out)) == 0)
 				{
 					if (errno == EINTR)
 					{
@@ -502,7 +502,7 @@ io::pipe::_write(const char *const buf)
 						break;
 					}
 
-					if (ferror((FILE *)outHandle) != 0)
+					if (ferror((FILE *)out) != 0)
 					{
 						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
@@ -524,12 +524,12 @@ io::pipe::flush()
 {
 	pc::sync::protector pg(keeper);
 
-	if (outHandle == NULL)
+	if (out == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
-	if (fflush((FILE *)outHandle) != 0)
+	if (fflush((FILE *)out) != 0)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
@@ -542,7 +542,7 @@ io::pipe::peerInfo()
 {
 	pc::sync::protector pg(keeper);
 
-	if (inHandle == NULL)
+	if (in == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -553,7 +553,7 @@ io::pipe::peerInfo()
 
 	socklen_t len = sizeof(sockaddr_in6);
 
-	int desc = fileno((FILE *)inHandle);
+	int desc = fileno((FILE *)in);
 	if (desc == -1)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -626,7 +626,7 @@ io::pipe::block(bool flag)
 {
 	pc::sync::protector pg(keeper);
 
-	if (inHandle == NULL && outHandle == NULL)
+	if (in == NULL && out == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -639,7 +639,7 @@ io::pipe::block(bool flag)
 	int blockFlag;
 	int desc;
 
-	desc = fileno((FILE *)inHandle);
+	desc = fileno((FILE *)in);
 	if (desc == -1)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -665,7 +665,7 @@ io::pipe::block(bool flag)
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	desc = fileno((FILE *)outHandle);
+	desc = fileno((FILE *)out);
 	if (desc == -1)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -699,7 +699,7 @@ io::pipe::block(bool flag)
 unsigned long
 io::pipe::_readStream(char * const a_data)
 {
-	if (inHandle == NULL)
+	if (in == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
@@ -710,7 +710,7 @@ io::pipe::_readStream(char * const a_data)
 
 	while (true)
 	{
-		if (fgets(a_data, readSize, (FILE *)inHandle) == NULL)
+		if (fgets(a_data, readSize, (FILE *)in) == NULL)
 		{
 			if (errno == EINTR)
 			{
@@ -722,7 +722,7 @@ io::pipe::_readStream(char * const a_data)
 				break;
 			}
 
-			if (ferror((FILE *)inHandle) != 0)
+			if (ferror((FILE *)in) != 0)
 			{
 				throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
@@ -754,7 +754,7 @@ io::pipe::_writeStream(const char * const data)
 
 		while (true)
 		{
-			if (fputc('\n', (FILE *)outHandle) == EOF)
+			if (fputc('\n', (FILE *)out) == EOF)
 			{
 				if (errno == EINTR)
 				{
@@ -766,7 +766,7 @@ io::pipe::_writeStream(const char * const data)
 					break;
 				}
 
-				if (ferror((FILE *)outHandle) != 0)
+				if (ferror((FILE *)out) != 0)
 				{
 					throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}

@@ -42,7 +42,7 @@ namespace dodo
 	{
 		namespace base
 		{
-			struct __sqliteHandle;
+			struct __sqlite;
 
 			/**
 			 * @class sqlite
@@ -162,7 +162,7 @@ namespace dodo
 
 			  private:
 
-				__sqliteHandle *handle; ///< DB handle
+				__sqlite *handle; ///< DB handle
 
 				bool empty;                     ///< true if liteStmt is empty
 			};

@@ -40,8 +40,8 @@ stdio::stdio(short protection) : pipe(false, protection),
 
 #endif
 
-	inHandle = stdin;
-	outHandle = stdout;
+	in = stdin;
+	out = stdout;
 }
 
 //-------------------------------------------------------------------
@@ -84,11 +84,11 @@ stdio::redirectToStderr(bool toStderr)
 
 	if (err)
 	{
-		outHandle = stderr;
+		out = stderr;
 	}
 	else
 	{
-		outHandle = stdout;
+		out = stdout;
 	}
 }
 

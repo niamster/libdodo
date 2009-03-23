@@ -43,10 +43,10 @@ namespace dodo
 		namespace base
 		{
 			/**
-			 * @struct __mysqlHandle
+			 * @struct __mysql
 			 * @brief defines internal handlers for MySQL DBMS interaction
 			 */
-			struct __mysqlHandle
+			struct __mysql
 			{
 				MYSQL	  *handle; ///< DB handle
 				MYSQL_RES *result; ///< handle to result
@@ -59,7 +59,7 @@ using namespace dodo::data::base;
 
 mysql::mysql() : empty(true),
 				 type(CLIENT_MULTI_STATEMENTS),
-				 handle(new __mysqlHandle)
+				 handle(new __mysql)
 
 {
 #ifndef DATABASE_WO_XEXEC
@@ -73,7 +73,7 @@ mysql::mysql() : empty(true),
 
 mysql::mysql(const __connectionInfo &info) : empty(true),
 											 type(CLIENT_MULTI_STATEMENTS),
-											 handle(new __mysqlHandle)
+											 handle(new __mysql)
 
 {
 #ifndef DATABASE_WO_XEXEC

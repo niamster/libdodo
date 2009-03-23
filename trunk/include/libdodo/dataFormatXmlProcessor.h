@@ -44,31 +44,31 @@ namespace dodo
 			{
 				class node;
 
-				struct __nodeHandle;
+				struct __node;
 
-				struct __docHandle;
+				struct __doc;
 
 				/**
-				 * @struct __nodeHandleDef
+				 * @struct __nodeDef
 				 * @brief defines processor tree definition
 				 */
-				struct __nodeHandleDef
+				struct __nodeDef
 				{
 					/**
 					 * constructor
 					 */
-					__nodeHandleDef();
+					__nodeDef();
 
 					/**
 					 * @param name defines node name
 					 * @param ns defines namespace of the node
 					 */
-					__nodeHandleDef(const dodoString &name,
+					__nodeDef(const dodoString &name,
 							  const            dodoString &ns = __dodostring__);
 
 					dodoString                     name;            ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-					dodoMap<dodoString, __nodeHandleDef> children;        ///< children definitions
+					dodoMap<dodoString, __nodeDef> children;        ///< children definitions
 					bool                           allChildren;     ///< if true - get all children tree[true by default]
 
 					dodoStringArray                attributes;      ///< node attrributes; if empty - take all
@@ -131,21 +131,21 @@ namespace dodo
 					virtual ~processor();
 
 					/**
-					 * parse XML file using __nodeHandleDef XML definition
+					 * parse XML file using __nodeDef XML definition
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
 					 * @param file defines path to XML file
 					 */
-					virtual node processFile(const __nodeHandleDef  &definition,
+					virtual node processFile(const __nodeDef  &definition,
 											 const dodoString &file);
 
 					/**
-					 * parse XML buffer using __nodeHandleDef XML definition
+					 * parse XML buffer using __nodeDef XML definition
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
 					 * @param buffer defines XML buffer
 					 */
-					virtual node processString(const __nodeHandleDef  &definition,
+					virtual node processString(const __nodeDef  &definition,
 											   const dodoString &buffer);
 
 					/**
@@ -186,7 +186,7 @@ namespace dodo
 					 * clear parameters of the give node definition
 					 * @param xnode defines node definition to clean
 					 */
-					static void initNodeDef(__nodeHandleDef &xnode);
+					static void initNodeDef(__nodeDef &xnode);
 
 					/**
 					 * free internal structures
@@ -212,41 +212,41 @@ namespace dodo
 				  protected:
 
 					/**
-					 * parse XML using __nodeHandleDef XML definition
+					 * parse XML using __nodeDef XML definition
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
 					 */
-					virtual node parse(const __nodeHandleDef &definition);
+					virtual node parse(const __nodeDef &definition);
 
 #ifdef LIBXML2_EXT
 					/**
 					 * @return true if content is in CDATA
 					 * @param xnode defines XML tree node
 					 */
-					bool isCDATA(const __nodeHandle &xnode);
+					bool isCDATA(const __node &xnode);
 
 					/**
 					 * parse XML
 					 * @return parsed XML in node structure
 					 * @param xnode defines XML tree node
 					 */
-					virtual dodoArray<node> parse(__nodeHandle xnode);
+					virtual dodoArray<node> parse(__node xnode);
 
 					/**
-					 * parses XML using __nodeHandleDef XML definition
+					 * parses XML using __nodeDef XML definition
 					 * @return parsed XML nodes in node structures
 					 * @param definition defines structure of XML
 					 * @param chNode defines XML tree node
 					 */
-					virtual dodoArray<node> parse(const __nodeHandleDef &definition,
-												  const __nodeHandle	  &xnode);
+					virtual dodoArray<node> parse(const __nodeDef &definition,
+												  const __node	  &xnode);
 
 					/**
 					 * get node attributes
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					virtual void getAttributes(const __nodeHandle		&xnode,
+					virtual void getAttributes(const __node		&xnode,
 											   dodoStringMap    &attributes);
 
 					/**
@@ -255,8 +255,8 @@ namespace dodo
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					virtual void getAttributes(const __nodeHandleDef  &definition,
-											   const __nodeHandle		&xnode,
+					virtual void getAttributes(const __nodeDef  &definition,
+											   const __node		&xnode,
 											   dodoStringMap    &attributes);
 
 					/**
@@ -264,7 +264,7 @@ namespace dodo
 					 * @param xnode defines node content
 					 * @param sample defines buffer for node
 					 */
-					virtual void getNodeInfo(const __nodeHandle &xnode,
+					virtual void getNodeInfo(const __node &xnode,
 											 node		  &sample);
 #endif
 
@@ -285,10 +285,10 @@ namespace dodo
 					 * @param definition defines structure of XML
 					 * @param node defines node content
 					 */
-					__nodeHandle findNode(const __nodeHandleDef &definition,
-									const __nodeHandle	&node);
+					__node findNode(const __nodeDef &definition,
+									const __node	&node);
 
-					__docHandle *document; ///< XML Document
+					__doc *document; ///< XML Document
 #endif
 
 #define PROCESSOR_STATEMENTS 11
