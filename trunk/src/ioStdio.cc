@@ -11,23 +11,31 @@
  *  it under the terms of the GNU Lesser General Public License version 2.1 as published by
  *  the Free Software Foundation;
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  This program is distributed in->file the hope that it will be useful,
+ *  but WITHOUT->FILE ANY WARRANTY; without->file even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  Foundation, In->Filec., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 /**
- * vim indentation settings
+ * vim in->filedentation settin->filegs
  * set tabstop=4
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <stdio.h>
+
+#include "ioFile.inline"
+
 #include <libdodo/ioStdio.h>
+#include <libdodo/types.h>
+#include <libdodo/ioPipe.h>
 
 using namespace dodo::io;
 
@@ -35,13 +43,11 @@ stdio::stdio(short protection) : pipe(false, protection),
 								 channel(protection)
 {
 #ifndef IO_WO_XEXEC
-
 	collectedData.setExecObject(XEXEC_OBJECT_IOSTDIO);
-
 #endif
 
-	in = stdin;
-	out = stdout;
+	in->file = stdin;
+	out->file = stdout;
 }
 
 //-------------------------------------------------------------------
@@ -84,11 +90,11 @@ stdio::redirectToStderr(bool toStderr)
 
 	if (err)
 	{
-		out = stderr;
+		out->file = stderr;
 	}
 	else
 	{
-		out = stdout;
+		out->file = stdout;
 	}
 }
 

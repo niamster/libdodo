@@ -43,6 +43,8 @@ namespace dodo
 			struct __peerInfo;
 		};
 
+		struct __file;
+
 		/**
 		 * @enum pipeOperationTypeEnum defines type of operation for hook
 		 */
@@ -159,8 +161,8 @@ namespace dodo
 			 */
 			virtual void _writeStream(const char * const data);
 
-			void *in;     ///< input stream descriptor
-			void *out;    ///< output stream descriptor
+			__file *in;     ///< input stream descriptor
+			__file *out;    ///< output stream descriptor
 
 		  private:
 

@@ -39,6 +39,8 @@ namespace dodo
 {
 	namespace io
 	{
+		struct __file;
+
 		namespace file
 		{
 #ifndef IO_WO_XEXEC
@@ -179,7 +181,7 @@ namespace dodo
 				dodoString path;    ///< file path
 				short mode;         ///< file open mode[see fileOpenmodeEnum]
 
-				void *handler;      ///< file handler
+				__file *handle;      ///< file handle
 
 				bool blocked;       ///< true if stream is blocked
 			};

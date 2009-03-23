@@ -30,16 +30,8 @@
 #ifndef _IOSTDIO_H_
 #define _IOSTDIO_H_ 1
 
-#include <fcntl.h>
-#include <sys/un.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
 #include <libdodo/ioPipe.h>
 
 namespace dodo

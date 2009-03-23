@@ -34,6 +34,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "ioFile.inline"
+
 #include <libdodo/ioFileRegular.h>
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioFileRegularEx.h>
@@ -47,7 +49,7 @@ regular::regular(short protection) : overwrite(false),
 									 pos(0),
 									 blockOffset(true),
 									 append(false),
-									 handler(NULL),
+									 handle(new io::__file),
 									 channel(protection)
 {
 #ifndef IO_WO_XEXEC
@@ -63,7 +65,7 @@ regular::regular(const dodoString &a_path,
 												pos(0),
 												blockOffset(true),
 												append(false),
-												handler(NULL),
+												handle(new io::__file),
 												path(a_path),
 												mode(a_mode),
 												channel(protection)
@@ -103,34 +105,34 @@ regular::regular(const dodoString &a_path,
 		{
 			case REGULAR_OPENMODE_READ_WRITE:
 
-				handler = fopen(path.c_str(), "r+");
-				if (handler == NULL)
+				handle->file = fopen(path.c_str(), "r+");
+				if (handle->file == NULL)
 				{
-					handler = fopen(path.c_str(), "w+");
+					handle->file = fopen(path.c_str(), "w+");
 				}
 
 				break;
 
 			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-				handler = fopen(path.c_str(), "w+");
+				handle->file = fopen(path.c_str(), "w+");
 
 				break;
 
 			case REGULAR_OPENMODE_APPEND:
 
-				handler = fopen(path.c_str(), "a");
+				handle->file = fopen(path.c_str(), "a");
 
 				break;
 
 			case REGULAR_OPENMODE_READ_ONLY:
 			default:
 
-				handler = fopen(path.c_str(), "r");
+				handle->file = fopen(path.c_str(), "r");
 		}
 	}
 
-	if (handler == NULL)
+	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
@@ -149,7 +151,7 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 									  blockOffset(fd.blockOffset),
 									  append(fd.append),
 									  mode(fd.mode),
-									  handler(NULL),
+									  handle(new io::__file),
 									  channel(fd.protection)
 
 {
@@ -160,11 +162,11 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.handler !=  NULL)
+	if (fd.handle->file !=  NULL)
 	{
 		int oldDesc, newDesc;
 
-		oldDesc = fileno((FILE *)fd.handler);
+		oldDesc = fileno(fd.handle->file);
 		if (oldDesc == -1)
 		{
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -181,23 +183,23 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 			case REGULAR_OPENMODE_READ_WRITE:
 			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-				handler = fdopen(newDesc, "r+");
+				handle->file = fdopen(newDesc, "r+");
 
 				break;
 
 			case REGULAR_OPENMODE_APPEND:
 
-				handler = fdopen(newDesc, "a");
+				handle->file = fdopen(newDesc, "a");
 
 				break;
 
 			case REGULAR_OPENMODE_READ_ONLY:
 			default:
 
-				handler = fdopen(newDesc, "r");
+				handle->file = fdopen(newDesc, "r");
 		}
 
-		if (handler == NULL)
+		if (handle->file == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
@@ -208,10 +210,12 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 
 regular::~regular()
 {
-	if (handler !=  NULL)
+	if (handle->file !=  NULL)
 	{
-		fclose((FILE *)handler);
+		fclose(handle->file);
 	}
+
+	delete handle;
 }
 
 //-------------------------------------------------------------------
@@ -221,12 +225,12 @@ regular::getInDescriptor() const
 {
 	pc::sync::protector pg(keeper);
 
-	if (handler == NULL)
+	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
-	return fileno((FILE *)handler);
+	return fileno(handle->file);
 }
 
 //-------------------------------------------------------------------
@@ -236,12 +240,12 @@ regular::getOutDescriptor() const
 {
 	pc::sync::protector pg(keeper);
 
-	if (handler == NULL)
+	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
-	return fileno((FILE *)handler);
+	return fileno(handle->file);
 }
 
 //-------------------------------------------------------------------
@@ -251,14 +255,14 @@ regular::clone(const regular &fd)
 {
 	pc::sync::protector pg(keeper);
 
-	if (handler !=  NULL)
+	if (handle->file !=  NULL)
 	{
-		if (fclose((FILE *)handler) != 0)
+		if (fclose(handle->file) != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		handler = NULL;
+		handle->file = NULL;
 	}
 
 	overwrite = fd.overwrite;
@@ -270,11 +274,11 @@ regular::clone(const regular &fd)
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.handler !=  NULL)
+	if (fd.handle->file !=  NULL)
 	{
 		int oldDesc, newDesc;
 
-		oldDesc = fileno((FILE *)fd.handler);
+		oldDesc = fileno(fd.handle->file);
 		if (oldDesc == -1)
 		{
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -291,23 +295,23 @@ regular::clone(const regular &fd)
 			case REGULAR_OPENMODE_READ_WRITE:
 			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-				handler = fdopen(newDesc, "r+");
+				handle->file = fdopen(newDesc, "r+");
 
 				break;
 
 			case REGULAR_OPENMODE_APPEND:
 
-				handler = fdopen(newDesc, "a");
+				handle->file = fdopen(newDesc, "a");
 
 				break;
 
 			case REGULAR_OPENMODE_READ_ONLY:
 			default:
 
-				handler = fdopen(newDesc, "r");
+				handle->file = fdopen(newDesc, "r");
 		}
 
-		if (handler == NULL)
+		if (handle->file == NULL)
 		{
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
@@ -326,14 +330,14 @@ regular::close()
 	performXExec(preExec);
 #endif
 
-	if (handler !=  NULL)
+	if (handle->file !=  NULL)
 	{
-		if (fclose((FILE *)handler) != 0)
+		if (fclose(handle->file) != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 
-		handler = NULL;
+		handle->file = NULL;
 	}
 
 #ifndef IO_WO_XEXEC
@@ -357,14 +361,14 @@ regular::open(const dodoString &a_path,
 	path = a_path;
 	mode = a_mode;
 
-	if (handler !=  NULL)
+	if (handle->file !=  NULL)
 	{
-		if (fclose((FILE *)handler) != 0)
+		if (fclose(handle->file) != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 
-		handler = NULL;
+		handle->file = NULL;
 	}
 
 	bool exists(false);
@@ -398,34 +402,34 @@ regular::open(const dodoString &a_path,
 		{
 			case REGULAR_OPENMODE_READ_WRITE:
 
-				handler = fopen(path.c_str(), "r+");
-				if (handler == NULL)
+				handle->file = fopen(path.c_str(), "r+");
+				if (handle->file == NULL)
 				{
-					handler = fopen(path.c_str(), "w+");
+					handle->file = fopen(path.c_str(), "w+");
 				}
 
 				break;
 
 			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
-				handler = fopen(path.c_str(), "w+");
+				handle->file = fopen(path.c_str(), "w+");
 
 				break;
 
 			case REGULAR_OPENMODE_APPEND:
 
-				handler = fopen(path.c_str(), "a");
+				handle->file = fopen(path.c_str(), "a");
 
 				break;
 
 			case REGULAR_OPENMODE_READ_ONLY:
 			default:
 
-				handler = fopen(path.c_str(), "r");
+				handle->file = fopen(path.c_str(), "r");
 		}
 	}
 
-	if (handler == NULL)
+	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
@@ -445,14 +449,14 @@ regular::open(const dodoString &a_path,
 void
 regular::_read(char * const a_data)
 {
-	if (handler == NULL)
+	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
 	unsigned long pos = blockOffset ? this->pos * inSize : this->pos;
 
-	if (fseek((FILE *)handler, pos, SEEK_SET) == -1)
+	if (fseek(handle->file, pos, SEEK_SET) == -1)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
@@ -461,9 +465,9 @@ regular::_read(char * const a_data)
 
 	while (true)
 	{
-		if (fread(a_data, inSize, 1, (FILE *)handler) == 0)
+		if (fread(a_data, inSize, 1, handle->file) == 0)
 		{
-			if (feof((FILE *)handler) != 0 || errno == EAGAIN)
+			if (feof(handle->file) != 0 || errno == EAGAIN)
 			{
 				break;
 			}
@@ -473,7 +477,7 @@ regular::_read(char * const a_data)
 				continue;
 			}
 
-			if (ferror((FILE *)handler) != 0)
+			if (ferror(handle->file) != 0)
 			{
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
@@ -488,7 +492,7 @@ regular::_read(char * const a_data)
 void
 regular::_write(const char *const a_data)
 {
-	if (handler == NULL)
+	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
@@ -497,7 +501,7 @@ regular::_write(const char *const a_data)
 	{
 		if (append)
 		{
-			if (fseek((FILE *)handler, 0, SEEK_END) == -1)
+			if (fseek(handle->file, 0, SEEK_END) == -1)
 			{
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
@@ -507,14 +511,14 @@ regular::_write(const char *const a_data)
 			unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
 			if (!overwrite)
 			{
-				if (fseek((FILE *)handler, pos, SEEK_SET) == -1)
+				if (fseek(handle->file, pos, SEEK_SET) == -1)
 				{
 					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
 				char *t_buf = new char[outSize];
 
-				size_t read = fread(t_buf, outSize, 1, (FILE *)handler);
+				size_t read = fread(t_buf, outSize, 1, handle->file);
 
 				delete [] t_buf;
 
@@ -524,7 +528,7 @@ regular::_write(const char *const a_data)
 				}
 			}
 
-			if (fseek((FILE *)handler, pos, SEEK_SET) == -1)
+			if (fseek(handle->file, pos, SEEK_SET) == -1)
 			{
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
@@ -533,7 +537,7 @@ regular::_write(const char *const a_data)
 
 	while (true)
 	{
-		if (fwrite(a_data, outSize, 1, (FILE *)handler) == 0)
+		if (fwrite(a_data, outSize, 1, handle->file) == 0)
 		{
 			if (errno == EINTR)
 			{
@@ -545,7 +549,7 @@ regular::_write(const char *const a_data)
 				break;
 			}
 
-			if (ferror((FILE *)handler) != 0)
+			if (ferror(handle->file) != 0)
 			{
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
@@ -594,12 +598,12 @@ regular::flush()
 {
 	pc::sync::protector pg(keeper);
 
-	if (handler == NULL)
+	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
-	if (fflush((FILE *)handler) != 0)
+	if (fflush(handle->file) != 0)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
@@ -610,7 +614,7 @@ regular::flush()
 unsigned long
 regular::_readStream(char * const a_data)
 {
-	if (handler == NULL)
+	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
@@ -619,14 +623,14 @@ regular::_readStream(char * const a_data)
 
 	if (blockOffset)
 	{
-		if (fseek((FILE *)handler, 0, SEEK_SET) == -1)
+		if (fseek(handle->file, 0, SEEK_SET) == -1)
 		{
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 
 		for (unsigned long i = 0; i < pos; ++i)
 		{
-			if (fgets(a_data, readSize, (FILE *)handler) == NULL)
+			if (fgets(a_data, readSize, handle->file) == NULL)
 			{
 				switch (errno)
 				{
@@ -644,7 +648,7 @@ regular::_readStream(char * const a_data)
 			}
 		}
 	}
-	else if (fseek((FILE *)handler, pos, SEEK_SET) == -1)
+	else if (fseek(handle->file, pos, SEEK_SET) == -1)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
@@ -653,7 +657,7 @@ regular::_readStream(char * const a_data)
 
 	while (true)
 	{
-		if (fgets(a_data, readSize, (FILE *)handler) == NULL)
+		if (fgets(a_data, readSize, handle->file) == NULL)
 		{
 			if (errno == EINTR)
 			{
@@ -665,7 +669,7 @@ regular::_readStream(char * const a_data)
 				break;
 			}
 
-			if (ferror((FILE *)handler) != 0)
+			if (ferror(handle->file) != 0)
 			{
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
@@ -682,14 +686,14 @@ regular::_readStream(char * const a_data)
 void
 regular::_writeStream(const char *const a_data)
 {
-	if (handler == NULL)
+	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
 	if (mode != REGULAR_OPENMODE_APPEND)
 	{
-		if (fseek((FILE *)handler, 0, SEEK_END) == -1)
+		if (fseek(handle->file, 0, SEEK_END) == -1)
 		{
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
@@ -706,14 +710,14 @@ regular::_writeStream(const char *const a_data)
 
 	while (true)
 	{
-		if (fwrite(a_data, _outSize, 1, (FILE *)handler) == 0)
+		if (fwrite(a_data, _outSize, 1, handle->file) == 0)
 		{
 			if (errno == EINTR)
 			{
 				continue;
 			}
 
-			if (ferror((FILE *)handler) != 0)
+			if (ferror(handle->file) != 0)
 			{
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}

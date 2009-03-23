@@ -38,6 +38,8 @@ namespace dodo
 {
 	namespace io
 	{
+		struct __file;
+
 		namespace file
 		{
 #ifndef IO_WO_XEXEC
@@ -158,7 +160,7 @@ namespace dodo
 
 			  private:
 
-				void *handler; ///< file handler
+				__file *handle; ///< file handle
 			};
 		};
 	};
