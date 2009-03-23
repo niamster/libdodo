@@ -49,6 +49,14 @@ namespace dodo
 			 */
 			struct __sqlite
 			{
+				/**
+				 * constructor
+				 */
+				__sqlite() : handle(NULL),
+							 result(NULL)
+				{
+				}
+
 				sqlite3 *handle; ///< DB handle
 				sqlite3_stmt *result; ///< handlde to result
 			};
@@ -61,8 +69,6 @@ using namespace dodo::data::base;
 sqlite::sqlite() : empty(true),
 				   handle(new __sqlite)
 {
-	handle->handle = NULL;
-
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
 #endif
@@ -73,8 +79,6 @@ sqlite::sqlite() : empty(true),
 sqlite::sqlite(const __connectionInfo &info) : empty(true),
 											   handle(new __sqlite)
 {
-	handle->handle = NULL;
-
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
 #endif

@@ -56,12 +56,13 @@ namespace dodo
 					/**
 					 * constructor
 					 */
-					__node()
+					__node() : node(NULL)
 					{
 					}
 
 					/**
 					 * constructor
+					 * @param node defines node handle to assign
 					 */
 					__node(xmlNodePtr node) : node(node)
 					{
@@ -76,7 +77,14 @@ namespace dodo
 				 */
 				struct __doc
 				{
-					xmlDocPtr document; ///< represents internal libxml2 document data
+					/**
+					 * constructor
+					 */
+					__doc() : doc(NULL)
+					{
+					}
+
+					xmlDocPtr doc; ///< represents internal libxml2 document data
 				};
 			};
 		};
@@ -173,7 +181,7 @@ processor::processor() : icaseNames(false)
 processor::~processor()
 {
 #ifdef LIBXML2_EXT
-	xmlFreeDoc(document->document);
+	xmlFreeDoc(document->doc);
 	xmlCleanupParser();
 
 	delete document;
@@ -208,10 +216,10 @@ processor::processFile(const __nodeDef  &definition,
 					   const dodoString &file)
 {
 #ifdef LIBXML2_EXT
-	xmlFreeDoc(document->document);
+	xmlFreeDoc(document->doc);
 
-	document->document = xmlParseFile(file.c_str());
-	if (document->document == NULL)
+	document->doc = xmlParseFile(file.c_str());
+	if (document->doc == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
@@ -236,10 +244,10 @@ processor::processString(const __nodeDef  &definition,
 						 const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
-	xmlFreeDoc(document->document);
+	xmlFreeDoc(document->doc);
 
-	document->document = xmlParseMemory(buffer.c_str(), buffer.size());
-	if (document->document == NULL)
+	document->doc = xmlParseMemory(buffer.c_str(), buffer.size());
+	if (document->doc == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
@@ -263,7 +271,7 @@ node
 processor::parse(const __nodeDef &definition)
 {
 #ifdef LIBXML2_EXT
-	__node xnode = xmlDocGetRootElement(document->document);
+	__node xnode = xmlDocGetRootElement(document->doc);
 	if (xnode.node == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
@@ -585,7 +593,7 @@ processor::getNodeInfo(const __node &xnode,
 		resNode.name.assign((char *)xnode.node->name);
 	}
 
-	unsigned char *xChar = xmlNodeListGetString(document->document, xnode.node->children, 1);
+	unsigned char *xChar = xmlNodeListGetString(document->doc, xnode.node->children, 1);
 	if (xChar != NULL)
 	{
 		resNode.value.assign((char *)xChar);
@@ -733,10 +741,10 @@ node
 processor::processFile(const dodoString &file)
 {
 #ifdef LIBXML2_EXT
-	xmlFreeDoc(document->document);
+	xmlFreeDoc(document->doc);
 
-	document->document = xmlParseFile(file.c_str());
-	if (document->document == NULL)
+	document->doc = xmlParseFile(file.c_str());
+	if (document->doc == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
@@ -750,7 +758,7 @@ processor::processFile(const dodoString &file)
 		}
 	}
 
-	xmlNodePtr xnode = xmlDocGetRootElement(document->document);
+	xmlNodePtr xnode = xmlDocGetRootElement(document->doc);
 	if (xnode == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
@@ -777,10 +785,10 @@ node
 processor::processString(const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
-	xmlFreeDoc(document->document);
+	xmlFreeDoc(document->doc);
 
-	document->document = xmlParseMemory(buffer.c_str(), buffer.size());
-	if (document->document == NULL)
+	document->doc = xmlParseMemory(buffer.c_str(), buffer.size());
+	if (document->doc == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
@@ -794,7 +802,7 @@ processor::processString(const dodoString &buffer)
 		}
 	}
 
-	xmlNodePtr xnode = xmlDocGetRootElement(document->document);
+	xmlNodePtr xnode = xmlDocGetRootElement(document->doc);
 	if (xnode == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
@@ -889,8 +897,8 @@ void
 processor::clear()
 {
 #ifdef LIBXML2_EXT
-	xmlFreeDoc(document->document);
-	document->document = NULL;
+	xmlFreeDoc(document->doc);
+	document->doc = NULL;
 #endif
 }
 

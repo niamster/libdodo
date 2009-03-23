@@ -50,7 +50,6 @@ using namespace dodo::io::network::ssl;
 __initialAccept::__initialAccept() : socket(-1),
 									 handle(new io::ssl::__sslConnection)
 {
-	handle->handle = NULL;
 }
 
 //-------------------------------------------------------------------
@@ -93,8 +92,6 @@ exchange::exchange(short protection) : channel(protection),
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
 #endif
-
-	handle->handle = NULL;
 }
 
 //-------------------------------------------------------------------

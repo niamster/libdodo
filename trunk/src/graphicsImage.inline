@@ -46,6 +46,14 @@ namespace dodo
 		 */
 		struct __image
 		{
+			/**
+			 * contructor
+			 */
+			__image() : im(NULL),
+						imInfo(NULL)
+			{
+			}
+
 			ImageInfo *imInfo; ///< image info handler
 			Image	  *im;    ///< image handler
 		};

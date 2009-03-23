@@ -44,6 +44,13 @@ namespace dodo
 			 */
 			struct __request
 			{
+				/**
+				 * constructor
+				 */
+				__request() : request(NULL)
+				{
+				}
+
 				FCGX_Request *request; ///< fast-CGI request handler
 			};
 		};

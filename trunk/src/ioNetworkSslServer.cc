@@ -66,8 +66,6 @@ server::server(short a_family,
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLSERVER);
 #endif
-
-	ctx->ctx = NULL;
 }
 
 

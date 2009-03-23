@@ -51,6 +51,14 @@ namespace dodo
 			 */
 			struct __postgresql
 			{
+				/**
+				 * constructor
+				 */
+				__postgresql() : handle(NULL),
+								 result(NULL)
+				{
+				}
+
 				PGconn *handle; ///< DB handle
 				PGresult *result; ///< handlde to result
 			};
@@ -110,8 +118,6 @@ const dodoString postgresql::encodingStatements[] =
 postgresql::postgresql() : empty(true),
 						   handle(new __postgresql)
 {
-	handle->handle = NULL;
-
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASEPOSTGRESQL);
 #endif

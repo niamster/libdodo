@@ -6,6 +6,7 @@
 
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/dataFormatXmlProcessor.h>
+#include <libdodo/dataFormatXmlNode.h>
 #include <libdodo/toolsMisc.h>
 
 #include <iostream>

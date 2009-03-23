@@ -241,8 +241,6 @@ image::image() : exInfo(new ExceptionInfo)
 				 collectedData(this, XEXEC_OBJECT_GRAPHICSIMAGE)
 #endif
 {
-	collectedData.handle->im = NULL;
-
 #ifndef IMAGEMAGICK_PRE_63
 	collectedData.handle->imInfo = AcquireImageInfo();
 #else

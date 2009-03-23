@@ -48,6 +48,14 @@ namespace dodo
 			 */
 			struct __mysql
 			{
+				/**
+				 * constructor
+				 */
+				__mysql() : handle(NULL),
+							result(NULL)
+				{
+				}
+
 				MYSQL	  *handle; ///< DB handle
 				MYSQL_RES *result; ///< handle to result
 			};

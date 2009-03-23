@@ -44,6 +44,13 @@ namespace dodo
 			 */
 			struct __sslConnection
 			{
+				/**
+				 * constructor
+				 */
+				__sslConnection() : handle(NULL)
+				{
+				}
+
 				SSL *handle;     ///< SSL connection handle
 			};
 
@@ -53,6 +60,13 @@ namespace dodo
 			 */
 			struct __sslContext
 			{
+				/**
+				 * constructor
+				 */
+				__sslContext() : ctx(NULL)
+				{
+				}
+
 				SSL_CTX *ctx;    ///< SSL context
 			};
 
