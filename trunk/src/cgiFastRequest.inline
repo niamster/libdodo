@@ -31,6 +31,7 @@
 
 #ifdef FASTCGI_EXT
 #include <fcgiapp.h>
+#include <unistd.h>
 
 namespace dodo
 {
@@ -48,6 +49,10 @@ namespace dodo
 				 * constructor
 				 */
 				__request() : request(NULL)
+				{
+				}
+
+				__request(FCGX_Request *request) : request(request)
 				{
 				}
 
