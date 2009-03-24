@@ -124,10 +124,10 @@ namespace dodo
 
 #ifdef DL_EXT
 		/**
-		 * @struct __basicMod
+		 * @struct __basicMod__
 		 * @brief is returned from initBaseExModule in the library
 		 */
-		struct __basicMod
+		struct __basicMod__
 		{
 			char  name[64];         ///< name of the library
 			char  discription[256]; ///< discription of the library
@@ -140,7 +140,7 @@ namespace dodo
 		 * @brief defines type of init function for library
 		 * @param data defines user data
 		 */
-		typedef __basicMod (*initBaseExModule)(void *data);
+		typedef __basicMod__ (*initBaseExModule)(void *data);
 
 		/**
 		 * @typedef deinitBaseExModule
@@ -162,10 +162,10 @@ namespace dodo
 
 #ifdef CALLSTACK_EX
 		/**
-		 * @struct __call
+		 * @struct __call__
 		 * @brief describes function call in call stack
 		 */
-		struct __call
+		struct __call__
 		{
 			dodoString object;      ///< name of the object where call was found
 			dodoString symbol;      ///< name of the call
@@ -209,7 +209,7 @@ namespace dodo
 				  const dodoString &baseErrstr,
 				  unsigned long    line,
 				  const dodoString &file,
-				  const dodoString &message = __dodostring__) throw ();
+				  const dodoString &message = __dodostring____) throw ();
 
 			/**
 			 * destructor
@@ -246,7 +246,7 @@ namespace dodo
 			dodoString message;             ///< custom message that might clarify the exception
 
 #ifdef CALLSTACK_EX
-			dodoArray<__call> callStack;    ///< call stack of the raised exception
+			dodoArray<__call__> callStack;    ///< call stack of the raised exception
 #endif
 
 			/**
@@ -284,7 +284,7 @@ namespace dodo
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			static __basicMod getModuleInfo(const dodoString &path,
+			static __basicMod__ getModuleInfo(const dodoString &path,
 											void             *toInit = NULL);
 
 			/**
@@ -293,7 +293,7 @@ namespace dodo
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param data decribes data that will be passed to the handler
 			 * @param toInit defines data that will be passed to the init function
-			 * @note module for what to set handler is taken from the library information[see __basicMod]
+			 * @note module for what to set handler is taken from the library information[see __basicMod__]
 			 */
 			static bool setErrorHandler(const dodoString &path,
 										void             *data,

@@ -36,15 +36,15 @@ namespace dodo
 	namespace io
 	{
 		/**
-		 * @struct __file
+		 * @struct __file__
 		 * @brief defines file handle
 		 */
-		struct __file
+		struct __file__
 		{
 			/**
 			 * constructor
 			 */
-			__file() : file(NULL)
+			__file__() : file(NULL)
 			{
 			}
 

@@ -36,8 +36,8 @@
 #define _GNU_SOURCE
 #endif
 
-#ifndef __USE_UNIX98
-#define __USE_UNIX98
+#ifndef __USE___UNIX98
+#define __USE___UNIX98
 #endif
 
 #ifndef _REENTRANT
@@ -52,7 +52,7 @@
  * size of key for shm_open and sem_open
  * @note including leading '/'
  */
-#ifdef __FreeBSD__
+#ifdef __FreeBSD____
 #define SH_KEY_SIZE 14
 #else
 #define SH_KEY_SIZE 32

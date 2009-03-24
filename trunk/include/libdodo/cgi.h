@@ -174,15 +174,15 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __cgiFile
+		 * @struct __cgiFile__
 		 * @brief defines node about uploaded POST file
 		 */
-		struct __cgiFile
+		struct __cgiFile__
 		{
 			/**
 			 * constructor
 			 */
-			__cgiFile();
+			__cgiFile__();
 
 			dodoString    name;                         ///< real name of the file
 			dodoString    mime;                         ///< mimetype of the file
@@ -193,26 +193,26 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __cgiCookie
+		 * @struct __cgiCookie__
 		 * @brief describes cookie that would be sent to the dialogue browser
 		 */
-		struct __cgiCookie
+		struct __cgiCookie__
 		{
 			/**
 			 * constructor
 			 */
-			__cgiCookie();
+			__cgiCookie__();
 
 			/**
 			 * constructor
 			 */
-			__cgiCookie(bool secure);
+			__cgiCookie__(bool secure);
 
 			/**
 			 * constructor
 			 * @note defines struct data with user data
 			 */
-			__cgiCookie(const dodoString &name,
+			__cgiCookie__(const dodoString &name,
 						const            dodoString &value,
 						const            dodoString &exDate,
 						const            dodoString &path,
@@ -249,10 +249,10 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __cgiAuthInfo
+		 * @struct __cgiAuthInfo__
 		 * @brief defines authenfication information
 		 */
-		struct __cgiAuthInfo
+		struct __cgiAuthInfo__
 		{
 			dodoString user;            ///< user name
 			short      type;            ///< authenfication type[see cgiAuthTypeEnum]

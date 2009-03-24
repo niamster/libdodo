@@ -32,12 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#include <pthread.h>
-#include <time.h>
-
-#include <libdodo/pcSyncThreadDataSingleEx.h>
 #include <libdodo/pcSyncDataSingle.h>
-#include <libdodo/types.h>
 
 namespace dodo
 {
@@ -47,6 +42,8 @@ namespace dodo
 		{
 			namespace thread
 			{
+				struct __lock__;
+
 				namespace data
 				{
 					/**
@@ -103,13 +100,7 @@ namespace dodo
 
 						void *data;             ///< shared data
 
-#ifdef PTHREAD_EXT
-
-						pthread_mutex_t mutex;  ///< lock
-
-#endif
-
-						timespec timeout;       ///< lcok timeout
+						__lock__ *lock; ///< lock
 					};
 				};
 			};

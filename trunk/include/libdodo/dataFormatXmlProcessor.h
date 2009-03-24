@@ -44,31 +44,31 @@ namespace dodo
 			{
 				class node;
 
-				struct __node;
+				struct __node__;
 
-				struct __doc;
+				struct __doc__;
 
 				/**
-				 * @struct __nodeDef
+				 * @struct __nodeDef__
 				 * @brief defines processor tree definition
 				 */
-				struct __nodeDef
+				struct __nodeDef__
 				{
 					/**
 					 * constructor
 					 */
-					__nodeDef();
+					__nodeDef__();
 
 					/**
 					 * @param name defines node name
 					 * @param ns defines namespace of the node
 					 */
-					__nodeDef(const dodoString &name,
-							  const            dodoString &ns = __dodostring__);
+					__nodeDef__(const dodoString &name,
+							  const            dodoString &ns = __dodostring____);
 
 					dodoString                     name;            ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-					dodoMap<dodoString, __nodeDef> children;        ///< children definitions
+					dodoMap<dodoString, __nodeDef__> children;        ///< children definitions
 					bool                           allChildren;     ///< if true - get all children tree[true by default]
 
 					dodoStringArray                attributes;      ///< node attrributes; if empty - take all
@@ -78,21 +78,21 @@ namespace dodo
 				};
 
 				/**
-				 * @struct __info
+				 * @struct __info__
 				 * @brief desribes info got about given XML document
 				 */
-				struct __info
+				struct __info__
 				{
 					/**
 					 * constructor
 					 */
-					__info();
+					__info__();
 
 					/**
 					 * constructor
 					 * @note initializes with user values
 					 */
-					__info(const dodoString &version,
+					__info__(const dodoString &version,
 						   const            dodoString &encoding,
 						   const            dodoString &root,
 						   int              compression);
@@ -131,21 +131,21 @@ namespace dodo
 					virtual ~processor();
 
 					/**
-					 * parse XML file using __nodeDef XML definition
+					 * parse XML file using __nodeDef__ XML definition
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
 					 * @param file defines path to XML file
 					 */
-					virtual node processFile(const __nodeDef  &definition,
+					virtual node processFile(const __nodeDef__  &definition,
 											 const dodoString &file);
 
 					/**
-					 * parse XML buffer using __nodeDef XML definition
+					 * parse XML buffer using __nodeDef__ XML definition
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
 					 * @param buffer defines XML buffer
 					 */
-					virtual node processString(const __nodeDef  &definition,
+					virtual node processString(const __nodeDef__  &definition,
 											   const dodoString &buffer);
 
 					/**
@@ -168,13 +168,13 @@ namespace dodo
 					 * @return XML info
 					 * @param file defines path to XML file
 					 */
-					static __info getFileInfo(const dodoString &file);
+					static __info__ getFileInfo(const dodoString &file);
 
 					/**
 					 * @return XML info
 					 * @param buffer defines XML buffer
 					 */
-					static __info getBufferInfo(const dodoString &buffer);
+					static __info__ getBufferInfo(const dodoString &buffer);
 
 					/**
 					 * clear parameters of the give node
@@ -186,7 +186,7 @@ namespace dodo
 					 * clear parameters of the give node definition
 					 * @param xnode defines node definition to clean
 					 */
-					static void initNodeDef(__nodeDef &xnode);
+					static void initNodeDef(__nodeDef__ &xnode);
 
 					/**
 					 * free internal structures
@@ -212,41 +212,41 @@ namespace dodo
 				  protected:
 
 					/**
-					 * parse XML using __nodeDef XML definition
+					 * parse XML using __nodeDef__ XML definition
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
 					 */
-					virtual node parse(const __nodeDef &definition);
+					virtual node parse(const __nodeDef__ &definition);
 
 #ifdef LIBXML2_EXT
 					/**
 					 * @return true if content is in CDATA
 					 * @param xnode defines XML tree node
 					 */
-					bool isCDATA(const __node &xnode);
+					bool isCDATA(const __node__ &xnode);
 
 					/**
 					 * parse XML
 					 * @return parsed XML in node structure
 					 * @param xnode defines XML tree node
 					 */
-					virtual dodoArray<node> parse(__node xnode);
+					virtual dodoArray<node> parse(__node__ xnode);
 
 					/**
-					 * parses XML using __nodeDef XML definition
+					 * parses XML using __nodeDef__ XML definition
 					 * @return parsed XML nodes in node structures
 					 * @param definition defines structure of XML
 					 * @param chNode defines XML tree node
 					 */
-					virtual dodoArray<node> parse(const __nodeDef &definition,
-												  const __node	  &xnode);
+					virtual dodoArray<node> parse(const __nodeDef__ &definition,
+												  const __node__	  &xnode);
 
 					/**
 					 * get node attributes
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					virtual void getAttributes(const __node		&xnode,
+					virtual void getAttributes(const __node__		&xnode,
 											   dodoStringMap    &attributes);
 
 					/**
@@ -255,8 +255,8 @@ namespace dodo
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					virtual void getAttributes(const __nodeDef  &definition,
-											   const __node		&xnode,
+					virtual void getAttributes(const __nodeDef__  &definition,
+											   const __node__		&xnode,
 											   dodoStringMap    &attributes);
 
 					/**
@@ -264,7 +264,7 @@ namespace dodo
 					 * @param xnode defines node content
 					 * @param sample defines buffer for node
 					 */
-					virtual void getNodeInfo(const __node &xnode,
+					virtual void getNodeInfo(const __node__ &xnode,
 											 node		  &sample);
 #endif
 
@@ -285,10 +285,10 @@ namespace dodo
 					 * @param definition defines structure of XML
 					 * @param node defines node content
 					 */
-					__node findNode(const __nodeDef &definition,
-									const __node	&node);
+					__node__ findNode(const __nodeDef__ &definition,
+									const __node__	&node);
 
-					__doc *document; ///< XML Document
+					__doc__ *document; ///< XML Document
 #endif
 
 #define PROCESSOR_STATEMENTS 11

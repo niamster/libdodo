@@ -40,8 +40,8 @@
 using namespace dodo::io;
 
 #ifndef IO_WO_XEXEC
-__xexecIoChannelCollectedData::__xexecIoChannelCollectedData(xexec *a_executor,
-															 short execObject) : __xexecCollectedData(a_executor, execObject)
+__xexecIoChannelCollectedData__::__xexecIoChannelCollectedData__(xexec *a_executor,
+															 short execObject) : __xexecCollectedData__(a_executor, execObject)
 {
 }
 #endif

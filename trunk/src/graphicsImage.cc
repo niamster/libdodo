@@ -51,22 +51,22 @@ namespace dodo
 	namespace graphics
 	{
 		/**
-		 * @class __image_init__
+		 * @class __image___init__
 		 * @brief initializes image evironment
 		 */
-		class __image_init__
+		class __image___init__
 		{
 		  public:
 
 			/**
 			 * contructor
 			 */
-			__image_init__();
+			__image___init__();
 
 			/**
 			 * destructor
 			 */
-			~__image_init__();
+			~__image___init__();
 
 		  private:
 
@@ -91,7 +91,7 @@ namespace dodo
 										 const char          *description);
 		};
 
-		__image_init__ __image_init_object__;
+		__image___init__ __image___init_object__;
 	};
 };
 
@@ -101,27 +101,27 @@ namespace dodo
 using namespace dodo::graphics;
 
 #ifndef GRAPHICS_WO_XEXEC
-__xexecImageCollectedData::__xexecImageCollectedData(xexec *executor,
-													 short execObject) : __xexecCollectedData(executor, execObject),
-																		 handle(new __image)
+__xexecImageCollectedData__::__xexecImageCollectedData__(xexec *executor,
+													 short execObject) : __xexecCollectedData__(executor, execObject),
+																		 handle(new __image__)
 {
 }
 #else
-__xexecImageCollectedData::__xexecImageCollectedData() : handle(new __image)
+__xexecImageCollectedData__::__xexecImageCollectedData__() : handle(new __image__)
 {
 }
 #endif
 
 //-------------------------------------------------------------------
 
-__xexecImageCollectedData::~__xexecImageCollectedData()
+__xexecImageCollectedData__::~__xexecImageCollectedData__()
 {
 	delete handle;
 }
 
 //-------------------------------------------------------------------
 
-__image_init__::__image_init__()
+__image___init__::__image___init__()
 {
 	if (IsMagickInstantiated() == MagickFalse)
 	{
@@ -139,7 +139,7 @@ __image_init__::__image_init__()
 
 //-------------------------------------------------------------------
 
-__image_init__::~__image_init__()
+__image___init__::~__image___init__()
 {
 	if (IsMagickInstantiated() == MagickTrue)
 	{
@@ -154,7 +154,7 @@ __image_init__::~__image_init__()
 //-------------------------------------------------------------------
 
 void
-__image_init__::imWarningHandler(const ExceptionType et,
+__image___init__::imWarningHandler(const ExceptionType et,
 								 const char          *reason,
 								 const char          *description)
 {
@@ -163,7 +163,7 @@ __image_init__::imWarningHandler(const ExceptionType et,
 //-------------------------------------------------------------------
 
 void
-__image_init__::imErrorHandler(const ExceptionType et,
+__image___init__::imErrorHandler(const ExceptionType et,
 							   const char          *reason,
 							   const char          *description)
 {
@@ -343,7 +343,7 @@ image::readMemory(const dodoString &data)
 //-------------------------------------------------------------------
 
 void
-image::readMemory(const __imageInfo &info)
+image::readMemory(const __imageInfo__ &info)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
@@ -384,7 +384,7 @@ image::readMemory(const __imageInfo &info)
 void
 image::create(unsigned long  width,
 			  unsigned long  height,
-			  const __color  &background,
+			  const __color__  &background,
 			  unsigned short backgroundDepth)
 {
 #ifndef GRAPHICS_WO_XEXEC
@@ -492,7 +492,7 @@ image::setOpacity(unsigned short opacity)
 //-------------------------------------------------------------------
 
 void
-image::setBackgroundColor(__color background)
+image::setBackgroundColor(__color__ background)
 {
 	if (collectedData.handle->im == NULL)
 	{
@@ -659,15 +659,15 @@ image::getEncoder()
 
 //-------------------------------------------------------------------
 
-__imageSize
+__imageSize__
 image::getImageSize()
 {
 	if (collectedData.handle->im == NULL)
 	{
-		return __imageSize();
+		return __imageSize__();
 	}
 
-	__imageSize info;
+	__imageSize__ info;
 
 	info.height = collectedData.handle->im->rows;
 	info.width = collectedData.handle->im->columns;

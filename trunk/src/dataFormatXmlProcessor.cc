@@ -48,15 +48,15 @@ namespace dodo
 			namespace xml
 			{
 				/**
-				 * @struct __node
+				 * @struct __node__
 				 * @brief defines XML node properties
 				 */
-				struct __node
+				struct __node__
 				{
 					/**
 					 * constructor
 					 */
-					__node() : node(NULL)
+					__node__() : node(NULL)
 					{
 					}
 
@@ -64,7 +64,7 @@ namespace dodo
 					 * constructor
 					 * @param node defines node handle to assign
 					 */
-					__node(xmlNodePtr node) : node(node)
+					__node__(xmlNodePtr node) : node(node)
 					{
 					}
 
@@ -72,15 +72,15 @@ namespace dodo
 				};
 
 				/**
-				 * @struct __doc
+				 * @struct __doc__
 				 * @brief defines XML document properties
 				 */
-				struct __doc
+				struct __doc__
 				{
 					/**
 					 * constructor
 					 */
-					__doc() : doc(NULL)
+					__doc__() : doc(NULL)
 					{
 					}
 
@@ -94,7 +94,7 @@ namespace dodo
 
 using namespace dodo::data::format::xml;
 
-__info::__info(const dodoString &version,
+__info__::__info__(const dodoString &version,
 			   const dodoString &encoding,
 			   const dodoString &root,
 			   int              compression) : version(version),
@@ -106,20 +106,20 @@ __info::__info(const dodoString &version,
 
 //-------------------------------------------------------------------
 
-__info::__info()
+__info__::__info__()
 {
 }
 
 //-------------------------------------------------------------------
 
-__nodeDef::__nodeDef() : allChildren(true),
+__nodeDef__::__nodeDef__() : allChildren(true),
 						 allAttributes(true)
 {
 }
 
 //-------------------------------------------------------------------
 
-__nodeDef::__nodeDef(const dodoString &name,
+__nodeDef__::__nodeDef__(const dodoString &name,
 					 const dodoString &ns) : allChildren(true),
 											 allAttributes(true),
 											 name(name),
@@ -166,7 +166,7 @@ processor::processor(processor &xt)
 processor::processor() : icaseNames(false)
 #ifdef LIBXML2_EXT
 						 ,
-						 document(new __doc)
+						 document(new __doc__)
 #endif
 {
 #ifdef LIBXML2_EXT
@@ -192,7 +192,7 @@ processor::~processor()
 
 #ifdef LIBXML2_EXT
 bool
-processor::isCDATA(const __node &a_xnode)
+processor::isCDATA(const __node__ &a_xnode)
 {
 	xmlNodePtr xnode = a_xnode.node->children;
 	while (xnode != NULL)
@@ -212,7 +212,7 @@ processor::isCDATA(const __node &a_xnode)
 //-------------------------------------------------------------------
 
 node
-processor::processFile(const __nodeDef  &definition,
+processor::processFile(const __nodeDef__  &definition,
 					   const dodoString &file)
 {
 #ifdef LIBXML2_EXT
@@ -240,7 +240,7 @@ processor::processFile(const __nodeDef  &definition,
 //-------------------------------------------------------------------
 
 node
-processor::processString(const __nodeDef  &definition,
+processor::processString(const __nodeDef__  &definition,
 						 const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
@@ -268,10 +268,10 @@ processor::processString(const __nodeDef  &definition,
 //-------------------------------------------------------------------
 
 node
-processor::parse(const __nodeDef &definition)
+processor::parse(const __nodeDef__ &definition)
 {
 #ifdef LIBXML2_EXT
-	__node xnode = xmlDocGetRootElement(document->doc);
+	__node__ xnode = xmlDocGetRootElement(document->doc);
 	if (xnode.node == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
@@ -331,7 +331,7 @@ processor::parse(const __nodeDef &definition)
 
 			if (xnode.node->children != NULL)
 			{
-				children = parse(__node(xnode.node->children));
+				children = parse(__node__(xnode.node->children));
 				i = children.begin();
 				j = children.end();
 				for (; i != j; ++i)
@@ -351,7 +351,7 @@ processor::parse(const __nodeDef &definition)
 	{
 		if (definition.children.size() > 0)
 		{
-			dodoMap<dodoString, __nodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
+			dodoMap<dodoString, __nodeDef__>::const_iterator i(definition.children.begin()), j(definition.children.end());
 			for (; i != j; ++i)
 			{
 				sample.children.insert(make_pair(i->first, parse(i->second, xnode.node->children)));
@@ -369,8 +369,8 @@ processor::parse(const __nodeDef &definition)
 
 #ifdef LIBXML2_EXT
 dodoArray<node>
-processor::parse(const __nodeDef &definition,
-				 const __node	 &a_xnode)
+processor::parse(const __nodeDef__ &definition,
+				 const __node__	 &a_xnode)
 {
 	xmlNodePtr xnode = a_xnode.node, subNode;
 
@@ -465,7 +465,7 @@ processor::parse(const __nodeDef &definition,
 		{
 			if (definition.children.size() > 0)
 			{
-				dodoMap<dodoString, __nodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
+				dodoMap<dodoString, __nodeDef__>::const_iterator i(definition.children.begin()), j(definition.children.end());
 				for (; i != j; ++i)
 				{
 					sample.children.insert(make_pair(i->first, parse(i->second, xnode->children)));
@@ -486,8 +486,8 @@ processor::parse(const __nodeDef &definition,
 
 #ifdef LIBXML2_EXT
 void
-processor::getAttributes(const __nodeDef  &definition,
-						 const __node &xnode,
+processor::getAttributes(const __nodeDef__  &definition,
+						 const __node__ &xnode,
 						 dodoStringMap    &attributes)
 {
 	xmlAttrPtr attribute = xnode.node->properties;
@@ -552,7 +552,7 @@ processor::getAttributes(const __nodeDef  &definition,
 //-------------------------------------------------------------------
 
 void
-processor::getAttributes(const __node &xnode,
+processor::getAttributes(const __node__ &xnode,
 						 dodoStringMap    &attributes)
 {
 	xmlAttrPtr attribute = xnode.node->properties;
@@ -573,7 +573,7 @@ processor::getAttributes(const __node &xnode,
 //-------------------------------------------------------------------
 
 void
-processor::getNodeInfo(const __node &xnode,
+processor::getNodeInfo(const __node__ &xnode,
 					   node			&resNode)
 {
 	if (xnode.node->ns != NULL)
@@ -604,7 +604,7 @@ processor::getNodeInfo(const __node &xnode,
 
 //-------------------------------------------------------------------
 
-__info
+__info__
 processor::getFileInfo(const dodoString &file)
 {
 #ifdef LIBXML2_EXT
@@ -623,22 +623,22 @@ processor::getFileInfo(const dodoString &file)
 		}
 	}
 
-	__info i(document->version != NULL ? (char *)document->version : __dodostring__,
-			 document->encoding != NULL ? (char *)document->encoding : __dodostring__,
-			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
+	__info__ i(document->version != NULL ? (char *)document->version : __dodostring____,
+			 document->encoding != NULL ? (char *)document->encoding : __dodostring____,
+			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring____,
 			 document->compression);
 
 	xmlFreeDoc(document);
 
 	return i;
 #else
-	return __info();
+	return __info__();
 #endif
 }
 
 //-------------------------------------------------------------------
 
-__info
+__info__
 processor::getBufferInfo(const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
@@ -657,16 +657,16 @@ processor::getBufferInfo(const dodoString &buffer)
 		}
 	}
 
-	__info i(document->version != NULL ? (char *)document->version : __dodostring__,
-			 document->encoding != NULL ? (char *)document->encoding : __dodostring__,
-			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
+	__info__ i(document->version != NULL ? (char *)document->version : __dodostring____,
+			 document->encoding != NULL ? (char *)document->encoding : __dodostring____,
+			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring____,
 			 document->compression);
 
 	xmlFreeDoc(document);
 
 	return i;
 #else
-	return __info();
+	return __info__();
 #endif
 }
 
@@ -674,7 +674,7 @@ processor::getBufferInfo(const dodoString &buffer)
 
 #ifdef LIBXML2_EXT
 dodoArray<node>
-processor::parse(__node xnode)
+processor::parse(__node__ xnode)
 {
 	dodoArray<node> sample;
 
@@ -700,7 +700,7 @@ processor::parse(__node xnode)
 
 		if (xnode.node->children != NULL)
 		{
-			children = parse(__node(xnode.node->children));
+			children = parse(__node__(xnode.node->children));
 			i = children.begin();
 			j = children.end();
 			for (; i != j; ++i)
@@ -773,7 +773,7 @@ processor::processFile(const dodoString &file)
 		}
 	}
 
-	return *(parse(__node(xnode)).begin());
+	return *(parse(__node__(xnode)).begin());
 #else
 	return node();
 #endif
@@ -817,7 +817,7 @@ processor::processString(const dodoString &buffer)
 		}
 	}
 
-	return *(parse(__node(xnode)).begin());
+	return *(parse(__node__(xnode)).begin());
 #else
 	return node();
 #endif
@@ -826,7 +826,7 @@ processor::processString(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 void
-processor::initNodeDef(__nodeDef &xnode)
+processor::initNodeDef(__nodeDef__ &xnode)
 {
 	xnode.attributes.clear();
 	xnode.children.clear();
@@ -837,9 +837,9 @@ processor::initNodeDef(__nodeDef &xnode)
 //-------------------------------------------------------------------
 
 #ifdef LIBXML2_EXT
-__node
-processor::findNode(const __nodeDef &definition,
-					const __node	&a_xnode)
+__node__
+processor::findNode(const __nodeDef__ &definition,
+					const __node__	&a_xnode)
 {
 	xmlNodePtr one, xnode = a_xnode.node;
 	bool skip;
@@ -877,7 +877,7 @@ processor::findNode(const __nodeDef &definition,
 			}
 		}
 
-		one = findNode(definition, __node(xnode->children)).node;
+		one = findNode(definition, __node__(xnode->children)).node;
 
 		if (one != NULL)
 		{
@@ -887,7 +887,7 @@ processor::findNode(const __nodeDef &definition,
 		xnode = xnode->next;
 	}
 
-	return __node(NULL);
+	return __node__(NULL);
 }
 #endif
 

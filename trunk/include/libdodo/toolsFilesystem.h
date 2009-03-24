@@ -95,10 +95,10 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __fileInfo
+		 * @struct __fileInfo__
 		 * @brief defines file info
 		 */
-		struct __fileInfo
+		struct __fileInfo__
 		{
 			dodoString name;    ///< file name
 			int        perm;    ///< file permissions[see filePermissionModesEnum]
@@ -343,16 +343,16 @@ namespace dodo
 			static int getGroupOwner(const dodoString &path);
 
 			/**
-			 * @return file info[see __fileInfo]
+			 * @return file info[see __fileInfo__]
 			 * @param path defines path to file
 			 */
-			static __fileInfo getFileInfo(const dodoString &path);
+			static __fileInfo__ getFileInfo(const dodoString &path);
 
 			/**
-			 * @return info of files in directory[see __fileInfo]
+			 * @return info of files in directory[see __fileInfo__]
 			 * @param path defines path to file
 			 */
-			static dodoArray<__fileInfo> getDirInfo(const dodoString &path);
+			static dodoArray<__fileInfo__> getDirInfo(const dodoString &path);
 
 		  protected:
 

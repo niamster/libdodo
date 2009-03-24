@@ -38,8 +38,8 @@ using namespace dodo::data::base;
 
 #ifndef DATABASE_WO_XEXEC
 
-__xexecDataBaseAccumulatorCollectedData::__xexecDataBaseAccumulatorCollectedData(xexec *a_executor,
-																				 short execObject) : __xexecCollectedData(a_executor, execObject)
+__xexecDataBaseAccumulatorCollectedData__::__xexecDataBaseAccumulatorCollectedData__(xexec *a_executor,
+																				 short execObject) : __xexecCollectedData__(a_executor, execObject)
 {
 }
 

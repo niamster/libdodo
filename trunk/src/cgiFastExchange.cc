@@ -44,21 +44,21 @@ using namespace dodo::cgi::fast;
 
 exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
 								   channel(cf.protection),
-								   request(new __request)
+								   request(new __request__)
 {
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange(const __request &req,
+exchange::exchange(const __request__ &req,
 				   short		   protection) : dodo::cgi::exchange(protection),
 												 channel(protection)
 {
-	request->request = req.request;
-
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_CGIFASTEXCHANGE);
 #endif
+
+	request->request = req.request;
 }
 
 //-------------------------------------------------------------------
@@ -120,7 +120,7 @@ exchange::_write(const char *const buf)
 {
 	if (FCGX_PutStr(buf, outSize, request->request->out) == -1)
 	{
-		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE__, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 	}
 }
 

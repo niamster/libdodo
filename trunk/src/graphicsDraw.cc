@@ -89,8 +89,8 @@ draw::setImage(graphics::image *a_im)
 
 void
 draw::primitive(char           *description,
-				const __color  &fillColor,
-				const __color  &borderColor,
+				const __color__  &fillColor,
+				const __color__  &borderColor,
 				unsigned short borderWidth)
 {
 	if (im == NULL || im->collectedData.handle->im == NULL)
@@ -135,8 +135,8 @@ draw::primitive(char           *description,
 void
 draw::circle(const graphics::point &center,
 			 unsigned long         radius,
-			 const __color         &fillColor,
-			 const __color         &borderColor,
+			 const __color__         &fillColor,
+			 const __color__         &borderColor,
 			 unsigned short        borderWidth)
 {
 	char description[128];
@@ -150,7 +150,7 @@ draw::circle(const graphics::point &center,
 
 void
 draw::line(const dodoArray<graphics::point> &points,
-		   const __color                    &lineColor,
+		   const __color__                    &lineColor,
 		   unsigned short                   lineWidth)
 {
 	char pointDesc[128];
@@ -173,8 +173,8 @@ draw::line(const dodoArray<graphics::point> &points,
 void
 draw::rectangle(const graphics::point &tl,
 				const graphics::point &br,
-				const __color         &fillColor,
-				const __color         &borderColor,
+				const __color__         &fillColor,
+				const __color__         &borderColor,
 				unsigned short        borderWidth)
 {
 	char description[128];
@@ -190,8 +190,8 @@ draw::text(const graphics::point &position,
 		   const dodoString      &text,
 		   const dodoString      &font,
 		   unsigned short        fontWidth,
-		   const __color         &fillColor,
-		   const __color         &borderColor,
+		   const __color__         &fillColor,
+		   const __color__         &borderColor,
 		   unsigned short        borderWidth,
 		   double                angle)
 {
@@ -314,7 +314,7 @@ draw::image(const graphics::point &position,
 
 void
 draw::point(const graphics::point &position,
-			const __color         &pointColor,
+			const __color__         &pointColor,
 			unsigned short        pointWidth)
 {
 	if (im == NULL || im->collectedData.handle->im == NULL)

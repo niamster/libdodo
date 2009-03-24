@@ -94,7 +94,7 @@ namespace dodo
 			 */
 			virtual bool match(const dodoString &pattern,
 							   const dodoString &sample,
-							   dodoStringArray  &pockets = __dodostringarray__);
+							   dodoStringArray  &pockets = __dodostringarray____);
 
 			/**
 			 * match with pattern previously given for match/compile method
@@ -104,7 +104,7 @@ namespace dodo
 			 * @note first in pocket is a first match
 			 */
 			virtual bool match(const dodoString &sample,
-							   dodoStringArray  &pockets = __dodostringarray__);
+							   dodoStringArray  &pockets = __dodostringarray____);
 
 			/**
 			 * replace substrings in match string
@@ -145,10 +145,10 @@ namespace dodo
 		  protected:
 
 			/**
-			 * @struct __regexMatch
+			 * @struct __regexMatch__
 			 * @brief defines begin and end of matched substring
 			 */
-			struct __regexMatch
+			struct __regexMatch__
 			{
 				int begin;
 				int end;
@@ -170,7 +170,7 @@ namespace dodo
 			bool notCompiled;                   ///< true if not compiled
 #endif
 
-			dodoArray<__regexMatch> boundaries; ///< list of boundaries matched in match string by pattern
+			dodoArray<__regexMatch__> boundaries; ///< list of boundaries matched in match string by pattern
 		};
 	};
 };

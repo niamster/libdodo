@@ -31,7 +31,7 @@
 
 using namespace dodo;
 
-tools::__time::__time() : sec(0),
+tools::__time__::__time__() : sec(0),
 						  min(0),
 						  hour(0),
 						  day(1),
@@ -43,7 +43,7 @@ tools::__time::__time() : sec(0),
 
 //-------------------------------------------------------------------
 
-tools::__time::__time(unsigned int a_sec,
+tools::__time__::__time__(unsigned int a_sec,
 					  unsigned int a_min,
 					  unsigned int a_hour,
 					  unsigned int a_day,
@@ -163,7 +163,7 @@ tools::time::dates(long             dateFrom,
 //-------------------------------------------------------------------
 
 long
-tools::time::timestamp(const __time &timeInfo)
+tools::time::timestamp(const __time__ &timeInfo)
 {
 	tm tTime;
 
@@ -180,7 +180,7 @@ tools::time::timestamp(const __time &timeInfo)
 
 //-------------------------------------------------------------------
 
-tools::__time
+tools::__time__
 tools::time::timestamp(long seconds,
 					   bool local)
 {
@@ -200,7 +200,7 @@ tools::time::timestamp(long seconds,
 		throw exception::basic(exception::ERRMODULE_TOOLSTIME, TIMEEX_MAKETIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	__time timeInfo;
+	__time__ timeInfo;
 
 	timeInfo.sec = tTime->tm_sec;
 	timeInfo.min = tTime->tm_min;

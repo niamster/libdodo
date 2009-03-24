@@ -365,12 +365,12 @@ connection::_close(int socket)
 {
 	if (::shutdown(socket, SHUT_RDWR) == -1)
 	{
-		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX__CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX__CLOSE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	if (::close(socket) == -1)
 	{
-		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX__CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX__CLOSE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 }
 

@@ -45,17 +45,17 @@ namespace dodo
 		namespace json
 		{
 			/**
-			 * @struct __additionalData
+			 * @struct __additionalData__
 			 * @brief defines response/request additional data
 			 */
-			struct __additionalData
+			struct __additionalData__
 			{
 				/**
 				 * constructor
 				 * @param version defines response/request version
 				 * @param id defines response/request ID
 				 */
-				__additionalData(dodoString &version, long &id);
+				__additionalData__(dodoString &version, long &id);
 
 				dodoString &version;    ///< response/request version
 				long       &id;         ///< response/request ID

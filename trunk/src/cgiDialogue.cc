@@ -292,7 +292,7 @@ dialogue::getCharset()
 		return dodoString(b->data() + temp + 8, b->size() - temp - 8);
 	}
 
-	return __dodostring__;
+	return __dodostring____;
 }
 
 void
@@ -439,10 +439,10 @@ dialogue::requestAuthentication(const dodoString &realm,
 
 //-------------------------------------------------------------------
 
-__cgiAuthInfo
+__cgiAuthInfo__
 dialogue::getAuthenticationInfo()
 {
-	__cgiAuthInfo info =
+	__cgiAuthInfo__ info =
 	{
 		authInfo.user, authInfo.type
 	};
@@ -465,7 +465,7 @@ dialogue::isAuthenticated(const dodoString &user,
 		if (authInfo.type == CGI_AUTHTYPE_DIGEST)
 		{
 			unsigned char HA[16];
-			tools::code::__MD5Context context;
+			tools::code::__MD__5Context context;
 
 			tools::code::MD5Init(&context);
 			tools::code::MD5Update(&context, (unsigned char *)authInfo.user.c_str(), authInfo.user.size());
@@ -515,7 +515,7 @@ dialogue::isAuthenticated(const dodoString &user,
 void
 dialogue::cleanTmp()
 {
-	dodoMap<dodoString, __cgiFile>::iterator i(FILES.begin()), j(FILES.end());
+	dodoMap<dodoString, __cgiFile__>::iterator i(FILES.begin()), j(FILES.end());
 	for (; i != j; ++i)
 	{
 		if (!postFilesInMem)
@@ -688,7 +688,7 @@ dialogue::printHeaders() const
 
 	if (cookies.size() > 0)
 	{
-		dodoList<__cgiCookie>::const_iterator i(cookies.begin()), j(cookies.end());
+		dodoList<__cgiCookie__>::const_iterator i(cookies.begin()), j(cookies.end());
 		for (; i != j; ++i)
 		{
 			cgiIO.writeStream("Set-Cookie: ");
@@ -817,7 +817,7 @@ dialogue::makePost()
 
 							dodoString post_name = dodoString(i->data() + temp0, temp1 - temp0);
 
-							__cgiFile file;
+							__cgiFile__ file;
 
 							temp0 = i->find("filename=\"", temp1);
 							temp0 += 10;
@@ -985,7 +985,7 @@ dialogue::request(const dodoString &varName)
 		return item->second;
 	}
 
-	return __dodostring__;
+	return __dodostring____;
 }
 
 //-------------------------------------------------------------------
@@ -998,7 +998,7 @@ dialogue::setCookie(const dodoString &name,
 					const dodoString &domain,
 					bool             secure)
 {
-	__cgiCookie temp(secure);
+	__cgiCookie__ temp(secure);
 	temp.name = name;
 	temp.value = tools::code::encodeUrl(value);
 	temp.expires = expires;
@@ -1011,7 +1011,7 @@ dialogue::setCookie(const dodoString &name,
 //-------------------------------------------------------------------
 
 void
-dialogue::setCookie(const __cgiCookie &cookie)
+dialogue::setCookie(const __cgiCookie__ &cookie)
 {
 	cookies.push_back(cookie);
 }

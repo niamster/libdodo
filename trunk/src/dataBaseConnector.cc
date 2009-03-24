@@ -34,7 +34,7 @@
 
 using namespace dodo::data::base;
 
-__connectionInfo::__connectionInfo(const dodoString &a_db,
+__connectionInfo__::__connectionInfo__(const dodoString &a_db,
 								   const dodoString &a_host,
 								   const dodoString &a_user,
 								   const dodoString &a_password,
@@ -50,20 +50,20 @@ __connectionInfo::__connectionInfo(const dodoString &a_db,
 
 //-------------------------------------------------------------------
 
-__connectionInfo::__connectionInfo()
+__connectionInfo__::__connectionInfo__()
 {
 }
 
 //-------------------------------------------------------------------
 
-__tuples::__tuples(dodoArray<dodoStringArray> a_rows, dodoStringArray a_fields) : rows(a_rows),
+__tuples__::__tuples__(dodoArray<dodoStringArray> a_rows, dodoStringArray a_fields) : rows(a_rows),
 																				  fields(a_fields)
 {
 }
 
 //-------------------------------------------------------------------
 
-__tuples::__tuples()
+__tuples__::__tuples__()
 {
 }
 

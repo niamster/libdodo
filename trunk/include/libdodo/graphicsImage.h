@@ -41,7 +41,7 @@ namespace dodo
 {
 	namespace graphics
 	{
-		struct __image;
+		struct __image__;
 
 		/**
 		 * @enum imageOperTypeEnum defines type of operation for hook
@@ -54,12 +54,12 @@ namespace dodo
 		};
 
 		/**
-		 * @class __xexecImageCollectedData
+		 * @class __xexecImageCollectedData__
 		 * @brief defines data that could be retrieved from the image object
 		 */
-		class __xexecImageCollectedData
+		class __xexecImageCollectedData__
 #ifndef GRAPHICS_WO_XEXEC
-			: public __xexecCollectedData
+			: public __xexecCollectedData__
 #endif
 		{
 		  public:
@@ -70,21 +70,21 @@ namespace dodo
 			 * @param executor defines class that executed hook
 			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 			 */
-			__xexecImageCollectedData(xexec *executor,
+			__xexecImageCollectedData__(xexec *executor,
 									  short execObject);
 #else
 			/**
 			 * constructor
 			 */
-			__xexecImageCollectedData();
+			__xexecImageCollectedData__();
 #endif
 
 			/**
 			 * destructor
 			 */
-			~__xexecImageCollectedData();
+			~__xexecImageCollectedData__();
 
-			__image *handle; ///< ImageMagic handle
+			__image__ *handle; ///< ImageMagic handle
 		};
 
 #define IMAGE_MAPPINGSTATEMENTS 2
@@ -157,10 +157,10 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __imageInfo
+		 * @struct __imageInfo__
 		 * @brief defines image information
 		 */
-		struct __imageInfo
+		struct __imageInfo__
 		{
 			void          *data;            ///< 2D array of pixels
 			unsigned long width;            ///< width of the image
@@ -170,10 +170,10 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __imageSize
+		 * @struct __imageSize__
 		 * @brief defines image dimensions
 		 */
-		struct __imageSize
+		struct __imageSize__
 		{
 			unsigned long width;            ///< width of the image
 			unsigned long height;           ///< height of the image
@@ -220,7 +220,7 @@ namespace dodo
 			 */
 			virtual void create(unsigned long  width,
 								unsigned long  height,
-								const __color  &background = color::transparent,
+								const __color__  &background = color::transparent,
 								unsigned short backgroundDepth = 32);
 
 			/**
@@ -233,7 +233,7 @@ namespace dodo
 			 * read image
 			 * @param info defines image info
 			 */
-			virtual void readMemory(const __imageInfo &info);
+			virtual void readMemory(const __imageInfo__ &info);
 
 			/**
 			 * read image
@@ -261,7 +261,7 @@ namespace dodo
 			/**
 			 * @return info about image
 			 */
-			virtual __imageSize getImageSize();
+			virtual __imageSize__ getImageSize();
 
 			/**
 			 * set image type
@@ -290,7 +290,7 @@ namespace dodo
 			 * set image background
 			 * @param background define image background color
 			 */
-			virtual void setBackgroundColor(__color background);
+			virtual void setBackgroundColor(__color__ background);
 
 			/**
 			 * set image output encoder
@@ -329,7 +329,7 @@ namespace dodo
 
 			void *exInfo;                                                       ///< exception info handler
 
-			__xexecImageCollectedData collectedData;                                    ///< data collected for xexec
+			__xexecImageCollectedData__ collectedData;                                    ///< data collected for xexec
 
 		  private:
 

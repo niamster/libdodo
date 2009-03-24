@@ -64,10 +64,10 @@ namespace dodo
 
 #ifndef IO_WO_XEXEC
 			/**
-			 * @class __xexecIoNetworkClientCollectedData
+			 * @class __xexecIoNetworkClientCollectedData__
 			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
 			 */
-			class __xexecIoNetworkClientCollectedData : public __xexecCollectedData
+			class __xexecIoNetworkClientCollectedData__ : public __xexecCollectedData__
 			{
 			  public:
 
@@ -76,7 +76,7 @@ namespace dodo
 				 * @param executor defines class that executed hook
 				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 				 */
-				__xexecIoNetworkClientCollectedData(xexec *executor, short execObject);
+				__xexecIoNetworkClientCollectedData__(xexec *executor, short execObject);
 			};
 #endif
 
@@ -166,7 +166,7 @@ namespace dodo
 				dodoString unixSock;                                ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
-				__xexecIoNetworkClientCollectedData collectedData;  ///< data collected for xexec
+				__xexecIoNetworkClientCollectedData__ collectedData;  ///< data collected for xexec
 #endif
 			};
 		};

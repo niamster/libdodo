@@ -42,8 +42,8 @@ namespace dodo
 	{
 		namespace ssl
 		{
-			struct __sslContext;
-			struct __certificates;
+			struct __sslContext__;
+			struct __certificates__;
 		};
 
 		namespace network
@@ -51,7 +51,7 @@ namespace dodo
 			namespace ssl
 			{
 				class exchange;
-				class __initialAccept;
+				class __initialAccept__;
 
 				/**
 				 * @class server
@@ -88,7 +88,7 @@ namespace dodo
 					 * set certificates information
 					 * @param certs defines certificates information
 					 */
-					virtual void setSertificates(const io::ssl::__certificates &certs);
+					virtual void setSertificates(const io::ssl::__certificates__ &certs);
 
 					/**
 					 * remove certificates information
@@ -125,8 +125,8 @@ namespace dodo
 					 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
 					 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 					 */
-					virtual bool accept(__initialAccept &init,
-										__peerInfo      &info);
+					virtual bool accept(__initialAccept__ &init,
+										__peerInfo__      &info);
 
 					/**
 					 * accept incoming connections
@@ -135,7 +135,7 @@ namespace dodo
 					 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
 					 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 					 */
-					virtual bool accept(__initialAccept &init);
+					virtual bool accept(__initialAccept__ &init);
 
 				  protected:
 
@@ -148,9 +148,9 @@ namespace dodo
 					 * accept SSL connection
 					 * @param init defines object that will be filled with info that may init exchange object
 					 */
-					virtual void acceptSsl(__initialAccept &init);
+					virtual void acceptSsl(__initialAccept__ &init);
 
-					io::ssl::__sslContext *ctx; ///< SSL context
+					io::ssl::__sslContext__ *ctx; ///< SSL context
 				};
 			};
 		};

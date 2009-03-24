@@ -41,9 +41,9 @@ namespace dodo
 	{
 		namespace ssl
 		{
-			struct __sslConnection;
+			struct __sslConnection__;
 
-			struct __sslContext;
+			struct __sslContext__;
 
 			enum keyTypeEnum
 			{
@@ -52,7 +52,7 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __certificates
+			 * @struct __certificates__
 			 * @brief defines SSL options
 			 * @note key, certificate or CA should be in PEM format
 			 * allowed ciphers you can list by `openssl ciphers -v` command
@@ -69,12 +69,12 @@ namespace dodo
 			 * DES-CBC-SHA
 			 * DES-CBC-MD5
 			 */
-			struct __certificates
+			struct __certificates__
 			{
 				/**
 				 * constructor
 				 */
-				__certificates();
+				__certificates__();
 
 				dodoString key;         ///< pathname to the key file
 				dodoString keyPassword; ///< password for the key file

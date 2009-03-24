@@ -38,7 +38,7 @@ namespace dodo
 {
 	namespace io
 	{
-		struct __file;
+		struct __file__;
 
 		namespace file
 		{
@@ -160,7 +160,7 @@ namespace dodo
 
 			  private:
 
-				__file *handle; ///< file handle
+				__file__ *handle; ///< file handle
 			};
 		};
 	};

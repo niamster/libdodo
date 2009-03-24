@@ -40,10 +40,10 @@ namespace dodo
 	{
 		namespace network
 		{
-			struct __peerInfo;
+			struct __peerInfo__;
 		};
 
-		struct __file;
+		struct __file__;
 
 		/**
 		 * @enum pipeOperationTypeEnum defines type of operation for hook
@@ -93,7 +93,7 @@ namespace dodo
 			 * @return info about source of inputting
 			 * @note it can be used to get info foreign 'inputter' if you ar using inetd
 			 */
-			network::__peerInfo peerInfo();
+			network::__peerInfo__ peerInfo();
 
 			/**
 			 * open pipe
@@ -161,8 +161,8 @@ namespace dodo
 			 */
 			virtual void _writeStream(const char * const data);
 
-			__file *in;     ///< input stream descriptor
-			__file *out;    ///< output stream descriptor
+			__file__ *in;     ///< input stream descriptor
+			__file__ *out;    ///< output stream descriptor
 
 		  private:
 

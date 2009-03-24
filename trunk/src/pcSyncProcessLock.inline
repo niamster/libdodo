@@ -48,15 +48,15 @@ namespace dodo
 			namespace process
 			{
 				/**
-				 * @struct __lock
+				 * @struct __lock__
 				 * @brief defines system semaphore
 				 */
-				struct __lock
+				struct __lock__
 				{
 					/**
 					 * constructor
 					 */
-					__lock() :
+					__lock__() :
 #ifdef XSI_IPC
 					keeper(-1)
 #else

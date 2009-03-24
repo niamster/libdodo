@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *            ioFileRegular.cc
  *
@@ -49,7 +48,7 @@ regular::regular(short protection) : overwrite(false),
 									 pos(0),
 									 blockOffset(true),
 									 append(false),
-									 handle(new io::__file),
+									 handle(new io::__file__),
 									 channel(protection)
 {
 #ifndef IO_WO_XEXEC
@@ -65,7 +64,7 @@ regular::regular(const dodoString &a_path,
 												pos(0),
 												blockOffset(true),
 												append(false),
-												handle(new io::__file),
+												handle(new io::__file__),
 												path(a_path),
 												mode(a_mode),
 												channel(protection)
@@ -78,6 +77,8 @@ regular::regular(const dodoString &a_path,
 
 	if (path.size() == 0)
 	{
+		delete handle;
+
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 	}
 	else
@@ -88,6 +89,8 @@ regular::regular(const dodoString &a_path,
 		{
 			if (errno != ENOENT)
 			{
+				delete handle;
+
 				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
@@ -98,6 +101,8 @@ regular::regular(const dodoString &a_path,
 
 		if (exists && !S_ISREG(st.st_mode) && !S_ISBLK(st.st_mode))
 		{
+			delete handle;
+
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 		}
 
@@ -134,12 +139,23 @@ regular::regular(const dodoString &a_path,
 
 	if (handle->file == NULL)
 	{
+		delete handle;
+
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	if (!exists)
 	{
-		tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
+		try
+		{
+			tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
+		}
+		catch (...)
+		{
+			delete handle;
+
+			throw;
+		}
 	}
 }
 
@@ -151,7 +167,7 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 									  blockOffset(fd.blockOffset),
 									  append(fd.append),
 									  mode(fd.mode),
-									  handle(new io::__file),
+									  handle(new io::__file__),
 									  channel(fd.protection)
 
 {
@@ -169,12 +185,16 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 		oldDesc = fileno(fd.handle->file);
 		if (oldDesc == -1)
 		{
+			delete handle;
+
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
 		{
+			delete handle;
+
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
@@ -201,6 +221,8 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 
 		if (handle->file == NULL)
 		{
+			delete handle;
+
 			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
@@ -451,14 +473,14 @@ regular::_read(char * const a_data)
 {
 	if (handle->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ__, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
 	unsigned long pos = blockOffset ? this->pos * inSize : this->pos;
 
 	if (fseek(handle->file, pos, SEEK_SET) == -1)
 	{
-		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	memset(a_data, '\0', inSize);
@@ -479,7 +501,7 @@ regular::_read(char * const a_data)
 
 			if (ferror(handle->file) != 0)
 			{
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -494,7 +516,7 @@ regular::_write(const char *const a_data)
 {
 	if (handle->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE__, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
 	if (mode != REGULAR_OPENMODE_APPEND)
@@ -503,7 +525,7 @@ regular::_write(const char *const a_data)
 		{
 			if (fseek(handle->file, 0, SEEK_END) == -1)
 			{
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 		else
@@ -513,7 +535,7 @@ regular::_write(const char *const a_data)
 			{
 				if (fseek(handle->file, pos, SEEK_SET) == -1)
 				{
-					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
 				char *t_buf = new char[outSize];
@@ -524,13 +546,13 @@ regular::_write(const char *const a_data)
 
 				if (read != 0)
 				{
-					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_CANNOTOVEWRITE, IOFILEREGULAREX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE__, exception::ERRNO_LIBDODO, REGULAREX_CANNOTOVEWRITE, IOFILEREGULAREX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
 				}
 			}
 
 			if (fseek(handle->file, pos, SEEK_SET) == -1)
 			{
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 	}
@@ -551,7 +573,7 @@ regular::_write(const char *const a_data)
 
 			if (ferror(handle->file) != 0)
 			{
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -616,7 +638,7 @@ regular::_readStream(char * const a_data)
 {
 	if (handle->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM__, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
 	unsigned long readSize = inSize + 1;
@@ -625,7 +647,7 @@ regular::_readStream(char * const a_data)
 	{
 		if (fseek(handle->file, 0, SEEK_SET) == -1)
 		{
-			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 
 		for (unsigned long i = 0; i < pos; ++i)
@@ -641,16 +663,16 @@ regular::_readStream(char * const a_data)
 					case ENOMEM:
 					case ENXIO:
 
-						throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_FILEISSHORTERTHANGIVENPOSITION, IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM__, exception::ERRNO_LIBDODO, REGULAREX_FILEISSHORTERTHANGIVENPOSITION, IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
 			}
 		}
 	}
 	else if (fseek(handle->file, pos, SEEK_SET) == -1)
 	{
-		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	memset(a_data, '\0', readSize);
@@ -671,7 +693,7 @@ regular::_readStream(char * const a_data)
 
 			if (ferror(handle->file) != 0)
 			{
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READSTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -688,14 +710,14 @@ regular::_writeStream(const char *const a_data)
 {
 	if (handle->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM__, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
 	if (mode != REGULAR_OPENMODE_APPEND)
 	{
 		if (fseek(handle->file, 0, SEEK_END) == -1)
 		{
-			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 	}
 
@@ -719,7 +741,7 @@ regular::_writeStream(const char *const a_data)
 
 			if (ferror(handle->file) != 0)
 			{
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 

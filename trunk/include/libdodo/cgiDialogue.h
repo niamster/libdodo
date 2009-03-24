@@ -116,7 +116,7 @@ namespace dodo
 			/**
 			 * @return authentication info
 			 */
-			virtual __cgiAuthInfo getAuthenticationInfo();
+			virtual __cgiAuthInfo__ getAuthenticationInfo();
 
 			/**
 			 * request the authentication
@@ -160,7 +160,7 @@ namespace dodo
 			dodoStringMap GET;                                          ///< GET variables
 			mutable dodoMap<short, dodoString> ENVIRONMENT;             ///< environment variables[see cgiEnvironmentEnum]
 			dodoStringMap COOKIES;                                      ///< cookies sent by browser
-			dodoMap<dodoString, __cgiFile, dodoMapStringCompare> FILES; ///< POST files
+			dodoMap<dodoString, __cgiFile__, dodoMapStringCompare> FILES; ///< POST files
 			dodoMap<short, dodoString> HEADERS;                         ///< headers that will be printed with printHeaders method
 
 			dodoString content;                                         ///< contents of the stdin for the POST request
@@ -202,9 +202,9 @@ namespace dodo
 			 */
 			virtual void setCookie(const dodoString &name,
 								   const dodoString &value,
-								   const dodoString &exDate = __dodostring__,
-								   const dodoString &path = __dodostring__,
-								   const dodoString &domain = __dodostring__,
+								   const dodoString &exDate = __dodostring____,
+								   const dodoString &path = __dodostring____,
+								   const dodoString &domain = __dodostring____,
 								   bool             secure = false);
 
 			/**
@@ -212,7 +212,7 @@ namespace dodo
 			 * @param cookie defines the cookie
 			 * @note cookies are printed with printHeaders method
 			 */
-			virtual void setCookie(const __cgiCookie &cookie);
+			virtual void setCookie(const __cgiCookie__ &cookie);
 
 			/**
 			 * @return charset of the request
@@ -289,7 +289,7 @@ namespace dodo
 
 			dodoString postFilesTmpDir;                                                         ///< directory for POST files if on they are saved on the disk
 
-			dodoList<__cgiCookie> cookies;                                                      ///< cookies
+			dodoList<__cgiCookie__> cookies;                                                      ///< cookies
 			int method;                                                                         ///< request method
 
 			dodoStringArray contenTypeExtensions;                                               ///< contains contentype extension[boundary, modification-date, etc]
@@ -308,9 +308,9 @@ namespace dodo
 			static const dodoString responseStatusStatements[CGI_STATUSSTATEMENTS];             ///< HTTP response headers[see cgiStatusCodeEnum]
 
 			/**
-			 * @struct __authInfo defines authenfication information
+			 * @struct __authInfo__ defines authenfication information
 			 */
-			struct __internalAuthInfo
+			struct __internalAuthInfo__
 			{
 				dodoString user;                                                                ///< user name
 				dodoString password;                                                            ///< user password
@@ -325,7 +325,7 @@ namespace dodo
 				short      type;                                                                ///< authenfication type[see cgiAuthTypeEnum]
 			};
 
-			__internalAuthInfo authInfo;                                                        ///< authentication information
+			__internalAuthInfo__ authInfo;                                                        ///< authentication information
 		};
 	};
 };

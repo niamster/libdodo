@@ -59,8 +59,8 @@ client::client(short a_family,
 			   short a_type) : network::client(a_family,
 											   a_type),
 							   sslConnected(false),
-							   handle(new io::ssl::__sslConnection),
-							   ctx(new io::ssl::__sslContext)
+							   handle(new io::ssl::__sslConnection__),
+							   ctx(new io::ssl::__sslContext__)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLCLIENT);
@@ -149,7 +149,7 @@ client::removeSertificates()
 //-------------------------------------------------------------------
 
 void
-client::setSertificates(const io::ssl::__certificates &certs)
+client::setSertificates(const io::ssl::__certificates__ &certs)
 {
 	if (handle->handle != NULL)
 	{
@@ -326,7 +326,7 @@ client::initSsl()
 void
 client::connectSsl()
 {
-	io::ssl::__openssl_init_object__.addEntropy();
+	io::ssl::__openssl___init_object__.addEntropy();
 
 	if (sslConnected)
 	{

@@ -43,10 +43,10 @@ namespace dodo
 			namespace data
 			{
 				/**
-				 * @struct __info
+				 * @struct __info__
 				 * @brief defines shared data
 				 */
-				struct __info
+				struct __info__
 				{
 					unsigned long position; ///< shared data identificator
 					void          *data;    ///< shared data

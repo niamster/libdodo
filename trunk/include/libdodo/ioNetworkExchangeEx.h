@@ -58,9 +58,9 @@ namespace dodo
 			 */
 			enum exchangeFunctionsID
 			{
-				EXCHANGEEX__WRITE,
-				EXCHANGEEX__READ,
-				EXCHANGEEX__READSTREAM,
+				EXCHANGEEX__WRITE__,
+				EXCHANGEEX__READ__,
+				EXCHANGEEX__READSTREAM__,
 			};
 		};
 	};

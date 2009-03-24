@@ -44,8 +44,8 @@
 using namespace dodo::io::network;
 
 #ifndef IO_WO_XEXEC
-__xexecIoNetworkServerCollectedData::__xexecIoNetworkServerCollectedData(xexec *a_executor,
-																		 short execObject) : __xexecCollectedData(a_executor, execObject)
+__xexecIoNetworkServerCollectedData__::__xexecIoNetworkServerCollectedData__(xexec *a_executor,
+																		 short execObject) : __xexecCollectedData__(a_executor, execObject)
 {
 }
 #endif
@@ -328,8 +328,8 @@ server::serve(const dodoString &path,
 //-------------------------------------------------------------------
 
 bool
-server::accept(__initialAccept &init,
-			   __peerInfo      &info)
+server::accept(__initialAccept__ &init,
+			   __peerInfo__      &info)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
@@ -443,7 +443,7 @@ server::accept(__initialAccept &init,
 //-------------------------------------------------------------------
 
 bool
-server::accept(__initialAccept &init)
+server::accept(__initialAccept__ &init)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;

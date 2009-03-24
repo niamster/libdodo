@@ -40,7 +40,7 @@ namespace dodo
 {
 	namespace cgi
 	{
-		struct __cgiCookie;
+		struct __cgiCookie__;
 	};
 
 	namespace io
@@ -100,41 +100,41 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __httpResponse
+			 * @struct __httpResponse__
 			 * @brief defines HTTP response
 			 */
-			struct __httpResponse
+			struct __httpResponse__
 			{
 				/**
 				 * constructor
 				 */
-				__httpResponse();
+				__httpResponse__();
 
 				dodoMap<short, dodoString>  headers;    ///< response headers[see httpResponseHeaderEnum]
-				dodoArray<cgi::__cgiCookie> cookies;    ///< cookies from the server
+				dodoArray<cgi::__cgiCookie__> cookies;    ///< cookies from the server
 				dodoString                  data;       ///< response data
 				short                       code;       ///< response code
 				bool                        redirected; ///< true if redirection was performeed
 			};
 
 			/**
-			 * @struct __httpPostFile
+			 * @struct __httpPostFile__
 			 * @brief defines file for POST request
 			 */
-			struct __httpPostFile
+			struct __httpPostFile__
 			{
 				/**
 				 * constructor
 				 * @param path defines path to file
 				 * @param mime defines mimetype of the file
 				 */
-				__httpPostFile(const dodoString path,
+				__httpPostFile__(const dodoString path,
 							   const dodoString mime);
 
 				/**
 				 * constructor
 				 */
-				__httpPostFile();
+				__httpPostFile__();
 
 				dodoString path;                        ///< path to file
 				dodoString mime;                        ///<  mimetype of the file
@@ -171,7 +171,7 @@ namespace dodo
 				 * set certificates information
 				 * @param certs defines certificates information
 				 */
-				virtual void setSertificates(const io::ssl::__certificates &certs);
+				virtual void setSertificates(const io::ssl::__certificates__ &certs);
 
 				/**
 				 * remove certificates information
@@ -195,8 +195,8 @@ namespace dodo
 				 */
 				virtual void setProxy(const dodoString &host,
 									  unsigned int     port = 3128,
-									  const dodoString &user = __dodostring__,
-									  const dodoString &password = __dodostring__);
+									  const dodoString &user = __dodostring____,
+									  const dodoString &password = __dodostring____);
 
 				/**
 				 * disable proxy usage
@@ -215,12 +215,12 @@ namespace dodo
 				 * @param url defines Url
 				 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 				 */
-				virtual __httpResponse GET(const dodoString &url);
+				virtual __httpResponse__ GET(const dodoString &url);
 
 				/**
 				 * perform GET request
 				 */
-				virtual __httpResponse GET();
+				virtual __httpResponse__ GET();
 
 				/**
 				 * perform POST request
@@ -230,7 +230,7 @@ namespace dodo
 				 * @param type defines content type of the POST request
 				 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 				 */
-				virtual __httpResponse POST(const dodoString &url,
+				virtual __httpResponse__ POST(const dodoString &url,
 											const dodoString &data,
 											const dodoString &type);
 
@@ -239,7 +239,7 @@ namespace dodo
 				 * @param data defines POST data
 				 * @param type defines content type of the POST request
 				 */
-				virtual __httpResponse POST(const dodoString &data,
+				virtual __httpResponse__ POST(const dodoString &data,
 											const dodoString &type);
 
 				/**
@@ -249,14 +249,14 @@ namespace dodo
 				 * @param arguments defines request arguments
 				 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 				 */
-				virtual __httpResponse POST(const dodoString    &url,
+				virtual __httpResponse__ POST(const dodoString    &url,
 											const dodoStringMap &arguments);
 
 				/**
 				 * perform POST request
 				 * @param arguments defines request arguments
 				 */
-				virtual __httpResponse POST(const dodoStringMap &arguments);
+				virtual __httpResponse__ POST(const dodoStringMap &arguments);
 
 				/**
 				 * perform POST request
@@ -266,17 +266,17 @@ namespace dodo
 				 * @param files defines files for POST request
 				 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 				 */
-				virtual __httpResponse POST(const dodoString &url,
+				virtual __httpResponse__ POST(const dodoString &url,
 											const dodoStringMap &arguments,
-											const dodoMap<dodoString, __httpPostFile> &files);
+											const dodoMap<dodoString, __httpPostFile__> &files);
 
 				/**
 				 * perform POST request
 				 * @param arguments defines request arguments
 				 * @param files defines files for POST request
 				 */
-				virtual __httpResponse POST(const dodoStringMap &arguments,
-											const dodoMap<dodoString, __httpPostFile> &files);
+				virtual __httpResponse__ POST(const dodoStringMap &arguments,
+											const dodoMap<dodoString, __httpPostFile__> &files);
 
 				/**
 				 * set HTTP authentification information
@@ -296,7 +296,7 @@ namespace dodo
 				 * @return cookie parse from the header
 				 * @param header defines `Set-Cookie` value
 				 */
-				virtual cgi::__cgiCookie parseCookie(const dodoString &header);
+				virtual cgi::__cgiCookie__ parseCookie(const dodoString &header);
 
 				/**
 				 * @enum getContentStatusEnum defines status of getContent routine
@@ -336,8 +336,8 @@ namespace dodo
 				static const dodoString requestHeaderStatements[HTTP_REQUESTHEADERSTATEMENTS];      ///< HTTP request headers[see httpRequestHeaderEnum]
 				static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];    ///< HTTP response headers[see httpResponseHeaderEnum]                                                                                                                                                                                       ///< parser for HTTP response status code
 
-				__httpResponse response;                                                            ///< HTTP response data
-				tools::__url urlComponents;                                                         ///< HTTP URL components
+				__httpResponse__ response;                                                            ///< HTTP response data
+				tools::__url__ urlComponents;                                                         ///< HTTP URL components
 				dodoString urlQuery;                                                                ///< HTTP URL query
 				dodoString urlBasePath;                                                             ///< HTTP URL base path
 
@@ -409,14 +409,14 @@ namespace dodo
 				};
 
 				/**
-				 * @struct __proxyAuthInfo defines proxy authentication information
+				 * @struct __proxyAuthInfo__ defines proxy authentication information
 				 */
-				struct __proxyAuthInfo
+				struct __proxyAuthInfo__
 				{
 					/**
 					 * constructor
 					 */
-					__proxyAuthInfo();
+					__proxyAuthInfo__();
 
 					dodoString   user;          ///< user name
 					dodoString   password;      ///< user password
@@ -426,12 +426,12 @@ namespace dodo
 					short        authType;      ///< type of proxy authentication[see proxyAuthTypeEnum]
 				};
 
-				__proxyAuthInfo proxyAuthInfo;  ///< proxy authentication information
+				__proxyAuthInfo__ proxyAuthInfo;  ///< proxy authentication information
 
 				dodoStringMap httpAuth;         ///< cached HTTP auth info
 
 #ifdef OPENSSL_EXT
-				io::ssl::__certificates certs;  ///< SSL certificates
+				io::ssl::__certificates__ certs;  ///< SSL certificates
 				bool certsSet;
 #endif
 			};

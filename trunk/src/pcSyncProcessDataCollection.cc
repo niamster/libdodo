@@ -63,7 +63,7 @@ collection::add(void *data)
 {
 	pc::sync::protector pg(keeper);
 
-	pc::sync::data::__info share;
+	pc::sync::data::__info__ share;
 
 	share.position = ++shareNum;
 	share.data = data;
@@ -130,7 +130,7 @@ collection::get(unsigned long position)
 bool
 collection::getShare(unsigned long position)
 {
-	dodoList<pc::sync::data::__info>::iterator i(shares.begin()), j(shares.end());
+	dodoList<pc::sync::data::__info__>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
 	{
 		if (i->position == position)
@@ -151,7 +151,7 @@ collection::getIds()
 {
 	dodoList<unsigned long> ids;
 
-	dodoList<pc::sync::data::__info>::iterator i(shares.begin()), j(shares.end());
+	dodoList<pc::sync::data::__info__>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
 	{
 		ids.push_back(i->position);

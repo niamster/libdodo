@@ -68,15 +68,15 @@ namespace dodo
 		 */
 
 		/**
-		 * @struct __time
+		 * @struct __time__
 		 * @brief defines time information
 		 */
-		struct __time
+		struct __time__
 		{
 			/**
 			 * constructor
 			 */
-			__time();
+			__time__();
 
 			/**
 			 * constructor
@@ -88,7 +88,7 @@ namespace dodo
 			 * @param year defines year
 			 * @param daylight defines daylight savings condition
 			 */
-			__time(unsigned int sec,
+			__time__(unsigned int sec,
 				   unsigned int min,
 				   unsigned int hour,
 				   unsigned int day,
@@ -173,14 +173,14 @@ namespace dodo
 			 * @return number of seconds from 00:00:00 UTC, January 1, 1970
 			 * @param timeInfo defines time info
 			 */
-			static long timestamp(const __time &timeInfo);
+			static long timestamp(const __time__ &timeInfo);
 
 			/**
 			 * @return time info
 			 * @param seconds defines number of seconds from 00:00:00 UTC, January 1, 1970
 			 * @param local defines local time condition; if true time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 */
-			static __time timestamp(long seconds,
+			static __time__ timestamp(long seconds,
 									bool local = true);
 		};
 	};

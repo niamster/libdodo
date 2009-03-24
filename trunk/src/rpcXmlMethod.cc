@@ -57,7 +57,7 @@ method::xmlToMethod(dodo::data::format::xml::node &node)
 			}
 			else
 			{
-				meth.name = __dodostring__;
+				meth.name = __dodostring____;
 			}
 		}
 		else

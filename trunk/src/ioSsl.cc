@@ -46,7 +46,7 @@ namespace dodo
 	{
 		namespace ssl
 		{
-			__openssl_init__ __openssl_init_object__;
+			__openssl___init__ __openssl___init_object__;
 		};
 	};
 };
@@ -55,13 +55,13 @@ namespace dodo
 
 using namespace dodo::io::ssl;
 
-__certificates::__certificates() : keyType(-1)
+__certificates__::__certificates__() : keyType(-1)
 {
 }
 
 //-------------------------------------------------------------------
 
-__openssl_init__::__openssl_init__()
+__openssl___init__::__openssl___init__()
 {
 	SSL_load_error_strings();
 	SSL_library_init();
@@ -94,7 +94,7 @@ __openssl_init__::__openssl_init__()
 
 //-------------------------------------------------------------------
 
-__openssl_init__::~__openssl_init__()
+__openssl___init__::~__openssl___init__()
 {
 	ERR_free_strings();
 
@@ -104,7 +104,7 @@ __openssl_init__::~__openssl_init__()
 //-------------------------------------------------------------------
 
 void
-__openssl_init__::addEntropy()
+__openssl___init__::addEntropy()
 {
 	struct stat randstat;
 

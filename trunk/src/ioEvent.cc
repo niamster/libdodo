@@ -69,7 +69,7 @@ event::addChannel(const eventInfo &fl)
 {
 	pc::sync::protector pg(keeper);
 
-	__eventInOutDescriptors tempD;
+	__eventInOutDescriptors__ tempD;
 
 	tempD.position = ++descs;
 	tempD.in = fl.getInDescriptor();
@@ -92,7 +92,7 @@ event::isReadable(const dodoArray<int> &pos,
 
 	pollfd *fds = new pollfd[pos.size()];
 
-	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 	{
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
@@ -178,7 +178,7 @@ event::isWritable(const dodoArray<int> &pos,
 
 	pollfd *fds = new pollfd[pos.size()];
 
-	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 	{
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
@@ -262,7 +262,7 @@ event::isReadable(int pos,
 
 	pollfd fd;
 
-	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 	{
 		if (i->position == pos)
@@ -307,7 +307,7 @@ event::delChannel(int pos)
 {
 	pc::sync::protector pg(keeper);
 
-	dodoArray<__eventInOutDescriptors>::iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors__>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 	{
 		if (i->position == pos)
@@ -329,7 +329,7 @@ event::isWritable(int pos,
 
 	pollfd fd;
 
-	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 	{
 		if (i->position == pos)

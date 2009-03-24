@@ -53,10 +53,10 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @struct __interfaceInfo
+		 * @struct __interfaceInfo__
 		 * @brief defines interface information
 		 */
-		struct __interfaceInfo
+		struct __interfaceInfo__
 		{
 			dodoString address;         ///< ip address of the interface
 			dodoString broadcast;       ///< broadcast address of the interface
@@ -68,10 +68,10 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __hostInfo
+		 * @struct __hostInfo__
 		 * @brief defines information about host
 		 */
-		struct __hostInfo
+		struct __hostInfo__
 		{
 			dodoString      name;       ///< original name of the host
 			dodoStringArray aliases;    ///< aliases of the host
@@ -79,10 +79,10 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __serviceInfo
+		 * @struct __serviceInfo__
 		 * @brief defines info about service
 		 */
-		struct __serviceInfo
+		struct __serviceInfo__
 		{
 			dodoString      name;       ///< original name of the service
 			dodoStringArray aliases;    ///< aliases of the service
@@ -106,13 +106,13 @@ namespace dodo
 			 * @return information about the interface
 			 * @param interface defines a name of the interface
 			 */
-			static __interfaceInfo getInterfaceInfo(const dodoString &interface);
+			static __interfaceInfo__ getInterfaceInfo(const dodoString &interface);
 
 			/**
 			 * @return information about the given host
 			 * @param host defines a name of the host
 			 */
-			static __hostInfo getHostInfo(const dodoString &host);
+			static __hostInfo__ getHostInfo(const dodoString &host);
 
 			/**
 			 * @return primary host ip
@@ -136,7 +136,7 @@ namespace dodo
 			 * @param service defices name of the service
 			 * @param protocol defines protocol of the service(tcp, udp ..)
 			 */
-			static __serviceInfo getServiceInfo(const dodoString &service,
+			static __serviceInfo__ getServiceInfo(const dodoString &service,
 												const dodoString &protocol);
 
 			/**
@@ -144,7 +144,7 @@ namespace dodo
 			 * @param port defices port of the service
 			 * @param protocol defines protocol of the service(tcp, udp ..)
 			 */
-			static __serviceInfo getServiceInfo(int              port,
+			static __serviceInfo__ getServiceInfo(int              port,
 												const dodoString &protocol);
 
 			/**
@@ -158,7 +158,7 @@ namespace dodo
 			static void mail(const dodoString &to,
 							 const dodoString &subject,
 							 const dodoString &message,
-							 const dodoString &headers = __dodostring__,
+							 const dodoString &headers = __dodostring____,
 							 const dodoString &path = "/usr/sbin/sendmail");
 
 			/**
@@ -180,9 +180,9 @@ namespace dodo
 							 const dodoString &from,
 							 const dodoString &subject,
 							 const dodoString &message,
-							 const dodoString &login = __dodostring__,
-							 const dodoString &pass = __dodostring__,
-							 const dodoString &headers = __dodostring__);
+							 const dodoString &login = __dodostring____,
+							 const dodoString &pass = __dodostring____,
+							 const dodoString &headers = __dodostring____);
 		};
 	};
 };

@@ -31,7 +31,7 @@
 
 using namespace dodo;
 
-__xexecCollectedData::__xexecCollectedData(xexec *executor,
+__xexecCollectedData__::__xexecCollectedData__(xexec *executor,
 										   short execObject) : operType(executor->operType),
 															   executor(executor)
 {
@@ -40,7 +40,7 @@ __xexecCollectedData::__xexecCollectedData(xexec *executor,
 }
 
 void
-__xexecCollectedData::setExecObject(short execObject)
+__xexecCollectedData__::setExecObject(short execObject)
 {
 	executor->execObject = execObject;
 }
@@ -71,7 +71,7 @@ xexec::~xexec()
 
 	deinitXexecModule deinit;
 
-	dodoList<__xexecItem>::iterator i(preExec.exec.begin()), j(preExec.exec.end());
+	dodoList<__xexecItem__>::iterator i(preExec.exec.begin()), j(preExec.exec.end());
 	for (; i != j; ++i)
 	{
 		if (i->handle == NULL)
@@ -116,11 +116,11 @@ xexec::~xexec()
 //-------------------------------------------------------------------
 
 int
-xexec::addXExec(dodoList<__xexecItem> &list,
+xexec::addXExec(dodoList<__xexecItem__> &list,
 				inExec                func,
 				void                  *data)
 {
-	__xexecItem temp;
+	__xexecItem__ temp;
 
 	temp.data = data;
 	temp.func = func;
@@ -139,7 +139,7 @@ xexec::addXExec(dodoList<__xexecItem> &list,
 //-------------------------------------------------------------------
 
 void
-xexec::setStatXExec(dodoList<__xexecItem> &list,
+xexec::setStatXExec(dodoList<__xexecItem__> &list,
 					int                   position,
 					bool                  stat)
 {
@@ -152,7 +152,7 @@ xexec::setStatXExec(dodoList<__xexecItem> &list,
 //-------------------------------------------------------------------
 
 void
-xexec::delXExec(dodoList<__xexecItem> &list,
+xexec::delXExec(dodoList<__xexecItem__> &list,
 				int                   position)
 {
 	if (getXexec(list, position))
@@ -354,7 +354,7 @@ xexec::replacePreExec(int    position,
 //-------------------------------------------------------------------
 
 void
-xexec::replaceXExec(dodoList<__xexecItem> &list,
+xexec::replaceXExec(dodoList<__xexecItem__> &list,
 					int                   position,
 					inExec                func,
 					void                  *data)
@@ -401,14 +401,14 @@ xexec::replaceXExec(dodoList<__xexecItem> &list,
 
 //-------------------------------------------------------------------
 void
-xexec::performXExec(__xexecItemList &list) const
+xexec::performXExec(__xexecItemList__ &list) const
 {
 	if (list.execDisabled)
 	{
 		return ;
 	}
 
-	dodoList<__xexecItem>::iterator i(list.exec.begin()), j(list.exec.end());
+	dodoList<__xexecItem__>::iterator i(list.exec.begin()), j(list.exec.end());
 
 	for (; i != j; ++i)
 	{
@@ -433,7 +433,7 @@ xexec::performXExec(__xexecItemList &list) const
 
 #ifdef DL_EXT
 
-__xexecCounts::__xexecCounts() : pre(-1),
+__xexecCounts__::__xexecCounts__() : pre(-1),
 								 post(-1)
 {
 }
@@ -441,12 +441,12 @@ __xexecCounts::__xexecCounts() : pre(-1),
 //-------------------------------------------------------------------
 
 int
-xexec::addXExecModule(dodoList<__xexecItem> &list,
+xexec::addXExecModule(dodoList<__xexecItem__> &list,
 					  const dodoString      &module,
 					  void                  *data,
 					  void                  *toInit)
 {
-	__xexecItem temp;
+	__xexecItem__ temp;
 
 	temp.data = data;
 	temp.position = ++execs;
@@ -503,7 +503,7 @@ xexec::addPreExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecMod
+__xexecMod__
 xexec::getModuleInfo(const dodoString &module,
 					 void             *toInit)
 {
@@ -523,7 +523,7 @@ xexec::getModuleInfo(const dodoString &module,
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 	}
 
-	__xexecMod mod = init(toInit);
+	__xexecMod__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
@@ -537,12 +537,12 @@ xexec::getModuleInfo(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecCounts
+__xexecCounts__
 xexec::addExec(const dodoString &module,
 			   void             *data,
 			   void             *toInit)
 {
-	__xexecItem temp;
+	__xexecItem__ temp;
 
 	temp.data = data;
 	temp.enabled = true;
@@ -563,7 +563,7 @@ xexec::addExec(const dodoString &module,
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 	}
 
-	__xexecMod info = init(toInit);
+	__xexecMod__ info = init(toInit);
 
 	inExec in = (inExec)dlsym(temp.handle, info.hook);
 	if (in == NULL)
@@ -573,7 +573,7 @@ xexec::addExec(const dodoString &module,
 
 	temp.func = in;
 
-	__xexecCounts count;
+	__xexecCounts__ count;
 
 	switch (info.execType)
 	{
@@ -614,10 +614,10 @@ xexec::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 bool
-xexec::getXexec(dodoList<__xexecItem> &list,
+xexec::getXexec(dodoList<__xexecItem__> &list,
 				int                   position)
 {
-	dodoList<__xexecItem>::iterator i(list.begin()), j(list.end());
+	dodoList<__xexecItem__>::iterator i(list.begin()), j(list.end());
 	for (; i != j; ++i)
 	{
 		if (i->position == position)

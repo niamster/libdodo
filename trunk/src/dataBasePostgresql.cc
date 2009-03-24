@@ -46,15 +46,15 @@ namespace dodo
 		namespace base
 		{
 			/**
-			 * @struct __postgresql
+			 * @struct __postgresql__
 			 * @brief defines internal handlers for MySQL DBMS interaction
 			 */
-			struct __postgresql
+			struct __postgresql__
 			{
 				/**
 				 * constructor
 				 */
-				__postgresql() : handle(NULL),
+				__postgresql__() : handle(NULL),
 								 result(NULL)
 				{
 				}
@@ -116,7 +116,7 @@ const dodoString postgresql::encodingStatements[] =
 //-------------------------------------------------------------------
 
 postgresql::postgresql() : empty(true),
-						   handle(new __postgresql)
+						   handle(new __postgresql__)
 {
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASEPOSTGRESQL);
@@ -125,8 +125,8 @@ postgresql::postgresql() : empty(true),
 
 //-------------------------------------------------------------------
 
-postgresql::postgresql(const __connectionInfo &info) : empty(true),
-													   handle(new __postgresql)
+postgresql::postgresql(const __connectionInfo__ &info) : empty(true),
+													   handle(new __postgresql__)
 {
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASEPOSTGRESQL);
@@ -179,7 +179,7 @@ postgresql::~postgresql()
 //-------------------------------------------------------------------
 
 void
-postgresql::connect(const __connectionInfo &info)
+postgresql::connect(const __connectionInfo__ &info)
 {
 	collectedData.dbInfo = info;
 
@@ -356,10 +356,10 @@ postgresql::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__tuples
+__tuples__
 postgresql::fetch() const
 {
-	return __tuples(fetchRows(), fetchFields());
+	return __tuples__(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
@@ -583,7 +583,7 @@ postgresql::exec(const dodoString &query,
 		int *lengths = new int[size];
 		int *formats = new int[size];
 
-		dodoList<__blob>::iterator i(blobs.begin()), j(blobs.end());
+		dodoList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
 		for (int o = 0; i != j; ++i, ++o)
 		{
 			values[o] = (char *)i->value->c_str();
@@ -651,7 +651,7 @@ postgresql::updateCollect()
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
-				__blob blob;
+				__blob__ blob;
 
 				unsigned int k = 1;
 				for (; k < o; ++i, ++k, ++j)
@@ -779,7 +779,7 @@ postgresql::insertCollect()
 
 			dodoStringArray::iterator t;
 
-			__blob blob;
+			__blob__ blob;
 
 			unsigned int o = 0;
 
@@ -1025,7 +1025,7 @@ postgresql::getCharset() const
 		return encodingStatements[encoding];
 	}
 
-	return __dodostring__;
+	return __dodostring____;
 #else
 	return pg_encoding_to_char(PQclientEncoding(handle->handle));
 #endif

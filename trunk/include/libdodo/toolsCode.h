@@ -78,10 +78,10 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @struct __url
+		 * @struct __url__
 		 * @brief defines Url parts
 		 */
-		struct __url
+		struct __url__
 		{
 			dodoString protocol;    ///< scheme
 			dodoString host;        ///< host name
@@ -221,13 +221,13 @@ namespace dodo
 			 * @return parts of Url
 			 * @param url defines Url
 			 */
-			static __url parseUrl(const dodoString &url);
+			static __url__ parseUrl(const dodoString &url);
 
 			/**
 			 * @return Url
 			 * @param url defines Url parts
 			 */
-			static dodoString makeUrl(const __url &url);
+			static dodoString makeUrl(const __url__ &url);
 
 			/**
 			 * @return MD5 hash of string
@@ -346,10 +346,10 @@ namespace dodo
 			static const unsigned long powASCII85[5];   ///< power values for ASCII85 encoding/decoding
 
 			/**
-			 * @struct __MD5Context
+			 * @struct __MD__5Context
 			 * @brief defines states for MD5 computations
 			 */
-			struct __MD5Context
+			struct __MD__5Context
 			{
 				unsigned int  state[4];                 ///< state[A,B,C,D]
 				unsigned int  count[2];                 ///< number of bits, modulo 2^64 (lsb first)
@@ -360,7 +360,7 @@ namespace dodo
 			 * init MD5 context
 			 * @param context defines MD5 structure
 			 */
-			static void MD5Init(__MD5Context *context);
+			static void MD5Init(__MD__5Context *context);
 
 			/**
 			 * MD5 block update operation
@@ -369,7 +369,7 @@ namespace dodo
 			 * @param inputLen defines size of input data
 			 * @note continues an MD5 message-digest operation, processing another message block, and updating the context.
 			 */
-			static void MD5Update(__MD5Context        *context,
+			static void MD5Update(__MD__5Context        *context,
 								  const unsigned char *input,
 								  unsigned int        inputLen);
 			/**
@@ -386,17 +386,17 @@ namespace dodo
 			 * @param context defines MD5 context
 			 * @note ends an MD5 message-digest operation, writing the the message digest and zeroizing the context
 			 */
-			static void MD5Final(unsigned char digest[16], __MD5Context * context);
+			static void MD5Final(unsigned char digest[16], __MD__5Context * context);
 
 			static const unsigned char MD5Padding[64];  ///< MD5 padding for finalization stage
 
 			static const char hexEncodeChars[17];       ///< characters for hex conversion
 
 			/**
-			 * @struct __SHAContext
+			 * @struct __SHAContext__
 			 * @brief defines states for SHA-1, SHA-256, SHA-512 computations
 			 */
-			struct __SHAContext
+			struct __SHAContext__
 			{
 				unsigned long intermediateHash[16];     ///< message digest[5 for SHA-1, 8 for SHA-256, 16 for SHA-512]
 
@@ -415,7 +415,7 @@ namespace dodo
 			 * init SHA-1
 			 * @param context defines SHA-1 context
 			 */
-			static void SHA1Init(__SHAContext *context);
+			static void SHA1Init(__SHAContext__ *context);
 
 			/**
 			 * accepts an array of octets as the next portion of the message
@@ -423,7 +423,7 @@ namespace dodo
 			 * @param bytes defines input data
 			 * @param bytecount defines size of input data
 			 */
-			static void SHA1Input(__SHAContext        *context,
+			static void SHA1Input(__SHAContext__        *context,
 								  const unsigned char *bytes,
 								  unsigned int        bytecount);
 
@@ -432,7 +432,7 @@ namespace dodo
 			 * @param context defines SHA-1 context
 			 * @param digest defines digest
 			 */
-			static void SHA1Result(__SHAContext * context, unsigned char digest[20]);
+			static void SHA1Result(__SHAContext__ * context, unsigned char digest[20]);
 
 			/**
 			 * @param context defines SHA-1 context
@@ -442,20 +442,20 @@ namespace dodo
 			 * All bits in between should be 0. This helper function will pad the message according to those rules by filling the messageBlock
 			 * array accordingly. When it returns, it can be assumed that the message digest has been computed.
 			 */
-			static void SHA1PadMessage(__SHAContext  *context,
+			static void SHA1PadMessage(__SHAContext__  *context,
 									   unsigned char padByte);
 
 			/**
 			 * processes the next 512 bits of the message stored in the messageBlock array in context
 			 * @param context defines SHA-1 context
 			 */
-			static void SHA1ProcessMessageBlock(__SHAContext *context);
+			static void SHA1ProcessMessageBlock(__SHAContext__ *context);
 
 			/**
 			 * init SHA-256
 			 * @param context defines SHA-256 context
 			 */
-			static void SHA256Init(__SHAContext *context);
+			static void SHA256Init(__SHAContext__ *context);
 
 			/**
 			 * accepts an array of octets as the next portion of the message
@@ -463,7 +463,7 @@ namespace dodo
 			 * @param bytes defines input data
 			 * @param bytecount defines size of input data
 			 */
-			static void SHA256Input(__SHAContext        *context,
+			static void SHA256Input(__SHAContext__        *context,
 									const unsigned char *bytes,
 									unsigned int        bytecount);
 
@@ -472,7 +472,7 @@ namespace dodo
 			 * @param context defines SHA-256 context
 			 * @param digest defines digest
 			 */
-			static void SHA256Result(__SHAContext * context, unsigned char digest[32]);
+			static void SHA256Result(__SHAContext__ * context, unsigned char digest[32]);
 
 			/**
 			 * @param context defines SHA-256 context
@@ -482,20 +482,20 @@ namespace dodo
 			 * All bits in between should be 0. This helper function will pad the message according to those rules by filling the messageBlock
 			 * array accordingly. When it returns, it can be assumed that the message digest has been computed.
 			 */
-			static void SHA256PadMessage(__SHAContext  *context,
+			static void SHA256PadMessage(__SHAContext__  *context,
 										 unsigned char padByte);
 
 			/**
 			 * processes the next 512 bits of the message stored in the messageBlock array in context
 			 * @param context defines SHA-256 context
 			 */
-			static void SHA256ProcessMessageBlock(__SHAContext *context);
+			static void SHA256ProcessMessageBlock(__SHAContext__ *context);
 
 			/**
 			 * init SHA-512
 			 * @param context defines SHA-512 context
 			 */
-			static void SHA512Init(__SHAContext *context);
+			static void SHA512Init(__SHAContext__ *context);
 
 			/**
 			 * accepts an array of octets as the next portion of the message
@@ -503,7 +503,7 @@ namespace dodo
 			 * @param bytes defines input data
 			 * @param bytecount defines size of input data
 			 */
-			static void SHA512Input(__SHAContext        *context,
+			static void SHA512Input(__SHAContext__        *context,
 									const unsigned char *bytes,
 									unsigned int        bytecount);
 
@@ -512,7 +512,7 @@ namespace dodo
 			 * @param context defines SHA-512 context
 			 * @param digest defines digest
 			 */
-			static void SHA512Result(__SHAContext * context, unsigned char digest[64]);
+			static void SHA512Result(__SHAContext__ * context, unsigned char digest[64]);
 
 			/**
 			 * @param context defines SHA-512 context
@@ -522,14 +522,14 @@ namespace dodo
 			 * All bits in between should be 0. This helper function will pad the message according to those rules by filling the messageBlock
 			 * array accordingly. When it returns, it can be assumed that the message digest has been computed.
 			 */
-			static void SHA512PadMessage(__SHAContext  *context,
+			static void SHA512PadMessage(__SHAContext__  *context,
 										 unsigned char padByte);
 
 			/**
 			 * processes the next 512 bits of the message stored in the messageBlock array in context
 			 * @param context defines SHA-512 context
 			 */
-			static void SHA512ProcessMessageBlock(__SHAContext *context);
+			static void SHA512ProcessMessageBlock(__SHAContext__ *context);
 		};
 	};
 };

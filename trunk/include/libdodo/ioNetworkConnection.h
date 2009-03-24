@@ -82,10 +82,10 @@ namespace dodo
 			};
 
 			/**
-			 * @struct __peerInfo
+			 * @struct __peerInfo__
 			 * @brief defines peer information
 			 */
-			struct __peerInfo
+			struct __peerInfo__
 			{
 				dodoString host;                        ///< host of the box
 				int        port;                        ///< port of the box

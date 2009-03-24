@@ -32,16 +32,14 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
-#include <libdodo/pcSyncSection.h>
-#include <libdodo/exceptionBasic.h>
-
 namespace dodo
 {
 	namespace pc
 	{
 		namespace sync
 		{
+			class section;
+
 			/**
 			 * @class protector
 			 * @brief provides thread/process safe behaviour

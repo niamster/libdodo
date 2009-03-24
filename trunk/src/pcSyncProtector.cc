@@ -27,7 +27,12 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/pcSyncProtector.h>
+
+#include <libdodo/pcSyncSection.h>
+#include <libdodo/exceptionBasic.h>
 
 using namespace dodo::pc::sync;
 

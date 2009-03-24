@@ -42,13 +42,13 @@ namespace dodo
 	{
 		namespace base
 		{
-			struct __mysql;
+			struct __mysql__;
 
 			/**
-			 * @struct __mysqlSslOptions
+			 * @struct __mysqlSslOptions__
 			 * @brief defines SSL mySQL options
 			 */
-			struct __mysqlSslOptions
+			struct __mysqlSslOptions__
 			{
 				dodoString key;     ///< pathname to the key file
 				dodoString cert;    ///< pathname to the certificate file
@@ -82,7 +82,7 @@ namespace dodo
 				 * constructor
 				 * @param dbInfo defines information for connection to db
 				 */
-				mysql(const __connectionInfo &dbInfo);
+				mysql(const __connectionInfo__ &dbInfo);
 
 				/**
 				 * destructor
@@ -92,19 +92,19 @@ namespace dodo
 				/*
 				 * set connection settings
 				 * @param type defines type of connection[see mySQL documentation]
-				 * @param options defines options of ssl connection[see __mysqlSslOptions]
+				 * @param options defines options of ssl connection[see __mysqlSslOptions__]
 				 * @note type can be:
 				 *  CLIENT_COMPRESS         Use compression protocol
 				 *	CLIENT_MULTI_STATEMENTS Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
 				 */
 				virtual void connectSettings(unsigned long           type,
-											 const __mysqlSslOptions &options = __mysqlSslOptions());
+											 const __mysqlSslOptions__ &options = __mysqlSslOptions__());
 
 				/**
 				 * connect to the database
 				 * @param dbInfo defines information for connection to db
 				 */
-				virtual void connect(const __connectionInfo &dbInfo);
+				virtual void connect(const __connectionInfo__ &dbInfo);
 
 				/**
 				 * disconnect from the database
@@ -145,7 +145,7 @@ namespace dodo
 				/**
 				 * @return structure received rows and fields from the evaluated request
 				 */
-				virtual __tuples fetch() const;
+				virtual __tuples__ fetch() const;
 
 				/**
 				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
@@ -157,7 +157,7 @@ namespace dodo
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
 				 */
-				virtual void exec(const dodoString &query = __dodostring__,
+				virtual void exec(const dodoString &query = __dodostring____,
 								  bool             result = false);
 
 				/**
@@ -181,7 +181,7 @@ namespace dodo
 
 				bool empty;             ///< true id mysqlRes is empty
 
-				__mysql *handle; ///< DB handle
+				__mysql__ *handle; ///< DB handle
 
 				unsigned long type;     ///< connection type
 			};

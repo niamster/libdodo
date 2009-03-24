@@ -577,10 +577,10 @@ filesystem::getModTime(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-__fileInfo
+__fileInfo__
 filesystem::getFileInfo(const dodoString &path)
 {
-	__fileInfo file;
+	__fileInfo__ file;
 
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -602,10 +602,10 @@ filesystem::getFileInfo(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoArray<__fileInfo>
+dodoArray<__fileInfo__>
 filesystem::getDirInfo(const dodoString &path)
 {
-	dodoArray<__fileInfo> dir;
+	dodoArray<__fileInfo__> dir;
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
 	{
@@ -1145,13 +1145,13 @@ filesystem::_writeToFile(const dodoString &path,
 	FILE *file = fopen(path.c_str(), mode);
 	if (file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	unsigned long size = content.size();
 	if (size > 0 && fwrite(content.c_str(), size, 1, file) != 1)
 	{
-		throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 }
 
@@ -1165,7 +1165,7 @@ filesystem::_writeToFile(const dodoString      &path,
 	FILE *file = fopen(path.c_str(), mode);
 	if (file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	dodoStringArray::const_iterator i = content.begin(), j = content.end();
@@ -1185,7 +1185,7 @@ filesystem::_writeToFile(const dodoString      &path,
 				case ENOMEM:
 				case ENXIO:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 
@@ -1203,7 +1203,7 @@ filesystem::_writeToFile(const dodoString      &path,
 				case ENOMEM:
 				case ENXIO:
 
-					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
 	}

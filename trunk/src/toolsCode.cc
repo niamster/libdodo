@@ -305,7 +305,7 @@ code::codesetConversion(const dodoString &buffer,
 	inFake = (char *)buffer.c_str();
 	outFake = outBuffer;
 
-#ifdef __FreeBSD__
+#ifdef __FreeBSD____
 	if (iconv(conv, (const char **)&inFake, &in, &outFake, &out) == (size_t)(-1))
 #else
 	if (iconv(conv, &inFake, &in, &outFake, &out) == (size_t)(-1))
@@ -1077,12 +1077,12 @@ code::decodeBase64(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-__url
+__url__
 code::parseUrl(const dodoString &url)
 {
 	unsigned long begin(0), pos, pos1;
 
-	__url temp;
+	__url__ temp;
 
 	if ((pos = url.find("://", 0)) != dodoString::npos)
 	{
@@ -1158,7 +1158,7 @@ code::parseUrl(const dodoString &url)
 //-------------------------------------------------------------------
 
 dodoString
-code::makeUrl(const __url &url)
+code::makeUrl(const __url__ &url)
 {
 	dodoString stringUrl;
 
@@ -1289,7 +1289,7 @@ code::bzDecompress(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 void
-code::MD5Init(__MD5Context *context)
+code::MD5Init(__MD__5Context *context)
 {
 	context->count[0] = context->count[1] = 0;
 
@@ -1390,7 +1390,7 @@ code::MD5Transform(unsigned int        state[4],
 
 void
 code::MD5Final(unsigned char digest[16],
-			   __MD5Context  *context)
+			   __MD__5Context  *context)
 {
 	unsigned char bits[8];
 	unsigned int index, padLen;
@@ -1419,13 +1419,13 @@ code::MD5Final(unsigned char digest[16],
 		digest[j + 3] = (unsigned char)((context->state[i] >> 24) & 0xff);
 	}
 
-	memset(context, 0, sizeof(__MD5Context));
+	memset(context, 0, sizeof(__MD__5Context));
 }
 
 //-------------------------------------------------------------------
 
 void
-code::MD5Update(__MD5Context        *context,
+code::MD5Update(__MD__5Context        *context,
 				const unsigned char *input,
 				unsigned int        inputLen)
 {
@@ -1468,7 +1468,7 @@ code::MD5Update(__MD5Context        *context,
 dodoString
 code::MD5(const dodoString &string)
 {
-	__MD5Context context;
+	__MD__5Context context;
 	unsigned char digest[16];
 
 	MD5Init(&context);
@@ -1507,7 +1507,7 @@ code::binToHex(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-code::SHA1Init(__SHAContext *context)
+code::SHA1Init(__SHAContext__ *context)
 {
 	context->lengthLow = 0;
 	context->lengthHigh = 0;
@@ -1526,7 +1526,7 @@ code::SHA1Init(__SHAContext *context)
 //-------------------------------------------------------------------
 
 void
-code::SHA1Input(__SHAContext        *context,
+code::SHA1Input(__SHAContext__        *context,
 				const unsigned char *bytes,
 				unsigned int        bytecount)
 {
@@ -1557,7 +1557,7 @@ code::SHA1Input(__SHAContext        *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA1Result(__SHAContext  *context,
+code::SHA1Result(__SHAContext__  *context,
 				 unsigned char digest[20])
 {
 	SHA1PadMessage(context, 0x80);
@@ -1571,7 +1571,7 @@ code::SHA1Result(__SHAContext  *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA1PadMessage(__SHAContext  *context,
+code::SHA1PadMessage(__SHAContext__  *context,
 					 unsigned char padByte)
 {
 	if (context->messageBlockIndex >= 56)
@@ -1611,7 +1611,7 @@ code::SHA1PadMessage(__SHAContext  *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA1ProcessMessageBlock(__SHAContext *context)
+code::SHA1ProcessMessageBlock(__SHAContext__ *context)
 {
 		/* Constants defined in FIPS-180-2, section 4.2.1 */
 	const static unsigned long K[4] =
@@ -1699,7 +1699,7 @@ code::SHA1ProcessMessageBlock(__SHAContext *context)
 dodoString
 code::SHA1(const dodoString &string)
 {
-	__SHAContext context;
+	__SHAContext__ context;
 	unsigned char digest[20];
 
 	SHA1Init(&context);
@@ -1719,7 +1719,7 @@ code::SHA1Hex(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-code::SHA256Init(__SHAContext *context)
+code::SHA256Init(__SHAContext__ *context)
 {
 	context->lengthLow = 0;
 	context->lengthHigh = 0;
@@ -1741,7 +1741,7 @@ code::SHA256Init(__SHAContext *context)
 //-------------------------------------------------------------------
 
 void
-code::SHA256Input(__SHAContext        *context,
+code::SHA256Input(__SHAContext__        *context,
 				  const unsigned char *bytes,
 				  unsigned int        bytecount)
 {
@@ -1772,7 +1772,7 @@ code::SHA256Input(__SHAContext        *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA256Result(__SHAContext  *context,
+code::SHA256Result(__SHAContext__  *context,
 				   unsigned char digest[32])
 {
 	SHA256PadMessage(context, 0x80);
@@ -1786,7 +1786,7 @@ code::SHA256Result(__SHAContext  *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA256PadMessage(__SHAContext  *context,
+code::SHA256PadMessage(__SHAContext__  *context,
 					   unsigned char padByte)
 {
 	if (context->messageBlockIndex >= 56)
@@ -1825,7 +1825,7 @@ code::SHA256PadMessage(__SHAContext  *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA256ProcessMessageBlock(__SHAContext *context)
+code::SHA256ProcessMessageBlock(__SHAContext__ *context)
 {
 		/* Constants defined in FIPS-180-2, section 4.2.2 */
 	static const uint32_t K[64] =
@@ -1907,7 +1907,7 @@ code::SHA256ProcessMessageBlock(__SHAContext *context)
 dodoString
 code::SHA256(const dodoString &string)
 {
-	__SHAContext context;
+	__SHAContext__ context;
 	unsigned char digest[32];
 
 	SHA256Init(&context);
@@ -1927,7 +1927,7 @@ code::SHA256Hex(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-code::SHA512Init(__SHAContext *context)
+code::SHA512Init(__SHAContext__ *context)
 {
 	context->messageBlockIndex = 0;
 
@@ -1957,7 +1957,7 @@ code::SHA512Init(__SHAContext *context)
 //-------------------------------------------------------------------
 
 void
-code::SHA512Input(__SHAContext        *context,
+code::SHA512Input(__SHAContext__        *context,
 				  const unsigned char *bytes,
 				  unsigned int        bytecount)
 {
@@ -1998,7 +1998,7 @@ code::SHA512Input(__SHAContext        *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA512Result(__SHAContext  *context,
+code::SHA512Result(__SHAContext__  *context,
 				   unsigned char digest[64])
 {
 	SHA512PadMessage(context, 0x80);
@@ -2019,7 +2019,7 @@ code::SHA512Result(__SHAContext  *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA512PadMessage(__SHAContext  *context,
+code::SHA512PadMessage(__SHAContext__  *context,
 					   unsigned char padByte)
 {
 	if (context->messageBlockIndex >= 112)
@@ -2067,7 +2067,7 @@ code::SHA512PadMessage(__SHAContext  *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA512ProcessMessageBlock(__SHAContext *context)
+code::SHA512ProcessMessageBlock(__SHAContext__ *context)
 {
 		/* Constants defined in FIPS-180-2, section 4.2.3 */
 	const unsigned long K[80 * 2] =
@@ -2257,7 +2257,7 @@ code::SHA512ProcessMessageBlock(__SHAContext *context)
 dodoString
 code::SHA512(const dodoString &string)
 {
-	__SHAContext context;
+	__SHAContext__ context;
 	unsigned char digest[64];
 
 	SHA512Init(&context);

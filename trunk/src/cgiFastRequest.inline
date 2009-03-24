@@ -40,19 +40,19 @@ namespace dodo
 		namespace fast
 		{
 			/**
-			 * @struct __request
+			 * @struct __request__
 			 * @brief defines fast CGI request interface
 			 */
-			struct __request
+			struct __request__
 			{
 				/**
 				 * constructor
 				 */
-				__request() : request(NULL)
+				__request__() : request(NULL)
 				{
 				}
 
-				__request(FCGX_Request *request) : request(request)
+				__request__(FCGX_Request *request) : request(request)
 				{
 				}
 

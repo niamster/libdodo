@@ -50,10 +50,10 @@ namespace dodo
 		class eventInfo;
 
 		/**
-		 * @struct __eventInOutDescriptors
+		 * @struct __eventInOutDescriptors__
 		 * @brief defines input and output descriptors of the io::* classes
 		 */
-		struct __eventInOutDescriptors
+		struct __eventInOutDescriptors__
 		{
 			int position;   ///< identificator of the pair
 
@@ -137,7 +137,7 @@ namespace dodo
 
 		  protected:
 
-			dodoArray<__eventInOutDescriptors> desc;    ///< stream pairs
+			dodoArray<__eventInOutDescriptors__> desc;    ///< stream pairs
 
 			int descs;                                  ///< descriptors counter
 

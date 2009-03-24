@@ -44,15 +44,15 @@ namespace dodo
 		namespace base
 		{
 			/**
-			 * @struct __sqlite
+			 * @struct __sqlite__
 			 * @brief defines internal handlers for SQLite DBMS interaction
 			 */
-			struct __sqlite
+			struct __sqlite__
 			{
 				/**
 				 * constructor
 				 */
-				__sqlite() : handle(NULL),
+				__sqlite__() : handle(NULL),
 							 result(NULL)
 				{
 				}
@@ -67,7 +67,7 @@ namespace dodo
 using namespace dodo::data::base;
 
 sqlite::sqlite() : empty(true),
-				   handle(new __sqlite)
+				   handle(new __sqlite__)
 {
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
@@ -76,8 +76,8 @@ sqlite::sqlite() : empty(true),
 
 //-------------------------------------------------------------------
 
-sqlite::sqlite(const __connectionInfo &info) : empty(true),
-											   handle(new __sqlite)
+sqlite::sqlite(const __connectionInfo__ &info) : empty(true),
+											   handle(new __sqlite__)
 {
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
@@ -121,7 +121,7 @@ sqlite::~sqlite()
 //-------------------------------------------------------------------
 
 void
-sqlite::connect(const __connectionInfo &info)
+sqlite::connect(const __connectionInfo__ &info)
 {
 	collectedData.dbInfo = info;
 
@@ -342,10 +342,10 @@ sqlite::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__tuples
+__tuples__
 sqlite::fetch() const
 {
-	return __tuples(fetchRows(), fetchFields());
+	return __tuples__(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
@@ -715,7 +715,7 @@ sqlite::exec(const dodoString &query,
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
 	}
 
-	dodoList<__blob>::iterator i(blobs.begin()), j(blobs.end());
+	dodoList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
 	for (; i != j; ++i)
 	{
 		if (sqlite3_bind_blob(handle->result, i->reference, i->value->c_str(), i->value->size(), SQLITE_TRANSIENT) != SQLITE_OK)
@@ -776,7 +776,7 @@ sqlite::updateCollect()
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
-				__blob blob;
+				__blob__ blob;
 
 				unsigned int k = 1;
 				for (; k < o; ++i, ++k, ++j)
@@ -904,7 +904,7 @@ sqlite::insertCollect()
 
 			dodoStringArray::iterator t;
 
-			__blob blob;
+			__blob__ blob;
 
 			unsigned int o = 0;
 

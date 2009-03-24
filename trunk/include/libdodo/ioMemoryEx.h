@@ -58,7 +58,7 @@ namespace dodo
 		 */
 		enum memoryFunctionsID
 		{
-			MEMORYEX__READ,
+			MEMORYEX__READ__,
 			MEMORYEX_GETINDESCRIPTOR,
 			MEMORYEX_GETOUTDESCRIPTOR,
 		};

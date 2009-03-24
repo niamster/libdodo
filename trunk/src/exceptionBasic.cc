@@ -443,7 +443,7 @@ basic::basic(int              a_errModule,
 	const char *symname;
 	char *demangled;
 
-	__call call;
+	__call__ call;
 
 	int trace_size = backtrace(trace, MAXCALLSTACKLEN);
 	char **symbols = backtrace_symbols(trace, trace_size);
@@ -534,7 +534,7 @@ basic::getCallStack()
 
 	char str[32];
 
-	dodoArray<__call>::iterator i = callStack.begin(), j = callStack.end();
+	dodoArray<__call__>::iterator i = callStack.begin(), j = callStack.end();
 	for (; i != j; ++i)
 	{
 		snprintf(str, 32, " [0x%x]", (long)i->address);
@@ -802,7 +802,7 @@ basic::setErrorHandler(const dodoString &path,
 		return false;
 	}
 
-	__basicMod mod = init(toInit);
+	__basicMod__ mod = init(toInit);
 
 	deinitBaseExModule deinit;
 
@@ -841,7 +841,7 @@ basic::setErrorHandler(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-__basicMod
+__basicMod__
 basic::getModuleInfo(const dodoString &module,
 					 void             *toInit)
 {
@@ -854,16 +854,16 @@ basic::getModuleInfo(const dodoString &module,
 #endif
 	if (handle == NULL)
 	{
-		return __basicMod();
+		return __basicMod__();
 	}
 
 	initBaseExModule init = (initBaseExModule)dlsym(handle, "initBaseExModule");
 	if (init == NULL)
 	{
-		return __basicMod();
+		return __basicMod__();
 	}
 
-	__basicMod mod = init(toInit);
+	__basicMod__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)

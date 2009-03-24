@@ -31,7 +31,7 @@
 
 using namespace dodo::rpc::xml;
 
-__additionalData::__additionalData(dodoString &encoding) : encoding(encoding)
+__additionalData__::__additionalData__(dodoString &encoding) : encoding(encoding)
 {
 }
 
@@ -64,7 +64,7 @@ server::processCall(const dodoString &data)
 
 	rqEncoding = xmlValue.getBufferInfo(data).encoding;
 
-	dodo::data::format::xml::__nodeDef xmlMethodCall;
+	dodo::data::format::xml::__nodeDef__ xmlMethodCall;
 	xmlMethodCall.name = "methodCall";
 	xmlMethodCall.allChildren = true;
 
@@ -94,9 +94,9 @@ server::serve()
 
 		dodoString encoding = rpEncoding;
 
-		__additionalData idata(rqEncoding);
+		__additionalData__ idata(rqEncoding);
 
-		__additionalData odata(rpEncoding);
+		__additionalData__ odata(rpEncoding);
 
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 

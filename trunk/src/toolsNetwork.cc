@@ -31,7 +31,7 @@
 
 using namespace dodo::tools;
 
-__hostInfo
+__hostInfo__
 network::getHostInfo(const dodoString &host)
 {
 	hostent *ent = gethostbyname(host.c_str());
@@ -41,7 +41,7 @@ network::getHostInfo(const dodoString &host)
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTINFO, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
 	}
 
-	__hostInfo info;
+	__hostInfo__ info;
 	info.name = ent->h_name;
 
 	int i(0);
@@ -155,13 +155,13 @@ network::getInterfacesNames()
 
 //-------------------------------------------------------------------
 
-__serviceInfo
+__serviceInfo__
 network::getServiceInfo(const dodoString &host,
 						const dodoString &protocol)
 {
 	servent *ent = getservbyname(host.c_str(), protocol.c_str());
 
-	__serviceInfo info;
+	__serviceInfo__ info;
 
 	if (ent == NULL)
 	{
@@ -183,13 +183,13 @@ network::getServiceInfo(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-__serviceInfo
+__serviceInfo__
 network::getServiceInfo(int              port,
 						const dodoString &protocol)
 {
 	servent *ent = getservbyport(port, protocol.c_str());
 
-	__serviceInfo info;
+	__serviceInfo__ info;
 
 	if (ent == NULL)
 	{
@@ -211,7 +211,7 @@ network::getServiceInfo(int              port,
 
 //-------------------------------------------------------------------
 
-__interfaceInfo
+__interfaceInfo__
 network::getInterfaceInfo(const dodoString &interface)
 {
 	int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
@@ -223,7 +223,7 @@ network::getInterfaceInfo(const dodoString &interface)
 	ifreq ifr;
 	strcpy(ifr.ifr_name, interface.c_str());
 
-	__interfaceInfo info;
+	__interfaceInfo__ info;
 	char add[INET6_ADDRSTRLEN];
 
 	sockaddr_in sin;
@@ -240,7 +240,7 @@ network::getInterfaceInfo(const dodoString &interface)
 		info.address = add;
 	}
 
-#ifdef __FreeBSD__
+#ifdef __FreeBSD____
 
 
 #else
@@ -271,7 +271,7 @@ network::getInterfaceInfo(const dodoString &interface)
 		info.broadcast = add;
 	}
 
-#ifdef __FreeBSD__
+#ifdef __FreeBSD____
 
 
 #else
@@ -302,7 +302,7 @@ network::getInterfaceInfo(const dodoString &interface)
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-#ifdef __FreeBSD__
+#ifdef __FreeBSD____
 
 	if (isSetFlag(ifr.ifr_ifru.ifru_flags[0], IFF_LOOPBACK))
 	{
@@ -498,7 +498,7 @@ network::mail(const dodoString &host,
 				opad[i] ^= 0x5c;
 			}
 
-			code::__MD5Context context;
+			code::__MD__5Context context;
 			unsigned char digest[16];
 
 			code::MD5Init(&context);

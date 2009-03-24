@@ -27,8 +27,17 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <pthread.h>
+#include <time.h>
+
+#include "pcSyncThreadLock.inline"
 
 #include <libdodo/pcSyncThreadDataSingle.h>
+#include <libdodo/pcSyncThreadDataSingleEx.h>
+#include <libdodo/pcSyncDataSingle.h>
+#include <libdodo/types.h>
 
 using namespace dodo::pc::sync::thread::data;
 
@@ -38,39 +47,43 @@ single::single(single &sts)
 
 //-------------------------------------------------------------------
 
-single::single() : data(NULL)
+single::single() : data(NULL),
+				   lock(new pc::sync::thread::__lock__)
 {
 #ifdef PTHREAD_EXT
-
 	pthread_mutexattr_t attr;
 	errno = pthread_mutexattr_init(&attr);
 	if (errno != 0)
 	{
+		delete lock;
+
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
 	if (errno != 0)
 	{
+		delete lock;
+
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	errno = pthread_mutex_init(&mutex, &attr);
+	errno = pthread_mutex_init(&lock->keeper, &attr);
 	if (errno != 0)
 	{
+		delete lock;
+
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	errno = pthread_mutexattr_destroy(&attr);
 	if (errno != 0)
 	{
+		delete lock;
+
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SIGNLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-
 #endif
-
-	timeout.tv_nsec = 1000;
-	timeout.tv_sec = 0;
 }
 
 //-------------------------------------------------------------------
@@ -78,15 +91,15 @@ single::single() : data(NULL)
 single::~single()
 {
 #ifdef PTHREAD_EXT
-
-	if (pthread_mutex_trylock(&mutex) == 0)
+	if (pthread_mutex_trylock(&lock->keeper) == 0)
 	{
-		pthread_mutex_unlock(&mutex);
+		pthread_mutex_unlock(&lock->keeper);
 	}
 
-	pthread_mutex_destroy(&mutex);
-
+	pthread_mutex_destroy(&lock->keeper);
 #endif
+
+	delete lock;
 }
 
 //-------------------------------------------------------------------
@@ -95,8 +108,7 @@ void
 single::set(void *a_data)
 {
 #ifdef PTHREAD_EXT
-
-	errno = pthread_mutex_lock(&mutex);
+	errno = pthread_mutex_lock(&lock->keeper);
 	if (errno != 0)
 	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -104,12 +116,11 @@ single::set(void *a_data)
 
 	data = a_data;
 
-	errno = pthread_mutex_unlock(&mutex);
+	errno = pthread_mutex_unlock(&lock->keeper);
 	if (errno != 0)
 	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-
 #endif
 }
 
@@ -119,8 +130,7 @@ void
 single::del()
 {
 #ifdef PTHREAD_EXT
-
-	errno = pthread_mutex_lock(&mutex);
+	errno = pthread_mutex_lock(&lock->keeper);
 	if (errno != 0)
 	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -128,12 +138,11 @@ single::del()
 
 	data = NULL;
 
-	errno = pthread_mutex_unlock(&mutex);
+	errno = pthread_mutex_unlock(&lock->keeper);
 	if (errno != 0)
 	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-
 #endif
 }
 
@@ -143,10 +152,9 @@ void *
 single::acquire(unsigned long microseconds)
 {
 #ifdef PTHREAD_EXT
-
 	if (microseconds == 0)
 	{
-		errno = pthread_mutex_lock(&mutex);
+		errno = pthread_mutex_lock(&lock->keeper);
 		if (errno != 0)
 		{
 			throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -156,10 +164,11 @@ single::acquire(unsigned long microseconds)
 	{
 		bool locked = true;
 		unsigned long slept = 0;
+		timespec timeout = {0, 10};
 
 		while (locked)
 		{
-			errno = pthread_mutex_trylock(&mutex);
+			errno = pthread_mutex_trylock(&lock->keeper);
 			if (errno != 0)
 			{
 				if (errno != EBUSY)
@@ -185,7 +194,6 @@ single::acquire(unsigned long microseconds)
 			}
 		}
 	}
-
 #endif
 
 	return data;
@@ -197,13 +205,11 @@ void
 single::release()
 {
 #ifdef PTHREAD_EXT
-
-	errno = pthread_mutex_unlock(&mutex);
+	errno = pthread_mutex_unlock(&lock->keeper);
 	if (errno != 0)
 	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATASINGLE, SINGLEEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-
 #endif
 }
 

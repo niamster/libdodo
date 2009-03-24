@@ -96,14 +96,14 @@ const dodoString http::responseHeaderStatements[] =
 
 //-------------------------------------------------------------------
 
-__httpResponse::__httpResponse() : code(0),
+__httpResponse__::__httpResponse__() : code(0),
 								   redirected(false)
 {
 }
 
 //-------------------------------------------------------------------
 
-__httpPostFile::__httpPostFile(const dodoString path,
+__httpPostFile__::__httpPostFile__(const dodoString path,
 							   const dodoString mime) : path(path),
 														mime(mime)
 {
@@ -111,13 +111,13 @@ __httpPostFile::__httpPostFile(const dodoString path,
 
 //-------------------------------------------------------------------
 
-__httpPostFile::__httpPostFile()
+__httpPostFile__::__httpPostFile__()
 {
 }
 
 //-------------------------------------------------------------------
 
-http::__proxyAuthInfo::__proxyAuthInfo() : enabled(false),
+http::__proxyAuthInfo__::__proxyAuthInfo__() : enabled(false),
 										   authType(PROXYAUTHTYPE_NONE)
 {
 }
@@ -177,7 +177,7 @@ http::getStatusCode(const dodoString &header)
 #ifdef OPENSSL_EXT
 
 void
-http::setSertificates(const io::ssl::__certificates &a_certs)
+http::setSertificates(const io::ssl::__certificates__ &a_certs)
 {
 	certs = a_certs;
 
@@ -295,7 +295,7 @@ http::setCookies(const dodoStringMap &cookies)
 
 //-------------------------------------------------------------------
 
-__httpResponse
+__httpResponse__
 http::GET()
 {
 	exchange *ex = NULL;
@@ -430,7 +430,7 @@ http::GET()
 	}
 	else
 	{
-		tools::__hostInfo host = tools::network::getHostInfo(urlComponents.host);
+		tools::__hostInfo__ host = tools::network::getHostInfo(urlComponents.host);
 
 		dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
 		for (; o != p; ++o)
@@ -685,7 +685,7 @@ http::GET()
 
 	delete ex;
 
-	__httpResponse response = this->response;
+	__httpResponse__ response = this->response;
 
 	clear();
 
@@ -694,7 +694,7 @@ http::GET()
 
 //-------------------------------------------------------------------
 
-__httpResponse
+__httpResponse__
 http::GET(const dodoString &a_url)
 {
 	setUrl(a_url);
@@ -704,10 +704,10 @@ http::GET(const dodoString &a_url)
 
 //-------------------------------------------------------------------
 
-__httpResponse
+__httpResponse__
 http::POST(const dodoString &a_url,
 		   const dodoStringMap &arguments,
-		   const dodoMap<dodoString, __httpPostFile> &files)
+		   const dodoMap<dodoString, __httpPostFile__> &files)
 {
 	setUrl(a_url);
 
@@ -716,9 +716,9 @@ http::POST(const dodoString &a_url,
 
 //-------------------------------------------------------------------
 
-__httpResponse
+__httpResponse__
 http::POST(const dodoStringMap &arguments,
-		   const dodoMap<dodoString, __httpPostFile> &files)
+		   const dodoMap<dodoString, __httpPostFile__> &files)
 {
 	dodoString boundary = "---------------------------" + tools::string::ulToString(tools::misc::ulRandom()) + tools::string::ulToString(tools::misc::ulRandom());
 	dodoString type = "multipart/form-data; boundary=" + boundary;
@@ -726,7 +726,7 @@ http::POST(const dodoStringMap &arguments,
 
 	dodoString data;
 
-	dodoMap<dodoString, __httpPostFile>::const_iterator i = files.begin(), j = files.end();
+	dodoMap<dodoString, __httpPostFile__>::const_iterator i = files.begin(), j = files.end();
 	for (; i != j; ++i)
 	{
 		data.append(boundary);
@@ -763,7 +763,7 @@ http::POST(const dodoStringMap &arguments,
 
 //-------------------------------------------------------------------
 
-__httpResponse
+__httpResponse__
 http::POST(const dodoString    &a_url,
 		   const dodoStringMap &arguments)
 {
@@ -774,7 +774,7 @@ http::POST(const dodoString    &a_url,
 
 //-------------------------------------------------------------------
 
-__httpResponse
+__httpResponse__
 http::POST(const dodoStringMap &arguments)
 {
 	dodoString data;
@@ -798,7 +798,7 @@ http::POST(const dodoStringMap &arguments)
 
 //-------------------------------------------------------------------
 
-__httpResponse
+__httpResponse__
 http::POST(const dodoString &a_url,
 		   const dodoString &data,
 		   const dodoString &type)
@@ -810,7 +810,7 @@ http::POST(const dodoString &a_url,
 
 //-------------------------------------------------------------------
 
-__httpResponse
+__httpResponse__
 http::POST(const dodoString &a_data,
 		   const dodoString &type)
 {
@@ -947,7 +947,7 @@ http::POST(const dodoString &a_data,
 	}
 	else
 	{
-		tools::__hostInfo host = tools::network::getHostInfo(urlComponents.host);
+		tools::__hostInfo__ host = tools::network::getHostInfo(urlComponents.host);
 
 		dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
 		for (; o != p; ++o)
@@ -1189,7 +1189,7 @@ http::POST(const dodoString &a_data,
 
 	delete ex;
 
-	__httpResponse response = this->response;
+	__httpResponse__ response = this->response;
 
 	clear();
 
@@ -1201,7 +1201,7 @@ http::POST(const dodoString &a_data,
 void
 http::removeProxy()
 {
-	proxyAuthInfo = __proxyAuthInfo();
+	proxyAuthInfo = __proxyAuthInfo__();
 
 	requestHeaders.erase(HTTP_REQUESTHEADER_PROXYAUTHORIZATION);
 }
@@ -1393,7 +1393,7 @@ http::getProxyConnectResponse(char     *data,
 		}
 		catch (exception::basic &ex)
 		{
-			if (ex.funcID == EXCHANGEEX__READSTREAM)
+			if (ex.funcID == EXCHANGEEX__READSTREAM__)
 			{
 				break;
 			}
@@ -1662,11 +1662,11 @@ http::getContent(dodoString &data,
 		{
 #ifdef OPENSSL_EXT
 
-			if (ex.funcID == EXCHANGEEX__READSTREAM || ex.funcID == ssl::EXCHANGEEX__READSTREAM)
+			if (ex.funcID == EXCHANGEEX__READSTREAM__ || ex.funcID == ssl::EXCHANGEEX__READSTREAM__)
 
 #else
 
-			if (ex.funcID == EXCHANGEEX__READSTREAM)
+			if (ex.funcID == EXCHANGEEX__READSTREAM__)
 
 #endif
 			{
@@ -1706,7 +1706,7 @@ http::makeDigestAuth(short            requestHeader,
 	dodoString HA1;
 
 	unsigned char HA[16];
-	tools::code::__MD5Context context;
+	tools::code::__MD__5Context context;
 
 	dodoStringArray tuple;
 
@@ -1837,7 +1837,7 @@ http::setAuthInfo(const dodoString &user,
 
 //-------------------------------------------------------------------
 
-dodo::cgi::__cgiCookie
+dodo::cgi::__cgiCookie__
 http::parseCookie(const dodoString &header)
 {
 	dodoStringArray parts = tools::misc::split(header, ";");
@@ -1849,10 +1849,10 @@ http::parseCookie(const dodoString &header)
 	tuple = tools::misc::split(*i, "=", 2);
 	if (tuple.size() != 2)
 	{
-		return cgi::__cgiCookie();
+		return cgi::__cgiCookie__();
 	}
 
-	cgi::__cgiCookie cookie;
+	cgi::__cgiCookie__ cookie;
 	cookie.name = tuple[0];
 	cookie.value = tools::code::decodeUrl(tuple[1]);
 

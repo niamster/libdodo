@@ -41,6 +41,8 @@ namespace dodo
 	{
 		namespace process
 		{
+			struct __process__;
+
 			/**
 			 * @enum collectionOnDestructEnum defines action with processes on object destruction
 			 */
@@ -51,39 +53,12 @@ namespace dodo
 				COLLECTION_ONDESTRUCT_WAIT
 			};
 
-			/**
-			 * @struct __processInfo
-			 * @brief defines process information
-			 */
-			struct __processInfo
-			{
-				/**
-				 * constuctor
-				 */
-				__processInfo();
-
-				pid_t         pid;              ///< process pid
-				void          *data;            ///< process data
-				bool          isRunning;        ///< true if the process is running
-				bool          joined;           ///< true if the process was joined
-				int           status;           ///< process exit status
-				unsigned long position;         ///< identificator
-				job::routine  func;             ///< function to execute
-				short         action;           ///< action on object destruction[see collectionOnDestructEnum]
-				unsigned long executed;         ///< amount of times process was executed
-				unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
-
-#ifdef DL_EXT
-				void          *handle;          ///< handle to library
-#endif
-			};
-
 #ifdef DL_EXT
 			/**
-			 * @struct __processMod
+			 * @struct __processMod__
 			 * @brief defines data that is returned from initIpcProcessCollectionModule in the library
 			 */
-			struct __processMod
+			struct __processMod__
 			{
 				char          name[64];         ///< name of module
 				char          discription[256]; ///< discription of module
@@ -97,7 +72,7 @@ namespace dodo
 			 * @brief defines type of init function for library
 			 * @param data defines user data
 			 */
-			typedef __processMod (*initIpcProcessCollectionModule)(void *data);
+			typedef __processMod__ (*initIpcProcessCollectionModule)(void *data);
 
 			/**
 			 * @typedef deinitIpcProcessCollectionModule
@@ -282,7 +257,7 @@ namespace dodo
 				 * @param module defines path to the library[if not in ldconfig db] or library name
 				 * @param toInit defines library init data
 				 */
-				static __processMod getModuleInfo(const dodoString &module,
+				static __processMod__ getModuleInfo(const dodoString &module,
 												  void             *toInit = NULL);
 #endif
 
@@ -292,7 +267,7 @@ namespace dodo
 				 * @return true if process is running
 				 * @param position defines process identificator
 				 */
-				virtual bool _isRunning(dodoList<__processInfo>::iterator &position) const;
+				virtual bool _isRunning(dodoList<__process__ *>::iterator &position) const;
 
 				/**
 				 * search processes by identificator
@@ -304,9 +279,9 @@ namespace dodo
 
 				unsigned long processNum;                           ///< number of registered processes
 
-				mutable dodoList<__processInfo> processes;          ///< identificators of processes
+				mutable dodoList<__process__ *> processes;          ///< identificators of processes
 
-				mutable dodoList<__processInfo>::iterator current;  ///< iterator for list of processes[for matched with getProcess method]
+				mutable dodoList<__process__ *>::iterator current;  ///< iterator for list of processes[for matched with getProcess method]
 			};
 		};
 	};

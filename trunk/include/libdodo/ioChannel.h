@@ -75,10 +75,10 @@ namespace dodo
 
 #ifndef IO_WO_XEXEC
 		/**
-		 * @class __xexecIoChannelCollectedData
+		 * @class __xexecIoChannelCollectedData__
 		 * @brief defines data that could be retrieved from io::channel(to modificate)
 		 */
-		class __xexecIoChannelCollectedData : public __xexecCollectedData
+		class __xexecIoChannelCollectedData__ : public __xexecCollectedData__
 		{
 		  public:
 
@@ -87,7 +87,7 @@ namespace dodo
 			 * @param executor defines class that executed hook
 			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 			 */
-			__xexecIoChannelCollectedData(xexec *executor,
+			__xexecIoChannelCollectedData__(xexec *executor,
 										  short execObject);
 
 			dodoString buffer; ///< data buffer
@@ -180,7 +180,7 @@ namespace dodo
 			virtual void _writeStream(const char * const data) = 0;
 
 #ifndef IO_WO_XEXEC
-			__xexecIoChannelCollectedData collectedData;    ///< data collected for xexec
+			__xexecIoChannelCollectedData__ collectedData;    ///< data collected for xexec
 #endif
 
 			pc::sync::section *keeper;                      ///< section locker

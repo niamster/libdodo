@@ -63,10 +63,10 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __logMap
+		 * @struct __logMap__
 		 * @brief defines map between log level and log handler
 		 */
-		struct __logMap
+		struct __logMap__
 		{
 			short       level;      ///< log level[see loggerLogLevelEnum]
 			io::channel *handler;   ///< log handler
@@ -128,7 +128,7 @@ namespace dodo
 
 			dodoString timeFormat;                          ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
 
-			dodoList<__logMap> handlers;                    ///< list of log maps
+			dodoList<__logMap__> handlers;                    ///< list of log maps
 
 			unsigned long handlersNum;                      ///< number of registered handlers
 

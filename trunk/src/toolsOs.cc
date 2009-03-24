@@ -221,7 +221,7 @@ os::setWorkingDir(const dodoString &path)
 //-------------------------------------------------------------------
 
 
-__usage
+__usage__
 os::getUsageInfo()
 {
 	rusage use;
@@ -230,7 +230,7 @@ os::getUsageInfo()
 		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUSAGEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	__usage info;
+	__usage__ info;
 	info.time = use.ru_utime.tv_sec * 100 + use.ru_utime.tv_usec;
 	info.mem = use.ru_maxrss * 1024;
 
@@ -252,7 +252,7 @@ os::changeRoot(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-__limits
+__limits__
 os::getLimit(short type)
 {
 	rlimit limit;
@@ -293,7 +293,7 @@ os::getLimit(short type)
 
 		case OS_MAXOPENFILES:
 
-#ifdef __FreeBSD__
+#ifdef __FreeBSD____
 			realRes = RLIMIT_NOFILE;
 #else
 			realRes = RLIMIT_OFILE;
@@ -311,7 +311,7 @@ os::getLimit(short type)
 		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETLIMIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	__limits lim;
+	__limits__ lim;
 
 	lim.current = limit.rlim_cur;
 	lim.max = limit.rlim_max;
@@ -323,7 +323,7 @@ os::getLimit(short type)
 
 void
 os::setLimit(short          type,
-			 const __limits &lim)
+			 const __limits__ &lim)
 {
 	rlimit limit;
 
@@ -363,7 +363,7 @@ os::setLimit(short          type,
 
 		case OS_MAXOPENFILES:
 
-#ifdef __FreeBSD__
+#ifdef __FreeBSD____
 			realRes = RLIMIT_NOFILE;
 #else
 			realRes = RLIMIT_OFILE;
@@ -521,7 +521,7 @@ os::setGID(short type,
 
 //-------------------------------------------------------------------
 
-__userInfo
+__userInfo__
 os::getUserInfo(int uid)
 {
 	passwd *in = getpwuid(uid);
@@ -530,14 +530,14 @@ os::getUserInfo(int uid)
 		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUSERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	__userInfo info;
+	__userInfo__ info;
 
 	return fillUserInfo(info, in);
 }
 
 //-------------------------------------------------------------------
 
-__userInfo
+__userInfo__
 os::getUserInfo(const dodoString &uid)
 {
 	passwd *in = getpwnam(uid.c_str());
@@ -546,21 +546,21 @@ os::getUserInfo(const dodoString &uid)
 		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUSERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	__userInfo info;
+	__userInfo__ info;
 
 	return fillUserInfo(info, in);
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<__userInfo>
+dodoArray<__userInfo__>
 os::getUsers()
 {
-	dodoArray<__userInfo> users;
+	dodoArray<__userInfo__> users;
 
 	passwd *in;
 
-	__userInfo info;
+	__userInfo__ info;
 
 	while ((in = getpwent()) != NULL)
 	{
@@ -584,8 +584,8 @@ os::getUsers()
 
 //-------------------------------------------------------------------
 
-__userInfo &
-os::fillUserInfo(__userInfo &info,
+__userInfo__ &
+os::fillUserInfo(__userInfo__ &info,
 				 passwd     *in)
 {
 	info.gid = in->pw_gid;
@@ -601,8 +601,8 @@ os::fillUserInfo(__userInfo &info,
 
 //-------------------------------------------------------------------
 
-__groupInfo &
-os::fillGroupInfo(__groupInfo &info,
+__groupInfo__ &
+os::fillGroupInfo(__groupInfo__ &info,
 				  group       *pw)
 {
 	info.gid = pw->gr_gid;
@@ -622,7 +622,7 @@ os::fillGroupInfo(__groupInfo &info,
 
 //-------------------------------------------------------------------
 
-__groupInfo
+__groupInfo__
 os::getGroupInfo(int uid)
 {
 	group *in = getgrgid(uid);
@@ -631,14 +631,14 @@ os::getGroupInfo(int uid)
 		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGROUPINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	__groupInfo info;
+	__groupInfo__ info;
 
 	return fillGroupInfo(info, in);
 }
 
 //-------------------------------------------------------------------
 
-__groupInfo
+__groupInfo__
 os::getGroupInfo(const dodoString &uid)
 {
 	group *in = getgrnam(uid.c_str());
@@ -647,21 +647,21 @@ os::getGroupInfo(const dodoString &uid)
 		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGROUPINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	__groupInfo info;
+	__groupInfo__ info;
 
 	return fillGroupInfo(info, in);
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<__groupInfo>
+dodoArray<__groupInfo__>
 os::getGroups()
 {
-	dodoArray<__groupInfo> groups;
+	dodoArray<__groupInfo__> groups;
 
 	group *in;
 
-	__groupInfo info;
+	__groupInfo__ info;
 
 	while ((in = getgrent()) != NULL)
 	{
@@ -1153,7 +1153,7 @@ os::unsetSignalHandler(long signal)
 
 #ifdef DL_EXT
 
-__signalMod
+__signalMod__
 os::getModuleInfo(const dodoString &module,
 				  void             *toInit)
 {
@@ -1173,7 +1173,7 @@ os::getModuleInfo(const dodoString &module,
 		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 	}
 
-	__signalMod mod = init(toInit);
+	__signalMod__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
@@ -1209,7 +1209,7 @@ os::setSignalHandler(const dodoString &path,
 		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	__signalMod mod = init(toInit);
+	__signalMod__ mod = init(toInit);
 
 	deinitOsSignalModule deinit;
 

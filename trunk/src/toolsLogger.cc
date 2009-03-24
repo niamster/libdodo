@@ -83,7 +83,7 @@ logger::add(short       level,
 {
 	pc::sync::protector pg(keeper);
 
-	__logMap lm;
+	__logMap__ lm;
 
 	lm.handler = handler;
 	lm.level = level;
@@ -101,7 +101,7 @@ logger::remove(unsigned long position)
 {
 	pc::sync::protector pg(keeper);
 
-	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
+	dodoList<__logMap__>::iterator i(handlers.begin()), j(handlers.end());
 	for (; i != j; ++i)
 	{
 		if (i->position == position)
@@ -126,7 +126,7 @@ logger::log(short            level,
 		return;
 	}
 
-	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
+	dodoList<__logMap__>::iterator i(handlers.begin()), j(handlers.end());
 	for (; i != j; ++i)
 	{
 		if (i->level == level)

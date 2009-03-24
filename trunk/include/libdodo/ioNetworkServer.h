@@ -48,7 +48,7 @@ namespace dodo
 				class server;
 			};
 
-			class __initialAccept;
+			class __initialAccept__;
 
 			/**
 			 * @enum serverOperationTypeEnum defines type of operation for hook
@@ -65,10 +65,10 @@ namespace dodo
 
 #ifndef IO_WO_XEXEC
 			/**
-			 * @class __xexecIoNetworkServerCollectedData
+			 * @class __xexecIoNetworkServerCollectedData__
 			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
 			 */
-			class __xexecIoNetworkServerCollectedData : public __xexecCollectedData
+			class __xexecIoNetworkServerCollectedData__ : public __xexecCollectedData__
 			{
 			  public:
 
@@ -77,7 +77,7 @@ namespace dodo
 				 * @param executor defines class that executed hook
 				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 				 */
-				__xexecIoNetworkServerCollectedData(xexec *executor, short execObject);
+				__xexecIoNetworkServerCollectedData__(xexec *executor, short execObject);
 			};
 #endif
 
@@ -148,8 +148,8 @@ namespace dodo
 				 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
 				 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 				 */
-				virtual bool accept(__initialAccept &init,
-									__peerInfo      &info);
+				virtual bool accept(__initialAccept__ &init,
+									__peerInfo__      &info);
 
 				/**
 				 * accept incoming connections
@@ -158,7 +158,7 @@ namespace dodo
 				 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
 				 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 				 */
-				virtual bool accept(__initialAccept &init);
+				virtual bool accept(__initialAccept__ &init);
 
 				bool blockInherited;                                ///< if true - children(exchange objects) become unblocked, if parent(Server) in unblocked; false by default
 
@@ -190,7 +190,7 @@ namespace dodo
 				dodoString unixSock;                                ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
-				__xexecIoNetworkServerCollectedData collectedData;  ///< data collected for xexec
+				__xexecIoNetworkServerCollectedData__ collectedData;  ///< data collected for xexec
 #endif
 			};
 		};

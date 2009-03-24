@@ -41,15 +41,15 @@ namespace dodo
 	namespace graphics
 	{
  		/**
-		 * @struct __image
+		 * @struct __image__
 		 * @brief defines internal handlers for image processing library
 		 */
-		struct __image
+		struct __image__
 		{
 			/**
 			 * contructor
 			 */
-			__image() : im(NULL),
+			__image__() : im(NULL),
 						imInfo(NULL)
 			{
 			}

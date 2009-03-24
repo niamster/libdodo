@@ -34,9 +34,6 @@
 
 #include <libdodo/types.h>
 #include <libdodo/pcSyncDataCollection.h>
-#include <libdodo/pcSyncThreadDataCollectionEx.h>
-#include <libdodo/pcSyncProtector.h>
-#include <libdodo/pcSyncThreadSection.h>
 
 namespace dodo
 {
@@ -46,6 +43,8 @@ namespace dodo
 		{
 			namespace thread
 			{
+				class section;
+
 				namespace data
 				{
 					/**
@@ -117,11 +116,11 @@ namespace dodo
 						 */
 						virtual bool getShare(unsigned long position);
 
-						dodoList<pc::sync::data::__info> shares;            ///< identificators of shared data
+						dodoList<pc::sync::data::__info__> shares;            ///< identificators of shared data
 
 						unsigned long shareNum;                             ///< number of registered shares
 
-						dodoList<pc::sync::data::__info>::iterator current; ///< iterator for list of shared data[for matched with getShare method]
+						dodoList<pc::sync::data::__info__>::iterator current; ///< iterator for list of shared data[for matched with getShare method]
 
 						section *keeper;                                    ///< section locker
 					};

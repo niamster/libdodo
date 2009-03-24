@@ -32,8 +32,6 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
-
 namespace dodo
 {
 	namespace pc

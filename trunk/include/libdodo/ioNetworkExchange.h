@@ -51,10 +51,10 @@ namespace dodo
 			};
 
 			/**
-			 * @class __initialAccept
+			 * @class __initialAccept__
 			 * @brief holds info that passes to accept call, and then inits exchange;
 			 */
-			class __initialAccept
+			class __initialAccept__
 			{
 				friend class exchange;
 				friend class client;
@@ -65,13 +65,13 @@ namespace dodo
 				/**
 				 * constructor
 				 */
-				__initialAccept();
+				__initialAccept__();
 
 				/**
 				 * copy constructor
 				 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
 				 */
-				__initialAccept(__initialAccept &init);
+				__initialAccept__(__initialAccept__ &init);
 
 			  private:
 
@@ -115,7 +115,7 @@ namespace dodo
 				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 * @note the object that has inited the object of current instance can be used for another connections
 				 */
-				exchange(__initialAccept &init,
+				exchange(__initialAccept__ &init,
 						 short           protection = CHANNEL_PROTECTION_PROCESS);
 
 				/**
@@ -127,7 +127,7 @@ namespace dodo
 				 * init object
 				 * @param init defines initial data[got from ::accept method]
 				 */
-				virtual void init(__initialAccept &init);
+				virtual void init(__initialAccept__ &init);
 
 				/**
 				 * @return true if connection is alive

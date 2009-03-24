@@ -50,8 +50,8 @@
 using namespace dodo::io::network;
 
 #ifndef IO_WO_XEXEC
-__xexecIoNetworkClientCollectedData::__xexecIoNetworkClientCollectedData(xexec *executor,
-																		 short execObject) : __xexecCollectedData(executor, execObject)
+__xexecIoNetworkClientCollectedData__::__xexecIoNetworkClientCollectedData__(xexec *executor,
+																		 short execObject) : __xexecCollectedData__(executor, execObject)
 {
 }
 #endif

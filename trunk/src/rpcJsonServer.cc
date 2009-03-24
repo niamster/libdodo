@@ -31,7 +31,7 @@
 
 using namespace dodo::rpc::json;
 
-__additionalData::__additionalData(dodoString &version,
+__additionalData__::__additionalData__(dodoString &version,
 								   long       &id) : version(version),
 													 id(id)
 {
@@ -92,10 +92,10 @@ server::serve()
 
 		dodoString version = rqVersion;
 
-		__additionalData idata(rqVersion, rqId);
+		__additionalData__ idata(rqVersion, rqId);
 
 		rpId = rqId;
-		__additionalData odata(rpVersion, rpId);
+		__additionalData__ odata(rpVersion, rpId);
 
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 

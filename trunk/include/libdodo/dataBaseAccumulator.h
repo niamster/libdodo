@@ -43,12 +43,12 @@ namespace dodo
 		namespace base
 		{
 			/**
-			 * @class __xexecDataBaseAccumulatorCollectedData
+			 * @class __xexecDataBaseAccumulatorCollectedData__
 			 * @brief defines data that could be retrieved from the db object
 			 */
-			class __xexecDataBaseAccumulatorCollectedData
+			class __xexecDataBaseAccumulatorCollectedData__
 #ifndef DATABASE_WO_XEXEC
-				: public __xexecCollectedData
+				: public __xexecCollectedData__
 #endif
 			{
 			  public:
@@ -60,7 +60,7 @@ namespace dodo
 				 * @param executor defines class that executed hook
 				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 				 */
-				__xexecDataBaseAccumulatorCollectedData(xexec *executor,
+				__xexecDataBaseAccumulatorCollectedData__(xexec *executor,
 														short execObject);
 
 #endif
@@ -80,7 +80,7 @@ namespace dodo
 				dodoStringArray joinConds;          ///< join conditions
 				dodoArray<int> joinTypes;           ///< join types
 
-				__connectionInfo dbInfo;            ///< data info to connect to the server
+				__connectionInfo__ dbInfo;            ///< data info to connect to the server
 
 				int qType;                          ///< type of operation
 				int qShift;                         ///< additional actions[see accumulatorAddEnum]
@@ -112,7 +112,7 @@ namespace dodo
 				 */
 				virtual void callFunction(const dodoString      &name,
 										  const dodoStringArray &arguments,
-										  const dodoString      &as = __dodostring__);
+										  const dodoString      &as = __dodostring____);
 
 				/**
 				 * call stored procedure
@@ -130,14 +130,14 @@ namespace dodo
 				 */
 				virtual void select(const dodoString      &table,
 									const dodoStringArray &fields,
-									const dodoString      &where = __dodostring__);
+									const dodoString      &where = __dodostring____);
 
 				/**
 				 * @param table defines table name
 				 * @param where defines `where` statement
 				 */
 				virtual void selectAll(const dodoString &table,
-									   const dodoString &where = __dodostring__);
+									   const dodoString &where = __dodostring____);
 
 				/**
 				 * @param table defines table name
@@ -160,7 +160,7 @@ namespace dodo
 				 */
 				virtual void insert(const dodoString      &table,
 									const dodoStringArray &values,
-									const dodoStringArray &fields = __dodostringarray__);
+									const dodoStringArray &fields = __dodostringarray____);
 
 				/**
 				 * @param table defines table name
@@ -169,7 +169,7 @@ namespace dodo
 				 */
 				virtual void insert(const dodoString                 &table,
 									const dodoArray<dodoStringArray> &values,
-									const dodoStringArray            &fields = __dodostringarray__);
+									const dodoStringArray            &fields = __dodostringarray____);
 
 				/**
 				 * @param tableTo defines table where data will be stored
@@ -181,8 +181,8 @@ namespace dodo
 				virtual void insertSelect(const dodoString      &tableTo,
 										  const dodoString      &tableFrom,
 										  const dodoStringArray &fieldsTo,
-										  const dodoStringArray &fieldsFrom = __dodostringarray__,
-										  const dodoString      &where = __dodostring__);
+										  const dodoStringArray &fieldsFrom = __dodostringarray____,
+										  const dodoString      &where = __dodostring____);
 
 				/**
 				 * @param table defines table name
@@ -191,7 +191,7 @@ namespace dodo
 				 */
 				virtual void update(const dodoString    &table,
 									const dodoStringMap &fields,
-									const dodoString    &where = __dodostring__);
+									const dodoString    &where = __dodostring____);
 
 				/**
 				 * @param table defines table name
@@ -202,14 +202,14 @@ namespace dodo
 				virtual void update(const dodoString      &table,
 									const dodoStringArray &values,
 									const dodoStringArray &fields,
-									const dodoString      &where = __dodostring__);
+									const dodoString      &where = __dodostring____);
 
 				/**
 				 * @param table defines table name
 				 * @param where defines `where` statement
 				 */
 				virtual void del(const dodoString &table,
-								 const dodoString &where = __dodostring__);
+								 const dodoString &where = __dodostring____);
 
 				/**
 				 * store query, made from subquery with requested method
@@ -308,7 +308,7 @@ namespace dodo
 
 				bool show;                                              ///< if true try to get result from the request[select]
 
-				__xexecDataBaseAccumulatorCollectedData collectedData;  ///< data collected for xexec
+				__xexecDataBaseAccumulatorCollectedData__ collectedData;  ///< data collected for xexec
 			};
 		};
 	};

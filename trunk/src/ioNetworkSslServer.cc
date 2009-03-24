@@ -61,7 +61,7 @@ server::server(server &fs) : network::server(fs)
 server::server(short a_family,
 			   short a_type) : network::server(a_family,
 											   a_type),
-							   ctx(new io::ssl::__sslContext)
+							   ctx(new io::ssl::__sslContext__)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLSERVER);
@@ -104,7 +104,7 @@ server::removeSertificates()
 //-------------------------------------------------------------------
 
 void
-server::setSertificates(const io::ssl::__certificates &certs)
+server::setSertificates(const io::ssl::__certificates__ &certs)
 {
 	if (ctx->ctx != NULL)
 	{
@@ -234,9 +234,9 @@ server::initSsl()
 //-------------------------------------------------------------------
 
 void
-server::acceptSsl(__initialAccept &init)
+server::acceptSsl(__initialAccept__ &init)
 {
-	io::ssl::__openssl_init_object__.addEntropy();
+	io::ssl::__openssl___init_object__.addEntropy();
 
 	init.handle->handle = SSL_new(ctx->ctx);
 	if (init.handle->handle == NULL)
@@ -449,8 +449,8 @@ server::serve(const dodoString &path,
 //-------------------------------------------------------------------
 
 bool
-server::accept(__initialAccept &init,
-			   __peerInfo      &info)
+server::accept(__initialAccept__ &init,
+			   __peerInfo__      &info)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
@@ -566,7 +566,7 @@ server::accept(__initialAccept &init,
 //-------------------------------------------------------------------
 
 bool
-server::accept(__initialAccept &init)
+server::accept(__initialAccept__ &init)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;

@@ -43,15 +43,15 @@ namespace dodo
 		namespace base
 		{
 			/**
-			 * @struct __mysql
+			 * @struct __mysql__
 			 * @brief defines internal handlers for MySQL DBMS interaction
 			 */
-			struct __mysql
+			struct __mysql__
 			{
 				/**
 				 * constructor
 				 */
-				__mysql() : handle(NULL),
+				__mysql__() : handle(NULL),
 							result(NULL)
 				{
 				}
@@ -67,7 +67,7 @@ using namespace dodo::data::base;
 
 mysql::mysql() : empty(true),
 				 type(CLIENT_MULTI_STATEMENTS),
-				 handle(new __mysql)
+				 handle(new __mysql__)
 
 {
 #ifndef DATABASE_WO_XEXEC
@@ -79,9 +79,9 @@ mysql::mysql() : empty(true),
 
 //-------------------------------------------------------------------
 
-mysql::mysql(const __connectionInfo &info) : empty(true),
+mysql::mysql(const __connectionInfo__ &info) : empty(true),
 											 type(CLIENT_MULTI_STATEMENTS),
-											 handle(new __mysql)
+											 handle(new __mysql__)
 
 {
 #ifndef DATABASE_WO_XEXEC
@@ -143,7 +143,7 @@ mysql::~mysql()
 
 void
 mysql::connectSettings(unsigned long           a_type,
-					   const __mysqlSslOptions &options)
+					   const __mysqlSslOptions__ &options)
 {
 	if (handle->handle == NULL)
 	{
@@ -166,7 +166,7 @@ mysql::connectSettings(unsigned long           a_type,
 //-------------------------------------------------------------------
 
 void
-mysql::connect(const __connectionInfo &info)
+mysql::connect(const __connectionInfo__ &info)
 {
 	collectedData.dbInfo = info;
 
@@ -357,10 +357,10 @@ mysql::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__tuples
+__tuples__
 mysql::fetch() const
 {
-	return __tuples(fetchRows(), fetchFields());
+	return __tuples__(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------

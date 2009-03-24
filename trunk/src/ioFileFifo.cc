@@ -47,7 +47,7 @@ using namespace dodo::io::file;
 fifo::fifo(short protection) : inFileFifoBuffer(IOPIPE_INSIZE),
 							   outFileFifoBuffer(IOPIPE_OUTSIZE),
 							   blocked(true),
-							   handle(new io::__file),
+							   handle(new io::__file__),
 							   channel(protection)
 {
 #ifndef IO_WO_XEXEC
@@ -62,7 +62,7 @@ fifo::fifo(const dodoString &path,
 		   short            protection) : inFileFifoBuffer(IOPIPE_INSIZE),
 										  outFileFifoBuffer(IOPIPE_OUTSIZE),
 										  blocked(true),
-										  handle(new io::__file),
+										  handle(new io::__file__),
 										  path(path),
 										  mode(mode),
 										  channel(protection)
@@ -80,6 +80,8 @@ fifo::fifo(const dodoString &path,
 		{
 			if (errno != ENOENT)
 			{
+				delete handle;
+
 				throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 		}
@@ -90,12 +92,23 @@ fifo::fifo(const dodoString &path,
 
 		if (exists && !S_ISFIFO(st.st_mode))
 		{
+			delete handle;
+
 			throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_LIBDODO, FIFOEX_WRONGFILENAME, IOFILEFIFOEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 		}
 
 		if (!exists)
 		{
-			tools::filesystem::mkfifo(path, DEFAULT_FILE_PERM);
+			try
+			{
+				tools::filesystem::mkfifo(path, DEFAULT_FILE_PERM);
+			}
+			catch (...)
+			{
+				delete handle;
+
+				throw;
+			}
 		}
 
 		switch (mode)
@@ -117,6 +130,8 @@ fifo::fifo(const dodoString &path,
 				int blockFlag = fcntl(fd, F_GETFL);
 				if (blockFlag == -1)
 				{
+					delete handle;
+
 					throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
@@ -124,6 +139,8 @@ fifo::fifo(const dodoString &path,
 
 				if (fcntl(fd, F_SETFL, blockFlag) == -1)
 				{
+					delete handle;
+
 					throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
@@ -141,6 +158,8 @@ fifo::fifo(const dodoString &path,
 
 	if (handle->file == NULL)
 	{
+		delete handle;
+
 		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 }
@@ -152,7 +171,7 @@ fifo::fifo(const fifo &fd) : inFileFifoBuffer(fd.inFileFifoBuffer),
 							 blocked(fd.blocked),
 							 mode(fd.mode),
 							 path(fd.path),
-							 handle(new __file),
+							 handle(new __file__),
 							 channel(fd.protection)
 {
 #ifndef IO_WO_XEXEC
@@ -169,12 +188,16 @@ fifo::fifo(const fifo &fd) : inFileFifoBuffer(fd.inFileFifoBuffer),
 		oldDesc = fileno(fd.handle->file);
 		if (oldDesc == -1)
 		{
+			delete handle;
+
 			throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
 		{
+			delete handle;
+
 			throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
@@ -194,6 +217,8 @@ fifo::fifo(const fifo &fd) : inFileFifoBuffer(fd.inFileFifoBuffer),
 
 		if (handle->file == NULL)
 		{
+			delete handle;
+
 			throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_FIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
@@ -503,7 +528,7 @@ fifo::_read(char * const a_data)
 {
 	if (handle->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READ, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READ__, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
 	char *data = a_data;
@@ -536,7 +561,7 @@ fifo::_read(char * const a_data)
 
 					if (ferror(handle->file) != 0)
 					{
-						throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READ__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
 				}
 
@@ -569,7 +594,7 @@ fifo::_read(char * const a_data)
 
 					if (ferror(handle->file) != 0)
 					{
-						throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READ__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
 				}
 
@@ -589,7 +614,7 @@ fifo::_write(const char *const a_data)
 {
 	if (handle->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITE, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITE__, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
 	const char *data = a_data;
@@ -620,7 +645,7 @@ fifo::_write(const char *const a_data)
 
 					if (ferror(handle->file) != 0)
 					{
-						throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
 				}
 
@@ -653,7 +678,7 @@ fifo::_write(const char *const a_data)
 
 					if (ferror(handle->file) != 0)
 					{
-						throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
 				}
 
@@ -691,7 +716,7 @@ fifo::_readStream(char * const a_data)
 {
 	if (handle->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READSTREAM, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READSTREAM__, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
 	unsigned long readSize = inSize + 1;
@@ -714,7 +739,7 @@ fifo::_readStream(char * const a_data)
 
 			if (ferror(handle->file) != 0)
 			{
-				throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__READSTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -758,7 +783,7 @@ fifo::_writeStream(const char *const a_data)
 
 				if (ferror(handle->file) != 0)
 				{
-					throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX__WRITESTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 			}
 

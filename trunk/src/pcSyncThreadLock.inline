@@ -1,8 +1,8 @@
 /***************************************************************************
- *            graphicsColor.h
+ *            pcSyncThreadLock.inline
  *
- *  Thu Nov 23 00:19:57 2007
- *  Copyright  2007  Ni@m
+ *  Tue Mar 24 01:56:16 2009
+ *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,45 +27,31 @@
  * set shiftwidth=4
  */
 
-#ifndef _GRAPHICSCOLOR_H_
-#define _GRAPHICSCOLOR_H_ 1
-
 #include <libdodo/directives.h>
 
-#ifdef IMAGEMAGICK_EXT
+#ifdef PTHREAD_EXT
+#include <pthread.h>
+#endif
+
 namespace dodo
 {
-	namespace graphics
+	namespace pc
 	{
-		/**
-		 * @struct __color__
-		 * @brief defines color of the primitive
-		 */
-		struct __color__
+		namespace sync
 		{
-			unsigned short red;     ///< in range [0; 65535]
-			unsigned short green;   ///< in range [0; 65535]
-			unsigned short blue;    ///< in range [0; 65535]
-			unsigned short opacity; ///< 0 is fully opaque and 65535 is fully transparent
-		};
-
-		/**
-		 * @class color
-		 * @brief defines default colors
-		 */
-		class color
-		{
-		  public:
-
-			static __color__ red;
-			static __color__ green;
-			static __color__ blue;
-			static __color__ white;
-			static __color__ black;
-			static __color__ transparent;
+			namespace thread
+			{
+				/**
+				 * @struct __lock__
+				 * @brief defines thread mutex
+				 */
+				struct __lock__
+				{
+#ifdef PTHREAD_EXT
+					pthread_mutex_t keeper;  ///< lock
+#endif
+				};
+			};
 		};
 	};
 };
-#endif
-
-#endif

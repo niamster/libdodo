@@ -61,7 +61,7 @@ namespace dodo
 			enum exchangeFunctionsID
 			{
 				FASTEXCHANGEEX_FLUSH,
-				FASTEXCHANGEEX__WRITE,
+				FASTEXCHANGEEX__WRITE__,
 			};
 		};
 	};

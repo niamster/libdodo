@@ -74,20 +74,20 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @struct __usage
+		 * @struct __usage__
 		 * @brief defines process information
 		 */
-		struct __usage
+		struct __usage__
 		{
 			long time;              ///< processor time of execution in miliseconds
 			long mem;               ///< memory usage in bytes
 		};
 
 		/**
-		 * @struct __limits
+		 * @struct __limits__
 		 * @brief defines os limits
 		 */
-		struct __limits
+		struct __limits__
 		{
 			unsigned long current;  ///< current limit
 			unsigned long max;      ///< max limit
@@ -129,8 +129,8 @@ namespace dodo
 		 * int si_fd;// File descriptor
 		 *
 		 * context fields:
-		 * int __sc_onstack;// Sigstack state to restore
-		 * __sigset_t uc_sigmask;// The set of signals that are blocked when this context is active
+		 * int __sc___onstack;// Sigstack state to restore
+		 * __sigset___t uc_sigmask;// The set of signals that are blocked when this context is active
 		 * mcontext_t uc_mcontext;// Machine-specific image of saved context
 		 * struct ucontext_t *uc_link;// Context resumed after this one returns
 		 * stack_t uc_stack;// Stack used by context
@@ -183,10 +183,10 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __userInfo
+		 * @struct __userInfo__
 		 * @brief defines user info
 		 */
-		struct  __userInfo
+		struct  __userInfo__
 		{
 			dodoString name;            ///< user name
 			dodoString pass;            ///< user password
@@ -198,10 +198,10 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __groupInfo
+		 * @struct __groupInfo__
 		 * @brief defines group info
 		 */
-		struct __groupInfo
+		struct __groupInfo__
 		{
 			dodoString      name;       ///< group name
 			int             gid;        ///< group id
@@ -211,10 +211,10 @@ namespace dodo
 #ifdef DL_EXT
 
 		/**
-		 * @struct __signalMod
+		 * @struct __signalMod__
 		 * @brief is returned from initOsSignalModule in the library
 		 */
-		struct __signalMod
+		struct __signalMod__
 		{
 			char name[64];              ///< name of the library
 			char discription[256];      ///< discription of the library
@@ -228,7 +228,7 @@ namespace dodo
 		 * @brief defines type of init function for library
 		 * @param data defines user data
 		 */
-		typedef __signalMod (*initOsSignalModule)(void *data);
+		typedef __signalMod__ (*initOsSignalModule)(void *data);
 
 		/**
 		 * @typedef deinitOsSignalModule
@@ -311,13 +311,13 @@ namespace dodo
 			/**
 			 * @return os usage info
 			 */
-			static __usage getUsageInfo();
+			static __usage__ getUsageInfo();
 
 			/**
 			 * @return os limits info
 			 * @param type defines type of limits[see osLimitEnum]
 			 */
-			static __limits getLimit(short type);
+			static __limits__ getLimit(short type);
 
 			/**
 			 * set os limits
@@ -325,7 +325,7 @@ namespace dodo
 			 * @param lim defines os limits
 			 */
 			static void setLimit(short          type,
-								 const __limits &lim);
+								 const __limits__ &lim);
 
 			/**
 			 * @return priority of current process
@@ -373,35 +373,35 @@ namespace dodo
 			 * @return user info
 			 * @param uid defines user id
 			 */
-			static __userInfo getUserInfo(int uid);
+			static __userInfo__ getUserInfo(int uid);
 
 			/**
 			 * @return user info
 			 * @param name defines user login name
 			 */
-			static __userInfo getUserInfo(const dodoString &name);
+			static __userInfo__ getUserInfo(const dodoString &name);
 
 			/**
 			 * @return users of the os
 			 */
-			static dodoArray<__userInfo> getUsers();
+			static dodoArray<__userInfo__> getUsers();
 
 			/**
 			 * @return group info
 			 * @param gid defines group id
 			 */
-			static __groupInfo getGroupInfo(int gid);
+			static __groupInfo__ getGroupInfo(int gid);
 
 			/**
 			 * @return group info
 			 * @param name defines group name
 			 */
-			static __groupInfo getGroupInfo(const dodoString &name);
+			static __groupInfo__ getGroupInfo(const dodoString &name);
 
 			/**
 			 * @return groups of the os
 			 */
-			static dodoArray<__groupInfo> getGroups();
+			static dodoArray<__groupInfo__> getGroups();
 
 			/**
 			 * @return PID of current process
@@ -487,7 +487,7 @@ namespace dodo
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			static __signalMod getModuleInfo(const dodoString &path,
+			static __signalMod__ getModuleInfo(const dodoString &path,
 											 void             *toInit = NULL);
 
 			/**
@@ -519,21 +519,21 @@ namespace dodo
 		  protected:
 
 			/**
-			 * fill __userInfo with values from passwd structure
+			 * fill __userInfo__ with values from passwd structure
 			 * @return user info
 			 * @param info defines structure to fill
 			 * @param pw defines structure with info
 			 */
-			static __userInfo &fillUserInfo(__userInfo &info,
+			static __userInfo__ &fillUserInfo(__userInfo__ &info,
 											passwd     *pw);
 
 			/**
-			 * fill __groupInfo with values from group structure
+			 * fill __groupInfo__ with values from group structure
 			 * @return group info
 			 * @param info defines structure to fill
 			 * @param pw defines structure with info
 			 */
-			static __groupInfo &fillGroupInfo(__groupInfo &info,
+			static __groupInfo__ &fillGroupInfo(__groupInfo__ &info,
 											  group       *pw);
 
 			/**

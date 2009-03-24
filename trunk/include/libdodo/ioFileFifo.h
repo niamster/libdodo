@@ -39,7 +39,7 @@ namespace dodo
 {
 	namespace io
 	{
-		struct __file;
+		struct __file__;
 
 		namespace file
 		{
@@ -181,7 +181,7 @@ namespace dodo
 				dodoString path;    ///< file path
 				short mode;         ///< file open mode[see fileOpenmodeEnum]
 
-				__file *handle;      ///< file handle
+				__file__ *handle;      ///< file handle
 
 				bool blocked;       ///< true if stream is blocked
 			};

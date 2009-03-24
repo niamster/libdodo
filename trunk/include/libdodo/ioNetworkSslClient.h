@@ -47,9 +47,9 @@ namespace dodo
 
 		namespace ssl
 		{
-			struct __sslConnection;
-			struct __sslContext;
-			struct __certificates;
+			struct __sslConnection__;
+			struct __sslContext__;
+			struct __certificates__;
 		};
 
 		namespace network
@@ -94,7 +94,7 @@ namespace dodo
 					 * set certificates information
 					 * @param certs defines certificates information
 					 */
-					virtual void setSertificates(const io::ssl::__certificates &certs);
+					virtual void setSertificates(const io::ssl::__certificates__ &certs);
 
 					/**
 					 * remove certificates information
@@ -143,8 +143,8 @@ namespace dodo
 					 */
 					virtual void connectSsl();
 
-					io::ssl::__sslConnection *handle; ///< ssl connection handle
-					io::ssl::__sslContext *ctx; ///< ssl connection context
+					io::ssl::__sslConnection__ *handle; ///< ssl connection handle
+					io::ssl::__sslContext__ *ctx; ///< ssl connection context
 
 					bool sslConnected;  ///< true if SSL connection established
 				};

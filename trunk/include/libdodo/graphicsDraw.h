@@ -111,8 +111,8 @@ namespace dodo
 			 */
 			virtual void circle(const graphics::point &center,
 								unsigned long         radius,
-								const __color         &fillColor,
-								const __color         &borderColor,
+								const __color__         &fillColor,
+								const __color__         &borderColor,
 								unsigned short        borderWidth = 1);
 
 			/**
@@ -125,8 +125,8 @@ namespace dodo
 			 */
 			virtual void rectangle(const graphics::point &tl,
 								   const graphics::point &br,
-								   const __color         &fillColor,
-								   const __color         &borderColor,
+								   const __color__         &fillColor,
+								   const __color__         &borderColor,
 								   unsigned short        borderWidth = 1);
 
 			/**
@@ -144,8 +144,8 @@ namespace dodo
 							  const dodoString      &text,
 							  const dodoString      &font,
 							  unsigned short        fontWidth,
-							  const __color         &fillColor = color::black,
-							  const __color         &borderColor = color::black,
+							  const __color__         &fillColor = color::black,
+							  const __color__         &borderColor = color::black,
 							  unsigned short        borderWidth = 1,
 							  double                angle = 0);
 
@@ -166,7 +166,7 @@ namespace dodo
 			 * @param lineWidth defines the width of the line
 			 */
 			virtual void line(const dodoArray<graphics::point> &points,
-							  const __color                    &lineColor,
+							  const __color__                    &lineColor,
 							  unsigned short                   lineWidth = 1);
 
 			/**
@@ -177,7 +177,7 @@ namespace dodo
 			 * @note for point width > 1 point is emulated as a circle, it's possible to get some side-effects
 			 */
 			virtual void point(const graphics::point &position,
-							   const __color         &pointColor,
+							   const __color__         &pointColor,
 							   unsigned short        pointWidth = 1);
 
 		  protected:
@@ -190,8 +190,8 @@ namespace dodo
 			 * @param borderWidth defines the width of the border of the primitive
 			 */
 			virtual void primitive(char           *description,
-								   const __color  &fillColor,
-								   const __color  &borderColor,
+								   const __color__  &fillColor,
+								   const __color__  &borderColor,
 								   unsigned short borderWidth);
 
 			graphics::image *im; ///< image to perform drawing

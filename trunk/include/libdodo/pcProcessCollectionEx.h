@@ -62,7 +62,7 @@ namespace dodo
 			 */
 			enum collectionFunctionsID
 			{
-				COLLECTIONEX__ISRUNNING,
+				COLLECTIONEX__ISRUNNING__,
 				COLLECTIONEX_ADDNRUN,
 				COLLECTIONEX_RUN,
 				COLLECTIONEX_DEL,

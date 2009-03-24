@@ -32,15 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#ifdef PTHREAD_EXT
-
-#include <pthread.h>
-
-#endif
-
 #include <libdodo/pcSyncSection.h>
-#include <libdodo/pcSyncThreadSectionEx.h>
-#include <libdodo/types.h>
 
 namespace dodo
 {
@@ -50,6 +42,8 @@ namespace dodo
 		{
 			namespace thread
 			{
+				struct __lock__;
+
 				/**
 				 * @class section
 				 * @brief performs atomic locks using mutexes
@@ -88,11 +82,7 @@ namespace dodo
 
 				  protected:
 
-#ifdef PTHREAD_EXT
-
-					pthread_mutex_t keeper; ///< mutex
-
-#endif
+					__lock__ *lock; ///< lock
 				};
 			};
 		};

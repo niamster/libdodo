@@ -45,16 +45,16 @@ namespace dodo
 		namespace xml
 		{
 			/**
-			 * @struct __additionalData
+			 * @struct __additionalData__
 			 * @brief defines response/request additional data
 			 */
-			struct __additionalData
+			struct __additionalData__
 			{
 				/**
 				 * constructor
 				 * @param encoding defines response/request encoding
 				 */
-				__additionalData(dodoString &encoding);
+				__additionalData__(dodoString &encoding);
 
 				dodoString &encoding; ///< response/request encoding
 			};

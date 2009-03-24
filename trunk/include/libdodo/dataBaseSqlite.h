@@ -42,7 +42,7 @@ namespace dodo
 	{
 		namespace base
 		{
-			struct __sqlite;
+			struct __sqlite__;
 
 			/**
 			 * @class sqlite
@@ -69,7 +69,7 @@ namespace dodo
 				 * constructor
 				 * @param dbInfo defines information for connection to db
 				 */
-				sqlite(const __connectionInfo &dbInfo);
+				sqlite(const __connectionInfo__ &dbInfo);
 
 				/**
 				 * destructor
@@ -80,7 +80,7 @@ namespace dodo
 				 * connect to the database
 				 * @param dbInfo defines information for connection to db
 				 */
-				virtual void connect(const __connectionInfo &dbInfo);
+				virtual void connect(const __connectionInfo__ &dbInfo);
 
 				/**
 				 * disconnect from the database
@@ -121,7 +121,7 @@ namespace dodo
 				/**
 				 * @return structure received rows and fields from the evaluated request
 				 */
-				virtual __tuples fetch() const;
+				virtual __tuples__ fetch() const;
 
 				/**
 				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
@@ -133,7 +133,7 @@ namespace dodo
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
 				 */
-				virtual void exec(const dodoString &query = __dodostring__,
+				virtual void exec(const dodoString &query = __dodostring____,
 								  bool             result = false);
 
 			  protected:
@@ -149,20 +149,20 @@ namespace dodo
 				virtual void updateCollect();
 
 				/**
-				 * @struct __blob
+				 * @struct __blob__
 				 * @brief defines blob value
 				 */
-				struct __blob
+				struct __blob__
 				{
 					unsigned int     reference; ///< reference in request
 					const dodoString *value;    ///< pointer to blob value
 				};
 
-				dodoList<__blob> blobs;         ///< references to blob data
+				dodoList<__blob__> blobs;         ///< references to blob data
 
 			  private:
 
-				__sqlite *handle; ///< DB handle
+				__sqlite__ *handle; ///< DB handle
 
 				bool empty;                     ///< true if liteStmt is empty
 			};

@@ -41,13 +41,13 @@
 
 using namespace dodo::io::network;
 
-__initialAccept::__initialAccept() : socket(-1)
+__initialAccept__::__initialAccept__() : socket(-1)
 {
 }
 
 //-------------------------------------------------------------------
 
-__initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket)
+__initialAccept__::__initialAccept__(__initialAccept__ &init) : socket(init.socket)
 {
 	init.socket = -1;
 }
@@ -86,7 +86,7 @@ exchange::exchange(short protection) : channel(protection)
 
 //-------------------------------------------------------------------
 
-exchange::exchange(__initialAccept &a_init,
+exchange::exchange(__initialAccept__ &a_init,
 				   short           protection) : channel(protection)
 {
 #ifndef IO_WO_XEXEC
@@ -111,7 +111,7 @@ exchange::~exchange()
 //-------------------------------------------------------------------
 
 void
-exchange::init(__initialAccept &a_init)
+exchange::init(__initialAccept__ &a_init)
 {
 	init(a_init.socket, a_init.blocked, a_init.blockInherited);
 
@@ -225,7 +225,7 @@ exchange::_write(const char * const a_data)
 {
 	if (socket == -1)
 	{
-		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE__, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 	}
 
 	unsigned long iter = outSize / outSocketBuffer;
@@ -254,7 +254,7 @@ exchange::_write(const char * const a_data)
 						break;
 					}
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -284,7 +284,7 @@ exchange::_write(const char * const a_data)
 						break;
 					}
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -303,7 +303,7 @@ exchange::_read(char * const a_data)
 {
 	if (socket == -1)
 	{
-		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ__, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 	}
 
 	memset(a_data, '\0', inSize);
@@ -334,7 +334,7 @@ exchange::_read(char * const a_data)
 						break;
 					}
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -369,7 +369,7 @@ exchange::_read(char * const a_data)
 						break;
 					}
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -421,7 +421,7 @@ exchange::_readStream(char * const data)
 {
 	if (socket == -1)
 	{
-		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM__, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 	}
 
 	memset(data, '\0', inSize);
@@ -442,7 +442,7 @@ exchange::_readStream(char * const data)
 				break;
 			}
 
-			throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
