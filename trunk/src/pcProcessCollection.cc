@@ -117,6 +117,8 @@ collection::~collection()
 	{
 		if (!_isRunning(i))
 		{
+			delete *i;
+
 			continue;
 		}
 

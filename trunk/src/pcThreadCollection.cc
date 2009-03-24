@@ -155,6 +155,8 @@ collection::~collection()
 	{
 		if (!_isRunning(i) || (*i)->detached)
 		{
+			delete *i;
+
 			continue;
 		}
 
