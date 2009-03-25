@@ -32,13 +32,6 @@
 
 #include <libdodo/directives.h>
 
-#include <string.h>
-#include <time.h>
-#include <stdlib.h>
-#include <errno.h>
-
-#include <libdodo/toolsTimeEx.h>
-#include <libdodo/toolsString.h>
 #include <libdodo/types.h>
 
 namespace dodo

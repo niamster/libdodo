@@ -32,11 +32,6 @@
 
 #include <libdodo/directives.h>
 
-#include <string.h>
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdlib.h>
-
 #include <libdodo/types.h>
 
 namespace dodo

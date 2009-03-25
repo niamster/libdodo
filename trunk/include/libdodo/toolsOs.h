@@ -32,39 +32,20 @@
 
 #include <libdodo/directives.h>
 
-#include <signal.h>
-#include <pwd.h>
-#include <grp.h>
-#include <unistd.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/resource.h>
-#include <sys/ioctl.h>
-#include <sys/wait.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-
-#ifdef PTHREAD_EXT
-
-#include <pthread.h>
-
-#endif
-
-#ifdef DL_EXT
-
-#include <dlfcn.h>
-
-#endif
-
-#include <libdodo/toolsOsEx.h>
 #include <libdodo/types.h>
-#include <libdodo/toolsMisc.h>
 
 namespace dodo
 {
 	namespace pc
 	{
+		namespace sync
+		{
+			namespace thread
+			{
+				struct __lock__;
+			};
+		};
+
 		namespace thread
 		{
 			class collection;
@@ -209,7 +190,6 @@ namespace dodo
 		};
 
 #ifdef DL_EXT
-
 		/**
 		 * @struct __signalMod__
 		 * @brief is returned from initOsSignalModule in the library
@@ -235,7 +215,6 @@ namespace dodo
 		 * @brief defines type of deinit function for library
 		 */
 		typedef void (*deinitOsSignalModule)();
-
 #endif
 
 		/**
@@ -481,7 +460,6 @@ namespace dodo
 			static void unsetSignalHandler(long signal);
 
 #ifdef DL_EXT
-
 			/**
 			 * @return information about module
 			 * @param path defines path to the library[if not in ldconfig db] or library name
@@ -497,7 +475,6 @@ namespace dodo
 			 */
 			static void setSignalHandler(const dodoString &path,
 										 void             *toInit = NULL);
-
 #endif
 
 			/**
@@ -558,10 +535,8 @@ namespace dodo
 								long     signal);
 
 #ifdef DL_EXT
-
 			static void *handlesSig[OS_SIGNALS];        ///< handles to modules
 			static bool handlesOpenedSig[OS_SIGNALS];   ///< map of opened modules
-
 #endif
 			/**
 			 * @class syncThreadSection
@@ -593,9 +568,7 @@ namespace dodo
 
 			  protected:
 
-#ifdef PTHREAD_EXT
-				static pthread_mutex_t keeper;  ///< mutex
-#endif
+				static pc::sync::thread::__lock__ keeper;  ///< mutex
 			};
 
 			static syncThreadSection keeper;    ///< lock

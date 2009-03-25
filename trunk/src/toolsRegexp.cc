@@ -27,7 +27,18 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#ifdef PCRE_EXT
+#include <pcre.h>
+#else
+#include <sys/types.h>
+#include <regex.h>
+#endif
+
 #include <libdodo/toolsRegexp.h>
+#include <libdodo/types.h>
+#include <libdodo/toolsRegexpEx.h>
 
 using namespace dodo::tools;
 
@@ -135,7 +146,6 @@ regexp::boundMatch(const dodoString &sample)
 	boundaries.clear();
 
 #ifdef PCRE_EXT
-
 	int subs;
 
 	if (pcre_fullinfo(code, NULL, PCRE_INFO_CAPTURECOUNT, &subs) != 0)
@@ -168,9 +178,7 @@ regexp::boundMatch(const dodoString &sample)
 	delete [] oVector;
 
 	return true;
-
 #else
-
 	int subs = code.re_nsub + 1;
 	regmatch_t *pmatch = new regmatch_t[subs];
 
@@ -193,7 +201,6 @@ regexp::boundMatch(const dodoString &sample)
 	delete [] pmatch;
 
 	return true;
-
 #endif
 }
 
@@ -205,7 +212,6 @@ regexp::compile(const dodoString &pattern)
 	int bits(0);
 
 #ifdef PCRE_EXT
-
 	if (icase)
 	{
 		bits |= PCRE_CASELESS;
@@ -227,9 +233,7 @@ regexp::compile(const dodoString &pattern)
 	{
 		throw exception::basic(exception::ERRMODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
 	}
-
 #else
-
 	if (extended)
 	{
 		bits |= REG_EXTENDED;
@@ -256,7 +260,6 @@ regexp::compile(const dodoString &pattern)
 		regerror(errn, &code, error, ERROR_LEN);
 		throw exception::basic(exception::ERRMODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
 	}
-
 #endif
 }
 

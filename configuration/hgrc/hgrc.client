@@ -1,6 +1,10 @@
 [ui]
 username = <name>
 
+[trusted]
+users = *
+groups = *
+
 [paths]
 default = <repository>
 

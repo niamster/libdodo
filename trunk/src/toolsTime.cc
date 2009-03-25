@@ -27,7 +27,17 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <string.h>
+#include <time.h>
+#include <stdlib.h>
+#include <errno.h>
+
 #include <libdodo/toolsTime.h>
+#include <libdodo/toolsTimeEx.h>
+#include <libdodo/toolsString.h>
+#include <libdodo/types.h>
 
 using namespace dodo;
 

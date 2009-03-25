@@ -32,19 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#ifdef PCRE_EXT
-
-#include <pcre.h>
-
-#else
-
-#include <sys/types.h>
-#include <regex.h>
-
-#endif
-
 #include <libdodo/types.h>
-#include <libdodo/toolsRegexpEx.h>
 
 namespace dodo
 {

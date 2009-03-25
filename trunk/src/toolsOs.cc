@@ -27,12 +27,38 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <signal.h>
+#include <pwd.h>
+#include <grp.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/resource.h>
+#include <sys/ioctl.h>
+#include <sys/wait.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
+#ifdef PTHREAD_EXT
+#include <pthread.h>
+#endif
+#ifdef DL_EXT
+#include <dlfcn.h>
+#endif
+
+#include "pcSyncThreadLock.inline"
+
+#include <libdodo/toolsOsEx.h>
+#include <libdodo/types.h>
+#include <libdodo/toolsMisc.h>
+
 #include <libdodo/toolsOs.h>
 
 using namespace dodo::tools;
 
 #ifdef DL_EXT
-
 void *os::handlesSig[] =
 {
 	NULL,
@@ -80,16 +106,11 @@ bool os::handlesOpenedSig[] =
 	false,
 	false
 };
-
 #endif
 
 //-------------------------------------------------------------------
 
-#ifdef PTHREAD_EXT
-
-pthread_mutex_t os::syncThreadSection::keeper;
-
-#endif
+dodo::pc::sync::thread::__lock__ os::syncThreadSection::keeper;
 
 //-------------------------------------------------------------------
 
@@ -100,7 +121,6 @@ os::syncThreadSection os::keeper;
 os::syncThreadSection::syncThreadSection()
 {
 #ifdef PTHREAD_EXT
-
 	pthread_mutexattr_t attr;
 	errno = pthread_mutexattr_init(&attr);
 	if (errno != 0)
@@ -114,7 +134,7 @@ os::syncThreadSection::syncThreadSection()
 		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	errno = pthread_mutex_init(&keeper, &attr);
+	errno = pthread_mutex_init(&keeper.keeper, &attr);
 	if (errno != 0)
 	{
 		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -125,7 +145,6 @@ os::syncThreadSection::syncThreadSection()
 	{
 		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-
 #endif
 }
 
@@ -134,9 +153,7 @@ os::syncThreadSection::syncThreadSection()
 os::syncThreadSection::~syncThreadSection()
 {
 #ifdef PTHREAD_EXT
-
-	pthread_mutex_destroy(&keeper);
-
+	pthread_mutex_destroy(&keeper.keeper);
 #endif
 }
 
@@ -146,13 +163,11 @@ void
 os::syncThreadSection::acquire()
 {
 #ifdef PTHREAD_EXT
-
-	errno = pthread_mutex_lock(&keeper);
+	errno = pthread_mutex_lock(&keeper.keeper);
 	if (errno != 0 && errno != EDEADLK)
 	{
 		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-
 #endif
 }
 
@@ -162,13 +177,11 @@ void
 os::syncThreadSection::release()
 {
 #ifdef PTHREAD_EXT
-
-	errno = pthread_mutex_unlock(&keeper);
+	errno = pthread_mutex_unlock(&keeper.keeper);
 	if (errno != 0)
 	{
 		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-
 #endif
 }
 
@@ -910,7 +923,6 @@ os::setSignalHandler(long          signal,
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-
 	deinitOsSignalModule deinit;
 
 	int handleSignal = toSignalNumber(signal);
@@ -929,7 +941,6 @@ os::setSignalHandler(long          signal,
 		handlesOpenedSig[handleSignal] = false;
 		handlesSig[handleSignal] = NULL;
 	}
-
 #endif
 
 	struct sigaction act;
@@ -959,7 +970,6 @@ os::setMicroTimer(unsigned long timeout,
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-
 	deinitOsSignalModule deinit;
 
 	int handleSignal = toSignalNumber(OS_SIGNAL_ALARM);
@@ -978,7 +988,6 @@ os::setMicroTimer(unsigned long timeout,
 		handlesOpenedSig[handleSignal] = false;
 		handlesSig[handleSignal] = NULL;
 	}
-
 #endif
 
 	struct sigaction act;
@@ -1027,7 +1036,6 @@ os::setTimer(long          timeout,
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-
 	deinitOsSignalModule deinit;
 
 	int handleSignal = toSignalNumber(OS_SIGNAL_ALARM);
@@ -1046,7 +1054,6 @@ os::setTimer(long          timeout,
 		handlesOpenedSig[handleSignal] = false;
 		handlesSig[handleSignal] = NULL;
 	}
-
 #endif
 
 	struct sigaction act;
@@ -1118,7 +1125,6 @@ os::unsetSignalHandler(long signal)
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-
 	deinitOsSignalModule deinit;
 
 	int handleSignal = toSignalNumber(signal);
@@ -1137,7 +1143,6 @@ os::unsetSignalHandler(long signal)
 		handlesOpenedSig[handleSignal] = false;
 		handlesSig[handleSignal] = NULL;
 	}
-
 #endif
 
 	struct sigaction act;
@@ -1152,7 +1157,6 @@ os::unsetSignalHandler(long signal)
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
-
 __signalMod__
 os::getModuleInfo(const dodoString &module,
 				  void             *toInit)
@@ -1256,7 +1260,6 @@ os::setSignalHandler(const dodoString &path,
 
 	handlesOpenedSig[handleSignal] = true;
 }
-
 #endif
 
 //-------------------------------------------------------------------
