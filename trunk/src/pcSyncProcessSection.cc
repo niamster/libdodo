@@ -37,6 +37,8 @@
 #include <semaphore.h>
 #endif
 
+#include <errno.h>
+
 #include "pcSyncProcessLock.inline"
 
 #include <libdodo/pcSyncProcessSection.h>

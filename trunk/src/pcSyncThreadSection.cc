@@ -33,6 +33,9 @@
 #include <pthread.h>
 #endif
 
+#include <errno.h>
+#include <string.h>
+
 #include "pcSyncThreadLock.inline"
 
 #include <libdodo/pcSyncThreadSection.h>

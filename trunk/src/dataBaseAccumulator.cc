@@ -413,6 +413,7 @@ accumulator::limit(unsigned int a_number)
 
 	collectedData.limit = tools::string::lToString(a_number);
 }
+
 //-------------------------------------------------------------------
 
 void

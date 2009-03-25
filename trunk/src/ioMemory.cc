@@ -29,6 +29,8 @@
 
 #include <libdodo/directives.h>
 
+#include <string.h>
+
 #include <libdodo/ioMemory.h>
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>

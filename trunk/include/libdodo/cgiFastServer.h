@@ -90,7 +90,6 @@ namespace dodo
 
 			  private:
 
-
 				bool threading;                     ///< true use threading
 
 				unsigned int threadsNum;            ///< amount of threads

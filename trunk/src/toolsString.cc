@@ -27,7 +27,6 @@
  * set shiftwidth=4
  */
 
-
 #include <libdodo/toolsString.h>
 
 using namespace dodo::tools;

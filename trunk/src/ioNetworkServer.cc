@@ -32,6 +32,7 @@
 #include <arpa/inet.h>
 #include <sys/un.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #include <libdodo/ioNetworkServer.h>
 #include <libdodo/ioNetworkServerEx.h>

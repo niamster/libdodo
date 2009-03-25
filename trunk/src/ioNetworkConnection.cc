@@ -31,6 +31,8 @@
 
 #include <sys/socket.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <string.h>
 
 #include <libdodo/ioNetworkConnection.h>
 #include <libdodo/ioNetworkConnectionEx.h>
@@ -198,7 +200,6 @@ connection::setOutTimeout(unsigned long microseconds)
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETOUTTIMEOUT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 }
-
 
 //-------------------------------------------------------------------
 

@@ -31,6 +31,8 @@
 
 #include <arpa/inet.h>
 #include <poll.h>
+#include <errno.h>
+#include <string.h>
 
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/ioNetworkConnection.h>
@@ -216,7 +218,6 @@ exchange::isAlive()
 
 	return false;
 }
-
 
 //-------------------------------------------------------------------
 

@@ -27,7 +27,6 @@
  * set shiftwidth=4
  */
 
-
 #ifndef _IOEVENTINFO_H_
 #define _IOEVENTINFO_H_ 1
 

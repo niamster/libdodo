@@ -39,6 +39,8 @@
 #include <fcntl.h>
 #endif
 
+#include <errno.h>
+
 #include <libdodo/dataMemoryShared.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/types.h>

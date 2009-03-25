@@ -156,7 +156,6 @@ errHandler(void        *data,
 
 //-------------------------------------------------------------------
 
-
 processor::processor(processor &xt)
 {
 }

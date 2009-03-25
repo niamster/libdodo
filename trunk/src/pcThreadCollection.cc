@@ -348,7 +348,6 @@ collection::replace(unsigned long position,
 			}
 		}
 
-
 #ifdef DL_EXT
 		if ((*current)->handle != NULL)
 		{
@@ -551,7 +550,6 @@ collection::stop()
 }
 
 //-------------------------------------------------------------------
-
 
 bool
 collection::isRunning(unsigned long position) const

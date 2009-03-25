@@ -41,6 +41,7 @@
 #include <time.h>
 #include <libgen.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include <libdodo/toolsFilesystemEx.h>
 #include <libdodo/types.h>

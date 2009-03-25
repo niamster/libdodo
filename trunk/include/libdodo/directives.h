@@ -58,7 +58,6 @@
 #define SH_KEY_SIZE 32
 #endif
 
-
 /**
  * size of block for zLib de/compression
  */
@@ -139,6 +138,5 @@
  * max depth of calls for stack trace
  */
 #define MAXCALLSTACKLEN 128
-
 
 #endif

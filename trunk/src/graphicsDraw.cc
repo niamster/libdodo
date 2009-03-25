@@ -35,6 +35,7 @@
 #else
 #include <magick/ImageMagick.h>
 #endif
+
 #include <math.h>
 
 #include "graphicsImage.inline"
@@ -83,7 +84,6 @@ draw::setImage(graphics::image *a_im)
 {
 	im = a_im;
 }
-
 
 //-------------------------------------------------------------------
 
@@ -144,7 +144,6 @@ draw::circle(const graphics::point &center,
 
 	primitive(description, fillColor, borderColor, borderWidth);
 }
-
 
 //-------------------------------------------------------------------
 

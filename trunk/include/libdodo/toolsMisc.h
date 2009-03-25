@@ -41,6 +41,7 @@
 #include <sys/un.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
 

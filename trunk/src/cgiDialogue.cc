@@ -31,6 +31,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include <libdodo/cgiDialogue.h>
 #include <libdodo/types.h>
@@ -329,7 +330,6 @@ dialogue::makeAuth()
 			authInfo.type = CGI_AUTHTYPE_DIGEST;
 
 			dodoStringArray parts = tools::misc::split(dodoString(httpAuthorization.data() + 7, httpAuthorization.size() - 7), ",");
-
 
 			dodoStringArray tuple;
 

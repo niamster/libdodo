@@ -255,7 +255,6 @@ namespace dodo
 				virtual void setExecutionLimit(unsigned long position,
 											   unsigned long limit = 1);
 
-
 #ifdef DL_EXT
 				/**
 				 * add function as a thread from library

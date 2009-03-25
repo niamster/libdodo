@@ -32,6 +32,7 @@
 
 #include <libdodo/directives.h>
 
+#include <errno.h>
 #ifdef ICONV_EXT
 #include <iconv.h>
 #endif

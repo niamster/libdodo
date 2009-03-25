@@ -37,6 +37,7 @@
 #endif
 
 #include <math.h>
+#include <string.h>
 
 #include "graphicsImage.inline"
 
@@ -94,9 +95,6 @@ namespace dodo
 		__image___init__ __image___init_object__;
 	};
 };
-
-
-//-------------------------------------------------------------------
 
 using namespace dodo::graphics;
 

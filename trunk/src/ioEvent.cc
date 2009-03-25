@@ -27,10 +27,10 @@
  * set shiftwidth=4
  */
 
-
 #include <libdodo/directives.h>
 
 #include <poll.h>
+#include <errno.h>
 
 #include <libdodo/ioEvent.h>
 #include <libdodo/ioEventEx.h>

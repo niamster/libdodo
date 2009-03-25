@@ -37,6 +37,8 @@
 #include <signal.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <errno.h>
+#include <string.h>
 
 #include <libdodo/pcJobCollection.h>
 
@@ -372,7 +374,6 @@ collection::replace(unsigned long position,
 				}
 			}
 		}
-
 
 #ifdef DL_EXT
 		if ((*current)->handle != NULL)

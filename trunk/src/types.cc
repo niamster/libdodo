@@ -27,6 +27,14 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <vector>
+#include <list>
+#include <deque>
+#include <map>
+#include <string>
+#include <string.h>
 
 #include <libdodo/types.h>
 

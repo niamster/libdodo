@@ -364,7 +364,6 @@ processor::processNumeric(long             &node,
 		}
 	}
 
-
 	return i;
 }
 

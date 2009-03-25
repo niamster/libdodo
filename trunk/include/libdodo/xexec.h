@@ -187,7 +187,6 @@ namespace dodo
 		struct __xexecItem__;
 		struct __xexecItemList__;
 
-
 	  private:
 
 		/*
@@ -465,7 +464,7 @@ namespace dodo
 		 * perform enabled hooks
 		 * @param list defines list of hooks
 		 */
-		virtual void performXExec(__xexecItemList__ *list) const;
+		virtual void performXExec(__xexecItemList__ &list) const;
 
 		/**
 		 * @struct __xexecItem__

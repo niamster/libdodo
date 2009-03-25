@@ -32,6 +32,8 @@
 #include <stdio.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <string.h>
 
 #include "ioFile.inline"
 

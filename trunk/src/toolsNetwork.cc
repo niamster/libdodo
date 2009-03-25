@@ -242,7 +242,6 @@ network::getInterfaceInfo(const dodoString &interface)
 
 #ifdef __FreeBSD____
 
-
 #else
 
 	if (::ioctl(socket, SIOCGIFNETMASK, &ifr) == -1)
@@ -272,7 +271,6 @@ network::getInterfaceInfo(const dodoString &interface)
 	}
 
 #ifdef __FreeBSD____
-
 
 #else
 

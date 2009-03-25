@@ -30,15 +30,13 @@
 #ifndef _TYPES_H_
 #define _TYPES_H_ 1
 
+#include <libdodo/directives.h>
+
 #include <vector>
 #include <list>
 #include <deque>
 #include <map>
-#include <iostream>
-#include <errno.h>
-#include <string.h>
-
-#include <libdodo/directives.h>
+#include <string>
 
 namespace dodo
 {

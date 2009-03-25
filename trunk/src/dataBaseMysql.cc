@@ -32,6 +32,7 @@
 #ifdef MYSQL_EXT
 #include <mysql.h>
 #include <errmsg.h>
+#include <string.h>
 
 #include <libdodo/dataBaseMysql.h>
 #include <libdodo/dataBaseMysqlEx.h>

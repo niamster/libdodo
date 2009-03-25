@@ -163,7 +163,6 @@ processor::_preProcessString(const dodoString &buffer,
 			{
 				j += 3;
 
-
 				continue;
 			}
 			else

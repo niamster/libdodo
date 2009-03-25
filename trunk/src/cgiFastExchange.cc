@@ -31,6 +31,7 @@
 
 #ifdef FASTCGI_EXT
 #include <fcgiapp.h>
+#include <string.h>
 
 #include "cgiFastRequest.inline"
 

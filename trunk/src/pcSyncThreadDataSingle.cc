@@ -29,8 +29,13 @@
 
 #include <libdodo/directives.h>
 
+#ifdef PTHREAD_EXT
 #include <pthread.h>
+#endif
+
 #include <time.h>
+#include <errno.h>
+#include <string.h>
 
 #include "pcSyncThreadLock.inline"
 

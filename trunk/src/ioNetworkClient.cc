@@ -38,6 +38,7 @@
 #include <sys/socket.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
+#include <errno.h>
 #include <fcntl.h>
 
 #include <libdodo/ioNetworkClient.h>
@@ -77,7 +78,6 @@ client::client(short a_family,
 #endif
 {
 }
-
 
 //-------------------------------------------------------------------
 

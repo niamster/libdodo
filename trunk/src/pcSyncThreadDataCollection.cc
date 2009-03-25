@@ -144,7 +144,6 @@ collection::getShare(unsigned long position)
 	return false;
 }
 
-
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>

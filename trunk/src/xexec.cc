@@ -411,15 +411,16 @@ xexec::replaceXExec(dodoList<__xexecItem__ *> &list,
 }
 
 //-------------------------------------------------------------------
+
 void
-xexec::performXExec(__xexecItemList__ *list) const
+xexec::performXExec(__xexecItemList__ &list) const
 {
-	if (list->execDisabled)
+	if (list.execDisabled)
 	{
 		return ;
 	}
 
-	dodoList<__xexecItem__ *>::iterator i(list->exec.begin()), j(list->exec.end());
+	dodoList<__xexecItem__ *>::iterator i(list.exec.begin()), j(list.exec.end());
 
 	for (; i != j; ++i)
 	{

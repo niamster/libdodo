@@ -38,6 +38,7 @@ using namespace dodo::data::format::xml;
 node::node() : CDATA(false)
 {
 }
+
 //-------------------------------------------------------------------
 
 node::node(const dodoString    &name,
