@@ -32,13 +32,6 @@
 
 #include <libdodo/directives.h>
 
-#ifdef DL_EXT
-
-#include <dlfcn.h>
-
-#endif
-
-#include <libdodo/xexecEx.h>
 #include <libdodo/types.h>
 
 namespace dodo
@@ -80,32 +73,8 @@ namespace dodo
 	 */
 	typedef void (*inExec)(__xexecCollectedData__ *odata, short object, void *udata);
 
-
-	/**
-	 * @struct __xexecItem__
-	 * @brief defines xexec node
-	 */
-	struct __xexecItem__
-	{
-		inExec func;                        ///< function to execute
-		void   *data;                       ///< user data
-		bool   enabled;                     ///< if true hook is enabled
-		int    position;                    ///< object identificator
-
-#ifdef DL_EXT
-		void   *handle;                     ///< handle to library
-#endif
-	};
-
-	/**
-	 * @struct __xexecItemList__
-	 * @brief defines collection of hooks
-	 */
-	struct __xexecItemList__
-	{
-		dodoList<__xexecItem__> exec;         ///< hooks
-		bool                  execDisabled; ///< if true hooks are disabled
-	};
+	struct __xexecItem__;
+	struct __xexecItemList__;
 
 	/**
 	 * @enum xexecOperTypeEnum defines default operation type
@@ -116,7 +85,6 @@ namespace dodo
 	};
 
 #ifdef DL_EXT
-
 	/**
 	 * @enum xexecModuleActionTypeEnum defines what type of exec[pre/post] will be used for module
 	 */
@@ -167,7 +135,6 @@ namespace dodo
 		int pre;                ///< identificator of preExec
 		int post;               ///< identificator of postExec
 	};
-
 #endif
 
 	class xexec;
@@ -257,7 +224,6 @@ namespace dodo
 							   void   *data);
 
 #ifdef DL_EXT
-
 		/**
 		 * set function that will be executed after the main action call
 		 * @return postExec identificator
@@ -294,7 +260,6 @@ namespace dodo
 		virtual __xexecCounts__ addExec(const dodoString &path,
 									  void             *data,
 									  void             *toInit = NULL);
-
 #endif
 
 		/**
@@ -396,7 +361,6 @@ namespace dodo
 		bool safeHooks;
 
 #ifdef DL_EXT
-
 		/**
 		 * @return information about module
 		 * @param path defines path to the library[if not in ldconfig db] or library name
@@ -404,7 +368,6 @@ namespace dodo
 		 */
 		static __xexecMod__ getModuleInfo(const dodoString &path,
 										void             *toInit = NULL);
-
 #endif
 
 	  protected:
@@ -436,7 +399,7 @@ namespace dodo
 		 * @param list defines list of hooks
 		 * @param position defines XExec identificator
 		 */
-		virtual bool getXexec(dodoList<__xexecItem__> &list,
+		virtual bool getXexec(dodoList<__xexecItem__ *> &list,
 							  int                   position);
 
 		/**
@@ -446,7 +409,7 @@ namespace dodo
 		 * @param func defines function that will be called
 		 * @param data defines hook data
 		 */
-		virtual int addXExec(dodoList<__xexecItem__> &list,
+		virtual int addXExec(dodoList<__xexecItem__ *> &list,
 							 inExec                func,
 							 void                  *data);
 
@@ -455,7 +418,7 @@ namespace dodo
 		 * @param list defines list of hooks
 		 * @param position defines XExec identificator
 		 */
-		virtual void delXExec(dodoList<__xexecItem__> &list,
+		virtual void delXExec(dodoList<__xexecItem__ *> &list,
 							  int                   position);
 
 		/**
@@ -465,7 +428,7 @@ namespace dodo
 		 * @param func defines function that will be called
 		 * @param data defines hook data
 		 */
-		virtual void replaceXExec(dodoList<__xexecItem__> &list,
+		virtual void replaceXExec(dodoList<__xexecItem__ *> &list,
 								  int                   position,
 								  inExec                func,
 								  void                  *data);
@@ -476,12 +439,11 @@ namespace dodo
 		 * @param position defines postExec identificator
 		 * @param stat defines hook enabled state
 		 */
-		virtual void setStatXExec(dodoList<__xexecItem__> &list,
+		virtual void setStatXExec(dodoList<__xexecItem__ *> &list,
 								  int                   position,
 								  bool                  stat);
 
 #ifdef DL_EXT
-
 		/**
 		 * set function that will be executed after the main action call
 		 * @return XExec identificator
@@ -490,25 +452,24 @@ namespace dodo
 		 * @param data defines hook data
 		 * @param toInit defines data that will be passed to the init function
 		 */
-		virtual int addXExecModule(dodoList<__xexecItem__> &list,
+		virtual int addXExecModule(dodoList<__xexecItem__ *> &list,
 								   const dodoString      &path,
 								   void                  *data,
 								   void                  *toInit = NULL);
-
 #endif
 
 		/**
 		 * perform enabled hooks
 		 * @param list defines list of hooks
 		 */
-		virtual void performXExec(__xexecItemList__ &list) const;
+		virtual void performXExec(__xexecItemList__ *list) const;
 
-		mutable __xexecItemList__ preExec;            ///< preExec hooks
-		mutable __xexecItemList__ postExec;           ///< postExec hooks
+		mutable __xexecItemList__ *preExec;            ///< preExec hooks
+		mutable __xexecItemList__ *postExec;           ///< postExec hooks
 
 		int execs;                                  ///< hook counter
 
-		dodoList<__xexecItem__>::iterator current;    ///< iterator for list[for matched with getXexec method]
+		dodoList<__xexecItem__ *>::iterator current;    ///< iterator for list[for matched with getXexec method]
 
 		mutable int operType;                       ///< operation type set by main action
 

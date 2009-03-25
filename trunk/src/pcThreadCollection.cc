@@ -39,7 +39,11 @@
 
 #include <signal.h>
 
+#include <libdodo/pcThreadCollection.h>
 #include <libdodo/pcJobCollection.h>
+#include <libdodo/toolsOs.h>
+#include <libdodo/pcThreadCollectionEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
@@ -87,12 +91,6 @@ namespace dodo
 		};
 	};
 };
-
-#include <libdodo/pcThreadCollection.h>
-#include <libdodo/pcJobCollection.h>
-#include <libdodo/toolsOs.h>
-#include <libdodo/pcThreadCollectionEx.h>
-#include <libdodo/types.h>
 
 using namespace dodo::pc::thread;
 
