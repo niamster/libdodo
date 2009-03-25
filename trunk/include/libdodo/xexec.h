@@ -73,9 +73,6 @@ namespace dodo
 	 */
 	typedef void (*inExec)(__xexecCollectedData__ *odata, short object, void *udata);
 
-	struct __xexecItem__;
-	struct __xexecItemList__;
-
 	/**
 	 * @enum xexecOperTypeEnum defines default operation type
 	 */
@@ -184,6 +181,12 @@ namespace dodo
 	class xexec
 	{
 		friend class __xexecCollectedData__;
+
+	  protected:
+
+		struct __xexecItem__;
+		struct __xexecItemList__;
+
 
 	  private:
 
@@ -464,8 +467,33 @@ namespace dodo
 		 */
 		virtual void performXExec(__xexecItemList__ *list) const;
 
-		mutable __xexecItemList__ *preExec;            ///< preExec hooks
-		mutable __xexecItemList__ *postExec;           ///< postExec hooks
+		/**
+		 * @struct __xexecItem__
+		 * @brief defines xexec node
+		 */
+		struct __xexecItem__
+		{
+			inExec func;                        ///< function to execute
+			void   *data;                       ///< user data
+			bool   enabled;                     ///< if true hook is enabled
+			int    position;                    ///< object identificator
+#ifdef DL_EXT
+			void   *handle;                     ///< handle to library
+#endif
+		};
+
+		/**
+		 * @struct __xexecItemList__
+		 * @brief defines collection of hooks
+		 */
+		struct __xexecItemList__
+		{
+			dodoList<__xexecItem__ *> exec;         ///< hooks
+			bool                  execDisabled; ///< if true hooks are disabled
+		};
+
+		mutable __xexecItemList__ preExec;            ///< preExec hooks
+		mutable __xexecItemList__ postExec;           ///< postExec hooks
 
 		int execs;                                  ///< hook counter
 

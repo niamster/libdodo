@@ -498,7 +498,7 @@ network::mail(const dodoString &host,
 				opad[i] ^= 0x5c;
 			}
 
-			code::__MD__5Context context;
+			code::__MD5Context__ context;
 			unsigned char digest[16];
 
 			code::MD5Init(&context);

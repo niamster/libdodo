@@ -346,10 +346,10 @@ namespace dodo
 			static const unsigned long powASCII85[5];   ///< power values for ASCII85 encoding/decoding
 
 			/**
-			 * @struct __MD__5Context
+			 * @struct __MD5Context__
 			 * @brief defines states for MD5 computations
 			 */
-			struct __MD__5Context
+			struct __MD5Context__
 			{
 				unsigned int  state[4];                 ///< state[A,B,C,D]
 				unsigned int  count[2];                 ///< number of bits, modulo 2^64 (lsb first)
@@ -360,7 +360,7 @@ namespace dodo
 			 * init MD5 context
 			 * @param context defines MD5 structure
 			 */
-			static void MD5Init(__MD__5Context *context);
+			static void MD5Init(__MD5Context__ *context);
 
 			/**
 			 * MD5 block update operation
@@ -369,7 +369,7 @@ namespace dodo
 			 * @param inputLen defines size of input data
 			 * @note continues an MD5 message-digest operation, processing another message block, and updating the context.
 			 */
-			static void MD5Update(__MD__5Context        *context,
+			static void MD5Update(__MD5Context__        *context,
 								  const unsigned char *input,
 								  unsigned int        inputLen);
 			/**
@@ -386,7 +386,7 @@ namespace dodo
 			 * @param context defines MD5 context
 			 * @note ends an MD5 message-digest operation, writing the the message digest and zeroizing the context
 			 */
-			static void MD5Final(unsigned char digest[16], __MD__5Context * context);
+			static void MD5Final(unsigned char digest[16], __MD5Context__ * context);
 
 			static const unsigned char MD5Padding[64];  ///< MD5 padding for finalization stage
 

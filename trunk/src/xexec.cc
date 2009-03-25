@@ -39,30 +39,7 @@
 
 namespace dodo
 {
-	/**
-	 * @struct __xexecItem__
-	 * @brief defines xexec node
-	 */
-	struct __xexecItem__
-	{
-		inExec func;                        ///< function to execute
-		void   *data;                       ///< user data
-		bool   enabled;                     ///< if true hook is enabled
-		int    position;                    ///< object identificator
-#ifdef DL_EXT
-		void   *handle;                     ///< handle to library
-#endif
-	};
 
-	/**
-	 * @struct __xexecItemList__
-	 * @brief defines collection of hooks
-	 */
-	struct __xexecItemList__
-	{
-		dodoList<__xexecItem__ *> exec;         ///< hooks
-		bool                  execDisabled; ///< if true hooks are disabled
-	};
 };
 
 using namespace dodo;
@@ -93,12 +70,10 @@ xexec::xexec() : safeHooks(true),
 				 operType(XEXEC_OPERTYPE_NONE),
 				 execs(0),
 				 execObject(XEXEC_OBJECT_XEXEC),
-				 execObjectData(NULL),
-				 preExec(new __xexecItemList__),
-				 postExec(new __xexecItemList__)
+				 execObjectData(NULL)
 {
-	preExec->execDisabled = false;
-	postExec->execDisabled = false;
+	preExec.execDisabled = false;
+	postExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -108,7 +83,7 @@ xexec::~xexec()
 #ifdef DL_EXT
 	deinitXexecModule deinit;
 
-	dodoList<__xexecItem__ *>::iterator i(preExec->exec.begin()), j(preExec->exec.end());
+	dodoList<__xexecItem__ *>::iterator i(preExec.exec.begin()), j(preExec.exec.end());
 	for (; i != j; ++i)
 	{
 		if ((*i)->handle == NULL)
@@ -127,8 +102,8 @@ xexec::~xexec()
 #endif
 	}
 
-	i = postExec->exec.begin();
-	j = postExec->exec.end();
+	i = postExec.exec.begin();
+	j = postExec.exec.end();
 	for (; i != j; ++i)
 	{
 		if ((*i)->handle == NULL)
@@ -149,9 +124,6 @@ xexec::~xexec()
 		delete *i;
 	}
 #endif
-
-	delete preExec;
-	delete postExec;
 }
 
 //-------------------------------------------------------------------
@@ -230,7 +202,7 @@ int
 xexec::addPreExec(inExec func,
 				  void   *data)
 {
-	return addXExec(preExec->exec, func, data);
+	return addXExec(preExec.exec, func, data);
 }
 
 //-------------------------------------------------------------------
@@ -238,7 +210,7 @@ xexec::addPreExec(inExec func,
 void
 xexec::disablePreExec(int position)
 {
-	setStatXExec(preExec->exec, position, false);
+	setStatXExec(preExec.exec, position, false);
 }
 
 //-------------------------------------------------------------------
@@ -246,7 +218,7 @@ xexec::disablePreExec(int position)
 void
 xexec::delPreExec(int position)
 {
-	delXExec(preExec->exec, position);
+	delXExec(preExec.exec, position);
 }
 
 //-------------------------------------------------------------------
@@ -254,7 +226,7 @@ xexec::delPreExec(int position)
 void
 xexec::enablePreExec(int position)
 {
-	setStatXExec(preExec->exec, position, true);
+	setStatXExec(preExec.exec, position, true);
 }
 
 //-------------------------------------------------------------------
@@ -263,7 +235,7 @@ int
 xexec::addPostExec(inExec func,
 				   void   *data)
 {
-	return addXExec(postExec->exec, func, data);
+	return addXExec(postExec.exec, func, data);
 }
 
 //-------------------------------------------------------------------
@@ -271,7 +243,7 @@ xexec::addPostExec(inExec func,
 void
 xexec::disablePostExec(int position)
 {
-	setStatXExec(postExec->exec, position, false);
+	setStatXExec(postExec.exec, position, false);
 }
 
 //-------------------------------------------------------------------
@@ -279,7 +251,7 @@ xexec::disablePostExec(int position)
 void
 xexec::delPostExec(int position)
 {
-	delXExec(postExec->exec, position);
+	delXExec(postExec.exec, position);
 }
 
 //-------------------------------------------------------------------
@@ -287,7 +259,7 @@ xexec::delPostExec(int position)
 void
 xexec::enablePostExec(int position)
 {
-	setStatXExec(postExec->exec, position, true);
+	setStatXExec(postExec.exec, position, true);
 }
 
 //-------------------------------------------------------------------
@@ -295,7 +267,7 @@ xexec::enablePostExec(int position)
 void
 xexec::enableAllPreExec() const
 {
-	preExec->execDisabled = false;
+	preExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -303,7 +275,7 @@ xexec::enableAllPreExec() const
 void
 xexec::enableAllPostExec() const
 {
-	postExec->execDisabled = false;
+	postExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -311,7 +283,7 @@ xexec::enableAllPostExec() const
 void
 xexec::disableAllPreExec() const
 {
-	preExec->execDisabled = true;
+	preExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
@@ -319,7 +291,7 @@ xexec::disableAllPreExec() const
 void
 xexec::disableAllPostExec() const
 {
-	postExec->execDisabled = true;
+	postExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
@@ -327,7 +299,7 @@ xexec::disableAllPostExec() const
 void
 xexec::enableAllPreExec()
 {
-	preExec->execDisabled = false;
+	preExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -335,7 +307,7 @@ xexec::enableAllPreExec()
 void
 xexec::enableAllPostExec()
 {
-	postExec->execDisabled = false;
+	postExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -343,7 +315,7 @@ xexec::enableAllPostExec()
 void
 xexec::disableAllPreExec()
 {
-	preExec->execDisabled = true;
+	preExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
@@ -351,7 +323,7 @@ xexec::disableAllPreExec()
 void
 xexec::disableAllPostExec()
 {
-	postExec->execDisabled = true;
+	postExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
@@ -359,8 +331,8 @@ xexec::disableAllPostExec()
 void
 xexec::disableAll()
 {
-	postExec->execDisabled = true;
-	preExec->execDisabled = true;
+	postExec.execDisabled = true;
+	preExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
@@ -368,8 +340,8 @@ xexec::disableAll()
 void
 xexec::enableAll()
 {
-	postExec->execDisabled = false;
-	preExec->execDisabled = false;
+	postExec.execDisabled = false;
+	preExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -379,7 +351,7 @@ xexec::replacePostExec(int    position,
 					   inExec func,
 					   void   *data)
 {
-	replaceXExec(postExec->exec, position, func, data);
+	replaceXExec(postExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
@@ -389,7 +361,7 @@ xexec::replacePreExec(int    position,
 					  inExec func,
 					  void   *data)
 {
-	replaceXExec(preExec->exec, position, func, data);
+	replaceXExec(preExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
@@ -526,7 +498,7 @@ xexec::addPostExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
-	return addXExecModule(postExec->exec, module, data, toInit);
+	return addXExecModule(postExec.exec, module, data, toInit);
 }
 
 //-------------------------------------------------------------------
@@ -536,7 +508,7 @@ xexec::addPreExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
-	return addXExecModule(preExec->exec, module, data, toInit);
+	return addXExecModule(preExec.exec, module, data, toInit);
 }
 
 //-------------------------------------------------------------------
@@ -618,7 +590,7 @@ xexec::addExec(const dodoString &module,
 		case XEXEC_MODULEACTIONTYPE_POST:
 
 			e->position = ++execs;
-			postExec->exec.push_back(e);
+			postExec.exec.push_back(e);
 			count.post = e->position;
 
 			break;
@@ -626,7 +598,7 @@ xexec::addExec(const dodoString &module,
 		case XEXEC_MODULEACTIONTYPE_PRE:
 
 			e->position = ++execs;
-			preExec->exec.push_back(e);
+			preExec.exec.push_back(e);
 			count.pre = e->position;
 
 			break;
@@ -634,11 +606,11 @@ xexec::addExec(const dodoString &module,
 		case XEXEC_MODULEACTIONTYPE_BOTH:
 
 			e->position = ++execs;
-			postExec->exec.push_back(e);
+			postExec.exec.push_back(e);
 			count.post = e->position;
 
 			e->position = ++execs;
-			preExec->exec.push_back(e);
+			preExec.exec.push_back(e);
 			count.pre = e->position;
 
 			break;

@@ -465,7 +465,7 @@ dialogue::isAuthenticated(const dodoString &user,
 		if (authInfo.type == CGI_AUTHTYPE_DIGEST)
 		{
 			unsigned char HA[16];
-			tools::code::__MD__5Context context;
+			tools::code::__MD5Context__ context;
 
 			tools::code::MD5Init(&context);
 			tools::code::MD5Update(&context, (unsigned char *)authInfo.user.c_str(), authInfo.user.size());

@@ -33,7 +33,6 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-
 #include <libdodo/cgi.h>
 
 namespace dodo
@@ -310,7 +309,7 @@ namespace dodo
 			/**
 			 * @struct __authInfo__ defines authenfication information
 			 */
-			struct __internalAuthInfo__
+			struct __authInfo__
 			{
 				dodoString user;                                                                ///< user name
 				dodoString password;                                                            ///< user password
@@ -325,7 +324,7 @@ namespace dodo
 				short      type;                                                                ///< authenfication type[see cgiAuthTypeEnum]
 			};
 
-			__internalAuthInfo__ authInfo;                                                        ///< authentication information
+			__authInfo__ authInfo;                                                        ///< authentication information
 		};
 	};
 };

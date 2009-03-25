@@ -50,18 +50,6 @@ namespace dodo
 		class eventInfo;
 
 		/**
-		 * @struct __eventInOutDescriptors__
-		 * @brief defines input and output descriptors of the io::* classes
-		 */
-		struct __eventInOutDescriptors__
-		{
-			int position;   ///< identificator of the pair
-
-			int in;         ///< input stream
-			int out;        ///< output stream
-		};
-
-		/**
 		 * @class event
 		 * @brief provides information if in/output stream is readable/writable
 		 */
@@ -136,6 +124,18 @@ namespace dodo
 											   int                  timeout = 100) const;
 
 		  protected:
+
+			/**
+			 * @struct __eventInOutDescriptors__
+			 * @brief defines input and output descriptors of the io::* classes
+			 */
+			struct __eventInOutDescriptors__
+			{
+				int position;   ///< identificator of the pair
+
+				int in;         ///< input stream
+				int out;        ///< output stream
+			};
 
 			dodoArray<__eventInOutDescriptors__> desc;    ///< stream pairs
 

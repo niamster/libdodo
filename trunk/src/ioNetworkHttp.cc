@@ -1706,7 +1706,7 @@ http::makeDigestAuth(short            requestHeader,
 	dodoString HA1;
 
 	unsigned char HA[16];
-	tools::code::__MD__5Context context;
+	tools::code::__MD5Context__ context;
 
 	dodoStringArray tuple;
 

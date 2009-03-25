@@ -1289,7 +1289,7 @@ code::bzDecompress(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 void
-code::MD5Init(__MD__5Context *context)
+code::MD5Init(__MD5Context__ *context)
 {
 	context->count[0] = context->count[1] = 0;
 
@@ -1390,7 +1390,7 @@ code::MD5Transform(unsigned int        state[4],
 
 void
 code::MD5Final(unsigned char digest[16],
-			   __MD__5Context  *context)
+			   __MD5Context__  *context)
 {
 	unsigned char bits[8];
 	unsigned int index, padLen;
@@ -1419,13 +1419,13 @@ code::MD5Final(unsigned char digest[16],
 		digest[j + 3] = (unsigned char)((context->state[i] >> 24) & 0xff);
 	}
 
-	memset(context, 0, sizeof(__MD__5Context));
+	memset(context, 0, sizeof(__MD5Context__));
 }
 
 //-------------------------------------------------------------------
 
 void
-code::MD5Update(__MD__5Context        *context,
+code::MD5Update(__MD5Context__        *context,
 				const unsigned char *input,
 				unsigned int        inputLen)
 {
@@ -1468,7 +1468,7 @@ code::MD5Update(__MD__5Context        *context,
 dodoString
 code::MD5(const dodoString &string)
 {
-	__MD__5Context context;
+	__MD5Context__ context;
 	unsigned char digest[16];
 
 	MD5Init(&context);
