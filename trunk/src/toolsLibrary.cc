@@ -7,7 +7,7 @@
  ****************************************************************************/
 
 /*
- *  This program is free software; you can redistribute it and/or modify
+ *  This program is free software; you can redistribute it and/or modifyto
  *  it under the terms of the GNU Lesser General Public License version 2.1 as published by
  *  the Free Software Foundation;
  *
@@ -27,9 +27,19 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/toolsLibrary.h>
+#include <libdodo/directives.h>
 
 #ifdef DL_EXT
+#include <dlfcn.h>
+#ifdef BFD_EXT
+#include <bfd.h>
+#endif
+#include <stdlib.h>
+
+#include <libdodo/toolsLibrary.h>
+#include <libdodo/toolsLibraryEx.h>
+#include <libdodo/types.h>
+#include <libdodo/toolsMisc.h>
 
 using namespace dodo::tools;
 
@@ -42,13 +52,9 @@ library::library() : handle(NULL)
 library::library(const dodoString &path)
 {
 #ifdef DL_FAST
-
 	handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
-
 #else
-
 	handle = dlopen(path.c_str(), RTLD_LAZY);
-
 #endif
 
 	if (handle == NULL)
@@ -62,12 +68,10 @@ library::library(const dodoString &path)
 library::~library()
 {
 #ifndef DL_FAST
-
 	if (handle != NULL)
 	{
 		dlclose(handle);
 	}
-
 #endif
 }
 
@@ -77,7 +81,6 @@ void
 library::open(const dodoString &path)
 {
 #ifndef DL_FAST
-
 	if (handle != NULL)
 	{
 		if (dlclose(handle) != 0)
@@ -85,17 +88,12 @@ library::open(const dodoString &path)
 			throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 	}
-
 #endif
 
 #ifdef DL_FAST
-
 	handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
-
 #else
-
 	handle = dlopen(path.c_str(), RTLD_LAZY);
-
 #endif
 
 	if (handle == NULL)
@@ -110,7 +108,6 @@ void
 library::close()
 {
 #ifndef DL_FAST
-
 	if (handle != NULL)
 	{
 		if (dlclose(handle) != 0)
@@ -118,7 +115,6 @@ library::close()
 			throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_CLOSE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 	}
-
 #endif
 }
 
@@ -159,7 +155,6 @@ library::operator[](const dodoString &name)
 //-------------------------------------------------------------------
 
 #ifdef BFD_EXT
-
 dodo::dodoStringArray
 library::getSymbols(const dodoString &path)
 {
@@ -218,9 +213,7 @@ library::getSymbols(const dodoString &path)
 
 	return arr;
 }
-
 #endif
-
 #endif
 
 //-------------------------------------------------------------------

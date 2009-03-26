@@ -31,11 +31,13 @@
 
 #ifdef SQLITE3_EXT
 #include <sqlite3.h>
+#include <string.h>
 
 #include <libdodo/dataBaseSqlite.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/dataBaseSqliteEx.h>
 #include <libdodo/xexec.h>
+#include <libdodo/toolsString.h>
 
 namespace dodo
 {

@@ -36,11 +36,10 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/resource.h>
-#include <sys/ioctl.h>
 #include <sys/wait.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <errno.h>
+#include <string.h>
 #ifdef PTHREAD_EXT
 #include <pthread.h>
 #endif
@@ -50,11 +49,10 @@
 
 #include "pcSyncThreadLock.inline"
 
+#include <libdodo/toolsOs.h>
 #include <libdodo/toolsOsEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
-
-#include <libdodo/toolsOs.h>
 
 using namespace dodo::tools;
 
@@ -599,15 +597,15 @@ os::getUsers()
 
 __userInfo__ &
 os::fillUserInfo(__userInfo__ &info,
-				 passwd     *in)
+				 void     *in)
 {
-	info.gid = in->pw_gid;
-	info.home = in->pw_dir;
-	info.name = in->pw_name;
-	info.pass = in->pw_passwd;
-	info.realName = in->pw_gecos;
-	info.shell = in->pw_shell;
-	info.uid = in->pw_uid;
+	info.gid = ((passwd *)in)->pw_gid;
+	info.home = ((passwd *)in)->pw_dir;
+	info.name = ((passwd *)in)->pw_name;
+	info.pass = ((passwd *)in)->pw_passwd;
+	info.realName = ((passwd *)in)->pw_gecos;
+	info.shell = ((passwd *)in)->pw_shell;
+	info.uid = ((passwd *)in)->pw_uid;
 
 	return info;
 }
@@ -616,18 +614,18 @@ os::fillUserInfo(__userInfo__ &info,
 
 __groupInfo__ &
 os::fillGroupInfo(__groupInfo__ &info,
-				  group       *pw)
+				  void       *pw)
 {
-	info.gid = pw->gr_gid;
-	info.name = pw->gr_name;
+	info.gid = ((group *)pw)->gr_gid;
+	info.name = ((group *)pw)->gr_name;
 
 	info.members.clear();
 
 	int i(0);
 
-	while (pw->gr_mem[i] != NULL)
+	while (((group *)pw)->gr_mem[i] != NULL)
 	{
-		info.members.push_back(pw->gr_mem[i++]);
+		info.members.push_back(((group *)pw)->gr_mem[i++]);
 	}
 
 	return info;

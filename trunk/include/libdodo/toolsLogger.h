@@ -32,16 +32,23 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/ioChannel.h>
-#include <libdodo/toolsTime.h>
-#include <libdodo/pcSyncProcessSection.h>
-#include <libdodo/pcSyncProtector.h>
 #include <libdodo/types.h>
-
-#include <syslog.h>
 
 namespace dodo
 {
+	namespace io
+	{
+		class channel;
+	};
+
+	namespace pc
+	{
+		namespace sync
+		{
+			class section;
+		};
+	};
+
 	namespace tools
 	{
 #define LOGGER_LEVELS 9
@@ -60,17 +67,6 @@ namespace dodo
 			LOGGER_CRITICAL,
 			LOGGER_EMERGENCY,
 			LOGGER_USER
-		};
-
-		/**
-		 * @struct __logMap__
-		 * @brief defines map between log level and log handler
-		 */
-		struct __logMap__
-		{
-			short       level;      ///< log level[see loggerLogLevelEnum]
-			io::channel *handler;   ///< log handler
-			long        position;   ///< log handler identificator
 		};
 
 		/**
@@ -127,6 +123,17 @@ namespace dodo
 		  private:
 
 			dodoString timeFormat;                          ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
+
+			/**
+			 * @struct __logMap__
+			 * @brief defines map between log level and log handler
+			 */
+			struct __logMap__
+			{
+				short       level;      ///< log level[see loggerLogLevelEnum]
+				io::channel *handler;   ///< log handler
+				long        position;   ///< log handler identificator
+			};
 
 			dodoList<__logMap__> handlers;                    ///< list of log maps
 

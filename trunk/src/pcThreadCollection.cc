@@ -32,12 +32,12 @@
 #ifdef DL_EXT
 #include <dlfcn.h>
 #endif
-
 #ifdef PTHREAD_EXT
 #include <pthread.h>
 #endif
-
 #include <signal.h>
+#include <errno.h>
+#include <string.h>
 
 #include <libdodo/pcThreadCollection.h>
 #include <libdodo/pcJobCollection.h>

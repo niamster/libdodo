@@ -35,6 +35,7 @@
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/ioChannel.h>
+#include <libdodo/toolsString.h>
 
 using namespace dodo::data::tpl;
 

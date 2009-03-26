@@ -33,18 +33,7 @@
 #include <libdodo/directives.h>
 
 #ifdef DL_EXT
-
-#include <dlfcn.h>
-
-#ifdef BFD_EXT
-
-#include <bfd.h>
-
-#endif
-
-#include <libdodo/toolsLibraryEx.h>
 #include <libdodo/types.h>
-#include <libdodo/toolsMisc.h>
 
 namespace dodo
 {
@@ -99,14 +88,12 @@ namespace dodo
 			virtual void *operator[](const dodoString &name);
 
 #ifdef BFD_EXT
-
 			/**
 			 * get symbols from the library
 			 * @return symbols of the library
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 */
 			static dodoStringArray getSymbols(const dodoString &path);
-
 #endif
 
 		  protected:
@@ -115,7 +102,6 @@ namespace dodo
 		};
 	};
 };
-
 #endif
 
 #endif

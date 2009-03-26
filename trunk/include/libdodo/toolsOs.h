@@ -502,7 +502,7 @@ namespace dodo
 			 * @param pw defines structure with info
 			 */
 			static __userInfo__ &fillUserInfo(__userInfo__ &info,
-											passwd     *pw);
+											void     *pw);
 
 			/**
 			 * fill __groupInfo__ with values from group structure
@@ -511,7 +511,7 @@ namespace dodo
 			 * @param pw defines structure with info
 			 */
 			static __groupInfo__ &fillGroupInfo(__groupInfo__ &info,
-											  group       *pw);
+											  void       *pw);
 
 			/**
 			 * @return os signal number that refers to osSignalsEnum

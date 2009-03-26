@@ -32,22 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/un.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdlib.h>
-
 #include <libdodo/types.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/toolsMiscEx.h>
 
 namespace dodo
 {

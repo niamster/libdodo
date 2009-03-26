@@ -49,6 +49,7 @@
 #include <libdodo/ioNetworkSslExchange.h>
 #include <libdodo/types.h>
 #include <libdodo/cgi.h>
+#include <libdodo/toolsMisc.h>
 
 using namespace dodo::io::network;
 

@@ -27,7 +27,17 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
+#include <syslog.h>
+
 #include <libdodo/toolsLogger.h>
+
+#include <libdodo/ioChannel.h>
+#include <libdodo/toolsTime.h>
+#include <libdodo/pcSyncProcessSection.h>
+#include <libdodo/pcSyncProtector.h>
+#include <libdodo/types.h>
 
 using namespace dodo::tools;
 

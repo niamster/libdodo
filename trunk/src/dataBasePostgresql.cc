@@ -32,6 +32,7 @@
 #ifdef POSTGRESQL_EXT
 #include <libpq-fe.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <libdodo/dataBasePostgresql.h>
 #include <libdodo/toolsString.h>

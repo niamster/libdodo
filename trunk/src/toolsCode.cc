@@ -27,7 +27,10 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/toolsCode.h>
+#include <libdodo/types.h>
 
 using namespace dodo::tools;
 

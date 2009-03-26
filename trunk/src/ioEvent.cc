@@ -31,6 +31,7 @@
 
 #include <poll.h>
 #include <errno.h>
+#include <string.h>
 
 #include <libdodo/ioEvent.h>
 #include <libdodo/ioEventEx.h>
