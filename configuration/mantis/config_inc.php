@@ -21,8 +21,8 @@
 	$g_from_email           = 'noreply@libdodo.org';
 	$g_return_path_email    = 'info@libdodo.org';
 
-	$g_host = 'http://issues.libdodo.org/';
-	$t_host = 'http://issues.libdodo.org/';
+	$g_path = 'http://issues.libdodo.org/';
+	$t_path = 'http://issues.libdodo.org/';
 
 	$g_default_advanced_report = ON;
 	$g_default_advanced_view   = ON;
