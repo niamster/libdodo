@@ -373,7 +373,6 @@ section::release()
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 #else
-
 	if (semaphore->keeper == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCPROCESSSECTION, SECTIONEX_RELEASE, exception::ERRNO_LIBDODO, SECTIONEX_NOTOPENED, PCSYNCPROCESSSECTIONEX_NOTOPENED_STR, __LINE__, __FILE__);

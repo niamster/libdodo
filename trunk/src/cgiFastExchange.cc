@@ -166,7 +166,6 @@ exchange::_readStream(char * const data)
 
 	return strlen(data);
 }
-
 #endif
 
 //-------------------------------------------------------------------

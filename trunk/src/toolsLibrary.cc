@@ -50,7 +50,7 @@ library::library() : handle(NULL)
 //-------------------------------------------------------------------
 
 library::library(const dodoString &path)
-{
+{0
 #ifdef DL_FAST
 	handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else

@@ -109,7 +109,6 @@ shared::shared(int a_key) : mshared(NULL),
 		key->key = a_key;
 	}
 #else
-
 #ifdef __FreeBSD____
 	key->key = "/tmp/";
 #else
@@ -189,7 +188,6 @@ shared::open(int a_key)
 		key = a_key;
 	}
 #else
-
 #ifdef __FreeBSD____
 	key->key = "/tmp/";
 #else
@@ -273,7 +271,6 @@ shared::remove(int a_key)
 		throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 #else
-
 #ifdef __FreeBSD____
 	dodoString key = "/tmp/";
 #else

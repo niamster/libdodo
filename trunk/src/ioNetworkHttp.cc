@@ -131,10 +131,8 @@ http::http() : followRedirection(true),
 			   scheme(SCHEME_HTTP)
 
 #ifdef OPENSSL_EXT
-
 			   ,
 			   certsSet(false)
-
 #endif
 {
 	requestHeaders[HTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
@@ -176,7 +174,6 @@ http::getStatusCode(const dodoString &header)
 //-------------------------------------------------------------------
 
 #ifdef OPENSSL_EXT
-
 void
 http::setSertificates(const io::ssl::__certificates__ &a_certs)
 {
@@ -200,7 +197,6 @@ http::removeSertificates()
 
 	certsSet = false;
 }
-
 #endif
 
 //-------------------------------------------------------------------
@@ -218,13 +214,11 @@ http::setUrl(const dodoString &a_url)
 	else
 	{
 #ifdef OPENSSL_EXT
-
 		if (tools::string::iequal(urlComponents.protocol, "https"))
 		{
 			scheme = SCHEME_HTTPS;
 		}
 		else
-
 #endif
 
 		throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_SETURL, exception::ERRNO_LIBDODO, HTTPEX_UNSUPPORTEDSURICHEME, IONETWORKHTTPEX_UNSUPPORTEDSURICHEME_STR, __LINE__, __FILE__);
@@ -240,12 +234,10 @@ http::setUrl(const dodoString &a_url)
 		}
 
 #ifdef OPENSSL_EXT
-
 		else if (scheme == SCHEME_HTTPS)
 		{
 			urlComponents.port = "443";
 		}
-
 #endif
 	}
 
@@ -311,13 +303,11 @@ http::GET()
 	}
 
 #ifdef OPENSSL_EXT
-
 	else
 	{
 		net = new ssl::client(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 		ex = new ssl::exchange;
 	}
-
 #endif
 
 	if (proxyAuthInfo.enabled)
@@ -328,7 +318,6 @@ http::GET()
 		}
 
 #ifdef OPENSSL_EXT
-
 		else
 		{
 			net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
@@ -446,7 +435,6 @@ http::GET()
 				}
 
 #ifdef OPENSSL_EXT
-
 				else
 				{
 					if (certsSet)
@@ -458,7 +446,6 @@ http::GET()
 					ex->setInBufferSize(512);
 					ex->inSize = 512;
 				}
-
 #endif
 
 				break;
@@ -466,13 +453,10 @@ http::GET()
 			catch (exception::basic &exp)
 			{
 #ifdef OPENSSL_EXT
-
 				if (exp.funcID == CLIENTEX_CONNECT || exp.funcID == ssl::CLIENTEX_CONNECT)
 
 #else
-
 				if (exp.funcID == CLIENTEX_CONNECT)
-
 #endif
 				{
 					if ((o + 1) == p)
@@ -518,12 +502,10 @@ http::GET()
 	for (; i != j; ++i)
 	{
 #ifdef OPENSSL_EXT
-
 		if (proxyAuthInfo.enabled && scheme == SCHEME_HTTPS && i->first == HTTP_REQUESTHEADER_PROXYAUTHORIZATION)
 		{
 			continue;
 		}
-
 #endif
 
 		data.append(requestHeaderStatements[i->first]);
@@ -827,13 +809,11 @@ http::POST(const dodoString &a_data,
 	}
 
 #ifdef OPENSSL_EXT
-
 	else
 	{
 		net = new ssl::client(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 		ex = new ssl::exchange;
 	}
-
 #endif
 
 	if (proxyAuthInfo.enabled)
@@ -844,7 +824,6 @@ http::POST(const dodoString &a_data,
 		}
 
 #ifdef OPENSSL_EXT
-
 		else
 		{
 			net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
@@ -943,7 +922,6 @@ http::POST(const dodoString &a_data,
 			((ssl::client *)net)->socket = -1;
 			((ssl::client *)net)->handle->handle = NULL;
 		}
-
 #endif
 	}
 	else
@@ -963,7 +941,6 @@ http::POST(const dodoString &a_data,
 				}
 
 #ifdef OPENSSL_EXT
-
 				else
 				{
 					if (certsSet)
@@ -975,7 +952,6 @@ http::POST(const dodoString &a_data,
 					ex->setInBufferSize(512);
 					ex->inSize = 512;
 				}
-
 #endif
 
 				break;
@@ -983,13 +959,9 @@ http::POST(const dodoString &a_data,
 			catch (exception::basic &exp)
 			{
 #ifdef OPENSSL_EXT
-
 				if (exp.funcID == CLIENTEX_CONNECT || exp.funcID == ssl::CLIENTEX_CONNECT)
-
 #else
-
 				if (exp.funcID == CLIENTEX_CONNECT)
-
 #endif
 				{
 					if ((o + 1) == p)
@@ -1033,12 +1005,10 @@ http::POST(const dodoString &a_data,
 	for (; i != j; ++i)
 	{
 #ifdef OPENSSL_EXT
-
 		if (proxyAuthInfo.enabled && scheme == SCHEME_HTTPS && i->first == HTTP_REQUESTHEADER_PROXYAUTHORIZATION)
 		{
 			continue;
 		}
-
 #endif
 
 		data.append(requestHeaderStatements[i->first]);
@@ -1662,13 +1632,9 @@ http::getContent(dodoString &data,
 		catch (exception::basic &ex)
 		{
 #ifdef OPENSSL_EXT
-
 			if (ex.funcID == EXCHANGEEX__READSTREAM__ || ex.funcID == ssl::EXCHANGEEX__READSTREAM__)
-
 #else
-
 			if (ex.funcID == EXCHANGEEX__READSTREAM__)
-
 #endif
 			{
 				if (!endOfHeaders && headers.size() > 0)

@@ -64,7 +64,6 @@ namespace dodo
 
 #endif
 
-
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
