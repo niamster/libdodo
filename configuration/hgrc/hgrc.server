@@ -19,4 +19,4 @@ outgoing.notify_pull = if [[ $HG_SOURCE == "serve" ]]; then for i in $(cat <path
 
 changegroup.mirror = for i in $(cat <path to list with mirrors>); do hg push -f $i; done
 
-incoming.mantis = /usr/bin/php </path/to/mantis> <<< $(hg log -r $HG_NODE --template '{desc}\n\n(changeset: {rev}:{node|short})'); /bin/true
+incoming.mantis = echo -n -e "$(hg log -r $HG_NODE --template '{desc}\n\n(changeset: {rev}:{node|short})')" | /usr/bin/php </path/to/mantis>; /bin/true
