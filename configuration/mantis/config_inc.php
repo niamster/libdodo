@@ -32,5 +32,5 @@
 	$g_source_control_regexp             = '/(?:bug|issue)\s*[#]{0,1}(\d+)/im';
 	$g_source_control_set_status_to      = RESOLVED;
 	$g_source_control_set_resolution_to  = FIXED;
-	$g_source_control_fixed_regexp       = '/(?:fix|resolv)(?:ed|es|e)\s*(?:bug|issue)?\s*[#]{0,1}(\d+)/im';
+	$g_source_control_fixed_regexp	     = '/(?:bug|issue)\s*[#]{0,1}(\d+)\[(?:fixed|resolved)\]/im';
 ?>
