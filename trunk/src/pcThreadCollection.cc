@@ -658,7 +658,6 @@ collection::running() const
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
-
 __threadMod__
 collection::getModuleInfo(const dodoString &module,
 						  void             *toInit)
@@ -737,7 +736,6 @@ collection::add(const dodoString &module,
 
 	return thread->position;
 }
-
 #endif
 
 //-------------------------------------------------------------------

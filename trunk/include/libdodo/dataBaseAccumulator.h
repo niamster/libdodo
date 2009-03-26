@@ -54,7 +54,6 @@ namespace dodo
 			  public:
 
 #ifndef DATABASE_WO_XEXEC
-
 				/**
 				 * constructor
 				 * @param executor defines class that executed hook
@@ -62,7 +61,6 @@ namespace dodo
 				 */
 				__xexecDataBaseAccumulatorCollectedData__(xexec *executor,
 														short execObject);
-
 #endif
 
 				dodoString where;                   ///< `where` for the request(can be used as `as` for `callFunction`)

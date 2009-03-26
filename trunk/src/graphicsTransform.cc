@@ -150,7 +150,6 @@ transform::rotate(double angle)
 
 	im->collectedData.handle->im = image;
 }
-
 #endif
 
 //-------------------------------------------------------------------

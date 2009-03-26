@@ -248,9 +248,7 @@ network::getInterfaceInfo(const dodoString &interface)
 	}
 
 #ifdef __FreeBSD____
-
 #else
-
 	if (::ioctl(socket, SIOCGIFNETMASK, &ifr) == -1)
 	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -262,7 +260,6 @@ network::getInterfaceInfo(const dodoString &interface)
 	{
 		info.netmask = add;
 	}
-
 #endif
 
 	if (::ioctl(socket, SIOCGIFBRDADDR, &ifr) == -1)
@@ -278,9 +275,7 @@ network::getInterfaceInfo(const dodoString &interface)
 	}
 
 #ifdef __FreeBSD____
-
 #else
-
 	if (::ioctl(socket, SIOCGIFHWADDR, &ifr) == -1)
 	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -292,7 +287,6 @@ network::getInterfaceInfo(const dodoString &interface)
 			ifr.ifr_ifru.ifru_hwaddr.sa_data[3] & 0xff,
 			ifr.ifr_ifru.ifru_hwaddr.sa_data[4] & 0xff,
 			ifr.ifr_ifru.ifru_hwaddr.sa_data[5] & 0xff);
-
 #endif
 
 	info.hwaddr = add;
@@ -308,7 +302,6 @@ network::getInterfaceInfo(const dodoString &interface)
 	}
 
 #ifdef __FreeBSD____
-
 	if (isSetFlag(ifr.ifr_ifru.ifru_flags[0], IFF_LOOPBACK))
 	{
 		info.loop = true;
@@ -318,9 +311,7 @@ network::getInterfaceInfo(const dodoString &interface)
 	{
 		info.up = true;
 	}
-
 #else
-
 	if (isSetFlag(IFF_LOOPBACK & ifr.ifr_ifru.ifru_flags, IFF_LOOPBACK))
 	{
 		info.loop = true;
@@ -330,7 +321,6 @@ network::getInterfaceInfo(const dodoString &interface)
 	{
 		info.up = true;
 	}
-
 #endif
 
 	return info;

@@ -286,7 +286,6 @@ const char code::hexEncodeChars[] = "0123456789abcdef";
 //-------------------------------------------------------------------
 
 #ifdef ICONV_EXT
-
 dodoString
 code::codesetConversion(const dodoString &buffer,
 						const dodoString &toCode,
@@ -326,13 +325,11 @@ code::codesetConversion(const dodoString &buffer,
 
 	return result;
 }
-
 #endif
 
 //-------------------------------------------------------------------
 
 #ifdef ZLIB_EXT
-
 dodoString
 code::zCompress(const dodoString &buffer,
 				unsigned short   level,
@@ -428,7 +425,6 @@ code::zDecompress(const dodoString &buffer)
 
 	return strBuf;
 }
-
 #endif
 
 //-------------------------------------------------------------------
@@ -1205,7 +1201,6 @@ code::makeUrl(const __url__ &url)
 //-------------------------------------------------------------------
 
 #ifdef BZIP2_EXT
-
 dodoString
 code::bzCompress(const dodoString &buffer,
 				 unsigned short   level,
@@ -1286,7 +1281,6 @@ code::bzDecompress(const dodoString &buffer)
 
 	return _buffer;
 }
-
 #endif
 
 //-------------------------------------------------------------------
