@@ -33,7 +33,9 @@
 #include <libdodo/toolsNetworkEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/ioNetwork.h>
+#include <libdodo/ioNetworkConnection.h>
+#include <libdodo/ioNetworkExchange.h>
+#include <libdodo/ioNetworkClient.h>
 #include <libdodo/toolsCode.h>
 
 using namespace dodo::tools;

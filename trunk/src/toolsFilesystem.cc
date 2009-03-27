@@ -241,7 +241,7 @@ filesystem::mkdir(const dodoString &path,
 		}
 		else
 		{
-			mkdir(dirname(path), permissions);
+			mkdir(dir(path), permissions);
 
 			if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
 			{
@@ -603,7 +603,7 @@ filesystem::getFileInfo(const dodoString &path)
 		throw exception::basic(exception::ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
-	file.name.assign(::basename((char *)path.c_str()));
+	file.name.assign(basename((char *)path.c_str()));
 	file.type = filesystem::getFileType(path);
 	file.perm = filesystem::getPermissions(path);
 	file.accTime = filesystem::getAccTime(path);
@@ -798,7 +798,7 @@ filesystem::getFileContentsArr(const dodoString &path)
 //-------------------------------------------------------------------
 
 dodoString
-filesystem::basename(const dodoString &path)
+filesystem::base(const dodoString &path)
 {
 	if (path.size() >= MAXPATHLEN)
 	{
@@ -809,13 +809,13 @@ filesystem::basename(const dodoString &path)
 
 	strcpy(temp, path.c_str());
 
-	return ::basename(temp);
+	return basename(temp);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-filesystem::dirname(const dodoString &path)
+filesystem::dir(const dodoString &path)
 {
 	if (path.size() >= MAXPATHLEN)
 	{
@@ -826,7 +826,7 @@ filesystem::dirname(const dodoString &path)
 
 	strcpy(temp, path.c_str());
 
-	return ::dirname(temp);
+	return dirname(temp);
 }
 
 //-------------------------------------------------------------------
@@ -842,10 +842,10 @@ filesystem::copy(const dodoString &from,
 		char temp[MAXPATHLEN];
 
 		strcpy(temp, to.c_str());
-		char *bname = ::basename(temp);
+		char *bname = basename(temp);
 		if (strcmp(bname, "..") == 0  || strcmp(bname, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
 		{
-			to = bname + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
+			to = bname + dodoString(1, FILE_DELIM) + basename((char *)from.c_str());
 		}
 	}
 
@@ -1021,10 +1021,10 @@ filesystem::copyDir(const dodoString &from,
 		char temp[MAXPATHLEN];
 
 		strcpy(temp, to.c_str());
-		char *bname = ::basename(temp);
+		char *bname = basename(temp);
 		if (strcmp(bname, "..") == 0 || strcmp(bname, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
 		{
-			to = bname + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
+			to = bname + dodoString(1, FILE_DELIM) + basename((char *)from.c_str());
 		}
 	}
 

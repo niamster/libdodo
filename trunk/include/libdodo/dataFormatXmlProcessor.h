@@ -291,7 +291,7 @@ namespace dodo
 					__doc__ *document; ///< XML Document
 #endif
 
-#define PROCESSOR_STATEMENTS 11
+#define DATAFORMATXMLPROCESSOR_STATEMENTS 11
 
 					/**
 					 * @enum processorStatementEnum defines processor statements
@@ -312,7 +312,7 @@ namespace dodo
 						PROCESSOR_STATEMENT_LTSLASH,
 					};
 
-					static const dodoString statements[PROCESSOR_STATEMENTS]; ///< processor statements
+					static const dodoString statements[DATAFORMATXMLPROCESSOR_STATEMENTS]; ///< processor statements
 				};
 			};
 		};

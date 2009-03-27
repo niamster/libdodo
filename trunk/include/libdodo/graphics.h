@@ -1,8 +1,8 @@
 /***************************************************************************
- *            ioFile.h
+ *            graphics.h
  *
- *  Tue Oct 8 08:19:57 2005
- *  Copyright  2005  Ni@m
+ *  Thu Mar 26 00:19:57 2009
+ *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,11 +27,15 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOFILE_H_
-#define _IOFILE_H_ 1
+#ifndef _GRAPHICS_H_
+#define _GRAPHICS_H_ 1
 
-#include <libdodo/ioFileRegular.h>
-#include <libdodo/ioFileTemp.h>
-#include <libdodo/ioFileFifo.h>
+#include <libdodo/graphicsColor.h>
+#include <libdodo/graphicsDraw.h>
+#include <libdodo/graphicsDrawEx.h>
+#include <libdodo/graphicsImage.h>
+#include <libdodo/graphicsImageEx.h>
+#include <libdodo/graphicsTransform.h>
+#include <libdodo/graphicsTransformEx.h>
 
 #endif

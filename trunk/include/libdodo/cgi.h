@@ -260,4 +260,15 @@ namespace dodo
 	};
 };
 
+#include <libdodo/cgiBasicExchange.h>
+#include <libdodo/cgiBasicServer.h>
+#include <libdodo/cgiDialogue.h>
+#include <libdodo/cgiDialogueEx.h>
+#include <libdodo/cgiExchange.h>
+#include <libdodo/cgiFastExchange.h>
+#include <libdodo/cgiFastExchangeEx.h>
+#include <libdodo/cgiFastServer.h>
+#include <libdodo/cgiFastServerEx.h>
+#include <libdodo/cgiServer.h>
+
 #endif

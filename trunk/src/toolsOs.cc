@@ -942,7 +942,7 @@ os::setSignalHandler(long          signal,
 #endif
 
 	struct sigaction act;
-	act.sa_sigaction = handler;
+	act.sa_sigaction = (void (*)(int, siginfo_t*, void*))handler;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
@@ -989,7 +989,7 @@ os::setMicroTimer(unsigned long timeout,
 #endif
 
 	struct sigaction act;
-	act.sa_sigaction = handler;
+	act.sa_sigaction = (void (*)(int, siginfo_t*, void*))handler;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
@@ -1055,7 +1055,7 @@ os::setTimer(long          timeout,
 #endif
 
 	struct sigaction act;
-	act.sa_sigaction = handler;
+	act.sa_sigaction = (void (*)(int, siginfo_t*, void*))handler;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
@@ -1241,7 +1241,7 @@ os::setSignalHandler(const dodoString &path,
 	}
 
 	struct sigaction act;
-	act.sa_sigaction = in;
+	act.sa_sigaction = (void (*)(int, siginfo_t*, void*))in;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)

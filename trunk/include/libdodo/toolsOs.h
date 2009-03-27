@@ -116,7 +116,7 @@ namespace dodo
 		 * struct ucontext_t *uc_link;// Context resumed after this one returns
 		 * stack_t uc_stack;// Stack used by context
 		 */
-		typedef void (*signalHandler)(int signal, siginfo_t *info, void *context);
+		typedef void (*signalHandler)(int signal, void *info, void *context);
 
 
 #define OS_SIGNALS 19

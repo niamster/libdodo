@@ -165,13 +165,13 @@ namespace dodo
 			 * @return basename of path string
 			 * @param path defines path string
 			 */
-			static dodoString basename(const dodoString &path);
+			static dodoString base(const dodoString &path);
 
 			/**
 			 * @return dirname of path string
 			 * @param path defines path string
 			 */
-			static dodoString dirname(const dodoString &path);
+			static dodoString dir(const dodoString &path);
 
 			/**
 			 * @return file content

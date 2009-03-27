@@ -36,6 +36,26 @@
 #include <regex.h>
 #endif
 
+namespace dodo
+{
+	namespace tools
+	{
+		/**
+		 * @struct __regexp__
+		 * @brief defines regular expression internal handles
+		 */
+		struct __regexp__
+		{
+#ifdef PCRE_EXT
+			pcre *code;                        ///< compiled pattern
+#else
+			regex_t code;                       ///< compiled pattern
+			bool notCompiled;                   ///< true if not compiled
+#endif
+		};
+	};
+};
+
 #include <libdodo/toolsRegexp.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsRegexpEx.h>
@@ -51,11 +71,12 @@ regexp::regexp(regexp &rt)
 regexp::regexp() : extended(true),
 				   icase(false),
 				   greedy(true),
-				   multiline(false)
+				   multiline(false),
+				   regex(new __regexp__)
 {
 #ifdef PCRE_EXT
 #else
-	notCompiled = true;
+	regex->notCompiled = true;
 #endif
 }
 
@@ -64,11 +85,12 @@ regexp::regexp() : extended(true),
 regexp::regexp(const dodoString &pattern) : extended(true),
 											icase(false),
 											greedy(true),
-											multiline(false)
+											multiline(false),
+											regex(new __regexp__)
 {
 #ifdef PCRE_EXT
 #else
-	notCompiled = true;
+	regex->notCompiled = true;
 #endif
 
 	compile(pattern);
@@ -80,11 +102,13 @@ regexp::~regexp()
 {
 #ifdef PCRE_EXT
 #else
-	if (!notCompiled)
+	if (!regex->notCompiled)
 	{
-		regfree(&code);
+		regfree(&regex->code);
 	}
 #endif
+
+	delete regex;
 }
 
 //-------------------------------------------------------------------
@@ -148,7 +172,7 @@ regexp::boundMatch(const dodoString &sample)
 #ifdef PCRE_EXT
 	int subs;
 
-	if (pcre_fullinfo(code, NULL, PCRE_INFO_CAPTURECOUNT, &subs) != 0)
+	if (pcre_fullinfo(regex->code, NULL, PCRE_INFO_CAPTURECOUNT, &subs) != 0)
 	{
 		return false;
 	}
@@ -157,7 +181,7 @@ regexp::boundMatch(const dodoString &sample)
 	subs += 3;
 
 	int *oVector = new int[subs];
-	int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
+	int rc = pcre_exec(regex->code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
 	if (rc <= 0)
 	{
 		delete [] oVector;
@@ -179,10 +203,10 @@ regexp::boundMatch(const dodoString &sample)
 
 	return true;
 #else
-	int subs = code.re_nsub + 1;
+	int subs = regex->code.re_nsub + 1;
 	regmatch_t *pmatch = new regmatch_t[subs];
 
-	int res = regexec(&code, sample.c_str(), subs, pmatch, 0);
+	int res = regexec(&regex->code, sample.c_str(), subs, pmatch, 0);
 	if (res != 0)
 	{
 		delete [] pmatch;
@@ -228,8 +252,8 @@ regexp::compile(const dodoString &pattern)
 
 	int errOffset(0), errn(0);
 	const char *error;
-	code = pcre_compile2(pattern.c_str(), bits, &errn, &error, &errOffset, NULL);
-	if (code == NULL)
+	regex->code = pcre_compile2(pattern.c_str(), bits, &errn, &error, &errOffset, NULL);
+	if (regex->code == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
 	}
@@ -243,21 +267,21 @@ regexp::compile(const dodoString &pattern)
 		bits |= REG_ICASE;
 	}
 
-	if (notCompiled)
+	if (regex->notCompiled)
 	{
-		notCompiled = false;
+		regex->notCompiled = false;
 	}
 	else
 	{
-		regfree(&code);
+		regfree(&regex->code);
 	}
 
-	int errn = regcomp(&code, pattern.c_str(), bits);
+	int errn = regcomp(&regex->code, pattern.c_str(), bits);
 	if (errn != 0)
 	{
 #define ERROR_LEN 256
 		char error[ERROR_LEN];
-		regerror(errn, &code, error, ERROR_LEN);
+		regerror(errn, &regex->code, error, ERROR_LEN);
 		throw exception::basic(exception::ERRMODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
 	}
 #endif

@@ -477,7 +477,7 @@ namespace dodo
 
 				unsigned int namespaceDeepness;                                         ///< cgi object through what output will be performed
 
-#define PROCESSOR_STATEMENTS 30
+#define DATATPLPROCESSOR_STATEMENTS 30
 
 				/**
 				 * @enum processorStatementEnum defines processor statements
@@ -517,7 +517,7 @@ namespace dodo
 					PROCESSOR_STATEMENT_CLOSE_VARPART,
 				};
 
-				static const dodoString statements[PROCESSOR_STATEMENTS]; ///< processor statements[for dodo.*, ...]
+				static const dodoString statements[DATATPLPROCESSOR_STATEMENTS]; ///< processor statements[for dodo.*, ...]
 			};
 		};
 	};

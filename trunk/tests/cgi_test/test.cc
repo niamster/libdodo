@@ -4,11 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/cgiDialogue.h>
-#include <libdodo/cgiBasicServer.h>
-#include <libdodo/cgiBasicExchange.h>
-#include <libdodo/dataTplProcessor.h>
+#include <libdodo/dodo.h>
 
 #include <iostream>
 

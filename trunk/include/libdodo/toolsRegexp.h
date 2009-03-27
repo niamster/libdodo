@@ -38,6 +38,7 @@ namespace dodo
 {
 	namespace tools
 	{
+		struct __regexp__;
 		/**
 		 * @class regexp
 		 * @brief provides REGEXP support
@@ -151,12 +152,7 @@ namespace dodo
 
 		  private:
 
-#ifdef PCRE_EXT
-			pcre * code;                        ///< compiled pattern
-#else
-			regex_t code;                       ///< compiled pattern
-			bool notCompiled;                   ///< true if not compiled
-#endif
+			__regexp__ *regex; ///< regexp handle
 
 			dodoArray<__regexMatch__> boundaries; ///< list of boundaries matched in match string by pattern
 		};

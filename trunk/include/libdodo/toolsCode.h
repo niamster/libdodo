@@ -36,15 +36,12 @@
 #ifdef ICONV_EXT
 #include <iconv.h>
 #endif
-
 #ifdef ZLIB_EXT
 #include <zlib.h>
 #endif
-
 #ifdef BZIP2_EXT
 #include <bzlib.h>
 #endif
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/socket.h>

@@ -1,15 +1,15 @@
 /***************************************************************************
- *            ioNetwork.h
+ *            dodo.h
  *
- *  Thu Oct 04 02:02:24 2005
- *  Copyright  2005  Ni@m
+ *  Thu Mar 26 00:19:57 2009
+ *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
 /*
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License version 2.1 as published by
- *  the Free Software Foundation;
+ *  it under the terms of the GNU Lesser General Public License versdodon 2.1 as published by
+ *  the Free Software Foundatdodon;
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,20 +18,28 @@
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *  Foundatdodon, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 /**
- * vim indentation settings
+ * vim indentatdodon settings
  * set tabstop=4
  * set shiftwidth=4
  */
 
-#ifndef _IONETWORK_H_
-#define _IONETWORK_H_ 1
+#ifndef _DODO_H_
+#define _DODO_H_ 1
 
-#include <libdodo/ioNetworkClient.h>
-#include <libdodo/ioNetworkServer.h>
-#include <libdodo/ioNetworkExchange.h>
+#include <libdodo/cgi.h>
+#include <libdodo/data.h>
+#include <libdodo/exceptionBasic.h>
+#include <libdodo/graphics.h>
+#include <libdodo/io.h>
+#include <libdodo/pc.h>
+#include <libdodo/rpc.h>
+#include <libdodo/tools.h>
+#include <libdodo/types.h>
+#include <libdodo/xexec.h>
+#include <libdodo/xexecEx.h>
 
 #endif
