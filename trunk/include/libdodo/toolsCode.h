@@ -32,31 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#include <errno.h>
-#ifdef ICONV_EXT
-#include <iconv.h>
-#endif
-#ifdef ZLIB_EXT
-#include <zlib.h>
-#endif
-#ifdef BZIP2_EXT
-#include <bzlib.h>
-#endif
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/un.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
-#include <stdlib.h>
-
 #include <libdodo/types.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/toolsCodeEx.h>
 
 namespace dodo
 {
