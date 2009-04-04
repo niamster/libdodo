@@ -31,14 +31,13 @@
 
 #include <sys/types.h>
 #include <sys/mman.h>
-
+#include <string.h>
 #ifdef XSI_IPC
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #else /*POSIX_SEMAPHORES*/
 #include <fcntl.h>
 #endif
-
 #include <errno.h>
 
 #include <libdodo/dataMemoryShared.h>

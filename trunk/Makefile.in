@@ -12,9 +12,9 @@ LN_S:=@LN_S@
 
 TAGS:=@TAGS@
 
-CPPFLAGS:=-I./include @CPPFLAGS@
-LDFLAGS:=-L./ @LDFLAGS@
-CFLAGS:=@CFLAGS@ @DEFS@
+CPPFLAGS+=-I./include @CPPFLAGS@
+LDFLAGS+=-L./ @LDFLAGS@
+CFLAGS+=@CFLAGS@ @DEFS@
 
 ###########################################################
 

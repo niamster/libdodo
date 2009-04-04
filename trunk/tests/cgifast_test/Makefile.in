@@ -1,7 +1,7 @@
 CXX:=@CXX@
-CPPFLAGS:=-I../../include @CPPFLAGS@
-LDFLAGS:=-L../.. @LDFLAGS@
-CFLAGS:=@CFLAGS@ @DEFS@
+CPPFLAGS+=-I../../include @CPPFLAGS@
+LDFLAGS+=-L../.. @LDFLAGS@
+CFLAGS+=@CFLAGS@ @DEFS@
 
 test: test.cc
 	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $^ -o $@

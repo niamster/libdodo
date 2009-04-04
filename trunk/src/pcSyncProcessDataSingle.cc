@@ -36,9 +36,9 @@
 #include <fcntl.h>
 #include <semaphore.h>
 #endif
-
 #include <time.h>
 #include <errno.h>
+#include <string.h>
 
 #include "pcSyncProcessLock.inline"
 

@@ -29,10 +29,18 @@
 
 #include <libdodo/directives.h>
 
+#include <netdb.h>
+#include <errno.h>
+#include <string.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/toolsNetworkEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
+#include <libdodo/toolsString.h>
 #include <libdodo/ioNetworkConnection.h>
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/ioNetworkClient.h>

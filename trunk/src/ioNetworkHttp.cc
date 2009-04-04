@@ -37,6 +37,7 @@
 
 #include <libdodo/ioNetworkHttp.h>
 #include <libdodo/toolsCode.h>
+#include <libdodo/toolsString.h>
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkClient.h>
 #include <libdodo/ioNetworkSslClient.h>
