@@ -148,7 +148,7 @@ logger::log(short            level,
 			}
 			else
 			{
-				syslog(syslogLevels[level], msg.c_str());
+				syslog(syslogLevels[level], "%s", msg.c_str());
 			}
 		}
 	}
@@ -168,7 +168,7 @@ logger::log(short            level,
 				}
 				else
 				{
-					syslog(syslogLevels[level], msg.c_str());
+					syslog(syslogLevels[level], "%s", msg.c_str());
 				}
 			}
 		}

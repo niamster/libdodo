@@ -537,7 +537,7 @@ basic::getCallStack()
 	dodoArray<__call__>::iterator i = callStack.begin(), j = callStack.end();
 	for (; i != j; ++i)
 	{
-		snprintf(str, 32, " [0x%x]", (long)i->address);
+		snprintf(str, 32, " [0x%lx]", (long)i->address);
 		stack.append(i->object + ": " + i->symbol + dodoString(str) + "\n");
 	}
 

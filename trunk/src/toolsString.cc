@@ -243,7 +243,7 @@ dodoString
 string::sToString(short number)
 {
 	char temp[SIZEOFNUM];
-	sprintf(temp, "%sd", number);
+	sprintf(temp, "%hd", number);
 
 	return temp;
 }
@@ -254,7 +254,7 @@ dodoString
 string::usToString(unsigned short number)
 {
 	char temp[SIZEOFNUM];
-	sprintf(temp, "%sd", number);
+	sprintf(temp, "%hd", number);
 
 	return temp;
 }

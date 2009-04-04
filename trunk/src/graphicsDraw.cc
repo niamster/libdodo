@@ -140,7 +140,7 @@ draw::circle(const graphics::point &center,
 			 unsigned short        borderWidth)
 {
 	char description[128];
-	snprintf(description, 128, "circle %d,%d %d,%d", center.x, center.y, center.x + radius, center.y);
+	snprintf(description, 128, "circle %ld,%ld %ld,%ld", center.x, center.y, center.x + radius, center.y);
 
 	primitive(description, fillColor, borderColor, borderWidth);
 }
@@ -159,7 +159,7 @@ draw::line(const dodoArray<graphics::point> &points,
 	dodoArray<graphics::point>::const_iterator i = points.begin(), j = points.end();
 	for (; i != j; ++i)
 	{
-		snprintf(pointDesc, 128, " %d,%d", i->x, i->y);
+		snprintf(pointDesc, 128, " %ld,%ld", i->x, i->y);
 
 		description.append(pointDesc);
 	}
@@ -177,7 +177,7 @@ draw::rectangle(const graphics::point &tl,
 				unsigned short        borderWidth)
 {
 	char description[128];
-	snprintf(description, 128, "rectangle %d,%d %d,%d", tl.x, tl.y, br.x, br.y);
+	snprintf(description, 128, "rectangle %ld,%ld %ld,%ld", tl.x, tl.y, br.x, br.y);
 
 	primitive(description, fillColor, borderColor, borderWidth);
 }
@@ -325,11 +325,11 @@ draw::point(const graphics::point &position,
 
 	if (pointWidth == 1)
 	{
-		snprintf(description, 128, "point %d,%d", position.x, position.y);
+		snprintf(description, 128, "point %ld,%ld", position.x, position.y);
 	}
 	else
 	{
-		snprintf(description, 128, "circle %d,%d %d,%d", position.x, position.y, position.x + pointWidth, position.y);
+		snprintf(description, 128, "circle %ld,%ld %ld,%ld", position.x, position.y, position.x + pointWidth, position.y);
 	}
 
 #ifndef IMAGEMAGICK_PRE_63
