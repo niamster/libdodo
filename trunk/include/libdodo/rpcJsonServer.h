@@ -33,15 +33,20 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/toolsString.h>
 #include <libdodo/rpcServer.h>
-#include <libdodo/rpcJsonMethod.h>
-#include <libdodo/rpcJsonResponse.h>
 
 namespace dodo
 {
+	namespace io
+	{
+		class channel;
+	};
+
 	namespace rpc
 	{
+		class method;
+		class response;
+
 		namespace json
 		{
 			/**
@@ -72,7 +77,7 @@ namespace dodo
 				/**
 				 * constructor
 				 */
-				server();
+				server(io::channel &io);
 
 				/**
 				 * destructor

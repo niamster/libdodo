@@ -27,7 +27,15 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcXmlServer.h>
+
+#include <libdodo/types.h>
+#include <libdodo/ioChannel.h>
+#include <libdodo/rpcServer.h>
+#include <libdodo/rpcXmlMethod.h>
+#include <libdodo/rpcXmlResponse.h>
 
 using namespace dodo::rpc::xml;
 
@@ -37,7 +45,8 @@ __additionalData__::__additionalData__(dodoString &encoding) : encoding(encoding
 
 //-------------------------------------------------------------------
 
-server::server() : rpEncoding("UTF-8")
+server::server(io::channel &io) : rpc::server(io),
+								  rpEncoding("UTF-8")
 {
 }
 
@@ -90,7 +99,7 @@ server::serve()
 {
 	try
 	{
-		rpc::method meth = processCall(receiveTextResponse());
+		rpc::method meth = processCall(io.readStream());
 
 		dodoString encoding = rpEncoding;
 
@@ -102,11 +111,11 @@ server::serve()
 
 		if (handler == handlers.end())
 		{
-			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
+			io.writeStream(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
 		}
 		else
 		{
-			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
+			io.writeStream(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
 		}
 
 		rpEncoding = encoding;
@@ -116,14 +125,14 @@ server::serve()
 		rpc::response response;
 		response.fault(ex.baseErrstr);
 
-		sendTextRequest(processCallResult(response));
+		io.writeStream(processCallResult(response));
 	}
 	catch (...)
 	{
 		rpc::response response;
 		response.fault(dodoString("An unknown error."));
 
-		sendTextRequest(processCallResult(response));
+		io.writeStream(processCallResult(response));
 	}
 }
 

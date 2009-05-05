@@ -33,16 +33,20 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/dataFormatXmlNode.h>
-#include <libdodo/toolsString.h>
 #include <libdodo/rpcClient.h>
-#include <libdodo/rpcXmlMethod.h>
-#include <libdodo/rpcXmlResponse.h>
 
 namespace dodo
 {
+	namespace io
+	{
+		class channel;
+	};
+
 	namespace rpc
 	{
+		class method;
+		class response;
+
 		namespace xml
 		{
 			/**
@@ -56,7 +60,7 @@ namespace dodo
 				/**
 				 * constructor
 				 */
-				client();
+				client(io::channel &io);
 
 				/**
 				 * destructor

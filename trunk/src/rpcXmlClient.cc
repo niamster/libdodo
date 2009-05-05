@@ -27,11 +27,20 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcXmlClient.h>
+
+#include <libdodo/types.h>
+#include <libdodo/dataFormatXmlNode.h>
+#include <libdodo/rpcClient.h>
+#include <libdodo/rpcXmlMethod.h>
+#include <libdodo/rpcXmlResponse.h>
 
 using namespace dodo::rpc::xml;
 
-client::client() : rqEncoding("UTF-8")
+client::client(io::channel &io) : rpc::client(io),
+								  rqEncoding("UTF-8")
 {
 }
 

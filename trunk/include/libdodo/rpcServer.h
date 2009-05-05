@@ -33,15 +33,20 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/toolsString.h>
 #include <libdodo/rpcValue.h>
-#include <libdodo/rpcResponse.h>
-#include <libdodo/rpcMethod.h>
 
 namespace dodo
 {
+	namespace io
+	{
+		class channel;
+	};
+
 	namespace rpc
 	{
+		class response;
+		class method;
+
 		/**
 		 * @typedef handler
 		 * @brief defines type of rpc method handler
@@ -63,7 +68,7 @@ namespace dodo
 			/**
 			 * constructor
 			 */
-			server();
+			server(io::channel &io);
 
 			/**
 			 * destructor
@@ -126,20 +131,10 @@ namespace dodo
 											  const void             *idata,
 											  void                   *odata);
 
-			/**
-			 * send request
-			 * @param method defines rpc method call
-			 */
-			virtual void sendTextRequest(const dodoString &method) = 0;
-
-			/**
-			 * get response
-			 * @return rpc response result
-			 */
-			virtual dodoString receiveTextResponse() = 0;
-
 			dodoMap<dodoString, handler, dodoMapStringCompare> handlers;    ///< method handlers
 			handler defaultHandler;                                         ///< default handler
+
+			io::channel &io; ///< I/O handler
 		};
 	};
 };

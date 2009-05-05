@@ -27,7 +27,15 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcJsonServer.h>
+
+#include <libdodo/types.h>
+#include <libdodo/ioChannel.h>
+#include <libdodo/rpcServer.h>
+#include <libdodo/rpcJsonMethod.h>
+#include <libdodo/rpcJsonResponse.h>
 
 using namespace dodo::rpc::json;
 
@@ -39,9 +47,10 @@ __additionalData__::__additionalData__(dodoString &version,
 
 //-------------------------------------------------------------------
 
-server::server() : rpVersion("1.1"),
-				   rpId(0),
-				   rqId(0)
+server::server(io::channel &io) : rpc::server(io),
+								  rpVersion("1.1"),
+								  rpId(0),
+								  rqId(0)
 {
 }
 
@@ -88,7 +97,7 @@ server::serve()
 {
 	try
 	{
-		rpc::method meth = processCall(receiveTextResponse());
+		rpc::method meth = processCall(io.readStream());
 
 		dodoString version = rqVersion;
 
@@ -101,11 +110,11 @@ server::serve()
 
 		if (handler == handlers.end())
 		{
-			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
+			io.writeStream(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
 		}
 		else
 		{
-			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
+			io.writeStream(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
 		}
 
 		rpVersion = version;
@@ -117,7 +126,7 @@ server::serve()
 
 		rpId = rqId;
 
-		sendTextRequest(processCallResult(response));
+		io.writeStream(processCallResult(response));
 	}
 	catch (...)
 	{
@@ -126,7 +135,7 @@ server::serve()
 
 		rpId = rqId;
 
-		sendTextRequest(processCallResult(response));
+		io.writeStream(processCallResult(response));
 	}
 }
 

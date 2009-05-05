@@ -27,11 +27,18 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcClient.h>
+
+#include <libdodo/ioChannel.h>
+#include <libdodo/types.h>
+#include <libdodo/rpcMethod.h>
+#include <libdodo/rpcResponse.h>
 
 using namespace dodo::rpc;
 
-client::client()
+client::client(io::channel &io) : io(io)
 {
 }
 
@@ -46,7 +53,9 @@ client::~client()
 response
 client::call(const method &method)
 {
-	return processCallResult(sendTextRequest(processCallRequest(method)));
+	io.writeStream(processCallRequest(method));
+
+	return processCallResult(io.readStream());
 }
 
 //-------------------------------------------------------------------

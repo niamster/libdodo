@@ -33,14 +33,19 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/rpcMethod.h>
-#include <libdodo/rpcResponse.h>
 
 namespace dodo
 {
+	namespace io
+	{
+		class channel;
+	};
+
 	namespace rpc
 	{
+		class response;
+		class method;
+
 		/**
 		 * @class client
 		 * @brief defines client-side RPC instrument
@@ -52,7 +57,7 @@ namespace dodo
 			/**
 			 * constructor
 			 */
-			client();
+			client(io::channel &io);
 
 			/**
 			 * destructor
@@ -81,12 +86,7 @@ namespace dodo
 			 */
 			virtual response processCallResult(const dodoString &data) = 0;
 
-			/**
-			 * send request
-			 * @return rpc response result
-			 * @param method defines rpc method call
-			 */
-			virtual dodoString sendTextRequest(const dodoString &method) = 0;
+			io::channel &io; ///< I/O handler
 		};
 	};
 };

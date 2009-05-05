@@ -25,6 +25,8 @@ OBJECTS:=@OBJECTS@
 VPATH:=src/
 
 all: @PACKAGE_NAME@
+dodo: all
+build: all
 
 @PACKAGE_NAME@: $(OBJECTS)
 	@echo "-- Linking dodo"

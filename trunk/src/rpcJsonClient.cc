@@ -27,12 +27,22 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcJsonClient.h>
+
+#include <libdodo/types.h>
+#include <libdodo/rpcClient.h>
+#include <libdodo/rpcResponse.h>
+#include <libdodo/rpcJsonMethod.h>
+#include <libdodo/dataFormatJsonNode.h>
+#include <libdodo/rpcJsonResponse.h>
 
 using namespace dodo::rpc::json;
 
-client::client() : rqVersion("1.1"),
-				   rqId(0)
+client::client(io::channel &io) : rpc::client(io),
+								  rqVersion("1.1"),
+								  rqId(0)
 {
 }
 

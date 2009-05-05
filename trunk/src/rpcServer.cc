@@ -27,11 +27,20 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcServer.h>
+
+#include <libdodo/ioChannel.h>
+#include <libdodo/types.h>
+#include <libdodo/rpcValue.h>
+#include <libdodo/rpcResponse.h>
+#include <libdodo/rpcMethod.h>
 
 using namespace dodo::rpc;
 
-server::server() : defaultHandler(&rpcDefaultHandler)
+server::server(io::channel &io) : defaultHandler(&rpcDefaultHandler),
+								  io(io)
 {
 }
 
@@ -87,17 +96,17 @@ server::serve()
 {
 	try
 	{
-		method meth = processCall(receiveTextResponse());
+		method meth = processCall(io.readStream());
 
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
 		if (handler == handlers.end())
 		{
-			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL)));
+			io.writeStream(processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL)));
 		}
 		else
 		{
-			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL)));
+			io.writeStream(processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL)));
 		}
 	}
 	catch (exception::basic &ex)
@@ -105,14 +114,14 @@ server::serve()
 		response response;
 		response.fault(ex.baseErrstr);
 
-		sendTextRequest(processCallResult(response));
+		io.writeStream(processCallResult(response));
 	}
 	catch (...)
 	{
 		response response;
 		response.fault(dodoString("An unknown error."));
 
-		sendTextRequest(processCallResult(response));
+		io.writeStream(processCallResult(response));
 	}
 }
 

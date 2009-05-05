@@ -30,12 +30,8 @@
 #ifndef _RPC_H_
 #define _RPC_H_ 1
 
-#include <libdodo/rpcCgiServer.h>
 #include <libdodo/rpcClient.h>
-#include <libdodo/rpcHttpClient.h>
-#include <libdodo/rpcJsonCgiServer.h>
 #include <libdodo/rpcJsonClient.h>
-#include <libdodo/rpcJsonHttpClient.h>
 #include <libdodo/rpcJsonMethod.h>
 #include <libdodo/rpcJsonMethodEx.h>
 #include <libdodo/rpcJsonResponse.h>
@@ -48,9 +44,7 @@
 #include <libdodo/rpcServer.h>
 #include <libdodo/rpcValue.h>
 #include <libdodo/rpcValueEx.h>
-#include <libdodo/rpcXmlCgiServer.h>
 #include <libdodo/rpcXmlClient.h>
-#include <libdodo/rpcXmlHttpClient.h>
 #include <libdodo/rpcXmlMethod.h>
 #include <libdodo/rpcXmlResponse.h>
 #include <libdodo/rpcXmlServer.h>
