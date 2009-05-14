@@ -4,7 +4,7 @@ AC_PREREQ(2.60)
 # project identity
 ##
 
-AC_INIT(libdodo, 0.11.0, libdodo.org)
+AC_INIT(libdodo, 0.11.0, issues.libdodo.org)
 
 OS=$(uname)
 
