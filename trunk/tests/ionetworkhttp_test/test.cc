@@ -5,11 +5,7 @@
  */
 
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/ioNetworkHttp.h>
-#include <libdodo/types.h>
-#include <libdodo/cgi.h>
-#include <libdodo/toolsFilesystem.h>
+#include <libdodo/dodo.h>
 
 #include <iostream>
 
@@ -31,12 +27,12 @@ int main(int argc, char **argv)
 		map["hidden"] = "hidden";
 		map["text"] = "text";
 
-		dodoMap<dodoString, __httpPostFile> files;
+		dodoMap<dodoString, __httpPostFile__> files;
 
-		files["file"] = __httpPostFile("./test.cc", "text/plain");
+		files["file"] = __httpPostFile__("./test.cc", "text/plain");
 
 		http HTTP;
-		__httpResponse res;
+		__httpResponse__ res;
 
 		HTTP.setCookies(cookies);
 
@@ -61,7 +57,7 @@ int main(int argc, char **argv)
 		cout << res.data.size() << "\n~~\n";
 
 		cout << "Cookies:\n";
-		dodoArray<cgi::__cgiCookie>::iterator i(res.cookies.begin()), j(res.cookies.end());
+		dodoArray<cgi::__cgiCookie__>::iterator i(res.cookies.begin()), j(res.cookies.end());
 		for (; i != j; ++i)
 			cout << i->name << "=" << i->value << "\n~~\n";
 	}
