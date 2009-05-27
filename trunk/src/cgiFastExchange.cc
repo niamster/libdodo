@@ -93,7 +93,7 @@ exchange::getenv(const char *buf)
 int
 exchange::getInDescriptor() const
 {
-	return -1;
+	throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT, CGIFASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -101,7 +101,7 @@ exchange::getInDescriptor() const
 int
 exchange::getOutDescriptor() const
 {
-	return -1;
+	throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT, CGIFASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

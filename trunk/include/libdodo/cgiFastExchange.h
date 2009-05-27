@@ -50,14 +50,6 @@ namespace dodo
 			 */
 			class exchange : virtual public cgi::exchange
 			{
-			  private:
-
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				exchange(exchange &cf);
-
 			  public:
 
 				/**
@@ -83,6 +75,14 @@ namespace dodo
 				 * @param data defines name of environment variable
 				 */
 				virtual char *getenv(const char *data);
+
+			  private:
+
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				exchange(exchange &);
 
 			  protected:
 

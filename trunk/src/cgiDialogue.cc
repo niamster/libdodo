@@ -163,7 +163,6 @@ dialogue::dialogue(dialogue &ct) : cgiIO(ct.cgiIO)
 //-------------------------------------------------------------------
 
 dialogue::dialogue(exchange   &a_cf,
-				   bool       silent,
 				   bool       a_autocleanFiles,
 				   bool       a_postFilesInMem,
 				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
@@ -179,11 +178,6 @@ dialogue::dialogue(exchange   &a_cf,
 	dodoMap<short, dodoString> headers;
 	initHeaders(headers);
 
-	if (!silent)
-	{
-		printHeaders();
-	}
-
 	makeEnv();
 
 	makeAuth();
@@ -193,15 +187,14 @@ dialogue::dialogue(exchange   &a_cf,
 	makeContent();
 	makePost();
 
-	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
-	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
+	makeKeyValue(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+	makeKeyValue(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 //-------------------------------------------------------------------
 
 dialogue::dialogue(exchange &a_cf,
 				   dodoMap<short, dodoString> &headers,
-				   bool silent,
 				   bool a_autocleanFiles,
 				   bool a_postFilesInMem,
 				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
@@ -216,10 +209,7 @@ dialogue::dialogue(exchange &a_cf,
 
 	initHeaders(headers);
 
-	if (!silent)
-	{
-		printHeaders();
-	}
+	printHeaders();
 
 	makeEnv();
 
@@ -230,8 +220,8 @@ dialogue::dialogue(exchange &a_cf,
 	makeContent();
 	makePost();
 
-	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
-	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
+	makeKeyValue(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+	makeKeyValue(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 //-------------------------------------------------------------------
@@ -558,7 +548,7 @@ dialogue::getMethod() const
 //-------------------------------------------------------------------
 
 void
-dialogue::make(dodoStringMap    &val,
+dialogue::makeKeyValue(dodoStringMap    &val,
 			   const dodoString &string,
 			   const char       *delim)
 {
@@ -751,7 +741,7 @@ dialogue::makePost()
 
 	if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
 	{
-		make(POST, content);
+		makeKeyValue(POST, content);
 
 		content.clear();
 	}
@@ -986,26 +976,6 @@ dialogue::request(const dodoString &varName)
 	}
 
 	return __dodostring____;
-}
-
-//-------------------------------------------------------------------
-
-void
-dialogue::setCookie(const dodoString &name,
-					const dodoString &value,
-					const dodoString &expires,
-					const dodoString &path,
-					const dodoString &domain,
-					bool             secure)
-{
-	__cgiCookie__ temp(secure);
-	temp.name = name;
-	temp.value = tools::code::encodeUrl(value);
-	temp.expires = expires;
-	temp.path = path;
-	temp.domain = domain;
-
-	cookies.push_back(temp);
 }
 
 //-------------------------------------------------------------------
