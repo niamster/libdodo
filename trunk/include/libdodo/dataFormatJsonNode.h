@@ -79,6 +79,11 @@ namespace dodo
 				  public:
 
 					/**
+					 * move constructor
+					 */
+					node(const node &);
+
+					/**
 					 * constructor
 					 * @note constructs `null` object
 					 */
@@ -173,69 +178,67 @@ namespace dodo
 					 * @param key defines key to search for node
 					 * @note throws exception if data type is not DATATYPE_OBJECT
 					 */
-					virtual node operator[](const dodoString &key);
+					virtual node operator[](const dodoString &key) const;
 
 					/**
 					 * @return node by numeric key
 					 * @param key defines key to search for node
 					 * @note throws exception if data type is not DATATYPE_ARRAY
 					 */
-					virtual node operator[](unsigned long key);
+					virtual node operator[](unsigned long key) const;
 
 					/**
 					 * @return type of node[see jsonDataTypeEnum]
 					 */
-					virtual short getType();
+					virtual short getType() const;
 
 					/**
 					 * @return true if node is `null`
 					 */
-					virtual bool isNull();
+					virtual bool isNull() const;
 
 					/**
 					 * @return string value
 					 * @note throws exception if data type is not DATATYPE_STRING
 					 */
-					virtual dodoString getString();
+					virtual dodoString getString() const;
 
 					/**
 					 * @return boolean value
 					 * @note throws exception if data type is not DATATYPE_BOOLEAN
 					 */
-					virtual bool getBoolean();
+					virtual bool getBoolean() const;
 
 					/**
 					 * @return numeric value
 					 * @note throws exception if data type is not DATATYPE_NUMERIC
 					 */
-					virtual long getNumeric();
+					virtual long getNumeric() const;
 
 					/**
 					 * @return array value
 					 * @note throws exception if data type is not DATATYPE_ARRAY
 					 */
-					virtual dodoArray<node> getArray();
+					virtual dodoArray<node> getArray() const;
 
 					/**
 					 * @return object value
 					 * @note throws exception if data type is not DATATYPE_OBJECT
 					 */
-					virtual dodoMap<dodoString, node, dodoMapStringCompare> getObject();
-
-					/**
-					 * clear internal data
-					 */
-					virtual void clear();
+					virtual dodoMap<dodoString, node, dodoMapStringCompare> getObject() const;
 
 				  private:
 
-					dodoString stringValue;                                         ///< string value of node
-					dodoMap<dodoString, node, dodoMapStringCompare> objectValue;    ///< object value of node
-					dodoArray<node> arrayValue;                                     ///< array value of node
-					bool booleanValue;                                              ///< boolean value of node
-					long numericValue;                                              ///< numeric value of node
+					union
+					{
+						dodoString *stringValue;                                         ///< string value of node
+						dodoMap<dodoString, node, dodoMapStringCompare> *objectValue;    ///< object value of node
+						dodoArray<node> *arrayValue;                                     ///< array value of node
+						bool booleanValue;                                              ///< boolean value of node
+						long numericValue;                                              ///< numeric value of node
+					};
 
-					short valueDataType;                                            ///< data type of value
+					mutable short valueDataType;                                            ///< data type of value
 				};
 			};
 		};

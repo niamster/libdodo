@@ -37,40 +37,33 @@ method::jsonToMethod(dodo::data::format::json::node &node,
 					 long                           &id)
 {
 	if (node.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
-	{
 		throw exception::basic(exception::ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
-	}
 
-	dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare> &obj = node.objectValue;
-
+	dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare> *obj = node.objectValue;
 	rpc::method meth;
 
-	meth.name = obj["method"].getString();
+	meth.name = (*obj)["method"].getString();
+	version = (*obj)["version"].getString();
+	id = (*obj)["id"].getNumeric();
 
-	version = obj["version"].getString();
+	dodo::data::format::json::node &params = (*obj)["params"];
 
-	id = obj["id"].getNumeric();
-
-	dodo::data::format::json::node &params = obj["params"];
-
-	if (params.valueDataType != dodo::data::format::json::DATATYPE_ARRAY && params.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
-	{
+	if (params.valueDataType != dodo::data::format::json::DATATYPE_ARRAY &&
+		params.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
 		throw exception::basic(exception::ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_PARAMSNOTANARRAY, RPCJSONMETHODEX_PARAMSNOTANARRAY_STR, __LINE__, __FILE__);
-	}
 
 	if (params.valueDataType == dodo::data::format::json::DATATYPE_ARRAY)
 	{
-		dodoArray<dodo::data::format::json::node>::iterator i = params.arrayValue.begin(), j = params.arrayValue.end();
+		dodoArray<dodo::data::format::json::node>::iterator
+			i = params.arrayValue->begin(),
+			j = params.arrayValue->end();
 		for (; i != j; ++i)
-		{
 			meth.arguments.push_back(value::jsonToValue(*i));
-		}
 	}
 	else
 	{
 		meth.arguments.push_back(value::jsonToValue(params));
 	}
-
 
 	return meth;
 }
@@ -83,42 +76,39 @@ method::methodToJson(const rpc::method &data,
 					 long              id)
 {
 	dodo::data::format::json::node meth;
-
-	meth.valueDataType = dodo::data::format::json::DATATYPE_OBJECT;
-
 	dodo::data::format::json::node node;
 
+	meth.valueDataType = dodo::data::format::json::DATATYPE_OBJECT;
+	meth.objectValue = new dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>;
+
 	node.valueDataType = dodo::data::format::json::DATATYPE_STRING;
+	node.stringValue = new dodoString(data.name);
+	meth.objectValue->insert(make_pair(dodoString("method"), node));
 
-	node.stringValue = data.name;
-	meth.objectValue.insert(make_pair(dodoString("method"), node));
-
-	node.stringValue = version;
-	meth.objectValue.insert(make_pair(dodoString("version"), node));
-
-	node.stringValue.clear();
+	node.valueDataType = dodo::data::format::json::DATATYPE_STRING;
+	node.stringValue = new dodoString(version);
+	meth.objectValue->insert(make_pair(dodoString("version"), node));
 
 	node.valueDataType = dodo::data::format::json::DATATYPE_NUMERIC;
 	node.numericValue = id;
-	meth.objectValue.insert(make_pair(dodoString("id"), node));
+	meth.objectValue->insert(make_pair(dodoString("id"), node));
 
 	dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
 	if (i != j)
 	{
 		if (data.arguments.size() == 1 && i->valueDataType == DATATYPE_STRUCT)
 		{
-			meth.objectValue.insert(make_pair(dodoString("params"), value::valueToJson(*i)));
+			meth.objectValue->insert(make_pair(dodoString("params"), value::valueToJson(*i)));
 		}
 		else
 		{
 			node.valueDataType = dodo::data::format::json::DATATYPE_ARRAY;
+			node.arrayValue = new dodoArray<dodo::data::format::json::node>;
 
 			for (; i != j; ++i)
-			{
-				node.arrayValue.push_back(value::valueToJson(*i));
-			}
+				node.arrayValue->push_back(value::valueToJson(*i));
 
-			meth.objectValue.insert(make_pair(dodoString("params"), node));
+			meth.objectValue->insert(make_pair(dodoString("params"), node));
 		}
 	}
 
