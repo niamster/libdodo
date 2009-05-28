@@ -4,9 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/toolsMisc.h>
-#include <libdodo/dataFormatJsonProcessor.h>
-#include <libdodo/dataFormatJsonNode.h>
+#include <libdodo/dodo.h>
 
 #include <iostream>
 
@@ -14,6 +12,65 @@ using namespace dodo;
 using namespace data::format::json;
 
 using namespace std;
+
+void showJSON(const node &jsN, short level=0)
+{
+	switch (jsN.getType())
+	{
+		case DATATYPE_STRING:
+
+			cout << dodoString(level, '\t') << "[string]: " << jsN.getString() << endl;
+
+			break;
+
+		case DATATYPE_OBJECT:
+		{
+			cout << dodoString(level, '\t') << "[object]: " << endl;
+			const dodoMap<dodoString, node, dodoMapStringCompare>
+				&objectValue = jsN.getObject();
+			dodoMap<dodoString, node, dodoMapStringCompare>::const_iterator
+				i = objectValue.begin(),
+				j = objectValue.end();
+			for (; i != j; ++i)
+			{
+				cout << dodoString(level+1, '\t') << "'" << i->first << "'" << endl;
+				showJSON(i->second, level+2);
+			}
+
+			break;
+		}
+
+		case DATATYPE_NULL:
+
+			cout << dodoString(level, '\t') << "[null]" << endl;
+
+			break;
+
+		case DATATYPE_NUMERIC:
+
+			cout << dodoString(level, '\t') << "[numeric]: " << jsN.getNumeric() << endl;
+
+			break;
+
+		case DATATYPE_BOOLEAN:
+
+			cout << dodoString(level, '\t') << "[boolean]: " << (jsN.getBoolean() ? "true" : "false") << endl;
+
+			break;
+
+		case DATATYPE_ARRAY:
+		{
+			const dodoArray<node> &arrayValue = jsN.getArray();
+			dodoArray<node>::const_iterator i = arrayValue.begin(), j = arrayValue.end();
+
+			cout << dodoString(level, '\t') << "[array]: " << endl;
+			for (; i != j; ++i)
+				showJSON(*i, level+1);
+
+			break;
+		}
+	}
+}
 
 int main(int argc, char **argv)
 {
@@ -51,103 +108,7 @@ int main(int argc, char **argv)
 		cout << js.make(node0) << endl;
 
 		node jsN = js.processString(js.make(node0));
-
-		switch (jsN.getType())
-		{
-			case DATATYPE_OBJECT:
-
-				dodoMap<dodoString, node, dodoMapStringCompare> objectValue = jsN.getObject();
-				cout << "size: " << objectValue.size() << endl;
-				dodoMap<dodoString, node>::iterator i = objectValue.begin(), j = objectValue.end();
-
-				for (; i != j; ++i)
-				{
-					cout << i->first << ": ";
-					switch (i->second.getType())
-					{
-						case DATATYPE_STRING:
-
-							cout << "[string]: " << i->second.getString() << endl;
-
-							break;
-
-						case DATATYPE_OBJECT:
-
-							cout << "[object]: " << endl;
-
-							break;
-
-						case DATATYPE_NULL:
-
-							cout << "[null]: null" << endl;
-
-							break;
-
-						case DATATYPE_NUMERIC:
-
-							cout << "[numeric]: " << i->second.getNumeric() << endl;
-
-							break;
-
-						case DATATYPE_BOOLEAN:
-
-							cout << "[boolean]: " << (i->second.getBoolean() ? "true" : "false") << endl;
-
-							break;
-
-						case DATATYPE_ARRAY:
-						{
-							dodoArray<node> objectValue = i->second.getArray();
-							dodoArray<node>::iterator o = objectValue.begin(), p = objectValue.end();
-
-							cout << "[array]: " << endl;
-							for (; o != p; ++o)
-								switch (o->getType())
-								{
-									case DATATYPE_STRING:
-
-										cout << "\t[string]: " << o->getString() << endl;
-
-										break;
-
-									case DATATYPE_ARRAY:
-
-										cout << "\t[array]: " << endl;
-
-										break;
-
-									case DATATYPE_OBJECT:
-
-										cout << "\t[object]: " << endl;
-
-										break;
-
-									case DATATYPE_NULL:
-
-										cout << "\t[null]: null" << endl;
-
-										break;
-
-									case DATATYPE_NUMERIC:
-
-										cout << "\t[numeric]: " << o->getNumeric() << endl;
-
-										break;
-
-									case DATATYPE_BOOLEAN:
-
-										cout << "\t[boolean]: " << (o->getBoolean() ? "true" : "false") << endl;
-
-										break;
-								}
-
-							break;
-						}
-					}
-				}
-
-				break;
-		}
+		showJSON(jsN);
 
 		dodoStringMap map;
 		map["test"] = "test";

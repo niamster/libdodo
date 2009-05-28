@@ -50,14 +50,6 @@ namespace dodo
 			 */
 			class server : public cgi::server
 			{
-			  private:
-
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				server(server &cf);
-
 			  public:
 
 				/**
@@ -84,9 +76,17 @@ namespace dodo
 				virtual void serve(serverHandler func);
 
 				/**
-				 * @return true if called as a fast CGI[not as a CGI]
+				 * @return true if called as a fast CGI
 				 */
 				virtual bool isFastCgi();
+
+			  private:
+
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				server(server &);
 
 			  private:
 

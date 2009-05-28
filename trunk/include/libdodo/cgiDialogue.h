@@ -37,14 +37,6 @@
 
 namespace dodo
 {
-	namespace rpc
-	{
-		namespace cgi
-		{
-			class server;
-		};
-	};
-
 	namespace cgi
 	{
 		class exchange;
@@ -54,7 +46,7 @@ namespace dodo
 		 * headers that will be printed calling prinHeaders method:
 		 * "Content-type",
 		 * "X-Powered-By"
-		 * you can change them or add extra using HEADERS cgi class property
+		 * you can change them or add extra using HEADERS dialogue class property
 		 */
 
 		/**
@@ -65,44 +57,32 @@ namespace dodo
 		 */
 		class dialogue
 		{
-			friend class rpc::cgi::server;
-
-		  private:
-
-			/**
-			 * copy constructor
-			 * @note to prevent copying
-			 */
-			dialogue(dialogue &ct);
-
 		  public:
 
 			/**
 			 * constructor
-			 * @param cf defines I/O interface
-			 * @param silent defines whether to print headers in constructor or not
+			 * @param io defines I/O interface
 			 * @param autocleanFiles defines whether to clean POST files in destructor
 			 * @param postFilesInMem defines place of POST files[disk or memory]
 			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
+			 * @note header won't be printed until print/printStream/desctructor is called
 			 */
-			dialogue(exchange   &cf,
-					 bool       silent = false,
+			dialogue(exchange   &io,
 					 bool       autocleanFiles = true,
 					 bool       postFilesInMem = true,
 					 dodoString postFilesTmpDir = "/tmp/");
 
 			/**
 			 * constructor
-			 * @param cf defines I/O interface
-			 * @param headers defines headers that will be printed
+			 * @param io defines I/O interface
 			 * @param silent defines whether to print headers in constructor or not
 			 * @param autocleanFiles defines whether to clean POST files in destructor
 			 * @param postFilesInMem defines place of POST files[disk or memory]
 			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
+			 * @note headers will be printed in contructor
 			 */
-			dialogue(exchange &cf,
+			dialogue(exchange &io,
 					 dodoMap<short, dodoString> &headers,
-					 bool silent = false,
 					 bool autocleanFiles = true,
 					 bool postFilesInMem = true,
 					 dodoString postFilesTmpDir = "/tmp/");
@@ -160,9 +140,10 @@ namespace dodo
 			mutable dodoMap<short, dodoString> ENVIRONMENT;             ///< environment variables[see cgiEnvironmentEnum]
 			dodoStringMap COOKIES;                                      ///< cookies sent by browser
 			dodoMap<dodoString, __cgiFile__, dodoMapStringCompare> FILES; ///< POST files
-			dodoMap<short, dodoString> HEADERS;                         ///< headers that will be printed with printHeaders method
 
 			dodoString content;                                         ///< contents of the stdin for the POST request
+
+			dodoMap<short, dodoString> HEADERS;                         ///< headers that will be printed with printHeaders method
 
 			/**
 			 * @return value of the requested variable from POST and GET
@@ -191,23 +172,6 @@ namespace dodo
 
 			/**
 			 * set cookie
-			 * @param name defines name of cookie
-			 * @param value defines value of cookie
-			 * @param exDate defines expiration date
-			 * @param path defines cookie path
-			 * @param domain defines cookie domain
-			 * @param secure defines cookie security
-			 * @note cookies are printed with printHeaders method
-			 */
-			virtual void setCookie(const dodoString &name,
-								   const dodoString &value,
-								   const dodoString &exDate = __dodostring____,
-								   const dodoString &path = __dodostring____,
-								   const dodoString &domain = __dodostring____,
-								   bool             secure = false);
-
-			/**
-			 * set cookie
 			 * @param cookie defines the cookie
 			 * @note cookies are printed with printHeaders method
 			 */
@@ -224,6 +188,14 @@ namespace dodo
 			 * @note headers are printed before the cast
 			 */
 			virtual operator exchange*();
+
+		  private:
+
+			/**
+			 * copy constructor
+			 * @note to prevent copying
+			 */
+			dialogue(dialogue &);
 
 		  protected:
 
@@ -267,13 +239,13 @@ namespace dodo
 			 * from : name1=value1`delim`name2=value2
 			 * to : val["name1"]=value1; val["name2"]=value2;
 			 */
-			virtual void make(dodoStringMap    &val,
-							  const dodoString &string,
-							  const char       *delim = "&");
+			virtual void makeKeyValue(dodoStringMap    &val,
+									  const dodoString &string,
+									  const char       *delim = "&");
 
 			/**
 			 * print cgi headers
-			 * @note print cookies also
+			 * @note prints cookies also
 			 */
 			virtual void printHeaders() const;
 
@@ -283,12 +255,10 @@ namespace dodo
 			dodoString returnMessage;                                                           ///< HTTP return message
 
 			bool postFilesInMem;                                                                ///< place of POST files
-
 			bool autocleanFiles;                                                                ///< defines whether to clean POST files in destructor
-
 			dodoString postFilesTmpDir;                                                         ///< directory for POST files if on they are saved on the disk
 
-			dodoList<__cgiCookie__> cookies;                                                      ///< cookies
+			dodoList<__cgiCookie__> cookies;                                                    ///< cookies
 			int method;                                                                         ///< request method
 
 			dodoStringArray contenTypeExtensions;                                               ///< contains contentype extension[boundary, modification-date, etc]

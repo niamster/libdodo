@@ -100,6 +100,15 @@ namespace dodo
 			};
 
 			/**
+			 * @enum httpRequestTypeEnum defines type of HTTP request
+			 */
+			enum httpRequestTypeEnum
+			{
+				HTTP_REQUESTTYPE_GET,
+				HTTP_REQUESTTYPE_POST
+			};
+
+			/**
 			 * @struct __httpResponse__
 			 * @brief defines HTTP response
 			 */
@@ -137,12 +146,12 @@ namespace dodo
 				__httpPostFile__();
 
 				dodoString path;                        ///< path to file
-				dodoString mime;                        ///<  mimetype of the file
+				dodoString mime;                        ///< mimetype of the file
 			};
 
 			/**
 			 * @class http
-			 * @brief provides disk I/O manipulations
+			 * @brief provides HTTP I/O manipulation
 			 */
 			class http
 			{
@@ -172,11 +181,6 @@ namespace dodo
 				 * @param certs defines certificates information
 				 */
 				virtual void setSertificates(const io::ssl::__certificates__ &certs);
-
-				/**
-				 * remove certificates information
-				 */
-				virtual void removeSertificates();
 #endif
 
 				dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see httpRequestHeaderEnum]
@@ -197,11 +201,6 @@ namespace dodo
 									  unsigned int     port = 3128,
 									  const dodoString &user = __dodostring____,
 									  const dodoString &password = __dodostring____);
-
-				/**
-				 * disable proxy usage
-				 */
-				virtual void removeProxy();
 
 				/**
 				 * set cookies for the request
@@ -318,44 +317,54 @@ namespace dodo
 				 * @return flag of redirection/authentification status
 				 * @param data defines buffer to store response
 				 * @param ex defines network connection
+				 * @param response defines response data to be filled
 				 */
 				virtual short getContent(dodoString &data,
-										 exchange   *ex);
+										 exchange   *ex,
+										 __httpResponse__ &response);
 
 				/**
 				 * get proxy CONNECT response data
 				 * @return flag of authentification status
 				 * @param data defines buffer to store response
 				 * @param ex defines network connection
+				 * @param response defines response data to be filled
 				 */
 				virtual short getProxyConnectResponse(char     *data,
-													  exchange *ex);
+													  exchange *ex,
+													  __httpResponse__ &response);
 
 				unsigned short authTries;                                                           ///< autherization request counter
 
 				static const dodoString requestHeaderStatements[HTTP_REQUESTHEADERSTATEMENTS];      ///< HTTP request headers[see httpRequestHeaderEnum]
-				static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];    ///< HTTP response headers[see httpResponseHeaderEnum]                                                                                                                                                                                       ///< parser for HTTP response status code
+				static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];    ///< HTTP response headers[see httpResponseHeaderEnum]
 
-				__httpResponse__ response;                                                            ///< HTTP response data
 				tools::__url__ urlComponents;                                                         ///< HTTP URL components
 				dodoString urlQuery;                                                                ///< HTTP URL query
 				dodoString urlBasePath;                                                             ///< HTTP URL base path
 
+				/**
+				 * @return status code from header
+				 */
 				virtual short getStatusCode(const dodoString &header);
 
 				/**
 				 * @return true if no more headers should be processed
 				 * @param data defines response data
 				 * @param headers defines data with headers
+				 * @param response defines response data to be filled
 				 */
 				virtual bool extractHeaders(const dodoString &data,
-											dodoString       &headers);
+											dodoString       &headers,
+											__httpResponse__ &response);
 
 				/**
 				 * fetch headers
 				 * @param headers defines data with headers
+				 * @param response defines response data to be filled
 				 */
-				virtual void getHeaders(const dodoString &headers);
+				virtual void getHeaders(const dodoString &headers,
+										__httpResponse__ &response);
 
 				/**
 				 * @param responseHeader defines what header create[HTTP_REQUESTHEADER_AUTHORIZATION or HTTP_REQUESTHEADER_PROXYAUTHORIZATION]
@@ -372,12 +381,14 @@ namespace dodo
 				 * @param method defines request method
 				 * @param user defines user name
 				 * @param password defines user password
+				 * @param response defines response data to be filled
 				 */
 				virtual void makeDigestAuth(short            requestHeader,
 											short            responseHeader,
 											const dodoString &method,
 											const dodoString &user,
-											const dodoString &password);
+											const dodoString &password,
+											__httpResponse__ &response);
 
 				/**
 				 * clear authentification/cookies information
@@ -413,16 +424,10 @@ namespace dodo
 				 */
 				struct __proxyAuthInfo__
 				{
-					/**
-					 * constructor
-					 */
-					__proxyAuthInfo__();
-
 					dodoString   user;          ///< user name
 					dodoString   password;      ///< user password
 					dodoString   host;          ///< proxy ip address
 					unsigned int port;          ///< proxy port
-					bool         enabled;       ///< if true proxy settings are enabled
 					short        authType;      ///< type of proxy authentication[see proxyAuthTypeEnum]
 				};
 
@@ -431,8 +436,8 @@ namespace dodo
 				dodoStringMap httpAuth;         ///< cached HTTP auth info
 
 #ifdef OPENSSL_EXT
-				io::ssl::__certificates__ certs;  ///< SSL certificates
-				bool certsSet;
+				io::ssl::__certificates__	certs;  ///< SSL certificates
+				bool						certsSet;
 #endif
 			};
 		};

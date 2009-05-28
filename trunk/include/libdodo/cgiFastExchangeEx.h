@@ -47,13 +47,15 @@ namespace dodo
 			{
 				FASTEXCHANGEEX_FAILEDTOFLUSH,
 				FASTEXCHANGEEX_FAILEDTOPRINTSTRING,
+				FASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT,
 			};
 
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR       "Failed to flush."
-#define CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
+#define CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR			"Failed to flush."
+#define CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR	"Failed to print string."
+#define CGIFASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT_STR	"io::memory can not be used with io::event."
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -62,6 +64,8 @@ namespace dodo
 			{
 				FASTEXCHANGEEX_FLUSH,
 				FASTEXCHANGEEX__WRITE__,
+				FASTEXCHANGEEX_GETINDESCRIPTOR,
+				FASTEXCHANGEEX_GETOUTDESCRIPTOR,
 			};
 		};
 	};
