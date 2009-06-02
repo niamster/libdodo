@@ -4,16 +4,76 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/cgiBasicExchange.h>
-#include <libdodo/rpcXmlCgiServer.h>
+#include <libdodo/dodo.h>
 
 #include <iostream>
+#include <string.h>
 
 using namespace dodo;
 using namespace rpc;
 
 using namespace std;
+
+class cgiIO : public io::channel, public io::network::http
+{
+  public:
+
+	cgiIO(cgi::exchange &cf,
+		  dodoMap<short, dodoString> &headers) : io::channel(io::CHANNEL_PROTECTION_NONE),
+												 provider(cf, headers)
+	{
+	}
+
+  protected:
+
+	virtual void _read(char * const data)
+	{	
+		_readStream(data);
+	}
+
+	virtual unsigned long _readStream(char * const data)
+	{
+		unsigned int size = provider.content.size();
+
+		if (size != 0)
+		{
+			if (size > inSize)
+				size = inSize;
+
+			memcpy(data, provider.content.data(), size);
+			if (size < inSize)
+				memset(data+size, 0x0, inSize - size);
+		}
+
+		return size;
+	}
+
+	virtual void _write(const char * const data)
+	{
+		provider.print(data);
+	}
+
+	virtual void _writeStream(const char * const data)
+	{
+		provider.printStream(data);
+	}
+
+	int getOutDescriptor() const
+	{
+		return -1;
+	}
+
+	int getInDescriptor() const
+	{
+		return -1;
+	}
+
+	void flush()
+	{
+	}
+
+	cgi::dialogue provider;
+};
 
 response
 handler(const dodoString &method, const dodoArray<value> &values, const void *idata, void *odata)
@@ -29,9 +89,13 @@ handler(const dodoString &method, const dodoArray<value> &values, const void *id
 
 int main(int argc, char **argv)
 {
-	dodo::cgi::basic::exchange cgiio;
-	dodo::cgi::dialogue provider(cgiio,true);
-	rpc::xml::cgi::server srv(provider);
+	dodoMap<short, dodoString> headers;
+	headers[cgi::CGI_ENVIRONMENT_CONTENTTYPE] = "application/json";
+
+	cgi::basic::exchange cgiio;
+	cgiIO provider(cgiio, headers);
+
+	xml::server srv(provider);
 
 	try
 	{

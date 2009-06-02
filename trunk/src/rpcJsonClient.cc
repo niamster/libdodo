@@ -30,12 +30,12 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/rpcJsonClient.h>
-
 #include <libdodo/types.h>
 #include <libdodo/rpcClient.h>
 #include <libdodo/rpcResponse.h>
 #include <libdodo/rpcJsonMethod.h>
 #include <libdodo/dataFormatJsonNode.h>
+#include <libdodo/dataFormatJsonProcessor.h>
 #include <libdodo/rpcJsonResponse.h>
 
 using namespace dodo::rpc::json;

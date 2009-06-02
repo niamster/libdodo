@@ -33,15 +33,24 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/dataFormatJsonNode.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/rpcValue.h>
-#include <libdodo/dataFormatJsonProcessor.h>
 
 namespace dodo
 {
+	namespace data
+	{
+		namespace format
+		{
+			namespace json
+			{
+				class node;
+			};
+		};
+	};
+
 	namespace rpc
 	{
+		class value;
+
 		namespace json
 		{
 			/**
@@ -56,7 +65,7 @@ namespace dodo
 				 * @return value parsed from JSON node
 				 * @param node defines JSON node
 				 */
-				static rpc::value jsonToValue(dodo::data::format::json::node &node);
+				static rpc::value jsonToValue(const dodo::data::format::json::node &node);
 
 				/**
 				 * @return JSON node from value

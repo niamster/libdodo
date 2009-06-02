@@ -257,7 +257,7 @@ network::getInterfaceInfo(const dodoString &interface)
 		info.address = add;
 	}
 
-#ifdef __FreeBSD____
+#ifdef __FreeBSD__
 #else
 	if (::ioctl(socket, SIOCGIFNETMASK, &ifr) == -1)
 	{
@@ -284,7 +284,7 @@ network::getInterfaceInfo(const dodoString &interface)
 		info.broadcast = add;
 	}
 
-#ifdef __FreeBSD____
+#ifdef __FreeBSD__
 #else
 	if (::ioctl(socket, SIOCGIFHWADDR, &ifr) == -1)
 	{
@@ -311,7 +311,7 @@ network::getInterfaceInfo(const dodoString &interface)
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-#ifdef __FreeBSD____
+#ifdef __FreeBSD__
 	if (isSetFlag(ifr.ifr_ifru.ifru_flags[0], IFF_LOOPBACK))
 	{
 		info.loop = true;

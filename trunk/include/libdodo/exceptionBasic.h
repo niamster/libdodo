@@ -209,7 +209,7 @@ namespace dodo
 				  const dodoString &baseErrstr,
 				  unsigned long    line,
 				  const dodoString &file,
-				  const dodoString &message = __dodostring____) throw ();
+				  const dodoString &message = __dodostring__) throw ();
 
 			/**
 			 * destructor

@@ -27,7 +27,13 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcResponse.h>
+
+#include <libdodo/types.h>
+#include <libdodo/rpcValue.h>
+#include <libdodo/rpcResponseEx.h>
 
 using namespace dodo::rpc;
 
@@ -88,9 +94,7 @@ value
 response::operator[](unsigned long position)
 {
 	if (position >= values.size())
-	{
 		throw exception::basic(exception::ERRMODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
-	}
 
 	return values[position];
 }

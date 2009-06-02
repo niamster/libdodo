@@ -144,7 +144,7 @@ namespace dodo
 			static void mail(const dodoString &to,
 							 const dodoString &subject,
 							 const dodoString &message,
-							 const dodoString &headers = __dodostring____,
+							 const dodoString &headers = __dodostring__,
 							 const dodoString &path = "/usr/sbin/sendmail");
 
 			/**
@@ -166,9 +166,9 @@ namespace dodo
 							 const dodoString &from,
 							 const dodoString &subject,
 							 const dodoString &message,
-							 const dodoString &login = __dodostring____,
-							 const dodoString &pass = __dodostring____,
-							 const dodoString &headers = __dodostring____);
+							 const dodoString &login = __dodostring__,
+							 const dodoString &pass = __dodostring__,
+							 const dodoString &headers = __dodostring__);
 		};
 	};
 };

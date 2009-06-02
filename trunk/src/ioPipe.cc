@@ -361,7 +361,7 @@ io::pipe::_read(char * const a_data)
 {
 	if (in->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ__, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
 	char *data = a_data;
@@ -394,7 +394,7 @@ io::pipe::_read(char * const a_data)
 
 					if (ferror(in->file) != 0)
 					{
-						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
 				}
 
@@ -427,7 +427,7 @@ io::pipe::_read(char * const a_data)
 
 					if (ferror(in->file) != 0)
 					{
-						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
 				}
 
@@ -447,7 +447,7 @@ io::pipe::_write(const char *const buf)
 {
 	if (out->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE__, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
 	const char *data = buf;
@@ -478,7 +478,7 @@ io::pipe::_write(const char *const buf)
 
 					if (ferror(out->file) != 0)
 					{
-						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
 				}
 
@@ -511,7 +511,7 @@ io::pipe::_write(const char *const buf)
 
 					if (ferror(out->file) != 0)
 					{
-						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
 				}
 
@@ -708,7 +708,7 @@ io::pipe::_readStream(char * const a_data)
 {
 	if (in->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM__, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
 	unsigned long readSize = inSize + 1;
@@ -731,7 +731,7 @@ io::pipe::_readStream(char * const a_data)
 
 			if (ferror(in->file) != 0)
 			{
-				throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -748,7 +748,7 @@ io::pipe::_writeStream(const char * const data)
 {
 	if (out->file == NULL)
 	{
-		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM__, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
 	unsigned long _outSize = outSize;
@@ -780,7 +780,7 @@ io::pipe::_writeStream(const char * const data)
 
 				if (ferror(out->file) != 0)
 				{
-					throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITESTREAM__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 			}
 

@@ -82,15 +82,15 @@ node::node(const node &on) : valueDataType(on.valueDataType)
 	switch (valueDataType)
 	{
 		case DATATYPE_STRING:
-			stringValue = on.stringValue;
+			stringValue = new dodoString(*on.stringValue);
 			break;
 
 		case DATATYPE_OBJECT:
-			objectValue = on.objectValue;
+			objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>(*on.objectValue);
 			break;
 
 		case DATATYPE_ARRAY:
-			arrayValue = on.arrayValue;
+			arrayValue = new dodoArray<node>(*on.arrayValue);
 			break;
 
 		case DATATYPE_NUMERIC:
@@ -101,8 +101,6 @@ node::node(const node &on) : valueDataType(on.valueDataType)
 			booleanValue = on.booleanValue;
 			break;
 	}
-
-	on.valueDataType = DATATYPE_NULL;
 }
 
 //-------------------------------------------------------------------

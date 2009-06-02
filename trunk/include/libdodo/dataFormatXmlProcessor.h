@@ -64,7 +64,7 @@ namespace dodo
 					 * @param ns defines namespace of the node
 					 */
 					__nodeDef__(const dodoString &name,
-							  const            dodoString &ns = __dodostring____);
+							  const            dodoString &ns = __dodostring__);
 
 					dodoString                     name;            ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 

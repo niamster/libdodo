@@ -304,7 +304,7 @@ os::getLimit(short type)
 
 		case OS_MAXOPENFILES:
 
-#ifdef __FreeBSD____
+#ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
 #else
 			realRes = RLIMIT_OFILE;
@@ -374,7 +374,7 @@ os::setLimit(short          type,
 
 		case OS_MAXOPENFILES:
 
-#ifdef __FreeBSD____
+#ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
 #else
 			realRes = RLIMIT_OFILE;

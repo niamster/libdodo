@@ -283,7 +283,7 @@ dialogue::getCharset()
 		return dodoString(b->data() + temp + 8, b->size() - temp - 8);
 	}
 
-	return __dodostring____;
+	return __dodostring__;
 }
 
 void
@@ -975,7 +975,7 @@ dialogue::request(const dodoString &varName)
 		return item->second;
 	}
 
-	return __dodostring____;
+	return __dodostring__;
 }
 
 //-------------------------------------------------------------------

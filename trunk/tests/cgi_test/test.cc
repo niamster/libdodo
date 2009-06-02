@@ -74,7 +74,7 @@ cgif(exchange &cgiio)
 
 	cgit.HEADERS[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 
-	cgit.setCookie("test", "Ni@m");
+	cgit.setCookie(__cgiCookie__("test", "Ni@m"));
 
 	exchange *io = cgit;
 	io->writeStream("The headers thould be already printed successfully.<br>");

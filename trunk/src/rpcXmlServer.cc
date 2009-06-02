@@ -30,12 +30,16 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/rpcXmlServer.h>
-
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/rpcServer.h>
 #include <libdodo/rpcXmlMethod.h>
+#include <libdodo/rpcMethod.h>
 #include <libdodo/rpcXmlResponse.h>
+#include <libdodo/rpcResponse.h>
+#include <libdodo/dataFormatXmlProcessor.h>
+#include <libdodo/dataFormatXmlNode.h>
+#include <libdodo/exceptionBasic.h>
 
 using namespace dodo::rpc::xml;
 

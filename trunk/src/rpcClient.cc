@@ -30,7 +30,6 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/rpcClient.h>
-
 #include <libdodo/ioChannel.h>
 #include <libdodo/types.h>
 #include <libdodo/rpcMethod.h>

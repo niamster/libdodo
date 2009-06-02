@@ -33,16 +33,24 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/dataFormatXmlNode.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/rpcResponse.h>
-#include <libdodo/rpcXmlValue.h>
-#include <libdodo/dataFormatXmlProcessor.h>
 
 namespace dodo
 {
+	namespace data
+	{
+		namespace format
+		{
+			namespace xml
+			{
+				class node;
+			};
+		};
+	};
+
 	namespace rpc
 	{
+		class response;
+
 		namespace xml
 		{
 			/**

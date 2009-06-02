@@ -27,7 +27,13 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcXmlValue.h>
+#include <libdodo/types.h>
+#include <libdodo/dataFormatXmlNode.h>
+#include <libdodo/toolsString.h>
+#include <libdodo/rpcValue.h>
 
 using namespace dodo::rpc::xml;
 
@@ -44,9 +50,7 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 {
 	dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
-	{
 		return rpc::value();
-	}
 
 	rpc::value val;
 
@@ -56,13 +60,9 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 
 		dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 		if (arr0.size() > 0)
-		{
 			val.integerValue = tools::string::stringToI(tools::string::trim(arr0[0].value, trimSymbols, 2));
-		}
 		else
-		{
 			val.integerValue = 0;
-		}
 	}
 	else
 	{
@@ -72,25 +72,20 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 
 			dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 			if (arr0.size() > 0)
-			{
 				val.booleanValue = tools::string::stringToI(tools::string::trim(arr0[0].value, trimSymbols, 2)) == 1 ? true : false;
-			}
 			else
-			{
 				val.booleanValue = false;
-			}
 		}
 		else
 		{
 			if (tools::string::iequal(i->first, "string") || tools::string::iequal(i->first, "base64") || tools::string::iequal(i->first, "dateTime.iso8601"))
 			{
 				val.valueDataType = DATATYPE_STRING;
+				val.stringValue = new dodoString;
 
 				dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 				if (arr0.size() > 0)
-				{
-					val.stringValue = tools::string::trim(arr0[0].value, trimSymbols, 2);
-				}
+					*val.stringValue = tools::string::trim(arr0[0].value, trimSymbols, 2);
 			}
 			else
 			{
@@ -100,25 +95,20 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 
 					dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 					if (arr0.size() > 0)
-					{
 						val.doubleValue = tools::string::stringToD(tools::string::trim(arr0[0].value, trimSymbols, 2));
-					}
 					else
-					{
 						val.doubleValue = 0;
-					}
 				}
 				else
 				{
 					if (tools::string::iequal(i->first, "struct"))
 					{
 						val.valueDataType = DATATYPE_STRUCT;
+						val.structValue = new dodoMap<dodoString, rpc::value, dodoMapStringCompare>;
 
 						dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 						if (arr0.size() == 0)
-						{
 							return val;
-						}
 
 						dodoArray<dodo::data::format::xml::node> &nodeArray = arr0[0].children["member"];
 
@@ -128,9 +118,7 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 							dodoArray<dodo::data::format::xml::node> &arr1 = o->children["name"];
 							dodoArray<dodo::data::format::xml::node> &arr2 = o->children["value"];
 							if (arr1.size() > 0 && arr2.size() > 0)
-							{
-								val.structValue.insert(make_pair(tools::string::trim(arr1[0].value, trimSymbols, 2), xmlToValue(arr2[0])));
-							}
+								val.structValue->insert(make_pair(tools::string::trim(arr1[0].value, trimSymbols, 2), xmlToValue(arr2[0])));
 						}
 					}
 					else
@@ -138,26 +126,21 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 						if (tools::string::iequal(i->first, "array"))
 						{
 							val.valueDataType = DATATYPE_ARRAY;
+							val.arrayValue = new dodoArray<rpc::value>;
 
 							dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 							if (arr0.size() == 0)
-							{
 								return val;
-							}
 
 							dodoArray<dodo::data::format::xml::node> &arr1 = arr0[0].children["data"];
 							if (arr1.size() == 0)
-							{
 								return val;
-							}
 
 							dodoArray<dodo::data::format::xml::node> &nodeArray = arr1[0].children["value"];
 
 							dodoArray<dodo::data::format::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 							for (; o != p; ++o)
-							{
-								val.arrayValue.push_back(xmlToValue(*o));
-							}
+								val.arrayValue->push_back(xmlToValue(*o));
 						}
 					}
 				}
@@ -185,7 +168,7 @@ value::valueToXml(const rpc::value &data)
 		case DATATYPE_STRING:
 
 			subNode.name = "string";
-			subNode.value = data.stringValue;
+			subNode.value = *data.stringValue;
 
 			nodeArr.assign(1, subNode);
 			node.children.insert(make_pair(subNode.name, nodeArr));
@@ -229,11 +212,9 @@ value::valueToXml(const rpc::value &data)
 			dodo::data::format::xml::node dataNode;
 			dataNode.name = "data";
 
-			dodoArray<rpc::value>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
+			dodoArray<rpc::value>::const_iterator i = data.arrayValue->begin(), j = data.arrayValue->end();
 			for (; i != j; ++i)
-			{
 				nodeArr.push_back(valueToXml(*i));
-			}
 			dataNode.children.insert(make_pair("value", nodeArr));
 
 			nodeArr.assign(1, dataNode);
@@ -256,7 +237,9 @@ value::valueToXml(const rpc::value &data)
 
 			dodoArray<dodo::data::format::xml::node> subNodeArr;
 
-			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator i = data.structValue.begin(), j = data.structValue.end();
+			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator
+				i = data.structValue->begin(),
+				j = data.structValue->end();
 			for (; i != j; ++i)
 			{
 				memberNode.children.clear();

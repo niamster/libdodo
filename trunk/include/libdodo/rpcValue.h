@@ -33,8 +33,6 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/rpcValueEx.h>
 
 namespace dodo
 {
@@ -81,9 +79,14 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @note constructs empty string value
+			 * @note constructs false boolean value
 			 */
 			value();
+
+			/**
+			 * copy constructor
+			 */
+			value(const value &);
 
 			/**
 			 * constructor
@@ -125,11 +128,6 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~value();
-
-			/**
-			 * clear arguments information
-			 */
-			virtual void clear();
 
 			/**
 			 * set string, date/time, base64 value
@@ -238,14 +236,17 @@ namespace dodo
 
 		  protected:
 
-			short valueDataType;                                            ///< argument type[see dataTypeEnum]
+			mutable short valueDataType;                                            ///< argument type[see dataTypeEnum]
 
-			dodoString stringValue;                                         ///< string, datetime, base64 value
-			long integerValue;                                              ///< integer value
-			bool booleanValue;                                              ///< boolean value
-			double doubleValue;                                             ///< double value
-			dodoArray<value> arrayValue;                                    ///< array value
-			dodoMap<dodoString, value, dodoMapStringCompare> structValue;   ///< struct value
+			union
+			{
+				dodoString *stringValue;                                         ///< string, datetime, base64 value
+				long integerValue;                                              ///< integer value
+				mutable bool booleanValue;                                              ///< boolean value
+				double doubleValue;                                             ///< double value
+				dodoArray<value> *arrayValue;                                    ///< array value
+				dodoMap<dodoString, value, dodoMapStringCompare> *structValue;   ///< struct value
+			};
 		};
 	};
 };

@@ -209,9 +209,9 @@ namespace dodo
 			 */
 			__cgiCookie__(const dodoString &name,
 						const            dodoString &value,
-						const            dodoString &exDate = __dodostring____,
-						const            dodoString &path = __dodostring____,
-						const            dodoString &domain = __dodostring____,
+						const            dodoString &exDate = __dodostring__,
+						const            dodoString &path = __dodostring__,
+						const            dodoString &domain = __dodostring__,
 						bool             secure = false);
 
 			dodoString name;            ///< name of the cookie

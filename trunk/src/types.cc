@@ -40,23 +40,23 @@
 
 namespace dodo
 {
-	dodoString __dodostring____;
+	dodoString __dodostring__;
 
 	//-------------------------------------------------------------------
 
-	dodoStringArray __dodostringarray____;
+	dodoStringArray __dodostringarray__;
 
 	//-------------------------------------------------------------------
 
-	dodoStringMap __dodostringmap____;
+	dodoStringMap __dodostringmap__;
 
 	//-------------------------------------------------------------------
 
-	dodoArray<dodoStringArray> __dodostringarrayarray____;
+	dodoArray<dodoStringArray> __dodostringarrayarray__;
 
 	//-------------------------------------------------------------------
 
-	dodoStringMapArray __dodostringmaparray____;
+	dodoStringMapArray __dodostringmaparray__;
 };
 
 //-------------------------------------------------------------------

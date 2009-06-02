@@ -93,7 +93,7 @@ namespace dodo
 					node(const dodoString    &name,
 						 const dodoStringMap &attributes,
 						 const dodoString    &value,
-						 const dodoString    &ns = __dodostring____);
+						 const dodoString    &ns = __dodostring__);
 
 					/**
 					 * add child to the node

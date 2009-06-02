@@ -1026,7 +1026,7 @@ postgresql::getCharset() const
 		return encodingStatements[encoding];
 	}
 
-	return __dodostring____;
+	return __dodostring__;
 #else
 	return pg_encoding_to_char(PQclientEncoding(handle->handle));
 #endif

@@ -27,7 +27,15 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcXmlResponse.h>
+#include <libdodo/types.h>
+#include <libdodo/dataFormatXmlNode.h>
+#include <libdodo/toolsString.h>
+#include <libdodo/rpcResponse.h>
+#include <libdodo/rpcValue.h>
+#include <libdodo/rpcXmlValue.h>
 
 using namespace dodo::rpc::xml;
 

@@ -151,15 +151,15 @@ namespace dodo
 	 * predifined constants
 	 */
 
-	extern dodoString __dodostring____;
+	extern dodoString __dodostring__;
 
-	extern dodoStringArray __dodostringarray____;
+	extern dodoStringArray __dodostringarray__;
 
-	extern dodoStringMap __dodostringmap____;
+	extern dodoStringMap __dodostringmap__;
 
-	extern dodoArray<dodoStringArray> __dodostringarrayarray____;
+	extern dodoArray<dodoStringArray> __dodostringarrayarray__;
 
-	extern dodoStringMapArray __dodostringmaparray____;
+	extern dodoStringMapArray __dodostringmaparray__;
 };
 
 #endif

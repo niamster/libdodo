@@ -75,7 +75,7 @@ install: @PACKAGE_NAME@
 tags:
 	@if test -n "${TAGS}" -a -x "${TAGS}";\
 	then\
-		${TAGS} include/libdodo/* src/*;\
+		${TAGS} include/libdodo/*.h src/*.cc src/*.inline;\
 	else\
 		echo "No application was found for generating tags";\
 	fi

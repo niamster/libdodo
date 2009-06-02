@@ -27,7 +27,11 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcMethod.h>
+#include <libdodo/types.h>
+#include <libdodo/rpcValue.h>
 
 using namespace dodo::rpc;
 

@@ -33,9 +33,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/toolsString.h>
 #include <libdodo/rpcValue.h>
-#include <libdodo/rpcResponseEx.h>
 
 namespace dodo
 {

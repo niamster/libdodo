@@ -116,7 +116,7 @@ namespace dodo
 								 const            dodoString &host,
 								 const            dodoString &user,
 								 const            dodoString &password,
-								 const            dodoString &path = __dodostring____,
+								 const            dodoString &path = __dodostring__,
 								 int              port = 0);
 
 				dodoString   db;        ///< database name
@@ -179,7 +179,7 @@ namespace dodo
 				 */
 				virtual void callFunction(const dodoString      &name,
 										  const dodoStringArray &arguments,
-										  const dodoString      &as = __dodostring____) = 0;
+										  const dodoString      &as = __dodostring__) = 0;
 
 				/**
 				 * call stored procedure
@@ -197,14 +197,14 @@ namespace dodo
 				 */
 				virtual void select(const dodoString      &table,
 									const dodoStringArray &fields,
-									const dodoString      &where = __dodostring____) = 0;
+									const dodoString      &where = __dodostring__) = 0;
 
 				/**
 				 * @param table defines table name
 				 * @param where defines `where` statement
 				 */
 				virtual void selectAll(const dodoString &table,
-									   const dodoString &where = __dodostring____) = 0;
+									   const dodoString &where = __dodostring__) = 0;
 
 				/**
 				 * @param table defines table name
@@ -227,7 +227,7 @@ namespace dodo
 				 */
 				virtual void insert(const dodoString      &table,
 									const dodoStringArray &values,
-									const dodoStringArray &fields = __dodostringarray____) = 0;
+									const dodoStringArray &fields = __dodostringarray__) = 0;
 
 				/**
 				 * @param table defines table name
@@ -236,7 +236,7 @@ namespace dodo
 				 */
 				virtual void insert(const dodoString                 &table,
 									const dodoArray<dodoStringArray> &values,
-									const dodoStringArray            &fields = __dodostringarray____) = 0;
+									const dodoStringArray            &fields = __dodostringarray__) = 0;
 
 				/**
 				 * @param tableTo defines table where data will be stored
@@ -248,8 +248,8 @@ namespace dodo
 				virtual void insertSelect(const dodoString      &tableTo,
 										  const dodoString      &tableFrom,
 										  const dodoStringArray &fieldsTo,
-										  const dodoStringArray &fieldsFrom = __dodostringarray____,
-										  const dodoString      &where = __dodostring____) = 0;
+										  const dodoStringArray &fieldsFrom = __dodostringarray__,
+										  const dodoString      &where = __dodostring__) = 0;
 
 				/**
 				 * @param table defines table name
@@ -258,7 +258,7 @@ namespace dodo
 				 */
 				virtual void update(const dodoString    &table,
 									const dodoStringMap &fields,
-									const dodoString    &where = __dodostring____) = 0;
+									const dodoString    &where = __dodostring__) = 0;
 
 				/**
 				 * @param table defines table name
@@ -269,14 +269,14 @@ namespace dodo
 				virtual void update(const dodoString      &table,
 									const dodoStringArray &values,
 									const dodoStringArray &fields,
-									const dodoString      &where = __dodostring____) = 0;
+									const dodoString      &where = __dodostring__) = 0;
 
 				/**
 				 * @param table defines table name
 				 * @param where defines `where` statement
 				 */
 				virtual void del(const dodoString &table,
-								 const dodoString &where = __dodostring____) = 0;
+								 const dodoString &where = __dodostring__) = 0;
 
 				/**
 				 * store query, made from subquery with requested method
@@ -367,7 +367,7 @@ namespace dodo
 				 * @param result defines type of result(true for quering data, false for data operation)
 				 * @note if query is empty request will be constructed from the data that was defined using object's methods
 				 */
-				virtual void exec(const dodoString &query = __dodostring____,
+				virtual void exec(const dodoString &query = __dodostring__,
 								  bool             result = false) = 0;
 
 				bool reconnect; ///< if true tries to reconect in case when `exec` failed with connection error[true by default]

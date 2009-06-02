@@ -110,7 +110,7 @@ namespace dodo
 				 */
 				virtual void callFunction(const dodoString      &name,
 										  const dodoStringArray &arguments,
-										  const dodoString      &as = __dodostring____);
+										  const dodoString      &as = __dodostring__);
 
 				/**
 				 * call stored procedure
@@ -128,14 +128,14 @@ namespace dodo
 				 */
 				virtual void select(const dodoString      &table,
 									const dodoStringArray &fields,
-									const dodoString      &where = __dodostring____);
+									const dodoString      &where = __dodostring__);
 
 				/**
 				 * @param table defines table name
 				 * @param where defines `where` statement
 				 */
 				virtual void selectAll(const dodoString &table,
-									   const dodoString &where = __dodostring____);
+									   const dodoString &where = __dodostring__);
 
 				/**
 				 * @param table defines table name
@@ -158,7 +158,7 @@ namespace dodo
 				 */
 				virtual void insert(const dodoString      &table,
 									const dodoStringArray &values,
-									const dodoStringArray &fields = __dodostringarray____);
+									const dodoStringArray &fields = __dodostringarray__);
 
 				/**
 				 * @param table defines table name
@@ -167,7 +167,7 @@ namespace dodo
 				 */
 				virtual void insert(const dodoString                 &table,
 									const dodoArray<dodoStringArray> &values,
-									const dodoStringArray            &fields = __dodostringarray____);
+									const dodoStringArray            &fields = __dodostringarray__);
 
 				/**
 				 * @param tableTo defines table where data will be stored
@@ -179,8 +179,8 @@ namespace dodo
 				virtual void insertSelect(const dodoString      &tableTo,
 										  const dodoString      &tableFrom,
 										  const dodoStringArray &fieldsTo,
-										  const dodoStringArray &fieldsFrom = __dodostringarray____,
-										  const dodoString      &where = __dodostring____);
+										  const dodoStringArray &fieldsFrom = __dodostringarray__,
+										  const dodoString      &where = __dodostring__);
 
 				/**
 				 * @param table defines table name
@@ -189,7 +189,7 @@ namespace dodo
 				 */
 				virtual void update(const dodoString    &table,
 									const dodoStringMap &fields,
-									const dodoString    &where = __dodostring____);
+									const dodoString    &where = __dodostring__);
 
 				/**
 				 * @param table defines table name
@@ -200,14 +200,14 @@ namespace dodo
 				virtual void update(const dodoString      &table,
 									const dodoStringArray &values,
 									const dodoStringArray &fields,
-									const dodoString      &where = __dodostring____);
+									const dodoString      &where = __dodostring__);
 
 				/**
 				 * @param table defines table name
 				 * @param where defines `where` statement
 				 */
 				virtual void del(const dodoString &table,
-								 const dodoString &where = __dodostring____);
+								 const dodoString &where = __dodostring__);
 
 				/**
 				 * store query, made from subquery with requested method

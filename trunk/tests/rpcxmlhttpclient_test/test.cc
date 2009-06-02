@@ -5,11 +5,10 @@
  */
 
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/rpcXmlHttpClient.h>
-#include <libdodo/types.h>
+#include <libdodo/dodo.h>
 
 #include <iostream>
+#include <string.h>
 
 using namespace dodo;
 using namespace rpc;
@@ -17,13 +16,105 @@ using namespace rpc;
 using namespace std;
 
 
+class httpIO : public io::channel, public io::network::http
+{
+  public:
+
+	httpIO() : io::channel(io::CHANNEL_PROTECTION_NONE),
+			   response(NULL)
+	{
+	}
+
+	~httpIO()
+	{
+		if (response != NULL)
+			delete response;
+	}
+
+  protected:
+
+	virtual void _read(char * const data)
+	{
+		_readStream(data);
+	}
+
+	virtual unsigned long _readStream(char * const data)
+	{
+		unsigned long size = 0;
+
+		if (response != NULL)
+		{
+			size = response->data.size();
+			if (size != 0)
+			{
+				if (size > inSize)
+					size = inSize;
+
+				memcpy(data, response->data.data(), size);
+				if (size < inSize)
+					memset(data+size, 0x0, inSize - size);
+			}
+
+			delete response;
+			response = NULL;
+		}
+
+		return size;
+	}
+
+	virtual void _write(const char * const data)
+	{
+		if (response != NULL)
+		{
+			delete response;
+			response = NULL;
+		}
+
+		dodoString post_data(data, outSize);
+
+		response = new io::network::__httpResponse__(POST(post_data, "application/xml"));
+	}
+
+	virtual void _writeStream(const char * const data)
+	{
+		if (response != NULL)
+		{
+			delete response;
+			response = NULL;
+		}
+
+		unsigned int dataLen = strlen(data);
+
+		dodoString post_data(data, dataLen>outSize?outSize:dataLen);
+
+		response = new io::network::__httpResponse__(POST(post_data, "application/xml"));
+	}
+
+	int getOutDescriptor() const
+	{
+		return -1;
+	}
+
+	int getInDescriptor() const
+	{
+		return -1;
+	}
+
+	void flush()
+	{
+	}
+
+	io::network::__httpResponse__ *response;
+};
+
 int main(int argc, char **argv)
 {
 	try
 	{
-		rpc::xml::http::client client;
+		httpIO http;
+		xml::client client(http);
 
-		client.setUrl("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi");
+		http.setUrl("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi");
 
 		method method;
 		value argument;

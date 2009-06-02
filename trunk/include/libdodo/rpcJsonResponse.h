@@ -33,17 +33,23 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/dataFormatJsonNode.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/rpcResponse.h>
-#include <libdodo/rpcJsonResponseEx.h>
-#include <libdodo/rpcJsonValue.h>
-#include <libdodo/dataFormatJsonProcessor.h>
 
 namespace dodo
 {
+	namespace data
+	{
+		namespace format
+		{
+			namespace json
+			{
+				class node;
+			};
+		};
+	};
+
 	namespace rpc
 	{
+		class response;
 		namespace json
 		{
 			/**

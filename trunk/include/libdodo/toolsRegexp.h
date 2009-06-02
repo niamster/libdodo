@@ -83,7 +83,7 @@ namespace dodo
 			 */
 			virtual bool match(const dodoString &pattern,
 							   const dodoString &sample,
-							   dodoStringArray  &pockets = __dodostringarray____);
+							   dodoStringArray  &pockets = __dodostringarray__);
 
 			/**
 			 * match with pattern previously given for match/compile method
@@ -93,7 +93,7 @@ namespace dodo
 			 * @note first in pocket is a first match
 			 */
 			virtual bool match(const dodoString &sample,
-							   dodoStringArray  &pockets = __dodostringarray____);
+							   dodoStringArray  &pockets = __dodostringarray__);
 
 			/**
 			 * replace substrings in match string

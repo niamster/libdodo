@@ -52,7 +52,7 @@
  * size of key for shm_open and sem_open
  * @note including leading '/'
  */
-#ifdef __FreeBSD____
+#ifdef __FreeBSD__
 #define SH_KEY_SIZE 14
 #else
 #define SH_KEY_SIZE 32

@@ -149,7 +149,7 @@ memory::_read(char * const a_data)
 
 	if ((pos + inSize) > buffer.size())
 	{
-		throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__READ__, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__READ, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
 	}
 
 	memset(a_data, '\0', inSize);

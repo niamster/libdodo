@@ -622,9 +622,9 @@ processor::getFileInfo(const dodoString &file)
 		}
 	}
 
-	__info__ i(document->version != NULL ? (char *)document->version : __dodostring____,
-			 document->encoding != NULL ? (char *)document->encoding : __dodostring____,
-			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring____,
+	__info__ i(document->version != NULL ? (char *)document->version : __dodostring__,
+			 document->encoding != NULL ? (char *)document->encoding : __dodostring__,
+			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
 			 document->compression);
 
 	xmlFreeDoc(document);
@@ -656,9 +656,9 @@ processor::getBufferInfo(const dodoString &buffer)
 		}
 	}
 
-	__info__ i(document->version != NULL ? (char *)document->version : __dodostring____,
-			 document->encoding != NULL ? (char *)document->encoding : __dodostring____,
-			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring____,
+	__info__ i(document->version != NULL ? (char *)document->version : __dodostring__,
+			 document->encoding != NULL ? (char *)document->encoding : __dodostring__,
+			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
 			 document->compression);
 
 	xmlFreeDoc(document);

@@ -79,7 +79,7 @@ namespace dodo
 				  public:
 
 					/**
-					 * move constructor
+					 * copy constructor
 					 */
 					node(const node &);
 

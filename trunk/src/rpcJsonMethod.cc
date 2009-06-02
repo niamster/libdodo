@@ -27,7 +27,15 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/directives.h>
+
 #include <libdodo/rpcJsonMethod.h>
+#include <libdodo/types.h>
+#include <libdodo/dataFormatJsonNode.h>
+#include <libdodo/rpcMethod.h>
+#include <libdodo/rpcJsonMethodEx.h>
+#include <libdodo/rpcJsonValue.h>
+#include <libdodo/rpcValue.h>
 
 using namespace dodo::rpc::json;
 
@@ -39,14 +47,13 @@ method::jsonToMethod(dodo::data::format::json::node &node,
 	if (node.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
 		throw exception::basic(exception::ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
 
-	dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare> *obj = node.objectValue;
 	rpc::method meth;
 
-	meth.name = (*obj)["method"].getString();
-	version = (*obj)["version"].getString();
-	id = (*obj)["id"].getNumeric();
+	meth.name = (*node.objectValue)["method"].getString();
+	version = (*node.objectValue)["version"].getString();
+	id = (*node.objectValue)["id"].getNumeric();
 
-	dodo::data::format::json::node &params = (*obj)["params"];
+	dodo::data::format::json::node &params = (*node.objectValue)["params"];
 
 	if (params.valueDataType != dodo::data::format::json::DATATYPE_ARRAY &&
 		params.valueDataType != dodo::data::format::json::DATATYPE_OBJECT)
@@ -82,12 +89,14 @@ method::methodToJson(const rpc::method &data,
 	meth.objectValue = new dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>;
 
 	node.valueDataType = dodo::data::format::json::DATATYPE_STRING;
+
 	node.stringValue = new dodoString(data.name);
 	meth.objectValue->insert(make_pair(dodoString("method"), node));
+	delete node.stringValue;
 
-	node.valueDataType = dodo::data::format::json::DATATYPE_STRING;
 	node.stringValue = new dodoString(version);
 	meth.objectValue->insert(make_pair(dodoString("version"), node));
+	delete node.stringValue;
 
 	node.valueDataType = dodo::data::format::json::DATATYPE_NUMERIC;
 	node.numericValue = id;
@@ -109,6 +118,9 @@ method::methodToJson(const rpc::method &data,
 				node.arrayValue->push_back(value::valueToJson(*i));
 
 			meth.objectValue->insert(make_pair(dodoString("params"), node));
+
+			delete node.arrayValue;
+			node.valueDataType = dodo::data::format::json::DATATYPE_NULL;
 		}
 	}
 

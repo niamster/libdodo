@@ -60,10 +60,10 @@ namespace dodo
 				 */
 				enum exchangeFunctionsID
 				{
-					EXCHANGEEX__WRITE__,
-					EXCHANGEEX__READ__,
-					EXCHANGEEX__READSTREAM__,
-					EXCHANGEEX__CLOSE__,
+					EXCHANGEEX__WRITE,
+					EXCHANGEEX__READ,
+					EXCHANGEEX__READSTREAM,
+					EXCHANGEEX__CLOSE,
 				};
 			};
 		};

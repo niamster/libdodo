@@ -289,7 +289,7 @@ code::codesetConversion(const dodoString &buffer,
 	inFake = (char *)buffer.c_str();
 	outFake = outBuffer;
 
-#ifdef __FreeBSD____
+#ifdef __FreeBSD__
 	if (iconv(conv, (const char **)&inFake, &in, &outFake, &out) == (size_t)(-1))
 #else
 	if (iconv(conv, &inFake, &in, &outFake, &out) == (size_t)(-1))

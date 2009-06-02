@@ -343,7 +343,7 @@ collection::_isRunning(dodoList<__process__ *>::iterator &position) const
 			return false;
 		}
 
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX__ISRUNNING__, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	return true;

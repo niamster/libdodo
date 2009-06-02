@@ -24,6 +24,12 @@ class httpIO : public io::channel, public io::network::http
 	{
 	}
 
+	~httpIO()
+	{
+		if (response != NULL)
+			delete response;
+	}
+
   protected:
 
 	virtual void _read(char * const data)
@@ -135,16 +141,16 @@ int main(int argc, char **argv)
 		cout << "First value: " << resp.getValue().getString() << endl;
 		cout << "Second value: " << resp.getValue(1).getString() << endl;
 
-		resp = client.call(method);
+		/* resp = client.call(method); */
 
-		cout << "Amount of values: " << resp.getValues().size() << endl;
-		cout << "Response ID: " << client.getResponseId() << endl;
-		cout << "First value: " << resp.getValue().getString() << endl;
-		cout << "Second value: " << resp.getValue(1).getString() << endl;
+		/* cout << "Amount of values: " << resp.getValues().size() << endl; */
+		/* cout << "Response ID: " << client.getResponseId() << endl; */
+		/* cout << "First value: " << resp.getValue().getString() << endl; */
+		/* cout << "Second value: " << resp.getValue(1).getString() << endl; */
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << endl << ex.getCallStack() << endl;
 	}
 
 	return 0;

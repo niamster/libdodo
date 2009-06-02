@@ -30,12 +30,12 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/rpcServer.h>
-
 #include <libdodo/ioChannel.h>
 #include <libdodo/types.h>
 #include <libdodo/rpcValue.h>
 #include <libdodo/rpcResponse.h>
 #include <libdodo/rpcMethod.h>
+#include <libdodo/exceptionBasic.h>
 
 using namespace dodo::rpc;
 
