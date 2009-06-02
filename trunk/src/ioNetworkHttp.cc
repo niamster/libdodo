@@ -326,13 +326,9 @@ http::GET()
 			ex->exchange::_write(data.c_str());
 			ex->outSize = outSize;
 
-			char proxyData[512];
-			ex->setInBufferSize(512);
-			ex->inSize = 512;
-
 			try
 			{
-				switch (getProxyConnectResponse(proxyData, ex, response))
+				switch (getProxyConnectResponse(ex, response))
 				{
 					case GETCONTENTSTATUS_NORMAL:
 
@@ -513,7 +509,7 @@ http::GET()
 
 	try
 	{
-		switch (getContent(data, ex, response))
+		switch (getContent(ex, response))
 		{
 			case GETCONTENTSTATUS_NORMAL:
 
@@ -778,7 +774,7 @@ http::POST(const dodoString &a_url,
 //-------------------------------------------------------------------
 
 __httpResponse__
-http::POST(const dodoString &a_data,
+http::POST(const dodoString &rdata,
 		   const dodoString &type)
 {
 	__httpResponse__ response;
@@ -832,13 +828,9 @@ http::POST(const dodoString &a_data,
 			ex->exchange::_write(data.c_str());
 			ex->outSize = outSize;
 
-			char proxyData[512];
-			ex->setInBufferSize(512);
-			ex->inSize = 512;
-
 			try
 			{
-				switch (getProxyConnectResponse(proxyData, ex, response))
+				switch (getProxyConnectResponse(ex, response))
 				{
 					case GETCONTENTSTATUS_NORMAL:
 
@@ -1007,7 +999,7 @@ http::POST(const dodoString &a_data,
 	data.append("\r\n");
 
 	data.append("Content-length: ");
-	data.append(tools::string::ulToString(a_data.size()));
+	data.append(tools::string::ulToString(rdata.size()));
 	data.append("\r\n");
 
 	data.append("Content-type: ");
@@ -1019,14 +1011,14 @@ http::POST(const dodoString &a_data,
 	ex->outSize = data.size();
 	ex->write(data);
 
-	ex->outSize = a_data.size();
-	ex->write(a_data);
+	ex->outSize = rdata.size();
+	ex->write(rdata);
 
 	ex->outSize = outSize;
 
 	try
 	{
-		switch (getContent(data, ex, response))
+		switch (getContent(ex, response))
 		{
 			case GETCONTENTSTATUS_NORMAL:
 
@@ -1036,7 +1028,7 @@ http::POST(const dodoString &a_data,
 
 				setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
 
-				return POST(data, type);
+				return POST(rdata, type);
 
 			case GETCONTENTSTATUS_PROXYBASICAUTH:
 
@@ -1049,7 +1041,7 @@ http::POST(const dodoString &a_data,
 
 				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 
-				return POST(data, type);
+				return POST(rdata, type);
 
 			case GETCONTENTSTATUS_WWWBASICAUTH:
 
@@ -1062,7 +1054,7 @@ http::POST(const dodoString &a_data,
 
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 
-				return POST(data, type);
+				return POST(rdata, type);
 
 			case GETCONTENTSTATUS_PROXYDIGESTAUTH:
 
@@ -1075,7 +1067,7 @@ http::POST(const dodoString &a_data,
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password, response);
 
-				return POST(data, type);
+				return POST(rdata, type);
 
 			case GETCONTENTSTATUS_WWWDIGESTAUTH:
 
@@ -1088,7 +1080,7 @@ http::POST(const dodoString &a_data,
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password, response);
 
-				return POST(data, type);
+				return POST(rdata, type);
 
 			case GETCONTENTSTATUS_WWWPROXYBASICAUTH:
 
@@ -1110,7 +1102,7 @@ http::POST(const dodoString &a_data,
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password, response);
 				}
 
-				return POST(data, type);
+				return POST(rdata, type);
 
 			case GETCONTENTSTATUS_WWWPROXYDIGESTAUTH:
 
@@ -1132,7 +1124,7 @@ http::POST(const dodoString &a_data,
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password, response);
 				}
 
-				return POST(data, type);
+				return POST(rdata, type);
 		}
 	}
 	catch (...)
@@ -1227,10 +1219,9 @@ http::getHeaders(const dodoString &headers,
 
 //-------------------------------------------------------------------
 
-bool
+unsigned int
 http::extractHeaders(const dodoString &data,
-					 dodoString       &headers,
-					 __httpResponse__ &response)
+					 dodoString       &headers)
 {
 	headers.append(data);
 
@@ -1240,40 +1231,39 @@ http::extractHeaders(const dodoString &data,
 		i = headers.find("\n\n");
 		if (i == dodoString::npos)
 		{
-			return false;
+			return 0;
 		}
 		else
 		{
-			response.data.append(dodoString(headers.data() + i + 2, headers.size() - i - 2));
-
 			headers.erase(i + 1);
 
-			return true;
+			return i + 2;
 		}
 	}
 	else
 	{
-		response.data.append(dodoString(headers.data() + i + 4, headers.size() - i - 4));
-
 		headers.erase(i + 2);
 
-		return true;
+		return i + 4;
 	}
 
-	return false;
+	return 0;
 }
 
 //-------------------------------------------------------------------
 
 short
-http::getProxyConnectResponse(char     *data,
-							  exchange *ex,
+http::getProxyConnectResponse(exchange *ex,
 							  __httpResponse__ &response)
 {
 	unsigned long size = 0, i;
 	bool endOfHeaders = false;
 
 	dodoString headers;
+
+	char data[512];
+	ex->setInBufferSize(512);
+	ex->inSize = 512;
 
 	while (true)
 	{
@@ -1340,7 +1330,7 @@ http::getProxyConnectResponse(char     *data,
 		}
 		catch (exception::basic &ex)
 		{
-			if (ex.funcID == EXCHANGEEX__READSTREAM__)
+			if (ex.funcID == EXCHANGEEX__READSTREAM)
 			{
 				break;
 			}
@@ -1359,10 +1349,11 @@ http::getProxyConnectResponse(char     *data,
 //-------------------------------------------------------------------
 
 short
-http::getContent(dodoString &data,
-				 exchange   *ex,
+http::getContent(exchange   *ex,
 				 __httpResponse__ &response)
 {
+	dodoString data;
+
 	unsigned long contentSize = 0;
 
 	long chunkSize = 0;
@@ -1370,14 +1361,10 @@ http::getContent(dodoString &data,
 
 	unsigned long eoc;
 
-	bool endOfHeaders = false;
+	unsigned int endOfHeaders = 0;
 	bool chunked = false;
 
 	dodoString headers;
-
-	response.data.clear();
-	response.headers.clear();
-	response.code = 0;
 
 	while (true)
 	{
@@ -1387,17 +1374,24 @@ http::getContent(dodoString &data,
 			{
 				if (chunkSize > 0)
 				{
-					ex->inSize = chunkSize;
-					data = ex->read();
-					response.data.append(data, 0, ex->inSize - 2); ///< remove 2 bytes of CRLF after chunk
-				}
+					if (chunkSize > data.size())
+					{
+						ex->inSize = chunkSize - data.size();
+						data.append(ex->read());
+					}
 
-				ex->inSize = 512;
-				data = ex->readStream();
+					response.data.append(data, 0, chunkSize);
+
+					data.erase(0, chunkSize);
+				}
 
 				if (data.size() == 0)
 				{
-					break;
+					ex->inSize = 512;
+					data = ex->readStream();
+
+					if (data.size() == 0)
+						break;
 				}
 
 				eoc = data.find("\r\n");
@@ -1427,6 +1421,7 @@ http::getContent(dodoString &data,
 
 						chunkSizeHex.append(1, data[i]);
 					}
+					data.erase(0, eoc);
 
 					if (chunkSizeHex.size() == 0)
 					{
@@ -1436,19 +1431,14 @@ http::getContent(dodoString &data,
 					}
 
 					chunkSize = tools::code::hexToLong(chunkSizeHex);
-
 					if (chunkSize == 0)
-					{
 						break;
-					}
+				}
+				else
+				{
+					ex->inSize = 512;
+					data.append(ex->readStream());
 
-					unsigned long dataSize = data.size();
-					if (dataSize > eoc)
-					{
-						response.data.append(data.data() + eoc);
-					}
-
-					chunkSize -= dataSize - 2 - eoc; ///< 2 bytes for CRLF after chunk
 				}
 			}
 			else
@@ -1457,7 +1447,7 @@ http::getContent(dodoString &data,
 
 				if (data.size() == 0 && contentSize <= 0)
 				{
-					if (!endOfHeaders && headers.size() > 0)
+					if (endOfHeaders == 0 && headers.size() > 0)
 					{
 						response.data.assign(headers);
 					}
@@ -1465,15 +1455,15 @@ http::getContent(dodoString &data,
 					break;
 				}
 
-				if (endOfHeaders)
+				if (endOfHeaders != 0)
 				{
 					response.data.append(data);
 				}
 				else
 				{
-					endOfHeaders = extractHeaders(data, headers, response);
+					endOfHeaders = extractHeaders(data, headers);
 
-					if (endOfHeaders)
+					if (endOfHeaders > 0)
 					{
 						getHeaders(headers, response);
 						headers.clear();
@@ -1555,42 +1545,11 @@ http::getContent(dodoString &data,
 						chunked = tools::string::equal(response.headers[HTTP_RESPONSEHEADER_TRANSFERENCODING], "chunked");
 
 						if (chunked)
-						{
-							eoc = response.data.find("\r\n");
-							if (eoc == dodoString::npos)
-							{
-								eoc = response.data.find('\n');
-								if (eoc != dodoString::npos)
-								{
-									++eoc;
-								}
-							}
-							else
-							{
-								eoc += 2;
-							}
-
-							if (eoc != dodoString::npos)
-							{
-								for (unsigned long i = 0; i < eoc; ++i)
-								{
-									if (response.data[i] == '\r' || response.data[i] == ';' || response.data[i] == '\n')
-									{
-										break;
-									}
-
-									chunkSizeHex.append(1, response.data[i]);
-								}
-
-								unsigned long dataSize = response.data.size() - eoc;
-
-								response.data.assign(response.data.data() + eoc, dataSize);
-
-								chunkSize = tools::code::hexToLong(chunkSizeHex) - dataSize + 2; ///< 2 bytes for CRLF after chunk
-							}
-						}
+							data.erase(0, endOfHeaders);
 						else
 						{
+							response.data = data.substr(endOfHeaders);
+
 							contentSize = tools::string::stringToUL(response.headers[HTTP_RESPONSEHEADER_CONTENTLENGTH]);
 
 							ex->inSize = 16384;
@@ -1609,9 +1568,9 @@ http::getContent(dodoString &data,
 		catch (exception::basic &ex)
 		{
 #ifdef OPENSSL_EXT
-			if (ex.funcID == EXCHANGEEX__READSTREAM__ || ex.funcID == ssl::EXCHANGEEX__READSTREAM__)
+			if (ex.funcID == EXCHANGEEX__READSTREAM || ex.funcID == ssl::EXCHANGEEX__READSTREAM)
 #else
-			if (ex.funcID == EXCHANGEEX__READSTREAM__)
+			if (ex.funcID == EXCHANGEEX__READSTREAM)
 #endif
 			{
 				if (!endOfHeaders && headers.size() > 0)

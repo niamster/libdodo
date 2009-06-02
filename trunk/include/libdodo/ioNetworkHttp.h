@@ -199,8 +199,8 @@ namespace dodo
 				 */
 				virtual void setProxy(const dodoString &host,
 									  unsigned int     port = 3128,
-									  const dodoString &user = __dodostring____,
-									  const dodoString &password = __dodostring____);
+									  const dodoString &user = __dodostring__,
+									  const dodoString &password = __dodostring__);
 
 				/**
 				 * set cookies for the request
@@ -315,12 +315,10 @@ namespace dodo
 				/**
 				 * get response data and fetch headers
 				 * @return flag of redirection/authentification status
-				 * @param data defines buffer to store response
 				 * @param ex defines network connection
 				 * @param response defines response data to be filled
 				 */
-				virtual short getContent(dodoString &data,
-										 exchange   *ex,
+				virtual short getContent(exchange   *ex,
 										 __httpResponse__ &response);
 
 				/**
@@ -330,8 +328,7 @@ namespace dodo
 				 * @param ex defines network connection
 				 * @param response defines response data to be filled
 				 */
-				virtual short getProxyConnectResponse(char     *data,
-													  exchange *ex,
+				virtual short getProxyConnectResponse(exchange *ex,
 													  __httpResponse__ &response);
 
 				unsigned short authTries;                                                           ///< autherization request counter
@@ -349,14 +346,12 @@ namespace dodo
 				virtual short getStatusCode(const dodoString &header);
 
 				/**
-				 * @return true if no more headers should be processed
+				 * @return offset of HTTP body in data or zero if headers are not complete
 				 * @param data defines response data
 				 * @param headers defines data with headers
-				 * @param response defines response data to be filled
 				 */
-				virtual bool extractHeaders(const dodoString &data,
-											dodoString       &headers,
-											__httpResponse__ &response);
+				virtual unsigned int extractHeaders(const dodoString &data,
+													dodoString       &headers);
 
 				/**
 				 * fetch headers
