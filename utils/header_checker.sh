@@ -2,6 +2,9 @@
 
 src=(trunk/include/libdodo trunk/src)
 
+##
+## Check for header description and #ifndef/#define file protector mark
+## 
 for i in ${src[*]}
 do
 	pushd $i
@@ -33,3 +36,15 @@ do
 
 	popd
 done
+
+##
+## Check for files that do not include directives.h
+##
+pushd trunk/src
+wo_direcites=$(uniq -u < <(sort <(grep -l directives.h *cc *inline) <(ls -1)))
+if [[ -n "$wo_direcites" ]]
+then
+	echo "Source files that do not contain directives.h inclusion:"
+	echo $wo_direcites
+fi
+popd
