@@ -622,9 +622,9 @@ then
 	fi
 	if test "$VERY_OLD_IMAGEMAGICK_LIB" != "yes"
 	then
-		AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))
+		AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))	
 	else
-		AC_CHECK_HEADER([magick/magick.h], [], AC_MSG_ERROR(Magick header was not found))
+		AC_CHECK_HEADER([magick/ImageMagick.h], [], AC_MSG_ERROR(Magick header was not found))
 	fi
 	echo -n -e "#define IMAGEMAGICK_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
