@@ -35,7 +35,6 @@
 #else
 #include <magick/ImageMagick.h>
 #endif
-
 #include <math.h>
 #include <string.h>
 

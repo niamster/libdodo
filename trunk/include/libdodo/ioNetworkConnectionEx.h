@@ -52,7 +52,7 @@ namespace dodo
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR "No socket was created =(."
+#define IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR "No socket was created."
 #define IONETWORKCONNECTIONEX_WRONGPARAMETER_STR  "Wrong paramather passed to function."
 
 			/**
