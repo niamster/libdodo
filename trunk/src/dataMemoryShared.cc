@@ -36,9 +36,8 @@
 #ifdef XSI_IPC
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#else /*POSIX_SEMAPHORES*/
-#include <fcntl.h>
 #endif
+#include <fcntl.h>
 #include <errno.h>
 
 #include <libdodo/dataMemoryShared.h>
@@ -185,7 +184,7 @@ shared::open(int a_key)
 	}
 	else
 	{
-		key = a_key;
+		key->key = a_key;
 	}
 #else
 #ifdef __FreeBSD__
