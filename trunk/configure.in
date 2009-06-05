@@ -706,26 +706,23 @@ CPPFLAGS=$NEW_CPPFLAGS
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS([arpa/inet.h \
-	fcntl.h \
-	netdb.h \
-	stdlib.h \
-	string.h \
-	unistd.h \
-	utime.h \
-	poll.h \
 	ctype.h \
+	dirent.h \
 	errno.h \
+	fcntl.h \
 	grp.h \
 	libgen.h \
 	math.h \
-	net/if.h \
+	netdb.h \
 	netinet/in.h \
+	poll.h \
 	pwd.h \
 	semaphore.h \
 	signal.h \
 	stdarg.h \
 	stdio.h \
 	stdlib.h \
+	string.h \
 	syslog.h \
 	sys/ioctl.h \
 	sys/mman.h \
@@ -738,13 +735,19 @@ AC_CHECK_HEADERS([arpa/inet.h \
 	sys/sem.h \
 	sys/un.h \
 	sys/wait.h \
-	dirent.h \
-	unistd.h \
-	utime.h \
 	time.h \
-	netdb.h],
+	unistd.h \
+	utime.h],
 	[],
 	[AC_MSG_ERROR(header was not found)])
+AC_CHECK_HEADERS([net/if.h],
+	[],
+	[AC_MSG_ERROR(header was not found)],
+	[[
+	 #ifdef HAVE_SYS_SOCKET_H
+	 #include <sys/socket.h> 
+	 #endif
+	]])
 
 AC_CHECK_HEADER([execinfo.h], [CALLSTACK_EX="yes"], [CALLSTACK_EX="no"])
 if test "$CALLSTACK_EX" = "yes"
