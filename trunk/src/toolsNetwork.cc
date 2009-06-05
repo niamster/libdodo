@@ -32,6 +32,8 @@
 #include <netdb.h>
 #include <errno.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <net/if.h>
 #include <sys/ioctl.h>

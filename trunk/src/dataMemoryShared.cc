@@ -31,6 +31,7 @@
 
 #include <sys/types.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <string.h>
 #ifdef XSI_IPC
 #include <sys/ipc.h>

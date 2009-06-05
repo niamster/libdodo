@@ -36,6 +36,7 @@
 #include <fcntl.h>
 #include <semaphore.h>
 #endif
+#include <sys/stat.h>
 #include <time.h>
 #include <errno.h>
 #include <string.h>

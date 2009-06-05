@@ -30,7 +30,10 @@
 #include <libdodo/directives.h>
 
 #include <arpa/inet.h>
+#include <netinet/in.h>
 #include <sys/un.h>
+#include <sys/stat.h>
+#include <sys/socket.h>
 #include <fcntl.h>
 #include <errno.h>
 
