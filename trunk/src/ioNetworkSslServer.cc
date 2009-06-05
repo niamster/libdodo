@@ -32,6 +32,7 @@
 #ifdef OPENSSL_EXT
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>

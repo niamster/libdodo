@@ -33,6 +33,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
