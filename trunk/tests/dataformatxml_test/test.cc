@@ -4,11 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/dataFormatXmlProcessor.h>
-#include <libdodo/dataFormatXmlNode.h>
-#include <libdodo/toolsMisc.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -26,11 +23,11 @@ int main(int argc, char **argv)
 
 		cout << xmlp.getFileInfo("./test.xml").version << endl;
 
-		__nodeDef def("div", "cns");
+		__nodeDef__ def("div", "cns");
 		def.attributes = dodoStringArray(1, "id");
 		def.allChildren = false;
 
-		def.children["span"] = __nodeDef("span");
+		def.children["span"] = __nodeDef__("span");
 
 		node xnode = xmlp.processFile(def, "./test.xml");
 		//node xnode = xmlp.processFile("./test.xml");

@@ -22,7 +22,7 @@ OBJECTS:=@OBJECTS@
 
 ###########################################################
 
-VPATH:=src/
+VPATH:=src
 
 all: @PACKAGE_NAME@
 dodo: all
@@ -36,11 +36,11 @@ build: all
 
 	@echo ""
 	@echo ""
-	@echo "Now you can run 'gmake install'."
+	@echo "Now you can run 'make install'."
 
 .cc.o:
-	@echo "-- Compiling: $^"
-	@$(CXX) $(CFLAGS) $(CPPFLAGS) -fPIC -c $^
+	@echo "-- Compiling: $<"
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) -fPIC -c $<
 
 install: @PACKAGE_NAME@
 	@echo "" > install_manifest.txt

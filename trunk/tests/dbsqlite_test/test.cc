@@ -4,10 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/dataBaseSqlite.h>
-#include <libdodo/toolsFilesystem.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace std;
@@ -21,11 +19,11 @@ using namespace data::base;
 #ifndef DATABASE_WO_XEXEC
 
 void
-hook(__xexecCollectedData *odata,
+hook(__xexecCollectedData__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecDataBaseAccumulatorCollectedData *sql = (__xexecDataBaseAccumulatorCollectedData *)odata;
+	__xexecDataBaseAccumulatorCollectedData__ *sql = (__xexecDataBaseAccumulatorCollectedData__ *)odata;
 
 	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
@@ -45,7 +43,7 @@ int main(int argc, char **argv)
 	{
 		tools::filesystem::unlink("test.lite", true);
 
-		__connectionInfo info;
+		__connectionInfo__ info;
 		info.path = "test.lite";
 
 		sqlite pp(info);
@@ -105,7 +103,7 @@ int main(int argc, char **argv)
 
 		cout << pp.fetch().rows.size() << endl;
 
-		__tuples store = pp.fetch();
+		__tuples__ store = pp.fetch();
 
 		dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
 

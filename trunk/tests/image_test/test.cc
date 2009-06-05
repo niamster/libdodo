@@ -4,12 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/toolsMisc.h>
-#include <libdodo/graphicsImage.h>
-#include <libdodo/graphicsTransform.h>
-#include <libdodo/graphicsDraw.h>
-#include <libdodo/ioFile.h>
 
+#include <libdodo/dodo.h>
 #include <math.h>
 #include <iostream>
 
@@ -25,11 +21,11 @@ using namespace graphics;
 #ifndef GRAPHICS_WO_XEXEC
 
 void
-hook(__xexecCollectedData *odata,
+hook(__xexecCollectedData__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecImageCollectedData *imData = (__xexecImageCollectedData *)odata;
+	__xexecImageCollectedData__ *imData = (__xexecImageCollectedData__ *)odata;
 
 	if (imData->operType == IMAGE_OPERATION_WRITE)
 	{
@@ -118,7 +114,7 @@ int main(int argc, char **argv)
 		im.setType(IMAGE_TYPE_GRAYSCALE);
 		dr.circle(point(200, 200), 50, color::blue, color::white, 5);
 		im.setOpacity(65535/2);
-		__color mygreen = color::green;
+		__color__ mygreen = color::green;
 		mygreen.opacity = 65535/2;
 		dr.circle(point(250, 250), 50, mygreen, color::white, 5);
 		im.writeFile("new-2.png");
@@ -154,7 +150,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl << ex.getCallStack() <<  endl;
+		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
 	}
 
 	return 0;

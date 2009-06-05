@@ -4,8 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/directives.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 #ifdef DL_EXT

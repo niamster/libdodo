@@ -4,10 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/ioStdio.h>
-#include <libdodo/toolsNetwork.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -18,11 +16,11 @@ using namespace std;
 #ifndef IO_WO_XEXEC
 
 void
-hook(__xexecCollectedData *odata,
+hook(__xexecCollectedData__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecIoChannelCollectedData *st = (__xexecIoChannelCollectedData *)odata;
+	__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
 	if (st->operType == IO_OPERATION_WRITE)
 	{
 		int a = *(int *)(st->buffer.c_str());

@@ -4,10 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/directives.h>
-#include <libdodo/toolsLibrary.h>
-#include <libdodo/exceptionBasic.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;

@@ -4,17 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/pcProcessCollection.h>
-#include <libdodo/toolsOs.h>
-#include <libdodo/toolsTime.h>
-#include <libdodo/toolsMisc.h>
-#include <libdodo/dataMemoryShared.h>
-#include <libdodo/pcSyncProcessDataSingle.h>
-#include <libdodo/pcSyncProcessSection.h>
-#include <libdodo/pcSyncProcessDataCollection.h>
-#include <libdodo/pcSyncProtector.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -73,7 +64,7 @@ process(void *ud)
 int
 processLocked(void *ud)
 {
-	sync::protector pg(&sec);
+	pc::sync::protector pg(&sec);
 
 	cout << "processLocked:" << (char *)ud << endl, cout.flush();
 

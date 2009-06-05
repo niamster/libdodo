@@ -5,11 +5,8 @@
  */
 
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/ioNetwork.h>
-#include <libdodo/toolsNetwork.h>
-#include <libdodo/types.h>
-
+#include <libdodo/dodo.h>
+#
 #include <iostream>
 
 using namespace dodo;
@@ -74,8 +71,8 @@ int main(int argc, char **argv)
 		//server sock(CONNECTION_PROTO_FAMILY_IPV6,CONNECTION_TRANSFER_TYPE_STREAM);
 		//server sock(CONNECTION_PROTO_FAMILY_UNIX_SOCKET,CONNECTION_TRANSFER_TYPE_STREAM);
 
-		__peerInfo info;
-		__initialAccept fake;
+		__peerInfo__ info;
+		__initialAccept__ fake;
 
 		sock.serve("127.0.0.1",7778,3);
 		//sock.serve("::",7777);

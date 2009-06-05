@@ -4,14 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/dataBaseConnector.h>
-#include <libdodo/dataBaseSqlConstructor.h>
-#include <libdodo/dataBasePostgresql.h>
-#include <libdodo/dataBaseMysql.h>
-#include <libdodo/dataBaseSqlite.h>
-#include <libdodo/toolsFilesystem.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -22,11 +16,11 @@ using namespace std;
 #ifndef DATABASE_WO_XEXEC
 
 void
-hook(__xexecCollectedData *odata,
+hook(__xexecCollectedData__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecDataBaseAccumulatorCollectedData *sql = (__xexecDataBaseAccumulatorCollectedData *)odata;
+	__xexecDataBaseAccumulatorCollectedData__ *sql = (__xexecDataBaseAccumulatorCollectedData__ *)odata;
 
 	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
@@ -47,7 +41,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-		__connectionInfo info;
+		__connectionInfo__ info;
 		info.db = "test";
 		if (strcasecmp(argv[1], "postgresql") == 0)
 		{
@@ -160,7 +154,7 @@ int main(int argc, char **argv)
 		select.push_back("operation");
 		select.push_back("b");
 
-		__tuples store;
+		__tuples__ store;
 
 		for (int i = 0; i < 10; i++)
 		{

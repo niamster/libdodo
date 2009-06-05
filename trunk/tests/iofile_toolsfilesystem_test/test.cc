@@ -4,11 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/ioFile.h>
-#include <libdodo/toolsFilesystem.h>
-#include <libdodo/toolsCode.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -56,11 +53,11 @@ int main(int argc, char **argv)
 
 		cout << filesystem::getPermissions("Makefile") << endl;
 
-		dodoArray<__fileInfo> dir = filesystem::getDirInfo("./");
+		dodoArray<__fileInfo__> dir = filesystem::getDirInfo("./");
 		if (dir.size() > 0)
 		{
 			cout << endl << dir.size() << endl;
-			for (dodoArray<__fileInfo>::iterator i = dir.begin(); i != dir.end(); ++i)
+			for (dodoArray<__fileInfo__>::iterator i = dir.begin(); i != dir.end(); ++i)
 				cout << i->size << "!" << i->name << endl;
 		}
 

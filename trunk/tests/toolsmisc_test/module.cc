@@ -4,8 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 #include <string.h>
 
@@ -23,10 +23,10 @@ extern "C"
 		std::cout << ex->message << std::endl;
 	}
 
-	dodo::exception::__basicMod
+	dodo::exception::__basicMod__
 	initBaseExModule(void *data)
 	{
-		dodo::exception::__basicMod module;
+		dodo::exception::__basicMod__ module;
 
 		strcpy(module.name, "test");
 		strcpy(module.discription, "test module");

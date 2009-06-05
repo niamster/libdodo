@@ -4,10 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/toolsOs.h>
-#include <libdodo/toolsMisc.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -20,7 +18,7 @@ static bool run = true;
 static int number = 1;
 
 void
-signaler(int, siginfo_t *, void *)
+signaler(int, void *, void *)
 {
 	cout << "\nTEST\n";
 	cout.flush();
@@ -29,7 +27,7 @@ signaler(int, siginfo_t *, void *)
 }
 
 void
-exit(int, siginfo_t *, void *)
+exit(int, void *, void *)
 {
 	run = false;
 }
@@ -39,8 +37,8 @@ int main(int argc, char **argv)
 
 	cout << os::getPID() << endl;
 
-	os::setSignalHandler(OS_SIGNAL_HANGUP, exit);
-	os::setSignalHandler(OS_SIGNAL_INTERRUPT, signaler);
+	os::setSignalHandler(OS_SIGNAL_HANGUP, ::exit);
+	os::setSignalHandler(OS_SIGNAL_INTERRUPT, ::signaler);
 
 	if (os::isSignalHandled(OS_SIGNAL_HANGUP))
 		cout << "OS_SIGNAL_HANGUP IS SET ... !\n";
@@ -66,7 +64,7 @@ int main(int argc, char **argv)
 	cout << os::getWorkingDir() << endl;
 
 	{
-		dodoArray<__userInfo> info = os::getUsers();
+		dodoArray<__userInfo__> info = os::getUsers();
 
 		for (int i(0); i < info.size(); i++)
 			cout << info[i].name << endl;
@@ -75,7 +73,7 @@ int main(int argc, char **argv)
 	cout << endl << endl;
 
 	{
-		dodoArray<__groupInfo> info = os::getGroups();
+		dodoArray<__groupInfo__> info = os::getGroups();
 
 		for (int i(0); i < info.size(); i++)
 			cout << info[i].name << endl;

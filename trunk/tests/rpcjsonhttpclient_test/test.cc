@@ -6,7 +6,7 @@
 
 
 #include <libdodo/dodo.h>
-
+#
 #include <iostream>
 #include <string.h>
 
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (dodoString)ex << endl << ex.getCallStack() << endl;
+		cout << (dodoString)ex << endl;
 	}
 
 	return 0;

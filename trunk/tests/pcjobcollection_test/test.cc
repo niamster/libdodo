@@ -4,14 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/pcJobCollection.h>
-#include <libdodo/pcProcessCollection.h>
-#include <libdodo/pcThreadCollection.h>
-#include <libdodo/toolsOs.h>
-#include <libdodo/toolsTime.h>
-#include <libdodo/toolsMisc.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;

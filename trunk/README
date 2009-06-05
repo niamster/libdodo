@@ -5,7 +5,7 @@ To configure run ./configure with additional options you can find running './con
 
 You may edit include/libdodo/directives.h to tune some options.
 
-To compile use 'gmake'
-To install 'gmake install'
+To compile use 'make'
+To install 'make install'
 
 list of installed files you can find in install_manifest.txt

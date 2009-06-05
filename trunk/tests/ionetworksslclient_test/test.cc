@@ -5,11 +5,8 @@
  */
 
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/ioNetworkSslClient.h>
-#include <libdodo/toolsNetwork.h>
-#include <libdodo/types.h>
-
+#include <libdodo/dodo.h>
+#
 #include <iostream>
 
 using namespace dodo;
@@ -34,7 +31,7 @@ int main(int argc, char **argv)
 
 		client st(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 		
-		io::ssl::__certificates certs;
+		io::ssl::__certificates__ certs;
 		certs.ca = "host.pem";
 		
 		//certs.cert = "host.cert";

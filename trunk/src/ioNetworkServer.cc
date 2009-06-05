@@ -57,7 +57,7 @@ __xexecIoNetworkServerCollectedData__::__xexecIoNetworkServerCollectedData__(xex
 //-------------------------------------------------------------------
 
 server::server(server &fs)
-#ifndef IO_WO_XEXE
+#ifndef IO_WO_XEXEC
 	: collectedData(this, XEXEC_OBJECT_IONETWORKSERVER)
 #endif
 {

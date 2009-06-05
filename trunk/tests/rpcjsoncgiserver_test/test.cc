@@ -4,8 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/dodo.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 #include <string.h>
 

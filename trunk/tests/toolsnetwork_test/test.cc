@@ -5,11 +5,8 @@
  */
 
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/ioNetwork.h>
-#include <libdodo/toolsNetwork.h>
-#include <libdodo/types.h>
-
+#include <libdodo/dodo.h>
+#
 #include <iostream>
 
 using namespace dodo;
@@ -21,7 +18,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		__hostInfo addr;
+		__hostInfo__ addr;
 
 		addr = network::getHostInfo("localhost");
 		cout << "Name: " << addr.name << endl;

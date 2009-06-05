@@ -4,12 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/ioNetwork.h>
-#include <libdodo/toolsNetwork.h>
-#include <libdodo/pcThreadCollection.h>
-#include <libdodo/pcSyncThreadDataSingle.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -19,7 +15,7 @@ using namespace pc::sync::thread;
 
 using namespace std;
 
-data::single sh;
+pc::sync::thread::data::single sh;
 
 int
 process(void *data)
@@ -107,8 +103,8 @@ int main(int argc, char **argv)
 	{
 		server sock(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 
-		__peerInfo info;
-		__initialAccept fake;
+		__peerInfo__ info;
+		__initialAccept__ fake;
 
 		sock.serve("127.0.0.1", 7778, 3);
 		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
@@ -137,7 +133,7 @@ int main(int argc, char **argv)
 				}
 
 				conn.init(fake);
-				positions.push_back(th.add(process, (void *)(new exchange(conn))));
+				positions.push_back(th.add(::process, (void *)(new exchange(conn))));
 				th.run(positions.back());
 				th.setExecutionLimit(positions.back(), 1);
 				conn.close();

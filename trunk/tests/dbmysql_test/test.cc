@@ -4,10 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/dataBaseMysql.h>
-#include <libdodo/toolsTime.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -21,11 +19,11 @@ using namespace data::base;
 #ifndef DATABASE_WO_XEXEC
 
 void
-hook(__xexecCollectedData *odata,
+hook(__xexecCollectedData__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecDataBaseAccumulatorCollectedData *sql = (__xexecDataBaseAccumulatorCollectedData *)odata;
+	__xexecDataBaseAccumulatorCollectedData__ *sql = (__xexecDataBaseAccumulatorCollectedData__ *)odata;
 
 	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
@@ -45,7 +43,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-		mysql pp(__connectionInfo("test", "localhost", "root", "password", "", 3306));
+		mysql pp(__connectionInfo__("test", "localhost", "root", "password", "", 3306));
 
 #ifndef DATABASE_WO_XEXEC
 
@@ -69,7 +67,7 @@ int main(int argc, char **argv)
 		pp.getFieldsTypes("test1");
 
 		dodoStringArray fields;
-		__tuples storage;
+		__tuples__ storage;
 
 		pp.selectAll("test");
 		pp.join("test1", JOINTYPE_JOIN, "test.operation = test1.operation");
@@ -102,7 +100,7 @@ int main(int argc, char **argv)
 		arr.clear();
 
 		pp.disconnect();
-		pp.connect(__connectionInfo("test", "localhost", "root", "password", "", 3306));
+		pp.connect(__connectionInfo__("test", "localhost", "root", "password", "", 3306));
 
 		arr["d"] = "100000";
 		pp.update("test", arr);

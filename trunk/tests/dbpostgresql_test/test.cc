@@ -4,9 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/dataBasePostgresql.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -20,9 +19,9 @@ using namespace data::base;
 #ifndef DATABASE_WO_XEXEC
 
 void
-hook(__xexecCollectedData *odata, short int type, void *udata)
+hook(__xexecCollectedData__ *odata, short int type, void *udata)
 {
-	__xexecDataBaseAccumulatorCollectedData *sql = (__xexecDataBaseAccumulatorCollectedData *)odata;
+	__xexecDataBaseAccumulatorCollectedData__ *sql = (__xexecDataBaseAccumulatorCollectedData__ *)odata;
 
 	if (sql->operType == DATABASE_OPERATION_EXEC)
 	{
@@ -40,7 +39,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-		__connectionInfo info;
+		__connectionInfo__ info;
 		info.db = "test";
 		info.host = "localhost";
 		info.port = 5432;
@@ -64,7 +63,7 @@ int main(int argc, char **argv)
 
 		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b bytea)");
 
-		__tuples store;
+		__tuples__ store;
 
 		dodoStringMap arr;
 		arr["date"] = "2005-07-08";

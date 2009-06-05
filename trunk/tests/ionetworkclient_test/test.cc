@@ -5,11 +5,8 @@
  */
 
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/ioNetwork.h>
-#include <libdodo/toolsNetwork.h>
-#include <libdodo/types.h>
-
+#include <libdodo/dodo.h>
+#
 #include <iostream>
 
 using namespace dodo;

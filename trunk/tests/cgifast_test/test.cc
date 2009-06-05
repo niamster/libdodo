@@ -4,14 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/cgiDialogue.h>
-#include <libdodo/dataTplProcessor.h>
-#include <libdodo/toolsMisc.h>
-#include <libdodo/cgiFastServer.h>
-#include <libdodo/cgiBasicServer.h>
-#include <libdodo/pcSyncThreadDataSingle.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace std;
@@ -30,7 +24,7 @@ cgif(exchange &fcgi)
 
 	dialogue cgit(fcgi, true);
 
-	cgit.setCookie("test", "Ni@m");
+	cgit.setCookie(__cgiCookie__("test", "Ni@m"));
 
 	///increment counter in shared memory
 	int *inc = (int *)sh.acquire();

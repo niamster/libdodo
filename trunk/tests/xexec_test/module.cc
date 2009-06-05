@@ -4,10 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/xexec.h>
-#include <libdodo/ioStdio.h>
-#include <libdodo/directives.h>
 
+#include <libdodo/dodo.h>
 #include <string.h>
 #include <iostream>
 
@@ -20,7 +18,7 @@ extern "C"
 {
 
 void
-hook(__xexecCollectedData *odata,
+hook(__xexecCollectedData__ *odata,
      short int type,
 	 void *udata)
 {
@@ -30,7 +28,7 @@ hook(__xexecCollectedData *odata,
 	{
 		std::cout << "stdio module\t";
 
-		__xexecIoChannelCollectedData *st = (__xexecIoChannelCollectedData *)odata;
+		__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
 		if (st->operType == IO_OPERATION_WRITE)
 		{
 			int *a = (int *)(st->buffer.c_str());
@@ -43,7 +41,7 @@ hook(__xexecCollectedData *odata,
 }
 
 void
-empty(__xexecCollectedData *odata,
+empty(__xexecCollectedData__ *odata,
       short int type,
 	  void *udata)
 {
@@ -51,10 +49,10 @@ empty(__xexecCollectedData *odata,
 	std::cout << "empty activation\n";
 }
 
-__xexecMod
+__xexecMod__
 initXexecModule(void *data)
 {
-	__xexecMod module;
+	__xexecMod__ module;
 
 	strcpy(module.name, "test");
 	strcpy(module.discription, "test module");

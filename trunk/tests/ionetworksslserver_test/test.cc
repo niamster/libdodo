@@ -5,12 +5,8 @@
  */
 
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/ioNetworkSslServer.h>
-#include <libdodo/toolsNetwork.h>
-#include <libdodo/toolsOs.h>
-#include <libdodo/types.h>
-
+#include <libdodo/dodo.h>
+#
 #include <iostream>
 
 using namespace dodo;
@@ -23,13 +19,13 @@ using namespace io::network::ssl;
 #ifndef IO_WO_XEXEC
 
 void
-hook(__xexecCollectedData *odata,
+hook(__xexecCollectedData__ *odata,
 	 short int type,
 	 void *udata)
 {
-	using io::__xexecIoChannelCollectedData;
+	using io::__xexecIoChannelCollectedData__;
 
-	__xexecIoChannelCollectedData *st = (__xexecIoChannelCollectedData *)odata;
+	__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
 
 	cout << st->buffer << endl;
 	cout << dynamic_cast<exchange *>(st->executor)->isAlive() << endl;
@@ -93,12 +89,12 @@ int main(int argc, char **argv)
 
 		server sock(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 
-		io::network::__peerInfo info;
-		__initialAccept fake;
+		io::network::__peerInfo__ info;
+		__initialAccept__ fake;
 
 		sock.serve("127.0.0.1",7778,3);
 
-		io::ssl::__certificates certs;
+		io::ssl::__certificates__ certs;
 		certs.ca = "host.pem";
 		certs.cipher = "RC4-MD5";
 

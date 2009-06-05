@@ -4,11 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/toolsOs.h>
-#include <libdodo/ioNetworkSslServer.h>
-#include <libdodo/ioEvent.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -29,7 +26,7 @@ int main(int argc, char **argv)
 
 		server sock(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 
-		__initialAccept fake;
+		__initialAccept__ fake;
 
 		sock.serve("127.0.0.1", 7778, 1);
 		sock.setOption(io::network::CONNECTION_OPTION_REUSE_ADDRESS, true);
@@ -37,7 +34,7 @@ int main(int argc, char **argv)
 		sock.blockInherited = true;
 		sock.block(false);
 		
-		io::ssl::__certificates certs;
+		io::ssl::__certificates__ certs;
 		certs.ca = "host.pem";
 		certs.cipher = "RC4-MD5";
 

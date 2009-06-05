@@ -4,12 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/toolsOs.h>
-#include <libdodo/ioNetwork.h>
-#include <libdodo/toolsNetwork.h>
-#include <libdodo/ioEvent.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -23,7 +19,7 @@ int main(int argc, char **argv)
 	{
 		server sock(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 
-		__initialAccept fake;
+		__initialAccept__ fake;
 
 		sock.serve("127.0.0.1", 7778, 1);
 		sock.setOption(CONNECTION_OPTION_REUSE_ADDRESS, true);

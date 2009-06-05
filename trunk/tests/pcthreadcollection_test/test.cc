@@ -4,14 +4,8 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/exceptionBasic.h>
-#include <libdodo/pcThreadCollection.h>
-#include <libdodo/pcSyncThreadDataSingle.h>
-#include <libdodo/pcSyncThreadDataCollection.h>
-#include <libdodo/toolsOs.h>
-#include <libdodo/toolsTime.h>
-#include <libdodo/toolsMisc.h>
 
+#include <libdodo/dodo.h>
 #include <iostream>
 
 using namespace dodo;
@@ -20,8 +14,8 @@ using namespace dodo::pc::sync::thread;
 
 using namespace std;
 
-data::single sh;
-data::collection shC;
+dodo::pc::sync::thread::data::single sh;
+dodo::pc::sync::thread::data::collection shC;
 
 unsigned long shCI;
 
