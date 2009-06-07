@@ -37,6 +37,7 @@
 #include <arpa/inet.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
+#include <stdio.h>
 
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/toolsNetworkEx.h>

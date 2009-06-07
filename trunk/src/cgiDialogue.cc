@@ -1,34 +1,35 @@
 /***************************************************************************
- *            cgiDialogue.cc
- *
- *  Sat Sep  18 17:18:19 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
- ****************************************************************************/
+*            cgiDialogue.cc
+*
+*  Sat Sep  18 17:18:19 2005
+*  Copyright  2005  Ni@m
+*  niam.niam@gmail.com
+****************************************************************************/
 
 /*
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Lesser General Public License version 2.1 as published by
- *  the Free Software Foundation;
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- */
+*  This program is free software; you can redistribute it and/or modify
+*  it under the terms of the GNU Lesser General Public License version 2.1 as published by
+*  the Free Software Foundation;
+*
+*  This program is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*  GNU Library General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public License
+*  along with this program; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+*/
 
 /**
- * vim indentation settings
- * set tabstop=4
- * set shiftwidth=4
- */
+* vim indentation settings
+* set tabstop=4
+* set shiftwidth=4
+*/
 
 #include <libdodo/directives.h>
 
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -46,112 +47,112 @@ using namespace dodo::cgi;
 
 const char *dialogue::environmentStatements[] =
 {
-	"REQUEST_METHOD",
-	"REQUEST_URI",
-	"QUERY_STRING",
-	"CONTENT_TYPE",
-	"CONTENT_LENGTH",
-	"CONTENT_TRANSFER_ENCODING",
-	"HTTP_AUTHORIZATION",
-	"HTTP_HOST",
-	"HTTP_USER_AGENT",
-	"HTTP_COOKIE",
-	"HTTP_DATE",
-	"HTTP_IF_MODIFIED_SINCE",
-	"HTTP_ACCEPT",
-	"HTTP_ACCEPT_LANGUAGE",
-	"HTTP_ACCEPT_ENCODING",
-	"HTTP_ACCEPT_CHARSET",
-	"HTTP_ACCEPT_RANGES",
-	"HTTP_KEEP_ALIVE",
-	"HTTP_CONNECTION",
-	"HTTP_REFERER",
-	"HTTP_VIA",
-	"HTTP_X_FORWARDED_FOR",
-	"REMOTE_ADDR",
-	"REMOTE_PORT",
-	"REDIRECT_STATUS",
-	"REDIRECT_QUERY_STRING",
-	"REDIRECT_URL",
-	"GATEWAY_INTERFACE",
-	"PATH",
-	"DIALOGUE_SIGNATURE",
-	"DIALOGUE_SOFTWARE",
-	"DIALOGUE_NAME",
-	"DIALOGUE_ADDR",
-	"DIALOGUE_PORT",
-	"DIALOGUE_ADMIN",
-	"DIALOGUE_PROTOCOL",
-	"SCRIPT_FILENAME",
-	"SCRIPT_NAME",
+"REQUEST_METHOD",
+"REQUEST_URI",
+"QUERY_STRING",
+"CONTENT_TYPE",
+"CONTENT_LENGTH",
+"CONTENT_TRANSFER_ENCODING",
+"HTTP_AUTHORIZATION",
+"HTTP_HOST",
+"HTTP_USER_AGENT",
+"HTTP_COOKIE",
+"HTTP_DATE",
+"HTTP_IF_MODIFIED_SINCE",
+"HTTP_ACCEPT",
+"HTTP_ACCEPT_LANGUAGE",
+"HTTP_ACCEPT_ENCODING",
+"HTTP_ACCEPT_CHARSET",
+"HTTP_ACCEPT_RANGES",
+"HTTP_KEEP_ALIVE",
+"HTTP_CONNECTION",
+"HTTP_REFERER",
+"HTTP_VIA",
+"HTTP_X_FORWARDED_FOR",
+"REMOTE_ADDR",
+"REMOTE_PORT",
+"REDIRECT_STATUS",
+"REDIRECT_QUERY_STRING",
+"REDIRECT_URL",
+"GATEWAY_INTERFACE",
+"PATH",
+"DIALOGUE_SIGNATURE",
+"DIALOGUE_SOFTWARE",
+"DIALOGUE_NAME",
+"DIALOGUE_ADDR",
+"DIALOGUE_PORT",
+"DIALOGUE_ADMIN",
+"DIALOGUE_PROTOCOL",
+"SCRIPT_FILENAME",
+"SCRIPT_NAME",
 };
 
 //-------------------------------------------------------------------
 
 const dodoString dialogue::responseHeaderStatements[] =
 {
-	"Accept-Ranges",
-	"Age",
-	"Allow",
-	"Cache-Control",
-	"Content-Encoding",
-	"Content-Language",
-	"Content-Length",
-	"Content-Location",
-	"Content-Disposition",
-	"Content-MD5",
-	"Content-Range",
-	"Content-Type",
-	"Date",
-	"Last-Modified",
-	"Location",
-	"Server",
-	"WWW-Authenticate",
-	"X-Powered-By",
+"Accept-Ranges",
+"Age",
+"Allow",
+"Cache-Control",
+"Content-Encoding",
+"Content-Language",
+"Content-Length",
+"Content-Location",
+"Content-Disposition",
+"Content-MD5",
+"Content-Range",
+"Content-Type",
+"Date",
+"Last-Modified",
+"Location",
+"Server",
+"WWW-Authenticate",
+"X-Powered-By",
 };
 
 const dodoString dialogue::responseStatusStatements[] =
 {
-	"Status: 100 Continue\r\n",
-	"Status: 101 Switching Protocols\r\n",
-	"Status: 200 OK\r\n",
-	"Status: 201 Created\r\n",
-	"Status: 202 Accepted\r\n",
-	"Status: 203 Non-Authoritative Information\r\n",
-	"Status: 204 No Content\r\n",
-	"Status: 205 Reset Content\r\n",
-	"Status: 206 Partial Content\r\n",
-	"Status: 300 Multiple Choices\r\n",
-	"Status: 301 Moved Permanently\r\n",
-	"Status: 302 Found\r\n",
-	"Status: 303 See Other\r\n",
-	"Status: 304 Not Modified\r\n",
-	"Status: 305 Use Proxy\r\n",
-	"Status: 307 Temporary Redirect\r\n",
-	"Status: 400 Bad Request\r\n",
-	"Status: 401 Unauthorized\r\n",
-	"Status: 402 Payment Required\r\n",
-	"Status: 403 Forbidden\r\n",
-	"Status: 404 Not Found\r\n",
-	"Status: 405 Method Not Allowed\r\n",
-	"Status: 406 Not Acceptable\r\n",
-	"Status: 407 Proxy Authentication Required\r\n",
-	"Status: 408 Request Timeout\r\n",
-	"Status: 409 Conflict\r\n",
-	"Status: 410 Gone\r\n",
-	"Status: 411 Length Required\r\n",
-	"Status: 412 Precondition Failed\r\n",
-	"Status: 413 Request Entity Too Large\r\n",
-	"Status: 414 Request-URI Too Long\r\n",
-	"Status: 415 Unsupported Media Type\r\n",
-	"Status: 416 Requested Range Not Satisfiable\r\n",
-	"Status: 417 Expectation Failed\r\n",
-	"Status: 500 Internal Server Error\r\n",
-	"Status: 501 Not Implemented\r\n",
-	"Status: 502 Bad Gateway\r\n",
-	"Status: 503 Service Unavailable\r\n",
-	"Status: 504 Gateway Timeout\r\n",
-	"Status: 505 HTTP Version Not Supported\r\n",
+"Status: 100 Continue\r\n",
+"Status: 101 Switching Protocols\r\n",
+"Status: 200 OK\r\n",
+"Status: 201 Created\r\n",
+"Status: 202 Accepted\r\n",
+"Status: 203 Non-Authoritative Information\r\n",
+"Status: 204 No Content\r\n",
+"Status: 205 Reset Content\r\n",
+"Status: 206 Partial Content\r\n",
+"Status: 300 Multiple Choices\r\n",
+"Status: 301 Moved Permanently\r\n",
+"Status: 302 Found\r\n",
+"Status: 303 See Other\r\n",
+"Status: 304 Not Modified\r\n",
+"Status: 305 Use Proxy\r\n",
+"Status: 307 Temporary Redirect\r\n",
+"Status: 400 Bad Request\r\n",
+"Status: 401 Unauthorized\r\n",
+"Status: 402 Payment Required\r\n",
+"Status: 403 Forbidden\r\n",
+"Status: 404 Not Found\r\n",
+"Status: 405 Method Not Allowed\r\n",
+"Status: 406 Not Acceptable\r\n",
+"Status: 407 Proxy Authentication Required\r\n",
+"Status: 408 Request Timeout\r\n",
+"Status: 409 Conflict\r\n",
+"Status: 410 Gone\r\n",
+"Status: 411 Length Required\r\n",
+"Status: 412 Precondition Failed\r\n",
+"Status: 413 Request Entity Too Large\r\n",
+"Status: 414 Request-URI Too Long\r\n",
+"Status: 415 Unsupported Media Type\r\n",
+"Status: 416 Requested Range Not Satisfiable\r\n",
+"Status: 417 Expectation Failed\r\n",
+"Status: 500 Internal Server Error\r\n",
+"Status: 501 Not Implemented\r\n",
+"Status: 502 Bad Gateway\r\n",
+"Status: 503 Service Unavailable\r\n",
+"Status: 504 Gateway Timeout\r\n",
+"Status: 505 HTTP Version Not Supported\r\n",
 };
 
 //-------------------------------------------------------------------
@@ -163,77 +164,77 @@ dialogue::dialogue(dialogue &ct) : cgiIO(ct.cgiIO)
 //-------------------------------------------------------------------
 
 dialogue::dialogue(exchange   &a_cf,
-				   bool       a_autocleanFiles,
-				   bool       a_postFilesInMem,
-				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-												   postFilesTmpDir(a_postFilesTmpDir),
-												   cgiIO(a_cf),
-												   autocleanFiles(a_autocleanFiles),
-												   headersPrinted(false),
-												   returnCode(CGI_STATUSCODE_OK)
+			   bool       a_autocleanFiles,
+			   bool       a_postFilesInMem,
+			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+											   postFilesTmpDir(a_postFilesTmpDir),
+											   cgiIO(a_cf),
+											   autocleanFiles(a_autocleanFiles),
+											   headersPrinted(false),
+											   returnCode(CGI_STATUSCODE_OK)
 
 {
-	authInfo.type = CGI_AUTHTYPE_NONE;
+authInfo.type = CGI_AUTHTYPE_NONE;
 
-	dodoMap<short, dodoString> headers;
-	initHeaders(headers);
+dodoMap<short, dodoString> headers;
+initHeaders(headers);
 
-	makeEnv();
+makeEnv();
 
-	makeAuth();
+makeAuth();
 
-	detectMethod();
+detectMethod();
 
-	makeContent();
-	makePost();
+makeContent();
+makePost();
 
-	makeKeyValue(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
-	makeKeyValue(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
+makeKeyValue(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+makeKeyValue(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 //-------------------------------------------------------------------
 
 dialogue::dialogue(exchange &a_cf,
-				   dodoMap<short, dodoString> &headers,
-				   bool a_autocleanFiles,
-				   bool a_postFilesInMem,
-				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-												   postFilesTmpDir(a_postFilesTmpDir),
-												   cgiIO(a_cf),
-												   autocleanFiles(a_autocleanFiles),
-												   headersPrinted(false),
-												   returnCode(CGI_STATUSCODE_OK)
+			   dodoMap<short, dodoString> &headers,
+			   bool a_autocleanFiles,
+			   bool a_postFilesInMem,
+			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+											   postFilesTmpDir(a_postFilesTmpDir),
+											   cgiIO(a_cf),
+											   autocleanFiles(a_autocleanFiles),
+											   headersPrinted(false),
+											   returnCode(CGI_STATUSCODE_OK)
 
 {
-	authInfo.type = CGI_AUTHTYPE_NONE;
+authInfo.type = CGI_AUTHTYPE_NONE;
 
-	initHeaders(headers);
+initHeaders(headers);
 
-	printHeaders();
+printHeaders();
 
-	makeEnv();
+makeEnv();
 
-	makeAuth();
+makeAuth();
 
-	detectMethod();
+detectMethod();
 
-	makeContent();
-	makePost();
+makeContent();
+makePost();
 
-	makeKeyValue(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
-	makeKeyValue(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
+makeKeyValue(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+makeKeyValue(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 //-------------------------------------------------------------------
 
 dialogue::~dialogue()
 {
-	printHeaders();
+printHeaders();
 
-	if (autocleanFiles)
-	{
-		cleanTmp();
-	}
+if (autocleanFiles)
+{
+	cleanTmp();
+}
 }
 
 //-------------------------------------------------------------------
@@ -241,9 +242,9 @@ dialogue::~dialogue()
 dialogue::operator exchange
 *()
 {
-	printHeaders();
+printHeaders();
 
-	return &cgiIO;
+return &cgiIO;
 }
 
 //-------------------------------------------------------------------
@@ -251,7 +252,7 @@ dialogue::operator exchange
 void
 dialogue::flush()
 {
-	cgiIO.flush();
+cgiIO.flush();
 }
 
 //-------------------------------------------------------------------
@@ -259,9 +260,9 @@ dialogue::flush()
 void
 dialogue::printStream(const dodoString &buf)
 {
-	printHeaders();
+printHeaders();
 
-	cgiIO.writeStream(buf);
+cgiIO.writeStream(buf);
 }
 
 //-------------------------------------------------------------------
@@ -269,30 +270,30 @@ dialogue::printStream(const dodoString &buf)
 dodoString
 dialogue::getCharset()
 {
-	unsigned long temp;
+unsigned long temp;
 
-	dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
-	for (; b != e; ++b)
+dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
+for (; b != e; ++b)
+{
+	temp = tools::string::find(*b, "charset=", true);
+	if (temp == dodoString::npos)
 	{
-		temp = tools::string::find(*b, "charset=", true);
-		if (temp == dodoString::npos)
-		{
-			continue;
-		}
-
-		return dodoString(b->data() + temp + 8, b->size() - temp - 8);
+		continue;
 	}
 
-	return __dodostring__;
+	return dodoString(b->data() + temp + 8, b->size() - temp - 8);
+}
+
+return __dodostring__;
 }
 
 void
 dialogue::print(const dodoString &buf)
 {
-	printHeaders();
+printHeaders();
 
-	cgiIO.outSize = buf.size();
-	cgiIO.write(buf);
+cgiIO.outSize = buf.size();
+cgiIO.write(buf);
 }
 
 //-------------------------------------------------------------------
@@ -300,93 +301,92 @@ dialogue::print(const dodoString &buf)
 void
 dialogue::makeAuth()
 {
-	dodoString &httpAuthorization = ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION];
+dodoString &httpAuthorization = ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION];
 
-	if (tools::string::contains(httpAuthorization, "Basic"))
+if (tools::string::contains(httpAuthorization, "Basic"))
+{
+	dodoStringArray arr = tools::misc::split(tools::code::decodeBase64(tools::string::trim(dodoString(httpAuthorization.data() + 6, httpAuthorization.size() - 6), ' ')), ":", 2);
+
+	authInfo.type = CGI_AUTHTYPE_BASIC;
+	authInfo.user = arr[0];
+	if (arr.size() == 2)
 	{
-		dodoStringArray arr = tools::misc::split(tools::code::decodeBase64(tools::string::trim(dodoString(httpAuthorization.data() + 6, httpAuthorization.size() - 6), ' ')), ":", 2);
-
-		authInfo.type = CGI_AUTHTYPE_BASIC;
-		authInfo.user = arr[0];
-		if (arr.size() == 2)
-		{
-			authInfo.password = arr[1];
-		}
+		authInfo.password = arr[1];
 	}
-	else
+}
+else
+{
+	if (tools::string::contains(httpAuthorization, "Digest"))
 	{
-		if (tools::string::contains(httpAuthorization, "Digest"))
+		authInfo.type = CGI_AUTHTYPE_DIGEST;
+
+		dodoStringArray parts = tools::misc::split(dodoString(httpAuthorization.data() + 7, httpAuthorization.size() - 7), ",");
+
+		dodoStringArray tuple;
+
+		dodoStringArray::iterator i = parts.begin(), j = parts.end();
+		for (; i != j; ++i)
 		{
-			authInfo.type = CGI_AUTHTYPE_DIGEST;
-
-			dodoStringArray parts = tools::misc::split(dodoString(httpAuthorization.data() + 7, httpAuthorization.size() - 7), ",");
-
-			dodoStringArray tuple;
-
-			dodoStringArray::iterator i = parts.begin(), j = parts.end();
-			for (; i != j; ++i)
+			*i = tools::string::trim(*i, ' ');
+			tuple = tools::misc::split(*i, "=", 2);
+			if (tuple.size() != 2)
 			{
-				*i = tools::string::trim(*i, ' ');
-				tuple = tools::misc::split(*i, "=", 2);
-				if (tuple.size() != 2)
-				{
-					continue;
-				}
+				continue;
+			}
 
-				dodoString &challengePart = tuple[0];
+			dodoString &challengePart = tuple[0];
 
-				if (tools::string::iequal(challengePart, "realm"))
+			if (tools::string::iequal(challengePart, "realm"))
+			{
+				authInfo.realm = tools::string::trim(tuple[1], '"');
+			}
+			else
+			{
+				if (tools::string::iequal(challengePart, "nonce"))
 				{
-					authInfo.realm = tools::string::trim(tuple[1], '"');
+					authInfo.nonce = tools::string::trim(tuple[1], '"');
 				}
 				else
 				{
-					if (tools::string::iequal(challengePart, "nonce"))
+					if (tools::string::iequal(challengePart, "opaque"))
 					{
-						authInfo.nonce = tools::string::trim(tuple[1], '"');
+						authInfo.opaque = tools::string::trim(tuple[1], '"');
 					}
 					else
 					{
-						if (tools::string::iequal(challengePart, "opaque"))
+						if (tools::string::iequal(challengePart, "username"))
 						{
-							authInfo.opaque = tools::string::trim(tuple[1], '"');
+							authInfo.user = tools::string::trim(tuple[1], '"');
 						}
 						else
 						{
-							if (tools::string::iequal(challengePart, "username"))
+							if (tools::string::iequal(challengePart, "uri"))
 							{
-								authInfo.user = tools::string::trim(tuple[1], '"');
+								authInfo.uri = tools::string::trim(tuple[1], '"');
 							}
 							else
 							{
-								if (tools::string::iequal(challengePart, "uri"))
+								if (tools::string::iequal(challengePart, "qop"))
 								{
-									authInfo.uri = tools::string::trim(tuple[1], '"');
+									authInfo.qop = tools::string::trim(tuple[1], '"');
 								}
 								else
 								{
-									if (tools::string::iequal(challengePart, "qop"))
+									if (tools::string::iequal(challengePart, "nc"))
 									{
-										authInfo.qop = tools::string::trim(tuple[1], '"');
+										authInfo.nonceCount = tools::string::trim(tuple[1], '"');
 									}
 									else
 									{
-										if (tools::string::iequal(challengePart, "nc"))
+										if (tools::string::iequal(challengePart, "cnonce"))
 										{
-											authInfo.nonceCount = tools::string::trim(tuple[1], '"');
+											authInfo.cnonce = tools::string::trim(tuple[1], '"');
 										}
 										else
 										{
-											if (tools::string::iequal(challengePart, "cnonce"))
+											if (tools::string::iequal(challengePart, "response"))
 											{
-												authInfo.cnonce = tools::string::trim(tuple[1], '"');
-											}
-											else
-											{
-												if (tools::string::iequal(challengePart, "response"))
-												{
-													authInfo.response = tools::string::trim(tuple[1], '"');
-												}
+												authInfo.response = tools::string::trim(tuple[1], '"');
 											}
 										}
 									}
@@ -397,34 +397,35 @@ dialogue::makeAuth()
 				}
 			}
 		}
-		else
-		{
-			authInfo.type = CGI_AUTHTYPE_NONE;
-		}
 	}
+	else
+	{
+		authInfo.type = CGI_AUTHTYPE_NONE;
+	}
+}
 }
 
 //-------------------------------------------------------------------
 
 void
 dialogue::requestAuthentication(const dodoString &realm,
-								short            type)
+							short            type)
 {
-	returnCode = CGI_STATUSCODE_UNAUTHORIZED;
+returnCode = CGI_STATUSCODE_UNAUTHORIZED;
 
-	if (type == CGI_AUTHTYPE_BASIC)
-	{
-		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
-	}
-	else if (type == CGI_AUTHTYPE_DIGEST)
-	{
-		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") +
-								 realm +
-								 "\", qop=\"auth\", nonce=\"" +
-								 tools::code::MD5Hex(tools::misc::stringRandom(16)) +
-								 "\", opaque=\"" +
-								 tools::code::MD5Hex(tools::misc::stringRandom(16)) + "\""));
-	}
+if (type == CGI_AUTHTYPE_BASIC)
+{
+	HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
+}
+else if (type == CGI_AUTHTYPE_DIGEST)
+{
+	HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") +
+							 realm +
+							 "\", qop=\"auth\", nonce=\"" +
+							 tools::code::MD5Hex(tools::misc::stringRandom(16)) +
+							 "\", opaque=\"" +
+							 tools::code::MD5Hex(tools::misc::stringRandom(16)) + "\""));
+}
 }
 
 //-------------------------------------------------------------------
@@ -432,72 +433,72 @@ dialogue::requestAuthentication(const dodoString &realm,
 __cgiAuthInfo__
 dialogue::getAuthenticationInfo()
 {
-	__cgiAuthInfo__ info =
-	{
-		authInfo.user, authInfo.type
-	};
+__cgiAuthInfo__ info =
+{
+	authInfo.user, authInfo.type
+};
 
-	return info;
+return info;
 }
 
 //-------------------------------------------------------------------
 
 bool
 dialogue::isAuthenticated(const dodoString &user,
-						  const dodoString &password)
+					  const dodoString &password)
 {
-	if (authInfo.type == CGI_AUTHTYPE_BASIC)
+if (authInfo.type == CGI_AUTHTYPE_BASIC)
+{
+	return (tools::string::equal(user, authInfo.user) && tools::string::equal(password, authInfo.password));
+}
+else
+{
+	if (authInfo.type == CGI_AUTHTYPE_DIGEST)
 	{
-		return (tools::string::equal(user, authInfo.user) && tools::string::equal(password, authInfo.password));
+		unsigned char HA[16];
+		tools::code::__MD5Context__ context;
+
+		tools::code::MD5Init(&context);
+		tools::code::MD5Update(&context, (unsigned char *)authInfo.user.c_str(), authInfo.user.size());
+		tools::code::MD5Update(&context, (unsigned char *)":", 1);
+		tools::code::MD5Update(&context, (unsigned char *)authInfo.realm.c_str(), authInfo.realm.size());
+		tools::code::MD5Update(&context, (unsigned char *)":", 1);
+		tools::code::MD5Update(&context, (unsigned char *)password.c_str(), password.size());
+		tools::code::MD5Final(HA, &context);
+
+		dodoString HA1 = tools::code::binToHex(dodoString((char *)&HA, 16));
+
+		dodoString &methodForAuth = ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD];
+
+		tools::code::MD5Init(&context);
+		tools::code::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
+		tools::code::MD5Update(&context, (unsigned char *)":", 1);
+		tools::code::MD5Update(&context, (unsigned char *)authInfo.uri.c_str(), authInfo.uri.size());
+		tools::code::MD5Final(HA, &context);
+
+		dodoString HA2 = tools::code::binToHex(dodoString((char *)&HA, 16));
+
+		tools::code::MD5Init(&context);
+		tools::code::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
+		tools::code::MD5Update(&context, (unsigned char *)":", 1);
+		tools::code::MD5Update(&context, (unsigned char *)authInfo.nonce.c_str(), authInfo.nonce.size());
+		tools::code::MD5Update(&context, (unsigned char *)":", 1);
+		tools::code::MD5Update(&context, (unsigned char *)authInfo.nonceCount.c_str(), authInfo.nonceCount.size());
+		tools::code::MD5Update(&context, (unsigned char *)":", 1);
+		tools::code::MD5Update(&context, (unsigned char *)authInfo.cnonce.c_str(), authInfo.cnonce.size());
+		tools::code::MD5Update(&context, (unsigned char *)":", 1);
+		tools::code::MD5Update(&context, (unsigned char *)authInfo.qop.c_str(), authInfo.qop.size());
+		tools::code::MD5Update(&context, (unsigned char *)":", 1);
+		tools::code::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
+		tools::code::MD5Final(HA, &context);
+
+		return (tools::string::equal(tools::code::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
 	}
 	else
 	{
-		if (authInfo.type == CGI_AUTHTYPE_DIGEST)
-		{
-			unsigned char HA[16];
-			tools::code::__MD5Context__ context;
-
-			tools::code::MD5Init(&context);
-			tools::code::MD5Update(&context, (unsigned char *)authInfo.user.c_str(), authInfo.user.size());
-			tools::code::MD5Update(&context, (unsigned char *)":", 1);
-			tools::code::MD5Update(&context, (unsigned char *)authInfo.realm.c_str(), authInfo.realm.size());
-			tools::code::MD5Update(&context, (unsigned char *)":", 1);
-			tools::code::MD5Update(&context, (unsigned char *)password.c_str(), password.size());
-			tools::code::MD5Final(HA, &context);
-
-			dodoString HA1 = tools::code::binToHex(dodoString((char *)&HA, 16));
-
-			dodoString &methodForAuth = ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD];
-
-			tools::code::MD5Init(&context);
-			tools::code::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
-			tools::code::MD5Update(&context, (unsigned char *)":", 1);
-			tools::code::MD5Update(&context, (unsigned char *)authInfo.uri.c_str(), authInfo.uri.size());
-			tools::code::MD5Final(HA, &context);
-
-			dodoString HA2 = tools::code::binToHex(dodoString((char *)&HA, 16));
-
-			tools::code::MD5Init(&context);
-			tools::code::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
-			tools::code::MD5Update(&context, (unsigned char *)":", 1);
-			tools::code::MD5Update(&context, (unsigned char *)authInfo.nonce.c_str(), authInfo.nonce.size());
-			tools::code::MD5Update(&context, (unsigned char *)":", 1);
-			tools::code::MD5Update(&context, (unsigned char *)authInfo.nonceCount.c_str(), authInfo.nonceCount.size());
-			tools::code::MD5Update(&context, (unsigned char *)":", 1);
-			tools::code::MD5Update(&context, (unsigned char *)authInfo.cnonce.c_str(), authInfo.cnonce.size());
-			tools::code::MD5Update(&context, (unsigned char *)":", 1);
-			tools::code::MD5Update(&context, (unsigned char *)authInfo.qop.c_str(), authInfo.qop.size());
-			tools::code::MD5Update(&context, (unsigned char *)":", 1);
-			tools::code::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
-			tools::code::MD5Final(HA, &context);
-
-			return (tools::string::equal(tools::code::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
-		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
+}
 }
 
 //-------------------------------------------------------------------
@@ -505,14 +506,14 @@ dialogue::isAuthenticated(const dodoString &user,
 void
 dialogue::cleanTmp()
 {
-	dodoMap<dodoString, __cgiFile__>::iterator i(FILES.begin()), j(FILES.end());
-	for (; i != j; ++i)
+dodoMap<dodoString, __cgiFile__>::iterator i(FILES.begin()), j(FILES.end());
+for (; i != j; ++i)
+{
+	if (!postFilesInMem)
 	{
-		if (!postFilesInMem)
-		{
-			unlink(i->second.tmp_name.c_str());
-		}
+		unlink(i->second.tmp_name.c_str());
 	}
+}
 }
 
 //-------------------------------------------------------------------
@@ -520,21 +521,21 @@ dialogue::cleanTmp()
 void
 dialogue::detectMethod()
 {
-	if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "GET"))
+if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "GET"))
+{
+	method = CGI_REQUESTMETHOD_GET;
+}
+else
+{
+	if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD].empty())
 	{
-		method = CGI_REQUESTMETHOD_GET;
+		method = CGI_REQUESTMETHOD_POST;
 	}
 	else
 	{
-		if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD].empty())
-		{
-			method = CGI_REQUESTMETHOD_POST;
-		}
-		else
-		{
-			method = CGI_REQUESTMETHOD_GET_POST;
-		}
+		method = CGI_REQUESTMETHOD_GET_POST;
 	}
+}
 }
 
 //-------------------------------------------------------------------
@@ -542,30 +543,30 @@ dialogue::detectMethod()
 int
 dialogue::getMethod() const
 {
-	return method;
+return method;
 }
 
 //-------------------------------------------------------------------
 
 void
 dialogue::makeKeyValue(dodoStringMap    &val,
-			   const dodoString &string,
-			   const char       *delim)
+		   const dodoString &string,
+		   const char       *delim)
 {
-	dodoStringArray getPair = tools::misc::split(tools::code::decodeUrl(string), delim);
+dodoStringArray getPair = tools::misc::split(tools::code::decodeUrl(string), delim);
 
-	dodoStringArray::iterator l(getPair.begin()), m(getPair.end());
+dodoStringArray::iterator l(getPair.begin()), m(getPair.end());
 
-	dodoStringArray temp;
+dodoStringArray temp;
 
-	for (; l != m; ++l)
+for (; l != m; ++l)
+{
+	temp = tools::misc::split(*l, "=");
+	if (temp.size() > 1)
 	{
-		temp = tools::misc::split(*l, "=");
-		if (temp.size() > 1)
-		{
-			val.insert(make_pair(temp[0], temp[1]));
-		}
+		val.insert(make_pair(temp[0], temp[1]));
 	}
+}
 }
 
 //-------------------------------------------------------------------
@@ -573,23 +574,44 @@ dialogue::makeKeyValue(dodoStringMap    &val,
 void
 dialogue::makeEnv()
 {
-	char *env;
+char *env;
 
-	for (int i = 0; i < CGI_ENVIRONMENTSTATEMENTS; ++i)
+for (int i = 0; i < CGI_ENVIRONMENTSTATEMENTS; ++i)
+{
+	env = cgiIO.getenv(environmentStatements[i]);
+
+	ENVIRONMENT[i] = env == NULL ? "NULL" : env;
+}
+
+dodoStringArray contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], ";");
+dodoStringArray::iterator i = contentTypeParts.begin(), j = contentTypeParts.end();
+for (; i != j; ++i)
+{
+	*i = tools::string::trim(*i, ' ');
+}
+
+unsigned long size = contentTypeParts.size();
+if (size > 0)
+{
+	dodoStringArray::iterator first = contentTypeParts.begin();
+
+	ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE] = *first;
+
+	if (size > 1)
 	{
-		env = cgiIO.getenv(environmentStatements[i]);
-
-		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
+		contenTypeExtensions.insert(contenTypeExtensions.begin(), first + 1, contentTypeParts.end());
 	}
-
-	dodoStringArray contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], ";");
-	dodoStringArray::iterator i = contentTypeParts.begin(), j = contentTypeParts.end();
+}
+else
+{
+	contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], ",");
+	i = contentTypeParts.begin();
+	j = contentTypeParts.end();
 	for (; i != j; ++i)
 	{
 		*i = tools::string::trim(*i, ' ');
 	}
 
-	unsigned long size = contentTypeParts.size();
 	if (size > 0)
 	{
 		dodoStringArray::iterator first = contentTypeParts.begin();
@@ -601,28 +623,7 @@ dialogue::makeEnv()
 			contenTypeExtensions.insert(contenTypeExtensions.begin(), first + 1, contentTypeParts.end());
 		}
 	}
-	else
-	{
-		contentTypeParts = tools::misc::split(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], ",");
-		i = contentTypeParts.begin();
-		j = contentTypeParts.end();
-		for (; i != j; ++i)
-		{
-			*i = tools::string::trim(*i, ' ');
-		}
-
-		if (size > 0)
-		{
-			dodoStringArray::iterator first = contentTypeParts.begin();
-
-			ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE] = *first;
-
-			if (size > 1)
-			{
-				contenTypeExtensions.insert(contenTypeExtensions.begin(), first + 1, contentTypeParts.end());
-			}
-		}
-	}
+}
 }
 
 //-------------------------------------------------------------------
@@ -630,15 +631,15 @@ dialogue::makeEnv()
 void
 dialogue::initHeaders(dodoMap<short, dodoString> &headers)
 {
-	if (headers.size() > 0)
-	{
-		HEADERS.insert(headers.begin(), headers.end());
-	}
-	else
-	{
-		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_CONTENTTYPE, dodoString("text/html")));
-		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_XPOWEREDBY, dodoString(PACKAGE_NAME "/" PACKAGE_VERSION)));
-	}
+if (headers.size() > 0)
+{
+	HEADERS.insert(headers.begin(), headers.end());
+}
+else
+{
+	HEADERS.insert(make_pair(CGI_RESPONSEHEADER_CONTENTTYPE, dodoString("text/html")));
+	HEADERS.insert(make_pair(CGI_RESPONSEHEADER_XPOWEREDBY, dodoString(PACKAGE_NAME "/" PACKAGE_VERSION)));
+}
 }
 
 //-------------------------------------------------------------------
@@ -646,14 +647,14 @@ dialogue::initHeaders(dodoMap<short, dodoString> &headers)
 void
 dialogue::setResponseStatus(short code)
 {
-	if (code <= CGI_STATUSCODE_HTTPVERSIONNOTSUPPORTED)
-	{
-		returnCode = code;
-	}
-	else
-	{
-		throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_SETRESPONSESTATUS, exception::ERRNO_LIBDODO, DIALOGUEEX_WRONGSTATUSCODE, CGIDIALOGUEEX_WRONGSTATUSCODE_STR, __LINE__, __FILE__);
-	}
+if (code <= CGI_STATUSCODE_HTTPVERSIONNOTSUPPORTED)
+{
+	returnCode = code;
+}
+else
+{
+	throw exception::basic(exception::ERRMODULE_CGIDIALOGUE, DIALOGUEEX_SETRESPONSESTATUS, exception::ERRNO_LIBDODO, DIALOGUEEX_WRONGSTATUSCODE, CGIDIALOGUEEX_WRONGSTATUSCODE_STR, __LINE__, __FILE__);
+}
 }
 
 //-------------------------------------------------------------------
@@ -661,50 +662,50 @@ dialogue::setResponseStatus(short code)
 void
 dialogue::printHeaders() const
 {
-	if (headersPrinted)
-	{
-		return;
-	}
+if (headersPrinted)
+{
+	return;
+}
 
-	headersPrinted = true;
+headersPrinted = true;
 
-	cgiIO.writeStream(responseStatusStatements[returnCode]);
+cgiIO.writeStream(responseStatusStatements[returnCode]);
 
-	dodoMap<short, dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
+dodoMap<short, dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
+for (; i != j; ++i)
+{
+	cgiIO.writeStream(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
+}
+
+if (cookies.size() > 0)
+{
+	dodoList<__cgiCookie__>::const_iterator i(cookies.begin()), j(cookies.end());
 	for (; i != j; ++i)
 	{
-		cgiIO.writeStream(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
-	}
-
-	if (cookies.size() > 0)
-	{
-		dodoList<__cgiCookie__>::const_iterator i(cookies.begin()), j(cookies.end());
-		for (; i != j; ++i)
+		cgiIO.writeStream("Set-Cookie: ");
+		cgiIO.writeStream(i->name + "=" + i->value + "; ");
+		if (i->path.size() > 0)
 		{
-			cgiIO.writeStream("Set-Cookie: ");
-			cgiIO.writeStream(i->name + "=" + i->value + "; ");
-			if (i->path.size() > 0)
-			{
-				cgiIO.writeStream("path=" + i->path + "; ");
-			}
-			if (i->expires.size() > 0)
-			{
-				cgiIO.writeStream("expires=" + i->expires + "; ");
-			}
-			if (i->domain.size() > 0)
-			{
-				cgiIO.writeStream("domain=" + i->domain + "; ");
-			}
-			if (i->secure)
-			{
-				cgiIO.writeStream("secure");
-			}
-			cgiIO.writeStream("\r\n");
+			cgiIO.writeStream("path=" + i->path + "; ");
 		}
+		if (i->expires.size() > 0)
+		{
+			cgiIO.writeStream("expires=" + i->expires + "; ");
+		}
+		if (i->domain.size() > 0)
+		{
+			cgiIO.writeStream("domain=" + i->domain + "; ");
+		}
+		if (i->secure)
+		{
+			cgiIO.writeStream("secure");
+		}
+		cgiIO.writeStream("\r\n");
 	}
+}
 
-	cgiIO.writeStream("\r\n");
-	cgiIO.flush();
+cgiIO.writeStream("\r\n");
+cgiIO.flush();
 }
 
 //-------------------------------------------------------------------
@@ -712,16 +713,16 @@ dialogue::printHeaders() const
 void
 dialogue::makeContent()
 {
-	unsigned long inSize = tools::string::stringToUL(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTLENGTH]);
+unsigned long inSize = tools::string::stringToUL(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTLENGTH]);
 
-	if (inSize <= 0)
-	{
-		return ;
-	}
+if (inSize <= 0)
+{
+	return ;
+}
 
-	cgiIO.inSize = inSize;
+cgiIO.inSize = inSize;
 
-	content = cgiIO.read();
+content = cgiIO.read();
 }
 
 //-------------------------------------------------------------------
@@ -729,132 +730,132 @@ dialogue::makeContent()
 void
 dialogue::makePost()
 {
-	if (content.size() == 0)
-	{
-		return ;
-	}
+if (content.size() == 0)
+{
+	return ;
+}
 
-	if (!tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST"))
-	{
-		return ;
-	}
+if (!tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST"))
+{
+	return ;
+}
 
-	if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
-	{
-		makeKeyValue(POST, content);
+if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
+{
+	makeKeyValue(POST, content);
 
-		content.clear();
-	}
-	else
+	content.clear();
+}
+else
+{
+	if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
 	{
-		if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
+		if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
 		{
-			if (tools::string::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
+			content = tools::code::decodeBase64(content);
+		}
+
+		unsigned long temp0;
+		dodoStringArray postParts;
+
+		dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
+		for (; b != e; ++b)
+		{
+			temp0 = tools::string::find(*b, "boundary=", true);
+			if (temp0 == dodoString::npos)
 			{
-				content = tools::code::decodeBase64(content);
+				continue;
 			}
 
-			unsigned long temp0;
-			dodoStringArray postParts;
+			dodoString delimiter = "--";
+			delimiter.append(b->data() + temp0 + 9, b->size() - temp0 - 9);
 
-			dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
-			for (; b != e; ++b)
+			postParts = tools::misc::split(content, delimiter);
+		}
+
+		if (postParts.size() > 0)
+		{
+			dodoStringArray::iterator i(postParts.begin() + 1), j(postParts.end());
+
+			unsigned long temp1;
+			char *ptr;
+			int fd;
+			unsigned short pathLength = postFilesTmpDir.size() + 18;
+			FILE *fp;
+			const char *argument;
+
+			for (; i != j; ++i)
 			{
-				temp0 = tools::string::find(*b, "boundary=", true);
-				if (temp0 == dodoString::npos)
+				if (i->size() == 2 && (*i)[0] == '-' && (*i)[1] == '-') ///< '--' in the last portion
 				{
-					continue;
+					break;
 				}
-
-				dodoString delimiter = "--";
-				delimiter.append(b->data() + temp0 + 9, b->size() - temp0 - 9);
-
-				postParts = tools::misc::split(content, delimiter);
-			}
-
-			if (postParts.size() > 0)
-			{
-				dodoStringArray::iterator i(postParts.begin() + 1), j(postParts.end());
-
-				unsigned long temp1;
-				char *ptr;
-				int fd;
-				unsigned short pathLength = postFilesTmpDir.size() + 18;
-				FILE *fp;
-				const char *argument;
-
-				for (; i != j; ++i)
+				else
 				{
-					if (i->size() == 2 && (*i)[0] == '-' && (*i)[1] == '-') ///< '--' in the last portion
+					if (i->find("filename") != dodoString::npos)
 					{
-						break;
-					}
-					else
-					{
-						if (i->find("filename") != dodoString::npos)
+						if ((temp0 = i->find("name=\"")) == dodoString::npos)
 						{
-							if ((temp0 = i->find("name=\"")) == dodoString::npos)
+							continue;
+						}
+
+						temp0 += 6;
+
+						if ((temp1 = i->find("\"", temp0)) == dodoString::npos)
+						{
+							continue;
+						}
+
+						dodoString post_name = dodoString(i->data() + temp0, temp1 - temp0);
+
+						__cgiFile__ file;
+
+						temp0 = i->find("filename=\"", temp1);
+						temp0 += 10;
+						temp1 = i->find("\"", temp0);
+						if (temp0 == temp1)
+						{
+							continue;
+						}
+
+						file.name = dodoString(i->data() + temp0, temp1 - temp0);
+
+						temp0 = tools::string::find(*i, "Content-Type: ", temp1, true);
+						temp0 += 14;
+						temp1 = i->find("\n", temp0);
+						file.mime = tools::misc::split(dodoString(i->data() + temp0, temp1 - temp0), ";")[0];
+
+						unsigned long lIndex = file.mime.size() - 1;
+						if (file.mime[lIndex] == '\r')
+						{
+							file.mime.erase(lIndex);
+						}
+						temp1 += 3;
+
+						file.size = i->size() - temp1 - 2;
+
+						if (postFilesInMem)
+						{
+							file.data.assign(i->c_str() + temp1, file.size);
+						}
+						else
+						{
+							file.error = CGI_POSTFILEERR_NONE;
+
+							ptr = new char[pathLength];
+							strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
+							fd = mkstemp(ptr);
+							if (fd == -1)
 							{
+								delete [] ptr;
+
+								file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
+								FILES.insert(make_pair(post_name, file));
+
 								continue;
 							}
 
-							temp0 += 6;
-
-							if ((temp1 = i->find("\"", temp0)) == dodoString::npos)
-							{
-								continue;
-							}
-
-							dodoString post_name = dodoString(i->data() + temp0, temp1 - temp0);
-
-							__cgiFile__ file;
-
-							temp0 = i->find("filename=\"", temp1);
-							temp0 += 10;
-							temp1 = i->find("\"", temp0);
-							if (temp0 == temp1)
-							{
-								continue;
-							}
-
-							file.name = dodoString(i->data() + temp0, temp1 - temp0);
-
-							temp0 = tools::string::find(*i, "Content-Type: ", temp1, true);
-							temp0 += 14;
-							temp1 = i->find("\n", temp0);
-							file.mime = tools::misc::split(dodoString(i->data() + temp0, temp1 - temp0), ";")[0];
-
-							unsigned long lIndex = file.mime.size() - 1;
-							if (file.mime[lIndex] == '\r')
-							{
-								file.mime.erase(lIndex);
-							}
-							temp1 += 3;
-
-							file.size = i->size() - temp1 - 2;
-
-							if (postFilesInMem)
-							{
-								file.data.assign(i->c_str() + temp1, file.size);
-							}
-							else
-							{
-								file.error = CGI_POSTFILEERR_NONE;
-
-								ptr = new char[pathLength];
-								strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
-								fd = mkstemp(ptr);
-								if (fd == -1)
-								{
-									delete [] ptr;
-
-									file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
-									FILES.insert(make_pair(post_name, file));
-
-									continue;
-								}
-
-								file.tmp_name = ptr;
+							file.tmp_name = ptr;
 
 								delete [] ptr;
 

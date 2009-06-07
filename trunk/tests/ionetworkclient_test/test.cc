@@ -6,7 +6,6 @@
 
 
 #include <libdodo/dodo.h>
-#
 #include <iostream>
 
 using namespace dodo;

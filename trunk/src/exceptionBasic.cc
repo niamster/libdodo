@@ -32,18 +32,16 @@
 #ifdef DL_EXT
 #include <dlfcn.h>
 #endif
-
 #ifdef CALLSTACK_EX
 #include <dlfcn.h>
 #include <execinfo.h>
 #include <cxxabi.h>
 #endif
-
 #ifdef PTHREAD_EXT
 #include <pthread.h>
 #endif
-
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <libdodo/exceptionBasic.h>
 

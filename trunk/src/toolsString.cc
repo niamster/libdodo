@@ -33,6 +33,7 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <libdodo/toolsString.h>
 #include <libdodo/types.h>

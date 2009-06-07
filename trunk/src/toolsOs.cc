@@ -38,6 +38,7 @@
 #include <sys/resource.h>
 #include <sys/wait.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <errno.h>
 #include <string.h>
 #ifdef PTHREAD_EXT

@@ -39,6 +39,7 @@
 #include <libgen.h>
 #include <unistd.h>
 #include <errno.h>
+#include <stdio.h>
 
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/toolsFilesystemEx.h>
