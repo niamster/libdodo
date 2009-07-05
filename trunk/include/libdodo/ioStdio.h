@@ -32,6 +32,7 @@
 
 #include <libdodo/directives.h>
 
+#include <libdodo/ioChannel.h>
 #include <libdodo/ioPipe.h>
 
 namespace dodo

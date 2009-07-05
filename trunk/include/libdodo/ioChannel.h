@@ -48,6 +48,16 @@ namespace dodo
 
 	namespace io
 	{
+		namespace block
+		{
+			class channel;
+		};
+
+		namespace stream
+		{
+			class channel;
+		};
+
 		/**
 		 * @enum channelProtectionTypeEnum defines type of protection for io objects
 		 * in IO interaction in parallel environment
@@ -104,7 +114,10 @@ namespace dodo
 						public xexec
 #endif
 		{
-		  public:
+			friend class block::channel;
+			friend class stream::channel;
+
+		  private:
 
 			/**
 			 * constructor
@@ -117,31 +130,33 @@ namespace dodo
 			 */
 			virtual ~channel();
 
+		  public:
+
 			/**
 			 * @return read data
 			 * @note not more then inSize
 			 */
-			virtual dodoString read();
+			virtual dodoString read() const = 0;
 
 			/**
 			 * @param data defines data that will be written
 			 * @note not more then outSize
 			 */
-			virtual void write(const dodoString &data);
+			virtual void write(const dodoString &data) = 0;
 
 			/**
 			 * read from stream - '\0' or '\n' - terminated string
 			 * @return read data
 			 * @note not more then inSize
 			 */
-			virtual dodoString readStream();
+			virtual dodoString readStream() const = 0;
 
 			/**
 			 * write to stream - '\0' - terminated string
 			 * @param data defines data that will be written
 			 * @note not more then outSize
 			 */
-			virtual void writeStream(const dodoString &data);
+			virtual void writeStream(const dodoString &data) = 0;
 
 			/**
 			 * flush output
@@ -157,14 +172,14 @@ namespace dodo
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
-			virtual void _read(char * const data) = 0;
+			virtual void _read(char * const data) const = 0;
 
 			/**
 			 * read from stream - '\0' or '\n' - terminated string
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
-			virtual unsigned long _readStream(char * const data) = 0;
+			virtual unsigned long _readStream(char * const data) const = 0;
 
 			/**
 			 * @param data defines data that will be written
@@ -180,7 +195,7 @@ namespace dodo
 			virtual void _writeStream(const char * const data) = 0;
 
 #ifndef IO_WO_XEXEC
-			__xexecIoChannelCollectedData__ collectedData;    ///< data collected for xexec
+			mutable __xexecIoChannelCollectedData__ collectedData;    ///< data collected for xexec
 #endif
 
 			pc::sync::section *keeper;                      ///< section locker

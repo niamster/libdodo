@@ -51,7 +51,7 @@ fifo::fifo(short protection) : inFileFifoBuffer(IOPIPE_INSIZE),
 							   outFileFifoBuffer(IOPIPE_OUTSIZE),
 							   blocked(true),
 							   handle(new io::__file__),
-							   channel(protection)
+							   stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEFIFO);
@@ -68,7 +68,7 @@ fifo::fifo(const dodoString &path,
 										  handle(new io::__file__),
 										  path(path),
 										  mode(mode),
-										  channel(protection)
+										  stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEFIFO);
@@ -175,7 +175,7 @@ fifo::fifo(const fifo &fd) : inFileFifoBuffer(fd.inFileFifoBuffer),
 							 mode(fd.mode),
 							 path(fd.path),
 							 handle(new __file__),
-							 channel(fd.protection)
+							 stream::channel(fd.protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEFIFO);
@@ -527,7 +527,7 @@ fifo::block(bool flag)
 //-------------------------------------------------------------------
 
 void
-fifo::_read(char * const a_data)
+fifo::_read(char * const a_data) const
 {
 	if (handle->file == NULL)
 	{
@@ -715,7 +715,7 @@ fifo::flush()
 //-------------------------------------------------------------------
 
 unsigned long
-fifo::_readStream(char * const a_data)
+fifo::_readStream(char * const a_data) const
 {
 	if (handle->file == NULL)
 	{

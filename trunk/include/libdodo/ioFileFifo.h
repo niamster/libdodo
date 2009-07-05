@@ -34,6 +34,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
+#include <libdodo/ioStreamChannel.h>
 
 namespace dodo
 {
@@ -69,7 +70,7 @@ namespace dodo
 			 * @brief provides I/O manipulations with fifo files
 			 * @note writeStream* put extra '\n' to the end of the string, so no need to add it manually
 			 */
-			class fifo : virtual public channel
+			class fifo : virtual public stream::channel
 			{
 			  public:
 
@@ -155,14 +156,14 @@ namespace dodo
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
-				virtual void _read(char * const data);
+				virtual void _read(char * const data) const;
 
 				/**
 				 * read from stream - '\0' or '\n' - terminated string
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
-				virtual unsigned long _readStream(char * const data);
+				virtual unsigned long _readStream(char * const data) const;
 
 				/**
 				 * @param data defines data that will be written

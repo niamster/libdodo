@@ -41,7 +41,7 @@
 using namespace dodo::io;
 
 stdio::stdio(short protection) : pipe(false, protection),
-								 channel(protection)
+								 stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOSTDIO);
@@ -53,7 +53,7 @@ stdio::stdio(short protection) : pipe(false, protection),
 
 //-------------------------------------------------------------------
 
-stdio::stdio(stdio &fd) : channel(protection)
+stdio::stdio(stdio &fd) : stream::channel(protection)
 {
 }
 

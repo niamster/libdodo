@@ -34,15 +34,13 @@
 #include <libdodo/ioMemory.h>
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
+#include <libdodo/ioBlockChannel.h>
 #include <libdodo/ioMemoryEx.h>
 #include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io;
 
-memory::memory(short protection) : pos(0),
-								   blockOffset(false),
-								   append(false),
-								   channel(protection)
+memory::memory(short protection) : block::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
@@ -51,16 +49,16 @@ memory::memory(short protection) : pos(0),
 
 //-------------------------------------------------------------------
 
-memory::memory(const memory &fd) : pos(fd.pos),
-								   blockOffset(fd.blockOffset),
-								   append(fd.append),
-								   buffer(fd.buffer),
-								   channel(fd.protection)
+memory::memory(const memory &fd) : buffer(fd.buffer),
+								   block::channel(fd.protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
 #endif
 
+	block = fd.block;
+	append = fd.append;
+	pos = fd.pos;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 }
@@ -68,11 +66,8 @@ memory::memory(const memory &fd) : pos(fd.pos),
 //-------------------------------------------------------------------
 
 memory::memory(const dodoString &data,
-			   short            protection) : pos(0),
-											  blockOffset(false),
-											  append(false),
-											  buffer(data),
-											  channel(protection)
+			   short            protection) : buffer(data),
+											  block::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
@@ -110,6 +105,14 @@ memory::flush()
 
 //-------------------------------------------------------------------
 
+void
+memory::clear()
+{
+	buffer.clear();
+}
+
+//-------------------------------------------------------------------
+
 memory::operator const dodoString
 & ()
 {
@@ -132,7 +135,7 @@ memory::clone(const memory &fd)
 	pc::sync::protector pg(keeper);
 
 	pos = fd.pos;
-	blockOffset = fd.blockOffset;
+	block = fd.block;
 	append = fd.append;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
@@ -143,9 +146,9 @@ memory::clone(const memory &fd)
 //-------------------------------------------------------------------
 
 void
-memory::_read(char * const a_data)
+memory::_read(char * const a_data) const
 {
-	unsigned long pos = blockOffset ? this->pos * inSize : this->pos;
+	unsigned long pos = block ? this->pos * inSize : this->pos;
 
 	if ((pos + inSize) > buffer.size())
 	{
@@ -168,7 +171,7 @@ memory::_write(const char *const a_data)
 	}
 	else
 	{
-		unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
+		unsigned long pos = block ? this->pos * outSize : this->pos;
 
 		unsigned long shift = pos + outSize;
 		if (shift > buffer.size())
@@ -187,7 +190,7 @@ memory::erase()
 {
 	pc::sync::protector pg(keeper);
 
-	unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
+	unsigned long pos = block ? this->pos * outSize : this->pos;
 
 	unsigned long shift = outSize + pos;
 	if (shift > buffer.size())
@@ -201,7 +204,7 @@ memory::erase()
 //-------------------------------------------------------------------
 
 unsigned long
-memory::_readStream(char * const a_data)
+memory::_readStream(char * const a_data) const
 {
 	unsigned long readSize = inSize + 1;
 
@@ -212,7 +215,7 @@ memory::_readStream(char * const a_data)
 
 	const char *data = buffer.data();
 
-	if (blockOffset)
+	if (block)
 	{
 		unsigned long block = 0;
 		unsigned long index = 0;

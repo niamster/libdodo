@@ -169,14 +169,14 @@ namespace dodo
 					 * @param data defines buffer that will be filled
 					 * @note not more then inSize(including '\0')
 					 */
-					virtual void _read(char * const data);
+					virtual void _read(char * const data) const;
 
 					/**
 					 * read from stream - '\0' or '\n' - terminated string
 					 * @param data defines buffer that will be filled
 					 * @note not more then inSize(including '\0')
 					 */
-					virtual unsigned long _readStream(char * const data);
+					virtual unsigned long _readStream(char * const data) const;
 
 					/**
 					 * @param data defines data that will be written

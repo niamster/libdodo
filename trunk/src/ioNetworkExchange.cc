@@ -57,7 +57,7 @@ __initialAccept__::__initialAccept__(__initialAccept__ &init) : socket(init.sock
 
 //-------------------------------------------------------------------
 
-exchange::exchange(exchange &fse) : channel(fse.protection)
+exchange::exchange(exchange &fse) : stream::channel(fse.protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
@@ -80,7 +80,7 @@ exchange::exchange(exchange &fse) : channel(fse.protection)
 
 //-------------------------------------------------------------------
 
-exchange::exchange(short protection) : channel(protection)
+exchange::exchange(short protection) : stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
@@ -90,7 +90,7 @@ exchange::exchange(short protection) : channel(protection)
 //-------------------------------------------------------------------
 
 exchange::exchange(__initialAccept__ &a_init,
-				   short           protection) : channel(protection)
+				   short           protection) : stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
@@ -301,7 +301,7 @@ exchange::_write(const char * const a_data)
 //-------------------------------------------------------------------
 
 void
-exchange::_read(char * const a_data)
+exchange::_read(char * const a_data) const
 {
 	if (socket == -1)
 	{
@@ -419,7 +419,7 @@ exchange::_writeStream(const char * const data)
 //-------------------------------------------------------------------
 
 unsigned long
-exchange::_readStream(char * const data)
+exchange::_readStream(char * const data) const
 {
 	if (socket == -1)
 	{

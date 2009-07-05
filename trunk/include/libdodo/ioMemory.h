@@ -34,6 +34,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
+#include <libdodo/ioBlockChannel.h>
 
 namespace dodo
 {
@@ -42,13 +43,8 @@ namespace dodo
 		/**
 		 * @class memory
 		 * @brief provides memory I/O manipulations
-		 * @note if blockOffset is false then read/write position is amount of bytes from the beginning, if true then:
-		 * writeStream, writeStream write only to the end of the file(append)
-		 * write offset for write, write is calculated as pos*outSize
-		 * read offset for read, read is calculated as pos*inSize
-		 * read offset for readStream, readStream is calculated as pos*'# of \n - terminated memorys'
 		 */
-		class memory : virtual public channel
+		class memory : virtual public block::channel
 		{
 		  public:
 
@@ -93,9 +89,10 @@ namespace dodo
 			 */
 			virtual void flush();
 
-			unsigned long pos;  ///< read/write/erase position[0 by default]
-			bool blockOffset;   ///<  if blockOffset is false then read/write position is amount of bytes from the beginning, if true then read/write position calculated by defined rules[true by default]
-			bool append;        ///< append to the end[false by default]
+			/**
+			 * clear buffer
+			 */
+			virtual void clear();
 
 			/**
 			 * @return memory
@@ -122,26 +119,27 @@ namespace dodo
 			/**
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
-			 * if blockOffset is true read offset is calculated as pos*inSize otherwise offset it taken pos bytes from the beginning
+			 * if block is true read offset is calculated as pos*inSize otherwise offset it taken pos bytes from the beginning
 			 */
-			virtual void _read(char * const data);
+			virtual void _read(char * const data) const;
 
 			/**
 			 * read from stream - '\0' or '\n' - terminated memory
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
-			 * if blockOffset is true read offset is calculated as pos*'# of \n - terminated memorys' otherwise offset it taken pos bytes from the beginning
+			 * if block is true read offset is calculated as pos*'# of \n - terminated memorys' otherwise offset it taken pos bytes from the beginning
 			 */
-			virtual unsigned long _readStream(char * const data);
+			virtual unsigned long _readStream(char * const data) const;
 
 			/**
 			 * @param data defines data that will be written
-			 * @note if blockOffset is true write offset is calculated as pos*outSize otherwise offset it taken pos bytes from the beginning
+			 * @note if block is true write offset is calculated as pos*outSize otherwise offset it taken pos bytes from the beginning
 			 */
 			virtual void _write(const char * const data);
 
 			/**
-			 * write to stream - '\0' - terminated memory
+			 *
+			 write to stream - '\0' - terminated memory
 			 * @param data defines data that will be written
 			 * @note write only to the end of the file(append)
 			 */

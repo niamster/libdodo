@@ -30,11 +30,11 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/cgiExchange.h>
-#include <libdodo/ioChannel.h>
+#include <libdodo/ioStreamChannel.h>
 
 using namespace dodo::cgi;
 
-exchange::exchange(short protection) : channel(protection)
+exchange::exchange(short protection) : io::stream::channel(protection)
 {
 }
 

@@ -44,7 +44,7 @@
 using namespace dodo::cgi::fast;
 
 exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
-								   channel(cf.protection),
+								   stream::channel(cf.protection),
 								   request(new __request__)
 {
 }
@@ -53,7 +53,7 @@ exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
 
 exchange::exchange(const __request__ &req,
 				   short		   protection) : dodo::cgi::exchange(protection),
-												 channel(protection)
+												 stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_CGIFASTEXCHANGE);
@@ -107,7 +107,7 @@ exchange::getOutDescriptor() const
 //-------------------------------------------------------------------
 
 void
-exchange::_read(char * const a_data)
+exchange::_read(char * const a_data) const
 {
 	memset(a_data, '\0', inSize);
 
@@ -156,7 +156,7 @@ exchange::_writeStream(const char * const data)
 //-------------------------------------------------------------------
 
 unsigned long
-exchange::_readStream(char * const data)
+exchange::_readStream(char * const data) const
 {
 	unsigned long _inSize = inSize++;
 

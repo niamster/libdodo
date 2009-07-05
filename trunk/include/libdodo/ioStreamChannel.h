@@ -1,8 +1,8 @@
 /***************************************************************************
- *            cgiBasicExchange.h
+ *            ioStreamChannel.h
  *
- *  Sat Aug  5 03:31:19 2006
- *  Copyright  2006  Ni@m
+ *  Sat Jun 13 12:26:57 2009
+ *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,27 +27,25 @@
  * set shiftwidth=4
  */
 
-#ifndef _CGIBASICEXCHANGE_H_
-#define _CGIBASICEXCHANGE_H_ 1
+#ifndef _IOSTREAMCHANNEL_H_
+#define _IOSTREAMCHANNEL_H_ 1
 
 #include <libdodo/directives.h>
 
+#include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/cgiExchange.h>
-#include <libdodo/ioStdio.h>
 
 namespace dodo
 {
-	namespace cgi
+	namespace io
 	{
-		namespace basic
+		namespace stream
 		{
 			/**
-			 * @class exchange
-			 * @brief provides interface to CGI I/O functionality
+			 * @class channel
+			 * @brief implements an interface for I/O operations on stream sources
 			 */
-			class exchange : virtual public cgi::exchange,
-							 virtual public io::stdio
+			class channel : public io::channel
 			{
 			  public:
 
@@ -55,30 +53,41 @@ namespace dodo
 				 * constructor
 				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
-				exchange(short protection = io::CHANNEL_PROTECTION_PROCESS);
+				channel(short protection);
 
 				/**
 				 * destructor
 				 */
-				virtual ~exchange();
+				virtual ~channel();
 
 				/**
-				 * @return environment variable
-				 * @param data defines name of environment variable
+				 * @return read data
+				 * @note not more then inSize
 				 */
-				virtual char *getenv(const char *data);
-
-			  private:
+				virtual dodoString read() const;
 
 				/**
-				 * copy constructor
-				 * @note to prevent copying
+				 * @param data defines data that will be written
+				 * @note not more then outSize
 				 */
-				exchange(exchange &);
+				virtual void write(const dodoString &data);
+
+				/**
+				 * read from stream - '\0' or '\n' - terminated string
+				 * @return read data
+				 * @note not more then inSize
+				 */
+				virtual dodoString readStream() const;
+
+				/**
+				 * write to stream - '\0' - terminated string
+				 * @param data defines data that will be written
+				 * @note not more then outSize
+				 */
+				virtual void writeStream(const dodoString &data);
 			};
 		};
 	};
 };
 
 #endif
-

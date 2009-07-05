@@ -42,6 +42,7 @@
 #include <libdodo/ioPipe.h>
 #include <libdodo/ioPipeEx.h>
 #include <libdodo/ioChannel.h>
+#include <libdodo/ioStreamChannel.h>
 #include <libdodo/ioNetworkConnection.h>
 #include <libdodo/pcSyncProtector.h>
 
@@ -53,7 +54,7 @@ io::pipe::pipe(bool  open,
 								   blocked(true),
 								   in(new io::__file__),
 								   out(new io::__file__),
-								   channel(protection)
+								   stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOPIPE);
@@ -89,7 +90,7 @@ io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
 								 blocked(fd.blocked),
 								 in(new io::__file__),
 								 out(new io::__file__),
-								 channel(protection)
+								 stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOPIPE);
@@ -359,7 +360,7 @@ io::pipe::open()
 //-------------------------------------------------------------------
 
 void
-io::pipe::_read(char * const a_data)
+io::pipe::_read(char * const a_data) const
 {
 	if (in->file == NULL)
 	{
@@ -706,7 +707,7 @@ io::pipe::block(bool flag)
 //-------------------------------------------------------------------
 
 unsigned long
-io::pipe::_readStream(char * const a_data)
+io::pipe::_readStream(char * const a_data) const
 {
 	if (in->file == NULL)
 	{

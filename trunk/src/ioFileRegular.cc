@@ -43,15 +43,12 @@
 #include <libdodo/types.h>
 #include <libdodo/pcSyncProtector.h>
 #include <libdodo/ioChannel.h>
+#include <libdodo/ioBlockChannel.h>
 
 using namespace dodo::io::file;
 
-regular::regular(short protection) : overwrite(false),
-									 pos(0),
-									 blockOffset(true),
-									 append(false),
-									 handle(new io::__file__),
-									 channel(protection)
+regular::regular(short protection) : handle(new io::__file__),
+									 block::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
@@ -62,14 +59,10 @@ regular::regular(short protection) : overwrite(false),
 
 regular::regular(const dodoString &a_path,
 				 short            a_mode,
-				 short            protection) : overwrite(false),
-												pos(0),
-												blockOffset(true),
-												append(false),
-												handle(new io::__file__),
+				 short            protection) : handle(new io::__file__),
 												path(a_path),
 												mode(a_mode),
-												channel(protection)
+												block::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
@@ -126,12 +119,6 @@ regular::regular(const dodoString &a_path,
 
 				break;
 
-			case REGULAR_OPENMODE_APPEND:
-
-				handle->file = fopen(path.c_str(), "a");
-
-				break;
-
 			case REGULAR_OPENMODE_READ_ONLY:
 			default:
 
@@ -163,20 +150,19 @@ regular::regular(const dodoString &a_path,
 
 //-------------------------------------------------------------------
 
-regular::regular(const regular &fd) : overwrite(fd.overwrite),
-									  path(fd.path),
-									  pos(fd.pos),
-									  blockOffset(fd.blockOffset),
-									  append(fd.append),
+regular::regular(const regular &fd) : path(fd.path),
 									  mode(fd.mode),
 									  handle(new io::__file__),
-									  channel(fd.protection)
+									  block::channel(fd.protection)
 
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
 #endif
 
+	block = fd.block;
+	append = fd.append;
+	pos = fd.pos;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
@@ -206,12 +192,6 @@ regular::regular(const regular &fd) : overwrite(fd.overwrite),
 			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
 				handle->file = fdopen(newDesc, "r+");
-
-				break;
-
-			case REGULAR_OPENMODE_APPEND:
-
-				handle->file = fdopen(newDesc, "a");
 
 				break;
 
@@ -289,11 +269,10 @@ regular::clone(const regular &fd)
 		handle->file = NULL;
 	}
 
-	overwrite = fd.overwrite;
 	path = fd.path;
 	mode = fd.mode;
 	pos = fd.pos;
-	blockOffset = fd.blockOffset;
+	block = fd.block;
 	append = fd.append;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
@@ -320,12 +299,6 @@ regular::clone(const regular &fd)
 			case REGULAR_OPENMODE_READ_WRITE_TRUNCATE:
 
 				handle->file = fdopen(newDesc, "r+");
-
-				break;
-
-			case REGULAR_OPENMODE_APPEND:
-
-				handle->file = fdopen(newDesc, "a");
 
 				break;
 
@@ -440,12 +413,6 @@ regular::open(const dodoString &a_path,
 
 				break;
 
-			case REGULAR_OPENMODE_APPEND:
-
-				handle->file = fopen(path.c_str(), "a");
-
-				break;
-
 			case REGULAR_OPENMODE_READ_ONLY:
 			default:
 
@@ -471,14 +438,14 @@ regular::open(const dodoString &a_path,
 //-------------------------------------------------------------------
 
 void
-regular::_read(char * const a_data)
+regular::_read(char * const a_data) const
 {
 	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
-	unsigned long pos = blockOffset ? this->pos * inSize : this->pos;
+	unsigned long pos = block ? this->pos * inSize : this->pos;
 
 	if (fseek(handle->file, pos, SEEK_SET) == -1)
 	{
@@ -521,41 +488,20 @@ regular::_write(const char *const a_data)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
-	if (mode != REGULAR_OPENMODE_APPEND)
+	if (append)
 	{
-		if (append)
+		if (fseek(handle->file, 0, SEEK_END) == -1)
 		{
-			if (fseek(handle->file, 0, SEEK_END) == -1)
-			{
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-			}
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
-		else
+	}
+	else
+	{
+		unsigned long pos = block ? this->pos * outSize : this->pos;
+
+		if (fseek(handle->file, pos, SEEK_SET) == -1)
 		{
-			unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
-			if (!overwrite)
-			{
-				if (fseek(handle->file, pos, SEEK_SET) == -1)
-				{
-					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-				}
-
-				char *t_buf = new char[outSize];
-
-				size_t read = fread(t_buf, outSize, 1, handle->file);
-
-				delete [] t_buf;
-
-				if (read != 0)
-				{
-					throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_CANNOTOVEWRITE, IOFILEREGULAREX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
-				}
-			}
-
-			if (fseek(handle->file, pos, SEEK_SET) == -1)
-			{
-				throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-			}
+			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 	}
 
@@ -593,20 +539,12 @@ regular::erase()
 	char *empty = new char[outSize];
 
 	memset(empty, 0, outSize);
-
-	bool _overwrite = overwrite;
-	overwrite = true;
-
 	try
 	{
 		_write(empty);
-
-		overwrite = _overwrite;
 	}
 	catch (...)
 	{
-		overwrite = _overwrite;
-
 		delete [] empty;
 
 		throw;
@@ -636,7 +574,7 @@ regular::flush()
 //-------------------------------------------------------------------
 
 unsigned long
-regular::_readStream(char * const a_data)
+regular::_readStream(char * const a_data) const
 {
 	if (handle->file == NULL)
 	{
@@ -645,7 +583,7 @@ regular::_readStream(char * const a_data)
 
 	unsigned long readSize = inSize + 1;
 
-	if (blockOffset)
+	if (block)
 	{
 		if (fseek(handle->file, 0, SEEK_SET) == -1)
 		{
@@ -715,12 +653,9 @@ regular::_writeStream(const char *const a_data)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 	}
 
-	if (mode != REGULAR_OPENMODE_APPEND)
+	if (fseek(handle->file, 0, SEEK_END) == -1)
 	{
-		if (fseek(handle->file, 0, SEEK_END) == -1)
-		{
-			throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-		}
+		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	unsigned int bufSize = strlen(a_data);

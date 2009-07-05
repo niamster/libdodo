@@ -67,8 +67,6 @@ int main(int argc, char **argv)
 		io.open("test.dat", file::REGULAR_OPENMODE_READ_WRITE_TRUNCATE);
 		filesystem::chmod("test.dat", FILESYSTEM_PERMISSION_ALL_ALL_ACCESS);
 
-		io.overwrite = true;
-
 		io.writeStream("!12345890#!!@\n");
 		io.writeStream("!12345890-!!@\n");
 		io.writeStream("!12345890@!!@\n");
@@ -79,6 +77,7 @@ int main(int argc, char **argv)
 
 		io2.pos = 1;
 		io2.outSize = 14;
+		io2.block = true;
 		io2.write("!12345890$!~@\n");
 		/**
 		 * test.dat should contain

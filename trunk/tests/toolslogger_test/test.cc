@@ -19,7 +19,8 @@ int main(int argc, char **argv)
 	try
 	{
 		file::regular *disk = new file::regular;
-		disk->open("./test.log", file::REGULAR_OPENMODE_APPEND);
+		disk->open("./test.log");
+		disk->append = true;
 
 		stdio *std = new stdio;
 		std->redirectToStderr(true);

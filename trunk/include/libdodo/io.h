@@ -31,6 +31,7 @@
 #define _IO_H_ 1
 
 #include <libdodo/ioChannel.h>
+#include <libdodo/ioBlockChannel.h>
 #include <libdodo/ioEvent.h>
 #include <libdodo/ioEventEx.h>
 #include <libdodo/ioEventInfo.h>
@@ -62,5 +63,6 @@
 #include <libdodo/ioPipeEx.h>
 #include <libdodo/ioSsl.h>
 #include <libdodo/ioStdio.h>
+#include <libdodo/ioStreamChannel.h>
 
 #endif

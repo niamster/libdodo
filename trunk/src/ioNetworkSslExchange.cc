@@ -38,6 +38,7 @@
 
 #include <libdodo/ioNetworkSslExchange.h>
 #include <libdodo/ioChannel.h>
+#include <libdodo/ioStreamChannel.h>
 #include <libdodo/ioNetworkSslExchangeEx.h>
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/ioSsl.h>
@@ -73,7 +74,7 @@ __initialAccept__::~__initialAccept__()
 //-------------------------------------------------------------------
 
 exchange::exchange(exchange &fse) : network::exchange(fse),
-									channel(fse.protection)
+									stream::channel(fse.protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
@@ -86,7 +87,7 @@ exchange::exchange(exchange &fse) : network::exchange(fse),
 
 //-------------------------------------------------------------------
 
-exchange::exchange(short protection) : channel(protection),
+exchange::exchange(short protection) : stream::channel(protection),
 									   handle(new io::ssl::__sslConnection__)
 {
 #ifndef IO_WO_XEXEC
@@ -97,7 +98,7 @@ exchange::exchange(short protection) : channel(protection),
 //-------------------------------------------------------------------
 
 exchange::exchange(__initialAccept__ &a_init,
-				   short           protection) : channel(protection),
+				   short           protection) : stream::channel(protection),
 												 handle(new io::ssl::__sslConnection__)
 {
 #ifndef IO_WO_XEXEC
@@ -353,7 +354,7 @@ exchange::_write(const char * const a_data)
 //-------------------------------------------------------------------
 
 void
-exchange::_read(char * const a_data)
+exchange::_read(char * const a_data) const
 {
 	if (socket == -1)
 	{
@@ -441,7 +442,7 @@ exchange::_read(char * const a_data)
 //-------------------------------------------------------------------
 
 unsigned long
-exchange::_readStream(char * const data)
+exchange::_readStream(char * const data) const
 {
 	if (socket == -1)
 	{

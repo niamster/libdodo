@@ -138,7 +138,7 @@ string::find(const dodoString &str,
 
 	if (icase)
 	{
-		if ((pos = strcasestr(str.c_str() + position, needle.c_str())) == NULL)
+		if ((pos = strcasestr((char *)(str.c_str() + position), needle.c_str())) == NULL)
 		{
 			return dodoString::npos;
 		}
@@ -149,7 +149,7 @@ string::find(const dodoString &str,
 	}
 	else
 	{
-		if ((pos = strstr(str.c_str() + position, needle.c_str())) == NULL)
+		if ((pos = strstr((char *)(str.c_str() + position), needle.c_str())) == NULL)
 		{
 			return dodoString::npos;
 		}

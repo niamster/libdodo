@@ -32,7 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/ioChannel.h>
+#include <libdodo/ioStreamChannel.h>
 
 namespace dodo
 {
@@ -42,7 +42,7 @@ namespace dodo
 		 * @class exchange
 		 * @brief provides interface to  CGI I/O functionality
 		 */
-		class exchange : virtual public io::channel
+		class exchange : virtual public io::stream::channel
 		{
 		  public:
 

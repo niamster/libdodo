@@ -41,17 +41,17 @@
 #include <libdodo/ioFileTempEx.h>
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
+#include <libdodo/ioBlockChannel.h>
 #include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io::file;
 
 temp::temp(bool  open,
 		   short protection) : overwrite(false),
-							   pos(0),
-							   blockOffset(true),
+							   block(true),
 							   append(false),
 							   handle(new io::__file__),
-							   channel(protection)
+							   block::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILETEMP);
@@ -72,17 +72,17 @@ temp::temp(bool  open,
 //-------------------------------------------------------------------
 
 temp::temp(const temp &fd) : overwrite(fd.overwrite),
-							 pos(fd.pos),
-							 blockOffset(fd.blockOffset),
+							 block(fd.block),
 							 append(fd.append),
 							 handle(new io::__file__),
-							 channel(protection)
+							 block::channel(protection)
 
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILETEMP);
 #endif
 
+	pos = fd.pos;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
@@ -178,7 +178,7 @@ temp::clone(const temp &fd)
 
 	overwrite = fd.overwrite;
 	pos = fd.pos;
-	blockOffset = fd.blockOffset;
+	block = fd.block;
 	append = fd.append;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
@@ -271,14 +271,14 @@ temp::open()
 //-------------------------------------------------------------------
 
 void
-temp::_read(char * const a_data)
+temp::_read(char * const a_data) const
 {
 	if (handle->file == NULL)
 	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
 	}
 
-	unsigned long pos = blockOffset ? this->pos * inSize : this->pos;
+	unsigned long pos = block ? this->pos * inSize : this->pos;
 
 	if (fseek(handle->file, pos * inSize, SEEK_SET) == -1)
 	{
@@ -330,7 +330,7 @@ temp::_write(const char *const a_data)
 	}
 	else
 	{
-		unsigned long pos = blockOffset ? this->pos * outSize : this->pos;
+		unsigned long pos = block ? this->pos * outSize : this->pos;
 		if (!overwrite)
 		{
 			if (fseek(handle->file, pos, SEEK_SET) == -1)
@@ -433,7 +433,7 @@ temp::flush()
 //-------------------------------------------------------------------
 
 unsigned long
-temp::_readStream(char * const a_data)
+temp::_readStream(char * const a_data) const
 {
 	if (handle->file == NULL)
 	{
@@ -442,7 +442,7 @@ temp::_readStream(char * const a_data)
 
 	unsigned long readSize = inSize + 1;
 
-	if (blockOffset)
+	if (block)
 	{
 		if (fseek(handle->file, 0, SEEK_SET) == -1)
 		{

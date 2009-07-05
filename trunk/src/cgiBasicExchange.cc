@@ -38,14 +38,14 @@
 using namespace dodo::cgi::basic;
 
 exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
-								   io::channel(cf.protection)
+								   io::stream::channel(cf.protection)
 {
 }
 
 //-------------------------------------------------------------------
 
 exchange::exchange(short protection) : dodo::cgi::exchange(protection),
-									   io::channel(protection)
+									   io::stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_CGIBASICEXCHANGE);
