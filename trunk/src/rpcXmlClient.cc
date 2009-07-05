@@ -37,6 +37,7 @@
 #include <libdodo/rpcXmlMethod.h>
 #include <libdodo/rpcXmlResponse.h>
 #include <libdodo/rpcResponse.h>
+#include <libdodo/ioChannel.h>
 
 using namespace dodo::rpc::xml;
 
@@ -75,6 +76,8 @@ client::processCallRequest(const rpc::method &meth)
 	dodo::data::format::xml::processor xmlValue;
 
 	xmlValue.make(method::methodToXml(meth), rqEncoding, "1.0", io);
+
+	io.flush();
 }
 
 //-------------------------------------------------------------------

@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	try
 	{
 		io::memory io;
-		io.blockOffset = true;
+		io.block = true;
 
 		io.writeStream("!12345890#!!@\n");
 		io.writeStream("!12345890-!!@\n");

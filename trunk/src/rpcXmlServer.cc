@@ -71,7 +71,7 @@ server::setResponseEncoding(const dodoString &a_encoding)
 //-------------------------------------------------------------------
 
 dodo::rpc::method
-server::processCall()
+server::processCallRequest()
 {
 	dodo::data::format::xml::processor xmlValue;
 
@@ -94,6 +94,8 @@ server::processCallResult(const rpc::response &resp)
 	dodo::data::format::xml::processor xmlValue;
 
 	xmlValue.make(response::responseToXml(resp), rpEncoding, "1.0", io);
+
+	io.flush();
 }
 
 //-------------------------------------------------------------------
@@ -103,7 +105,7 @@ server::serve()
 {
 	try
 	{
-		rpc::method meth = processCall();
+		rpc::method meth = processCallRequest();
 
 		dodoString encoding = rpEncoding;
 

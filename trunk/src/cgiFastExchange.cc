@@ -44,7 +44,7 @@
 using namespace dodo::cgi::fast;
 
 exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
-								   stream::channel(cf.protection),
+								   io::stream::channel(cf.protection),
 								   request(new __request__)
 {
 }
@@ -53,7 +53,7 @@ exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
 
 exchange::exchange(const __request__ &req,
 				   short		   protection) : dodo::cgi::exchange(protection),
-												 stream::channel(protection)
+												 io::stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_CGIFASTEXCHANGE);

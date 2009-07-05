@@ -61,6 +61,8 @@ client::processCallRequest(const rpc::method &meth)
 	dodo::data::format::json::processor jsonValue;
 
 	jsonValue.make(method::methodToJson(meth, rqVersion, ++rqId), io);
+
+	io.flush();
 }
 
 //-------------------------------------------------------------------

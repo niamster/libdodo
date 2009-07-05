@@ -27,7 +27,7 @@ class cgiIO : public io::stream::channel, public io::network::http
   protected:
 
 	virtual void _read(char * const data) const
-	{	
+	{
 		_readStream(data);
 	}
 
@@ -44,6 +44,8 @@ class cgiIO : public io::stream::channel, public io::network::http
 			if (size < inSize)
 				memset(data+size, 0x0, inSize - size);
 		}
+
+		provider.content.clear();
 
 		return size;
 	}

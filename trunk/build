@@ -1,17 +1,21 @@
 
 function build()
 {
-	exec 3>&1
-	exec 1>/dev/null
+	( \
+		exec 3>&1; \
+		exec 1>/dev/null; \
 
-	echo Building with $@ >&3 && \
-	./configure $@ && \
-	make clean && \
-	make -s -C tests clean && \
-	echo Building libdodo >&3 && \
-	make && \
-	echo Building tests >&3 && \
-	make -s -C tests
+		echo Building with $@ >&3 && \
+		./configure $@ && \
+		make clean && \
+		make -s -C tests clean && \
+		echo Building libdodo >&3 && \
+		make && \
+		echo Building tests >&3 && \
+		make -s -C tests; \
+	
+		exec 1>&3
+	)
 }
 
 build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --enable-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick $@

@@ -96,7 +96,7 @@ server::serve()
 {
 	try
 	{
-		method meth = processCall();
+		method meth = processCallRequest();
 
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 

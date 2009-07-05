@@ -63,30 +63,12 @@ class httpIO : public io::stream::channel, public io::network::http
 
 	virtual void _write(const char * const data)
 	{
-		if (response != NULL)
-		{
-			delete response;
-			response = NULL;
-		}
-
-		dodoString post_data(data, outSize);
-
-		response = new io::network::__httpResponse__(POST(post_data, "application/xml"));
+		throw dodoString("Not implemented");
 	}
 
-	virtual void _writeStream(const char * const data)
+	virtual void _writeStream(const char * const idata)
 	{
-		if (response != NULL)
-		{
-			delete response;
-			response = NULL;
-		}
-
-		unsigned int dataLen = strlen(data);
-
-		dodoString post_data(data, dataLen>outSize?outSize:dataLen);
-
-		response = new io::network::__httpResponse__(POST(post_data, "application/xml"));
+		data.append(idata);
 	}
 
 	int getOutDescriptor() const
@@ -101,9 +83,18 @@ class httpIO : public io::stream::channel, public io::network::http
 
 	void flush()
 	{
+		if (response != NULL)
+		{
+			delete response;
+			response = NULL;
+		}
+
+		response = new io::network::__httpResponse__(POST(data, "application/json"));
+		data.clear();
 	}
 
 	mutable io::network::__httpResponse__ *response;
+	dodoString data;
 };
 
 int main(int argc, char **argv)

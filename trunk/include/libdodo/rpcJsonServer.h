@@ -104,7 +104,7 @@ namespace dodo
 				 * process RPC call
 				 * @return RPC method represantation
 				 */
-				virtual rpc::method processCall();
+				virtual rpc::method processCallRequest();
 
 				/**
 				 * process RPC call

@@ -163,8 +163,8 @@ namespace dodo
 			 */
 			virtual void flush() = 0;
 
-			unsigned long inSize;   ///< size of data block for read* operations
-			unsigned long outSize;  ///< size of data block for write* operations
+			mutable unsigned long inSize;   ///< size of data block for read* operations
+			mutable unsigned long outSize;  ///< size of data block for write* operations
 
 		  protected:
 

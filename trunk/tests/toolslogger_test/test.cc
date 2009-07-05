@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	try
 	{
 		file::regular *disk = new file::regular;
-		disk->open("./test.log");
+		disk->open("./test.log", io::file::REGULAR_OPENMODE_READ_WRITE_TRUNCATE);
 		disk->append = true;
 
 		stdio *std = new stdio;
