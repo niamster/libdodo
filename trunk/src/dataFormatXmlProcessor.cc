@@ -37,6 +37,7 @@
 #include <libdodo/dataFormatXmlProcessor.h>
 #include <libdodo/dataFormatXmlNode.h>
 #include <libdodo/dataFormatXmlProcessorEx.h>
+#include <libdodo/ioChannel.h>
 
 #ifdef LIBXML2_EXT
 namespace dodo
@@ -211,39 +212,22 @@ processor::isCDATA(const __node__ &a_xnode)
 //-------------------------------------------------------------------
 
 node
-processor::processFile(const __nodeDef__  &definition,
-					   const dodoString &file)
+processor::process(const __nodeDef__  &definition,
+				   io::channel &io)
 {
 #ifdef LIBXML2_EXT
 	xmlFreeDoc(document->doc);
 
-	document->doc = xmlParseFile(file.c_str());
-	if (document->doc == NULL)
+	dodoString buffer, bufferPart;
+	while (true)
 	{
-		xmlErrorPtr error = xmlGetLastError();
+		bufferPart = io.readStream();
+		if (bufferPart.size() == 0)
+			break;
 
-		if (error == NULL)
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
-		}
-		else
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
-		}
+		buffer.append(bufferPart);
 	}
-#endif
-
-	return parse(definition);
-}
-
-//-------------------------------------------------------------------
-
-node
-processor::processString(const __nodeDef__  &definition,
-						 const dodoString &buffer)
-{
-#ifdef LIBXML2_EXT
-	xmlFreeDoc(document->doc);
+	bufferPart.clear();
 
 	document->doc = xmlParseMemory(buffer.c_str(), buffer.size());
 	if (document->doc == NULL)
@@ -604,69 +588,9 @@ processor::getNodeInfo(const __node__ &xnode,
 //-------------------------------------------------------------------
 
 __info__
-processor::getFileInfo(const dodoString &file)
+processor::getInfo()
 {
-#ifdef LIBXML2_EXT
-	xmlDocPtr document = xmlParseFile(file.c_str());
-	if (document == NULL)
-	{
-		xmlErrorPtr error = xmlGetLastError();
-
-		if (error == NULL)
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_GETFILEINFO, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
-		}
-		else
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_GETFILEINFO, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
-		}
-	}
-
-	__info__ i(document->version != NULL ? (char *)document->version : __dodostring__,
-			 document->encoding != NULL ? (char *)document->encoding : __dodostring__,
-			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
-			 document->compression);
-
-	xmlFreeDoc(document);
-
-	return i;
-#else
-	return __info__();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-__info__
-processor::getBufferInfo(const dodoString &buffer)
-{
-#ifdef LIBXML2_EXT
-	xmlDocPtr document = xmlParseMemory(buffer.c_str(), buffer.size());
-	if (document == NULL)
-	{
-		xmlErrorPtr error = xmlGetLastError();
-
-		if (error == NULL)
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
-		}
-		else
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
-		}
-	}
-
-	__info__ i(document->version != NULL ? (char *)document->version : __dodostring__,
-			 document->encoding != NULL ? (char *)document->encoding : __dodostring__,
-			 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
-			 document->compression);
-
-	xmlFreeDoc(document);
-
-	return i;
-#else
-	return __info__();
-#endif
+	return info;
 }
 
 //-------------------------------------------------------------------
@@ -737,54 +661,21 @@ processor::initNode(node &xnode)
 //-------------------------------------------------------------------
 
 node
-processor::processFile(const dodoString &file)
+processor::process(io::channel &io)
 {
 #ifdef LIBXML2_EXT
 	xmlFreeDoc(document->doc);
 
-	document->doc = xmlParseFile(file.c_str());
-	if (document->doc == NULL)
+	dodoString buffer, bufferPart;
+	while (true)
 	{
-		xmlErrorPtr error = xmlGetLastError();
+		bufferPart = io.readStream();
+		if (bufferPart.size() == 0)
+			break;
 
-		if (error == NULL)
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
-		}
-		else
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
-		}
+		buffer.append(bufferPart);
 	}
-
-	xmlNodePtr xnode = xmlDocGetRootElement(document->doc);
-	if (xnode == NULL)
-	{
-		xmlErrorPtr error = xmlGetLastError();
-
-		if (error == NULL)
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__, file);
-		}
-		else
-		{
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
-		}
-	}
-
-	return *(parse(__node__(xnode)).begin());
-#else
-	return node();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-node
-processor::processString(const dodoString &buffer)
-{
-#ifdef LIBXML2_EXT
-	xmlFreeDoc(document->doc);
+	bufferPart.clear();
 
 	document->doc = xmlParseMemory(buffer.c_str(), buffer.size());
 	if (document->doc == NULL)
@@ -800,6 +691,12 @@ processor::processString(const dodoString &buffer)
 			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 		}
 	}
+
+	info = __info__(document->doc->version != NULL ? (char *)document->doc->version : __dodostring__,
+			 document->doc->encoding != NULL ? (char *)document->doc->encoding : __dodostring__,
+			 (document->doc->children != NULL && document->doc->children->name != NULL) ? (char *)document->doc->children->name : __dodostring__,
+			 document->doc->compression);
+
 
 	xmlNodePtr xnode = xmlDocGetRootElement(document->doc);
 	if (xnode == NULL)
@@ -903,81 +800,85 @@ processor::clear()
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 processor::make(const node       &root,
 				const dodoString &encoding,
-				const dodoString &version) const
+				const dodoString &version,
+				io::channel &io) const
 {
 	if (root.name.empty())
 	{
 		throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
 	}
 
-	dodoString processor = "<?xml version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
+	io.writeStream("<?xml version=\"");
+	io.writeStream(version);
+	io.writeStream("\" encoding=\"");
+	io.writeStream(encoding);
+	io.writeStream("\"?>\r\n");
 
-	processor.append(make(root));
-
-	return processor;
+	make(root, io);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-processor::make(const node &xnode) const
+void
+processor::make(const node &xnode,
+				io::channel &io) const
 {
 	if (xnode.name.empty())
 	{
 		throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
 	}
 
-	dodoString data = statements[PROCESSOR_STATEMENT_LT];
+	io.writeStream(statements[PROCESSOR_STATEMENT_LT]);
 
 	if (!xnode.ns.prefix.empty())
 	{
-		data.append(xnode.ns.prefix);
-		data.append(statements[PROCESSOR_STATEMENT_COLON]);
+		io.writeStream(xnode.ns.prefix);
+		io.writeStream(statements[PROCESSOR_STATEMENT_COLON]);
 	}
-	data.append(xnode.name);
-	data.append(statements[PROCESSOR_STATEMENT_SPACE]);
+	io.writeStream(xnode.name);
+	io.writeStream(statements[PROCESSOR_STATEMENT_SPACE]);
 
 	if (!xnode.nsDef.prefix.empty())
 	{
-		data.append(statements[PROCESSOR_STATEMENT_XMLNS]);
-		data.append(xnode.nsDef.prefix);
-		data.append(statements[PROCESSOR_STATEMENT_EQUALDQUOTE]);
-		data.append(xnode.nsDef.href);
-		data.append(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
+		io.writeStream(statements[PROCESSOR_STATEMENT_XMLNS]);
+		io.writeStream(xnode.nsDef.prefix);
+		io.writeStream(statements[PROCESSOR_STATEMENT_EQUALDQUOTE]);
+		io.writeStream(xnode.nsDef.href);
+		io.writeStream(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
 	}
 
 	dodoMap<dodoString, dodoString, dodoMapStringCompare>::const_iterator i = xnode.attributes.begin(), j = xnode.attributes.end();
 	for (; i != j; ++i)
 	{
-		data.append(i->first);
-		data.append(statements[PROCESSOR_STATEMENT_EQUALDQUOTE]);
-		data.append(i->second);
-		data.append(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
+		io.writeStream(i->first);
+		io.writeStream(statements[PROCESSOR_STATEMENT_EQUALDQUOTE]);
+		io.writeStream(i->second);
+		io.writeStream(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
 	}
 
 	if (xnode.value.empty() && xnode.children.empty())
 	{
-		data.append(statements[PROCESSOR_STATEMENT_SLASHGT]);
+		io.writeStream(statements[PROCESSOR_STATEMENT_SLASHGT]);
 
-		return data;
+		return;
 	}
 
-	data.append(statements[PROCESSOR_STATEMENT_GT]);
+	io.writeStream(statements[PROCESSOR_STATEMENT_GT]);
 
 	if (!xnode.value.empty())
 	{
 		if (xnode.CDATA)
 		{
-			data.append(statements[PROCESSOR_STATEMENT_CDATAOPEN]);
-			data.append(xnode.value);
-			data.append(statements[PROCESSOR_STATEMENT_CDATACLOSE]);
+			io.writeStream(statements[PROCESSOR_STATEMENT_CDATAOPEN]);
+			io.writeStream(xnode.value);
+			io.writeStream(statements[PROCESSOR_STATEMENT_CDATACLOSE]);
 		}
 		else
 		{
-			data.append(xnode.value);
+			io.writeStream(xnode.value);
 		}
 	}
 
@@ -989,22 +890,20 @@ processor::make(const node &xnode) const
 		y = o->second.end();
 		for (; x != y; ++x)
 		{
-			data.append(make(*x));
+			make(*x, io);
 		}
 	}
 
-	data.append(statements[PROCESSOR_STATEMENT_LTSLASH]);
+	io.writeStream(statements[PROCESSOR_STATEMENT_LTSLASH]);
 
 	if (!xnode.ns.prefix.empty())
 	{
-		data.append(xnode.ns.prefix);
-		data.append(statements[PROCESSOR_STATEMENT_COLON]);
+		io.writeStream(xnode.ns.prefix);
+		io.writeStream(statements[PROCESSOR_STATEMENT_COLON]);
 	}
 
-	data.append(xnode.name);
-	data.append(statements[PROCESSOR_STATEMENT_GT]);
-
-	return data;
+	io.writeStream(xnode.name);
+	io.writeStream(statements[PROCESSOR_STATEMENT_GT]);
 }
 
 //-------------------------------------------------------------------

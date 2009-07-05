@@ -36,6 +36,11 @@
 
 namespace dodo
 {
+	namespace io
+	{
+		class channel;
+	};
+
 	namespace data
 	{
 		namespace format
@@ -134,47 +139,24 @@ namespace dodo
 					 * parse XML file using __nodeDef__ XML definition
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
-					 * @param file defines path to XML file
+					 * @param io defines input source that contains XML
 					 */
-					virtual node processFile(const __nodeDef__  &definition,
-											 const dodoString &file);
-
-					/**
-					 * parse XML buffer using __nodeDef__ XML definition
-					 * @return parsed XML in node structure
-					 * @param definition defines structure of XML
-					 * @param buffer defines XML buffer
-					 */
-					virtual node processString(const __nodeDef__  &definition,
-											   const dodoString &buffer);
+					virtual node process(const __nodeDef__  &definition,
+										 io::channel &io);
 
 					/**
 					 * parse XML file
 					 * @return parsed XML in node structure
-					 * @param file defines path to XML file
+					 * @param io defines input source that contains XML
 					 */
-					virtual node processFile(const dodoString &file);
-
-					/**
-					 * parse XML buffer
-					 * @return parsed XML in node structure
-					 * @param buffer defines XML buffer
-					 */
-					virtual node processString(const dodoString &buffer);
+					virtual node process(io::channel &io);
 
 					bool icaseNames; ///< if true ignore case of names[false by default]
 
 					/**
 					 * @return XML info
-					 * @param file defines path to XML file
 					 */
-					static __info__ getFileInfo(const dodoString &file);
-
-					/**
-					 * @return XML info
-					 * @param buffer defines XML buffer
-					 */
-					static __info__ getBufferInfo(const dodoString &buffer);
+					virtual __info__ getInfo();
 
 					/**
 					 * clear parameters of the give node
@@ -198,16 +180,20 @@ namespace dodo
 					 * @param root defines root node of XML document
 					 * @param encoding defines XML encoding
 					 * @param version defines XML version
+					 * @param io defines output destination for XML
 					 */
-					virtual dodoString make(const node       &root,
-											const dodoString &encoding,
-											const dodoString &version = "1.0")  const;
+					virtual void make(const node       &root,
+ 									  const dodoString &encoding,
+									  const dodoString &version,
+									  io::channel &io)  const;
 
 					/**
 					 * @return XML string
-					 * @param xnode defines root node of XML document
+					 * @param node defines root node of XML document
+					 * @param io defines output destination for XML
 					 */
-					virtual dodoString make(const node &xnode) const;
+					virtual void make(const node &node,
+									  io::channel &io) const;
 
 				  protected:
 
@@ -313,6 +299,8 @@ namespace dodo
 					};
 
 					static const dodoString statements[DATAFORMATXMLPROCESSOR_STATEMENTS]; ///< processor statements
+
+					__info__ info;
 				};
 			};
 		};
