@@ -36,6 +36,11 @@
 
 namespace dodo
 {
+	namespace io
+	{
+		class channel;
+	};
+
 	namespace data
 	{
 		namespace format
@@ -63,34 +68,30 @@ namespace dodo
 					virtual ~processor();
 
 					/**
-					 * @return string that contains serialized JSON object
 					 * @param root defines root of unserialized JSON object
+					 * @param io defines output destination for serialized JSON object
 					 */
-					virtual dodoString make(const node &root);
+					virtual void make(const node &root,
+									  io::channel &io);
 
 					/**
 					 * @return root of unserialized JSON object
-					 * @param root defines string that contains serialized JSON object
+					 * @param io defines input source that contains serialized JSON object
 					 */
-					virtual node processString(const dodoString &root);
-
-					/**
-					 * @return root of unserialized JSON object
-					 * @param path defines path to file that contains serialized JSON object
-					 */
-					virtual node processFile(const dodoString &path);
+					virtual node process(const io::channel &io);
 
 					/**
 					 * @return string that contains serialized JSON object
 					 * @param root defines root of unserialized JSON object
 					 */
-					virtual dodoString fromMap(const dodoStringMap &root);
+					virtual void fromMap(const dodoStringMap &root,
+										 io::channel &io);
 
 					/**
-					 * @return root of unserialized JSON object
-					 * @param root defines string that contains serialized JSON object
+					 * @param io defines IO source that contains serialized JSON object
+					 * @param io defines output destination for serialized JSON object
 					 */
-					virtual dodoStringMap toMap(const dodoString &root);
+					virtual dodoStringMap toMap(const io::channel &io);
 
 				  protected:
 

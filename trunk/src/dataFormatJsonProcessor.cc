@@ -35,6 +35,7 @@
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/dataFormatJsonProcessorEx.h>
 #include <libdodo/dataFormatJsonNode.h>
+#include <libdodo/ioChannel.h>
 
 using namespace dodo::data::format::json;
 
@@ -50,25 +51,26 @@ processor::~processor()
 
 //-------------------------------------------------------------------
 
-dodoString
-processor::make(const node &root)
+void
+processor::make(const node &root,
+				io::channel &io)
 {
 	switch (root.valueDataType)
 	{
 		case DATATYPE_STRING:
 		{
-			dodoString jsonObject = "\"";
+			io.writeStream("\"");
 			dodoString stringValue = *root.stringValue;
 			tools::string::replace("\"", "\\\"", stringValue);
-			jsonObject.append(stringValue);
-			jsonObject.append("\"");
+			io.writeStream(stringValue);
+			io.writeStream("\"");
 
-			return jsonObject;
+			break;
 		}
 
 		case DATATYPE_OBJECT:
 		{
-			dodoString jsonObject = "{";
+			io.writeStream("{");
 
 			dodoMap<dodoString, node, dodoMapStringCompare>::const_iterator
 				i = root.objectValue->begin(),
@@ -77,28 +79,28 @@ processor::make(const node &root)
 			{
 				for (--j; i != j; ++i)
 				{
-					jsonObject.append("\"");
-					jsonObject.append(i->first);
-					jsonObject.append("\":");
+					io.writeStream("\"");
+					io.writeStream(i->first);
+					io.writeStream("\":");
 
-					jsonObject.append(make(i->second));
-					jsonObject.append(",");
+					make(i->second, io);
+					io.writeStream(",");
 				}
-				jsonObject.append("\"");
-				jsonObject.append(i->first);
-				jsonObject.append("\":");
+				io.writeStream("\"");
+				io.writeStream(i->first);
+				io.writeStream("\":");
 
-				jsonObject.append(make(i->second));
+				make(i->second, io);
 			}
 
-			jsonObject.append("}");
+			io.writeStream("}");
 
-			return jsonObject;
+			break;
 		}
 
 		case DATATYPE_ARRAY:
 		{
-			dodoString jsonObject = "[";
+			io.writeStream("[");
 
 			dodoArray<node>::const_iterator
 				i = root.arrayValue->begin(),
@@ -108,29 +110,31 @@ processor::make(const node &root)
 				--j;
 				for (; i != j; ++i)
 				{
-					jsonObject.append(make(*i));
-					jsonObject.append(",");
+					make(*i, io);
+					io.writeStream(",");
 				}
-				jsonObject.append(make(*i));
+				make(*i, io);
 			}
 
-			jsonObject.append("]");
+			io.writeStream("]");
 
-			return jsonObject;
+			break;
 		}
 
 		case DATATYPE_NUMERIC:
-			return tools::string::lToString(root.numericValue);
+			io.writeStream(tools::string::lToString(root.numericValue));
+
+			break;
 
 		case DATATYPE_BOOLEAN:
-			return root.booleanValue ? "true" : "false";
+			io.writeStream(root.booleanValue ? "true" : "false");
+
+			break;
 
 		case DATATYPE_NULL:
 		default:
-			return "null";
+			io.writeStream("null");
 	}
-
-	return "null";
 }
 
 //-------------------------------------------------------------------
@@ -448,37 +452,35 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
 //-------------------------------------------------------------------
 
 node
-processor::processString(const dodoString &root)
+processor::process(const io::channel &io)
 {
 	node node;
 
 	node.valueDataType = DATATYPE_OBJECT;
 	node.objectValue = new dodoMap<dodoString, json::node, dodoMapStringCompare>;
 
-	processObject(*node.objectValue, root, 0);
+	dodoString json, jsonPart;
+
+	while (true)
+	{
+		jsonPart = io.readStream();
+		if (jsonPart.size() == 0)
+			break;
+
+		json.append(jsonPart);
+	}
+	jsonPart.clear();
+
+	processObject(*node.objectValue, json, 0);
 
 	return node;
 }
 
 //-------------------------------------------------------------------
 
-node
-processor::processFile(const dodoString &path)
-{
-	node node;
-
-	node.valueDataType = DATATYPE_OBJECT;
-	node.objectValue = new dodoMap<dodoString, json::node, dodoMapStringCompare>;
-
-	processObject(*node.objectValue, tools::filesystem::getFileContents(path), 0);
-
-	return node;
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-processor::fromMap(const dodoStringMap &root)
+void
+processor::fromMap(const dodoStringMap &root,
+				   io::channel &io)
 {
 	node nodeDef;
 	node subNodeDef;
@@ -498,15 +500,15 @@ processor::fromMap(const dodoStringMap &root)
 	}
 	subNodeDef.valueDataType = DATATYPE_NULL;
 
-	return make(nodeDef);
+	make(nodeDef, io);
 }
 
 //-------------------------------------------------------------------
 
 dodo::dodoStringMap
-processor::toMap(const dodoString &jnode)
+processor::toMap(const io::channel &io)
 {
-	node JSON = processString(jnode);
+	node JSON = process(io);
 
 	dodoStringMap map;
 
