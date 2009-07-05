@@ -105,17 +105,23 @@ int main(int argc, char **argv)
 
 		node0.addObjectMember("object", node2);
 
-		cout << js.make(node0) << endl;
+		io::memory json;
 
-		node jsN = js.processString(js.make(node0));
-		showJSON(jsN);
+		js.make(node0, json);
+		cout << json << endl;
+
+		json.pos = 0;
+		node jn = js.process(json);
+		showJSON(jn);
 
 		dodoStringMap map;
 		map["test"] = "test";
 		map["foo"] = "bar";
 		map["one"] = "two";
 
-		cout << endl << js.fromMap(map) << endl;
+		json.clear();
+		js.fromMap(map, json);
+		cout << endl << json << endl;
 	}
 	catch (dodo::exception::basic ex)
 	{

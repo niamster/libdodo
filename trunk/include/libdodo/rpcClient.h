@@ -74,17 +74,15 @@ namespace dodo
 
 			/**
 			 * process RPC call
-			 * @return RPC method
 			 * @param method defines RPC method representation
 			 */
-			virtual dodoString processCallRequest(const method &method) = 0;
+			virtual void processCallRequest(const method &method) = 0;
 
 			/**
 			 * process RPC call
 			 * @return RPC response represantation
-			 * @param data defines buffer that contains RPC response
 			 */
-			virtual response processCallResult(const dodoString &data) = 0;
+			virtual response processCallResult() = 0;
 
 			io::channel &io; ///< I/O handler
 		};

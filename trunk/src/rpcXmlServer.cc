@@ -71,29 +71,29 @@ server::setResponseEncoding(const dodoString &a_encoding)
 //-------------------------------------------------------------------
 
 dodo::rpc::method
-server::processCall(const dodoString &data)
+server::processCall()
 {
 	dodo::data::format::xml::processor xmlValue;
-
-	rqEncoding = xmlValue.getBufferInfo(data).encoding;
 
 	dodo::data::format::xml::__nodeDef__ xmlMethodCall;
 	xmlMethodCall.name = "methodCall";
 	xmlMethodCall.allChildren = true;
 
-	dodo::data::format::xml::node node = xmlValue.processString(xmlMethodCall, data);
+	dodo::data::format::xml::node node = xmlValue.process(xmlMethodCall, io);
+
+	rqEncoding = xmlValue.getInfo().encoding;
 
 	return method::xmlToMethod(node);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 server::processCallResult(const rpc::response &resp)
 {
 	dodo::data::format::xml::processor xmlValue;
 
-	return xmlValue.make(response::responseToXml(resp), rpEncoding);
+	xmlValue.make(response::responseToXml(resp), rpEncoding, "1.0", io);
 }
 
 //-------------------------------------------------------------------
@@ -103,7 +103,7 @@ server::serve()
 {
 	try
 	{
-		rpc::method meth = processCall(io.readStream());
+		rpc::method meth = processCall();
 
 		dodoString encoding = rpEncoding;
 
@@ -115,11 +115,11 @@ server::serve()
 
 		if (handler == handlers.end())
 		{
-			io.writeStream(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
+			processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
 		}
 		else
 		{
-			io.writeStream(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
+			processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
 		}
 
 		rpEncoding = encoding;
@@ -129,14 +129,14 @@ server::serve()
 		rpc::response response;
 		response.fault(ex.baseErrstr);
 
-		io.writeStream(processCallResult(response));
+		processCallResult(response);
 	}
 	catch (...)
 	{
 		rpc::response response;
 		response.fault(dodoString("An unknown error."));
 
-		io.writeStream(processCallResult(response));
+		processCallResult(response);
 	}
 }
 

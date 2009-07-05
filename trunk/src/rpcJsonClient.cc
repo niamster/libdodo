@@ -37,6 +37,7 @@
 #include <libdodo/dataFormatJsonNode.h>
 #include <libdodo/dataFormatJsonProcessor.h>
 #include <libdodo/rpcJsonResponse.h>
+#include <libdodo/ioMemory.h>
 
 using namespace dodo::rpc::json;
 
@@ -54,22 +55,22 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 client::processCallRequest(const rpc::method &meth)
 {
 	dodo::data::format::json::processor jsonValue;
 
-	return jsonValue.make(method::methodToJson(meth, rqVersion, ++rqId));
+	jsonValue.make(method::methodToJson(meth, rqVersion, ++rqId), io);
 }
 
 //-------------------------------------------------------------------
 
 dodo::rpc::response
-client::processCallResult(const dodoString &data)
+client::processCallResult()
 {
 	dodo::data::format::json::processor jsonValue;
 
-	dodo::data::format::json::node node = jsonValue.processString(data);
+	dodo::data::format::json::node node = jsonValue.process(io);
 
 	return response::jsonToResponse(node, rpVersion, rpId);
 }

@@ -14,24 +14,24 @@ using namespace rpc;
 
 using namespace std;
 
-class cgiIO : public io::channel, public io::network::http
+class cgiIO : public io::stream::channel, public io::network::http
 {
   public:
 
 	cgiIO(cgi::exchange &cf,
-		  dodoMap<short, dodoString> &headers) : io::channel(io::CHANNEL_PROTECTION_NONE),
+		  dodoMap<short, dodoString> &headers) : io::stream::channel(io::CHANNEL_PROTECTION_NONE),
 												 provider(cf, headers)
 	{
 	}
 
   protected:
 
-	virtual void _read(char * const data)
+	virtual void _read(char * const data) const
 	{	
 		_readStream(data);
 	}
 
-	virtual unsigned long _readStream(char * const data)
+	virtual unsigned long _readStream(char * const data) const
 	{
 		unsigned int size = provider.content.size();
 
@@ -72,7 +72,7 @@ class cgiIO : public io::channel, public io::network::http
 	{
 	}
 
-	cgi::dialogue provider;
+	mutable cgi::dialogue provider;
 };
 
 response

@@ -69,28 +69,28 @@ client::getResponseEncoding()
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 client::processCallRequest(const rpc::method &meth)
 {
 	dodo::data::format::xml::processor xmlValue;
 
-	return xmlValue.make(method::methodToXml(meth), rqEncoding);
+	xmlValue.make(method::methodToXml(meth), rqEncoding, "1.0", io);
 }
 
 //-------------------------------------------------------------------
 
 dodo::rpc::response
-client::processCallResult(const dodoString &data)
+client::processCallResult()
 {
 	dodo::data::format::xml::processor xmlValue;
-
-	rpEncoding = xmlValue.getBufferInfo(data).encoding;
 
 	dodo::data::format::xml::__nodeDef__ xmlMethodResponse;
 	xmlMethodResponse.name = "methodResponse";
 	xmlMethodResponse.allChildren = true;
 
-	dodo::data::format::xml::node node = xmlValue.processString(xmlMethodResponse, data);
+	dodo::data::format::xml::node node = xmlValue.process(xmlMethodResponse, io);
+
+	rpEncoding = xmlValue.getInfo().encoding;
 
 	return response::xmlToResponse(node);
 }

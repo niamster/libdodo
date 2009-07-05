@@ -52,9 +52,9 @@ client::~client()
 response
 client::call(const method &method)
 {
-	io.writeStream(processCallRequest(method));
+	processCallRequest(method);
 
-	return processCallResult(io.readStream());
+	return processCallResult();
 }
 
 //-------------------------------------------------------------------

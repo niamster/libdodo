@@ -18,10 +18,9 @@ int main(int argc, char **argv)
 {
 	try
 	{
+		io::file::regular file("./test.xml", io::file::REGULAR_OPENMODE_READ_ONLY);
 		processor xmlp;
 		xmlp.icaseNames = true;
-
-		cout << xmlp.getFileInfo("./test.xml").version << endl;
 
 		__nodeDef__ def("div", "cns");
 		def.attributes = dodoStringArray(1, "id");
@@ -29,8 +28,10 @@ int main(int argc, char **argv)
 
 		def.children["span"] = __nodeDef__("span");
 
-		node xnode = xmlp.processFile(def, "./test.xml");
-		//node xnode = xmlp.processFile("./test.xml");
+		node xnode = xmlp.process(def, file);
+		//node xnode = xmlp.process(io::file::regular("./test.xml", io::file::REGULAR_OPENMODE_READ_ONLY));
+
+		cout << xmlp.getInfo().version << endl;
 
 		cout << xnode.attributes["id"] << endl;
 		cout << xnode.name << endl;
@@ -60,12 +61,15 @@ int main(int argc, char **argv)
 
 		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
-		cout  << endl << xmlp.make(xmlp.processFile("./test.xml"), xmlp.getFileInfo("./test.xml").encoding) << endl << endl;
+		io::memory buffer;
+		file.pos = 0;
+		xmlp.make(xmlp.process(file), "utf-8", "1.0", buffer);
+		cout  << endl << buffer << endl << endl;
 
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (dodoString)ex << "\t" << ex.line << endl;
+		cout << (dodoString)ex << "\t" << ex.line << endl << ex.getCallStack() << endl;
 	}
 	catch (std::exception &ex)
 	{

@@ -100,16 +100,14 @@ namespace dodo
 				/**
 				 * process RPC call
 				 * @return RPC method represantation
-				 * @param data defines buffer that contains RPC request
 				 */
-				virtual rpc::method processCall(const dodoString &data);
+				virtual rpc::method processCall();
 
 				/**
 				 * process RPC call
-				 * @return RPC response
 				 * @param response defines RPC response representation
 				 */
-				virtual dodoString processCallResult(const rpc::response &response);
+				virtual void processCallResult(const rpc::response &response);
 
 				dodoString rpEncoding;  ///< encoding of the messages['UTF-8' by default]
 				dodoString rqEncoding;  ///< encoding of the messages['UTF-8' by default]

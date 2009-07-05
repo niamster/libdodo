@@ -96,17 +96,17 @@ server::serve()
 {
 	try
 	{
-		method meth = processCall(io.readStream());
+		method meth = processCall();
 
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
 		if (handler == handlers.end())
 		{
-			io.writeStream(processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL)));
+			processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL));
 		}
 		else
 		{
-			io.writeStream(processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL)));
+			processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL));
 		}
 	}
 	catch (exception::basic &ex)
@@ -114,14 +114,14 @@ server::serve()
 		response response;
 		response.fault(ex.baseErrstr);
 
-		io.writeStream(processCallResult(response));
+		processCallResult(response);
 	}
 	catch (...)
 	{
 		response response;
 		response.fault(dodoString("An unknown error."));
 
-		io.writeStream(processCallResult(response));
+		processCallResult(response);
 	}
 }
 

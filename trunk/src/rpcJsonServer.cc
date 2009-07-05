@@ -67,23 +67,23 @@ server::~server()
 //-------------------------------------------------------------------
 
 dodo::rpc::method
-server::processCall(const dodoString &data)
+server::processCall()
 {
 	dodo::data::format::json::processor jsonValue;
 
-	dodo::data::format::json::node node = jsonValue.processString(data);
+	dodo::data::format::json::node node = jsonValue.process(io);
 
 	return method::jsonToMethod(node, rqVersion, rqId);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 server::processCallResult(const rpc::response &resp)
 {
 	dodo::data::format::json::processor jsonValue;
 
-	return jsonValue.make(response::responseToJson(resp, rpVersion, rpId));
+	jsonValue.make(response::responseToJson(resp, rpVersion, rpId), io);
 }
 
 //-------------------------------------------------------------------
@@ -101,7 +101,7 @@ server::serve()
 {
 	try
 	{
-		rpc::method meth = processCall(io.readStream());
+		rpc::method meth = processCall();
 
 		dodoString version = rqVersion;
 
@@ -114,11 +114,11 @@ server::serve()
 
 		if (handler == handlers.end())
 		{
-			io.writeStream(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
+			processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
 		}
 		else
 		{
-			io.writeStream(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
+			processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
 		}
 
 		rpVersion = version;
@@ -130,7 +130,7 @@ server::serve()
 
 		rpId = rqId;
 
-		io.writeStream(processCallResult(response));
+		processCallResult(response);
 	}
 	catch (...)
 	{
@@ -139,7 +139,7 @@ server::serve()
 
 		rpId = rqId;
 
-		io.writeStream(processCallResult(response));
+		processCallResult(response);
 	}
 }
 

@@ -14,11 +14,11 @@ using namespace rpc;
 
 using namespace std;
 
-class httpIO : public io::channel, public io::network::http
+class httpIO : public io::stream::channel, public io::network::http
 {
   public:
 
-	httpIO() : io::channel(io::CHANNEL_PROTECTION_NONE),
+	httpIO() : io::stream::channel(io::CHANNEL_PROTECTION_NONE),
 			   response(NULL)
 	{
 	}
@@ -31,12 +31,12 @@ class httpIO : public io::channel, public io::network::http
 
   protected:
 
-	virtual void _read(char * const data)
+	virtual void _read(char * const data) const
 	{
 		_readStream(data);
 	}
 
-	virtual unsigned long _readStream(char * const data)
+	virtual unsigned long _readStream(char * const data) const
 	{
 		unsigned long size = 0;
 
@@ -102,7 +102,7 @@ class httpIO : public io::channel, public io::network::http
 	{
 	}
 
-	io::network::__httpResponse__ *response;
+	mutable io::network::__httpResponse__ *response;
 };
 
 int main(int argc, char **argv)
