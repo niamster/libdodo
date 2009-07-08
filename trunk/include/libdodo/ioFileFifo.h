@@ -124,7 +124,7 @@ namespace dodo
 				/**
 				 * flush output
 				 */
-				virtual void flush();
+				virtual void flush() const;
 
 				/**
 				 * @return true if stream is blocked
@@ -168,14 +168,14 @@ namespace dodo
 				/**
 				 * @param data defines data that will be written
 				 */
-				virtual void _write(const char * const data);
+				virtual void _write(const char * const data) const;
 
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
 				 * @note puts extra '\n' to the end of the string
 				 */
-				virtual void _writeStream(const char * const data);
+				virtual void _writeStream(const char * const data) const;
 
 			  private:
 

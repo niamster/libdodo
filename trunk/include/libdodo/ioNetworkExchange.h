@@ -93,7 +93,7 @@ namespace dodo
 			{
 				friend class server;
 				friend class client;
-				friend class http;
+				friend class http::client;
 
 			  public:
 
@@ -166,7 +166,7 @@ namespace dodo
 				 * flush output
 				 * @note does nothing for network connections
 				 */
-				virtual void flush();
+				virtual void flush() const;
 
 				/**
 				 * @param data defines buffer that will be filled
@@ -184,14 +184,14 @@ namespace dodo
 				/**
 				 * @param data defines data that will be written
 				 */
-				virtual void _write(const char * const data);
+				virtual void _write(const char * const data) const;
 
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
 				 * @note puts extra '\0' in the end of the string
 				 */
-				virtual void _writeStream(const char * const data);
+				virtual void _writeStream(const char * const data) const;
 			};
 		};
 	};

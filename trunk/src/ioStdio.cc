@@ -110,7 +110,7 @@ stdio::isRedirectedToStderr()
 //-------------------------------------------------------------------
 
 void
-stdio::_writeStream(const char * const data)
+stdio::_writeStream(const char * const data) const
 {
 	unsigned long _outSize = outSize;
 

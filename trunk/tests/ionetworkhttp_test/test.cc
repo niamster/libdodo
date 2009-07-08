@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace io::network;
+using namespace io::network::http;
 
 using namespace std;
 
@@ -26,12 +26,12 @@ int main(int argc, char **argv)
 		map["hidden"] = "hidden";
 		map["text"] = "text";
 
-		dodoMap<dodoString, __httpPostFile__> files;
+		dodoMap<dodoString, file> files;
 
-		files["file"] = __httpPostFile__("./test.cc", "text/plain");
+		files["file"] = file("./test.cc", "text/plain");
 
-		http HTTP;
-		__httpResponse__ res;
+		client HTTP;
+		response res;
 
 		HTTP.setCookies(cookies);
 
@@ -50,13 +50,13 @@ int main(int argc, char **argv)
 		tools::filesystem::writeToFile("test.dat", res.data);
 
 		cout << res.code << "\n~~\n";
-		cout << res.headers[HTTP_RESPONSEHEADER_CONTENTTYPE] << "\n~~\n";
+		cout << res.headers[RESPONSEHEADER_CONTENTTYPE] << "\n~~\n";
 		//cout << res.data << "\n~~\n";
-		cout << res.headers[HTTP_RESPONSEHEADER_CONTENTLENGTH] << "\n~~\n";
+		cout << res.headers[RESPONSEHEADER_CONTENTLENGTH] << "\n~~\n";
 		cout << res.data.size() << "\n~~\n";
 
 		cout << "Cookies:\n";
-		dodoArray<cgi::__cgiCookie__>::iterator i(res.cookies.begin()), j(res.cookies.end());
+		dodoArray<cgi::cookie>::iterator i(res.cookies.begin()), j(res.cookies.end());
 		for (; i != j; ++i)
 			cout << i->name << "=" << i->value << "\n~~\n";
 	}

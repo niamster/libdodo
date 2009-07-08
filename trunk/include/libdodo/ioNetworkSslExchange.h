@@ -42,7 +42,10 @@ namespace dodo
 	{
 		namespace network
 		{
-			class http;
+			namespace http
+			{
+				class client;
+			};
 
 			namespace ssl
 			{
@@ -94,7 +97,7 @@ namespace dodo
 				{
 					friend class server;
 					friend class client;
-					friend class network::http;
+					friend class network::http::client;
 
 				  public:
 
@@ -181,7 +184,7 @@ namespace dodo
 					/**
 					 * @param data defines data that will be written
 					 */
-					virtual void _write(const char * const data);
+					virtual void _write(const char * const data) const;
 				};
 			};
 		};

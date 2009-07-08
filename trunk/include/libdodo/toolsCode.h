@@ -45,7 +45,10 @@ namespace dodo
 	{
 		namespace network
 		{
-			class http;
+			namespace http
+			{
+				class client;
+			};
 		};
 	};
 
@@ -86,7 +89,7 @@ namespace dodo
 		 */
 		class code
 		{
-			friend class io::network::http;
+			friend class io::network::http::client;
 			friend class cgi::dialogue;
 			friend class network;
 

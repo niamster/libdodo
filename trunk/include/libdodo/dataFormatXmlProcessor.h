@@ -142,14 +142,14 @@ namespace dodo
 					 * @param io defines input source that contains XML
 					 */
 					virtual node process(const __nodeDef__  &definition,
-										 io::channel &io);
+										 const io::channel &io);
 
 					/**
 					 * parse XML file
 					 * @return parsed XML in node structure
 					 * @param io defines input source that contains XML
 					 */
-					virtual node process(io::channel &io);
+					virtual node process(const io::channel &io);
 
 					bool icaseNames; ///< if true ignore case of names[false by default]
 
@@ -185,7 +185,7 @@ namespace dodo
 					virtual void make(const node       &root,
  									  const dodoString &encoding,
 									  const dodoString &version,
-									  io::channel &io)  const;
+									  const io::channel &io)  const;
 
 					/**
 					 * @return XML string
@@ -193,7 +193,7 @@ namespace dodo
 					 * @param io defines output destination for XML
 					 */
 					virtual void make(const node &node,
-									  io::channel &io) const;
+									  const io::channel &io) const;
 
 				  protected:
 

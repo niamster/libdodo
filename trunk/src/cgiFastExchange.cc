@@ -72,7 +72,7 @@ exchange::~exchange()
 //-------------------------------------------------------------------
 
 void
-exchange::flush()
+exchange::flush() const
 {
 	if (FCGX_FFlush(request->request->out) == -1)
 	{
@@ -117,7 +117,7 @@ exchange::_read(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-exchange::_write(const char *const buf)
+exchange::_write(const char *const buf) const
 {
 	if (FCGX_PutStr(buf, outSize, request->request->out) == -1)
 	{
@@ -128,7 +128,7 @@ exchange::_write(const char *const buf)
 //-------------------------------------------------------------------
 
 void
-exchange::_writeStream(const char * const data)
+exchange::_writeStream(const char * const data) const
 {
 	unsigned long _outSize = outSize;
 

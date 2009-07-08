@@ -314,7 +314,7 @@ temp::_read(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-temp::_write(const char *const a_data)
+temp::_write(const char *const a_data) const
 {
 	if (handle->file == NULL)
 	{
@@ -415,7 +415,7 @@ temp::erase()
 //-------------------------------------------------------------------
 
 void
-temp::flush()
+temp::flush() const
 {
 	pc::sync::protector pg(keeper);
 
@@ -505,7 +505,7 @@ temp::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-temp::_writeStream(const char *const a_data)
+temp::_writeStream(const char *const a_data) const
 {
 	if (handle->file == NULL)
 	{

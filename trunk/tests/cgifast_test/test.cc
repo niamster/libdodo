@@ -24,7 +24,7 @@ cgif(exchange &fcgi)
 
 	dialogue cgit(fcgi, true);
 
-	cgit.setCookie(__cgiCookie__("test", "Ni@m"));
+	cgit.setCookie(cookie("test", "Ni@m"));
 
 	///increment counter in shared memory
 	int *inc = (int *)sh.acquire();
@@ -34,9 +34,7 @@ cgif(exchange &fcgi)
 	io->writeStream("The headers thould be already printed successfully.<br>");
 
 #ifndef FASTCGI_EXT
-
 	io->writeStream("No fastCGI extension was compiled!<br>");
-
 #endif
 
 	fcgi.writeStream("counter: " + tools::string::iToString(*inc) + "<br>");

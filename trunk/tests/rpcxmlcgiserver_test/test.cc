@@ -14,7 +14,7 @@ using namespace rpc;
 
 using namespace std;
 
-class cgiIO : public io::stream::channel, public io::network::http
+class cgiIO : public io::stream::channel
 {
   public:
 
@@ -50,12 +50,12 @@ class cgiIO : public io::stream::channel, public io::network::http
 		return size;
 	}
 
-	virtual void _write(const char * const data)
+	virtual void _write(const char * const data) const
 	{
 		provider.print(data);
 	}
 
-	virtual void _writeStream(const char * const data)
+	virtual void _writeStream(const char * const data) const
 	{
 		provider.printStream(data);
 	}
@@ -70,7 +70,7 @@ class cgiIO : public io::stream::channel, public io::network::http
 		return -1;
 	}
 
-	void flush()
+	void flush() const
 	{
 	}
 

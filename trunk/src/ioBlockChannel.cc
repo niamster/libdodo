@@ -177,7 +177,7 @@ channel::readStream() const
 //-------------------------------------------------------------------
 
 void
-channel::write(const dodoString &a_data)
+channel::write(const dodoString &a_data) const
 {
 	pc::sync::protector pg(keeper);
 
@@ -213,7 +213,7 @@ channel::write(const dodoString &a_data)
 //-------------------------------------------------------------------
 
 void
-channel::writeStream(const dodoString &a_data)
+channel::writeStream(const dodoString &a_data) const
 {
 	pc::sync::protector pg(keeper);
 

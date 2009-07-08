@@ -68,7 +68,7 @@ namespace dodo
 				/**
 				 * flush output
 				 */
-				virtual void flush();
+				virtual void flush() const;
 
 				/**
 				 * @return environment variable
@@ -115,13 +115,13 @@ namespace dodo
 				 * @param data is data that will be written
 				 * if outSize bigger than buffer size - writes with few iterations
 				 */
-				virtual void _write(const char * const data);
+				virtual void _write(const char * const data) const;
 
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
 				 */
-				virtual void _writeStream(const char * const data);
+				virtual void _writeStream(const char * const data) const;
 
 			  private:
 

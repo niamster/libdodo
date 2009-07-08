@@ -250,7 +250,7 @@ return &cgiIO;
 //-------------------------------------------------------------------
 
 void
-dialogue::flush()
+dialogue::flush() const
 {
 cgiIO.flush();
 }
@@ -506,7 +506,7 @@ else
 void
 dialogue::cleanTmp()
 {
-dodoMap<dodoString, __cgiFile__>::iterator i(FILES.begin()), j(FILES.end());
+dodoMap<dodoString, file>::iterator i(FILES.begin()), j(FILES.end());
 for (; i != j; ++i)
 {
 	if (!postFilesInMem)
@@ -679,7 +679,7 @@ for (; i != j; ++i)
 
 if (cookies.size() > 0)
 {
-	dodoList<__cgiCookie__>::const_iterator i(cookies.begin()), j(cookies.end());
+	dodoList<cookie>::const_iterator i(cookies.begin()), j(cookies.end());
 	for (; i != j; ++i)
 	{
 		cgiIO.writeStream("Set-Cookie: ");
@@ -808,7 +808,7 @@ else
 
 						dodoString post_name = dodoString(i->data() + temp0, temp1 - temp0);
 
-						__cgiFile__ file;
+						file file;
 
 						temp0 = i->find("filename=\"", temp1);
 						temp0 += 10;
@@ -982,7 +982,7 @@ dialogue::request(const dodoString &varName)
 //-------------------------------------------------------------------
 
 void
-dialogue::setCookie(const __cgiCookie__ &cookie)
+dialogue::setCookie(const cookie &cookie)
 {
 	cookies.push_back(cookie);
 }

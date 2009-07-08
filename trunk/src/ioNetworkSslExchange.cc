@@ -268,7 +268,7 @@ exchange::isAlive()
 //-------------------------------------------------------------------
 
 void
-exchange::_write(const char * const a_data)
+exchange::_write(const char * const a_data) const
 {
 	if (socket == -1)
 	{

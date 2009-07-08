@@ -53,7 +53,7 @@ processor::~processor()
 
 void
 processor::make(const node &root,
-				io::channel &io)
+				const io::channel &io)
 {
 	switch (root.valueDataType)
 	{
@@ -480,7 +480,7 @@ processor::process(const io::channel &io)
 
 void
 processor::fromMap(const dodoStringMap &root,
-				   io::channel &io)
+				   const io::channel &io)
 {
 	node nodeDef;
 	node subNodeDef;

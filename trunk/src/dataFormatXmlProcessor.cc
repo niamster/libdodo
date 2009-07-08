@@ -213,7 +213,7 @@ processor::isCDATA(const __node__ &a_xnode)
 
 node
 processor::process(const __nodeDef__  &definition,
-				   io::channel &io)
+				   const io::channel &io)
 {
 #ifdef LIBXML2_EXT
 	xmlFreeDoc(document->doc);
@@ -661,7 +661,7 @@ processor::initNode(node &xnode)
 //-------------------------------------------------------------------
 
 node
-processor::process(io::channel &io)
+processor::process(const io::channel &io)
 {
 #ifdef LIBXML2_EXT
 	xmlFreeDoc(document->doc);
@@ -804,7 +804,7 @@ void
 processor::make(const node       &root,
 				const dodoString &encoding,
 				const dodoString &version,
-				io::channel &io) const
+				const io::channel &io) const
 {
 	if (root.name.empty())
 	{
@@ -824,7 +824,7 @@ processor::make(const node       &root,
 
 void
 processor::make(const node &xnode,
-				io::channel &io) const
+				const io::channel &io) const
 {
 	if (xnode.name.empty())
 	{

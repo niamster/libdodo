@@ -15,12 +15,13 @@ using namespace rpc;
 using namespace std;
 
 
-class httpIO : public io::stream::channel, public io::network::http
+class httpIO : public io::stream::channel, public io::network::http::client
 {
   public:
 
-	httpIO() : io::stream::channel(io::CHANNEL_PROTECTION_NONE),
-			   response(NULL)
+	httpIO(const dodoString &url) : io::stream::channel(io::CHANNEL_PROTECTION_NONE),
+									response(NULL),
+									io::network::http::client(url)
 	{
 	}
 
@@ -61,12 +62,12 @@ class httpIO : public io::stream::channel, public io::network::http
 		return size;
 	}
 
-	virtual void _write(const char * const data)
+	virtual void _write(const char * const data) const
 	{
 		throw dodoString("Not implemented");
 	}
 
-	virtual void _writeStream(const char * const idata)
+	virtual void _writeStream(const char * const idata) const
 	{
 		data.append(idata);
 	}
@@ -81,7 +82,7 @@ class httpIO : public io::stream::channel, public io::network::http
 		return -1;
 	}
 
-	void flush()
+	void flush() const
 	{
 		if (response != NULL)
 		{
@@ -89,22 +90,19 @@ class httpIO : public io::stream::channel, public io::network::http
 			response = NULL;
 		}
 
-		response = new io::network::__httpResponse__(POST(data, "application/json"));
+		response = new io::network::http::response(POST(data, "application/json"));
 		data.clear();
 	}
 
-	mutable io::network::__httpResponse__ *response;
-	dodoString data;
+	mutable io::network::http::response *response;
+	mutable dodoString data;
 };
 
 int main(int argc, char **argv)
 {
 	try
 	{
-		httpIO http;
-		xml::client client(http);
-
-		http.setUrl("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi");
+		xml::client client(httpIO("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi"));
 
 		method method;
 		value argument;

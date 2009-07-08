@@ -34,14 +34,14 @@
 
 using namespace dodo::cgi;
 
-__cgiFile__::__cgiFile__() : size(0),
+file::file() : size(0),
 						 error(CGI_POSTFILEERR_NO_FILE)
 {
 }
 
 //-------------------------------------------------------------------
 
-__cgiCookie__::__cgiCookie__(const dodoString &a_name,
+cookie::cookie(const dodoString &a_name,
 						 const dodoString &a_value,
 						 const dodoString &a_expires,
 						 const dodoString &a_path,
@@ -57,7 +57,7 @@ __cgiCookie__::__cgiCookie__(const dodoString &a_name,
 
 //-------------------------------------------------------------------
 
-__cgiCookie__::__cgiCookie__() : secure(false)
+cookie::cookie() : secure(false)
 {
 }
 

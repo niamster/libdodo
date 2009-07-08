@@ -223,7 +223,7 @@ exchange::isAlive()
 //-------------------------------------------------------------------
 
 void
-exchange::_write(const char * const a_data)
+exchange::_write(const char * const a_data) const
 {
 	if (socket == -1)
 	{
@@ -391,7 +391,7 @@ exchange::_read(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-exchange::_writeStream(const char * const data)
+exchange::_writeStream(const char * const data) const
 {
 	unsigned long _outSize = outSize;
 
@@ -456,7 +456,7 @@ exchange::_readStream(char * const data) const
 //-------------------------------------------------------------------
 
 void
-exchange::flush()
+exchange::flush() const
 {
 }
 

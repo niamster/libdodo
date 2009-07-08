@@ -37,7 +37,7 @@
 
 using namespace dodo::rpc;
 
-client::client(io::channel &io) : io(io)
+client::client(const io::channel &io) : io(io)
 {
 }
 

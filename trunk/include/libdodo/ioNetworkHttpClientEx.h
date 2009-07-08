@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IONETWORKHTTPEX_H_
-#define _IONETWORKHTTPEX_H_ 1
+#ifndef _IONETWORKHTTPCLIENTEX_H_
+#define _IONETWORKHTTPCLIENTEX_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -40,37 +40,40 @@ namespace dodo
 	{
 		namespace network
 		{
-			/**
-			 * libdodo defined errors
-			 */
-			enum httpExR
+			namespace http
 			{
-				HTTPEX_CANNOTCONNECT,
-				HTTPEX_NOTAUTHORIZED,
-				HTTPEX_UNKNOWNWWWAUTHTYPE,
-				HTTPEX_UNKNOWNPROXYAUTHTYPE,
-				HTTPEX_UNSUPPORTEDSURICHEME,
-			};
+				/**
+				 * libdodo defined errors
+				 */
+				enum clientExR
+				{
+					CLIENTEX_CANNOTCONNECT,
+					CLIENTEX_NOTAUTHORIZED,
+					CLIENTEX_UNKNOWNWWWAUTHTYPE,
+					CLIENTEX_UNKNOWNPROXYAUTHTYPE,
+					CLIENTEX_UNSUPPORTEDSURICHEME,
+				};
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
-#define IONETWORKHTTPEX_CANNOTCONNECT_STR        "Can't connect to the host(s)."
-#define IONETWORKHTTPEX_NOTAUTHORIZED_STR        "Aythorization required."
-#define IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR   "Unknown HTTP authentication type."
-#define IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR "Unknown proxy authentication type."
-#define IONETWORKHTTPEX_UNSUPPORTEDSURICHEME_STR "Unsupported URI scheme."
+				/**
+				 * explanations for libdodo defined errors
+				 */
+#define IONETWORKHTTPCLIENTEX_CANNOTCONNECT_STR        "Can't connect to the host(s)."
+#define IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR        "Aythorization required."
+#define IONETWORKHTTPCLIENTEX_UNKNOWNWWWAUTHTYPE_STR   "Unknown HTTP authentication type."
+#define IONETWORKHTTPCLIENTEX_UNKNOWNPROXYAUTHTYPE_STR "Unknown proxy authentication type."
+#define IONETWORKHTTPCLIENTEX_UNSUPPORTEDSURICHEME_STR "Unsupported URI scheme."
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum httpFunctionsID
-			{
-				HTTPEX_POST,
-				HTTPEX_GET,
-				HTTPEX_GETCONTENT,
-				HTTPEX_SETURL,
-				HTTPEX_GETPROXYCONNECTRESPONSE,
+				/**
+				 * IDs of functions where exception might be thrown
+				 */
+				enum clientFunctionsID
+				{
+					CLIENTEX_POST,
+					CLIENTEX_GET,
+					CLIENTEX_GETCONTENT,
+					CLIENTEX_SETURL,
+					CLIENTEX_GETPROXYCONNECTRESPONSE,
+				};
 			};
 		};
 	};

@@ -72,7 +72,7 @@ namespace dodo
 					 * @param io defines output destination for serialized JSON object
 					 */
 					virtual void make(const node &root,
-									  io::channel &io);
+									  const io::channel &io);
 
 					/**
 					 * @return root of unserialized JSON object
@@ -85,7 +85,7 @@ namespace dodo
 					 * @param root defines root of unserialized JSON object
 					 */
 					virtual void fromMap(const dodoStringMap &root,
-										 io::channel &io);
+										 const io::channel &io);
 
 					/**
 					 * @param io defines IO source that contains serialized JSON object

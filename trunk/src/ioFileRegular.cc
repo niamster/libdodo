@@ -481,7 +481,7 @@ regular::_read(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-regular::_write(const char *const a_data)
+regular::_write(const char *const a_data) const
 {
 	if (handle->file == NULL)
 	{
@@ -556,7 +556,7 @@ regular::erase()
 //-------------------------------------------------------------------
 
 void
-regular::flush()
+regular::flush() const
 {
 	pc::sync::protector pg(keeper);
 
@@ -646,7 +646,7 @@ regular::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-regular::_writeStream(const char *const a_data)
+regular::_writeStream(const char *const a_data) const
 {
 	if (handle->file == NULL)
 	{

@@ -74,7 +74,7 @@ namespace dodo
 				 * @param data defines data that will be written
 				 * @note not more then outSize
 				 */
-				virtual void write(const dodoString &data);
+				virtual void write(const dodoString &data) const;
 
 				/**
 				 * read from stream - '\0' or '\n' - terminated string
@@ -88,7 +88,7 @@ namespace dodo
 				 * @param data defines data that will be written
 				 * @note not more then outSize
 				 */
-				virtual void writeStream(const dodoString &data);
+				virtual void writeStream(const dodoString &data) const;
 
 				mutable unsigned long pos;  ///< read/write/erase position; incremented on read/write/erase[0 by default]
 

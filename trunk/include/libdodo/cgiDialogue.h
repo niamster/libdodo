@@ -139,7 +139,7 @@ namespace dodo
 			dodoStringMap GET;                                          ///< GET variables
 			mutable dodoMap<short, dodoString> ENVIRONMENT;             ///< environment variables[see cgiEnvironmentEnum]
 			dodoStringMap COOKIES;                                      ///< cookies sent by browser
-			dodoMap<dodoString, __cgiFile__, dodoMapStringCompare> FILES; ///< POST files
+			dodoMap<dodoString, file, dodoMapStringCompare> FILES; ///< POST files
 
 			dodoString content;                                         ///< contents of the stdin for the POST request
 
@@ -168,14 +168,14 @@ namespace dodo
 			/**
 			 * flush output
 			 */
-			virtual void flush();
+			virtual void flush() const;
 
 			/**
 			 * set cookie
 			 * @param cookie defines the cookie
 			 * @note cookies are printed with printHeaders method
 			 */
-			virtual void setCookie(const __cgiCookie__ &cookie);
+			virtual void setCookie(const cookie &cookie);
 
 			/**
 			 * @return charset of the request
@@ -258,7 +258,7 @@ namespace dodo
 			bool autocleanFiles;                                                                ///< defines whether to clean POST files in destructor
 			dodoString postFilesTmpDir;                                                         ///< directory for POST files if on they are saved on the disk
 
-			dodoList<__cgiCookie__> cookies;                                                    ///< cookies
+			dodoList<cookie> cookies;                                                    ///< cookies
 			int method;                                                                         ///< request method
 
 			dodoStringArray contenTypeExtensions;                                               ///< contains contentype extension[boundary, modification-date, etc]

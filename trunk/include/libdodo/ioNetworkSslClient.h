@@ -42,7 +42,10 @@ namespace dodo
 	{
 		namespace network
 		{
-			class http;
+			namespace http
+			{
+				class client;
+			};
 		};
 
 		namespace ssl
@@ -65,7 +68,7 @@ namespace dodo
 				class client : public network::client
 				{
 					friend class exchange;
-					friend class network::http;
+					friend class network::http::client;
 
 				  private:
 

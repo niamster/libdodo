@@ -99,7 +99,7 @@ memory::getOutDescriptor() const
 //-------------------------------------------------------------------
 
 void
-memory::flush()
+memory::flush() const
 {
 }
 
@@ -163,7 +163,7 @@ memory::_read(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-memory::_write(const char *const a_data)
+memory::_write(const char *const a_data) const
 {
 	if (append)
 	{
@@ -267,7 +267,7 @@ memory::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-memory::_writeStream(const char *const a_data)
+memory::_writeStream(const char *const a_data) const
 {
 	unsigned long _outSize = outSize;
 	unsigned int bufSize = strlen(a_data);

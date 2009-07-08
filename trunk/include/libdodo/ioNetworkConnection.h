@@ -40,6 +40,11 @@ namespace dodo
 	{
 		namespace network
 		{
+			namespace http
+			{
+				class client;
+			};
+
 			/**
 			 * @enum connectionTransferTypeEnum defines type of socket
 			 */
@@ -97,7 +102,7 @@ namespace dodo
 			 */
 			class connection
 			{
-				friend class http;
+				friend class http::client;
 
 			  protected:
 

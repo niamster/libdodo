@@ -446,7 +446,7 @@ io::pipe::_read(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-io::pipe::_write(const char *const buf)
+io::pipe::_write(const char *const buf) const
 {
 	if (out->file == NULL)
 	{
@@ -530,7 +530,7 @@ io::pipe::_write(const char *const buf)
 //-------------------------------------------------------------------
 
 void
-io::pipe::flush()
+io::pipe::flush() const
 {
 	pc::sync::protector pg(keeper);
 
@@ -747,7 +747,7 @@ io::pipe::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-io::pipe::_writeStream(const char * const data)
+io::pipe::_writeStream(const char * const data) const
 {
 	if (out->file == NULL)
 	{

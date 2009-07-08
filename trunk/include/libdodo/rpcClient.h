@@ -57,7 +57,7 @@ namespace dodo
 			/**
 			 * constructor
 			 */
-			client(io::channel &io);
+			client(const io::channel &io);
 
 			/**
 			 * destructor
@@ -84,7 +84,7 @@ namespace dodo
 			 */
 			virtual response processCallResult() = 0;
 
-			io::channel &io; ///< I/O handler
+			const io::channel &io; ///< I/O handler
 		};
 	};
 };

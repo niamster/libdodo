@@ -613,7 +613,7 @@ fifo::_read(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-fifo::_write(const char *const a_data)
+fifo::_write(const char *const a_data) const
 {
 	if (handle->file == NULL)
 	{
@@ -697,7 +697,7 @@ fifo::_write(const char *const a_data)
 //-------------------------------------------------------------------
 
 void
-fifo::flush()
+fifo::flush() const
 {
 	pc::sync::protector pg(keeper);
 
@@ -755,7 +755,7 @@ fifo::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-fifo::_writeStream(const char *const a_data)
+fifo::_writeStream(const char *const a_data) const
 {
 	unsigned long _outSize = outSize;
 

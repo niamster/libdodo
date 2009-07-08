@@ -62,6 +62,7 @@ namespace dodo
 
 			/**
 			 * constructor
+			 * @param data defines initial data for the interface
 			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 			 */
 			memory(const dodoString &data,
@@ -87,7 +88,7 @@ namespace dodo
 			/**
 			 * flush output
 			 */
-			virtual void flush();
+			virtual void flush() const;
 
 			/**
 			 * clear buffer
@@ -135,7 +136,7 @@ namespace dodo
 			 * @param data defines data that will be written
 			 * @note if block is true write offset is calculated as pos*outSize otherwise offset it taken pos bytes from the beginning
 			 */
-			virtual void _write(const char * const data);
+			virtual void _write(const char * const data) const;
 
 			/**
 			 *
@@ -143,11 +144,11 @@ namespace dodo
 			 * @param data defines data that will be written
 			 * @note write only to the end of the file(append)
 			 */
-			virtual void _writeStream(const char * const data);
+			virtual void _writeStream(const char * const data) const;
 
 		  protected:
 
-			dodoString buffer; ///< object data
+			mutable dodoString buffer; ///< object data
 		};
 	};
 };

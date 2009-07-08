@@ -142,7 +142,7 @@ namespace dodo
 			 * @param data defines data that will be written
 			 * @note not more then outSize
 			 */
-			virtual void write(const dodoString &data) = 0;
+			virtual void write(const dodoString &data) const = 0;
 
 			/**
 			 * read from stream - '\0' or '\n' - terminated string
@@ -156,12 +156,12 @@ namespace dodo
 			 * @param data defines data that will be written
 			 * @note not more then outSize
 			 */
-			virtual void writeStream(const dodoString &data) = 0;
+			virtual void writeStream(const dodoString &data) const = 0;
 
 			/**
 			 * flush output
 			 */
-			virtual void flush() = 0;
+			virtual void flush() const = 0;
 
 			mutable unsigned long inSize;   ///< size of data block for read* operations
 			mutable unsigned long outSize;  ///< size of data block for write* operations
@@ -185,14 +185,14 @@ namespace dodo
 			 * @param data defines data that will be written
 			 * @note not more then outSize(including '\0')
 			 */
-			virtual void _write(const char * const data) = 0;
+			virtual void _write(const char * const data) const = 0;
 
 			/**
 			 * write to stream - '\0' - terminated string
 			 * @param data defines data that will be written
 			 * @note not more then outSize(including '\0')
 			 */
-			virtual void _writeStream(const char * const data) = 0;
+			virtual void _writeStream(const char * const data) const = 0;
 
 #ifndef IO_WO_XEXEC
 			mutable __xexecIoChannelCollectedData__ collectedData;    ///< data collected for xexec

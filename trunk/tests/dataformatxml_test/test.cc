@@ -18,7 +18,6 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		io::file::regular file("./test.xml", io::file::REGULAR_OPENMODE_READ_ONLY);
 		processor xmlp;
 		xmlp.icaseNames = true;
 
@@ -28,7 +27,7 @@ int main(int argc, char **argv)
 
 		def.children["span"] = __nodeDef__("span");
 
-		node xnode = xmlp.process(def, file);
+		node xnode = xmlp.process(def, io::file::regular("./test.xml", io::file::REGULAR_OPENMODE_READ_ONLY));
 		//node xnode = xmlp.process(io::file::regular("./test.xml", io::file::REGULAR_OPENMODE_READ_ONLY));
 
 		cout << xmlp.getInfo().version << endl;
@@ -62,8 +61,7 @@ int main(int argc, char **argv)
 		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
 		io::memory buffer;
-		file.pos = 0;
-		xmlp.make(xmlp.process(file), "utf-8", "1.0", buffer);
+		xmlp.make(xmlp.process(io::file::regular("./test.xml", io::file::REGULAR_OPENMODE_READ_ONLY)), "utf-8", "1.0", buffer);
 		cout  << endl << buffer << endl << endl;
 
 	}

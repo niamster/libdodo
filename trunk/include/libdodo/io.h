@@ -49,8 +49,8 @@
 #include <libdodo/ioNetworkConnectionEx.h>
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/ioNetworkExchangeEx.h>
-#include <libdodo/ioNetworkHttp.h>
-#include <libdodo/ioNetworkHttpEx.h>
+#include <libdodo/ioNetworkHttpClient.h>
+#include <libdodo/ioNetworkHttpClientEx.h>
 #include <libdodo/ioNetworkServer.h>
 #include <libdodo/ioNetworkServerEx.h>
 #include <libdodo/ioNetworkSslClient.h>
