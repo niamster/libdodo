@@ -36,31 +36,39 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioBlockChannel.h>
 #include <libdodo/ioMemoryEx.h>
-#include <libdodo/dataMemoryShared.h>
 #include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io;
 
-#include <iostream>
-using namespace std;
-memory::memory(const data::memory::shared &shared,
+memory::memory(char *a_data,
+			   unsigned long size,
+			   short flags,
 			   short protection) : block::channel(protection),
-								   type(MEMORYTYPE_FIXED|MEMORYTYPE_EXTERN)
+								   flags(flags),
+								   size(size)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
 #endif
 
-	if (shared.shData == NULL)
-		shared.map();
-	data = (char *)shared.shData;
-	size = shared.shSize;
+	if (flags&MEMORYFLAGS_NORMAL)
+	{
+		data = new char[size];
+		memcpy(data, a_data, size);
+	}
+	else
+	{
+		if (flags&MEMORYFLAGS_EXTERN)
+			data = a_data;
+		else
+			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_MEMORY, exception::ERRNO_LIBDODO, MEMORYEX_WRONGFLAGS, IOMEMORYEX_WRONGFLAGS_STR, __LINE__, __FILE__);
+	}
 }
 
 //-------------------------------------------------------------------
 
 memory::memory(short protection) : block::channel(protection),
-								   type(MEMORYTYPE_LOCAL),
+								   flags(MEMORYFLAGS_NORMAL),
 								   size(0),
 								   data(NULL)
 {
@@ -72,21 +80,21 @@ memory::memory(short protection) : block::channel(protection),
 //-------------------------------------------------------------------
 
 memory::memory(const memory &fd) : block::channel(fd.protection),
-								   type(fd.type),
+								   flags(fd.flags),
 								   size(fd.size)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
 #endif
 
-	if (type&MEMORYTYPE_LOCAL)
+	if (flags&MEMORYFLAGS_NORMAL)
 	{
 		data = new char[size];
 		memcpy(data, fd.data, size);
 	}
 	else
 	{
-		if (type&MEMORYTYPE_EXTERN)
+		if (flags&MEMORYFLAGS_EXTERN)
 		{
 			data = fd.data;
 		}
@@ -103,7 +111,7 @@ memory::memory(const memory &fd) : block::channel(fd.protection),
 
 memory::memory(const dodoString &buffer,
 			   short            protection) : block::channel(protection),
-											  type(MEMORYTYPE_LOCAL),
+											  flags(MEMORYFLAGS_NORMAL),
 											  size(buffer.size())
 {
 #ifndef IO_WO_XEXEC
@@ -118,7 +126,7 @@ memory::memory(const dodoString &buffer,
 
 memory::~memory()
 {
-	if (!(type&MEMORYTYPE_EXTERN))
+	if (!(flags&MEMORYFLAGS_EXTERN))
 		delete [] data;
 }
 
@@ -150,20 +158,13 @@ memory::flush() const
 void
 memory::clear()
 {
-	if (!(type&MEMORYTYPE_EXTERN))
+	if (!(flags&MEMORYFLAGS_EXTERN))
 	{
 		delete [] data;
 		data = NULL;
 
 		size = 0;
 	}
-}
-
-//-------------------------------------------------------------------
-
-memory::operator const dodoString & ()
-{
-	return size==0?__dodostring__:dodoString(data, size);
 }
 
 //-------------------------------------------------------------------
@@ -185,17 +186,17 @@ memory::clone(const memory &fd)
 	append = fd.append;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
-	type = fd.type;
+	flags = fd.flags;
 	size = fd.size;
 
-	if (type == MEMORYTYPE_LOCAL)
+	if (flags == MEMORYFLAGS_NORMAL)
 	{
 		data = new char[size];
 		memcpy(data, fd.data, size);
 	}
 	else
 	{
-		if (type == MEMORYTYPE_EXTERN)
+		if (flags == MEMORYFLAGS_EXTERN)
 		{
 			data = fd.data;
 		}
@@ -224,7 +225,7 @@ memory::_write(const char *const a_data) const
 {
 	if (append)
 	{
-		if (type & MEMORYTYPE_FIXED)
+		if (flags & MEMORYFLAGS_FIXED_LENGTH)
 			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_APPENDTOFIXED, IOMEMORYEX_APPENDTOFIXED_STR, __LINE__, __FILE__);
 		else
 		{
@@ -243,7 +244,7 @@ memory::_write(const char *const a_data) const
 		unsigned long shift = pos + outSize;
 		if (shift > size)
 		{
-			if (type & MEMORYTYPE_FIXED)
+			if (flags & MEMORYFLAGS_FIXED_LENGTH)
 				throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
 			else
 			{
@@ -273,7 +274,7 @@ memory::erase()
 	unsigned long shift = pos + outSize;
 	if (shift > size)
 	{
-		if (type & MEMORYTYPE_FIXED)
+		if (flags & MEMORYFLAGS_FIXED_LENGTH)
 			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_ERASE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
 		else
 		{
@@ -355,7 +356,7 @@ memory::_readStream(char * const a_data) const
 void
 memory::_writeStream(const char *const a_data) const
 {
-	if (type & MEMORYTYPE_FIXED)
+	if (flags & MEMORYFLAGS_FIXED_LENGTH)
 		throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITESTREAM, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
 
 	unsigned long _outSize = outSize;

@@ -33,9 +33,9 @@ process(void *ud)
 	try
 	{
 		dodo::data::memory::shared shD(shKey);
-		io::memory shM(shD);
+		io::memory shM((char *)shD.data(), shD.size(), io::MEMORYFLAGS_EXTERN|io::MEMORYFLAGS_FIXED_LENGTH);
 		cout << "Shared memory: " << endl, cout.flush();
-		cout << "Data: " << shM << endl, cout.flush();
+		cout << "Data: '" << shM << "'" << endl, cout.flush();
 
 		cout << (char *)dgC.get(dgCI), cout.flush();
 

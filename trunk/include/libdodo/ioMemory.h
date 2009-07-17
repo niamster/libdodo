@@ -38,16 +38,18 @@
 
 namespace dodo
 {
-	namespace data
-	{
-		namespace memory
-		{
-			class shared;
-		};
-	};
-
 	namespace io
 	{
+		/*
+		 * @enum memoryFlagsEnum defines flags of memory serviced by io::memory interface
+		 */
+		enum memoryFlagsEnum
+		{
+			MEMORYFLAGS_NORMAL = 1,
+			MEMORYFLAGS_EXTERN = 2,
+			MEMORYFLAGS_FIXED_LENGTH = 4,
+		};
+
 		/**
 		 * @class memory
 		 * @brief provides memory I/O manipulations
@@ -58,16 +60,19 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param shared defines shared memory region
-			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
-			 * @note memory::shared object shouldn't be unmapped during io::memory's life
+			 * @param shared defines pointer to memory region
+			 * @param shared defines memory region size
+			 * @param shared defines memory region flags[see memoryFlagsEnum]
+			 * @param protection defines flags of IO protection[see channelProtectionFlagsEnum]
 			 */
-			memory(const data::memory::shared &shared,
+			memory(char *data,
+				   unsigned long size,
+				   short flags = MEMORYFLAGS_NORMAL,
 				   short protection = CHANNEL_PROTECTION_PROCESS);
 
 			/**
 			 * constructor
-			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+			 * @param protection defines flags of IO protection[see channelProtectionFlagsEnum]
 			 */
 			memory(short protection = CHANNEL_PROTECTION_PROCESS);
 
@@ -80,7 +85,7 @@ namespace dodo
 			/**
 			 * constructor
 			 * @param data defines initial data for the interface
-			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+			 * @param protection defines flags of IO protection[see channelProtectionFlagsEnum]
 			 */
 			memory(const dodoString &data,
 				   short            protection = CHANNEL_PROTECTION_PROCESS);
@@ -115,12 +120,7 @@ namespace dodo
 			/**
 			 * @return memory
 			 */
-			operator const dodoString &();
-
-			/**
-			 * @return memory
-			 */
-			operator const char*();
+			operator const char *();
 
 		  protected:
 
@@ -167,17 +167,7 @@ namespace dodo
 			mutable char *data; ///< data
 			mutable unsigned long size; ///< size of data
 
-			/*
-			 * @enum memoryTypeEnum defines type of memory serviced by io::memory
-			 */
-			enum memoryTypeEnum
-			{
-				MEMORYTYPE_LOCAL = 1,
-				MEMORYTYPE_EXTERN = 2,
-				MEMORYTYPE_FIXED = 4,
-			};
-
-			short type;
+			short flags;
 		};
 	};
 };
