@@ -32,14 +32,10 @@ process(void *ud)
 
 	try
 	{
-		dodo::data::memory::shared shD;
-		shD.open(shKey);
-		unsigned long size = shD.getSize();
+		dodo::data::memory::shared shD(shKey);
+		io::memory shM(shD);
 		cout << "Shared memory: " << endl, cout.flush();
-		cout << "Size: " << size << endl, cout.flush();
-		char *dt = (char *)shD.map();
-		cout << "Data: " << dt << endl, cout.flush();
-		shD.close();
+		cout << "Data: " << shM << endl, cout.flush();
 
 		cout << (char *)dgC.get(dgCI), cout.flush();
 
@@ -47,12 +43,12 @@ process(void *ud)
 		tools::os::microSleep(1000);
 		dg0.release();
 
-		cout << endl << (char *)dt << ": " << tools::time::now() << endl, cout.flush();
+		cout << endl << shM << ": " << tools::time::now() << endl, cout.flush();
 
 		cout << (char *)dg1.acquire(), cout.flush();
 		dg1.release();
 
-		cout << endl << (char *)dt << ": " << tools::time::now() << endl, cout.flush();
+		cout << endl << shM << ": " << tools::time::now() << endl, cout.flush();
 	}
 	catch (dodo::exception::basic ex)
 	{
@@ -72,8 +68,8 @@ processLocked(void *ud)
 	try
 	{
 		dodo::data::memory::shared shD(shKey);
-		unsigned long size = shD.getSize();
-		cout << "Shared memory: " << endl, cout.flush();
+		unsigned long size = shD.size();
+		cout << "Shared data: " << endl, cout.flush();
 		cout << "Size: " << size << endl, cout.flush();
 		char *dt = (char *)shD.map(size);
 		cout << "Data: " << dt << endl, cout.flush();

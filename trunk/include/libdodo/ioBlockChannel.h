@@ -44,10 +44,12 @@ namespace dodo
 			/**
 			 * @class channel
 			 * @brief implements an interface for I/O operations on block sources
-			 * @note if block is false then read/write position is amount of bytes from the beginning, if true then:
-			 * offset for write is calculated as pos*outSize
-			 * offset for read is calculated as pos*inSize
-			 * offset for readStream is calculated as pos*(amount of null- or newline- terminated strings)
+			 * @note if block is false then read/write position is amount of bytes from the beginning,
+			 * if block is true then:
+			 *	offset for write is calculated as pos*outSize
+			 *	offset for read is calculated as pos*inSize
+			 *	offset for readStream is calculated as pos*(amount of null- or newline- terminated strings)
+			 *	offset for writeStream is calculated as pos*(amount of null- or newline- terminated strings)
 			 */
 			class channel : public io::channel
 			{
@@ -93,7 +95,7 @@ namespace dodo
 				mutable unsigned long pos;  ///< read/write/erase position; incremented on read/write/erase[0 by default]
 
 				bool block;   ///< use block I/O[false by default]
-				bool append;        ///< append to the end[false by default]
+				bool append;  ///< append to the end[false by default]
 			};
 		};
 	};

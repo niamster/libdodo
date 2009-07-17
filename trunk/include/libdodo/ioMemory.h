@@ -38,6 +38,14 @@
 
 namespace dodo
 {
+	namespace data
+	{
+		namespace memory
+		{
+			class shared;
+		};
+	};
+
 	namespace io
 	{
 		/**
@@ -47,6 +55,15 @@ namespace dodo
 		class memory : virtual public block::channel
 		{
 		  public:
+
+			/**
+			 * constructor
+			 * @param shared defines shared memory region
+			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+			 * @note memory::shared object shouldn't be unmapped during io::memory's life
+			 */
+			memory(const data::memory::shared &shared,
+				   short protection = CHANNEL_PROTECTION_PROCESS);
 
 			/**
 			 * constructor
@@ -139,8 +156,7 @@ namespace dodo
 			virtual void _write(const char * const data) const;
 
 			/**
-			 *
-			 write to stream - '\0' - terminated memory
+			 * write to stream - '\0' - terminated memory
 			 * @param data defines data that will be written
 			 * @note write only to the end of the file(append)
 			 */
@@ -148,7 +164,20 @@ namespace dodo
 
 		  protected:
 
-			mutable dodoString buffer; ///< object data
+			mutable char *data; ///< data
+			mutable unsigned long size; ///< size of data
+
+			/*
+			 * @enum memoryTypeEnum defines type of memory serviced by io::memory
+			 */
+			enum memoryTypeEnum
+			{
+				MEMORYTYPE_LOCAL = 1,
+				MEMORYTYPE_EXTERN = 2,
+				MEMORYTYPE_FIXED = 4,
+			};
+
+			short type;
 		};
 	};
 };

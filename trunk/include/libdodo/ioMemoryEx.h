@@ -45,6 +45,8 @@ namespace dodo
 		{
 			MEMORYEX_CANTBEUSEDWITHIOEVENT,
 			MEMORYEX_OUTOFBOUNDS,
+			MEMORYEX_APPENDTOFIXED,
+			MEMORYEX_EXTENDFIXED,
 		};
 
 		/**
@@ -52,6 +54,8 @@ namespace dodo
 		 */
 #define IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR        "io::memory can not be used with io::event."
 #define IOMEMORYEX_OUTOFBOUNDS_STR                  "Access data out of bounds."
+#define IOMEMORYEX_APPENDTOFIXED_STR                "Append to fixed-size region."
+#define IOMEMORYEX_EXTENDFIXED_STR                "Extend fixed-size region."
 
 		/**
 		 * IDs of functions where exception might be thrown
@@ -59,6 +63,9 @@ namespace dodo
 		enum memoryFunctionsID
 		{
 			MEMORYEX__READ,
+			MEMORYEX__WRITE,
+			MEMORYEX__WRITESTREAM,
+			MEMORYEX_ERASE,
 			MEMORYEX_GETINDESCRIPTOR,
 			MEMORYEX_GETOUTDESCRIPTOR,
 		};

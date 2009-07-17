@@ -49,6 +49,7 @@ int main(int argc, char **argv)
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;
 
+		io2.pos = 2;
 		str = io2.read();
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;

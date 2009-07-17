@@ -34,6 +34,11 @@
 
 namespace dodo
 {
+	namespace io
+	{
+		class memory;
+	};
+
 	namespace data
 	{
 		namespace memory
@@ -48,10 +53,12 @@ namespace dodo
 			 */
 			class shared
 			{
+				friend class io::memory;
+
 			  private:
 
 				/**
-				 * copy constructor
+				 * copyructor
 				 * @note to prevent copying
 				 */
 				shared(shared &sts);
@@ -59,7 +66,7 @@ namespace dodo
 			  public:
 
 				/**
-				 * constructor
+				 *ructor
 				 * @param key defines shared memory key
 				 * @note if key is 0 - key will be generated
 				 * if you want to share data between different instances of process - set own key,
@@ -68,7 +75,7 @@ namespace dodo
 				shared(const int key);
 
 				/**
-				 * constructor
+				 *ructor
 				 */
 				shared();
 
@@ -108,13 +115,13 @@ namespace dodo
 				/**
 				 * @return shared data
 				 */
-				virtual void *get();
+				virtual void *data();
 
 				/**
 				 * @return size of shared data
 				 * @note this should be called before map to obtain the size of the already allocated shared memory
 				 */
-				virtual unsigned long getSize();
+				virtual unsigned long size();
 
 				/**
 				 * remove the shared data from the system
@@ -125,9 +132,9 @@ namespace dodo
 			  protected:
 
 				int shm;            ///< shared data descriptor
-				void *mshared;      ///< shared data
+				void *shData;      ///< shared data
 #ifndef XSI_IPC
-				unsigned long size; ///< size of shared data
+				unsigned long shSize; ///< size of shared data
 #endif
 
 				__key__ *key; ///< key for the shared data

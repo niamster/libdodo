@@ -36,11 +36,33 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioBlockChannel.h>
 #include <libdodo/ioMemoryEx.h>
+#include <libdodo/dataMemoryShared.h>
 #include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io;
 
-memory::memory(short protection) : block::channel(protection)
+#include <iostream>
+using namespace std;
+memory::memory(const data::memory::shared &shared,
+			   short protection) : block::channel(protection),
+								   type(MEMORYTYPE_FIXED|MEMORYTYPE_EXTERN)
+{
+#ifndef IO_WO_XEXEC
+	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
+#endif
+
+	if (shared.shData == NULL)
+		shared.map();
+	data = (char *)shared.shData;
+	size = shared.shSize;
+}
+
+//-------------------------------------------------------------------
+
+memory::memory(short protection) : block::channel(protection),
+								   type(MEMORYTYPE_LOCAL),
+								   size(0),
+								   data(NULL)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
@@ -49,12 +71,26 @@ memory::memory(short protection) : block::channel(protection)
 
 //-------------------------------------------------------------------
 
-memory::memory(const memory &fd) : buffer(fd.buffer),
-								   block::channel(fd.protection)
+memory::memory(const memory &fd) : block::channel(fd.protection),
+								   type(fd.type),
+								   size(fd.size)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
 #endif
+
+	if (type&MEMORYTYPE_LOCAL)
+	{
+		data = new char[size];
+		memcpy(data, fd.data, size);
+	}
+	else
+	{
+		if (type&MEMORYTYPE_EXTERN)
+		{
+			data = fd.data;
+		}
+	}
 
 	block = fd.block;
 	append = fd.append;
@@ -65,19 +101,25 @@ memory::memory(const memory &fd) : buffer(fd.buffer),
 
 //-------------------------------------------------------------------
 
-memory::memory(const dodoString &data,
-			   short            protection) : buffer(data),
-											  block::channel(protection)
+memory::memory(const dodoString &buffer,
+			   short            protection) : block::channel(protection),
+											  type(MEMORYTYPE_LOCAL),
+											  size(buffer.size())
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
 #endif
+
+	data = new char[size];
+	memcpy(data, buffer.data(), size);
 }
 
 //-------------------------------------------------------------------
 
 memory::~memory()
 {
+	if (!(type&MEMORYTYPE_EXTERN))
+		delete [] data;
 }
 
 //-------------------------------------------------------------------
@@ -108,23 +150,27 @@ memory::flush() const
 void
 memory::clear()
 {
-	buffer.clear();
+	if (!(type&MEMORYTYPE_EXTERN))
+	{
+		delete [] data;
+		data = NULL;
+
+		size = 0;
+	}
 }
 
 //-------------------------------------------------------------------
 
-memory::operator const dodoString
-& ()
+memory::operator const dodoString & ()
 {
-	return buffer;
+	return size==0?__dodostring__:dodoString(data, size);
 }
 
 //-------------------------------------------------------------------
 
-memory::operator const char
-*()
+memory::operator const char *()
 {
-	return buffer.data();
+	return data;
 }
 
 //-------------------------------------------------------------------
@@ -139,8 +185,21 @@ memory::clone(const memory &fd)
 	append = fd.append;
 	inSize = fd.inSize;
 	outSize = fd.outSize;
+	type = fd.type;
+	size = fd.size;
 
-	buffer = fd.buffer;
+	if (type == MEMORYTYPE_LOCAL)
+	{
+		data = new char[size];
+		memcpy(data, fd.data, size);
+	}
+	else
+	{
+		if (type == MEMORYTYPE_EXTERN)
+		{
+			data = fd.data;
+		}
+	}
 }
 
 //-------------------------------------------------------------------
@@ -150,14 +209,12 @@ memory::_read(char * const a_data) const
 {
 	unsigned long pos = block ? this->pos * inSize : this->pos;
 
-	if ((pos + inSize) > buffer.size())
+	if ((pos + inSize) > size)
 	{
 		throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__READ, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
 	}
 
-	memset(a_data, '\0', inSize);
-
-	buffer.copy(a_data, inSize, pos);
+	memcpy(a_data, data+pos, inSize);
 }
 
 //-------------------------------------------------------------------
@@ -167,19 +224,40 @@ memory::_write(const char *const a_data) const
 {
 	if (append)
 	{
-		buffer.append(a_data, outSize);
+		if (type & MEMORYTYPE_FIXED)
+			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_APPENDTOFIXED, IOMEMORYEX_APPENDTOFIXED_STR, __LINE__, __FILE__);
+		else
+		{
+			char *newData = new char[size + outSize];
+			memcpy(newData, data, size);
+			memcpy(newData+size, a_data, outSize);
+			size += outSize;
+			delete [] data;
+			data = newData;
+		}
 	}
 	else
 	{
 		unsigned long pos = block ? this->pos * outSize : this->pos;
 
 		unsigned long shift = pos + outSize;
-		if (shift > buffer.size())
+		if (shift > size)
 		{
-			buffer.resize(shift, '\0');
+			if (type & MEMORYTYPE_FIXED)
+				throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+			else
+			{
+				shift -= size;
+				char *newData = new char[size + shift];
+				memcpy(newData, data, size);
+				memset(newData+size, 0x0, shift);
+				size += shift;
+				delete [] data;
+				data = newData;
+			}
 		}
 
-		buffer.replace(pos, outSize, a_data);
+		memcpy(data+pos, a_data, outSize);
 	}
 }
 
@@ -192,13 +270,24 @@ memory::erase()
 
 	unsigned long pos = block ? this->pos * outSize : this->pos;
 
-	unsigned long shift = outSize + pos;
-	if (shift > buffer.size())
+	unsigned long shift = pos + outSize;
+	if (shift > size)
 	{
-		buffer.resize(shift, '\0');
+		if (type & MEMORYTYPE_FIXED)
+			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_ERASE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+		else
+		{
+			shift -= size;
+			char *newData = new char[size + shift];
+			memcpy(newData, data, size);
+			memset(newData+size, 0x0, shift);
+			size += shift;
+			delete [] data;
+			data = newData;
+		}
 	}
 
-	buffer.replace(pos, outSize, 1, '\0');
+	memset(data+pos, 0x0, outSize);
 }
 
 //-------------------------------------------------------------------
@@ -210,16 +299,13 @@ memory::_readStream(char * const a_data) const
 
 	memset(a_data, '\0', readSize);
 
-	unsigned long length = buffer.size();
 	unsigned long read = 0;
-
-	const char *data = buffer.data();
 
 	if (block)
 	{
 		unsigned long block = 0;
 		unsigned long index = 0;
-		for (; index < length; ++index)
+		for (; index < size; ++index)
 		{
 			if (data[index] == '\n' || data[index] == '\0')
 			{
@@ -230,7 +316,7 @@ memory::_readStream(char * const a_data) const
 			{
 				++index;
 
-				for (unsigned long i = index; i < length && read < readSize; ++i)
+				for (unsigned long i = index; i < size && read < readSize; ++i)
 				{
 					a_data[read] = data[i];
 
@@ -248,7 +334,7 @@ memory::_readStream(char * const a_data) const
 	}
 	else
 	{
-		for (unsigned long i = pos; i < length && read < readSize; ++i)
+		for (unsigned long i = pos; i < size && read < readSize; ++i)
 		{
 			a_data[read] = data[i];
 
@@ -269,6 +355,9 @@ memory::_readStream(char * const a_data) const
 void
 memory::_writeStream(const char *const a_data) const
 {
+	if (type & MEMORYTYPE_FIXED)
+		throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITESTREAM, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+
 	unsigned long _outSize = outSize;
 	unsigned int bufSize = strlen(a_data);
 
@@ -277,7 +366,13 @@ memory::_writeStream(const char *const a_data) const
 		_outSize = bufSize;
 	}
 
-	buffer.append(a_data, _outSize);
+	char *newData = new char[size + _outSize + 1];
+	memcpy(newData, data, size);
+	memcpy(newData+size, a_data, _outSize);
+	size += _outSize;
+	newData[size] = '\0';
+	delete [] data;
+	data = newData;
 }
 
 //-------------------------------------------------------------------
