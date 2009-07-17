@@ -375,7 +375,7 @@ shared::unmap() const
 void *
 shared::data() const
 {
-	return shData;
+	return shData?shData:map();
 }
 
 //-------------------------------------------------------------------
