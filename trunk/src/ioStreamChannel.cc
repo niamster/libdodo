@@ -66,19 +66,16 @@ channel::read() const
 	collectedData.buffer.reserve(readSize);
 #endif
 
-	char *data = new char[readSize];
+	a_str.assign(readSize, '\0');
 
 	try
 	{
-		_read(data);
+		_read((char *)a_str.data());
 
-		data[inSize] = '\0';
 	}
 	catch (...)
 	{
 		a_str.clear();
-
-		delete [] data;
 
 #ifndef IO_WO_XEXEC
 		collectedData.buffer.clear();
@@ -88,8 +85,7 @@ channel::read() const
 	}
 
 #ifndef IO_WO_XEXEC
-	collectedData.buffer.assign(data, inSize);
-	delete [] data;
+	collectedData.buffer = a_str;
 
 	performXExec(postExec);
 
@@ -97,9 +93,7 @@ channel::read() const
 
 	collectedData.buffer.clear();
 #else
-	a_str.assign(data, inSize);
 
-	delete [] data;
 #endif
 
 	return a_str;
@@ -119,33 +113,25 @@ channel::readStream() const
 	performXExec(preExec);
 #endif
 
-	char *data = new char[inSize + 1];
+	a_str.assign(inSize + 1, '\0');
 	unsigned long n = 0;
 
 	try
 	{
-		n = _readStream(data);
+		n = _readStream((char *)a_str.data());
 	}
 	catch (...)
 	{
 		a_str.clear();
-
-		delete [] data;
 
 		throw;
 	}
 
 #ifndef IO_WO_XEXEC
 	if (n > 0)
-	{
-		collectedData.buffer.assign(data, n);
-	}
+		collectedData.buffer = a_str;
 	else
-	{
 		collectedData.buffer.clear();
-	}
-
-	delete [] data;
 
 	performXExec(postExec);
 
@@ -153,16 +139,8 @@ channel::readStream() const
 
 	collectedData.buffer.clear();
 #else
-	if (n > 0)
-	{
-		a_str.assign(data, n);
-	}
-	else
-	{
+	if (n == 0)
 		a_str.clear();
-	}
-
-	delete [] data;
 #endif
 
 	return a_str;
