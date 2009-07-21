@@ -31,16 +31,13 @@
 
 #include <stdio.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		/**
 		 * @struct __file__
 		 * @brief defines file handle
 		 */
-		struct __file__
-		{
+		struct __file__ {
 			/**
 			 * constructor
 			 */

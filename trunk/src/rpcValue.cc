@@ -71,14 +71,14 @@ value::value(bool value) : valueDataType(DATATYPE_BOOLEAN),
 //-------------------------------------------------------------------
 
 value::value(const dodoArray<value> &nvalue) : valueDataType(DATATYPE_ARRAY),
-											  arrayValue(new dodoArray<value>(nvalue))
+											   arrayValue(new dodoArray<value>(nvalue))
 {
 }
 
 //-------------------------------------------------------------------
 
 value::value(const dodoMap<dodoString, value, dodoMapStringCompare> &nvalue) : valueDataType(DATATYPE_STRUCT),
-																			  structValue(new dodoMap<dodoString, value, dodoMapStringCompare>(nvalue))
+																			   structValue(new dodoMap<dodoString, value, dodoMapStringCompare>(nvalue))
 {
 }
 
@@ -86,8 +86,7 @@ value::value(const dodoMap<dodoString, value, dodoMapStringCompare> &nvalue) : v
 
 value::value(const value &on) : valueDataType(on.valueDataType)
 {
-	switch (valueDataType)
-	{
+	switch (valueDataType) {
 		case DATATYPE_STRING:
 			stringValue = new dodoString(*on.stringValue);
 			break;
@@ -118,8 +117,7 @@ value::value(const value &on) : valueDataType(on.valueDataType)
 
 value::~value()
 {
-	switch (valueDataType)
-	{
+	switch (valueDataType) {
 		case DATATYPE_STRING:
 			delete stringValue;
 			break;
@@ -139,10 +137,8 @@ value::~value()
 void
 value::setString(const dodoString &nvalue)
 {
-	if (valueDataType != DATATYPE_STRING)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_STRING) {
+		switch (valueDataType) {
 			case DATATYPE_STRUCT:
 				delete structValue;
 				break;
@@ -154,11 +150,8 @@ value::setString(const dodoString &nvalue)
 
 		valueDataType = DATATYPE_STRING;
 		stringValue = new dodoString(nvalue);
-	}
-	else
-	{
+	} else
 		*stringValue = nvalue;
-	}
 }
 
 //-------------------------------------------------------------------
@@ -166,10 +159,8 @@ value::setString(const dodoString &nvalue)
 void
 value::setBoolean(bool value)
 {
-	if (valueDataType != DATATYPE_BOOLEAN)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_BOOLEAN) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -194,10 +185,8 @@ value::setBoolean(bool value)
 void
 value::setInteger(long value)
 {
-	if (valueDataType != DATATYPE_INTEGER)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_INTEGER) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -222,10 +211,8 @@ value::setInteger(long value)
 void
 value::setDouble(double value)
 {
-	if (valueDataType != DATATYPE_DOUBLE)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_DOUBLE) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -250,10 +237,8 @@ value::setDouble(double value)
 void
 value::addArrayElement(const value &nvalue)
 {
-	if (valueDataType != DATATYPE_ARRAY)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_ARRAY) {
+		switch (valueDataType) {
 			case DATATYPE_STRUCT:
 				delete structValue;
 				break;
@@ -276,10 +261,8 @@ void
 value::addStructMember(const dodoString &name,
 					   const value      &nvalue)
 {
-	if (valueDataType != DATATYPE_STRUCT)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_STRUCT) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -301,10 +284,8 @@ value::addStructMember(const dodoString &name,
 void
 value::setArray(const dodoArray<value> &nvalue)
 {
-	if (valueDataType != DATATYPE_ARRAY)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_ARRAY) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -316,11 +297,8 @@ value::setArray(const dodoArray<value> &nvalue)
 
 		valueDataType = DATATYPE_ARRAY;
 		arrayValue = new dodoArray<value>(nvalue);
-	}
-	else
-	{
+	} else
 		*arrayValue = nvalue;
-	}
 }
 
 //-------------------------------------------------------------------
@@ -328,10 +306,8 @@ value::setArray(const dodoArray<value> &nvalue)
 void
 value::setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &nvalue)
 {
-	if (valueDataType != DATATYPE_STRUCT)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_STRUCT) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -343,11 +319,8 @@ value::setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &nvalue)
 
 		valueDataType = DATATYPE_STRUCT;
 		structValue = new dodoMap<dodoString, value, dodoMapStringCompare>(nvalue);
-	}
-	else
-	{
+	} else
 		*structValue = nvalue;
-	}
 }
 
 //-------------------------------------------------------------------

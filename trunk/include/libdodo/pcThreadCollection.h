@@ -35,19 +35,15 @@
 #include <libdodo/pcJobCollection.h>
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace thread
-		{
+namespace dodo {
+	namespace pc {
+		namespace thread {
 			struct __thread__;
 
 			/**
 			 * @enum collectionOnDestructEnum defines action with thread on object destruction
 			 */
-			enum collectionOnDestructEnum
-			{
+			enum collectionOnDestructEnum {
 				COLLECTION_ONDESTRUCT_KEEP_ALIVE,
 				COLLECTION_ONDESTRUCT_STOP,
 				COLLECTION_ONDESTRUCT_WAIT
@@ -58,8 +54,7 @@ namespace dodo
 			 * @struct __threadMod__
 			 * @brief defines data that is returned from initIpcThreadCollectionModule in the library
 			 */
-			struct __threadMod__
-			{
+			struct __threadMod__ {
 				char          name[64];         ///< name of module
 				char          discription[256]; ///< discription of module
 				char          hook[64];         ///< name of function in module that will be a hook
@@ -87,8 +82,7 @@ namespace dodo
 			 * @class collection
 			 * @brief provides threads management functionality
 			 */
-			class collection : public job::collection
-			{
+			class collection : public job::collection {
 			  private:
 
 				/**
@@ -273,7 +267,7 @@ namespace dodo
 				 * @param toInit defines library init data
 				 */
 				static __threadMod__ getModuleInfo(const dodoString &module,
-												 void             *toInit = NULL);
+												   void             *toInit = NULL);
 #endif
 
 				/**

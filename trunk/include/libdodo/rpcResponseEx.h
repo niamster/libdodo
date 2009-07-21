@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace rpc
-	{
+namespace dodo {
+	namespace rpc {
 		/**
 		 * libdodo defined errors
 		 */
-		enum responseExR
-		{
+		enum responseExR {
 			RESPONSEEX_ARRAYOUTOFBOUNDS,
 		};
 
@@ -54,8 +51,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum responseFunctionsID
-		{
+		enum responseFunctionsID {
 			RESPONSEEX_BROPERATORUNSIGNEDLONG,
 			RESPONSEEX_GETVALUE,
 		};

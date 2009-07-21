@@ -35,26 +35,21 @@
 #include <libdodo/types.h>
 #include <libdodo/rpcClient.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		class channel;
 	};
 
-	namespace rpc
-	{
+	namespace rpc {
 		class method;
 		class response;
 
-		namespace xml
-		{
+		namespace xml {
 			/**
 			 * @class client
 			 * @brief defines client-side XML-RPC instrument
 			 */
-			class client : virtual public rpc::client
-			{
+			class client : virtual public rpc::client {
 			  public:
 
 				/**

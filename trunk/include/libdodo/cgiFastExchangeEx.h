@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
-		namespace fast
-		{
+namespace dodo {
+	namespace cgi {
+		namespace fast {
 			/**
 			 * libdodo defined errors
 			 */
-			enum exchangeExR
-			{
+			enum exchangeExR {
 				FASTEXCHANGEEX_FAILEDTOFLUSH,
 				FASTEXCHANGEEX_FAILEDTOPRINTSTRING,
 				FASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT,
@@ -53,15 +49,14 @@ namespace dodo
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR			"Failed to flush."
-#define CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR	"Failed to print string."
-#define CGIFASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT_STR	"io::memory can not be used with io::event."
+#define CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR         "Failed to flush."
+#define CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR   "Failed to print string."
+#define CGIFASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT_STR "io::memory can not be used with io::event."
 
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum exchangeFunctionsID
-			{
+			enum exchangeFunctionsID {
 				FASTEXCHANGEEX_FLUSH,
 				FASTEXCHANGEEX__WRITE,
 				FASTEXCHANGEEX_GETINDESCRIPTOR,

@@ -34,19 +34,14 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
-			namespace http
-			{
+namespace dodo {
+	namespace io {
+		namespace network {
+			namespace http {
 				/**
 				 * libdodo defined errors
 				 */
-				enum clientExR
-				{
+				enum clientExR {
 					CLIENTEX_CANNOTCONNECT,
 					CLIENTEX_NOTAUTHORIZED,
 					CLIENTEX_UNKNOWNWWWAUTHTYPE,
@@ -66,8 +61,7 @@ namespace dodo
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
-				enum clientFunctionsID
-				{
+				enum clientFunctionsID {
 					CLIENTEX_POST,
 					CLIENTEX_GET,
 					CLIENTEX_GETCONTENT,

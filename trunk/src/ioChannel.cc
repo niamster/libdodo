@@ -40,7 +40,7 @@ using namespace dodo::io;
 
 #ifndef IO_WO_XEXEC
 __xexecIoChannelCollectedData__::__xexecIoChannelCollectedData__(xexec *a_executor,
-															 short execObject) : __xexecCollectedData__(a_executor, execObject)
+																 short execObject) : __xexecCollectedData__(a_executor, execObject)
 {
 }
 #endif
@@ -57,16 +57,10 @@ channel::channel(short protection) : inSize(IO_INSIZE),
 #endif
 {
 	if (protection == CHANNEL_PROTECTION_THREAD)
-	{
 		keeper = new pc::sync::thread::section;
-	}
-	else
-	{
-		if (protection == CHANNEL_PROTECTION_PROCESS)
-		{
-			keeper = new pc::sync::process::section(0);
-		}
-	}
+	else if (protection == CHANNEL_PROTECTION_PROCESS)
+		keeper = new pc::sync::process::section(0);
+
 }
 
 //-------------------------------------------------------------------

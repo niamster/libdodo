@@ -35,16 +35,13 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioPipe.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		/**
 		 * @class stdio
 		 * @brief provides interface for stdin/stdout/stderr I/O operations
 		 */
-		class stdio : virtual public pipe
-		{
+		class stdio : virtual public pipe {
 		  private:
 
 			/**

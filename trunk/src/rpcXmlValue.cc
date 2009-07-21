@@ -37,8 +37,7 @@
 
 using namespace dodo::rpc::xml;
 
-const char value::trimSymbols[] =
-{
+const char value::trimSymbols[] = {
 	' ',
 	'\r'
 };
@@ -54,8 +53,7 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 
 	rpc::value val;
 
-	if (tools::string::iequal(i->first, "int") || tools::string::iequal(i->first, "i4"))
-	{
+	if (tools::string::iequal(i->first, "int") || tools::string::iequal(i->first, "i4")) {
 		val.valueDataType = DATATYPE_INTEGER;
 
 		dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
@@ -63,11 +61,8 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 			val.integerValue = tools::string::stringToI(tools::string::trim(arr0[0].value, trimSymbols, 2));
 		else
 			val.integerValue = 0;
-	}
-	else
-	{
-		if (tools::string::iequal(i->first, "boolean"))
-		{
+	} else {
+		if (tools::string::iequal(i->first, "boolean")) {
 			val.valueDataType = DATATYPE_BOOLEAN;
 
 			dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
@@ -75,22 +70,16 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 				val.booleanValue = tools::string::stringToI(tools::string::trim(arr0[0].value, trimSymbols, 2)) == 1 ? true : false;
 			else
 				val.booleanValue = false;
-		}
-		else
-		{
-			if (tools::string::iequal(i->first, "string") || tools::string::iequal(i->first, "base64") || tools::string::iequal(i->first, "dateTime.iso8601"))
-			{
+		} else {
+			if (tools::string::iequal(i->first, "string") || tools::string::iequal(i->first, "base64") || tools::string::iequal(i->first, "dateTime.iso8601")) {
 				val.valueDataType = DATATYPE_STRING;
 				val.stringValue = new dodoString;
 
 				dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 				if (arr0.size() > 0)
 					*val.stringValue = tools::string::trim(arr0[0].value, trimSymbols, 2);
-			}
-			else
-			{
-				if (tools::string::iequal(i->first, "double"))
-				{
+			} else {
+				if (tools::string::iequal(i->first, "double")) {
 					val.valueDataType = DATATYPE_DOUBLE;
 
 					dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
@@ -98,11 +87,8 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 						val.doubleValue = tools::string::stringToD(tools::string::trim(arr0[0].value, trimSymbols, 2));
 					else
 						val.doubleValue = 0;
-				}
-				else
-				{
-					if (tools::string::iequal(i->first, "struct"))
-					{
+				} else {
+					if (tools::string::iequal(i->first, "struct")) {
 						val.valueDataType = DATATYPE_STRUCT;
 						val.structValue = new dodoMap<dodoString, rpc::value, dodoMapStringCompare>;
 
@@ -113,18 +99,14 @@ value::xmlToValue(dodo::data::format::xml::node &node)
 						dodoArray<dodo::data::format::xml::node> &nodeArray = arr0[0].children["member"];
 
 						dodoArray<dodo::data::format::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
-						for (; o != p; ++o)
-						{
+						for (; o != p; ++o) {
 							dodoArray<dodo::data::format::xml::node> &arr1 = o->children["name"];
 							dodoArray<dodo::data::format::xml::node> &arr2 = o->children["value"];
 							if (arr1.size() > 0 && arr2.size() > 0)
 								val.structValue->insert(make_pair(tools::string::trim(arr1[0].value, trimSymbols, 2), xmlToValue(arr2[0])));
 						}
-					}
-					else
-					{
-						if (tools::string::iequal(i->first, "array"))
-						{
+					} else {
+						if (tools::string::iequal(i->first, "array")) {
 							val.valueDataType = DATATYPE_ARRAY;
 							val.arrayValue = new dodoArray<rpc::value>;
 
@@ -163,8 +145,7 @@ value::valueToXml(const rpc::value &data)
 
 	dodo::data::format::xml::node subNode;
 
-	switch (data.valueDataType)
-	{
+	switch (data.valueDataType) {
 		case DATATYPE_STRING:
 
 			subNode.name = "string";
@@ -238,10 +219,9 @@ value::valueToXml(const rpc::value &data)
 			dodoArray<dodo::data::format::xml::node> subNodeArr;
 
 			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator
-				i = data.structValue->begin(),
-				j = data.structValue->end();
-			for (; i != j; ++i)
-			{
+			i = data.structValue->begin(),
+			j = data.structValue->end();
+			for (; i != j; ++i) {
 				memberNode.children.clear();
 				memberValueNode.children.clear();
 

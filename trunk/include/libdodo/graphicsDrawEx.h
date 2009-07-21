@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace graphics
-	{
+namespace dodo {
+	namespace graphics {
 		/**
 		 * libdodo defined errors
 		 */
-		enum drawExR
-		{
+		enum drawExR {
 			DRAWEX_EMPTYIMAGE,
 			DRAWEX_CANNOTDRAWPRIMITIVE
 		};
@@ -56,8 +53,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum drawFunctionsID
-		{
+		enum drawFunctionsID {
 			DRAWEX_PRIMITIVE,
 			DRAWEX_POINT,
 			DRAWEX_TEXT,

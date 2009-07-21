@@ -44,8 +44,8 @@
 using namespace dodo::rpc::json;
 
 __additionalData__::__additionalData__(dodoString &version,
-								   long       &id) : version(version),
-													 id(id)
+									   long       &id) : version(version),
+														 id(id)
 {
 }
 
@@ -101,8 +101,7 @@ server::setResponseVersion(const dodoString &version)
 void
 server::serve()
 {
-	try
-	{
+	try {
 		rpc::method meth = processCallRequest();
 
 		dodoString version = rqVersion;
@@ -115,27 +114,19 @@ server::serve()
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
 		if (handler == handlers.end())
-		{
 			processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
-		}
 		else
-		{
 			processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
-		}
 
 		rpVersion = version;
-	}
-	catch (exception::basic &ex)
-	{
+	} catch (exception::basic &ex) {
 		rpc::response response;
 		response.fault(ex.baseErrstr);
 
 		rpId = rqId;
 
 		processCallResult(response);
-	}
-	catch (...)
-	{
+	} catch (...) {
 		rpc::response response;
 		response.fault(dodoString("An unknown error."));
 

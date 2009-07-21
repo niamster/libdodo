@@ -39,28 +39,24 @@
 #include <libdodo/xexec.h>
 #include <libdodo/toolsString.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
+namespace dodo {
+	namespace data {
+		namespace base {
 			/**
 			 * @struct __sqlite__
 			 * @brief defines internal handlers for SQLite DBMS interaction
 			 */
-			struct __sqlite__
-			{
+			struct __sqlite__ {
 				/**
 				 * constructor
 				 */
 				__sqlite__() : handle(NULL),
-							 result(NULL)
+							   result(NULL)
 				{
 				}
 
-				sqlite3 *handle; ///< DB handle
-				sqlite3_stmt *result; ///< handlde to result
+				sqlite3        *handle; ///< DB handle
+				sqlite3_stmt   *result; ///< handlde to result
 			};
 		};
 	};
@@ -79,7 +75,7 @@ sqlite::sqlite() : empty(true),
 //-------------------------------------------------------------------
 
 sqlite::sqlite(const __connectionInfo__ &info) : empty(true),
-											   handle(new __sqlite__)
+												 handle(new __sqlite__)
 {
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
@@ -87,8 +83,7 @@ sqlite::sqlite(const __connectionInfo__ &info) : empty(true),
 
 	collectedData.dbInfo = info;
 
-	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &handle->handle) != SQLITE_OK)
-	{
+	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &handle->handle) != SQLITE_OK) {
 		sqlite3_close(handle->handle);
 
 		delete handle;
@@ -107,12 +102,9 @@ sqlite::sqlite(sqlite &a_pp)
 
 sqlite::~sqlite()
 {
-	if (handle->handle != NULL)
-	{
+	if (handle->handle != NULL) {
 		if (!empty)
-		{
 			sqlite3_finalize(handle->result);
-		}
 
 		sqlite3_close(handle->handle);
 	}
@@ -132,24 +124,19 @@ sqlite::connect(const __connectionInfo__ &info)
 	performXExec(preExec);
 #endif
 
-	if (handle->handle != NULL)
-	{
-		if (!empty)
-		{
+	if (handle->handle != NULL) {
+		if (!empty) {
 			empty = true;
 			sqlite3_finalize(handle->result);
 		}
 
 		if (sqlite3_close(handle->handle) != SQLITE_OK)
-		{
 			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
-		}
 
 		handle->handle = NULL;
 	}
 
-	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &handle->handle) != SQLITE_OK)
-	{
+	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &handle->handle) != SQLITE_OK) {
 		sqlite3_close(handle->handle);
 
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
@@ -165,23 +152,19 @@ sqlite::connect(const __connectionInfo__ &info)
 void
 sqlite::disconnect()
 {
-	if (handle->handle != NULL)
-	{
+	if (handle->handle != NULL) {
 #ifndef DATABASE_WO_XEXEC
 		operType = DATABASE_OPERATION_DISCONNECT;
 		performXExec(preExec);
 #endif
 
-		if (!empty)
-		{
+		if (!empty) {
 			empty = true;
 			sqlite3_finalize(handle->result);
 		}
 
 		if (sqlite3_close(handle->handle) != SQLITE_OK)
-		{
 			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_DISCONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
-		}
 
 #ifndef DATABASE_WO_XEXEC
 		performXExec(postExec);
@@ -197,9 +180,7 @@ dodoArray<dodo::dodoStringArray>
 sqlite::fetchRows() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHROW;
@@ -209,9 +190,7 @@ sqlite::fetchRows() const
 	dodoArray<dodoStringArray> rows;
 
 	if (!show)
-	{
 		return rows;
-	}
 
 	sqlite3_reset(handle->result);
 
@@ -226,10 +205,8 @@ sqlite::fetchRows() const
 
 	dodoStringArray rowsPart;
 
-	while (iterate)
-	{
-		switch (sqlite3_step(handle->result))
-		{
+	while (iterate) {
+		switch (sqlite3_step(handle->result)) {
 			case SQLITE_BUSY:
 
 				continue;
@@ -252,10 +229,8 @@ sqlite::fetchRows() const
 				rowsPart.reserve(numFields);
 #endif
 
-				for (i = 0; i < numFields; ++i)
-				{
-					switch (sqlite3_column_type(handle->result, i))
-					{
+				for (i = 0; i < numFields; ++i) {
+					switch (sqlite3_column_type(handle->result, i)) {
 						case SQLITE_INTEGER:
 
 							rowsPart.push_back(tools::string::iToString(sqlite3_column_int(handle->result, i)));
@@ -308,9 +283,7 @@ dodo::dodoStringArray
 sqlite::fetchFields() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHFIELD;
@@ -320,9 +293,7 @@ sqlite::fetchFields() const
 	dodoStringArray fields;
 
 	if (!show)
-	{
 		return fields;
-	}
 
 	unsigned int numFields = sqlite3_column_count(handle->result);
 
@@ -331,9 +302,7 @@ sqlite::fetchFields() const
 #endif
 
 	for (unsigned int i(0); i < numFields; ++i)
-	{
 		fields.push_back(sqlite3_column_name(handle->result, i));
-	}
 
 #ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
@@ -356,23 +325,18 @@ unsigned int
 sqlite::rowsCount() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
-	if (show)
-	{
+	if (show) {
 		sqlite3_reset(handle->result);
 
 		unsigned int numRows = 0;
 		bool iterate = true;
 		int result;
 
-		while (iterate)
-		{
+		while (iterate) {
 			result = sqlite3_step(handle->result);
-			switch (result)
-			{
+			switch (result) {
 				case SQLITE_BUSY:
 
 					continue;
@@ -396,11 +360,8 @@ sqlite::rowsCount() const
 		}
 
 		return numRows;
-	}
-	else
-	{
+	} else
 		return 0;
-	}
 }
 
 //-------------------------------------------------------------------
@@ -409,18 +370,12 @@ unsigned int
 sqlite::fieldsCount() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	if (show)
-	{
 		return sqlite3_column_count(handle->result);
-	}
 	else
-	{
 		return 0;
-	}
 }
 
 //-------------------------------------------------------------------
@@ -429,18 +384,12 @@ unsigned int
 sqlite::affectedRowsCount() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	if (!show)
-	{
 		return sqlite3_changes(handle->handle);
-	}
 	else
-	{
 		return 0;
-	}
 }
 
 //-------------------------------------------------------------------
@@ -449,37 +398,28 @@ void
 sqlite::getFieldsTypes(const dodoString &table)
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	dodoString temp = collectedData.dbInfo.db + ":" + table;
 
 	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
 
 	if (types == fieldTypes.end())
-	{
 		types = fieldTypes.insert(make_pair(temp, dodoMap<dodoString, short, dodoMapICaseStringCompare>())).first;
-	}
 
 #ifdef SQLITE_ENABLE_COLUMN_METADATA
 	request = "select * from " + table + " limit 1";
 
-	if (!empty)
-	{
+	if (!empty) {
 		sqlite3_finalize(handle->result);
 		empty = true;
 	}
 
 	if (sqlite3_prepare(handle->handle, request.c_str(), request.size(), &handle->result, NULL) != SQLITE_OK)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
-	}
 
 	if (handle->result == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
-	}
 
 	empty = false;
 
@@ -489,8 +429,7 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 	dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
 
-	for (unsigned int i(0); i < numFields; ++i)
-	{
+	for (unsigned int i(0); i < numFields; ++i) {
 		columnName = sqlite3_column_name(handle->result, i);
 
 		if (sqlite3_table_column_metadata(handle->handle,
@@ -501,10 +440,8 @@ sqlite::getFieldsTypes(const dodoString &table)
 										  NULL,
 										  NULL,
 										  NULL,
-										  NULL) != SQLITE_OK)
-		{
-			if (!empty)
-			{
+										  NULL) != SQLITE_OK) {
+			if (!empty) {
 				sqlite3_finalize(handle->result);
 				empty = true;
 			}
@@ -514,77 +451,54 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 		field = types->second.find(columnName);
 
-		if (field == fieldsEnd)
-		{
+		if (field == fieldsEnd) {
 			if (strcasestr(columnType, "char") != NULL ||
 				strcasestr(columnType, "date") != NULL ||
 				strcasestr(columnType, "time") != NULL ||
 				strcasestr(columnType, "text") != NULL ||
 				strcasestr(columnType, "enum") != NULL ||
 				strcasestr(columnType, "set") != NULL)
-			{
 				types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_TEXT));
-			}
-			else
-			{
+			else {
 				if (strcasestr(columnType, "blob") != NULL)
-				{
 					types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_BINARY));
-				}
 				else
-				{
 					types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_NUMERIC));
-				}
 			}
-		}
-		else
-		{
+		} else {
 			if (strcasestr(columnType, "char") != NULL ||
 				strcasestr(columnType, "date") != NULL ||
 				strcasestr(columnType, "time") != NULL ||
 				strcasestr(columnType, "text") != NULL ||
 				strcasestr(columnType, "enum") != NULL ||
 				strcasestr(columnType, "set") != NULL)
-			{
 				field->second = sql::FIELDTYPE_TEXT;
-			}
-			else
-			{
+			else {
 				if (strcasestr(columnType, "blob") != NULL)
-				{
 					field->second = sql::FIELDTYPE_BINARY;
-				}
 				else
-				{
 					field->second = sql::FIELDTYPE_NUMERIC;
-				}
 			}
 		}
 	}
 
-	if (!empty)
-	{
+	if (!empty) {
 		sqlite3_finalize(handle->result);
 		empty = true;
 	}
 #else
 	request = "pragma table_info(" + table + ")";
 
-	if (!empty)
-	{
+	if (!empty) {
 		sqlite3_finalize(handle->result);
 		empty = true;
 	}
 
 	if (sqlite3_prepare(handle->handle, request.c_str(), request.size(), &handle->result, NULL) != SQLITE_OK)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
-	}
 
 	if (handle->result == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
-	}
 
 	empty = false;
 
@@ -594,10 +508,8 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 	dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
 
-	while (iterate)
-	{
-		switch (sqlite3_step(handle->result))
-		{
+	while (iterate) {
+		switch (sqlite3_step(handle->result)) {
 			case SQLITE_BUSY:
 
 				continue;
@@ -619,50 +531,33 @@ sqlite::getFieldsTypes(const dodoString &table)
 
 				field = types->second.find(columnName);
 
-				if (field == fieldsEnd)
-				{
+				if (field == fieldsEnd) {
 					if (strcasestr(columnType, "char") != NULL ||
 						strcasestr(columnType, "date") != NULL ||
 						strcasestr(columnType, "time") != NULL ||
 						strcasestr(columnType, "text") != NULL ||
 						strcasestr(columnType, "enum") != NULL ||
 						strcasestr(columnType, "set") != NULL)
-					{
 						types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_TEXT));
-					}
-					else
-					{
+					else {
 						if (strcasestr(columnType, "blob") != NULL)
-						{
 							types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_BINARY));
-						}
 						else
-						{
 							types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_NUMERIC));
-						}
 					}
-				}
-				else
-				{
+				} else {
 					if (strcasestr(columnType, "char") != NULL ||
 						strcasestr(columnType, "date") != NULL ||
 						strcasestr(columnType, "time") != NULL ||
 						strcasestr(columnType, "text") != NULL ||
 						strcasestr(columnType, "enum") != NULL ||
 						strcasestr(columnType, "set") != NULL)
-					{
 						field->second = sql::FIELDTYPE_TEXT;
-					}
-					else
-					{
+					else {
 						if (strcasestr(columnType, "blob") != NULL)
-						{
 							field->second = sql::FIELDTYPE_BINARY;
-						}
 						else
-						{
 							field->second = sql::FIELDTYPE_NUMERIC;
-						}
 					}
 				}
 
@@ -670,8 +565,7 @@ sqlite::getFieldsTypes(const dodoString &table)
 		}
 	}
 
-	if (!empty)
-	{
+	if (!empty) {
 		sqlite3_finalize(handle->result);
 		empty = true;
 	}
@@ -687,9 +581,7 @@ sqlite::exec(const dodoString &query,
 			 bool             result)
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_EXEC;
@@ -697,31 +589,23 @@ sqlite::exec(const dodoString &query,
 #endif
 
 	if (query.size() == 0)
-	{
 		queryCollect();
-	}
-	else
-	{
+	else {
 		request = query;
 		show = result;
 	}
 
-	if (!empty)
-	{
+	if (!empty) {
 		sqlite3_finalize(handle->result);
 		empty = true;
 	}
 
 	if (sqlite3_prepare(handle->handle, request.c_str(), request.size(), &handle->result, NULL) != SQLITE_OK)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
-	}
 
 	dodoList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
-	for (; i != j; ++i)
-	{
-		if (sqlite3_bind_blob(handle->result, i->reference, i->value->c_str(), i->value->size(), SQLITE_TRANSIENT) != SQLITE_OK)
-		{
+	for (; i != j; ++i) {
+		if (sqlite3_bind_blob(handle->result, i->reference, i->value->c_str(), i->value->size(), SQLITE_TRANSIENT) != SQLITE_OK) {
 			blobs.clear();
 
 			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
@@ -731,19 +615,13 @@ sqlite::exec(const dodoString &query,
 	blobs.clear();
 
 	if (handle->result == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
-	}
 
 	empty = false;
 
 	if (!show)
-	{
 		if (sqlite3_step(handle->result) != SQLITE_DONE)
-		{
 			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
-		}
-	}
 
 #ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
@@ -763,41 +641,32 @@ sqlite::updateCollect()
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_SET]);
 
 	dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
-	if (v != collectedData.values.end())
-	{
+	if (v != collectedData.values.end()) {
 		unsigned int fn(collectedData.fields.size()), fv(v->size());
 
 		unsigned int o(fn <= fv ? fn : fv);
 
 		dodoStringArray::const_iterator i(collectedData.fields.begin()), j(v->begin());
-		if (i != j)
-		{
+		if (i != j) {
 			dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
-			if (types != fieldTypes.end())
-			{
+			if (types != fieldTypes.end()) {
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
 				__blob__ blob;
 
 				unsigned int k = 1;
-				for (; k < o; ++i, ++k, ++j)
-				{
+				for (; k < o; ++i, ++k, ++j) {
 					request.append(*i);
 
 					type = types->second.find(*i);
-					if (type != typesEnd)
-					{
-						if (type->second == sql::FIELDTYPE_TEXT)
-						{
+					if (type != typesEnd) {
+						if (type->second == sql::FIELDTYPE_TEXT) {
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 							request.append(escapeFields(*j));
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-						}
-						else
-						{
-							if (type->second == sql::FIELDTYPE_BINARY)
-							{
+						} else {
+							if (type->second == sql::FIELDTYPE_BINARY) {
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 								request.append("$" + tools::string::uiToString(k));
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
@@ -806,17 +675,13 @@ sqlite::updateCollect()
 								blob.value = &(*j);
 
 								blobs.push_back(blob);
-							}
-							else
-							{
+							} else {
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 								request.append(*j);
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 							}
 						}
-					}
-					else
-					{
+					} else {
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 						request.append(escapeFields(*j));
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
@@ -825,18 +690,13 @@ sqlite::updateCollect()
 				request.append(*i);
 
 				type = types->second.find(*i);
-				if (type != typesEnd)
-				{
-					if (type->second == sql::FIELDTYPE_TEXT)
-					{
+				if (type != typesEnd) {
+					if (type->second == sql::FIELDTYPE_TEXT) {
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 						request.append(escapeFields(*j));
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-					}
-					else
-					{
-						if (type->second == sql::FIELDTYPE_BINARY)
-						{
+					} else {
+						if (type->second == sql::FIELDTYPE_BINARY) {
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 							request.append("$" + tools::string::uiToString(k));
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
@@ -845,26 +705,19 @@ sqlite::updateCollect()
 							blob.value = &(*j);
 
 							blobs.push_back(blob);
-						}
-						else
-						{
+						} else {
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 							request.append(*j);
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 						}
 					}
-				}
-				else
-				{
+				} else {
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 					request.append(escapeFields(*j));
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 				}
-			}
-			else
-			{
-				for (unsigned int k(1); k < o; ++i, ++k, ++j)
-				{
+			} else {
+				for (unsigned int k(1); k < o; ++i, ++k, ++j) {
 					request.append(*i);
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 					request.append(escapeFields(*j));
@@ -887,8 +740,7 @@ sqlite::insertCollect()
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
 	request.append(collectedData.table);
-	if (collectedData.fields.size() != 0)
-	{
+	if (collectedData.fields.size() != 0) {
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 		request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
@@ -896,11 +748,9 @@ sqlite::insertCollect()
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_VALUES]);
 
 	dodoArray<dodoStringArray>::iterator k(collectedData.values.begin()), l(collectedData.values.end());
-	if (k != l)
-	{
+	if (k != l) {
 		dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
-		if (types != fieldTypes.end())
-		{
+		if (types != fieldTypes.end()) {
 			dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
 			dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
@@ -911,26 +761,19 @@ sqlite::insertCollect()
 			unsigned int o = 0;
 
 			--l;
-			for (; k != l; ++k)
-			{
+			for (; k != l; ++k) {
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 
 				t = collectedData.fields.begin();
 
 				dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
-				for (; i != j; ++i, ++t)
-				{
+				for (; i != j; ++i, ++t) {
 					type = types->second.find(*t);
-					if (type != typesEnd)
-					{
+					if (type != typesEnd) {
 						if (type->second == sql::FIELDTYPE_TEXT)
-						{
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-						}
-						else
-						{
-							if (type->second == sql::FIELDTYPE_BINARY)
-							{
+						else {
+							if (type->second == sql::FIELDTYPE_BINARY) {
 								++o;
 
 								request.append("$" + tools::string::uiToString(o));
@@ -940,29 +783,18 @@ sqlite::insertCollect()
 								blob.value = &(*i);
 
 								blobs.push_back(blob);
-							}
-							else
-							{
+							} else
 								request.append(*i + statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
-							}
 						}
-					}
-					else
-					{
+					} else
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-					}
 				}
 				type = types->second.find(*t);
-				if (type != typesEnd)
-				{
+				if (type != typesEnd) {
 					if (type->second == sql::FIELDTYPE_TEXT)
-					{
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-					}
-					else
-					{
-						if (type->second == sql::FIELDTYPE_BINARY)
-						{
+					else {
+						if (type->second == sql::FIELDTYPE_BINARY) {
 							++o;
 
 							request.append("$" + tools::string::uiToString(o));
@@ -971,17 +803,11 @@ sqlite::insertCollect()
 							blob.value = &(*i);
 
 							blobs.push_back(blob);
-						}
-						else
-						{
+						} else
 							request.append(*i);
-						}
 					}
-				}
-				else
-				{
+				} else
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-				}
 
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
 			}
@@ -990,19 +816,13 @@ sqlite::insertCollect()
 			t = collectedData.fields.begin();
 
 			dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
-			for (; i != j; ++i, ++t)
-			{
+			for (; i != j; ++i, ++t) {
 				type = types->second.find(*t);
-				if (type != typesEnd)
-				{
+				if (type != typesEnd) {
 					if (type->second == sql::FIELDTYPE_TEXT)
-					{
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-					}
-					else
-					{
-						if (type->second == sql::FIELDTYPE_BINARY)
-						{
+					else {
+						if (type->second == sql::FIELDTYPE_BINARY) {
 							++o;
 
 							request.append("$" + tools::string::uiToString(o));
@@ -1012,29 +832,18 @@ sqlite::insertCollect()
 							blob.value = &(*i);
 
 							blobs.push_back(blob);
-						}
-						else
-						{
+						} else
 							request.append(*i + statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
-						}
 					}
-				}
-				else
-				{
+				} else
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-				}
 			}
 			type = types->second.find(*t);
-			if (type != typesEnd)
-			{
+			if (type != typesEnd) {
 				if (type->second == sql::FIELDTYPE_TEXT)
-				{
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-				}
-				else
-				{
-					if (type->second == sql::FIELDTYPE_BINARY)
-					{
+				else {
+					if (type->second == sql::FIELDTYPE_BINARY) {
 						++o;
 
 						request.append("$" + tools::string::uiToString(o));
@@ -1043,25 +852,16 @@ sqlite::insertCollect()
 						blob.value = &(*i);
 
 						blobs.push_back(blob);
-					}
-					else
-					{
+					} else
 						request.append(*i);
-					}
 				}
-			}
-			else
-			{
+			} else
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-			}
 
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
-		}
-		else
-		{
+		} else {
 			--l;
-			for (; k != l; ++k)
-			{
+			for (; k != l; ++k) {
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 				request.append(joinFields(*k, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
@@ -1079,16 +879,12 @@ dodo::dodoStringMapArray
 sqlite::fetchFieldsToRows() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	dodoStringMapArray rowsFields;
 
 	if (!show)
-	{
 		return rowsFields;
-	}
 
 	sqlite3_reset(handle->result);
 
@@ -1104,10 +900,8 @@ sqlite::fetchFieldsToRows() const
 	rowsFields.reserve(sqlite3_data_count(handle->result));
 #endif
 
-	while (iterate)
-	{
-		switch (sqlite3_step(handle->result))
-		{
+	while (iterate) {
+		switch (sqlite3_step(handle->result)) {
 			case SQLITE_BUSY:
 
 				continue;
@@ -1126,10 +920,8 @@ sqlite::fetchFieldsToRows() const
 
 				rowFieldsPart.clear();
 
-				for (i = 0; i < numFields; ++i)
-				{
-					switch (sqlite3_column_type(handle->result, i))
-					{
+				for (i = 0; i < numFields; ++i) {
+					switch (sqlite3_column_type(handle->result, i)) {
 						case SQLITE_INTEGER:
 
 							rowFieldsPart.insert(make_pair(sqlite3_column_name(handle->result, i), tools::string::iToString(sqlite3_column_int(handle->result, i))));

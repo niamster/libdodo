@@ -34,19 +34,14 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace format
-		{
-			namespace xml
-			{
+namespace dodo {
+	namespace data {
+		namespace format {
+			namespace xml {
 				/**
 				 * libdodo defined errors
 				 */
-				enum processorExR
-				{
+				enum processorExR {
 					PROCESSOREX_EMPTYDOCUMENT,
 					PROCESSOREX_NOROOTNODE,
 					PROCESSOREX_NONAME,
@@ -62,8 +57,7 @@ namespace dodo
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
-				enum processorFunctionsID
-				{
+				enum processorFunctionsID {
 					PROCESSOREX_PARSEFILE,
 					PROCESSOREX_PARSE,
 					PROCESSOREX_ERRHANDLER,

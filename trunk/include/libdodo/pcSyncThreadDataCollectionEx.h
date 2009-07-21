@@ -34,21 +34,15 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace thread
-			{
-				namespace data
-				{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace thread {
+				namespace data {
 					/**
 					 * libdodo defined errors
 					 */
-					enum collectionExR
-					{
+					enum collectionExR {
 						COLLECTIONEX_NOTFOUND,
 					};
 
@@ -60,8 +54,7 @@ namespace dodo
 					/**
 					 * IDs of functions where exception might be thrown
 					 */
-					enum collectionFunctionsID
-					{
+					enum collectionFunctionsID {
 						COLLECTIONEX_DEL,
 						COLLECTIONEX_SET,
 						COLLECTIONEX_GET,

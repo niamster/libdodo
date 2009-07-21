@@ -32,12 +32,9 @@
 
 #include <libdodo/directives.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
+namespace dodo {
+	namespace pc {
+		namespace sync {
 			class section;
 
 			/**
@@ -45,8 +42,7 @@ namespace dodo
 			 * @brief provides thread/process safe behaviour
 			 * @note it locks in constructor and unlocks in destructor
 			 */
-			class protector
-			{
+			class protector {
 			  public:
 
 				/**

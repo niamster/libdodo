@@ -39,46 +39,40 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace process
-			{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace process {
 				/**
 				 * @struct __lock__
 				 * @brief defines system semaphore
 				 */
-				struct __lock__
-				{
+				struct __lock__ {
 					/**
 					 * constructor
 					 */
 					__lock__() :
 #ifdef XSI_IPC
-					keeper(-1)
+						keeper(-1)
 #else
-					keeper(NULL)
+							   keeper(NULL)
 #endif
 					{
 					}
 
 #ifdef XSI_IPC
-					int keeper;             ///< semaphore
-					int key;                ///< key for the semaphore
-					union semun
-					{
+					int        keeper;              ///< semaphore
+					int        key;                 ///< key for the semaphore
+					union semun {
 						int             val;
 						struct semid_ds *buf;
 						ushort          * array;
-					} control;              ///< semaphore semaphore->control structure
+					} control;                      ///< semaphore semaphore->control structure
 
-					sembuf operations[1];   ///< semaphore semaphore->operations
+					sembuf     operations[1];       ///< semaphore semaphore->operations
 #else
-					sem_t *keeper;          ///< semaphore
-					dodoString key;         ///< key for the semaphore
+					sem_t      *keeper;             ///< semaphore
+					dodoString key;                 ///< key for the semaphore
 #endif
 				};
 			};

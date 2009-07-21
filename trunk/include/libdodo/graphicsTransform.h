@@ -33,17 +33,14 @@
 #include <libdodo/directives.h>
 
 #ifdef IMAGEMAGICK_EXT
-namespace dodo
-{
-	namespace graphics
-	{
+namespace dodo {
+	namespace graphics {
 		class image;
 
 		/**
 		 * @enum transformRotateDirectionAngleEnum defines rotation options
 		 */
-		enum transformRotateDirectionAngleEnum
-		{
+		enum transformRotateDirectionAngleEnum {
 			TRANSFORM_ROTATEDIRECTIONANGLE_90CW = -90,
 			TRANSFORM_ROTATEDIRECTIONANGLE_90CCW = 90,
 			TRANSFORM_ROTATEDIRECTIONANGLE_180 = 180,
@@ -55,8 +52,7 @@ namespace dodo
 		 * @class transform
 		 * @brief provides simple image transformations
 		 */
-		class transform
-		{
+		class transform {
 		  private:
 
 			/**

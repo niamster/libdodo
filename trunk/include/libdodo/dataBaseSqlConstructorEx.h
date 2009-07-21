@@ -35,19 +35,14 @@
 #include <libdodo/types.h>
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
-			namespace sql
-			{
+namespace dodo {
+	namespace data {
+		namespace base {
+			namespace sql {
 				/**
 				 * libdodo defined errors
 				 */
-				enum sqlConstructorExR
-				{
+				enum sqlConstructorExR {
 					SQLCONSTRUCTOREX_EMPTYREQUEST,
 					SQLCONSTRUCTOREX_UNKNOWNJOINTYPE,
 				};
@@ -61,8 +56,7 @@ namespace dodo
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
-				enum sqlConstructorFunctionsID
-				{
+				enum sqlConstructorFunctionsID {
 					SQLCONSTRUCTOREX_QUERYCOLLECT,
 					SQLCONSTRUCTOREX_JOINCOLLECT,
 				};

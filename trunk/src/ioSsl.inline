@@ -32,18 +32,14 @@
 #ifdef OPENSSL_EXT
 #include <openssl/ssl.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace ssl
-		{
+namespace dodo {
+	namespace io {
+		namespace ssl {
 			/**
 			 * @struct __sslConnection__
 			 * @brief defines internal handlers for SSL
 			 */
-			struct __sslConnection__
-			{
+			struct __sslConnection__ {
 				/**
 				 * constructor
 				 */
@@ -51,15 +47,14 @@ namespace dodo
 				{
 				}
 
-				SSL *handle;     ///< SSL connection handle
+				SSL *handle;        ///< SSL connection handle
 			};
 
 			/**
 			 * @struct __sslContext__
 			 * @brief defines internal context for SSL
 			 */
-			struct __sslContext__
-			{
+			struct __sslContext__ {
 				/**
 				 * constructor
 				 */
@@ -67,15 +62,14 @@ namespace dodo
 				{
 				}
 
-				SSL_CTX *ctx;    ///< SSL context
+				SSL_CTX *ctx;       ///< SSL context
 			};
 
 			/**
 			 * @class __openssl___init__
 			 * @brief initializes openssl evironment
 			 */
-			class __openssl___init__
-			{
+			class __openssl___init__ {
 			  public:
 
 				/**

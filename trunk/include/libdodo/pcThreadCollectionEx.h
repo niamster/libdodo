@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace thread
-		{
+namespace dodo {
+	namespace pc {
+		namespace thread {
 			/**
 			 * libdodo defined errors
 			 */
-			enum collectionExR
-			{
+			enum collectionExR {
 				COLLECTIONEX_ISALREADYRUNNING,
 				COLLECTIONEX_NOTFOUND,
 				COLLECTIONEX_ISDETACHED,
@@ -62,8 +58,7 @@ namespace dodo
 			/**
 			 * ID of function where exception was thrown
 			 */
-			enum collectionFunctionsID
-			{
+			enum collectionFunctionsID {
 				COLLECTIONEX_REPLACE,
 				COLLECTIONEX_RUN,
 				COLLECTIONEX_ADDNRUN,

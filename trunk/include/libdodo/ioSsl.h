@@ -35,18 +35,14 @@
 #ifdef OPENSSL_EXT
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace ssl
-		{
+namespace dodo {
+	namespace io {
+		namespace ssl {
 			struct __sslConnection__;
 
 			struct __sslContext__;
 
-			enum keyTypeEnum
-			{
+			enum keyTypeEnum {
 				KEYTYPE_PKEY,
 				KEYTYPE_RSA,
 			};
@@ -69,8 +65,7 @@ namespace dodo
 			 * DES-CBC-SHA
 			 * DES-CBC-MD5
 			 */
-			struct __certificates__
-			{
+			struct __certificates__ {
 				/**
 				 * constructor
 				 */

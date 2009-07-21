@@ -35,19 +35,15 @@
 #include <libdodo/types.h>
 #include <libdodo/pcJobCollection.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace process
-		{
+namespace dodo {
+	namespace pc {
+		namespace process {
 			struct __process__;
 
 			/**
 			 * @enum collectionOnDestructEnum defines action with processes on object destruction
 			 */
-			enum collectionOnDestructEnum
-			{
+			enum collectionOnDestructEnum {
 				COLLECTION_ONDESTRUCT_KEEP_ALIVE,
 				COLLECTION_ONDESTRUCT_STOP,     ///< send SIGINT to process
 				COLLECTION_ONDESTRUCT_WAIT
@@ -58,8 +54,7 @@ namespace dodo
 			 * @struct __processMod__
 			 * @brief defines data that is returned from initIpcProcessCollectionModule in the library
 			 */
-			struct __processMod__
-			{
+			struct __processMod__ {
 				char          name[64];         ///< name of module
 				char          discription[256]; ///< discription of module
 				char          hook[64];         ///< name of function in module that will be a hook
@@ -85,8 +80,7 @@ namespace dodo
 			 * @class collection
 			 * @brief provides processes management functionality
 			 */
-			class collection : public job::collection
-			{
+			class collection : public job::collection {
 			  private:
 
 				/**
@@ -258,7 +252,7 @@ namespace dodo
 				 * @param toInit defines library init data
 				 */
 				static __processMod__ getModuleInfo(const dodoString &module,
-												  void             *toInit = NULL);
+													void             *toInit = NULL);
 #endif
 
 			  protected:

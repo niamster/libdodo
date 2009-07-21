@@ -35,26 +35,21 @@
 #include <libdodo/types.h>
 #include <libdodo/rpcServer.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		class channel;
 	};
 
-	namespace rpc
-	{
+	namespace rpc {
 		class method;
 		class response;
 
-		namespace xml
-		{
+		namespace xml {
 			/**
 			 * @struct __additionalData__
 			 * @brief defines response/request additional data
 			 */
-			struct __additionalData__
-			{
+			struct __additionalData__ {
 				/**
 				 * constructor
 				 * @param encoding defines response/request encoding
@@ -68,8 +63,7 @@ namespace dodo
 			 * @class server
 			 * @brief defines server-side XML-RPC instrument
 			 */
-			class server : virtual public rpc::server
-			{
+			class server : virtual public rpc::server {
 			  public:
 
 				/**

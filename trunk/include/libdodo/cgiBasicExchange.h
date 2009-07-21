@@ -36,19 +36,15 @@
 #include <libdodo/cgiExchange.h>
 #include <libdodo/ioStdio.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
-		namespace basic
-		{
+namespace dodo {
+	namespace cgi {
+		namespace basic {
 			/**
 			 * @class exchange
 			 * @brief provides interface to CGI I/O functionality
 			 */
 			class exchange : virtual public cgi::exchange,
-							 virtual public io::stdio
-			{
+							 virtual public io::stdio {
 			  public:
 
 				/**

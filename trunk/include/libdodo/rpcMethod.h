@@ -34,20 +34,16 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace rpc
-	{
+namespace dodo {
+	namespace rpc {
 		class value;
 
-		namespace xml
-		{
+		namespace xml {
 			class method;
 			class server;
 		};
 
-		namespace json
-		{
+		namespace json {
 			class method;
 			class server;
 		};
@@ -56,8 +52,7 @@ namespace dodo
 		 * @class method
 		 * @brief defines RPC method reprasentation
 		 */
-		class method
-		{
+		class method {
 			friend class client;
 			friend class server;
 			friend class xml::method;

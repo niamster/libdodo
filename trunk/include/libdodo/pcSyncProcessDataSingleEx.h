@@ -34,21 +34,15 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace process
-			{
-				namespace data
-				{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace process {
+				namespace data {
 					/**
 					 * libdodo defined errors
 					 */
-					enum singleExR
-					{
+					enum singleExR {
 						SINGLEEX_CANNOTLOCK,
 						SINGLEEX_NOTOPENED,
 					};
@@ -62,8 +56,7 @@ namespace dodo
 					/**
 					 * IDs of functions where exception might be thrown
 					 */
-					enum singleFunctionsID
-					{
+					enum singleFunctionsID {
 						SINGLEEX_SET,
 						SINGLEEX_ACQUIRE,
 						SINGLEEX_RELEASE,

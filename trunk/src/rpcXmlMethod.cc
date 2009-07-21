@@ -39,8 +39,7 @@
 
 using namespace dodo::rpc::xml;
 
-const char method::trimSymbols[] =
-{
+const char method::trimSymbols[] = {
 	' ',
 	'\r'
 };
@@ -54,40 +53,26 @@ method::xmlToMethod(dodo::data::format::xml::node &node)
 	rpc::method meth;
 
 	dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin(), j = node.children.end();
-	for (; i != j; ++i)
-	{
-		if (tools::string::iequal(i->first, "methodName"))
-		{
+	for (; i != j; ++i) {
+		if (tools::string::iequal(i->first, "methodName")) {
 			dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 			if (arr0.size() > 0)
-			{
 				meth.name = tools::string::trim(arr0[0].value, trimSymbols, 2);
-			}
 			else
-			{
 				meth.name = __dodostring__;
-			}
-		}
-		else
-		{
-			if (tools::string::iequal(i->first, "params"))
-			{
+		} else {
+			if (tools::string::iequal(i->first, "params")) {
 				dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 				if (arr0.size() == 0)
-				{
 					return meth;
-				}
 
 				dodoArray<dodo::data::format::xml::node> &nodeArray = arr0[0].children["param"];
 
 				dodoArray<dodo::data::format::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
-				for (; o != p; ++o)
-				{
+				for (; o != p; ++o) {
 					dodoArray<dodo::data::format::xml::node> &arr1 = o->children["value"];
 					if (arr0.size() > 0)
-					{
 						meth.arguments.push_back(value::xmlToValue(arr1[0]));
-					}
 				}
 			}
 		}
@@ -114,8 +99,7 @@ method::methodToXml(const rpc::method &data)
 	meth.children.insert(make_pair(methodName.name, nodeArr));
 
 	dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
-	if (i != j)
-	{
+	if (i != j) {
 		dodo::data::format::xml::node params;
 		params.name = "params";
 
@@ -124,8 +108,7 @@ method::methodToXml(const rpc::method &data)
 
 		dodoArray<dodo::data::format::xml::node> subNodeArr;
 
-		for (; i != j; ++i)
-		{
+		for (; i != j; ++i) {
 			param.children.clear();
 
 			nodeArr.assign(1, value::valueToXml(*i));

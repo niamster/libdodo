@@ -94,13 +94,10 @@ event::isReadable(const dodoArray<int> &pos,
 	pollfd *fds = new pollfd[pos.size()];
 
 	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i)
-	{
+	for (; i != j; ++i) {
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
-		for (; m != n; ++m)
-		{
-			if (i->position == *m)
-			{
+		for (; m != n; ++m) {
+			if (i->position == *m) {
 				++count;
 
 				fds[count].fd = i->in;
@@ -113,43 +110,29 @@ event::isReadable(const dodoArray<int> &pos,
 
 	dodoArray<bool> tempRB;
 
-	if (count > 0)
-	{
+	if (count > 0) {
 		int res = poll(fds, count, timeout);
 
-		if (res > 0)
-		{
-			for (int i = 0; i < count; ++i)
-			{
+		if (res > 0) {
+			for (int i = 0; i < count; ++i) {
 				if (isSetFlag(fds[i].revents, POLLIN) || isSetFlag(fds[i].revents, POLLPRI))
-				{
 					tempRB.push_back(true);
-				}
 				else
-				{
 					tempRB.push_back(false);
-				}
 			}
 
 			delete [] fds;
 
 			return tempRB;
-		}
-		else
-		{
-			if (res == 0)
-			{
+		} else {
+			if (res == 0) {
 				for (int i = 0; i < count; ++i)
-				{
 					tempRB.push_back(false);
-				}
 
 				delete [] fds;
 
 				return tempRB;
-			}
-			else
-			{
+			} else {
 				delete [] fds;
 
 				throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -160,9 +143,7 @@ event::isReadable(const dodoArray<int> &pos,
 	delete [] fds;
 
 	for (int i = 0; i < count; ++i)
-	{
 		tempRB.push_back(false);
-	}
 
 	return tempRB;
 }
@@ -180,13 +161,10 @@ event::isWritable(const dodoArray<int> &pos,
 	pollfd *fds = new pollfd[pos.size()];
 
 	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i)
-	{
+	for (; i != j; ++i) {
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
-		for (; m != n; ++m)
-		{
-			if (i->position == *m)
-			{
+		for (; m != n; ++m) {
+			if (i->position == *m) {
 				++count;
 
 				fds[count].fd = i->out;
@@ -199,43 +177,29 @@ event::isWritable(const dodoArray<int> &pos,
 
 	dodoArray<bool> tempRB;
 
-	if (count > 0)
-	{
+	if (count > 0) {
 		int res = poll(fds, count, timeout);
 
-		if (res > 0)
-		{
-			for (int i = 0; i < count; ++i)
-			{
+		if (res > 0) {
+			for (int i = 0; i < count; ++i) {
 				if (isSetFlag(fds[i].revents, POLLOUT))
-				{
 					tempRB.push_back(true);
-				}
 				else
-				{
 					tempRB.push_back(false);
-				}
 			}
 
 			delete [] fds;
 
 			return tempRB;
-		}
-		else
-		{
-			if (res == 0)
-			{
+		} else {
+			if (res == 0) {
 				delete [] fds;
 
 				for (int i = 0; i < count; ++i)
-				{
 					tempRB.push_back(false);
-				}
 
 				return tempRB;
-			}
-			else
-			{
+			} else {
 				delete [] fds;
 
 				throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -246,9 +210,7 @@ event::isWritable(const dodoArray<int> &pos,
 	delete [] fds;
 
 	for (int i = 0; i < count; ++i)
-	{
 		tempRB.push_back(false);
-	}
 
 	return tempRB;
 }
@@ -264,36 +226,23 @@ event::isReadable(int pos,
 	pollfd fd;
 
 	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i)
-	{
-		if (i->position == pos)
-		{
+	for (; i != j; ++i) {
+		if (i->position == pos) {
 			fd.fd = i->in;
 			fd.events = POLLIN | POLLPRI;
 
 			int res = poll(&fd, 1, timeout);
 
-			if (res > 0)
-			{
+			if (res > 0) {
 				if (isSetFlag(fd.revents, POLLIN) || isSetFlag(fd.revents, POLLPRI))
-				{
 					return true;
-				}
 				else
-				{
 					return false;
-				}
-			}
-			else
-			{
+			} else {
 				if (res == 0)
-				{
 					return false;
-				}
 				else
-				{
 					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
 			}
 		}
 	}
@@ -309,10 +258,8 @@ event::delChannel(int pos)
 	pc::sync::protector pg(keeper);
 
 	dodoArray<__eventInOutDescriptors__>::iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i)
-	{
-		if (i->position == pos)
-		{
+	for (; i != j; ++i) {
+		if (i->position == pos) {
 			desc.erase(i);
 
 			break;
@@ -331,36 +278,23 @@ event::isWritable(int pos,
 	pollfd fd;
 
 	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i)
-	{
-		if (i->position == pos)
-		{
+	for (; i != j; ++i) {
+		if (i->position == pos) {
 			fd.fd = i->out;
 			fd.events = POLLOUT;
 
 			int res = poll(&fd, 1, timeout);
 
-			if (res > 0)
-			{
+			if (res > 0) {
 				if (isSetFlag(fd.revents, POLLOUT))
-				{
 					return true;
-				}
 				else
-				{
 					return false;
-				}
-			}
-			else
-			{
+			} else {
 				if (res == 0)
-				{
 					return false;
-				}
 				else
-				{
 					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
 			}
 		}
 	}

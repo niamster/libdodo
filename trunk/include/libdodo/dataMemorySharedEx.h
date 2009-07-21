@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace memory
-		{
+namespace dodo {
+	namespace data {
+		namespace memory {
 			/**
 			 * ID of function where exception was thrown
 			 */
-			enum sharedFunctionsID
-			{
+			enum sharedFunctionsID {
 				SHAREDEX_MAP,
 				SHAREDEX_UNMAP,
 				SHAREDEX_SIZE,

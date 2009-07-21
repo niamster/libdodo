@@ -40,25 +40,22 @@
 
 using namespace dodo::io;
 
-memory::memory(char *a_data,
+memory::memory(char          *a_data,
 			   unsigned long size,
-			   short flags,
-			   short protection) : block::channel(protection),
-								   flags(flags),
-								   size(size)
+			   short         flags,
+			   short         protection) : block::channel(protection),
+										   flags(flags),
+										   size(size)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
 #endif
 
-	if (flags&MEMORYFLAGS_NORMAL)
-	{
+	if (flags & MEMORYFLAGS_NORMAL) {
 		data = new char[size];
 		memcpy(data, a_data, size);
-	}
-	else
-	{
-		if (flags&MEMORYFLAGS_EXTERN)
+	} else {
+		if (flags & MEMORYFLAGS_EXTERN)
 			data = a_data;
 		else
 			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_MEMORY, exception::ERRNO_LIBDODO, MEMORYEX_WRONGFLAGS, IOMEMORYEX_WRONGFLAGS_STR, __LINE__, __FILE__);
@@ -87,18 +84,12 @@ memory::memory(const memory &fd) : block::channel(fd.protection),
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
 #endif
 
-	if (flags&MEMORYFLAGS_NORMAL)
-	{
+	if (flags & MEMORYFLAGS_NORMAL) {
 		data = new char[size];
 		memcpy(data, fd.data, size);
-	}
-	else
-	{
-		if (flags&MEMORYFLAGS_EXTERN)
-		{
-			data = fd.data;
-		}
-	}
+	} else if (flags & MEMORYFLAGS_EXTERN)
+		data = fd.data;
+
 
 	block = fd.block;
 	append = fd.append;
@@ -126,7 +117,7 @@ memory::memory(const dodoString &buffer,
 
 memory::~memory()
 {
-	if (!(flags&MEMORYFLAGS_EXTERN))
+	if (!(flags & MEMORYFLAGS_EXTERN))
 		delete [] data;
 }
 
@@ -158,8 +149,7 @@ memory::flush() const
 void
 memory::clear()
 {
-	if (!(flags&MEMORYFLAGS_EXTERN))
-	{
+	if (!(flags & MEMORYFLAGS_EXTERN)) {
 		delete [] data;
 		data = NULL;
 
@@ -169,7 +159,8 @@ memory::clear()
 
 //-------------------------------------------------------------------
 
-memory::operator const char *()
+memory::operator const char
+*()
 {
 	return data;
 }
@@ -189,18 +180,12 @@ memory::clone(const memory &fd)
 	flags = fd.flags;
 	size = fd.size;
 
-	if (flags == MEMORYFLAGS_NORMAL)
-	{
+	if (flags == MEMORYFLAGS_NORMAL) {
 		data = new char[size];
 		memcpy(data, fd.data, size);
-	}
-	else
-	{
-		if (flags == MEMORYFLAGS_EXTERN)
-		{
-			data = fd.data;
-		}
-	}
+	} else if (flags == MEMORYFLAGS_EXTERN)
+		data = fd.data;
+
 }
 
 //-------------------------------------------------------------------
@@ -211,11 +196,9 @@ memory::_read(char * const a_data) const
 	unsigned long pos = block ? this->pos * inSize : this->pos;
 
 	if ((pos + inSize) > size)
-	{
 		throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__READ, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
-	}
 
-	memcpy(a_data, data+pos, inSize);
+	memcpy(a_data, data + pos, inSize);
 }
 
 //-------------------------------------------------------------------
@@ -223,42 +206,36 @@ memory::_read(char * const a_data) const
 void
 memory::_write(const char *const a_data) const
 {
-	if (append)
-	{
+	if (append) {
 		if (flags & MEMORYFLAGS_FIXED_LENGTH)
 			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_APPENDTOFIXED, IOMEMORYEX_APPENDTOFIXED_STR, __LINE__, __FILE__);
-		else
-		{
+		else {
 			char *newData = new char[size + outSize];
 			memcpy(newData, data, size);
-			memcpy(newData+size, a_data, outSize);
+			memcpy(newData + size, a_data, outSize);
 			size += outSize;
 			delete [] data;
 			data = newData;
 		}
-	}
-	else
-	{
+	} else {
 		unsigned long pos = block ? this->pos * outSize : this->pos;
 
 		unsigned long shift = pos + outSize;
-		if (shift > size)
-		{
+		if (shift > size) {
 			if (flags & MEMORYFLAGS_FIXED_LENGTH)
 				throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
-			else
-			{
+			else {
 				shift -= size;
 				char *newData = new char[size + shift];
 				memcpy(newData, data, size);
-				memset(newData+size, 0x0, shift);
+				memset(newData + size, 0x0, shift);
 				size += shift;
 				delete [] data;
 				data = newData;
 			}
 		}
 
-		memcpy(data+pos, a_data, outSize);
+		memcpy(data + pos, a_data, outSize);
 	}
 }
 
@@ -272,23 +249,21 @@ memory::erase()
 	unsigned long pos = block ? this->pos * outSize : this->pos;
 
 	unsigned long shift = pos + outSize;
-	if (shift > size)
-	{
+	if (shift > size) {
 		if (flags & MEMORYFLAGS_FIXED_LENGTH)
 			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_ERASE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
-		else
-		{
+		else {
 			shift -= size;
 			char *newData = new char[size + shift];
 			memcpy(newData, data, size);
-			memset(newData+size, 0x0, shift);
+			memset(newData + size, 0x0, shift);
 			size += shift;
 			delete [] data;
 			data = newData;
 		}
 	}
 
-	memset(data+pos, 0x0, outSize);
+	memset(data + pos, 0x0, outSize);
 }
 
 //-------------------------------------------------------------------
@@ -302,49 +277,36 @@ memory::_readStream(char * const a_data) const
 
 	unsigned long read = 0;
 
-	if (block)
-	{
+	if (block) {
 		unsigned long block = 0;
 		unsigned long index = 0;
-		for (; index < size; ++index)
-		{
+		for (; index < size; ++index) {
 			if (data[index] == '\n' || data[index] == '\0')
-			{
 				++block;
-			}
 
-			if (block == pos)
-			{
+			if (block == pos) {
 				++index;
 
-				for (unsigned long i = index; i < size && read < readSize; ++i)
-				{
+				for (unsigned long i = index; i < size && read < readSize; ++i) {
 					a_data[read] = data[i];
 
 					++read;
 
 					if (data[i] == '\n' || data[i] == '\0')
-					{
 						break;
-					}
 				}
 
 				break;
 			}
 		}
-	}
-	else
-	{
-		for (unsigned long i = pos; i < size && read < readSize; ++i)
-		{
+	} else {
+		for (unsigned long i = pos; i < size && read < readSize; ++i) {
 			a_data[read] = data[i];
 
 			++read;
 
 			if (data[i] == '\n' || data[i] == '\0')
-			{
 				break;
-			}
 		}
 	}
 
@@ -363,13 +325,11 @@ memory::_writeStream(const char *const a_data) const
 	unsigned int bufSize = strlen(a_data);
 
 	if (bufSize < _outSize)
-	{
 		_outSize = bufSize;
-	}
 
 	char *newData = new char[size + _outSize + 1];
 	memcpy(newData, data, size);
-	memcpy(newData+size, a_data, _outSize);
+	memcpy(newData + size, a_data, _outSize);
 	size += _outSize;
 	newData[size] = '\0';
 	delete [] data;

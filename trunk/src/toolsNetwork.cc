@@ -57,9 +57,7 @@ network::getHostInfo(const dodoString &host)
 	hostent *ent = gethostbyname(host.c_str());
 
 	if (ent == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTINFO, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
-	}
 
 	__hostInfo__ info;
 	info.name = ent->h_name;
@@ -67,21 +65,16 @@ network::getHostInfo(const dodoString &host)
 	int i(0);
 
 	while (ent->h_aliases[i] != NULL)
-	{
 		info.aliases.push_back(ent->h_aliases[i++]);
-	}
 
 	i = 0;
 	char temp[INET6_ADDRSTRLEN];
 
-	while (ent->h_addr_list[i] != NULL)
-	{
-		switch (ent->h_addrtype)
-		{
+	while (ent->h_addr_list[i] != NULL) {
+		switch (ent->h_addrtype) {
 			case AF_INET:
 
-				if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN) == NULL)
-				{
+				if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN) == NULL) {
 					++i;
 
 					continue;
@@ -91,8 +84,7 @@ network::getHostInfo(const dodoString &host)
 
 			case AF_INET6:
 
-				if (inet_ntop(AF_INET6, ent->h_addr_list[i], temp, INET6_ADDRSTRLEN) == NULL)
-				{
+				if (inet_ntop(AF_INET6, ent->h_addr_list[i], temp, INET6_ADDRSTRLEN) == NULL) {
 					++i;
 
 					continue;
@@ -116,31 +108,23 @@ network::getHostPrimaryIp(const dodoString &host)
 	hostent *ent = gethostbyname(host.c_str());
 
 	if (ent == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
-	}
 
 	char temp[INET6_ADDRSTRLEN];
 
-	if (ent->h_addr_list[0] != NULL)
-	{
-		switch (ent->h_addrtype)
-		{
+	if (ent->h_addr_list[0] != NULL) {
+		switch (ent->h_addrtype) {
 			case AF_INET:
 
 				if (inet_ntop(AF_INET, ent->h_addr_list[0], temp, INET_ADDRSTRLEN) == NULL)
-				{
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
-				}
 
 				break;
 
 			case AF_INET6:
 
 				if (inet_ntop(AF_INET6, ent->h_addr_list[0], temp, INET6_ADDRSTRLEN) == NULL)
-				{
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETHOSTPRIMARYIP, exception::ERRNO_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
-				}
 
 				break;
 		}
@@ -156,17 +140,13 @@ network::getInterfacesNames()
 {
 	struct if_nameindex *ifaces = if_nameindex();
 	if (ifaces == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACESNAMES, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	int i(-1);
 	dodoStringArray arr;
 
 	while (ifaces[++i].if_index != 0)
-	{
 		arr.push_back(ifaces[i].if_name);
-	}
 
 	if_freenameindex(ifaces);
 
@@ -184,9 +164,7 @@ network::getServiceInfo(const dodoString &host,
 	__serviceInfo__ info;
 
 	if (ent == NULL)
-	{
 		return info;
-	}
 
 	info.name = ent->s_name;
 	info.port = ent->s_port;
@@ -194,9 +172,7 @@ network::getServiceInfo(const dodoString &host,
 	int i(0);
 
 	while (ent->s_aliases[i] != NULL)
-	{
 		info.aliases.push_back(ent->s_aliases[i++]);
-	}
 
 	return info;
 }
@@ -212,9 +188,7 @@ network::getServiceInfo(int              port,
 	__serviceInfo__ info;
 
 	if (ent == NULL)
-	{
 		return info;
-	}
 
 	info.name = ent->s_name;
 	info.port = ent->s_port;
@@ -222,9 +196,7 @@ network::getServiceInfo(int              port,
 	int i(0);
 
 	while (ent->s_aliases[i] != NULL)
-	{
 		info.aliases.push_back(ent->s_aliases[i++]);
-	}
 
 	return info;
 }
@@ -236,9 +208,7 @@ network::getInterfaceInfo(const dodoString &interface)
 {
 	int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	ifreq ifr;
 	strcpy(ifr.ifr_name, interface.c_str());
@@ -249,50 +219,37 @@ network::getInterfaceInfo(const dodoString &interface)
 	sockaddr_in sin;
 
 	if (::ioctl(socket, SIOCGIFADDR, &ifr) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_addr, sizeof(sockaddr));
 
 	if (inet_ntop(AF_INET, &sin.sin_addr, add, INET_ADDRSTRLEN) != NULL)
-	{
 		info.address = add;
-	}
 
 #ifdef __FreeBSD__
 #else
 	if (::ioctl(socket, SIOCGIFNETMASK, &ifr) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_netmask, sizeof(sockaddr));
 
 	if (inet_ntop(AF_INET, &sin.sin_addr, add, INET_ADDRSTRLEN) != NULL)
-	{
 		info.netmask = add;
-	}
+
 #endif
 
 	if (::ioctl(socket, SIOCGIFBRDADDR, &ifr) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_broadaddr, sizeof(sockaddr));
 
 	if (inet_ntop(AF_INET, &sin.sin_addr, add, INET_ADDRSTRLEN) != NULL)
-	{
 		info.broadcast = add;
-	}
 
 #ifdef __FreeBSD__
 #else
 	if (::ioctl(socket, SIOCGIFHWADDR, &ifr) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	sprintf(add, "%.2X:%.2X:%.2X:%.2X:%.2X:%.2X", ifr.ifr_ifru.ifru_hwaddr.sa_data[0] & 0xff,
 			ifr.ifr_ifru.ifru_hwaddr.sa_data[1] & 0xff,
@@ -305,35 +262,25 @@ network::getInterfaceInfo(const dodoString &interface)
 	info.hwaddr = add;
 
 	if (::ioctl(socket, SIOCGIFFLAGS, &ifr) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	if (::close(socket) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 #ifdef __FreeBSD__
 	if (isSetFlag(ifr.ifr_ifru.ifru_flags[0], IFF_LOOPBACK))
-	{
 		info.loop = true;
-	}
 
 	if (isSetFlag(ifr.ifr_ifru.ifru_flags[0], IFF_UP))
-	{
 		info.up = true;
-	}
+
 #else
 	if (isSetFlag(IFF_LOOPBACK & ifr.ifr_ifru.ifru_flags, IFF_LOOPBACK))
-	{
 		info.loop = true;
-	}
 
 	if (isSetFlag(IFF_UP & ifr.ifr_ifru.ifru_flags, IFF_UP))
-	{
 		info.up = true;
-	}
+
 #endif
 
 	return info;
@@ -346,8 +293,7 @@ network::getLocalName()
 	dodoString temp0;
 	char *temp1 = new char[256];
 
-	if (::gethostname(temp1, 255) == -1)
-	{
+	if (::gethostname(temp1, 255) == -1) {
 		delete [] temp1;
 
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_GETLOCALNAME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -366,9 +312,7 @@ void
 network::setLocalName(const dodoString &host)
 {
 	if (::sethostname(host.c_str(), host.size()) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_SETLOCALNAME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -383,22 +327,16 @@ network::mail(const dodoString &to,
 	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 
 	if (sendmail == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	fprintf(sendmail, "To: %s\n", to.c_str());
 	fprintf(sendmail, "Subject: %s\n", subject.c_str());
 	if (headers.size() > 0)
-	{
 		fprintf(sendmail, "%s\n", headers.c_str());
-	}
 	fprintf(sendmail, "\n%s\n", message.c_str());
 
 	if (pclose(sendmail) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -416,8 +354,7 @@ network::mail(const dodoString &host,
 {
 	using namespace io::network;
 
-	enum mailAuthTypeEnum
-	{
+	enum mailAuthTypeEnum {
 		SMTPAUTH_CRAMMD5 = 2,
 		SMTPAUTH_LOGIN = 4,
 		SMTPAUTH_PLAIN = 8
@@ -429,9 +366,7 @@ network::mail(const dodoString &host,
 
 	short family = CONNECTION_PROTO_FAMILY_IPV4;
 	if (host.find(":") != dodoString::npos)
-	{
 		family = CONNECTION_PROTO_FAMILY_IPV6;
-	}
 
 	exchange ex;
 	client net(family, CONNECTION_TRANSFER_TYPE_STREAM);
@@ -445,51 +380,34 @@ network::mail(const dodoString &host,
 	mess = ex.readStream();
 
 	if (string::stringToI(dodoString(mess.data(), 3)) != 250)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_LIBDODO, NETWORKEX_BADMAILHELO, TOOLSNETWORKEX_BADMAILHELO_STR, __LINE__, __FILE__);
-	}
 
-	if (auth)
-	{
+	if (auth) {
 		if (string::contains(mess, "CRAM-MD5"))
-		{
 			addFlag(authType, SMTPAUTH_CRAMMD5);
-		}
 
 		if (string::contains(mess, "LOGIN"))
-		{
 			addFlag(authType, SMTPAUTH_LOGIN);
-		}
 
 		if (string::contains(mess, "PLAIN"))
-		{
 			addFlag(authType, SMTPAUTH_PLAIN);
-		}
 	}
 
-	if (auth)
-	{
-		if (isSetFlag(authType, SMTPAUTH_CRAMMD5))
-		{
+	if (auth) {
+		if (isSetFlag(authType, SMTPAUTH_CRAMMD5)) {
 			ex.writeStream("AUTH CRAM-MD5\r\n");
 			mess = ex.readStream();
 
 			if (string::stringToI(dodoString(mess.data(), 3)) != 334)
-			{
 				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-			}
 
 			dodoString ticket = code::decodeBase64(dodoString(mess.data() + 4, mess.size() - 4));
 
 			dodoString md5pass;
 			if (pass.size() > 64)
-			{
 				md5pass = code::MD5(pass);
-			}
 			else
-			{
 				md5pass = pass;
-			}
 
 			unsigned char ipad[65];
 			unsigned char opad[65];
@@ -500,8 +418,7 @@ network::mail(const dodoString &host,
 			memcpy(ipad, md5pass.c_str(), md5pass.size());
 			memcpy(opad, md5pass.c_str(), md5pass.size());
 
-			for (short i = 0; i < 64; ++i)
-			{
+			for (short i = 0; i < 64; ++i) {
 				ipad[i] ^= 0x36;
 				opad[i] ^= 0x5c;
 			}
@@ -525,49 +442,33 @@ network::mail(const dodoString &host,
 			mess = ex.readStream();
 
 			if (string::stringToI(dodoString(mess.data(), 3)) != 235)
-			{
 				throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-			}
-		}
-		else
-		{
-			if (isSetFlag(authType, SMTPAUTH_LOGIN))
-			{
+		} else {
+			if (isSetFlag(authType, SMTPAUTH_LOGIN)) {
 				ex.writeStream("AUTH LOGIN\r\n");
 				mess = ex.readStream();
 
 				if (string::stringToI(dodoString(mess.data(), 3)) != 334)
-				{
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-				}
 
 				ex.writeStream(code::encodeBase64(login) + "\r\n");
 				mess = ex.readStream();
 
 				if (string::stringToI(dodoString(mess.data(), 3)) != 334)
-				{
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-				}
 
 				ex.writeStream(code::encodeBase64(pass) + "\r\n");
 				mess = ex.readStream();
 
 				if (string::stringToI(dodoString(mess.data(), 3)) != 235)
-				{
 					throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-				}
-			}
-			else
-			{
-				if (isSetFlag(authType, SMTPAUTH_PLAIN))
-				{
+			} else {
+				if (isSetFlag(authType, SMTPAUTH_PLAIN)) {
 					ex.writeStream("AUTH PLAIN" + code::encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
 					mess = ex.readStream();
 
 					if (string::stringToI(dodoString(mess.data(), 3)) != 334)
-					{
 						throw exception::basic(exception::ERRMODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-					}
 				}
 			}
 		}
@@ -579,8 +480,7 @@ network::mail(const dodoString &host,
 	dodoStringArray pock = misc::split(to, ",");
 
 	dodoStringArray::iterator i = pock.begin(), j = pock.end();
-	for (; i != j; ++i)
-	{
+	for (; i != j; ++i) {
 		ex.writeStream("RCPT TO: <" + *i + ">\r\n");
 		mess = ex.readStream();
 	}

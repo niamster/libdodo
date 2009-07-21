@@ -34,19 +34,14 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
-			namespace ssl
-			{
+namespace dodo {
+	namespace io {
+		namespace network {
+			namespace ssl {
 				/**
 				 * libdodo defined errors
 				 */
-				enum serverExR
-				{
+				enum serverExR {
 					SERVEREX_WRONGPARAMETER,
 					SERVEREX_WRONGFILENAME,
 					SERVEREX_UNABLETOINITCONTEXT,
@@ -67,8 +62,7 @@ namespace dodo
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
-				enum serverFunctionsID
-				{
+				enum serverFunctionsID {
 					SERVEREX_INITSSL,
 					SERVEREX_ACCEPTSSL,
 					SERVEREX_BINDNLISTEN,

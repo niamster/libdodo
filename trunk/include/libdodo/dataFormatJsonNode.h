@@ -34,29 +34,22 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace rpc
-	{
-		namespace json
-		{
+namespace dodo {
+	namespace rpc {
+		namespace json {
 			class method;
 			class response;
 			class value;
 		};
 	};
 
-	namespace data
-	{
-		namespace format
-		{
-			namespace json
-			{
+	namespace data {
+		namespace format {
+			namespace json {
 				/**
 				 * @enum nodeDataTypeEnum defines JSON data types
 				 */
-				enum nodeDataTypeEnum
-				{
+				enum nodeDataTypeEnum {
 					DATATYPE_STRING,
 					DATATYPE_OBJECT,
 					DATATYPE_ARRAY,
@@ -69,8 +62,7 @@ namespace dodo
 				 * @class node
 				 * @brief defines JSON object reprasentation
 				 */
-				class node
-				{
+				class node {
 					friend class processor;
 					friend class rpc::json::method;
 					friend class rpc::json::response;
@@ -229,16 +221,15 @@ namespace dodo
 
 				  private:
 
-					union
-					{
-						dodoString *stringValue;                                         ///< string value of node
-						dodoMap<dodoString, node, dodoMapStringCompare> *objectValue;    ///< object value of node
-						dodoArray<node> *arrayValue;                                     ///< array value of node
-						bool booleanValue;                                              ///< boolean value of node
-						long numericValue;                                              ///< numeric value of node
+					union {
+						dodoString                                      *stringValue;                                               ///< string value of node
+						dodoMap<dodoString, node, dodoMapStringCompare> *objectValue;                                               ///< object value of node
+						dodoArray<node>                                 *arrayValue;                                                ///< array value of node
+						bool                                            booleanValue;                                               ///< boolean value of node
+						long                                            numericValue;                                               ///< numeric value of node
 					};
 
-					mutable short valueDataType;                                            ///< data type of value
+					mutable short valueDataType;                                                                                    ///< data type of value
 				};
 			};
 		};

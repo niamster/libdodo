@@ -35,18 +35,14 @@
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace stream
-		{
+namespace dodo {
+	namespace io {
+		namespace stream {
 			/**
 			 * @class channel
 			 * @brief implements an interface for I/O operations on stream sources
 			 */
-			class channel : public io::channel
-			{
+			class channel : public io::channel {
 			  public:
 
 				/**

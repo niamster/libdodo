@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
+namespace dodo {
+	namespace io {
+		namespace network {
 			/**
 			 * libdodo defined errors
 			 */
-			enum serverExR
-			{
+			enum serverExR {
 				SERVEREX_WRONGPARAMETER,
 				SERVEREX_WRONGFILENAME,
 				SERVEREX_LONGPATH,
@@ -60,8 +56,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum serverFunctionsID
-			{
+			enum serverFunctionsID {
 				SERVEREX_MAKESOCKET,
 				SERVEREX_BINDNLISTEN,
 				SERVEREX_ACCEPT,

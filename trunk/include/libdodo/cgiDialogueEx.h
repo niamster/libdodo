@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
+namespace dodo {
+	namespace cgi {
 		/**
 		 * libdodo defined errors
 		 */
-		enum dialogueExR
-		{
+		enum dialogueExR {
 			DIALOGUEEX_WRONGSTATUSCODE,
 		};
 
@@ -54,8 +51,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum dialogueFunctionsID
-		{
+		enum dialogueFunctionsID {
 			DIALOGUEEX_MAKEPOST,
 			DIALOGUEEX_SETRESPONSESTATUS,
 		};

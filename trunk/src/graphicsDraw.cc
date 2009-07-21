@@ -87,15 +87,13 @@ draw::setImage(graphics::image *a_im)
 //-------------------------------------------------------------------
 
 void
-draw::primitive(char           *description,
-				const __color__  &fillColor,
-				const __color__  &borderColor,
-				unsigned short borderWidth)
+draw::primitive(char            *description,
+				const __color__ &fillColor,
+				const __color__ &borderColor,
+				unsigned short  borderWidth)
 {
 	if (im == NULL || im->collectedData.handle->im == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-	}
 
 #ifndef IMAGEMAGICK_PRE_63
 	DrawInfo *di = AcquireDrawInfo();
@@ -117,8 +115,7 @@ draw::primitive(char           *description,
 	di->fill.blue = fillColor.blue;
 	di->fill.opacity = fillColor.opacity;
 
-	if (DrawImage(im->collectedData.handle->im, di) == MagickFalse)
-	{
+	if (DrawImage(im->collectedData.handle->im, di) == MagickFalse) {
 		di->primitive = NULL;
 		DestroyDrawInfo(di);
 
@@ -134,8 +131,8 @@ draw::primitive(char           *description,
 void
 draw::circle(const graphics::point &center,
 			 unsigned long         radius,
-			 const __color__         &fillColor,
-			 const __color__         &borderColor,
+			 const __color__       &fillColor,
+			 const __color__       &borderColor,
 			 unsigned short        borderWidth)
 {
 	char description[128];
@@ -148,7 +145,7 @@ draw::circle(const graphics::point &center,
 
 void
 draw::line(const dodoArray<graphics::point> &points,
-		   const __color__                    &lineColor,
+		   const __color__                  &lineColor,
 		   unsigned short                   lineWidth)
 {
 	char pointDesc[128];
@@ -156,8 +153,7 @@ draw::line(const dodoArray<graphics::point> &points,
 	dodoString description = "polyline";
 
 	dodoArray<graphics::point>::const_iterator i = points.begin(), j = points.end();
-	for (; i != j; ++i)
-	{
+	for (; i != j; ++i) {
 		snprintf(pointDesc, 128, " %ld,%ld", i->x, i->y);
 
 		description.append(pointDesc);
@@ -171,8 +167,8 @@ draw::line(const dodoArray<graphics::point> &points,
 void
 draw::rectangle(const graphics::point &tl,
 				const graphics::point &br,
-				const __color__         &fillColor,
-				const __color__         &borderColor,
+				const __color__       &fillColor,
+				const __color__       &borderColor,
 				unsigned short        borderWidth)
 {
 	char description[128];
@@ -188,15 +184,13 @@ draw::text(const graphics::point &position,
 		   const dodoString      &text,
 		   const dodoString      &font,
 		   unsigned short        fontWidth,
-		   const __color__         &fillColor,
-		   const __color__         &borderColor,
+		   const __color__       &fillColor,
+		   const __color__       &borderColor,
 		   unsigned short        borderWidth,
 		   double                angle)
 {
 	if (im == NULL || im->collectedData.handle->im == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-	}
 
 	dodoString txt = "text 0,0 \"";
 	txt.append(text);
@@ -249,8 +243,7 @@ draw::text(const graphics::point &position,
 	di->fill.blue = fillColor.blue;
 	di->fill.opacity = fillColor.opacity;
 
-	if (DrawImage(im->collectedData.handle->im, di) == MagickFalse)
-	{
+	if (DrawImage(im->collectedData.handle->im, di) == MagickFalse) {
 		di->primitive = NULL;
 		di->font = NULL;
 		DestroyDrawInfo(di);
@@ -271,9 +264,7 @@ draw::image(const graphics::point &position,
 			double                angle)
 {
 	if (im == NULL || im->collectedData.handle->im == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-	}
 
 	AffineMatrix current;
 	GetAffineMatrix(&current);
@@ -303,33 +294,25 @@ draw::image(const graphics::point &position,
 	current.ty = _current.rx * affine.tx + _current.sy * affine.ty + _current.ty;
 
 	if (DrawAffineImage(im->collectedData.handle->im, a_im.collectedData.handle->im, &current) == MagickFalse)
-	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
 
 void
 draw::point(const graphics::point &position,
-			const __color__         &pointColor,
+			const __color__       &pointColor,
 			unsigned short        pointWidth)
 {
 	if (im == NULL || im->collectedData.handle->im == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-	}
 
 	char description[128];
 
 	if (pointWidth == 1)
-	{
 		snprintf(description, 128, "point %ld,%ld", position.x, position.y);
-	}
 	else
-	{
 		snprintf(description, 128, "circle %ld,%ld %ld,%ld", position.x, position.y, position.x + pointWidth, position.y);
-	}
 
 #ifndef IMAGEMAGICK_PRE_63
 	DrawInfo *di = AcquireDrawInfo();
@@ -344,8 +327,7 @@ draw::point(const graphics::point &position,
 	di->fill.blue = pointColor.blue;
 	di->fill.opacity = pointColor.opacity;
 
-	if (DrawImage(im->collectedData.handle->im, di) == MagickFalse)
-	{
+	if (DrawImage(im->collectedData.handle->im, di) == MagickFalse) {
 		di->primitive = NULL;
 		DestroyDrawInfo(di);
 

@@ -34,27 +34,21 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		class channel;
 	};
 
-	namespace data
-	{
-		namespace format
-		{
-			namespace json
-			{
+	namespace data {
+		namespace format {
+			namespace json {
 				class node;
 
 				/**
 				 * @class processor
 				 * @brief provides JSON operations
 				 */
-				class processor
-				{
+				class processor {
 				  public:
 
 					/**
@@ -71,7 +65,7 @@ namespace dodo
 					 * @param root defines root of unserialized JSON object
 					 * @param io defines output destination for serialized JSON object
 					 */
-					virtual void make(const node &root,
+					virtual void make(const node        &root,
 									  const io::channel &io);
 
 					/**
@@ -85,7 +79,7 @@ namespace dodo
 					 * @param root defines root of unserialized JSON object
 					 */
 					virtual void fromMap(const dodoStringMap &root,
-										 const io::channel &io);
+										 const io::channel   &io);
 
 					/**
 					 * @param io defines IO source that contains serialized JSON object
@@ -173,8 +167,7 @@ namespace dodo
 					/**
 					 * @enum jsonStateEnum describes states for json processor
 					 */
-					enum jsonStateEnum
-					{
+					enum jsonStateEnum {
 						JSON_STATE_OBJECT_INITIAL,
 						JSON_STATE_OBJECT_OBJECTNAME,
 						JSON_STATE_OBJECT_OBJECTVALUE,

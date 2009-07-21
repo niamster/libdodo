@@ -36,20 +36,16 @@
 #include <libdodo/types.h>
 #include <libdodo/dataBaseSqlConstructor.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
+namespace dodo {
+	namespace data {
+		namespace base {
 			struct __sqlite__;
 
 			/**
 			 * @class sqlite
 			 * @brief provides an interface to sqlite db
 			 */
-			class sqlite : public sql::constructor
-			{
+			class sqlite : public sql::constructor {
 			  private:
 
 				/**
@@ -152,19 +148,18 @@ namespace dodo
 				 * @struct __blob__
 				 * @brief defines blob value
 				 */
-				struct __blob__
-				{
-					unsigned int     reference; ///< reference in request
-					const dodoString *value;    ///< pointer to blob value
+				struct __blob__ {
+					unsigned int     reference;     ///< reference in request
+					const dodoString *value;        ///< pointer to blob value
 				};
 
-				dodoList<__blob__> blobs;         ///< references to blob data
+				dodoList<__blob__> blobs;           ///< references to blob data
 
 			  private:
 
-				__sqlite__ *handle; ///< DB handle
+				__sqlite__ *handle;                 ///< DB handle
 
-				bool empty;                     ///< true if liteStmt is empty
+				bool empty;                         ///< true if liteStmt is empty
 			};
 		};
 	};

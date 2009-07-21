@@ -41,8 +41,7 @@ value::jsonToValue(const dodo::data::format::json::node &node)
 {
 	rpc::value val;
 
-	switch (node.valueDataType)
-	{
+	switch (node.valueDataType) {
 		case dodo::data::format::json::DATATYPE_STRING:
 			val.valueDataType = DATATYPE_STRING;
 			val.stringValue = new dodoString(*node.stringValue);
@@ -55,8 +54,8 @@ value::jsonToValue(const dodo::data::format::json::node &node)
 			val.structValue = new dodoMap<dodoString, rpc::value, dodoMapStringCompare>;
 
 			dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>::iterator
-				i = node.objectValue->begin(),
-				j = node.objectValue->end();
+			i = node.objectValue->begin(),
+			j = node.objectValue->end();
 			for (; i != j; ++i)
 				val.structValue->insert(make_pair(i->first, jsonToValue(i->second)));
 
@@ -69,8 +68,8 @@ value::jsonToValue(const dodo::data::format::json::node &node)
 			val.arrayValue = new dodoArray<rpc::value>;
 
 			dodoArray<dodo::data::format::json::node>::const_iterator
-				i = node.arrayValue->begin(),
-				j = node.arrayValue->end();
+			i = node.arrayValue->begin(),
+			j = node.arrayValue->end();
 			for (; i != j; ++i)
 				val.arrayValue->push_back(jsonToValue(*i));
 
@@ -106,8 +105,7 @@ value::valueToJson(const rpc::value &data)
 {
 	dodo::data::format::json::node node;
 
-	switch (data.valueDataType)
-	{
+	switch (data.valueDataType) {
 		case DATATYPE_STRING:
 			node.valueDataType = dodo::data::format::json::DATATYPE_STRING;
 			node.stringValue = new dodoString(*data.stringValue);
@@ -138,8 +136,8 @@ value::valueToJson(const rpc::value &data)
 			node.arrayValue = new dodoArray<dodo::data::format::json::node>;
 
 			dodoArray<rpc::value>::const_iterator
-				i = data.arrayValue->begin(),
-				j = data.arrayValue->end();
+			i = data.arrayValue->begin(),
+			j = data.arrayValue->end();
 			for (; i != j; ++i)
 				node.arrayValue->push_back(valueToJson(*i));
 
@@ -152,8 +150,8 @@ value::valueToJson(const rpc::value &data)
 			node.objectValue = new dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>;
 
 			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator
-				i = data.structValue->begin(),
-				j = data.structValue->end();
+			i = data.structValue->begin(),
+			j = data.structValue->end();
 			for (; i != j; ++i)
 				node.objectValue->insert(make_pair(i->first, valueToJson(i->second)));
 

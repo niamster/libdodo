@@ -32,10 +32,8 @@
 
 #include <libdodo/directives.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
+namespace dodo {
+	namespace cgi {
 		class exchange;
 
 		/**
@@ -49,8 +47,7 @@ namespace dodo
 		 * @class server
 		 * @brief provides CGI server functionality
 		 */
-		class server
-		{
+		class server {
 		  public:
 
 			/**

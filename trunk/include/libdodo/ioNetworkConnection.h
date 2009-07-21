@@ -34,22 +34,17 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
-			namespace http
-			{
+namespace dodo {
+	namespace io {
+		namespace network {
+			namespace http {
 				class client;
 			};
 
 			/**
 			 * @enum connectionTransferTypeEnum defines type of socket
 			 */
-			enum connectionTransferTypeEnum
-			{
+			enum connectionTransferTypeEnum {
 				CONNECTION_TRANSFER_TYPE_STREAM,        ///< Sequenced, reliable, connection-based byte streams
 				CONNECTION_TRANSFER_TYPE_DATAGRAM,      ///< Connectionless, unreliable datagrams of fixed maximum length
 			};
@@ -57,8 +52,7 @@ namespace dodo
 			/**
 			 * @enum connectionProtoFamilyEnum defines type of domain of socket
 			 */
-			enum connectionProtoFamilyEnum
-			{
+			enum connectionProtoFamilyEnum {
 				CONNECTION_PROTO_FAMILY_IPV4,
 				CONNECTION_PROTO_FAMILY_IPV6,
 				CONNECTION_PROTO_FAMILY_UNIX_SOCKET,
@@ -67,8 +61,7 @@ namespace dodo
 			/**
 			 * @enum connectionOptionEnum defines connection for socket
 			 */
-			enum connectionOptionEnum
-			{
+			enum connectionOptionEnum {
 				CONNECTION_OPTION_KEEP_ALIVE = 1,       ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
 				CONNECTION_OPTION_REUSE_ADDRESS,        ///< Should allow reuse of local addresses[it's accepted by default].
 				CONNECTION_OPTION_DONOT_USE_GATEWAY,    ///< Requests  that outgoing messages bypass the standard routing facilities.
@@ -79,8 +72,7 @@ namespace dodo
 			/**
 			 * @enum connectionLingerOptionEnum defines linger connection for socket
 			 */
-			enum connectionLingerOptionEnum
-			{
+			enum connectionLingerOptionEnum {
 				CONNECTION_LINGEROPTION_GRACEFUL_CLOSE, ///< close returns immediately, but any unsent data is transmitted (after close returns).
 				CONNECTION_LINGEROPTION_HARD_CLOSE,     ///< close returns immediately, and any unsent data is discarded.
 				CONNECTION_LINGEROPTION_WAIT_CLOSE,     ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
@@ -90,8 +82,7 @@ namespace dodo
 			 * @struct __peerInfo__
 			 * @brief defines peer information
 			 */
-			struct __peerInfo__
-			{
+			struct __peerInfo__ {
 				dodoString host;                        ///< host of the box
 				int        port;                        ///< port of the box
 			};
@@ -100,8 +91,7 @@ namespace dodo
 			 * @class connection
 			 * @brief provides option manipulation for network connections
 			 */
-			class connection
-			{
+			class connection {
 				friend class http::client;
 
 			  protected:

@@ -34,17 +34,13 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace rpc
-	{
-		namespace xml
-		{
+namespace dodo {
+	namespace rpc {
+		namespace xml {
 			class value;
 		};
 
-		namespace json
-		{
+		namespace json {
 			class value;
 			class method;
 			class response;
@@ -53,8 +49,7 @@ namespace dodo
 		/**
 		 * @enum dataTypeEnum defines RPC data types
 		 */
-		enum dataTypeEnum
-		{
+		enum dataTypeEnum {
 			DATATYPE_STRING,
 			DATATYPE_BOOLEAN,
 			DATATYPE_INTEGER,
@@ -67,8 +62,7 @@ namespace dodo
 		 * @class value
 		 * @brief defines RPC value
 		 */
-		class value
-		{
+		class value {
 			friend class client;
 			friend class xml::value;
 			friend class json::value;
@@ -236,16 +230,15 @@ namespace dodo
 
 		  protected:
 
-			mutable short valueDataType;                                            ///< argument type[see dataTypeEnum]
+			mutable short valueDataType;                                                                                    ///< argument type[see dataTypeEnum]
 
-			union
-			{
-				dodoString *stringValue;                                         ///< string, datetime, base64 value
-				long integerValue;                                              ///< integer value
-				mutable bool booleanValue;                                              ///< boolean value
-				double doubleValue;                                             ///< double value
-				dodoArray<value> *arrayValue;                                    ///< array value
-				dodoMap<dodoString, value, dodoMapStringCompare> *structValue;   ///< struct value
+			union {
+				dodoString                                       *stringValue;                                              ///< string, datetime, base64 value
+				long                                             integerValue;                                              ///< integer value
+				mutable bool                                     booleanValue;                                              ///< boolean value
+				double                                           doubleValue;                                               ///< double value
+				dodoArray<value>                                 *arrayValue;                                               ///< array value
+				dodoMap<dodoString, value, dodoMapStringCompare> *structValue;                                              ///< struct value
 			};
 		};
 	};

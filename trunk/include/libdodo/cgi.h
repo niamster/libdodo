@@ -34,17 +34,14 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
+namespace dodo {
+	namespace cgi {
 #define CGI_ENVIRONMENTSTATEMENTS    38
 
 		/**
 		 * @enum cgiEnvironmentEnum defines DIALOGUE environment
 		 */
-		enum cgiEnvironmentEnum
-		{
+		enum cgiEnvironmentEnum {
 			CGI_ENVIRONMENT_REQUESTMETHOD,
 			CGI_ENVIRONMENT_REQUESTURI,
 			CGI_ENVIRONMENT_QUERYSTRING,
@@ -90,8 +87,7 @@ namespace dodo
 		/**
 		 * @enum cgiResponseHeaderEnum defines HTTP response headers
 		 */
-		enum cgiResponseHeaderEnum
-		{
+		enum cgiResponseHeaderEnum {
 			CGI_RESPONSEHEADER_ACCEPTRANGES,            ///< what partial content range types this dialogue supports
 			CGI_RESPONSEHEADER_AGE,                     ///< the age the object has been in a proxy cache in seconds
 			CGI_RESPONSEHEADER_ALLOW,                   ///< valid actions for a specified resource. To be used for a 405 Method not allowed
@@ -117,8 +113,7 @@ namespace dodo
 		/**
 		 * @enum cgiStatusCodeEnum defines HTTP response status code
 		 */
-		enum cgiStatusCodeEnum
-		{
+		enum cgiStatusCodeEnum {
 			CGI_STATUSCODE_CONTINUE,                    ///< 100
 			CGI_STATUSCODE_SWITCHINGPROTOCOLS,          ///< 101
 			CGI_STATUSCODE_OK,                          ///< 200
@@ -164,8 +159,7 @@ namespace dodo
 		/**
 		 * @enum cgiPostFileErrEnum defines errors that might occur during fetching POST file
 		 */
-		enum cgiPostFileErrEnum
-		{
+		enum cgiPostFileErrEnum {
 			CGI_POSTFILEERR_NONE,                       ///< everything is OK
 			CGI_POSTFILEERR_ACCESS_DENY,                ///< permissions error
 			CGI_POSTFILEERR_BAD_FILE_NAME,              ///< filename is too long
@@ -177,29 +171,29 @@ namespace dodo
 		 * @class file
 		 * @brief defines node about uploaded POST file
 		 */
-		class file
-		{
+		class file {
 		  public:
+
 			/**
 			 * constructor
 			 */
 			file();
 
-			dodoString    name;                         ///< real name of the file
-			dodoString    mime;                         ///< mimetype of the file
-			dodoString    tmp_name;                     ///< path where it was temporary saved[empty, if file is stored in the memory]
+			dodoString name;                            ///< real name of the file
+			dodoString mime;                            ///< mimetype of the file
+			dodoString tmp_name;                        ///< path where it was temporary saved[empty, if file is stored in the memory]
 			unsigned long size;                         ///< size of the file
-			short         error;                        ///< error code[see dialoguePostFileErrEnum]
-			dodoString    data;                         ///< contains file data[if file is stored in the memory]
+			short error;                                ///< error code[see dialoguePostFileErrEnum]
+			dodoString data;                            ///< contains file data[if file is stored in the memory]
 		};
 
 		/**
 		 * @class cookie
 		 * @brief describes cookie that would be sent to the dialogue browser
 		 */
-		class cookie
-		{
-			public:
+		class cookie {
+		  public:
+
 			/**
 			 * constructor
 			 */
@@ -210,11 +204,11 @@ namespace dodo
 			 * @note defines struct data with user data
 			 */
 			cookie(const dodoString &name,
-						const            dodoString &value,
-						const            dodoString &exDate = __dodostring__,
-						const            dodoString &path = __dodostring__,
-						const            dodoString &domain = __dodostring__,
-						bool             secure = false);
+				   const dodoString &value,
+				   const dodoString &exDate = __dodostring__,
+				   const dodoString &path = __dodostring__,
+				   const dodoString &domain = __dodostring__,
+				   bool             secure = false);
 
 			dodoString name;            ///< name of the cookie
 			dodoString value;           ///< value of the cookie
@@ -222,14 +216,13 @@ namespace dodo
 			dodoString expires;         ///< expiration date
 			dodoString path;            ///< cookie path
 			dodoString domain;          ///< cookie domain
-			bool       secure;          ///< defines cookie security; false by default
+			bool secure;                ///< defines cookie security; false by default
 		};
 
 		/**
 		 * @enum cgiRequestMethodEnum defines request type
 		 */
-		enum cgiRequestMethodEnum
-		{
+		enum cgiRequestMethodEnum {
 			CGI_REQUESTMETHOD_GET,
 			CGI_REQUESTMETHOD_POST,
 			CGI_REQUESTMETHOD_GET_POST  ///< if POST method and request Url also contains ?name=value&.... format data
@@ -238,8 +231,7 @@ namespace dodo
 		/**
 		 * @enum cgiAuthTypeEnum defines authentication types
 		 */
-		enum cgiAuthTypeEnum
-		{
+		enum cgiAuthTypeEnum {
 			CGI_AUTHTYPE_NONE,
 			CGI_AUTHTYPE_BASIC,
 			CGI_AUTHTYPE_DIGEST
@@ -249,8 +241,7 @@ namespace dodo
 		 * @struct __cgiAuthInfo__
 		 * @brief defines authenfication information
 		 */
-		struct __cgiAuthInfo__
-		{
+		struct __cgiAuthInfo__ {
 			dodoString user;            ///< user name
 			short      type;            ///< authenfication type[see cgiAuthTypeEnum]
 		};

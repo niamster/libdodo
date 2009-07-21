@@ -70,29 +70,19 @@ void
 connection::block(bool flag)
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_BLOCK, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
-	}
 
 	int block = fcntl(socket, F_GETFL);
 	if (block == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	if (flag)
-	{
 		block &= ~O_NONBLOCK;
-	}
 	else
-	{
 		block |= O_NONBLOCK;
-	}
 
 	if (fcntl(socket, F_SETFL, block) == 1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	blocked = flag;
 }
@@ -103,16 +93,12 @@ void
 connection::setInBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETINBUFFERSIZE, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
-	}
 
 	inSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &inSocketBuffer, sizeof(long)) == 1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETINBUFFERSIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -129,16 +115,12 @@ void
 connection::setOutBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETOUTBUFFERSIZE, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
-	}
 
 	outSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBuffer, sizeof(long)) == 1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETOUTBUFFERSIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -155,9 +137,7 @@ void
 connection::setInTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETINTIMEOUT, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
-	}
 
 	inTimeout = microseconds;
 
@@ -166,9 +146,7 @@ connection::setInTimeout(unsigned long microseconds)
 	val.tv_usec = inTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &val, sizeof(val)) == 1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETINTIMEOUT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -185,9 +163,7 @@ void
 connection::setOutTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETOUTTIMEOUT, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
-	}
 
 	outTimeout = microseconds;
 
@@ -196,9 +172,7 @@ connection::setOutTimeout(unsigned long microseconds)
 	val.tv_usec = outTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, &val, sizeof(val)) == 1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETOUTTIMEOUT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -215,9 +189,7 @@ bool
 connection::isSetOption(int option) const
 {
 	if  ((option & socketOpts) == option)
-	{
 		return true;
-	}
 
 	return false;
 }
@@ -229,21 +201,16 @@ connection::setOption(short option,
 					  bool  flag)
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
-	}
 
 	int sockFlag(1);
 
 	if (!flag)
-	{
 		sockFlag = 0;
-	}
 
 	int real_option(0);
 
-	switch (option)
-	{
+	switch (option) {
 		case CONNECTION_OPTION_KEEP_ALIVE:
 
 			real_option = SO_KEEPALIVE;
@@ -280,18 +247,12 @@ connection::setOption(short option,
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, real_option, &sockFlag, sizeof(int)) == 1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETSOCKOPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	if (!flag)
-	{
 		removeFlag(socketOpts, 1 << option);
-	}
 	else
-	{
 		addFlag(socketOpts, 1 << option);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -301,14 +262,11 @@ connection::setLingerOption(short option,
 							int   seconds)
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETLINGERSOCKOPT, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
-	}
 
 	linger lin;
 
-	switch (option)
-	{
+	switch (option) {
 		case CONNECTION_LINGEROPTION_GRACEFUL_CLOSE:
 
 			lin.l_onoff = 0;
@@ -335,9 +293,7 @@ connection::setLingerOption(short option,
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, SO_LINGER, &lin, sizeof(linger)) == 1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX_SETLINGERSOCKOPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	lingerOpts = option;
 	lingerSeconds = seconds;
@@ -365,14 +321,10 @@ void
 connection::_close(int socket)
 {
 	if (::shutdown(socket, SHUT_RDWR) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX__CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	if (::close(socket) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKCONNECTION, CONNECTIONEX__CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------

@@ -35,24 +35,18 @@
 #include <libdodo/types.h>
 #include <libdodo/pcSyncDataCollection.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
+namespace dodo {
+	namespace pc {
+		namespace sync {
 			class section;
 
-			namespace process
-			{
-				namespace data
-				{
+			namespace process {
+				namespace data {
 					/**
 					 * @class collection
 					 * @brief implements collection of shared data for processes
 					 */
-					class collection : public sync::data::collection
-					{
+					class collection : public sync::data::collection {
 					  private:
 
 						/**
@@ -116,13 +110,13 @@ namespace dodo
 						 */
 						virtual bool getShare(unsigned long position);
 
-						dodoList<pc::sync::data::__info__> shares;            ///< identificators of shared data
+						dodoList<pc::sync::data::__info__> shares;              ///< identificators of shared data
 
-						unsigned long shareNum;                             ///< number of registered shares
+						unsigned long shareNum;                                 ///< number of registered shares
 
-						dodoList<pc::sync::data::__info__>::iterator current; ///< iterator for list of shared data[for matched with getShare method]
+						dodoList<pc::sync::data::__info__>::iterator current;   ///< iterator for list of shared data[for matched with getShare method]
 
-						section *keeper;                                    ///< section locker
+						section *keeper;                                        ///< section locker
 					};
 				};
 			};

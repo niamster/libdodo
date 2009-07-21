@@ -34,19 +34,14 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace thread
-			{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace thread {
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
-				enum sectionFunctionsID
-				{
+				enum sectionFunctionsID {
 					SECTIONEX_LOCK,
 					SECTIONEX_UNLOCK,
 					SECTIONEX_SECTION,

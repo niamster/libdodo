@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum timeFunctionsID
-		{
+		enum timeFunctionsID {
 			TIMEEX_GETBYFORMAT,
 			TIMEEX_NOW,
 			TIMEEX_MAKETIME,

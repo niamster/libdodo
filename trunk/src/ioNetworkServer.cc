@@ -49,7 +49,7 @@ using namespace dodo::io::network;
 
 #ifndef IO_WO_XEXEC
 __xexecIoNetworkServerCollectedData__::__xexecIoNetworkServerCollectedData__(xexec *a_executor,
-																		 short execObject) : __xexecCollectedData__(a_executor, execObject)
+																			 short execObject) : __xexecCollectedData__(a_executor, execObject)
 {
 }
 #endif
@@ -80,17 +80,14 @@ server::server(short a_family,
 
 server::~server()
 {
-	if (socket != -1)
-	{
+	if (socket != -1) {
 		::shutdown(socket, SHUT_RDWR);
 
 		::close(socket);
 	}
 
 	if (unixSock.size() != 0)
-	{
 		::unlink(unixSock.c_str());
-	}
 }
 
 //-------------------------------------------------------------------
@@ -114,22 +111,18 @@ server::restoreOptions()
 void
 server::makeSocket()
 {
-	if (socket != -1)
-	{
+	if (socket != -1) {
 		::shutdown(socket, SHUT_RDWR);
 
 		if (::close(socket) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 
 		socket = -1;
 	}
 
 	int real_domain(PF_INET), real_type(SOCK_STREAM);
 
-	switch (family)
-	{
+	switch (family) {
 		case CONNECTION_PROTO_FAMILY_IPV4:
 
 			real_domain = PF_INET;
@@ -153,8 +146,7 @@ server::makeSocket()
 			throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
-	switch (type)
-	{
+	switch (type) {
 		case CONNECTION_TRANSFER_TYPE_STREAM:
 
 			real_type = SOCK_STREAM;
@@ -174,9 +166,7 @@ server::makeSocket()
 
 	socket = ::socket(real_domain, real_type, 0);
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	restoreOptions();
 }
@@ -197,63 +187,42 @@ server::serve(const dodoString &host,
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == 1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
 	setLingerOption(IONETWORKCONNECTION_SOCKET_LINGER_OPTION, IONETWORKCONNECTION_SOCKET_LINGER_PERIOD);
 
-	if (family == CONNECTION_PROTO_FAMILY_IPV6)
-	{
+	if (family == CONNECTION_PROTO_FAMILY_IPV6) {
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;
 		sa.sin6_port = htons(port);
 		sa.sin6_flowinfo = 0;
 		sa.sin6_scope_id = 0;
 		if (host == "*")
-		{
 			sa.sin6_addr = in6addr_any;
-		}
 		else
-		{
 			inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
-		}
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-	}
-	else
-	{
+	} else {
 		struct sockaddr_in sa;
 
 		sa.sin_family = AF_INET;
 		sa.sin_port = htons(port);
 		if (host == "*")
-		{
 			sa.sin_addr.s_addr = htonl(INADDR_ANY);
-		}
 		else
-		{
 			inet_pton(AF_INET, host.c_str(), &sa.sin_addr);
-		}
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 	}
 
 	if (type == CONNECTION_TRANSFER_TYPE_STREAM)
-	{
 		if (::listen(socket, numberOfConnections) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-	}
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
@@ -274,27 +243,19 @@ server::serve(const dodoString &path,
 
 	makeSocket();
 
-	if (force)
-	{
+	if (force) {
 		struct stat st;
-		if (::lstat(path.c_str(), &st) != -1)
-		{
+		if (::lstat(path.c_str(), &st) != -1) {
 			if (S_ISSOCK(st.st_mode))
-			{
 				::unlink(path.c_str());
-			}
 			else
-			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_WRONGFILENAME, IONETWORKSERVEREX_WRONGFILENAME_STR, __LINE__, __FILE__);
-			}
 		}
 	}
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
@@ -305,22 +266,16 @@ server::serve(const dodoString &path,
 	unsigned long size = path.size();
 
 	if (size >= 108)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_LONGPATH, IONETWORKSERVEREX_LONGPATH_STR, __LINE__, __FILE__);
-	}
 
 	strncpy(sa.sun_path, path.c_str(), size);
 	sa.sun_family = AF_UNIX;
 
 	if (::bind(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	if (::listen(socket, numberOfConnections) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	unixSock = path;
 
@@ -340,8 +295,7 @@ server::accept(__initialAccept__ &init,
 	performXExec(preExec);
 #endif
 
-	if (type != CONNECTION_TRANSFER_TYPE_STREAM)
-	{
+	if (type != CONNECTION_TRANSFER_TYPE_STREAM) {
 		init.socket = socket;
 		init.blocked = blocked;
 		init.blockInherited = blockInherited;
@@ -352,31 +306,23 @@ server::accept(__initialAccept__ &init,
 	int sock(-1);
 	info.host.clear();
 
-	switch (family)
-	{
+	switch (family) {
 		case CONNECTION_PROTO_FAMILY_IPV4:
 		{
 			struct sockaddr_in sa;
 			socklen_t len = sizeof(sockaddr_in);
 			sock = ::accept(socket, (sockaddr *)&sa, &len);
 
-			if (sock == -1)
-			{
+			if (sock == -1) {
 				if (errno == EAGAIN)
-				{
 					return false;
-				}
 				else
-				{
 					throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
 			}
 
 			char temp[INET_ADDRSTRLEN];
 			if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
-			{
 				info.host.assign(temp);
-			}
 			info.port = ntohs(sa.sin_port);
 
 			break;
@@ -389,23 +335,16 @@ server::accept(__initialAccept__ &init,
 
 			sock = ::accept(socket, (sockaddr *)&sa, &len);
 
-			if (sock == -1)
-			{
+			if (sock == -1) {
 				if (errno == EAGAIN)
-				{
 					return false;
-				}
 				else
-				{
 					throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
 			}
 
 			char temp[INET6_ADDRSTRLEN];
 			if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
-			{
 				info.host.assign(temp);
-			}
 			info.port = ntohs(sa.sin6_port);
 
 			break;
@@ -414,16 +353,11 @@ server::accept(__initialAccept__ &init,
 		case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
 
 			sock = ::accept(socket, NULL, NULL);
-			if (sock == -1)
-			{
+			if (sock == -1) {
 				if (errno == EAGAIN)
-				{
 					return false;
-				}
 				else
-				{
 					throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
 			}
 
 			break;
@@ -454,8 +388,7 @@ server::accept(__initialAccept__ &init)
 	performXExec(preExec);
 #endif
 
-	if (type != CONNECTION_TRANSFER_TYPE_STREAM)
-	{
+	if (type != CONNECTION_TRANSFER_TYPE_STREAM) {
 		init.socket = socket;
 		init.blocked = blocked;
 		init.blockInherited = blockInherited;
@@ -464,16 +397,11 @@ server::accept(__initialAccept__ &init)
 	}
 
 	int sock = ::accept(socket, NULL, NULL);
-	if (sock == -1)
-	{
+	if (sock == -1) {
 		if (errno == EAGAIN)
-		{
 			return false;
-		}
 		else
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 	}
 
 	init.socket = sock;

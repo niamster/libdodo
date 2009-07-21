@@ -38,7 +38,7 @@ using namespace dodo::data::base;
 
 #ifndef DATABASE_WO_XEXEC
 __xexecDataBaseAccumulatorCollectedData__::__xexecDataBaseAccumulatorCollectedData__(xexec *a_executor,
-																				 short execObject) : __xexecCollectedData__(a_executor, execObject)
+																					 short execObject) : __xexecCollectedData__(a_executor, execObject)
 {
 }
 #endif
@@ -74,15 +74,11 @@ accumulator::callFunction(const dodoString      &name,
 	collectedData.table = name;
 	collectedData.fields = arguments;
 
-	if (as.size() != 0)
-	{
+	if (as.size() != 0) {
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_AS;
 		collectedData.where = as;
-	}
-	else
-	{
+	} else
 		collectedData.qShift = ACCUMULATOR_NONE;
-	}
 
 	show = true;
 }
@@ -115,15 +111,11 @@ accumulator::select(const dodoString      &a_table,
 	collectedData.table = a_table;
 	collectedData.fields = a_fields;
 
-	if (a_where.size() != 0)
-	{
+	if (a_where.size() != 0) {
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
-	}
-	else
-	{
+	} else
 		collectedData.qShift = ACCUMULATOR_NONE;
-	}
 
 	show = true;
 }
@@ -140,15 +132,11 @@ accumulator::selectAll(const dodoString &a_table,
 	collectedData.fields.clear();
 	collectedData.fields.push_back("*");
 
-	if (a_where.size() != 0)
-	{
+	if (a_where.size() != 0) {
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
-	}
-	else
-	{
+	} else
 		collectedData.qShift = ACCUMULATOR_NONE;
-	}
 
 	show = true;
 }
@@ -171,8 +159,7 @@ accumulator::insert(const dodoString    &a_table,
 	dodoStringArray temp;
 
 	dodoStringMap::const_iterator i = (a_fields.begin()), j(a_fields.end());
-	for (; i != j; ++i)
-	{
+	for (; i != j; ++i) {
 		collectedData.fields.push_back(i->first);
 		temp.push_back(i->second);
 	}
@@ -200,21 +187,16 @@ accumulator::insert(const dodoString               &a_table,
 
 	dodoStringMap::const_iterator i(v->begin()), j(v->end());
 	for (; i != j; ++i)
-	{
 		collectedData.fields.push_back(i->first);
-	}
 
 	dodoStringArray temp;
 
-	for (; v != b; ++v)
-	{
+	for (; v != b; ++v) {
 		j = v->end();
 		temp.clear();
 
 		for (i = v->begin(); i != j; ++i)
-		{
 			temp.push_back(i->second);
-		}
 
 		collectedData.values.push_back(temp);
 	}
@@ -259,9 +241,7 @@ accumulator::insert(const dodoString                 &a_table,
 
 	dodoArray<dodoStringArray>::const_iterator k(a_values.begin()), l(a_values.end());
 	for (; k != l; ++k)
-	{
 		collectedData.values.push_back(*k);
-	}
 
 	show = false;
 }
@@ -285,15 +265,11 @@ accumulator::insertSelect(const dodoString      &a_tableTo,
 
 	collectedData.values.push_back(a_fieldsFrom);
 
-	if (a_where.size() != 0)
-	{
+	if (a_where.size() != 0) {
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
-	}
-	else
-	{
+	} else
 		collectedData.qShift = ACCUMULATOR_NONE;
-	}
 
 	show = false;
 }
@@ -316,22 +292,17 @@ accumulator::update(const dodoString    &a_table,
 
 	dodoStringArray temp;
 
-	for (; i != j; ++i)
-	{
+	for (; i != j; ++i) {
 		collectedData.fields.push_back((*i).first);
 		temp.push_back((*i).second);
 	}
 	collectedData.values.push_back(temp);
 
-	if (a_where.size() != 0)
-	{
+	if (a_where.size() != 0) {
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
-	}
-	else
-	{
+	} else
 		collectedData.qShift = ACCUMULATOR_NONE;
-	}
 
 	show = false;
 }
@@ -353,15 +324,11 @@ accumulator::update(const dodoString      &a_table,
 
 	collectedData.values.push_back(a_values);
 
-	if (a_where.size() != 0)
-	{
+	if (a_where.size() != 0) {
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
-	}
-	else
-	{
+	} else
 		collectedData.qShift = ACCUMULATOR_NONE;
-	}
 
 	show = false;
 }
@@ -378,15 +345,11 @@ accumulator::del(const dodoString &a_table,
 
 	collectedData.table = a_table;
 
-	if (a_where.size() != 0)
-	{
+	if (a_where.size() != 0) {
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
-	}
-	else
-	{
+	} else
 		collectedData.qShift = ACCUMULATOR_NONE;
-	}
 
 	show = false;
 }

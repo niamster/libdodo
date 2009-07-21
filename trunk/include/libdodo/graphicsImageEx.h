@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace graphics
-	{
+namespace dodo {
+	namespace graphics {
 		/**
 		 * libdodo defined errors
 		 */
-		enum imageExR
-		{
+		enum imageExR {
 			IMAGEEX_IMERROR,
 			IMAGEEX_BADINFO,
 			IMAGEEX_EMPTYIMAGE,
@@ -61,8 +58,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum imageFunctionsID
-		{
+		enum imageFunctionsID {
 			IMAGEEX_IMERRORHANDLER,
 			IMAGEEX_READ,
 			IMAGEEX_CREATE,

@@ -53,9 +53,7 @@ value
 response::getValue(unsigned long position)
 {
 	if (position >= values.size())
-	{
 		throw exception::basic(exception::ERRMODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
-	}
 
 	return values[position];
 }

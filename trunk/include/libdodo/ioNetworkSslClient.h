@@ -36,37 +36,29 @@
 #include <libdodo/ioNetworkClient.h>
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
-			namespace http
-			{
+namespace dodo {
+	namespace io {
+		namespace network {
+			namespace http {
 				class client;
 			};
 		};
 
-		namespace ssl
-		{
+		namespace ssl {
 			struct __sslConnection__;
 			struct __sslContext__;
 			struct __certificates__;
 		};
 
-		namespace network
-		{
-			namespace ssl
-			{
+		namespace network {
+			namespace ssl {
 				class exchange;
 
 				/**
 				 * @class client
 				 * @brief provides network SSL connection interface
 				 */
-				class client : public network::client
-				{
+				class client : public network::client {
 					friend class exchange;
 					friend class network::http::client;
 
@@ -147,9 +139,9 @@ namespace dodo
 					virtual void connectSsl();
 
 					io::ssl::__sslConnection__ *handle; ///< ssl connection handle
-					io::ssl::__sslContext__ *ctx; ///< ssl connection context
+					io::ssl::__sslContext__ *ctx;       ///< ssl connection context
 
-					bool sslConnected;  ///< true if SSL connection established
+					bool sslConnected;                  ///< true if SSL connection established
 				};
 			};
 		};

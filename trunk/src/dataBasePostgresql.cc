@@ -40,28 +40,24 @@
 #include <libdodo/dataBasePostgresqlEx.h>
 #include <libdodo/xexec.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
+namespace dodo {
+	namespace data {
+		namespace base {
 			/**
 			 * @struct __postgresql__
 			 * @brief defines internal handlers for MySQL DBMS interaction
 			 */
-			struct __postgresql__
-			{
+			struct __postgresql__ {
 				/**
 				 * constructor
 				 */
 				__postgresql__() : handle(NULL),
-								 result(NULL)
+								   result(NULL)
 				{
 				}
 
-				PGconn *handle; ///< DB handle
-				PGresult *result; ///< handlde to result
+				PGconn             *handle; ///< DB handle
+				PGresult           *result; ///< handlde to result
 			};
 		};
 	};
@@ -70,8 +66,7 @@ namespace dodo
 using namespace dodo::data::base;
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
-const dodoString postgresql::encodingStatements[] =
-{
+const dodoString postgresql::encodingStatements[] = {
 	"SQL_ASCII",
 	"EUC_JP",
 	"EUC_CN",
@@ -127,7 +122,7 @@ postgresql::postgresql() : empty(true),
 //-------------------------------------------------------------------
 
 postgresql::postgresql(const __connectionInfo__ &info) : empty(true),
-													   handle(new __postgresql__)
+														 handle(new __postgresql__)
 {
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASEPOSTGRESQL);
@@ -146,8 +141,7 @@ postgresql::postgresql(const __connectionInfo__ &info) : empty(true),
 
 	int status = PQstatus(handle->handle);
 
-	if (status != CONNECTION_OK)
-	{
+	if (status != CONNECTION_OK) {
 		delete handle;
 
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_POSTGRESQL, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
@@ -164,12 +158,9 @@ postgresql::postgresql(postgresql &a_mypp)
 
 postgresql::~postgresql()
 {
-	if (handle->handle != NULL)
-	{
+	if (handle->handle != NULL) {
 		if (!empty)
-		{
 			PQclear(handle->result);
-		}
 
 		PQfinish(handle->handle);
 	}
@@ -189,10 +180,8 @@ postgresql::connect(const __connectionInfo__ &info)
 	performXExec(preExec);
 #endif
 
-	if (handle->handle != NULL)
-	{
-		if (!empty)
-		{
+	if (handle->handle != NULL) {
+		if (!empty) {
 			PQclear(handle->result);
 			empty = true;
 		}
@@ -213,8 +202,7 @@ postgresql::connect(const __connectionInfo__ &info)
 
 	int status = PQstatus(handle->handle);
 
-	if (status != CONNECTION_OK)
-	{
+	if (status != CONNECTION_OK) {
 		handle->handle = NULL;
 
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_CONNECT, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
@@ -230,15 +218,13 @@ postgresql::connect(const __connectionInfo__ &info)
 void
 postgresql::disconnect()
 {
-	if (handle->handle != NULL)
-	{
+	if (handle->handle != NULL) {
 #ifndef DATABASE_WO_XEXEC
 		operType = DATABASE_OPERATION_DISCONNECT;
 		performXExec(preExec);
 #endif
 
-		if (!empty)
-		{
+		if (!empty) {
 			PQclear(handle->result);
 			empty = true;
 		}
@@ -259,9 +245,7 @@ dodoArray<dodo::dodoStringArray>
 postgresql::fetchRows() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHROW;
@@ -271,9 +255,7 @@ postgresql::fetchRows() const
 	dodoArray<dodoStringArray> rows;
 
 	if (empty || !show)
-	{
 		return rows;
-	}
 
 	int rowsNum = PQntuples(handle->result);
 	int fieldsNum = PQnfields(handle->result);
@@ -289,20 +271,14 @@ postgresql::fetchRows() const
 #endif
 
 	int j;
-	for (int i(0); i < rowsNum; ++i)
-	{
+	for (int i(0); i < rowsNum; ++i) {
 		rowsPart.clear();
 
-		for (j = 0; j < fieldsNum; ++j)
-		{
+		for (j = 0; j < fieldsNum; ++j) {
 			if (PQgetisnull(handle->result, i, j) == 1)
-			{
 				rowsPart.push_back(statements[SQLCONSTRUCTOR_STATEMENT_NULL]);
-			}
 			else
-			{
 				rowsPart.push_back(dodoString(PQgetvalue(handle->result, i, j), PQgetlength(handle->result, i, j)));
-			}
 		}
 
 		rows.push_back(rowsPart);
@@ -321,9 +297,7 @@ dodo::dodoStringArray
 postgresql::fetchFields() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHFIELD;
@@ -333,9 +307,7 @@ postgresql::fetchFields() const
 	dodoStringArray fields;
 
 	if (empty || !show)
-	{
 		return fields;
-	}
 
 	int fieldsNum = PQnfields(handle->result);
 
@@ -344,9 +316,7 @@ postgresql::fetchFields() const
 #endif
 
 	for (int i(0); i < fieldsNum; ++i)
-	{
 		fields.push_back(PQfname(handle->result, i));
-	}
 
 #ifndef DATABASE_WO_XEXEC
 	performXExec(postExec);
@@ -369,18 +339,12 @@ unsigned int
 postgresql::rowsCount() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	if (empty || !show)
-	{
 		return 0;
-	}
 	else
-	{
 		return PQntuples(handle->result);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -389,18 +353,12 @@ unsigned int
 postgresql::fieldsCount() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	if (empty || !show)
-	{
 		return 0;
-	}
 	else
-	{
 		return PQnfields(handle->result);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -409,18 +367,12 @@ unsigned int
 postgresql::affectedRowsCount() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	if (empty || show)
-	{
 		return 0;
-	}
 	else
-	{
 		return atoi(PQcmdTuples(handle->result));
-	}
 }
 
 //-------------------------------------------------------------------
@@ -429,37 +381,29 @@ void
 postgresql::getFieldsTypes(const dodoString &table)
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	dodoString temp = collectedData.dbInfo.db + ":" + table;
 
 	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
 
 	if (types == fieldTypes.end())
-	{
 		types = fieldTypes.insert(make_pair(temp, dodoMap<dodoString, short, dodoMapICaseStringCompare>())).first;
-	}
 
 	request = "select column_name, data_type from information_schema.columns where table_name='" + table + "'";
 
-	if (!empty)
-	{
+	if (!empty) {
 		PQclear(handle->result);
 		empty = true;
 	}
 
 	handle->result = PQexecParams(handle->handle, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 	if (handle->result == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__, request);
-	}
 
 	int status = PQresultStatus(handle->result);
 
-	switch (status)
-	{
+	switch (status) {
 		case PGRES_EMPTY_QUERY:
 		case PGRES_BAD_RESPONSE:
 		case PGRES_NONFATAL_ERROR:
@@ -478,65 +422,46 @@ postgresql::getFieldsTypes(const dodoString &table)
 
 	dodoStringArray rowsPart;
 
-	for (int i(0); i < rowsNum; ++i)
-	{
+	for (int i(0); i < rowsNum; ++i) {
 		columnName = PQgetvalue(handle->result, i, 0);
 		columnType = PQgetvalue(handle->result, i, 1);
 
 		field = types->second.find(columnName);
 
-		if (field == fieldsEnd)
-		{
+		if (field == fieldsEnd) {
 			if (strcasestr(columnType, "char") != NULL ||
 				strcasestr(columnType, "date") != NULL ||
 				strcasestr(columnType, "text") != NULL)
-			{
 				types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_TEXT));
-			}
-			else
-			{
+			else {
 				if (strcasestr(columnType, "bytea") != NULL ||
 					strcasestr(columnType, "array") != NULL ||
 					strcasestr(columnType, "cidr") != NULL ||
 					strcasestr(columnType, "macaddrcd") != NULL ||
 					strcasestr(columnType, "inet") != NULL)
-				{
 					types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_BINARY));
-				}
 				else
-				{
 					types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_NUMERIC));
-				}
 			}
-		}
-		else
-		{
+		} else {
 			if (strcasestr(columnType, "char") != NULL ||
 				strcasestr(columnType, "date") != NULL ||
 				strcasestr(columnType, "text") != NULL)
-			{
 				field->second = sql::FIELDTYPE_TEXT;
-			}
-			else
-			{
+			else {
 				if (strcasestr(columnType, "bytea") != NULL ||
 					strcasestr(columnType, "array") != NULL ||
 					strcasestr(columnType, "cidr") != NULL ||
 					strcasestr(columnType, "macaddrcd") != NULL ||
 					strcasestr(columnType, "inet") != NULL)
-				{
 					field->second = sql::FIELDTYPE_BINARY;
-				}
 				else
-				{
 					field->second = sql::FIELDTYPE_NUMERIC;
-				}
 			}
 		}
 	}
 
-	if (!empty)
-	{
+	if (!empty) {
 		PQclear(handle->result);
 		empty = true;
 	}
@@ -549,9 +474,7 @@ postgresql::exec(const dodoString &query,
 				 bool             result)
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_EXEC;
@@ -561,32 +484,26 @@ postgresql::exec(const dodoString &query,
 	int status;
 
 	if (query.size() == 0)
-	{
 		queryCollect();
-	}
-	else
-	{
+	else {
 		request = query;
 		show = result;
 	}
 
-	if (!empty)
-	{
+	if (!empty) {
 		PQclear(handle->result);
 		empty = true;
 	}
 
 	unsigned long size = blobs.size();
 
-	if (size > 0)
-	{
+	if (size > 0) {
 		char **values = new char*[size];
 		int *lengths = new int[size];
 		int *formats = new int[size];
 
 		dodoList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
-		for (int o = 0; i != j; ++i, ++o)
-		{
+		for (int o = 0; i != j; ++i, ++o) {
 			values[o] = (char *)i->value->c_str();
 			lengths[o] = i->value->size();
 			formats[o] = 1;
@@ -595,20 +512,14 @@ postgresql::exec(const dodoString &query,
 		handle->result = PQexecParams(handle->handle, request.c_str(), size, NULL, values, lengths, formats, 0);
 
 		blobs.clear();
-	}
-	else
-	{
+	} else
 		handle->result = PQexecParams(handle->handle, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
-	}
 
 	if (handle->result == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__);
-	}
 
 	status = PQresultStatus(handle->result);
-	switch (status)
-	{
+	switch (status) {
 		case PGRES_EMPTY_QUERY:
 		case PGRES_BAD_RESPONSE:
 		case PGRES_NONFATAL_ERROR:
@@ -637,41 +548,32 @@ postgresql::updateCollect()
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_SET]);
 
 	dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
-	if (v != collectedData.values.end())
-	{
+	if (v != collectedData.values.end()) {
 		unsigned int fn(collectedData.fields.size()), fv(v->size());
 
 		unsigned int o(fn <= fv ? fn : fv);
 
 		dodoStringArray::const_iterator i(collectedData.fields.begin()), j(v->begin());
-		if (i != j)
-		{
+		if (i != j) {
 			dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
-			if (types != fieldTypes.end())
-			{
+			if (types != fieldTypes.end()) {
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
 				__blob__ blob;
 
 				unsigned int k = 1;
-				for (; k < o; ++i, ++k, ++j)
-				{
+				for (; k < o; ++i, ++k, ++j) {
 					request.append(*i);
 
 					type = types->second.find(*i);
-					if (type != typesEnd)
-					{
-						if (type->second == sql::FIELDTYPE_TEXT)
-						{
+					if (type != typesEnd) {
+						if (type->second == sql::FIELDTYPE_TEXT) {
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 							request.append(escapeFields(*j));
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-						}
-						else
-						{
-							if (type->second == sql::FIELDTYPE_BINARY)
-							{
+						} else {
+							if (type->second == sql::FIELDTYPE_BINARY) {
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 								request.append("$" + tools::string::uiToString(k));
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
@@ -680,17 +582,13 @@ postgresql::updateCollect()
 								blob.value = &(*j);
 
 								blobs.push_back(blob);
-							}
-							else
-							{
+							} else {
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 								request.append(*j);
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 							}
 						}
-					}
-					else
-					{
+					} else {
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 						request.append(escapeFields(*j));
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
@@ -699,18 +597,13 @@ postgresql::updateCollect()
 				request.append(*i);
 
 				type = types->second.find(*i);
-				if (type != typesEnd)
-				{
-					if (type->second == sql::FIELDTYPE_TEXT)
-					{
+				if (type != typesEnd) {
+					if (type->second == sql::FIELDTYPE_TEXT) {
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 						request.append(escapeFields(*j));
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-					}
-					else
-					{
-						if (type->second == sql::FIELDTYPE_BINARY)
-						{
+					} else {
+						if (type->second == sql::FIELDTYPE_BINARY) {
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 							request.append("$" + tools::string::uiToString(k));
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
@@ -719,26 +612,19 @@ postgresql::updateCollect()
 							blob.value = &(*j);
 
 							blobs.push_back(blob);
-						}
-						else
-						{
+						} else {
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 							request.append(*j);
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 						}
 					}
-				}
-				else
-				{
+				} else {
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 					request.append(escapeFields(*j));
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 				}
-			}
-			else
-			{
-				for (unsigned int k(1); k < o; ++i, ++k, ++j)
-				{
+			} else {
+				for (unsigned int k(1); k < o; ++i, ++k, ++j) {
 					request.append(*i);
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 					request.append(escapeFields(*j));
@@ -761,8 +647,7 @@ postgresql::insertCollect()
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
 	request.append(collectedData.table);
-	if (collectedData.fields.size() != 0)
-	{
+	if (collectedData.fields.size() != 0) {
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 		request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
@@ -770,11 +655,9 @@ postgresql::insertCollect()
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_VALUES]);
 
 	dodoArray<dodoStringArray>::iterator k(collectedData.values.begin()), l(collectedData.values.end());
-	if (k != l)
-	{
+	if (k != l) {
 		dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
-		if (types != fieldTypes.end())
-		{
+		if (types != fieldTypes.end()) {
 			dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
 			dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
@@ -785,26 +668,19 @@ postgresql::insertCollect()
 			unsigned int o = 0;
 
 			--l;
-			for (; k != l; ++k)
-			{
+			for (; k != l; ++k) {
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 
 				t = collectedData.fields.begin();
 
 				dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
-				for (; i != j; ++i, ++t)
-				{
+				for (; i != j; ++i, ++t) {
 					type = types->second.find(*t);
-					if (type != typesEnd)
-					{
+					if (type != typesEnd) {
 						if (type->second == sql::FIELDTYPE_TEXT)
-						{
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-						}
-						else
-						{
-							if (type->second == sql::FIELDTYPE_BINARY)
-							{
+						else {
+							if (type->second == sql::FIELDTYPE_BINARY) {
 								++o;
 
 								request.append("$" + tools::string::uiToString(o));
@@ -814,29 +690,18 @@ postgresql::insertCollect()
 								blob.value = &(*i);
 
 								blobs.push_back(blob);
-							}
-							else
-							{
+							} else
 								request.append(*i + statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
-							}
 						}
-					}
-					else
-					{
+					} else
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-					}
 				}
 				type = types->second.find(*t);
-				if (type != typesEnd)
-				{
+				if (type != typesEnd) {
 					if (type->second == sql::FIELDTYPE_TEXT)
-					{
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-					}
-					else
-					{
-						if (type->second == sql::FIELDTYPE_BINARY)
-						{
+					else {
+						if (type->second == sql::FIELDTYPE_BINARY) {
 							++o;
 
 							request.append("$" + tools::string::uiToString(o));
@@ -845,17 +710,11 @@ postgresql::insertCollect()
 							blob.value = &(*i);
 
 							blobs.push_back(blob);
-						}
-						else
-						{
+						} else
 							request.append(*i);
-						}
 					}
-				}
-				else
-				{
+				} else
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-				}
 
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
 			}
@@ -864,19 +723,13 @@ postgresql::insertCollect()
 			t = collectedData.fields.begin();
 
 			dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
-			for (; i != j; ++i, ++t)
-			{
+			for (; i != j; ++i, ++t) {
 				type = types->second.find(*t);
-				if (type != typesEnd)
-				{
+				if (type != typesEnd) {
 					if (type->second == sql::FIELDTYPE_TEXT)
-					{
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-					}
-					else
-					{
-						if (type->second == sql::FIELDTYPE_BINARY)
-						{
+					else {
+						if (type->second == sql::FIELDTYPE_BINARY) {
 							++o;
 
 							request.append("$" + tools::string::uiToString(o));
@@ -886,29 +739,18 @@ postgresql::insertCollect()
 							blob.value = &(*i);
 
 							blobs.push_back(blob);
-						}
-						else
-						{
+						} else
 							request.append(*i + statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
-						}
 					}
-				}
-				else
-				{
+				} else
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-				}
 			}
 			type = types->second.find(*t);
-			if (type != typesEnd)
-			{
+			if (type != typesEnd) {
 				if (type->second == sql::FIELDTYPE_TEXT)
-				{
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-				}
-				else
-				{
-					if (type->second == sql::FIELDTYPE_BINARY)
-					{
+				else {
+					if (type->second == sql::FIELDTYPE_BINARY) {
 						++o;
 
 						request.append("$" + tools::string::uiToString(o));
@@ -917,25 +759,16 @@ postgresql::insertCollect()
 						blob.value = &(*i);
 
 						blobs.push_back(blob);
-					}
-					else
-					{
+					} else
 						request.append(*i);
-					}
 				}
-			}
-			else
-			{
+			} else
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-			}
 
 			request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
-		}
-		else
-		{
+		} else {
 			--l;
-			for (; k != l; ++k)
-			{
+			for (; k != l; ++k) {
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 				request.append(joinFields(*k, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
@@ -955,9 +788,7 @@ postgresql::fetchFieldsToRows() const
 	dodoStringMapArray rowsFields;
 
 	if (empty || !show)
-	{
 		return rowsFields;
-	}
 
 	int rowsNum = PQntuples(handle->result);
 	int fieldsNum = PQnfields(handle->result);
@@ -969,20 +800,14 @@ postgresql::fetchFieldsToRows() const
 	dodoStringMap rowFieldsPart;
 
 	int j;
-	for (int i(0); i < rowsNum; ++i)
-	{
+	for (int i(0); i < rowsNum; ++i) {
 		rowFieldsPart.clear();
 
-		for (j = 0; j < fieldsNum; ++j)
-		{
+		for (j = 0; j < fieldsNum; ++j) {
 			if (PQgetisnull(handle->result, i, j) == 1)
-			{
 				rowFieldsPart.insert(make_pair(PQfname(handle->result, j), statements[SQLCONSTRUCTOR_STATEMENT_NULL]));
-			}
 			else
-			{
 				rowFieldsPart.insert(make_pair(PQfname(handle->result, j), dodoString(PQgetvalue(handle->result, i, j), PQgetlength(handle->result, i, j))));
-			}
 		}
 
 		rowsFields.push_back(rowFieldsPart);
@@ -997,15 +822,11 @@ void
 postgresql::setCharset(const dodoString &charset)
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	int status = PQsetClientEncoding(handle->handle, charset.c_str());
 	if (status == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -1014,17 +835,13 @@ dodoString
 postgresql::getCharset() const
 {
 	if (handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
 	int encoding = PQclientEncoding(handle->handle);
 
 	if (encoding >= 0 && encoding < _PG_LAST_ENCODING_)
-	{
 		return encodingStatements[encoding];
-	}
 
 	return __dodostring__;
 #else

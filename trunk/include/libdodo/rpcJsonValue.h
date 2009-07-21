@@ -34,31 +34,24 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace format
-		{
-			namespace json
-			{
+namespace dodo {
+	namespace data {
+		namespace format {
+			namespace json {
 				class node;
 			};
 		};
 	};
 
-	namespace rpc
-	{
+	namespace rpc {
 		class value;
 
-		namespace json
-		{
+		namespace json {
 			/**
 			 * @class value
 			 * @brief defines RPC value in JSON representation
 			 */
-			class value
-			{
+			class value {
 			  public:
 
 				/**

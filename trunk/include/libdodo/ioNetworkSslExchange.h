@@ -36,27 +36,21 @@
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
-			namespace http
-			{
+namespace dodo {
+	namespace io {
+		namespace network {
+			namespace http {
 				class client;
 			};
 
-			namespace ssl
-			{
+			namespace ssl {
 				struct __sslConnection__;
 
 				/**
 				 * @class __initialAccept__
 				 * @brief holds info that passes to accept call, and then inits exchange;
 				 */
-				class __initialAccept__
-				{
+				class __initialAccept__ {
 					friend class exchange;
 					friend class client;
 					friend class server;
@@ -81,20 +75,19 @@ namespace dodo
 
 				  private:
 
-					int socket;             ///< socket
+					int socket;                                 ///< socket
 
 					io::ssl::__sslConnection__ *handle;         ///< SSL connection handle
 
-					bool blocked;           ///< true if blocked
-					bool blockInherited;    ///< true if block flag is inherited
+					bool blocked;                               ///< true if blocked
+					bool blockInherited;                        ///< true if block flag is inherited
 				};
 
 				/**
 				 * @class exchange
 				 * @brief provides SSL communication interface[send/receive data]
 				 */
-				class exchange : public network::exchange
-				{
+				class exchange : public network::exchange {
 					friend class server;
 					friend class client;
 					friend class network::http::client;
@@ -121,7 +114,7 @@ namespace dodo
 					 * @note the object that has inited the object of current instance can be used for another connections
 					 */
 					exchange(__initialAccept__ &init,
-							 short           protection = CHANNEL_PROTECTION_PROCESS);
+							 short             protection = CHANNEL_PROTECTION_PROCESS);
 
 					/**
 					 * destructor
@@ -153,7 +146,7 @@ namespace dodo
 					 * @param socket defines socket descriptor
 					 * @param ssl defines SSL handle
 					 */
-					virtual void _close(int socket,
+					virtual void _close(int                        socket,
 										io::ssl::__sslConnection__ *handle);
 
 					/**
@@ -163,10 +156,10 @@ namespace dodo
 					 * @param blocked defines the connection block status
 					 * @param blockInherited defines block flag inheritance
 					 */
-					virtual void init(int  socket,
-									  io::ssl::__sslConnection__  *handle,
-									  bool blocked,
-									  bool blockInherited);
+					virtual void init(int                        socket,
+									  io::ssl::__sslConnection__ *handle,
+									  bool                       blocked,
+									  bool                       blockInherited);
 
 					/**
 					 * @param data defines buffer that will be filled

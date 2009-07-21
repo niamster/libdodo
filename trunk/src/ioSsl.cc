@@ -40,12 +40,9 @@
 
 #include <libdodo/ioSsl.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace ssl
-		{
+namespace dodo {
+	namespace io {
+		namespace ssl {
 			__openssl___init__ __openssl___init_object__;
 		};
 	};
@@ -68,17 +65,13 @@ __openssl___init__::__openssl___init__()
 
 	struct stat randstat;
 
-	if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1)
-	{
+	if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1) {
 		char buf[4];
 		struct timeval tv;
 
-		for (int i = 0; i < 10000; ++i)
-		{
+		for (int i = 0; i < 10000; ++i) {
 			if (RAND_status() == 1)
-			{
 				break;
-			}
 
 			gettimeofday(&tv, NULL);
 
@@ -108,17 +101,13 @@ __openssl___init__::addEntropy()
 {
 	struct stat randstat;
 
-	if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1)
-	{
+	if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1) {
 		char buf[4];
 		struct timeval tv;
 
-		for (int i = 0; i < 10000; ++i)
-		{
+		for (int i = 0; i < 10000; ++i) {
 			if (RAND_status() == 1)
-			{
 				break;
-			}
 
 			gettimeofday(&tv, NULL);
 

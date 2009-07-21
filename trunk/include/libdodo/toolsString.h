@@ -34,16 +34,13 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * @class string
 		 * @brief provides various string tools
 		 */
-		class string
-		{
+		class string {
 		  public:
 
 			/**

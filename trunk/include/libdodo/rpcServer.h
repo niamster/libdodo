@@ -35,15 +35,12 @@
 #include <libdodo/types.h>
 #include <libdodo/rpcValue.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		class channel;
 	};
 
-	namespace rpc
-	{
+	namespace rpc {
 		class response;
 		class method;
 
@@ -61,8 +58,7 @@ namespace dodo
 		 * @class server
 		 * @brief defines server-side RPC instrument
 		 */
-		class server
-		{
+		class server {
 		  public:
 
 			/**
@@ -132,7 +128,7 @@ namespace dodo
 			dodoMap<dodoString, handler, dodoMapStringCompare> handlers;    ///< method handlers
 			handler defaultHandler;                                         ///< default handler
 
-			io::channel &io; ///< I/O handler
+			io::channel &io;                                                ///< I/O handler
 		};
 	};
 };

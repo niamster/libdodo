@@ -103,8 +103,7 @@ server::processCallResult(const rpc::response &resp)
 void
 server::serve()
 {
-	try
-	{
+	try {
 		rpc::method meth = processCallRequest();
 
 		dodoString encoding = rpEncoding;
@@ -116,25 +115,17 @@ server::serve()
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
 		if (handler == handlers.end())
-		{
 			processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
-		}
 		else
-		{
 			processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
-		}
 
 		rpEncoding = encoding;
-	}
-	catch (exception::basic &ex)
-	{
+	} catch (exception::basic &ex) {
 		rpc::response response;
 		response.fault(ex.baseErrstr);
 
 		processCallResult(response);
-	}
-	catch (...)
-	{
+	} catch (...) {
 		rpc::response response;
 		response.fault(dodoString("An unknown error."));
 

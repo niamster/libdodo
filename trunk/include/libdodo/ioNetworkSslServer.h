@@ -36,20 +36,15 @@
 #include <libdodo/ioNetworkServer.h>
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace ssl
-		{
+namespace dodo {
+	namespace io {
+		namespace ssl {
 			struct __sslContext__;
 			struct __certificates__;
 		};
 
-		namespace network
-		{
-			namespace ssl
-			{
+		namespace network {
+			namespace ssl {
 				class exchange;
 				class __initialAccept__;
 
@@ -57,8 +52,7 @@ namespace dodo
 				 * @class server
 				 * @brief provides SSL network connection interface
 				 */
-				class server : public network::server
-				{
+				class server : public network::server {
 					friend class exchange;
 
 				  private:

@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum regexpExFunctionsID
-		{
+		enum regexpExFunctionsID {
 			REGEXPEX_COMPILE,
 		};
 	};

@@ -36,18 +36,15 @@
 #include <libdodo/types.h>
 #include <libdodo/graphicsColor.h>
 
-namespace dodo
-{
-	namespace graphics
-	{
+namespace dodo {
+	namespace graphics {
 		class image;
 
 		/**
 		 * class point
 		 * @brief defines x and y position of the point
 		 */
-		class point
-		{
+		class point {
 		  public:
 
 			/**
@@ -67,8 +64,7 @@ namespace dodo
 		 * @brief provides simple image drawing
 		 * @note for (x;y) == (0;0) it's left upper corner
 		 */
-		class draw
-		{
+		class draw {
 		  private:
 
 			/**
@@ -111,8 +107,8 @@ namespace dodo
 			 */
 			virtual void circle(const graphics::point &center,
 								unsigned long         radius,
-								const __color__         &fillColor,
-								const __color__         &borderColor,
+								const __color__       &fillColor,
+								const __color__       &borderColor,
 								unsigned short        borderWidth = 1);
 
 			/**
@@ -125,8 +121,8 @@ namespace dodo
 			 */
 			virtual void rectangle(const graphics::point &tl,
 								   const graphics::point &br,
-								   const __color__         &fillColor,
-								   const __color__         &borderColor,
+								   const __color__       &fillColor,
+								   const __color__       &borderColor,
 								   unsigned short        borderWidth = 1);
 
 			/**
@@ -144,8 +140,8 @@ namespace dodo
 							  const dodoString      &text,
 							  const dodoString      &font,
 							  unsigned short        fontWidth,
-							  const __color__         &fillColor = color::black,
-							  const __color__         &borderColor = color::black,
+							  const __color__       &fillColor = color::black,
+							  const __color__       &borderColor = color::black,
 							  unsigned short        borderWidth = 1,
 							  double                angle = 0);
 
@@ -166,7 +162,7 @@ namespace dodo
 			 * @param lineWidth defines the width of the line
 			 */
 			virtual void line(const dodoArray<graphics::point> &points,
-							  const __color__                    &lineColor,
+							  const __color__                  &lineColor,
 							  unsigned short                   lineWidth = 1);
 
 			/**
@@ -177,7 +173,7 @@ namespace dodo
 			 * @note for point width > 1 point is emulated as a circle, it's possible to get some side-effects
 			 */
 			virtual void point(const graphics::point &position,
-							   const __color__         &pointColor,
+							   const __color__       &pointColor,
 							   unsigned short        pointWidth = 1);
 
 		  protected:
@@ -189,10 +185,10 @@ namespace dodo
 			 * @param borderColor defines primitive border color
 			 * @param borderWidth defines the width of the border of the primitive
 			 */
-			virtual void primitive(char           *description,
-								   const __color__  &fillColor,
-								   const __color__  &borderColor,
-								   unsigned short borderWidth);
+			virtual void primitive(char            *description,
+								   const __color__ &fillColor,
+								   const __color__ &borderColor,
+								   unsigned short  borderWidth);
 
 			graphics::image *im; ///< image to perform drawing
 		};

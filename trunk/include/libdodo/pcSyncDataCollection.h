@@ -34,20 +34,15 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace data
-			{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace data {
 				/**
 				 * @struct __info__
 				 * @brief defines shared data
 				 */
-				struct __info__
-				{
+				struct __info__ {
 					unsigned long position; ///< shared data identificator
 					void          *data;    ///< shared data
 				};
@@ -56,8 +51,7 @@ namespace dodo
 				 * @class collection
 				 * @brief implements collection of shared data
 				 */
-				class collection
-				{
+				class collection {
 				  public:
 
 					/**

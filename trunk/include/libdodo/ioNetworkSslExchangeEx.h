@@ -34,19 +34,14 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
-			namespace ssl
-			{
+namespace dodo {
+	namespace io {
+		namespace network {
+			namespace ssl {
 				/**
 				 * libdodo defined errors
 				 */
-				enum exchangeExR
-				{
+				enum exchangeExR {
 					EXCHANGEEX_NOCONNECTION,
 				};
 
@@ -58,8 +53,7 @@ namespace dodo
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
-				enum exchangeFunctionsID
-				{
+				enum exchangeFunctionsID {
 					EXCHANGEEX__WRITE,
 					EXCHANGEEX__READ,
 					EXCHANGEEX__READSTREAM,

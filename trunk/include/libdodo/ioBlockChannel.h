@@ -35,12 +35,9 @@
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace block
-		{
+namespace dodo {
+	namespace io {
+		namespace block {
 			/**
 			 * @class channel
 			 * @brief implements an interface for I/O operations on block sources
@@ -51,8 +48,7 @@ namespace dodo
 			 *	offset for readStream is calculated as pos*(amount of null- or newline- terminated strings)
 			 *	offset for writeStream is calculated as pos*(amount of null- or newline- terminated strings)
 			 */
-			class channel : public io::channel
-			{
+			class channel : public io::channel {
 			  public:
 
 				/**
@@ -94,8 +90,8 @@ namespace dodo
 
 				mutable unsigned long pos;  ///< read/write/erase position; incremented on read/write/erase[0 by default]
 
-				bool block;   ///< use block I/O[false by default]
-				bool append;  ///< append to the end[false by default]
+				bool block;                 ///< use block I/O[false by default]
+				bool append;                ///< append to the end[false by default]
 			};
 		};
 	};

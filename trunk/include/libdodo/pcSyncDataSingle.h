@@ -32,20 +32,15 @@
 
 #include <libdodo/directives.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace data
-			{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace data {
 				/**
 				 * @class single
 				 * @brief provides shared data management functionality
 				 */
-				class single
-				{
+				class single {
 				  public:
 
 					/**

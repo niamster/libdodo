@@ -83,20 +83,14 @@ void
 stdio::redirectToStderr(bool toStderr)
 {
 	if (err == toStderr)
-	{
 		return;
-	}
 
 	err = toStderr;
 
 	if (err)
-	{
 		out->file = stderr;
-	}
 	else
-	{
 		out->file = stdout;
-	}
 }
 
 //-------------------------------------------------------------------
@@ -114,21 +108,16 @@ stdio::_writeStream(const char * const data) const
 {
 	unsigned long _outSize = outSize;
 
-	try
-	{
+	try {
 		unsigned int bufSize = strlen(data);
 
 		if (bufSize < outSize)
-		{
 			outSize = bufSize;
-		}
 
 		_write(data);
 
 		outSize = _outSize;
-	}
-	catch (...)
-	{
+	} catch (...) {
 		outSize = _outSize;
 
 		throw;

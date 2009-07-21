@@ -37,16 +37,14 @@
 #include <libdodo/xexecEx.h>
 #include <libdodo/types.h>
 
-namespace dodo
-{
-
+namespace dodo {
 };
 
 using namespace dodo;
 
 __xexecCollectedData__::__xexecCollectedData__(xexec *executor,
-										   short execObject) : operType(executor->operType),
-															   executor(executor)
+											   short execObject) : operType(executor->operType),
+																   executor(executor)
 {
 	executor->execObjectData = this;
 	executor->execObject = execObject;
@@ -84,18 +82,13 @@ xexec::~xexec()
 	deinitXexecModule deinit;
 
 	dodoList<__xexecItem__ *>::iterator i(preExec.exec.begin()), j(preExec.exec.end());
-	for (; i != j; ++i)
-	{
+	for (; i != j; ++i) {
 		if ((*i)->handle == NULL)
-		{
 			continue;
-		}
 
 		deinit = (deinitXexecModule)dlsym((*i)->handle, "deinitXexecModule");
 		if (deinit != NULL)
-		{
 			deinit();
-		}
 
 #ifndef DL_FAST
 		dlclose((*i)->handle);
@@ -104,18 +97,13 @@ xexec::~xexec()
 
 	i = postExec.exec.begin();
 	j = postExec.exec.end();
-	for (; i != j; ++i)
-	{
+	for (; i != j; ++i) {
 		if ((*i)->handle == NULL)
-		{
 			continue;
-		}
 
 		deinit = (deinitXexecModule)dlsym((*i)->handle, "deinitXexecModule");
 		if (deinit != NULL)
-		{
 			deinit();
-		}
 
 #ifndef DL_FAST
 		dlclose((*i)->handle);
@@ -130,8 +118,8 @@ xexec::~xexec()
 
 int
 xexec::addXExec(dodoList<__xexecItem__ *> &list,
-				inExec                func,
-				void                  *data)
+				inExec                    func,
+				void                      *data)
 {
 	__xexecItem__ *e = new __xexecItem__;
 
@@ -153,39 +141,32 @@ xexec::addXExec(dodoList<__xexecItem__ *> &list,
 
 void
 xexec::setStatXExec(dodoList<__xexecItem__ *> &list,
-					int                   position,
-					bool                  stat)
+					int                       position,
+					bool                      stat)
 {
 	if (getXexec(list, position))
-	{
 		(*current)->enabled = stat;
-	}
 }
 
 //-------------------------------------------------------------------
 
 void
 xexec::delXExec(dodoList<__xexecItem__ *> &list,
-				int                   position)
+				int                       position)
 {
-	if (getXexec(list, position))
-	{
+	if (getXexec(list, position)) {
 #ifdef DL_EXT
-		if ((*current)->handle != NULL)
-		{
+		if ((*current)->handle != NULL) {
 			deinitXexecModule deinit;
 
 			deinit = (deinitXexecModule)dlsym((*current)->handle, "deinitXexecModule");
 			if (deinit != NULL)
-			{
 				deinit();
-			}
 
 #ifndef DL_FAST
 			if (dlclose((*current)->handle) != 0)
-			{
 				throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_DELXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-			}
+
 #endif
 		}
 #endif
@@ -368,28 +349,23 @@ xexec::replacePreExec(int    position,
 
 void
 xexec::replaceXExec(dodoList<__xexecItem__ *> &list,
-					int                   position,
-					inExec                func,
-					void                  *data)
+					int                       position,
+					inExec                    func,
+					void                      *data)
 {
-	if (getXexec(list, position))
-	{
+	if (getXexec(list, position)) {
 #ifdef DL_EXT
-		if ((*current)->handle != NULL)
-		{
+		if ((*current)->handle != NULL) {
 			deinitXexecModule deinit;
 
 			deinit = (deinitXexecModule)dlsym((*current)->handle, "deinitXexecModule");
 			if (deinit != NULL)
-			{
 				deinit();
-			}
 
 #ifndef DL_FAST
 			if (dlclose((*current)->handle) != 0)
-			{
 				throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_DELXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-			}
+
 #endif
 
 			(*current)->handle = NULL;
@@ -401,13 +377,10 @@ xexec::replaceXExec(dodoList<__xexecItem__ *> &list,
 		(*current)->enabled = true;
 
 #ifdef DL_EXT
-		(*current)->handle = NULL;
+																						(*current)->handle = NULL;
 #endif
-	}
-	else
-	{
+	} else
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_REPLACEXEXEC, exception::ERRNO_LIBDODO, XEXECEX_EXECNOTFOUND, XEXECEX_EXECNOTFOUND_STR, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -416,24 +389,18 @@ void
 xexec::performXExec(__xexecItemList__ &list) const
 {
 	if (list.execDisabled)
-	{
 		return ;
-	}
 
 	dodoList<__xexecItem__ *>::iterator i(list.exec.begin()), j(list.exec.end());
 
-	for (; i != j; ++i)
-	{
-		if ((*i)->enabled)
-		{
-			if (safeHooks)
-			{
+	for (; i != j; ++i) {
+		if ((*i)->enabled) {
+			if (safeHooks) {
 				disableAllPostExec();
 				disableAllPreExec();
 			}
 			(*i)->func(execObjectData, execObject, (*i)->data);
-			if (safeHooks)
-			{
+			if (safeHooks) {
 				enableAllPostExec();
 				enableAllPreExec();
 			}
@@ -445,7 +412,7 @@ xexec::performXExec(__xexecItemList__ &list) const
 
 #ifdef DL_EXT
 __xexecCounts__::__xexecCounts__() : pre(-1),
-								 post(-1)
+									 post(-1)
 {
 }
 
@@ -453,9 +420,9 @@ __xexecCounts__::__xexecCounts__() : pre(-1),
 
 int
 xexec::addXExecModule(dodoList<__xexecItem__ *> &list,
-					  const dodoString      &module,
-					  void                  *data,
-					  void                  *toInit)
+					  const dodoString          &module,
+					  void                      *data,
+					  void                      *toInit)
 {
 	__xexecItem__ *e = new __xexecItem__;
 
@@ -469,21 +436,15 @@ xexec::addXExecModule(dodoList<__xexecItem__ *> &list,
 	e->handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (e->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-	}
 
 	initXexecModule init = (initXexecModule)dlsym(e->handle, "initXexecModule");
 	if (init == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-	}
 
 	inExec in = (inExec)dlsym(e->handle, init(toInit).hook);
 	if (in == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-	}
 
 	e->func = in;
 
@@ -524,23 +485,18 @@ xexec::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-	}
 
 	initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
 	if (init == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-	}
 
 	__xexecMod__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-	}
+
 #endif
 
 	return mod;
@@ -564,30 +520,23 @@ xexec::addExec(const dodoString &module,
 	e->handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (e->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-	}
 
 	initXexecModule init = (initXexecModule)dlsym(e->handle, "initXexecModule");
 	if (init == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-	}
 
 	__xexecMod__ info = init(toInit);
 
 	inExec in = (inExec)dlsym(e->handle, info.hook);
 	if (in == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-	}
 
 	e->func = in;
 
 	__xexecCounts__ count;
 
-	switch (info.execType)
-	{
+	switch (info.execType) {
 		case XEXEC_MODULEACTIONTYPE_POST:
 
 			e->position = ++execs;
@@ -626,13 +575,11 @@ xexec::addExec(const dodoString &module,
 
 bool
 xexec::getXexec(dodoList<__xexecItem__ *> &list,
-				int                   position)
+				int                       position)
 {
 	dodoList<__xexecItem__ *>::iterator i(list.begin()), j(list.end());
-	for (; i != j; ++i)
-	{
-		if ((*i)->position == position)
-		{
+	for (; i != j; ++i) {
+		if ((*i)->position == position) {
 			current = i;
 
 			return true;

@@ -34,16 +34,13 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * @struct __interfaceInfo__
 		 * @brief defines interface information
 		 */
-		struct __interfaceInfo__
-		{
+		struct __interfaceInfo__ {
 			dodoString address;         ///< ip address of the interface
 			dodoString broadcast;       ///< broadcast address of the interface
 			dodoString netmask;         ///< netmask of the interface
@@ -57,8 +54,7 @@ namespace dodo
 		 * @struct __hostInfo__
 		 * @brief defines information about host
 		 */
-		struct __hostInfo__
-		{
+		struct __hostInfo__ {
 			dodoString      name;       ///< original name of the host
 			dodoStringArray aliases;    ///< aliases of the host
 			dodoStringArray addresses;  ///< addresses of the host
@@ -68,8 +64,7 @@ namespace dodo
 		 * @struct __serviceInfo__
 		 * @brief defines info about service
 		 */
-		struct __serviceInfo__
-		{
+		struct __serviceInfo__ {
 			dodoString      name;       ///< original name of the service
 			dodoStringArray aliases;    ///< aliases of the service
 			int             port;       ///< port of the service
@@ -79,8 +74,7 @@ namespace dodo
 		 * @class network
 		 * @brief provides information about network environment
 		 */
-		class network
-		{
+		class network {
 		  public:
 
 			/**
@@ -123,7 +117,7 @@ namespace dodo
 			 * @param protocol defines protocol of the service(tcp, udp ..)
 			 */
 			static __serviceInfo__ getServiceInfo(const dodoString &service,
-												const dodoString &protocol);
+												  const dodoString &protocol);
 
 			/**
 			 * @return information about the service
@@ -131,7 +125,7 @@ namespace dodo
 			 * @param protocol defines protocol of the service(tcp, udp ..)
 			 */
 			static __serviceInfo__ getServiceInfo(int              port,
-												const dodoString &protocol);
+												  const dodoString &protocol);
 
 			/**
 			 * send mail using sendmail external program

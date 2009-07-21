@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace tpl
-		{
+namespace dodo {
+	namespace data {
+		namespace tpl {
 			/**
 			 * libdodo defined errors
 			 */
-			enum processorExR
-			{
+			enum processorExR {
 				PROCESSOREX_WRONGFORSTATEMENT,
 				PROCESSOREX_WRONGVARSTATEMENT,
 				PROCESSOREX_DODOISRESERVEDVARNAME,
@@ -66,8 +62,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum processorFunctionsID
-			{
+			enum processorFunctionsID {
 				PROCESSOREX__PREPROCESSSTRING,
 				PROCESSOREX_BLOCKEND,
 				PROCESSOREX__FOR,

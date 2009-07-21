@@ -35,26 +35,21 @@
 #include <libdodo/types.h>
 #include <libdodo/rpcServer.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		class channel;
 	};
 
-	namespace rpc
-	{
+	namespace rpc {
 		class method;
 		class response;
 
-		namespace json
-		{
+		namespace json {
 			/**
 			 * @struct __additionalData__
 			 * @brief defines response/request additional data
 			 */
-			struct __additionalData__
-			{
+			struct __additionalData__ {
 				/**
 				 * constructor
 				 * @param version defines response/request version
@@ -70,8 +65,7 @@ namespace dodo
 			 * @class server
 			 * @brief defines server-side JSON-RPC instrument
 			 */
-			class server : virtual public rpc::server
-			{
+			class server : virtual public rpc::server {
 			  public:
 
 				/**

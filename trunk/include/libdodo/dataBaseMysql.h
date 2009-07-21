@@ -36,20 +36,16 @@
 #include <libdodo/types.h>
 #include <libdodo/dataBaseSqlConstructor.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
+namespace dodo {
+	namespace data {
+		namespace base {
 			struct __mysql__;
 
 			/**
 			 * @struct __mysqlSslOptions__
 			 * @brief defines SSL mySQL options
 			 */
-			struct __mysqlSslOptions__
-			{
+			struct __mysqlSslOptions__ {
 				dodoString key;     ///< pathname to the key file
 				dodoString cert;    ///< pathname to the certificate file
 				dodoString ca;      ///< pathname to the certificate authority file
@@ -61,8 +57,7 @@ namespace dodo
 			 * @class mysql
 			 * @brief provides an interface to MySQL db
 			 */
-			class mysql : public sql::constructor
-			{
+			class mysql : public sql::constructor {
 			  private:
 
 				/**
@@ -97,7 +92,7 @@ namespace dodo
 				 *  CLIENT_COMPRESS         Use compression protocol
 				 *	CLIENT_MULTI_STATEMENTS Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
 				 */
-				virtual void connectSettings(unsigned long           type,
+				virtual void connectSettings(unsigned long             type,
 											 const __mysqlSslOptions__ &options = __mysqlSslOptions__());
 
 				/**
@@ -181,7 +176,7 @@ namespace dodo
 
 				bool empty;             ///< true id mysqlRes is empty
 
-				__mysql__ *handle; ///< DB handle
+				__mysql__ *handle;      ///< DB handle
 
 				unsigned long type;     ///< connection type
 			};

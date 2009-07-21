@@ -47,22 +47,14 @@ string::equal(const dodoString &first,
 	unsigned long firstSize = first.size();
 
 	if (firstSize != second.size())
-	{
 		return false;
-	}
 
 	if (firstSize == 0)
-	{
 		return true;
-	}
 
 	for (unsigned long i = 0; i < firstSize; ++i)
-	{
 		if (first[i] != second[i])
-		{
 			return false;
-		}
-	}
 
 	return true;
 }
@@ -76,22 +68,14 @@ string::iequal(const dodoString &first,
 	unsigned long firstSize = first.size();
 
 	if (firstSize != second.size())
-	{
 		return false;
-	}
 
 	if (firstSize == 0)
-	{
 		return true;
-	}
 
 	for (unsigned long i = 0; i < firstSize; ++i)
-	{
 		if (tolower(first[i]) != tolower(second[i]))
-		{
 			return false;
-		}
-	}
 
 	return true;
 }
@@ -103,20 +87,12 @@ string::contains(const dodoString &str,
 				 const dodoString &needle,
 				 bool             icase)
 {
-	if (icase)
-	{
+	if (icase) {
 		if (strcasestr(str.c_str(), needle.c_str()) != NULL)
-		{
 			return true;
-		}
-	}
-	else
-	{
-		if (strstr(str.c_str(), needle.c_str()) != NULL)
-		{
-			return true;
-		}
-	}
+	} else if (strstr(str.c_str(), needle.c_str()) != NULL)
+		return true;
+
 
 	return false;
 }
@@ -130,33 +106,20 @@ string::find(const dodoString &str,
 			 bool             icase)
 {
 	if (position > str.size())
-	{
 		return dodoString::npos;
-	}
 
 	char *pos = NULL;
 
-	if (icase)
-	{
+	if (icase) {
 		if ((pos = strcasestr((char *)(str.c_str() + position), needle.c_str())) == NULL)
-		{
 			return dodoString::npos;
-		}
 		else
-		{
 			return (pos - str.c_str());
-		}
-	}
-	else
-	{
+	} else {
 		if ((pos = strstr((char *)(str.c_str() + position), needle.c_str())) == NULL)
-		{
 			return dodoString::npos;
-		}
 		else
-		{
 			return (pos - str.c_str());
-		}
 	}
 
 	return dodoString::npos;
@@ -292,12 +255,8 @@ string::lTrim(const dodoString &data,
 	int size = data.size(), i(0);
 
 	for (; i < size; ++i)
-	{
 		if (data[i] != symbol)
-		{
 			break;
-		}
-	}
 
 	return dodoString(data.data() + i, size - i);
 }
@@ -311,12 +270,8 @@ string::rTrim(const dodoString &data,
 	int i(data.size() - 1);
 
 	for (; i >= 0; --i)
-	{
 		if (data[i] != symbol)
-		{
 			break;
-		}
-	}
 
 	return dodoString(data.data(), i + 1);
 }
@@ -330,19 +285,12 @@ string::rTrim(const dodoString &data,
 {
 	int i(data.size() - 1), j, empty;
 
-	for (; i >= 0; --i)
-	{
+	for (; i >= 0; --i) {
 		for (j = 0, empty = 0; j < symCount; ++j)
-		{
 			if (data[i] != symbols[j])
-			{
 				++empty;
-			}
-		}
 		if (empty == symCount)
-		{
 			break;
-		}
 	}
 
 	return dodoString(data.data(), i + 1);
@@ -357,19 +305,12 @@ string::lTrim(const dodoString &data,
 {
 	int size = data.size(), i(0), empty, j;
 
-	for (; i < size; ++i)
-	{
+	for (; i < size; ++i) {
 		for (j = 0, empty = 0; j < symCount; ++j)
-		{
 			if (data[i] != symbols[j])
-			{
 				++empty;
-			}
-		}
 		if (empty == symCount)
-		{
 			break;
-		}
 	}
 
 	return dodoString(data.data() + i, size - i);
@@ -468,9 +409,7 @@ string::replace(const dodoStringArray &needle,
 	dodoStringArray::const_iterator i(needle.begin()), j(needle.end());
 	dodoStringArray::const_iterator o(replacement.begin()), p(replacement.end());
 	for (; i != j && o != p; ++i, ++o)
-	{
 		replace(*i, *o, data);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -482,13 +421,10 @@ string::replace(const dodoString &needle,
 {
 	unsigned long i(0), j(needle.size()), k(replacement.size());
 
-	while (true)
-	{
+	while (true) {
 		i = data.find(needle, i);
 		if (i == dodoString::npos)
-		{
 			break;
-		}
 
 		data.replace(i, j, replacement, 0, k);
 		i += k;

@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		/**
 		 * libdodo defined errors
 		 */
-		enum pipeExR
-		{
+		enum pipeExR {
 			PIPEEX_PIPENOTOPENED,
 		};
 
@@ -54,8 +51,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum pipeFunctionsID
-		{
+		enum pipeFunctionsID {
 			PIPEEX_PIPE,
 			PIPEEX_CLOSE,
 			PIPEEX_CLONE,

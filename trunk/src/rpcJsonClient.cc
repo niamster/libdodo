@@ -42,8 +42,8 @@
 using namespace dodo::rpc::json;
 
 client::client(const io::channel &io) : rpc::client(io),
-								  rqVersion("1.1"),
-								  rqId(0)
+										rqVersion("1.1"),
+										rqId(0)
 {
 }
 

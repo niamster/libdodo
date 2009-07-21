@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
+namespace dodo {
+	namespace data {
+		namespace base {
 			/**
 			 * libdodo defined errors
 			 */
-			enum sqliteExR
-			{
+			enum sqliteExR {
 				SQLITEEX_NOTOPENED,
 			};
 
@@ -56,8 +52,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum sqliteFunctionsID
-			{
+			enum sqliteFunctionsID {
 				SQLITEEX_DISCONNECT,
 				SQLITEEX_CONNECT,
 				SQLITEEX_EXEC,

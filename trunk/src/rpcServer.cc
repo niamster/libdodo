@@ -94,30 +94,21 @@ server::removeHandler(const dodoString &method)
 void
 server::serve()
 {
-	try
-	{
+	try {
 		method meth = processCallRequest();
 
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
 		if (handler == handlers.end())
-		{
 			processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL));
-		}
 		else
-		{
 			processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL));
-		}
-	}
-	catch (exception::basic &ex)
-	{
+	} catch (exception::basic &ex) {
 		response response;
 		response.fault(ex.baseErrstr);
 
 		processCallResult(response);
-	}
-	catch (...)
-	{
+	} catch (...) {
 		response response;
 		response.fault(dodoString("An unknown error."));
 

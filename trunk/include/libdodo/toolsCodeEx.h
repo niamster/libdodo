@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * libdodo defined errors
 		 */
-		enum codeExR
-		{
+		enum codeExR {
 			CODEEX_BADASCII85,
 			CODEEX_BADBZCOMPRESSION,
 			CODEEX_BADBZDECOMPRESSIONINIT,
@@ -67,8 +64,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum codeFunctionsID
-		{
+		enum codeFunctionsID {
 #ifdef ICONV_EXT
 
 			CODEEX_CODESETCONVERSION,

@@ -35,20 +35,16 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioBlockChannel.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		struct __file__;
 
-		namespace file
-		{
+		namespace file {
 #ifndef IO_WO_XEXEC
 			/**
 			 * @enum tempOperationTypeEnum defines type of operation for hook
 			 */
-			enum tempOperationTypeEnum
-			{
+			enum tempOperationTypeEnum {
 				TEMP_OPERATION_OPEN = 128,
 				TEMP_OPERATION_CLOSE
 			};
@@ -63,8 +59,7 @@ namespace dodo
 			 * read offset for read, read is calculated as pos*inSize
 			 * read offset for readStream, readStream is calculated as pos*'# of \n - terminated strings'
 			 */
-			class temp : virtual public block::channel
-			{
+			class temp : virtual public block::channel {
 			  public:
 
 				/**
@@ -113,7 +108,7 @@ namespace dodo
 				 */
 				virtual void erase();
 
-				bool block;   ///<  if block is false then read/write position is amount of bytes from the beginning, if true then read/write position calculated by defined rules[false by default]
+				bool block;         ///<  if block is false then read/write position is amount of bytes from the beginning, if true then read/write position calculated by defined rules[false by default]
 				bool append;        ///< append to the end[false by default]
 
 				bool overwrite;     ///< if true block will be overwritten; for regular and temp files only[false by default]

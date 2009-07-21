@@ -37,14 +37,10 @@
 #include <libdodo/xexec.h>
 #include <libdodo/ioEventInfo.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
-			namespace ssl
-			{
+namespace dodo {
+	namespace io {
+		namespace network {
+			namespace ssl {
 				class server;
 			};
 
@@ -53,8 +49,7 @@ namespace dodo
 			/**
 			 * @enum serverOperationTypeEnum defines type of operation for hook
 			 */
-			enum serverOperationTypeEnum
-			{
+			enum serverOperationTypeEnum {
 				SERVER_OPERATION_CONNECT = 128,
 				SERVER_OPERATION_CONNECTFROM,
 				SERVER_OPERATION_CONNECT_UNIX,
@@ -68,8 +63,7 @@ namespace dodo
 			 * @class __xexecIoNetworkServerCollectedData__
 			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
 			 */
-			class __xexecIoNetworkServerCollectedData__ : public __xexecCollectedData__
-			{
+			class __xexecIoNetworkServerCollectedData__ : public __xexecCollectedData__ {
 			  public:
 
 				/**
@@ -160,7 +154,7 @@ namespace dodo
 				 */
 				virtual bool accept(__initialAccept__ &init);
 
-				bool blockInherited;                                ///< if true - children(exchange objects) become unblocked, if parent(Server) in unblocked; false by default
+				bool blockInherited;                                    ///< if true - children(exchange objects) become unblocked, if parent(Server) in unblocked; false by default
 
 				/**
 				 * @return descriptor of input stream
@@ -174,8 +168,8 @@ namespace dodo
 
 			  protected:
 
-				short family;                                       ///< socket family
-				short type;                                         ///< socket type
+				short family;                                           ///< socket family
+				short type;                                             ///< socket type
 
 				/**
 				 * restore options on connect/bind
@@ -187,10 +181,10 @@ namespace dodo
 				 */
 				virtual void makeSocket();
 
-				dodoString unixSock;                                ///< path to unix socket
+				dodoString unixSock;                                    ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
-				__xexecIoNetworkServerCollectedData__ collectedData;  ///< data collected for xexec
+				__xexecIoNetworkServerCollectedData__ collectedData;    ///< data collected for xexec
 #endif
 			};
 		};

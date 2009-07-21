@@ -34,30 +34,24 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		class channel;
 	};
 
-	namespace pc
-	{
-		namespace sync
-		{
+	namespace pc {
+		namespace sync {
 			class section;
 		};
 	};
 
-	namespace tools
-	{
+	namespace tools {
 #define LOGGER_LEVELS 9
 
 		/**
 		 * @enum loggerLogLevelEnum defines log levels
 		 */
-		enum loggerLogLevelEnum
-		{
+		enum loggerLogLevelEnum {
 			LOGGER_INFO = 0,
 			LOGGER_NOTICE,
 			LOGGER_DEBUG,
@@ -73,8 +67,7 @@ namespace dodo
 		 * @class logger
 		 * @brief provides logging function
 		 */
-		class logger : public singleton<logger>
-		{
+		class logger : public singleton<logger>{
 		  public:
 
 			/**
@@ -118,31 +111,30 @@ namespace dodo
 			 */
 			virtual void setTimeFormat(const dodoString &format);
 
-			bool forward;                                   ///< forward message to global log instance[false by default]
+			bool forward;                                       ///< forward message to global log instance[false by default]
 
 		  private:
 
-			dodoString timeFormat;                          ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
+			dodoString timeFormat;                              ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
 
 			/**
 			 * @struct __logMap__
 			 * @brief defines map between log level and log handler
 			 */
-			struct __logMap__
-			{
-				short       level;      ///< log level[see loggerLogLevelEnum]
-				io::channel *handler;   ///< log handler
-				long        position;   ///< log handler identificator
+			struct __logMap__ {
+				short       level;                              ///< log level[see loggerLogLevelEnum]
+				io::channel *handler;                           ///< log handler
+				long        position;                           ///< log handler identificator
 			};
 
-			dodoList<__logMap__> handlers;                    ///< list of log maps
+			dodoList<__logMap__> handlers;                      ///< list of log maps
 
-			unsigned long handlersNum;                      ///< number of registered handlers
+			unsigned long handlersNum;                          ///< number of registered handlers
 
-			static const dodoString levels[LOGGER_LEVELS];  ///< log levels statements
-			static const int syslogLevels[LOGGER_LEVELS];   ///< syslog log levels
+			static const dodoString levels[LOGGER_LEVELS];      ///< log levels statements
+			static const int syslogLevels[LOGGER_LEVELS];       ///< syslog log levels
 
-			pc::sync::section *keeper;                      ///< section locker
+			pc::sync::section *keeper;                          ///< section locker
 		};
 	};
 };

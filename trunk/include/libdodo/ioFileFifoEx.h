@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace file
-		{
+namespace dodo {
+	namespace io {
+		namespace file {
 			/**
 			 * libdodo defined errors
 			 */
-			enum fifoExR
-			{
+			enum fifoExR {
 				FIFOEX_WRONGFILENAME,
 				FIFOEX_NOTOPENED
 			};
@@ -58,8 +54,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum fifoFunctionsID
-			{
+			enum fifoFunctionsID {
 				FIFOEX_FIFO,
 				FIFOEX_CLOSE,
 				FIFOEX_CLONE,

@@ -32,16 +32,13 @@
 
 #include <libdodo/directives.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		/**
 		 * @class eventInfo
 		 * @brief provides interface for event
 		 */
-		class eventInfo
-		{
+		class eventInfo {
 			friend class event;
 
 		  public:

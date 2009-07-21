@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
-		namespace fast
-		{
+namespace dodo {
+	namespace cgi {
+		namespace fast {
 			/**
 			 * libdodo defined errors
 			 */
-			enum serverExR
-			{
+			enum serverExR {
 				SERVEREX_ACCEPTFAILED,
 				SERVEREX_ISCGI,
 			};
@@ -58,8 +54,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum serverFunctionsID
-			{
+			enum serverFunctionsID {
 				SERVEREX_LISTEN,
 				SERVEREX_STACKTHREAD,
 			};

@@ -35,17 +35,13 @@
 #include <libdodo/types.h>
 #include <libdodo/rpcValue.h>
 
-namespace dodo
-{
-	namespace rpc
-	{
-		namespace xml
-		{
+namespace dodo {
+	namespace rpc {
+		namespace xml {
 			class response;
 		};
 
-		namespace json
-		{
+		namespace json {
 			class response;
 		};
 
@@ -53,8 +49,7 @@ namespace dodo
 		 * @class response
 		 * @brief defines RPC response reprasentation
 		 */
-		class response
-		{
+		class response {
 			friend class client;
 			friend class server;
 			friend class xml::response;

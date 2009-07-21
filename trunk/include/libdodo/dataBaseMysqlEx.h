@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
+namespace dodo {
+	namespace data {
+		namespace base {
 			/**
 			 * libdodo defined errors
 			 */
-			enum mysqlExR
-			{
+			enum mysqlExR {
 				MYSQLEX_NOTOPENED,
 			};
 
@@ -56,8 +52,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum mysqlFunctionsID
-			{
+			enum mysqlFunctionsID {
 				MYSQLEX_CONNECT,
 				MYSQLEX_EXEC,
 				MYSQLEX_MYSQL,

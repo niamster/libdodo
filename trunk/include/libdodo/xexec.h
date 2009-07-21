@@ -34,13 +34,11 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
+namespace dodo {
 	/**
 	 * @enum xexecObjectTypeEnum defines objects that access xexec
 	 */
-	enum xexecObjectTypeEnum
-	{
+	enum xexecObjectTypeEnum {
 		XEXEC_OBJECT_XEXEC,
 		XEXEC_OBJECT_DATABASEMYSQL,
 		XEXEC_OBJECT_DATABASESQLITE,
@@ -76,8 +74,7 @@ namespace dodo
 	/**
 	 * @enum xexecOperTypeEnum defines default operation type
 	 */
-	enum xexecOperTypeEnum
-	{
+	enum xexecOperTypeEnum {
 		XEXEC_OPERTYPE_NONE,
 	};
 
@@ -85,8 +82,7 @@ namespace dodo
 	/**
 	 * @enum xexecModuleActionTypeEnum defines what type of exec[pre/post] will be used for module
 	 */
-	enum xexecModuleActionTypeEnum
-	{
+	enum xexecModuleActionTypeEnum {
 		XEXEC_MODULEACTIONTYPE_PRE,
 		XEXEC_MODULEACTIONTYPE_POST,
 		XEXEC_MODULEACTIONTYPE_BOTH,
@@ -96,8 +92,7 @@ namespace dodo
 	 * @struct __xexecExMod__
 	 * @brief is returned from initXexecModule in the library
 	 */
-	struct __xexecMod__
-	{
+	struct __xexecMod__ {
 		char  name[64];         ///< name of the library
 		char  discription[256]; ///< discription of the library
 		char  hook[64];         ///< name of function in module that will be a hook
@@ -122,8 +117,7 @@ namespace dodo
 	 * @brief defines identificator of pre or/and post exec
 	 * @note -1 if not set
 	 */
-	struct __xexecCounts__
-	{
+	struct __xexecCounts__ {
 		/**
 		 * constructor
 		 */
@@ -140,8 +134,7 @@ namespace dodo
 	 * @class __xexecCollectedData__
 	 * @brief defines data that could be retrieved from the object where xexec action raised
 	 */
-	class __xexecCollectedData__
-	{
+	class __xexecCollectedData__ {
 	  public:
 
 		/**
@@ -150,7 +143,7 @@ namespace dodo
 		 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 		 */
 		__xexecCollectedData__(xexec *executor,
-							 short execObject);
+							   short execObject);
 
 		/**
 		 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
@@ -178,8 +171,7 @@ namespace dodo
 	 * @class xexec
 	 * @brief provides pre/post exec actions for defrived classes
 	 */
-	class xexec
-	{
+	class xexec {
 		friend class __xexecCollectedData__;
 
 	  protected:
@@ -260,8 +252,8 @@ namespace dodo
 		 * if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 		 */
 		virtual __xexecCounts__ addExec(const dodoString &path,
-									  void             *data,
-									  void             *toInit = NULL);
+										void             *data,
+										void             *toInit = NULL);
 #endif
 
 		/**
@@ -369,7 +361,7 @@ namespace dodo
 		 * @param toInit defines data that will be passed to the init function
 		 */
 		static __xexecMod__ getModuleInfo(const dodoString &path,
-										void             *toInit = NULL);
+										  void             *toInit = NULL);
 #endif
 
 	  protected:
@@ -402,7 +394,7 @@ namespace dodo
 		 * @param position defines XExec identificator
 		 */
 		virtual bool getXexec(dodoList<__xexecItem__ *> &list,
-							  int                   position);
+							  int                       position);
 
 		/**
 		 * set hook function
@@ -412,8 +404,8 @@ namespace dodo
 		 * @param data defines hook data
 		 */
 		virtual int addXExec(dodoList<__xexecItem__ *> &list,
-							 inExec                func,
-							 void                  *data);
+							 inExec                    func,
+							 void                      *data);
 
 		/**
 		 * delete hook from list
@@ -421,7 +413,7 @@ namespace dodo
 		 * @param position defines XExec identificator
 		 */
 		virtual void delXExec(dodoList<__xexecItem__ *> &list,
-							  int                   position);
+							  int                       position);
 
 		/**
 		 * replace hook with another one
@@ -431,9 +423,9 @@ namespace dodo
 		 * @param data defines hook data
 		 */
 		virtual void replaceXExec(dodoList<__xexecItem__ *> &list,
-								  int                   position,
-								  inExec                func,
-								  void                  *data);
+								  int                       position,
+								  inExec                    func,
+								  void                      *data);
 
 		/**
 		 * set state(enable/disable) for XExec
@@ -442,8 +434,8 @@ namespace dodo
 		 * @param stat defines hook enabled state
 		 */
 		virtual void setStatXExec(dodoList<__xexecItem__ *> &list,
-								  int                   position,
-								  bool                  stat);
+								  int                       position,
+								  bool                      stat);
 
 #ifdef DL_EXT
 		/**
@@ -455,9 +447,9 @@ namespace dodo
 		 * @param toInit defines data that will be passed to the init function
 		 */
 		virtual int addXExecModule(dodoList<__xexecItem__ *> &list,
-								   const dodoString      &path,
-								   void                  *data,
-								   void                  *toInit = NULL);
+								   const dodoString          &path,
+								   void                      *data,
+								   void                      *toInit = NULL);
 #endif
 
 		/**
@@ -470,14 +462,13 @@ namespace dodo
 		 * @struct __xexecItem__
 		 * @brief defines xexec node
 		 */
-		struct __xexecItem__
-		{
-			inExec func;                        ///< function to execute
-			void   *data;                       ///< user data
-			bool   enabled;                     ///< if true hook is enabled
-			int    position;                    ///< object identificator
+		struct __xexecItem__ {
+			inExec func;                                ///< function to execute
+			void   *data;                               ///< user data
+			bool   enabled;                             ///< if true hook is enabled
+			int    position;                            ///< object identificator
 #ifdef DL_EXT
-			void   *handle;                     ///< handle to library
+			void   *handle;                             ///< handle to library
 #endif
 		};
 
@@ -485,23 +476,22 @@ namespace dodo
 		 * @struct __xexecItemList__
 		 * @brief defines collection of hooks
 		 */
-		struct __xexecItemList__
-		{
-			dodoList<__xexecItem__ *> exec;         ///< hooks
-			bool                  execDisabled; ///< if true hooks are disabled
+		struct __xexecItemList__ {
+			dodoList<__xexecItem__ *> exec;             ///< hooks
+			bool                      execDisabled;     ///< if true hooks are disabled
 		};
 
-		mutable __xexecItemList__ preExec;            ///< preExec hooks
-		mutable __xexecItemList__ postExec;           ///< postExec hooks
+		mutable __xexecItemList__ preExec;              ///< preExec hooks
+		mutable __xexecItemList__ postExec;             ///< postExec hooks
 
-		int execs;                                  ///< hook counter
+		int execs;                                      ///< hook counter
 
 		dodoList<__xexecItem__ *>::iterator current;    ///< iterator for list[for matched with getXexec method]
 
-		mutable int operType;                       ///< operation type set by main action
+		mutable int operType;                           ///< operation type set by main action
 
-		short execObject;                           ///< type of object[see xexecObjectTypeEnum]
-		__xexecCollectedData__ *execObjectData;       ///< object data
+		short execObject;                               ///< type of object[see xexecObjectTypeEnum]
+		__xexecCollectedData__ *execObjectData;         ///< object data
 	};
 };
 

@@ -34,13 +34,11 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
+namespace dodo {
 	/**
 	 * libdodo defined errors
 	 */
-	enum xexecExR
-	{
+	enum xexecExR {
 		XEXECEX_EXECNOTFOUND,
 	};
 
@@ -52,8 +50,7 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum xexecFunctionsID
-	{
+	enum xexecFunctionsID {
 		XEXECEX_REPLACEXEXEC,
 
 #ifdef DL_EXT

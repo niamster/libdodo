@@ -37,17 +37,14 @@
 #include <libdodo/graphicsColor.h>
 #include <libdodo/xexec.h>
 
-namespace dodo
-{
-	namespace graphics
-	{
+namespace dodo {
+	namespace graphics {
 		struct __image__;
 
 		/**
 		 * @enum imageOperTypeEnum defines type of operation for hook
 		 */
-		enum imageOperTypeEnum
-		{
+		enum imageOperTypeEnum {
 			IMAGE_OPERATION_WRITE,
 			IMAGE_OPERATION_READ,
 			IMAGE_OPERATION_CREATE,
@@ -71,7 +68,7 @@ namespace dodo
 			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 			 */
 			__xexecImageCollectedData__(xexec *executor,
-									  short execObject);
+										short execObject);
 #else
 			/**
 			 * constructor
@@ -92,8 +89,7 @@ namespace dodo
 		/**
 		 * @enum imageMappingEnum defines the order of pixels
 		 */
-		enum imageMappingEnum
-		{
+		enum imageMappingEnum {
 			IMAGE_MAPPING_RGB,
 			IMAGE_MAPPING_RGBA,
 		};
@@ -103,8 +99,7 @@ namespace dodo
 		/**
 		 * @enum imageTypeEnum defines the type of the image
 		 */
-		enum imageTypeEnum
-		{
+		enum imageTypeEnum {
 			IMAGE_TYPE_TRUECOLOR,
 			IMAGE_TYPE_GRAYSCALE
 		};
@@ -114,8 +109,7 @@ namespace dodo
 		/**
 		 * @enum imagePixelSizeEnum defines size of pixel
 		 */
-		enum imagePixelSizeEnum
-		{
+		enum imagePixelSizeEnum {
 			IMAGE_PIXELSIZE_CHAR,   ///< 8 bits
 			IMAGE_PIXELSIZE_SHORT,  ///< 16 bits
 			IMAGE_PIXELSIZE_INT,    ///< 32(16 on some CPUs) bits
@@ -129,8 +123,7 @@ namespace dodo
 		/**
 		 * @enum imageEncoderEnum defines image encoder
 		 */
-		enum imageEncoderEnum
-		{
+		enum imageEncoderEnum {
 			IMAGE_ENCODER_PNG,
 			IMAGE_ENCODER_JPEG,
 			IMAGE_ENCODER_GIF,
@@ -144,8 +137,7 @@ namespace dodo
 		/**
 		 * @enum imageCompressionEnum defines type of compression
 		 */
-		enum imageCompressionEnum
-		{
+		enum imageCompressionEnum {
 			IMAGE_COMPRESSION_NO,
 			IMAGE_COMPRESSION_BZIP,
 			IMAGE_COMPRESSION_LZW,
@@ -160,8 +152,7 @@ namespace dodo
 		 * @struct __imageInfo__
 		 * @brief defines image information
 		 */
-		struct __imageInfo__
-		{
+		struct __imageInfo__ {
 			void          *data;            ///< 2D array of pixels
 			unsigned long width;            ///< width of the image
 			unsigned long height;           ///< height of the image
@@ -173,8 +164,7 @@ namespace dodo
 		 * @struct __imageSize__
 		 * @brief defines image dimensions
 		 */
-		struct __imageSize__
-		{
+		struct __imageSize__ {
 			unsigned long width;            ///< width of the image
 			unsigned long height;           ///< height of the image
 		};
@@ -218,10 +208,10 @@ namespace dodo
 			 * @param background defines image background
 			 * @param backgroundDepth defines the color depth of the image background in bits
 			 */
-			virtual void create(unsigned long  width,
-								unsigned long  height,
-								const __color__  &background = color::transparent,
-								unsigned short backgroundDepth = 32);
+			virtual void create(unsigned long   width,
+								unsigned long   height,
+								const __color__ &background = color::transparent,
+								unsigned short  backgroundDepth = 32);
 
 			/**
 			 * read image
@@ -327,17 +317,17 @@ namespace dodo
 
 		  protected:
 
-			void *exInfo;                                                       ///< exception info handler
+			void *exInfo;                                                                   ///< exception info handler
 
-			__xexecImageCollectedData__ collectedData;                                    ///< data collected for xexec
+			__xexecImageCollectedData__ collectedData;                                      ///< data collected for xexec
 
 		  private:
 
-			static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                   ///< image mapping statements
-			static const int pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];         ///< pixel type statements
-			static const int typeStArr[IMAGE_TYPESTATEMENTS];                     ///< color space statements
-			static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                   ///< image encoder
-			static const int compressionStArr[IMAGE_COMPRESSIONSTATEMENTS]; ///< image compression
+			static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                       ///< image mapping statements
+			static const int pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];                     ///< pixel type statements
+			static const int typeStArr[IMAGE_TYPESTATEMENTS];                               ///< color space statements
+			static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                       ///< image encoder
+			static const int compressionStArr[IMAGE_COMPRESSIONSTATEMENTS];                 ///< image compression
 		};
 	};
 };

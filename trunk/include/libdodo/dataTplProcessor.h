@@ -34,17 +34,13 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		class channel;
 	};
 
-	namespace data
-	{
-		namespace tpl
-		{
+	namespace data {
+		namespace tpl {
 			/**
 			 * @class processor
 			 * @brief parses template
@@ -205,8 +201,7 @@ namespace dodo
 			 *
 			 *                      <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
 			 */
-			class processor
-			{
+			class processor {
 			  public:
 
 				/**
@@ -483,8 +478,7 @@ namespace dodo
 				 * @enum processorStatementEnum defines processor statements
 				 * @note defines positions of string representation in 'statements' class property
 				 */
-				enum processorStatementEnum
-				{
+				enum processorStatementEnum {
 					PROCESSOR_STATEMENT_DODO = 0,
 					PROCESSOR_STATEMENT_OPEN_ST,
 					PROCESSOR_STATEMENT_CLOSE_ST,

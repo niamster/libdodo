@@ -36,20 +36,16 @@
 #include <libdodo/types.h>
 #include <libdodo/cgiExchange.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
-		namespace fast
-		{
+namespace dodo {
+	namespace cgi {
+		namespace fast {
 			struct __request__;
 
 			/**
 			 * @class exchange
 			 * @brief provides interface to fast CGI I/O functionality
 			 */
-			class exchange : virtual public cgi::exchange
-			{
+			class exchange : virtual public cgi::exchange {
 			  public:
 
 				/**
@@ -58,7 +54,7 @@ namespace dodo
 				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
 				exchange(const __request__ &req,
-						 short			 protection = io::CHANNEL_PROTECTION_PROCESS);
+						 short             protection = io::CHANNEL_PROTECTION_PROCESS);
 
 				/**
 				 * destructor

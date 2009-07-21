@@ -42,7 +42,7 @@
 using namespace dodo::rpc::xml;
 
 client::client(const io::channel &io) : rpc::client(io),
-								  rqEncoding("UTF-8")
+										rqEncoding("UTF-8")
 {
 }
 

@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace rpc
-	{
-		namespace json
-		{
+namespace dodo {
+	namespace rpc {
+		namespace json {
 			/**
 			 * libdodo defined errors
 			 */
-			enum methodExR
-			{
+			enum methodExR {
 				METHODEX_ROOTNOTANOBJECT,
 				METHODEX_PARAMSNOTANARRAY,
 			};
@@ -58,8 +54,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum methodFunctionsID
-			{
+			enum methodFunctionsID {
 				METHODEX_JSONTOMETHOD,
 			};
 		};

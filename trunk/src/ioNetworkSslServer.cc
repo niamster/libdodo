@@ -75,9 +75,7 @@ server::server(short a_family,
 server::~server()
 {
 	if (ctx->ctx != NULL)
-	{
 		SSL_CTX_free(ctx->ctx);
-	}
 
 	delete ctx;
 }
@@ -87,8 +85,7 @@ server::~server()
 void
 server::removeSertificates()
 {
-	if (ctx->ctx != NULL)
-	{
+	if (ctx->ctx != NULL) {
 		SSL_CTX_free(ctx->ctx);
 
 		ctx->ctx = NULL;
@@ -96,9 +93,7 @@ server::removeSertificates()
 
 	ctx->ctx = SSL_CTX_new(SSLv23_server_method());
 	if (ctx->ctx == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_REMOVESERTIFICATES, exception::ERRNO_LIBDODO, SERVEREX_UNABLETOINITCONTEXT, IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -107,49 +102,37 @@ void
 server::setSertificates(const io::ssl::__certificates__ &certs)
 {
 	if (ctx->ctx != NULL)
-	{
 		SSL_CTX_free(ctx->ctx);
-	}
 
 	ctx->ctx = SSL_CTX_new(SSLv23_server_method());
 	if (ctx->ctx == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_LIBDODO, SERVEREX_UNABLETOINITCONTEXT, IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
-	}
 
-	if (certs.cipher.size() > 0 && SSL_CTX_set_cipher_list(ctx->ctx, certs.cipher.c_str()) != 1)
-	{
+	if (certs.cipher.size() > 0 && SSL_CTX_set_cipher_list(ctx->ctx, certs.cipher.c_str()) != 1) {
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	if (certs.ca.size() > 0 && SSL_CTX_use_certificate_chain_file(ctx->ctx, certs.ca.c_str()) != 1)
-	{
+	if (certs.ca.size() > 0 && SSL_CTX_use_certificate_chain_file(ctx->ctx, certs.ca.c_str()) != 1) {
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	if (certs.cert.size() > 0 && SSL_CTX_use_certificate_file(ctx->ctx, certs.cert.c_str(), SSL_FILETYPE_PEM) != 1)
-	{
+	if (certs.cert.size() > 0 && SSL_CTX_use_certificate_file(ctx->ctx, certs.cert.c_str(), SSL_FILETYPE_PEM) != 1) {
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
 	if (certs.keyPassword.size() > 0)
-	{
 		SSL_CTX_set_default_passwd_cb_userdata(ctx->ctx, (void *)certs.keyPassword.c_str());
-	}
 
 	bool keySet = false;
 
-	if (certs.key.size() > 0)
-	{
-		switch (certs.keyType)
-		{
+	if (certs.key.size() > 0) {
+		switch (certs.keyType) {
 			case io::ssl::KEYTYPE_PKEY:
 
-				if (SSL_CTX_use_PrivateKey_file(ctx->ctx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
-				{
+				if (SSL_CTX_use_PrivateKey_file(ctx->ctx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1) {
 					unsigned long nerr = ERR_get_error();
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 				}
@@ -160,8 +143,7 @@ server::setSertificates(const io::ssl::__certificates__ &certs)
 
 			case io::ssl::KEYTYPE_RSA:
 
-				if (SSL_CTX_use_RSAPrivateKey_file(ctx->ctx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
-				{
+				if (SSL_CTX_use_RSAPrivateKey_file(ctx->ctx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1) {
 					unsigned long nerr = ERR_get_error();
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 				}
@@ -174,13 +156,9 @@ server::setSertificates(const io::ssl::__certificates__ &certs)
 
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_LIBDODO, SERVEREX_UNKNOWNKEYTYPE, IONETWORKSSLSERVEREX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
 		}
-	}
-	else
-	{
-		if (certs.ca.size() > 0)
-		{
-			if (SSL_CTX_use_PrivateKey_file(ctx->ctx, certs.ca.c_str(), SSL_FILETYPE_PEM) != 1)
-			{
+	} else {
+		if (certs.ca.size() > 0) {
+			if (SSL_CTX_use_PrivateKey_file(ctx->ctx, certs.ca.c_str(), SSL_FILETYPE_PEM) != 1) {
 				unsigned long nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
@@ -189,28 +167,21 @@ server::setSertificates(const io::ssl::__certificates__ &certs)
 		}
 	}
 
-	if (certs.caPath.size() > 0)
-	{
-		if (tools::filesystem::getFileInfo(certs.caPath).type == tools::FILESYSTEM_FILETYPE_DIRECTORY)
-		{
-			if (SSL_CTX_load_verify_locations(ctx->ctx, NULL, certs.caPath.c_str()) != 1)
-			{
+	if (certs.caPath.size() > 0) {
+		if (tools::filesystem::getFileInfo(certs.caPath).type == tools::FILESYSTEM_FILETYPE_DIRECTORY) {
+			if (SSL_CTX_load_verify_locations(ctx->ctx, NULL, certs.caPath.c_str()) != 1) {
 				unsigned long nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
-		}
-		else
-		{
-			if (SSL_CTX_load_verify_locations(ctx->ctx, certs.caPath.c_str(), NULL) != 1)
-			{
+		} else {
+			if (SSL_CTX_load_verify_locations(ctx->ctx, certs.caPath.c_str(), NULL) != 1) {
 				unsigned long nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
 		}
 	}
 
-	if (keySet && SSL_CTX_check_private_key(ctx->ctx) != 1)
-	{
+	if (keySet && SSL_CTX_check_private_key(ctx->ctx) != 1) {
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
@@ -221,13 +192,10 @@ server::setSertificates(const io::ssl::__certificates__ &certs)
 void
 server::initSsl()
 {
-	if (ctx->ctx == NULL)
-	{
+	if (ctx->ctx == NULL) {
 		ctx->ctx = SSL_CTX_new(SSLv23_server_method());
 		if (ctx->ctx == NULL)
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_INITSSL, exception::ERRNO_LIBDODO, SERVEREX_UNABLETOINITCONTEXT, IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
-		}
 	}
 }
 
@@ -240,19 +208,15 @@ server::acceptSsl(__initialAccept__ &init)
 
 	init.handle->handle = SSL_new(ctx->ctx);
 	if (init.handle->handle == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_INITSSL, exception::ERRNO_LIBDODO, SERVEREX_UNABLETOINITSSL, IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
-	}
 
-	if (SSL_set_fd(init.handle->handle, init.socket) == 0)
-	{
+	if (SSL_set_fd(init.handle->handle, init.socket) == 0) {
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
 	int res = SSL_accept(init.handle->handle);
-	switch (res)
-	{
+	switch (res) {
 		case 1:
 			break;
 
@@ -266,9 +230,7 @@ server::acceptSsl(__initialAccept__ &init)
 		{
 			int nerr = SSL_get_error(init.handle->handle, res);
 			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
-			{
 				break;
-			}
 		}
 
 		default:
@@ -276,16 +238,13 @@ server::acceptSsl(__initialAccept__ &init)
 			unsigned long nerr = ERR_get_error();
 
 			int err = SSL_shutdown(init.handle->handle);
-			if (err < 0)
-			{
+			if (err < 0) {
 				nerr = ERR_get_error();
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
-			if (err == 0)
-			{
+			if (err == 0) {
 				err = SSL_shutdown(init.handle->handle);
-				if (err < 0)
-				{
+				if (err < 0) {
 					nerr = ERR_get_error();
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 				}
@@ -313,63 +272,42 @@ server::serve(const dodoString &host,
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == 1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
 	setLingerOption(IONETWORKCONNECTION_SOCKET_LINGER_OPTION, IONETWORKCONNECTION_SOCKET_LINGER_PERIOD);
 
-	if (family == CONNECTION_PROTO_FAMILY_IPV6)
-	{
+	if (family == CONNECTION_PROTO_FAMILY_IPV6) {
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;
 		sa.sin6_port = htons(port);
 		sa.sin6_flowinfo = 0;
 		sa.sin6_scope_id = 0;
 		if (host == "*")
-		{
 			sa.sin6_addr = in6addr_any;
-		}
 		else
-		{
 			inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
-		}
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-	}
-	else
-	{
+	} else {
 		struct sockaddr_in sa;
 
 		sa.sin_family = AF_INET;
 		sa.sin_port = htons(port);
 		if (host == "*")
-		{
 			sa.sin_addr.s_addr = htonl(INADDR_ANY);
-		}
 		else
-		{
 			inet_pton(AF_INET, host.c_str(), &sa.sin_addr);
-		}
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 	}
 
 	if (type == CONNECTION_TRANSFER_TYPE_STREAM)
-	{
 		if (::listen(socket, numberOfConnections) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-	}
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
@@ -391,27 +329,19 @@ server::serve(const dodoString &path,
 	initSsl();
 	makeSocket();
 
-	if (force)
-	{
+	if (force) {
 		struct stat st;
-		if (::lstat(path.c_str(), &st) != -1)
-		{
+		if (::lstat(path.c_str(), &st) != -1) {
 			if (S_ISSOCK(st.st_mode))
-			{
 				::unlink(path.c_str());
-			}
 			else
-			{
 				throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_WRONGFILENAME, IONETWORKSSLSERVEREX_WRONGFILENAME_STR, __LINE__, __FILE__);
-			}
 		}
 	}
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
@@ -422,22 +352,16 @@ server::serve(const dodoString &path,
 	unsigned long size = path.size();
 
 	if (size >= 108)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_LONGPATH, IONETWORKSSLSERVEREX_LONGPATH_STR, __LINE__, __FILE__);
-	}
 
 	strncpy(sa.sun_path, path.c_str(), size);
 	sa.sun_family = AF_UNIX;
 
 	if (::bind(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	if (::listen(socket, numberOfConnections) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	unixSock = path;
 
@@ -457,8 +381,7 @@ server::accept(__initialAccept__ &init,
 	performXExec(preExec);
 #endif
 
-	if (type != CONNECTION_TRANSFER_TYPE_STREAM)
-	{
+	if (type != CONNECTION_TRANSFER_TYPE_STREAM) {
 		init.socket = socket;
 		init.blocked = blocked;
 		init.blockInherited = blockInherited;
@@ -469,31 +392,23 @@ server::accept(__initialAccept__ &init,
 	int sock(-1);
 	info.host.clear();
 
-	switch (family)
-	{
+	switch (family) {
 		case CONNECTION_PROTO_FAMILY_IPV4:
 		{
 			struct sockaddr_in sa;
 			socklen_t len = sizeof(sockaddr_in);
 			sock = ::accept(socket, (sockaddr *)&sa, &len);
 
-			if (sock == -1)
-			{
+			if (sock == -1) {
 				if (errno == EAGAIN)
-				{
 					return false;
-				}
 				else
-				{
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
 			}
 
 			char temp[INET_ADDRSTRLEN];
 			if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
-			{
 				info.host.assign(temp);
-			}
 			info.port = ntohs(sa.sin_port);
 
 			break;
@@ -506,23 +421,16 @@ server::accept(__initialAccept__ &init,
 
 			sock = ::accept(socket, (sockaddr *)&sa, &len);
 
-			if (sock == -1)
-			{
+			if (sock == -1) {
 				if (errno == EAGAIN)
-				{
 					return false;
-				}
 				else
-				{
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
 			}
 
 			char temp[INET6_ADDRSTRLEN];
 			if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
-			{
 				info.host.assign(temp);
-			}
 			info.port = ntohs(sa.sin6_port);
 
 			break;
@@ -531,16 +439,11 @@ server::accept(__initialAccept__ &init,
 		case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
 
 			sock = ::accept(socket, NULL, NULL);
-			if (sock == -1)
-			{
+			if (sock == -1) {
 				if (errno == EAGAIN)
-				{
 					return false;
-				}
 				else
-				{
 					throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
 			}
 
 			break;
@@ -573,8 +476,7 @@ server::accept(__initialAccept__ &init)
 	performXExec(preExec);
 #endif
 
-	if (type != CONNECTION_TRANSFER_TYPE_STREAM)
-	{
+	if (type != CONNECTION_TRANSFER_TYPE_STREAM) {
 		init.socket = socket;
 		init.blocked = blocked;
 		init.blockInherited = blockInherited;
@@ -583,16 +485,11 @@ server::accept(__initialAccept__ &init)
 	}
 
 	int sock = ::accept(socket, NULL, NULL);
-	if (sock == -1)
-	{
+	if (sock == -1) {
 		if (errno == EAGAIN)
-		{
 			return false;
-		}
 		else
-		{
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 	}
 
 	init.socket = sock;

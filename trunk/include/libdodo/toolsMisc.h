@@ -34,10 +34,8 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * @typedef escape
 		 * @brief defines escape function for split/join
@@ -48,8 +46,7 @@ namespace dodo
 		/**
 		 * @enum miscRandomStrengthEnum defines type of randomness
 		 */
-		enum miscRandomStrengthEnum
-		{
+		enum miscRandomStrengthEnum {
 			MISC_RANDOMSTRENGTH_DEFAULT,
 			MISC_RANDOMSTRENGTH_STRONG
 		};
@@ -58,8 +55,7 @@ namespace dodo
 		 * @class misc
 		 * @brief provides misc functionality
 		 */
-		class misc
-		{
+		class misc {
 		  public:
 
 			/**

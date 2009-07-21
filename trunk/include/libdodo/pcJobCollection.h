@@ -34,12 +34,9 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace job
-		{
+namespace dodo {
+	namespace pc {
+		namespace job {
 			/**
 			 * @typedef routine
 			 * @brief defines job function
@@ -51,8 +48,7 @@ namespace dodo
 			 * @class collection
 			 * @brief provides interface for jobs management
 			 */
-			class collection
-			{
+			class collection {
 			  public:
 
 				/**

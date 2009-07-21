@@ -34,22 +34,17 @@
 
 #include <libdodo/pcSyncSection.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace thread
-			{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace thread {
 				struct __lock__;
 
 				/**
 				 * @class section
 				 * @brief performs atomic locks using mutexes
 				 */
-				class section : public sync::section
-				{
+				class section : public sync::section {
 				  private:
 
 					/**

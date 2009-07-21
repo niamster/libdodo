@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * libdodo defined errors
 		 */
-		enum libraryExR
-		{
+		enum libraryExR {
 			LIBRARYEX_LIBRARYNOTOPENED,
 		};
 
@@ -53,8 +50,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum libraryFunctionsID
-		{
+		enum libraryFunctionsID {
 			LIBRARYEX_OPEN,
 			LIBRARYEX_CLOSE,
 			LIBRARYEX_GET,

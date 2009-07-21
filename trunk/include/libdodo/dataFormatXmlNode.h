@@ -34,32 +34,25 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace rpc
-	{
-		namespace xml
-		{
+namespace dodo {
+	namespace rpc {
+		namespace xml {
 			class value;
 			class method;
 			class response;
 		};
 	};
 
-	namespace data
-	{
-		namespace format
-		{
-			namespace xml
-			{
+	namespace data {
+		namespace format {
+			namespace xml {
 				class processor;
 
 				/**
 				 * @struct __nodeNamespace__
 				 * @brief defines node namespace
 				 */
-				struct __nodeNamespace__
-				{
+				struct __nodeNamespace__ {
 					dodoString prefix;  ///< prefix for the namespace
 					dodoString href;    ///< URL for the namespace
 				};
@@ -69,8 +62,7 @@ namespace dodo
 				 * @brief defines xml tree
 				 * @note children is a map of vectors of xml nodes where map key is node name and vector contains nodes with name given in key
 				 */
-				class node
-				{
+				class node {
 					friend class processor;
 					friend class rpc::xml::value;
 					friend class rpc::xml::method;
@@ -140,20 +132,20 @@ namespace dodo
 					 */
 					virtual dodoString getValue();
 
-					dodoStringMap attributes;                                               ///< attributes
+					dodoStringMap attributes;                                                   ///< attributes
 
-					dodoString name;                                                        ///< name of the node [[tag]]
+					dodoString name;                                                            ///< name of the node [[tag]]
 
-					__nodeNamespace__ ns;                                                     ///< namespace of the node
-					__nodeNamespace__ nsDef;                                                  ///< namespace definition of the node
+					__nodeNamespace__ ns;                                                       ///< namespace of the node
+					__nodeNamespace__ nsDef;                                                    ///< namespace definition of the node
 
 				  protected:
 
-					dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> children;    ///< children
+					dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> children;        ///< children
 
-					dodoString value;                                                       ///< value of the node
+					dodoString value;                                                           ///< value of the node
 
-					bool CDATA;                                                             ///< true if node doesn't have contents : `<node />`
+					bool CDATA;                                                                 ///< true if node doesn't have contents : `<node />`
 				};
 			};
 		};

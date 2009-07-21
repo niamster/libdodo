@@ -34,15 +34,12 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		class channel;
 	};
 
-	namespace rpc
-	{
+	namespace rpc {
 		class response;
 		class method;
 
@@ -50,8 +47,7 @@ namespace dodo
 		 * @class client
 		 * @brief defines client-side RPC instrument
 		 */
-		class client
-		{
+		class client {
 		  public:
 
 			/**

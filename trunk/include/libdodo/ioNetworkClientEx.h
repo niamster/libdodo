@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
+namespace dodo {
+	namespace io {
+		namespace network {
 			/**
 			 * libdodo defined errors
 			 */
-			enum clientExR
-			{
+			enum clientExR {
 				CLIENTEX_WRONGPARAMETER,
 				CLIENTEX_LONGPATH,
 			};
@@ -58,8 +54,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum clientFunctionsID
-			{
+			enum clientFunctionsID {
 				CLIENTEX_MAKESOCKET,
 				CLIENTEX_CONNECT,
 				CLIENTEX_CONNECTFROM,

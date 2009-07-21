@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum eventFunctionsID
-		{
+		enum eventFunctionsID {
 			EVENTEX_ISREADABLE,
 			EVENTEX_ISWRITABLE,
 		};

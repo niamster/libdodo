@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace rpc
-	{
+namespace dodo {
+	namespace rpc {
 		/**
 		 * libdodo defined errors
 		 */
-		enum valueExR
-		{
+		enum valueExR {
 			VALUEEX_WRONGTYPEREQUESTED,
 			VALUEEX_ARRAYOUTOFRANGE,
 		};
@@ -56,8 +53,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum valueFunctionsID
-		{
+		enum valueFunctionsID {
 			VALUEEX_BROPERATORSTRING,
 			VALUEEX_BROPERATORNUMERIC,
 			VALUEEX_GETSTRING,

@@ -32,18 +32,14 @@
 
 #include <libdodo/directives.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
+namespace dodo {
+	namespace pc {
+		namespace sync {
 			/**
 			 * @class section
 			 * @brief performs atomic locks
 			 */
-			class section
-			{
+			class section {
 			  public:
 
 				/**

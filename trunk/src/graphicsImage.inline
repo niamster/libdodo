@@ -36,26 +36,23 @@
 #include <magick/ImageMagick.h>
 #endif
 
-namespace dodo
-{
-	namespace graphics
-	{
- 		/**
+namespace dodo {
+	namespace graphics {
+		/**
 		 * @struct __image__
 		 * @brief defines internal handlers for image processing library
 		 */
-		struct __image__
-		{
+		struct __image__ {
 			/**
 			 * contructor
 			 */
 			__image__() : im(NULL),
-						imInfo(NULL)
+						  imInfo(NULL)
 			{
 			}
 
-			ImageInfo *imInfo; ///< image info handler
-			Image	  *im;    ///< image handler
+			ImageInfo     *imInfo;  ///< image info handler
+			Image         *im;      ///< image handler
 		};
 	};
 };

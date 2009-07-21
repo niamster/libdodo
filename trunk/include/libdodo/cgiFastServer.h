@@ -38,18 +38,14 @@
 #include <libdodo/cgiServer.h>
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
-		namespace fast
-		{
+namespace dodo {
+	namespace cgi {
+		namespace fast {
 			/**
 			 * @class server
 			 * @brief provides fast CGI functionality
 			 */
-			class server : public cgi::server
-			{
+			class server : public cgi::server {
 			  public:
 
 				/**
@@ -90,9 +86,9 @@ namespace dodo
 
 			  private:
 
-				bool threading;                     ///< true use threading
+				bool threading;                                 ///< true use threading
 
-				unsigned int threadsNum;            ///< amount of threads
+				unsigned int threadsNum;                        ///< amount of threads
 
 				/**
 				 * thread that holds one queue of CGI requests
@@ -100,12 +96,12 @@ namespace dodo
 				 */
 				static void *fastCGIThread(void *data);
 
-				static pc::sync::thread::section acceptLock; ///< accept request mutex
-				static pc::sync::thread::section requestLock; ///< accept request mutex
+				static pc::sync::thread::section acceptLock;    ///< accept request mutex
+				static pc::sync::thread::section requestLock;   ///< accept request mutex
 
-				static serverHandler handler;       ///< function to be called on new request
+				static serverHandler handler;                   ///< function to be called on new request
 
-				unsigned long limit;         ///< limit of requests to serve; if 0 server forever[0 by default]
+				unsigned long limit;                            ///< limit of requests to serve; if 0 server forever[0 by default]
 			};
 		};
 	};

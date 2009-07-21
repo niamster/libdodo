@@ -79,8 +79,7 @@ node::node(const dodoMap<dodoString, node, dodoMapStringCompare> &value) : value
 
 node::node(const node &on) : valueDataType(on.valueDataType)
 {
-	switch (valueDataType)
-	{
+	switch (valueDataType) {
 		case DATATYPE_STRING:
 			stringValue = new dodoString(*on.stringValue);
 			break;
@@ -107,8 +106,7 @@ node::node(const node &on) : valueDataType(on.valueDataType)
 
 node::~node()
 {
-	switch (valueDataType)
-	{
+	switch (valueDataType) {
 		case DATATYPE_STRING:
 			delete stringValue;
 			break;
@@ -128,10 +126,8 @@ node::~node()
 void
 node::setString(const dodoString &value)
 {
-	if (valueDataType != DATATYPE_STRING)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_STRING) {
+		switch (valueDataType) {
 			case DATATYPE_OBJECT:
 				delete objectValue;
 				break;
@@ -143,12 +139,8 @@ node::setString(const dodoString &value)
 
 		valueDataType = DATATYPE_STRING;
 		stringValue = new dodoString(value);
-	}
-	else
-	{
+	} else
 		*stringValue = value;
-	}
-
 }
 
 //-------------------------------------------------------------------
@@ -156,10 +148,8 @@ node::setString(const dodoString &value)
 void
 node::setBoolean(bool value)
 {
-	if (valueDataType != DATATYPE_BOOLEAN)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_BOOLEAN) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -184,10 +174,8 @@ node::setBoolean(bool value)
 void
 node::setNumeric(long value)
 {
-	if (valueDataType != DATATYPE_NUMERIC)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_NUMERIC) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -212,10 +200,8 @@ node::setNumeric(long value)
 void
 node::setNull()
 {
-	if (valueDataType != DATATYPE_NULL)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_NULL) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -238,10 +224,8 @@ node::setNull()
 void
 node::addArrayElement(const node &value)
 {
-	if (valueDataType != DATATYPE_ARRAY)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_ARRAY) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -268,10 +252,8 @@ void
 node::addObjectMember(const dodoString &name,
 					  const node       &value)
 {
-	if (valueDataType != DATATYPE_OBJECT)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_OBJECT) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -293,10 +275,8 @@ node::addObjectMember(const dodoString &name,
 void
 node::setArray(const dodoArray<node> &value)
 {
-	if (valueDataType != DATATYPE_ARRAY)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_ARRAY) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -308,11 +288,8 @@ node::setArray(const dodoArray<node> &value)
 
 		valueDataType = DATATYPE_ARRAY;
 		arrayValue = new dodoArray<node>(value);
-	}
-	else
-	{
+	} else
 		*arrayValue = value;
-	}
 }
 
 //-------------------------------------------------------------------
@@ -320,10 +297,8 @@ node::setArray(const dodoArray<node> &value)
 void
 node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
 {
-	if (valueDataType != DATATYPE_OBJECT)
-	{
-		switch (valueDataType)
-		{
+	if (valueDataType != DATATYPE_OBJECT) {
+		switch (valueDataType) {
 			case DATATYPE_STRING:
 				delete stringValue;
 				break;
@@ -335,11 +310,8 @@ node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
 
 		valueDataType = DATATYPE_OBJECT;
 		objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>(value);
-	}
-	else
-	{
+	} else
 		*objectValue = value;
-	}
 }
 
 //-------------------------------------------------------------------

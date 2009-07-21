@@ -34,16 +34,13 @@
 
 #include <libdodo/ioStreamChannel.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
+namespace dodo {
+	namespace cgi {
 		/**
 		 * @class exchange
 		 * @brief provides interface to  CGI I/O functionality
 		 */
-		class exchange : virtual public io::stream::channel
-		{
+		class exchange : virtual public io::stream::channel {
 		  public:
 
 			/**

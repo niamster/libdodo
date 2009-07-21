@@ -36,20 +36,16 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioStreamChannel.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		struct __file__;
 
-		namespace file
-		{
+		namespace file {
 #ifndef IO_WO_XEXEC
 			/**
 			 * @enum fileOperationTypeEnum defines type of operation for hook
 			 */
-			enum fileOperationTypeEnum
-			{
+			enum fileOperationTypeEnum {
 				FIFO_OPERATION_OPEN = 128,
 				FIFO_OPERATION_CLOSE
 			};
@@ -58,8 +54,7 @@ namespace dodo
 			/**
 			 * @enum fifoOpenmodeEnum defines modes to open file
 			 */
-			enum fifoOpenmodeEnum
-			{
+			enum fifoOpenmodeEnum {
 				FIFO_OPENMODE_READ,                 ///< normaly blocks until some other process opens the same FIFO for writing
 				FIFO_OPENMODE_READ_OPENNONBLOCK,    ///< normaly does't block until some other process opens the same FIFO for writing, further I/O is in blocked mode
 				FIFO_OPENMODE_WRITE,                ///< normaly blocks until some other process opens the same FIFO for reading
@@ -70,8 +65,7 @@ namespace dodo
 			 * @brief provides I/O manipulations with fifo files
 			 * @note writeStream* put extra '\n' to the end of the string, so no need to add it manually
 			 */
-			class fifo : virtual public stream::channel
-			{
+			class fifo : virtual public stream::channel {
 			  public:
 
 				/**
@@ -179,12 +173,12 @@ namespace dodo
 
 			  private:
 
-				dodoString path;    ///< file path
-				short mode;         ///< file open mode[see fileOpenmodeEnum]
+				dodoString path;        ///< file path
+				short mode;             ///< file open mode[see fileOpenmodeEnum]
 
-				__file__ *handle;      ///< file handle
+				__file__ *handle;       ///< file handle
 
-				bool blocked;       ///< true if stream is blocked
+				bool blocked;           ///< true if stream is blocked
 			};
 		};
 	};

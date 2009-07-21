@@ -35,10 +35,8 @@
 #include <libdodo/types.h>
 #include <libdodo/cgi.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
+namespace dodo {
+	namespace cgi {
 		class exchange;
 
 		/**
@@ -55,8 +53,7 @@ namespace dodo
 		 * @note do not read stdin before contructing object of this class!
 		 * object of this class should be contructed in the early begin
 		 */
-		class dialogue
-		{
+		class dialogue {
 		  public:
 
 			/**
@@ -139,7 +136,7 @@ namespace dodo
 			dodoStringMap GET;                                          ///< GET variables
 			mutable dodoMap<short, dodoString> ENVIRONMENT;             ///< environment variables[see cgiEnvironmentEnum]
 			dodoStringMap COOKIES;                                      ///< cookies sent by browser
-			dodoMap<dodoString, file, dodoMapStringCompare> FILES; ///< POST files
+			dodoMap<dodoString, file, dodoMapStringCompare> FILES;      ///< POST files
 
 			dodoString content;                                         ///< contents of the stdin for the POST request
 
@@ -258,7 +255,7 @@ namespace dodo
 			bool autocleanFiles;                                                                ///< defines whether to clean POST files in destructor
 			dodoString postFilesTmpDir;                                                         ///< directory for POST files if on they are saved on the disk
 
-			dodoList<cookie> cookies;                                                    ///< cookies
+			dodoList<cookie> cookies;                                                           ///< cookies
 			int method;                                                                         ///< request method
 
 			dodoStringArray contenTypeExtensions;                                               ///< contains contentype extension[boundary, modification-date, etc]
@@ -279,8 +276,7 @@ namespace dodo
 			/**
 			 * @struct __authInfo__ defines authenfication information
 			 */
-			struct __authInfo__
-			{
+			struct __authInfo__ {
 				dodoString user;                                                                ///< user name
 				dodoString password;                                                            ///< user password
 				dodoString realm;                                                               ///< explanation of the authentication request
@@ -294,7 +290,7 @@ namespace dodo
 				short      type;                                                                ///< authenfication type[see cgiAuthTypeEnum]
 			};
 
-			__authInfo__ authInfo;                                                        ///< authentication information
+			__authInfo__ authInfo;                                                              ///< authentication information
 		};
 	};
 };

@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * libdodo defined errors
 		 */
-		enum miscExR
-		{
+		enum miscExR {
 			MISCEX_WRONGSTRENGTH,
 			MISCEX_EMPTYARRAY,
 		};
@@ -56,8 +53,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum miscFunctionsID
-		{
+		enum miscFunctionsID {
 			MISCEX_RANDOM,
 			MISCEX_JOIN,
 		};

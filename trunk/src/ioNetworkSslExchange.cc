@@ -49,14 +49,14 @@
 using namespace dodo::io::network::ssl;
 
 __initialAccept__::__initialAccept__() : socket(-1),
-									 handle(new io::ssl::__sslConnection__)
+										 handle(new io::ssl::__sslConnection__)
 {
 }
 
 //-------------------------------------------------------------------
 
 __initialAccept__::__initialAccept__(__initialAccept__ &init) : socket(init.socket),
-														  handle(new io::ssl::__sslConnection__)
+																handle(new io::ssl::__sslConnection__)
 {
 	handle->handle = init.handle->handle;
 
@@ -98,8 +98,8 @@ exchange::exchange(short protection) : stream::channel(protection),
 //-------------------------------------------------------------------
 
 exchange::exchange(__initialAccept__ &a_init,
-				   short           protection) : stream::channel(protection),
-												 handle(new io::ssl::__sslConnection__)
+				   short             protection) : stream::channel(protection),
+												   handle(new io::ssl::__sslConnection__)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
@@ -112,12 +112,9 @@ exchange::exchange(__initialAccept__ &a_init,
 
 exchange::~exchange()
 {
-	if (handle->handle != NULL)
-	{
+	if (handle->handle != NULL) {
 		if (SSL_shutdown(handle->handle) == 0)
-		{
 			SSL_shutdown(handle->handle);
-		}
 
 		SSL_free(handle->handle);
 	}
@@ -139,20 +136,17 @@ exchange::init(__initialAccept__ &a_init)
 //-------------------------------------------------------------------
 
 void
-exchange::_close(int socket,
+exchange::_close(int                        socket,
 				 io::ssl::__sslConnection__ *handle)
 {
 	int err = SSL_shutdown(handle->handle);
-	if (err < 0)
-	{
+	if (err < 0) {
 		unsigned long nerr = ERR_get_error();
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
-	if (err == 0)
-	{
+	if (err == 0) {
 		err = SSL_shutdown(handle->handle);
-		if (err < 0)
-		{
+		if (err < 0) {
 			unsigned long nerr = ERR_get_error();
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
@@ -173,8 +167,7 @@ exchange::close()
 	performXExec(preExec);
 #endif
 
-	if (socket != -1)
-	{
+	if (socket != -1) {
 		_close(socket, handle);
 
 		socket = -1;
@@ -189,15 +182,14 @@ exchange::close()
 //-------------------------------------------------------------------
 
 void
-exchange::init(int  a_socket,
-			   io::ssl::__sslConnection__  *a_handle,
-			   bool a_blocked,
-			   bool blockInherited)
+exchange::init(int                        a_socket,
+			   io::ssl::__sslConnection__ *a_handle,
+			   bool                       a_blocked,
+			   bool                       blockInherited)
 {
 	pc::sync::protector pg(keeper);
 
-	if (socket != -1)
-	{
+	if (socket != -1) {
 		_close(socket, handle);
 
 		socket = -1;
@@ -216,21 +208,13 @@ exchange::init(int  a_socket,
 
 	setLingerOption(lingerOpts, lingerSeconds);
 
-	if (!blocked)
-	{
+	if (!blocked) {
 		if (blockInherited)
-		{
 			block(false);
-		}
 		else
-		{
 			block(true);
-		}
-	}
-	else
-	{
+	} else
 		block(true);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -241,21 +225,15 @@ exchange::isAlive()
 	pc::sync::protector pg(keeper);
 
 	if (socket == -1)
-	{
 		return false;
-	}
 
 	pollfd fd;
 	fd.fd = socket;
 	fd.events = POLLOUT;
 
 	if (poll(&fd, 1, -1) > 0)
-	{
 		if (isSetFlag(fd.revents, POLLOUT))
-		{
 			return true;
-		}
-	}
 
 	_close(socket, handle);
 
@@ -271,9 +249,7 @@ void
 exchange::_write(const char * const a_data) const
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-	}
 
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
@@ -282,14 +258,10 @@ exchange::_write(const char * const a_data) const
 
 	long n;
 
-	for (unsigned long i = 0; i < iter; ++i)
-	{
-		while (true)
-		{
-			if ((n = SSL_write(handle->handle, data, outSocketBuffer)) <= 0)
-			{
-				switch (SSL_get_error(handle->handle, n))
-				{
+	for (unsigned long i = 0; i < iter; ++i) {
+		while (true) {
+			if ((n = SSL_write(handle->handle, data, outSocketBuffer)) <= 0) {
+				switch (SSL_get_error(handle->handle, n)) {
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
 					case SSL_ERROR_WANT_X509_LOOKUP:
@@ -299,9 +271,8 @@ exchange::_write(const char * const a_data) const
 					case SSL_ERROR_SYSCALL:
 
 						if (errno == 0)
-						{
 							continue;
-						}
+
 
 					default:
 					{
@@ -317,14 +288,10 @@ exchange::_write(const char * const a_data) const
 		data += outSocketBuffer;
 	}
 
-	if (rest > 0)
-	{
-		while (true)
-		{
-			if ((n = SSL_write(handle->handle, data, rest)) <= 0)
-			{
-				switch (SSL_get_error(handle->handle, n))
-				{
+	if (rest > 0) {
+		while (true) {
+			if ((n = SSL_write(handle->handle, data, rest)) <= 0) {
+				switch (SSL_get_error(handle->handle, n)) {
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
 					case SSL_ERROR_WANT_X509_LOOKUP:
@@ -334,9 +301,8 @@ exchange::_write(const char * const a_data) const
 					case SSL_ERROR_SYSCALL:
 
 						if (errno == 0)
-						{
 							continue;
-						}
+
 
 					default:
 					{
@@ -357,9 +323,7 @@ void
 exchange::_read(char * const a_data) const
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-	}
 
 	memset(a_data, '\0', inSize);
 
@@ -370,14 +334,10 @@ exchange::_read(char * const a_data) const
 
 	long n;
 
-	for (unsigned long i = 0; i < iter; ++i)
-	{
-		while (true)
-		{
-			if ((n = SSL_read(handle->handle, data, inSocketBuffer)) <= 0)
-			{
-				switch (SSL_get_error(handle->handle, n))
-				{
+	for (unsigned long i = 0; i < iter; ++i) {
+		while (true) {
+			if ((n = SSL_read(handle->handle, data, inSocketBuffer)) <= 0) {
+				switch (SSL_get_error(handle->handle, n)) {
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
 					case SSL_ERROR_WANT_X509_LOOKUP:
@@ -387,9 +347,8 @@ exchange::_read(char * const a_data) const
 					case SSL_ERROR_SYSCALL:
 
 						if (errno == 0)
-						{
 							continue;
-						}
+
 
 					default:
 					{
@@ -405,14 +364,10 @@ exchange::_read(char * const a_data) const
 		data += inSocketBuffer;
 	}
 
-	if (rest > 0)
-	{
-		while (true)
-		{
-			if ((n = SSL_read(handle->handle, data, rest)) <= 0)
-			{
-				switch (SSL_get_error(handle->handle, n))
-				{
+	if (rest > 0) {
+		while (true) {
+			if ((n = SSL_read(handle->handle, data, rest)) <= 0) {
+				switch (SSL_get_error(handle->handle, n)) {
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
 					case SSL_ERROR_WANT_X509_LOOKUP:
@@ -422,9 +377,8 @@ exchange::_read(char * const a_data) const
 					case SSL_ERROR_SYSCALL:
 
 						if (errno == 0)
-						{
 							continue;
-						}
+
 
 					default:
 					{
@@ -445,20 +399,15 @@ unsigned long
 exchange::_readStream(char * const data) const
 {
 	if (socket == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-	}
 
 	memset(data, '\0', inSize);
 
 	long n;
 
-	while (true)
-	{
-		if ((n = SSL_read(handle->handle, data, inSize)) <= 0)
-		{
-			switch (SSL_get_error(handle->handle, n))
-			{
+	while (true) {
+		if ((n = SSL_read(handle->handle, data, inSize)) <= 0) {
+			switch (SSL_get_error(handle->handle, n)) {
 				case SSL_ERROR_WANT_READ:
 				case SSL_ERROR_WANT_WRITE:
 				case SSL_ERROR_WANT_X509_LOOKUP:
@@ -469,9 +418,8 @@ exchange::_readStream(char * const data) const
 				case SSL_ERROR_SYSCALL:
 
 					if (errno == 0)
-					{
 						continue;
-					}
+
 
 				default:
 				{

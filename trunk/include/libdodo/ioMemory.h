@@ -36,15 +36,12 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioBlockChannel.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		/*
 		 * @enum memoryFlagsEnum defines flags of memory serviced by io::memory interface
 		 */
-		enum memoryFlagsEnum
-		{
+		enum memoryFlagsEnum {
 			MEMORYFLAGS_NORMAL = 1,
 			MEMORYFLAGS_EXTERN = 2,
 			MEMORYFLAGS_FIXED_LENGTH = 4,
@@ -54,8 +51,7 @@ namespace dodo
 		 * @class memory
 		 * @brief provides memory I/O manipulations
 		 */
-		class memory : virtual public block::channel
-		{
+		class memory : virtual public block::channel {
 		  public:
 
 			/**
@@ -65,10 +61,10 @@ namespace dodo
 			 * @param shared defines memory region flags[see memoryFlagsEnum]
 			 * @param protection defines flags of IO protection[see channelProtectionFlagsEnum]
 			 */
-			memory(char *data,
+			memory(char          *data,
 				   unsigned long size,
-				   short flags = MEMORYFLAGS_NORMAL,
-				   short protection = CHANNEL_PROTECTION_PROCESS);
+				   short         flags = MEMORYFLAGS_NORMAL,
+				   short         protection = CHANNEL_PROTECTION_PROCESS);
 
 			/**
 			 * constructor
@@ -120,7 +116,7 @@ namespace dodo
 			/**
 			 * @return memory
 			 */
-			operator const char *();
+			operator const char*();
 
 		  protected:
 
@@ -164,7 +160,7 @@ namespace dodo
 
 		  protected:
 
-			mutable char *data; ///< data
+			mutable char *data;         ///< data
 			mutable unsigned long size; ///< size of data
 
 			short flags;

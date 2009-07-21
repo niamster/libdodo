@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace file
-		{
+namespace dodo {
+	namespace io {
+		namespace file {
 			/**
 			 * libdodo defined errors
 			 */
-			enum regularExR
-			{
+			enum regularExR {
 				REGULAREX_WRONGFILENAME,
 				REGULAREX_FILEISSHORTERTHANGIVENPOSITION,
 				REGULAREX_NOTOPENED
@@ -60,8 +56,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum regularFunctionsID
-			{
+			enum regularFunctionsID {
 				REGULAREX_REGULAR,
 				REGULAREX_CLOSE,
 				REGULAREX_CLONE,

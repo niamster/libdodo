@@ -38,8 +38,7 @@
 #include <map>
 #include <string>
 
-namespace dodo
-{
+namespace dodo {
 	/**
 	 * @def addFlag
 	 * @brief add bit flag to the statement
@@ -64,8 +63,7 @@ namespace dodo
 	 * @class dodoMapStringCompare
 	 * @brief defines compare functor
 	 */
-	class dodoMapStringCompare
-	{
+	class dodoMapStringCompare {
 	  public:
 
 		/**
@@ -73,22 +71,23 @@ namespace dodo
 		 * @param first defines first string to compare
 		 * @param second defines second string to compare
 		 */
-		bool operator()(const dodoString &first, const dodoString &second);
+		bool operator()(const dodoString &first,
+						const dodoString &second);
 
 		/**
 		 * compares strings
 		 * @param first defines first string to compare
 		 * @param second defines second string to compare
 		 */
-		bool operator()(const dodoString &first, const dodoString &second) const;
+		bool operator()(const dodoString &first,
+						const dodoString &second) const;
 	};
 
 	/**
 	 * @class dodoMapStringCompare
 	 * @brief defines compare functor
 	 */
-	class dodoMapICaseStringCompare
-	{
+	class dodoMapICaseStringCompare {
 	  public:
 
 		/**
@@ -96,14 +95,16 @@ namespace dodo
 		 * @param first defines first string to compare
 		 * @param second defines second string to compare
 		 */
-		bool operator()(const dodoString &first, const dodoString &second);
+		bool operator()(const dodoString &first,
+						const dodoString &second);
 
 		/**
 		 * compares strings
 		 * @param first defines first string to compare
 		 * @param second defines second string to compare
 		 */
-		bool operator()(const dodoString &first, const dodoString &second) const;
+		bool operator()(const dodoString &first,
+						const dodoString &second) const;
 	};
 
 	/**
@@ -112,8 +113,7 @@ namespace dodo
 	 * @note not threadsafe
 	 */
 	template<typename T>
-	class singleton
-	{
+	class singleton {
 	  public:
 
 		/**

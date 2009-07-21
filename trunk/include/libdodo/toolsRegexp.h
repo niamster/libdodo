@@ -34,10 +34,8 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		struct __regexp__;
 		/**
 		 * @class regexp
@@ -46,8 +44,7 @@ namespace dodo
 		 * both POSIX and PCRE don't support binary patterns
 		 * POSIX doesn't support binary match sting
 		 */
-		class regexp
-		{
+		class regexp {
 		  private:
 
 			/**
@@ -123,13 +120,13 @@ namespace dodo
 			 */
 			virtual void compile(const dodoString &pattern);
 
-			bool extended;  ///< if true use extended regext support[true by default]
+			bool extended;                          ///< if true use extended regext support[true by default]
 
-			bool icase;     ///< if true ignore case[false by default]
+			bool icase;                             ///< if true ignore case[false by default]
 
-			bool greedy;    ///< if true REGEXPs are greedy[true by default]
+			bool greedy;                            ///< if true REGEXPs are greedy[true by default]
 
-			bool multiline; ///< if true match strings are treated as multiline[false by default]
+			bool multiline;                         ///< if true match strings are treated as multiline[false by default]
 
 		  protected:
 
@@ -137,8 +134,7 @@ namespace dodo
 			 * @struct __regexMatch__
 			 * @brief defines begin and end of matched substring
 			 */
-			struct __regexMatch__
-			{
+			struct __regexMatch__ {
 				int begin;
 				int end;
 			};
@@ -152,9 +148,9 @@ namespace dodo
 
 		  private:
 
-			__regexp__ *regex; ///< regexp handle
+			__regexp__ *regex;                      ///< regexp handle
 
-			dodoArray<__regexMatch__> boundaries; ///< list of boundaries matched in match string by pattern
+			dodoArray<__regexMatch__> boundaries;   ///< list of boundaries matched in match string by pattern
 		};
 	};
 };

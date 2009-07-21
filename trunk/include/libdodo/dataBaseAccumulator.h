@@ -36,12 +36,9 @@
 #include <libdodo/xexec.h>
 #include <libdodo/dataBaseConnector.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
+namespace dodo {
+	namespace data {
+		namespace base {
 			/**
 			 * @class __xexecDataBaseAccumulatorCollectedData__
 			 * @brief defines data that could be retrieved from the db object
@@ -60,36 +57,35 @@ namespace dodo
 				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 				 */
 				__xexecDataBaseAccumulatorCollectedData__(xexec *executor,
-														short execObject);
+														  short execObject);
 #endif
 
-				dodoString where;                   ///< `where` for the request(can be used as `as` for `callFunction`)
-				dodoStringArray fields;             ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
-				dodoArray<dodoStringArray> values;  ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
-				dodoString table;                   ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-				dodoString tableTo;                 ///< `tableTo` for the request
-				dodoString order;                   ///< `order` for the request
-				dodoString having;                  ///< `having` for the request
-				dodoString group;                   ///< `group` for the request
-				dodoString limit;                   ///< `limit` for the result
-				dodoString offset;                  ///< `offset` for the result
-				dodoStringArray subQueries;         ///< `subquery`
-				dodoStringArray joinTables;         ///< join tables
-				dodoStringArray joinConds;          ///< join conditions
-				dodoArray<int> joinTypes;           ///< join types
+				dodoString where;                       ///< `where` for the request(can be used as `as` for `callFunction`)
+				dodoStringArray fields;                 ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
+				dodoArray<dodoStringArray> values;      ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
+				dodoString table;                       ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
+				dodoString tableTo;                     ///< `tableTo` for the request
+				dodoString order;                       ///< `order` for the request
+				dodoString having;                      ///< `having` for the request
+				dodoString group;                       ///< `group` for the request
+				dodoString limit;                       ///< `limit` for the result
+				dodoString offset;                      ///< `offset` for the result
+				dodoStringArray subQueries;             ///< `subquery`
+				dodoStringArray joinTables;             ///< join tables
+				dodoStringArray joinConds;              ///< join conditions
+				dodoArray<int> joinTypes;               ///< join types
 
-				__connectionInfo__ dbInfo;            ///< data info to connect to the server
+				__connectionInfo__ dbInfo;              ///< data info to connect to the server
 
-				int qType;                          ///< type of operation
-				int qShift;                         ///< additional actions[see accumulatorAddEnum]
+				int qType;                              ///< type of operation
+				int qShift;                             ///< additional actions[see accumulatorAddEnum]
 			};
 
 			/**
 			 * @class accumulator
 			 * @brief provides wide abilities for db manipulations
 			 */
-			class accumulator : public connector
-			{
+			class accumulator : public connector {
 			  public:
 
 				/*
@@ -260,8 +256,7 @@ namespace dodo
 				/**
 				 * @enum accumulatorNoneEnum defines empty state of the db object
 				 */
-				enum accumulatorNoneEnum
-				{
+				enum accumulatorNoneEnum {
 					ACCUMULATOR_NONE
 				};
 
@@ -270,8 +265,7 @@ namespace dodo
 				/**
 				 * @enum accumulatorAddRequestEnum defines additional properties for the request
 				 */
-				enum accumulatorAddRequestEnum
-				{
+				enum accumulatorAddRequestEnum {
 					ACCUMULATOR_ADDREQUEST_WHERE = 1,
 					ACCUMULATOR_ADDREQUEST_HAVING,
 					ACCUMULATOR_ADDREQUEST_GROUPBY,
@@ -285,8 +279,7 @@ namespace dodo
 				/**
 				 * @enum accumulatorRequestEnum defines type of request
 				 */
-				enum accumulatorRequestEnum
-				{
+				enum accumulatorRequestEnum {
 					ACCUMULATOR_REQUEST_SELECT = SUBREQUESTSTATEMENTS + 1,
 					ACCUMULATOR_REQUEST_INSERT,
 					ACCUMULATOR_REQUEST_INSERT_SELECT,
@@ -304,9 +297,9 @@ namespace dodo
 				 */
 				virtual void cleanCollected();
 
-				bool show;                                              ///< if true try to get result from the request[select]
+				bool show;                                                  ///< if true try to get result from the request[select]
 
-				__xexecDataBaseAccumulatorCollectedData__ collectedData;  ///< data collected for xexec
+				__xexecDataBaseAccumulatorCollectedData__ collectedData;    ///< data collected for xexec
 			};
 		};
 	};

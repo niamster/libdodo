@@ -52,8 +52,8 @@ exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
 //-------------------------------------------------------------------
 
 exchange::exchange(const __request__ &req,
-				   short		   protection) : dodo::cgi::exchange(protection),
-												 io::stream::channel(protection)
+				   short             protection) : dodo::cgi::exchange(protection),
+												   io::stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_CGIFASTEXCHANGE);
@@ -75,9 +75,7 @@ void
 exchange::flush() const
 {
 	if (FCGX_FFlush(request->request->out) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_FLUSH, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOFLUSH, CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -120,9 +118,7 @@ void
 exchange::_write(const char *const buf) const
 {
 	if (FCGX_PutStr(buf, outSize, request->request->out) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -132,21 +128,16 @@ exchange::_writeStream(const char * const data) const
 {
 	unsigned long _outSize = outSize;
 
-	try
-	{
+	try {
 		unsigned int bufSize = strlen(data);
 
 		if (bufSize < outSize)
-		{
 			outSize = bufSize;
-		}
 
 		_write(data);
 
 		outSize = _outSize;
-	}
-	catch (...)
-	{
+	} catch (...) {
 		outSize = _outSize;
 
 		throw;

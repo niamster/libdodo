@@ -34,19 +34,14 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace process
-			{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace process {
 				/**
 				 * libdodo defined errors
 				 */
-				enum sectionExR
-				{
+				enum sectionExR {
 					SECTIONEX_NOTOPENED,
 				};
 
@@ -58,8 +53,7 @@ namespace dodo
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
-				enum sectionFunctionsID
-				{
+				enum sectionFunctionsID {
 					SECTIONEX_ACQUIRE,
 					SECTIONEX_RELEASE,
 					SECTIONEX_REMOVE,

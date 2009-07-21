@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		/**
 		 * libdodo defined errors
 		 */
-		enum memoryExR
-		{
+		enum memoryExR {
 			MEMORYEX_CANTBEUSEDWITHIOEVENT,
 			MEMORYEX_OUTOFBOUNDS,
 			MEMORYEX_APPENDTOFIXED,
@@ -62,8 +59,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum memoryFunctionsID
-		{
+		enum memoryFunctionsID {
 			MEMORYEX__READ,
 			MEMORYEX__WRITE,
 			MEMORYEX__WRITESTREAM,

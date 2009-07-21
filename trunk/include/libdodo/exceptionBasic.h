@@ -36,15 +36,12 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace exception
-	{
+namespace dodo {
+	namespace exception {
 		/**
 		 * @enum errnoEnum defines sources, where the code of the error has been got
 		 */
-		enum errnoEnum
-		{
+		enum errnoEnum {
 			ERRNO_LIBDODO,
 			ERRNO_ERRNO,
 			ERRNO_MYSQL,
@@ -64,8 +61,7 @@ namespace dodo
 		/**
 		 * @enum errorModuleEnum defines modules where exception might be thrown
 		 */
-		enum errorModuleEnum
-		{
+		enum errorModuleEnum {
 			ERRMODULE_DATABASEMYSQL = 0,
 			ERRMODULE_DATABASEPOSTGRESQL,
 			ERRMODULE_DATABASESQLCONSTRUCTOR,
@@ -127,8 +123,7 @@ namespace dodo
 		 * @struct __basicMod__
 		 * @brief is returned from initBaseExModule in the library
 		 */
-		struct __basicMod__
-		{
+		struct __basicMod__ {
 			char  name[64];         ///< name of the library
 			char  discription[256]; ///< discription of the library
 			char  hook[64];         ///< name of the function in module that will be as a hook
@@ -165,8 +160,7 @@ namespace dodo
 		 * @struct __call__
 		 * @brief describes function call in call stack
 		 */
-		struct __call__
-		{
+		struct __call__ {
 			dodoString object;      ///< name of the object where call was found
 			dodoString symbol;      ///< name of the call
 			void       *address;    ///< address of the call
@@ -178,8 +172,7 @@ namespace dodo
 		 * @brief describes exception that has been thrown
 		 */
 		class basic : public std::exception,
-					  public singleton<basic>
-		{
+					  public singleton<basic>{
 			friend class singleton<basic>;
 
 		  private:
@@ -233,20 +226,20 @@ namespace dodo
 			virtual dodoString getCallStack();
 #endif
 
-			int errModule;                  ///< module where exception has been thrown
-			int funcID;                     ///< function where exception has been thrown[see *Ex.h headers for IDs]
-			int errnoSource;                ///< the source of the error code and of the error string
+			int errModule;                      ///< module where exception has been thrown
+			int funcID;                         ///< function where exception has been thrown[see *Ex.h headers for IDs]
+			int errnoSource;                    ///< the source of the error code and of the error string
 
-			int baseErrno;                  ///< error code
-			dodoString baseErrstr;          ///< error string
+			int baseErrno;                      ///< error code
+			dodoString baseErrstr;              ///< error string
 
-			unsigned long line;             ///< line where exception has been thrown
-			dodoString file;                ///< file where exception has been thrown
+			unsigned long line;                 ///< line where exception has been thrown
+			dodoString file;                    ///< file where exception has been thrown
 
-			dodoString message;             ///< custom message that might clarify the exception
+			dodoString message;                 ///< custom message that might clarify the exception
 
 #ifdef CALLSTACK_EX
-			dodoArray<__call__> callStack;    ///< call stack of the raised exception
+			dodoArray<__call__> callStack;      ///< call stack of the raised exception
 #endif
 
 			/**
@@ -285,7 +278,7 @@ namespace dodo
 			 * @param toInit defines data that will be passed to the init function
 			 */
 			static __basicMod__ getModuleInfo(const dodoString &path,
-											void             *toInit = NULL);
+											  void             *toInit = NULL);
 
 			/**
 			 * set handler for exceptions for specific module
@@ -329,8 +322,7 @@ namespace dodo
 			 * @class syncThreadSection
 			 * @brief performs atomic locks using mutexes
 			 */
-			class syncThreadSection
-			{
+			class syncThreadSection {
 			  public:
 
 				/**
@@ -367,8 +359,7 @@ namespace dodo
 			 * @brief provides thread safe behaviour
 			 * @note it locks in constructor and unlocks in destructor
 			 */
-			class syncThreadStack
-			{
+			class syncThreadStack {
 			  public:
 
 				/**

@@ -81,13 +81,9 @@ collection::del(unsigned long position)
 	pc::sync::protector tg(keeper);
 
 	if (getShare(position))
-	{
 		shares.erase(current);
-	}
 	else
-	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATACOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -99,13 +95,9 @@ collection::set(unsigned long position,
 	pc::sync::protector tg(keeper);
 
 	if (getShare(position))
-	{
 		current->data = data;
-	}
 	else
-	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATACOLLECTION, COLLECTIONEX_SET, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -116,13 +108,9 @@ collection::get(unsigned long position)
 	pc::sync::protector tg(keeper);
 
 	if (getShare(position))
-	{
 		return current->data;
-	}
 	else
-	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATACOLLECTION, COLLECTIONEX_SET, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -131,10 +119,8 @@ bool
 collection::getShare(unsigned long position)
 {
 	dodoList<pc::sync::data::__info__>::iterator i(shares.begin()), j(shares.end());
-	for (; i != j; ++i)
-	{
-		if (i->position == position)
-		{
+	for (; i != j; ++i) {
+		if (i->position == position) {
 			current = i;
 
 			return true;
@@ -153,9 +139,7 @@ collection::getIds()
 
 	dodoList<pc::sync::data::__info__>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
-	{
 		ids.push_back(i->position);
-	}
 
 	return ids;
 }

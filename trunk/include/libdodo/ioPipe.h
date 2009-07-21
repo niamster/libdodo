@@ -35,12 +35,9 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioStreamChannel.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
+namespace dodo {
+	namespace io {
+		namespace network {
 			struct __peerInfo__;
 		};
 
@@ -49,8 +46,7 @@ namespace dodo
 		/**
 		 * @enum pipeOperationTypeEnum defines type of operation for hook
 		 */
-		enum pipeOperationTypeEnum
-		{
+		enum pipeOperationTypeEnum {
 			PIPE_OPERATION_OPEN = 128,
 			PIPE_OPERATION_CLOSE
 		};
@@ -60,8 +56,7 @@ namespace dodo
 		 * @brief provides interface for PIPE I/O operations
 		 * @note writeStream* put extra '\n' to the end of the string, so no need to add it manually
 		 */
-		class pipe : virtual public stream::channel
-		{
+		class pipe : virtual public stream::channel {
 		  public:
 
 			/**
@@ -162,8 +157,8 @@ namespace dodo
 			 */
 			virtual void _writeStream(const char * const data) const;
 
-			__file__ *in;     ///< input stream descriptor
-			__file__ *out;    ///< output stream descriptor
+			__file__ *in;       ///< input stream descriptor
+			__file__ *out;      ///< output stream descriptor
 
 		  private:
 

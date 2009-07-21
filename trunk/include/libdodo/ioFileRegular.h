@@ -36,20 +36,16 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioBlockChannel.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		struct __file__;
 
-		namespace file
-		{
+		namespace file {
 #ifndef IO_WO_XEXEC
 			/**
 			 * @enum regularOperationTypeEnum defines type of operation for hook
 			 */
-			enum regularOperationTypeEnum
-			{
+			enum regularOperationTypeEnum {
 				REGULAR_OPERATION_OPEN = 128,
 				REGULAR_OPERATION_CLOSE
 			};
@@ -58,8 +54,7 @@ namespace dodo
 			/**
 			 * @enum regularOpenmodeEnum defines modes to open file
 			 */
-			enum regularOpenmodeEnum
-			{
+			enum regularOpenmodeEnum {
 				REGULAR_OPENMODE_READ_ONLY,             ///< reading from the file
 				REGULAR_OPENMODE_READ_WRITE,            ///< reading and writing[creates if not exists]
 				REGULAR_OPENMODE_READ_WRITE_TRUNCATE,   ///< file will be truncated if exists
@@ -69,8 +64,7 @@ namespace dodo
 			 * @class regular
 			 * @brief provides file I/O manipulations
 			 */
-			class regular : virtual public block::channel
-			{
+			class regular : virtual public block::channel {
 			  public:
 
 				/**
@@ -172,10 +166,10 @@ namespace dodo
 
 			  private:
 
-				dodoString path;    ///< file path
-				short mode;         ///< file open mode[see fileOpenmodeEnum]
+				dodoString path;        ///< file path
+				short mode;             ///< file open mode[see fileOpenmodeEnum]
 
-				__file__ *handle;      ///< file handle
+				__file__ *handle;       ///< file handle
 			};
 		};
 	};

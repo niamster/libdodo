@@ -101,18 +101,14 @@ server::fastCGIThread(void *data)
 
 	int res = 0;
 
-	while (true)
-	{
-		if (limit != 0)
-		{
+	while (true) {
+		if (limit != 0) {
 			pc::sync::protector rp(&requestLock);
 
 			++requests;
 
 			if (requests >= limit)
-			{
 				break;
-			}
 		}
 
 		acceptLock.acquire();
@@ -120,9 +116,7 @@ server::fastCGIThread(void *data)
 		acceptLock.release();
 
 		if (res == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
-		}
 
 		handler(cfSTD);
 
@@ -138,32 +132,23 @@ void
 server::serve(serverHandler func)
 {
 	if (!isFastCgi())
-	{
 		throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ISCGI, CGIFASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);
-	}
 
 	handler = func;
 
-	if (threading)
-	{
+	if (threading) {
 		pthread_t *id = new pthread_t[threadsNum];
 
 		unsigned int i = 0;
 
 		for (; i < threadsNum; ++i)
-		{
 			pthread_create(&id[i], NULL, fastCGIThread, &limit);
-		}
 
 		for (i = 0; i < threadsNum; ++i)
-		{
 			pthread_join(id[i], NULL);
-		}
 
 		delete [] id;
-	}
-	else
-	{
+	} else {
 		unsigned long requests = 0;
 
 		FCGX_Request req;
@@ -172,22 +157,16 @@ server::serve(serverHandler func)
 
 		exchange cfSTD(request);
 
-		while (true)
-		{
-			if (limit != 0)
-			{
+		while (true) {
+			if (limit != 0) {
 				++requests;
 
 				if (requests >= limit)
-				{
 					break;
-				}
 			}
 
 			if (FCGX_Accept_r(request.request) == -1)
-			{
 				throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
-			}
 
 			handler(cfSTD);
 

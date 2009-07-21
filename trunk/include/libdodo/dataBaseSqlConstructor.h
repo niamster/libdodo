@@ -35,19 +35,14 @@
 #include <libdodo/types.h>
 #include <libdodo/dataBaseAccumulator.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
-			namespace sql
-			{
+namespace dodo {
+	namespace data {
+		namespace base {
+			namespace sql {
 				/**
 				 * @enum fieldTypeEnum defines field type
 				 */
-				enum fieldTypeEnum
-				{
+				enum fieldTypeEnum {
 					FIELDTYPE_TEXT,
 					FIELDTYPE_BINARY,
 					FIELDTYPE_NUMERIC,
@@ -59,8 +54,7 @@ namespace dodo
 				 * @note all data become escaped and framed with '. Names of fields are not framed with ` to prevent cases as `count(*)`, etc.
 				 * If you want to prevent data framing define preventFraming sqlConstructor class propertie as true but remember
 				 */
-				class constructor : public accumulator
-				{
+				class constructor : public accumulator {
 				  public:
 
 					/*
@@ -178,8 +172,7 @@ namespace dodo
 					 * @enum sqlConstructorStatementEnum defines sqlConstructor statements
 					 * @note defines positions of string representation in 'statements' class property
 					 */
-					enum sqlConstructorStatementEnum
-					{
+					enum sqlConstructorStatementEnum {
 						SQLCONSTRUCTOR_STATEMENT_EQUAL,
 						SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE,
 						SQLCONSTRUCTOR_STATEMENT_APOSTROPHE,

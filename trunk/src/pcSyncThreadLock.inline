@@ -33,20 +33,15 @@
 #include <pthread.h>
 #endif
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace thread
-			{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace thread {
 				/**
 				 * @struct __lock__
 				 * @brief defines thread mutex
 				 */
-				struct __lock__
-				{
+				struct __lock__ {
 #ifdef PTHREAD_EXT
 					pthread_mutex_t keeper;  ///< lock
 #endif

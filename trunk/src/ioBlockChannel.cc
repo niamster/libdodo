@@ -70,12 +70,9 @@ channel::read() const
 
 	a_str.assign(readSize, '\0');
 
-	try
-	{
+	try {
 		_read((char *)a_str.data());
-	}
-	catch (...)
-	{
+	} catch (...) {
 		a_str.clear();
 
 #ifndef IO_WO_XEXEC
@@ -119,12 +116,9 @@ channel::readStream() const
 	a_str.assign(inSize + 1, '\0');
 	unsigned long n = 0;
 
-	try
-	{
+	try {
 		n = _readStream((char *)a_str.data());
-	}
-	catch (...)
-	{
+	} catch (...) {
 		a_str.clear();
 
 		throw;
@@ -144,6 +138,7 @@ channel::readStream() const
 #else
 	if (n == 0)
 		a_str.clear();
+
 #endif
 
 	pos += n;
@@ -164,12 +159,9 @@ channel::write(const dodoString &a_data) const
 	operType = IO_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
-	try
-	{
+	try {
 		_write(collectedData.buffer.c_str());
-	}
-	catch (...)
-	{
+	} catch (...) {
 		collectedData.buffer.clear();
 
 		throw;
@@ -200,12 +192,9 @@ channel::writeStream(const dodoString &a_data) const
 	operType = IO_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
-	try
-	{
+	try {
 		_writeStream(collectedData.buffer.c_str());
-	}
-	catch (...)
-	{
+	} catch (...) {
 		collectedData.buffer.clear();
 
 		throw;

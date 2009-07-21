@@ -38,8 +38,7 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
+namespace dodo {
 	dodoString __dodostring__;
 
 	//-------------------------------------------------------------------

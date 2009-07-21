@@ -34,19 +34,14 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace format
-		{
-			namespace json
-			{
+namespace dodo {
+	namespace data {
+		namespace format {
+			namespace json {
 				/**
 				 * libdodo defined errors
 				 */
-				enum nodeExR
-				{
+				enum nodeExR {
 					NODEEX_WRONGTYPEREQUESTED,
 					NODEEX_ARRAYOUTOFRANGE,
 					NODEEX_MALFORMEDJSON,
@@ -62,8 +57,7 @@ namespace dodo
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
-				enum nodeFunctionsID
-				{
+				enum nodeFunctionsID {
 					NODEEX_BROPERATORSTRING,
 					NODEEX_BROPERATORNUMERIC,
 					NODEEX_GETSTRING,

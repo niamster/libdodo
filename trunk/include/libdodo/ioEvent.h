@@ -34,26 +34,21 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
+namespace dodo {
+	namespace pc {
+		namespace sync {
 			class section;
 		};
 	};
 
-	namespace io
-	{
+	namespace io {
 		class eventInfo;
 
 		/**
 		 * @class event
 		 * @brief provides information if in/output stream is readable/writable
 		 */
-		class event
-		{
+		class event {
 		  private:
 
 			/**
@@ -128,19 +123,18 @@ namespace dodo
 			 * @struct __eventInOutDescriptors__
 			 * @brief defines input and output descriptors of the io::* classes
 			 */
-			struct __eventInOutDescriptors__
-			{
-				int position;   ///< identificator of the pair
+			struct __eventInOutDescriptors__ {
+				int position;                               ///< identificator of the pair
 
-				int in;         ///< input stream
-				int out;        ///< output stream
+				int in;                                     ///< input stream
+				int out;                                    ///< output stream
 			};
 
-			dodoArray<__eventInOutDescriptors__> desc;    ///< stream pairs
+			dodoArray<__eventInOutDescriptors__> desc;      ///< stream pairs
 
-			int descs;                                  ///< descriptors counter
+			int descs;                                      ///< descriptors counter
 
-			pc::sync::section *keeper;                  ///< section locker
+			pc::sync::section *keeper;                      ///< section locker
 		};
 	};
 };

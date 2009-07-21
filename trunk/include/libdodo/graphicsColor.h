@@ -33,16 +33,13 @@
 #include <libdodo/directives.h>
 
 #ifdef IMAGEMAGICK_EXT
-namespace dodo
-{
-	namespace graphics
-	{
+namespace dodo {
+	namespace graphics {
 		/**
 		 * @struct __color__
 		 * @brief defines color of the primitive
 		 */
-		struct __color__
-		{
+		struct __color__ {
 			unsigned short red;     ///< in range [0; 65535]
 			unsigned short green;   ///< in range [0; 65535]
 			unsigned short blue;    ///< in range [0; 65535]
@@ -53,8 +50,7 @@ namespace dodo
 		 * @class color
 		 * @brief defines default colors
 		 */
-		class color
-		{
+		class color {
 		  public:
 
 			static __color__ red;

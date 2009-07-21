@@ -35,19 +35,15 @@
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
+namespace dodo {
+	namespace data {
+		namespace base {
 #define JOINTYPESTSTATEMENTS 6
 
 			/**
 			 * @enum joinTypeEnum defines join types
 			 */
-			enum joinTypeEnum
-			{
+			enum joinTypeEnum {
 				JOINTYPE_JOIN,
 				JOINTYPE_LEFTOUTER,
 				JOINTYPE_RIGHTOUTER,
@@ -61,8 +57,7 @@ namespace dodo
 			/**
 			 * @enum subrequestEnum defines type of sub request
 			 */
-			enum subrequestEnum
-			{
+			enum subrequestEnum {
 				SUBREQUEST_UNION = 1,
 				SUBREQUEST_UNION_ALL,
 				SUBREQUEST_MINUS,
@@ -73,15 +68,14 @@ namespace dodo
 			 * @struct __tuples__
 			 * @brief defines fetched data from db
 			 */
-			struct __tuples__
-			{
+			struct __tuples__ {
 				/**
 				 * constructor
 				 * @param rows defines rows of data
 				 * @param fields defines names of fields
 				 */
 				__tuples__(dodoArray<dodoStringArray> rows,
-						 dodoStringArray            fields);
+						   dodoStringArray            fields);
 
 				/**
 				 * constructor
@@ -96,8 +90,7 @@ namespace dodo
 			 * @struct __connectionInfo__
 			 * @brief defines connection options for the server
 			 */
-			struct __connectionInfo__
-			{
+			struct __connectionInfo__ {
 				/**
 				 * constructor
 				 */
@@ -113,11 +106,11 @@ namespace dodo
 				 * @param port defines port
 				 */
 				__connectionInfo__(const dodoString &db,
-								 const            dodoString &host,
-								 const            dodoString &user,
-								 const            dodoString &password,
-								 const            dodoString &path = __dodostring__,
-								 int              port = 0);
+								   const            dodoString &host,
+								   const            dodoString &user,
+								   const            dodoString &password,
+								   const            dodoString &path = __dodostring__,
+								   int              port = 0);
 
 				dodoString   db;        ///< database name
 				dodoString   host;      ///< hostname
@@ -130,8 +123,7 @@ namespace dodo
 			/**
 			 * @enum dbOperationTypeEnum defines type of operation for hook
 			 */
-			enum dbOperationTypeEnum
-			{
+			enum dbOperationTypeEnum {
 				DATABASE_OPERATION_CONNECT,
 				DATABASE_OPERATION_EXEC,
 				DATABASE_OPERATION_DISCONNECT,

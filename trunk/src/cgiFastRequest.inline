@@ -33,18 +33,14 @@
 #include <fcgiapp.h>
 #include <unistd.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
-		namespace fast
-		{
+namespace dodo {
+	namespace cgi {
+		namespace fast {
 			/**
 			 * @struct __request__
 			 * @brief defines fast CGI request interface
 			 */
-			struct __request__
-			{
+			struct __request__ {
 				/**
 				 * constructor
 				 */

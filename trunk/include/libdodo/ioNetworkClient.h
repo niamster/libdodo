@@ -36,14 +36,10 @@
 #include <libdodo/ioNetworkConnection.h>
 #include <libdodo/xexec.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
-			namespace ssl
-			{
+namespace dodo {
+	namespace io {
+		namespace network {
+			namespace ssl {
 				class client;
 			};
 
@@ -52,8 +48,7 @@ namespace dodo
 			/**
 			 * @enum clientOperationTypeEnum defines type of operation for hook
 			 */
-			enum clientOperationTypeEnum
-			{
+			enum clientOperationTypeEnum {
 				CLIENT_OPERATION_CONNECT = 128,
 				CLIENT_OPERATION_CONNECTFROM,
 				CLIENT_OPERATION_CONNECT_UNIX,
@@ -67,8 +62,7 @@ namespace dodo
 			 * @class __xexecIoNetworkClientCollectedData__
 			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
 			 */
-			class __xexecIoNetworkClientCollectedData__ : public __xexecCollectedData__
-			{
+			class __xexecIoNetworkClientCollectedData__ : public __xexecCollectedData__ {
 			  public:
 
 				/**
@@ -146,12 +140,12 @@ namespace dodo
 				virtual void connect(const dodoString &path,
 									 exchange         &exchange);
 
-				bool blockInherited;                                ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
+				bool blockInherited;                                    ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
 
 			  protected:
 
-				short family;                                       ///< socket family
-				short type;                                         ///< socket type
+				short family;                                           ///< socket family
+				short type;                                             ///< socket type
 
 				/**
 				 * restore options on connect/bind
@@ -163,10 +157,10 @@ namespace dodo
 				 */
 				virtual void makeSocket();
 
-				dodoString unixSock;                                ///< path to unix socket
+				dodoString unixSock;                                    ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
-				__xexecIoNetworkClientCollectedData__ collectedData;  ///< data collected for xexec
+				__xexecIoNetworkClientCollectedData__ collectedData;    ///< data collected for xexec
 #endif
 			};
 		};

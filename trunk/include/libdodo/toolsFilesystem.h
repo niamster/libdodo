@@ -34,15 +34,12 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * @enum filesystemFileTypeEnum defines file type
 		 */
-		enum filesystemFileTypeEnum
-		{
+		enum filesystemFileTypeEnum {
 			FILESYSTEM_FILETYPE_REGULAR_FILE,
 			FILESYSTEM_FILETYPE_LOCAL_SOCKET,
 			FILESYSTEM_FILETYPE_SYMBOLIC_LINK,
@@ -55,8 +52,7 @@ namespace dodo
 		/**
 		 * @enum filePermissionModesEnum defines file permissions
 		 */
-		enum filePermissionModesEnum
-		{
+		enum filePermissionModesEnum {
 			FILESYSTEM_PERMISSION_NONE,
 
 			FILESYSTEM_PERMISSION_OWNER_READ_ACCESS = 1 << 1,
@@ -87,8 +83,7 @@ namespace dodo
 		 * @struct __fileInfo__
 		 * @brief defines file info
 		 */
-		struct __fileInfo__
-		{
+		struct __fileInfo__ {
 			dodoString name;    ///< file name
 			int        perm;    ///< file permissions[see filePermissionModesEnum]
 			int        type;    ///< file type[see filesystemFileTypeEnum]
@@ -103,8 +98,7 @@ namespace dodo
 		 * @class filesystem
 		 * @brief provides disk I/O manipulations
 		 */
-		class filesystem
-		{
+		class filesystem {
 		  public:
 
 			/**

@@ -34,31 +34,24 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace format
-		{
-			namespace xml
-			{
+namespace dodo {
+	namespace data {
+		namespace format {
+			namespace xml {
 				class node;
 			};
 		};
 	};
 
-	namespace rpc
-	{
+	namespace rpc {
 		class method;
 
-		namespace xml
-		{
+		namespace xml {
 			/**
 			 * @class method
 			 * @brief defines RPC method in XML representation
 			 */
-			class method
-			{
+			class method {
 			  public:
 
 				/**

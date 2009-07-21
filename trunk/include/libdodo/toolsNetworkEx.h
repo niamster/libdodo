@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * libdodo defined errors
 		 */
-		enum networkExR
-		{
+		enum networkExR {
 			NETWORKEX_BADMAILHELO,
 			NETWORKEX_BADMAILAUTH,
 		};
@@ -56,8 +53,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum networkFunctionsID
-		{
+		enum networkFunctionsID {
 			NETWORKEX_GETHOSTINFO,
 			NETWORKEX_GETHOSTPRIMARYIP,
 			NETWORKEX_SETLOCALNAME,

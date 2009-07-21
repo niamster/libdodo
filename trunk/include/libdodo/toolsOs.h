@@ -34,32 +34,25 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace thread
-			{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace thread {
 				struct __lock__;
 			};
 		};
 
-		namespace thread
-		{
+		namespace thread {
 			class collection;
 		};
 	};
 
-	namespace tools
-	{
+	namespace tools {
 		/**
 		 * @struct __usage__
 		 * @brief defines process information
 		 */
-		struct __usage__
-		{
+		struct __usage__ {
 			long time;              ///< processor time of execution in miliseconds
 			long mem;               ///< memory usage in bytes
 		};
@@ -68,8 +61,7 @@ namespace dodo
 		 * @struct __limits__
 		 * @brief defines os limits
 		 */
-		struct __limits__
-		{
+		struct __limits__ {
 			unsigned long current;  ///< current limit
 			unsigned long max;      ///< max limit
 		};
@@ -77,8 +69,7 @@ namespace dodo
 		/**
 		 * @enum osLimitEnum defines limit types
 		 */
-		enum osLimitEnum
-		{
+		enum osLimitEnum {
 			OS_CPUTIME,
 			OS_MAXFILESIZE,
 			OS_MAXMEMUSAGE,
@@ -124,8 +115,7 @@ namespace dodo
 		/**
 		 * @enum osSignalsEnum defines os signals
 		 */
-		enum osSignalsEnum
-		{
+		enum osSignalsEnum {
 			OS_SIGNAL_HANGUP = 0,
 			OS_SIGNAL_INTERRUPT = 1 << 1,
 			OS_SIGNAL_QUIT = 1 << 2,
@@ -157,8 +147,7 @@ namespace dodo
 		/**
 		 * @enum osIdTypeEnum defines type of UID
 		 */
-		enum osIdTypeEnum
-		{
+		enum osIdTypeEnum {
 			OS_UID,
 			OS_EUID
 		};
@@ -167,8 +156,7 @@ namespace dodo
 		 * @struct __userInfo__
 		 * @brief defines user info
 		 */
-		struct  __userInfo__
-		{
+		struct  __userInfo__ {
 			dodoString name;            ///< user name
 			dodoString pass;            ///< user password
 			int        uid;             ///< user id
@@ -182,8 +170,7 @@ namespace dodo
 		 * @struct __groupInfo__
 		 * @brief defines group info
 		 */
-		struct __groupInfo__
-		{
+		struct __groupInfo__ {
 			dodoString      name;       ///< group name
 			int             gid;        ///< group id
 			dodoStringArray members;    ///< group members
@@ -194,8 +181,7 @@ namespace dodo
 		 * @struct __signalMod__
 		 * @brief is returned from initOsSignalModule in the library
 		 */
-		struct __signalMod__
-		{
+		struct __signalMod__ {
 			char name[64];              ///< name of the library
 			char discription[256];      ///< discription of the library
 			char hook[64];              ///< name of function in module that will be as a hook
@@ -221,8 +207,7 @@ namespace dodo
 		 * @class os
 		 * @brief provides os operations
 		 */
-		class os
-		{
+		class os {
 			friend class pc::thread::collection;
 
 		  public:
@@ -303,7 +288,7 @@ namespace dodo
 			 * @param type defines type limits[see osLimitEnum]
 			 * @param lim defines os limits
 			 */
-			static void setLimit(short          type,
+			static void setLimit(short            type,
 								 const __limits__ &lim);
 
 			/**
@@ -466,7 +451,7 @@ namespace dodo
 			 * @param toInit defines data that will be passed to the init function
 			 */
 			static __signalMod__ getModuleInfo(const dodoString &path,
-											 void             *toInit = NULL);
+											   void             *toInit = NULL);
 
 			/**
 			 * set handler on signal from specific module
@@ -502,7 +487,7 @@ namespace dodo
 			 * @param pw defines structure with info
 			 */
 			static __userInfo__ &fillUserInfo(__userInfo__ &info,
-											void     *pw);
+											  void         *pw);
 
 			/**
 			 * fill __groupInfo__ with values from group structure
@@ -511,7 +496,7 @@ namespace dodo
 			 * @param pw defines structure with info
 			 */
 			static __groupInfo__ &fillGroupInfo(__groupInfo__ &info,
-											  void       *pw);
+												void          *pw);
 
 			/**
 			 * @return os signal number that refers to osSignalsEnum
@@ -542,8 +527,7 @@ namespace dodo
 			 * @class syncThreadSection
 			 * @brief performs atomic locks using mutexes
 			 */
-			class syncThreadSection
-			{
+			class syncThreadSection {
 			  public:
 
 				/**
@@ -568,18 +552,17 @@ namespace dodo
 
 			  protected:
 
-				static pc::sync::thread::__lock__ keeper;  ///< mutex
+				static pc::sync::thread::__lock__ keeper;   ///< mutex
 			};
 
-			static syncThreadSection keeper;    ///< lock
+			static syncThreadSection keeper;                ///< lock
 
 			/**
 			 * @class syncThreadStack
 			 * @brief provides thread safe behaviour
 			 * @note it locks in constructor and unlocks in destructor
 			 */
-			class syncThreadStack
-			{
+			class syncThreadStack {
 			  public:
 
 				/**

@@ -34,10 +34,8 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * @note time/date format can be specified as:
 		 * %w     Weekday number (Sunday=[0, 6]).
@@ -65,8 +63,7 @@ namespace dodo
 		 * @struct __time__
 		 * @brief defines time information
 		 */
-		struct __time__
-		{
+		struct __time__ {
 			/**
 			 * constructor
 			 */
@@ -83,12 +80,12 @@ namespace dodo
 			 * @param daylight defines daylight savings condition
 			 */
 			__time__(unsigned int sec,
-				   unsigned int min,
-				   unsigned int hour,
-				   unsigned int day,
-				   unsigned int month,
-				   unsigned int year,
-				   bool         daylight = true);
+					 unsigned int min,
+					 unsigned int hour,
+					 unsigned int day,
+					 unsigned int month,
+					 unsigned int year,
+					 bool         daylight = true);
 
 			unsigned int sec;       ///< seconds [0, 60]
 			unsigned int min;       ///< minutes [0, 59]
@@ -104,8 +101,7 @@ namespace dodo
 		 * @class time
 		 * @brief provides time functionality
 		 */
-		class time
-		{
+		class time {
 		  public:
 
 			/**
@@ -175,7 +171,7 @@ namespace dodo
 			 * @param local defines local time condition; if true time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 */
 			static __time__ timestamp(long seconds,
-									bool local = true);
+									  bool local = true);
 		};
 	};
 };

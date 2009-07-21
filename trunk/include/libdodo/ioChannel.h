@@ -36,25 +36,19 @@
 #include <libdodo/types.h>
 #include <libdodo/ioEventInfo.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
+namespace dodo {
+	namespace pc {
+		namespace sync {
 			class section;
 		};
 	};
 
-	namespace io
-	{
-		namespace block
-		{
+	namespace io {
+		namespace block {
 			class channel;
 		};
 
-		namespace stream
-		{
+		namespace stream {
 			class channel;
 		};
 
@@ -62,8 +56,7 @@ namespace dodo
 		 * @enum channelProtectionTypeEnum defines type of protection for io objects
 		 * in IO interaction in parallel environment
 		 */
-		enum channelProtectionTypeEnum
-		{
+		enum channelProtectionTypeEnum {
 			CHANNEL_PROTECTION_NONE,
 			CHANNEL_PROTECTION_THREAD,
 			CHANNEL_PROTECTION_PROCESS
@@ -71,8 +64,7 @@ namespace dodo
 		/**
 		 * @enum ioOperationTypeEnum describes type of operation for hook
 		 */
-		enum ioOperationTypeEnum
-		{
+		enum ioOperationTypeEnum {
 			IO_OPERATION_READ,
 			IO_OPERATION_READSTRING,
 			IO_OPERATION_READSTREAM,
@@ -88,8 +80,7 @@ namespace dodo
 		 * @class __xexecIoChannelCollectedData__
 		 * @brief defines data that could be retrieved from io::channel(to modificate)
 		 */
-		class __xexecIoChannelCollectedData__ : public __xexecCollectedData__
-		{
+		class __xexecIoChannelCollectedData__ : public __xexecCollectedData__ {
 		  public:
 
 			/**
@@ -98,7 +89,7 @@ namespace dodo
 			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
 			 */
 			__xexecIoChannelCollectedData__(xexec *executor,
-										  short execObject);
+											short execObject);
 
 			dodoString buffer; ///< data buffer
 		};
@@ -195,11 +186,11 @@ namespace dodo
 			virtual void _writeStream(const char * const data) const = 0;
 
 #ifndef IO_WO_XEXEC
-			mutable __xexecIoChannelCollectedData__ collectedData;    ///< data collected for xexec
+			mutable __xexecIoChannelCollectedData__ collectedData;      ///< data collected for xexec
 #endif
 
-			pc::sync::section *keeper;                      ///< section locker
-			short protection;                               ///< type of IO protection[see channelProtectionTypeEnum]
+			pc::sync::section *keeper;                                  ///< section locker
+			short protection;                                           ///< type of IO protection[see channelProtectionTypeEnum]
 		};
 	};
 };

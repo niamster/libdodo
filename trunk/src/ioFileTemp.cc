@@ -57,11 +57,9 @@ temp::temp(bool  open,
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILETEMP);
 #endif
 
-	if (open)
-	{
+	if (open) {
 		handle->file = tmpfile();
-		if (handle->file == NULL)
-		{
+		if (handle->file == NULL) {
 			delete handle;
 
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -86,21 +84,18 @@ temp::temp(const temp &fd) : overwrite(fd.overwrite),
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.handle->file != NULL)
-	{
+	if (fd.handle->file != NULL) {
 		int oldDesc, newDesc;
 
 		oldDesc = fileno(fd.handle->file);
-		if (oldDesc == -1)
-		{
+		if (oldDesc == -1) {
 			delete handle;
 
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		newDesc = dup(oldDesc);
-		if (newDesc == -1)
-		{
+		if (newDesc == -1) {
 			delete handle;
 
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -108,8 +103,7 @@ temp::temp(const temp &fd) : overwrite(fd.overwrite),
 
 		handle->file = fdopen(newDesc, "r+");
 
-		if (handle->file == NULL)
-		{
+		if (handle->file == NULL) {
 			delete handle;
 
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -122,9 +116,7 @@ temp::temp(const temp &fd) : overwrite(fd.overwrite),
 temp::~temp()
 {
 	if (handle->file != NULL)
-	{
 		fclose(handle->file);
-	}
 
 	delete handle;
 }
@@ -137,9 +129,7 @@ temp::getInDescriptor() const
 	pc::sync::protector pg(keeper);
 
 	if (handle->file == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	return fileno(handle->file);
 }
@@ -152,9 +142,7 @@ temp::getOutDescriptor() const
 	pc::sync::protector pg(keeper);
 
 	if (handle->file == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	return fileno(handle->file);
 }
@@ -166,12 +154,9 @@ temp::clone(const temp &fd)
 {
 	pc::sync::protector pg(keeper);
 
-	if (handle->file != NULL)
-	{
+	if (handle->file != NULL) {
 		if (fclose(handle->file) != 0)
-		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 
 		handle->file = NULL;
 	}
@@ -183,28 +168,21 @@ temp::clone(const temp &fd)
 	inSize = fd.inSize;
 	outSize = fd.outSize;
 
-	if (fd.handle->file != NULL)
-	{
+	if (fd.handle->file != NULL) {
 		int oldDesc, newDesc;
 
 		oldDesc = fileno(fd.handle->file);
 		if (oldDesc == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 
 		newDesc = dup(oldDesc);
 		if (newDesc == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 
 		handle->file = fdopen(newDesc, "r+");
 
 		if (handle->file == NULL)
-		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 	}
 }
 
@@ -220,12 +198,9 @@ temp::close()
 	performXExec(preExec);
 #endif
 
-	if (handle->file != NULL)
-	{
+	if (handle->file != NULL) {
 		if (fclose(handle->file) != 0)
-		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 
 		handle->file = NULL;
 	}
@@ -247,21 +222,16 @@ temp::open()
 	performXExec(preExec);
 #endif
 
-	if (handle->file != NULL)
-	{
+	if (handle->file != NULL) {
 		if (fclose(handle->file) != 0)
-		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 
 		handle->file = NULL;
 	}
 
 	handle->file = tmpfile();
 	if (handle->file == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
@@ -274,37 +244,25 @@ void
 temp::_read(char * const a_data) const
 {
 	if (handle->file == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	unsigned long pos = block ? this->pos * inSize : this->pos;
 
 	if (fseek(handle->file, pos * inSize, SEEK_SET) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	memset(a_data, '\0', inSize);
 
-	while (true)
-	{
-		if (fread(a_data, inSize, 1, handle->file) == 0)
-		{
+	while (true) {
+		if (fread(a_data, inSize, 1, handle->file) == 0) {
 			if (feof(handle->file) != 0 || errno == EAGAIN)
-			{
 				break;
-			}
 
 			if (errno == EINTR)
-			{
 				continue;
-			}
 
 			if (ferror(handle->file) != 0)
-			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
 		}
 
 		break;
@@ -317,26 +275,16 @@ void
 temp::_write(const char *const a_data) const
 {
 	if (handle->file == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
-	if (append)
-	{
+	if (append) {
 		if (fseek(handle->file, 0, SEEK_END) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-	}
-	else
-	{
+	} else {
 		unsigned long pos = block ? this->pos * outSize : this->pos;
-		if (!overwrite)
-		{
+		if (!overwrite) {
 			if (fseek(handle->file, pos, SEEK_SET) == -1)
-			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
 
 			char *t_buf = new char[outSize];
 
@@ -345,35 +293,23 @@ temp::_write(const char *const a_data) const
 			delete [] t_buf;
 
 			if (read != 0)
-			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_LIBDODO, TEMPEX_CANNOTOVEWRITE, IOFILETEMPEX_CANNOTOVEWRITE_STR, __LINE__, __FILE__);
-			}
 		}
 
 		if (fseek(handle->file, pos, SEEK_SET) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 	}
 
-	while (true)
-	{
-		if (fwrite(a_data, outSize, 1, handle->file) == 0)
-		{
+	while (true) {
+		if (fwrite(a_data, outSize, 1, handle->file) == 0) {
 			if (errno == EINTR)
-			{
 				continue;
-			}
 
 			if (errno == EAGAIN)
-			{
 				break;
-			}
 
 			if (ferror(handle->file) != 0)
-			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
 		}
 
 		break;
@@ -394,14 +330,11 @@ temp::erase()
 	bool _overwrite = overwrite;
 	overwrite = true;
 
-	try
-	{
+	try {
 		_write(empty);
 
 		overwrite = _overwrite;
-	}
-	catch (...)
-	{
+	} catch (...) {
 		overwrite = _overwrite;
 
 		delete [] empty;
@@ -420,14 +353,10 @@ temp::flush() const
 	pc::sync::protector pg(keeper);
 
 	if (handle->file == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_FLUSH, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	if (fflush(handle->file) != 0)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
@@ -436,25 +365,17 @@ unsigned long
 temp::_readStream(char * const a_data) const
 {
 	if (handle->file == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	unsigned long readSize = inSize + 1;
 
-	if (block)
-	{
+	if (block) {
 		if (fseek(handle->file, 0, SEEK_SET) == -1)
-		{
 			throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
 
-		for (unsigned long i = 0; i < pos; ++i)
-		{
-			if (fgets(a_data, readSize, handle->file) == NULL)
-			{
-				switch (errno)
-				{
+		for (unsigned long i = 0; i < pos; ++i) {
+			if (fgets(a_data, readSize, handle->file) == NULL) {
+				switch (errno) {
 					case EIO:
 					case EINTR:
 					case EBADF:
@@ -468,32 +389,21 @@ temp::_readStream(char * const a_data) const
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_FILEISSHORTERTHANGIVENPOSITION, IOFILETEMPEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__);
 			}
 		}
-	}
-	else if (fseek(handle->file, pos, SEEK_SET) == -1)
-	{
+	} else if (fseek(handle->file, pos, SEEK_SET) == -1)
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	memset(a_data, '\0', readSize);
 
-	while (true)
-	{
-		if (fgets(a_data, readSize, handle->file) == NULL)
-		{
+	while (true) {
+		if (fgets(a_data, readSize, handle->file) == NULL) {
 			if (errno == EINTR)
-			{
 				continue;
-			}
 
 			if (errno == EAGAIN)
-			{
 				break;
-			}
 
 			if (ferror(handle->file) != 0)
-			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
 		}
 
 		break;
@@ -508,37 +418,25 @@ void
 temp::_writeStream(const char *const a_data) const
 {
 	if (handle->file == NULL)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
-	}
 
 	if (fseek(handle->file, 0, SEEK_END) == -1)
-	{
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	unsigned long _outSize = outSize;
 
 	unsigned int bufSize = strlen(a_data);
 
 	if (bufSize < _outSize)
-	{
 		_outSize = bufSize;
-	}
 
-	while (true)
-	{
-		if (fwrite(a_data, _outSize, 1, handle->file) == 0)
-		{
+	while (true) {
+		if (fwrite(a_data, _outSize, 1, handle->file) == 0) {
 			if (errno == EINTR)
-			{
 				continue;
-			}
 
 			if (ferror(handle->file) != 0)
-			{
 				throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
 		}
 
 		break;

@@ -34,18 +34,14 @@
 
 #include <libdodo/cgiServer.h>
 
-namespace dodo
-{
-	namespace cgi
-	{
-		namespace basic
-		{
+namespace dodo {
+	namespace cgi {
+		namespace basic {
 			/**
 			 * @class server
 			 * @brief provides basic CGI server functionality
 			 */
-			class server : public cgi::server
-			{
+			class server : public cgi::server {
 			  public:
 
 				/**

@@ -34,15 +34,12 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace tools
-	{
+namespace dodo {
+	namespace tools {
 		/**
 		 * libdodo defined errors
 		 */
-		enum osExR
-		{
+		enum osExR {
 			OSEX_WRONGPARAMETER,
 		};
 
@@ -54,8 +51,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum osFunctionsID
-		{
+		enum osFunctionsID {
 			SYNCTHREADSECTION_RELEASE,
 			SYNCTHREADSECTION_ACQUIRE,
 			SYNCTHREADSECTION_SYNCTHREADSECTION,

@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace file
-		{
+namespace dodo {
+	namespace io {
+		namespace file {
 			/**
 			 * libdodo defined errors
 			 */
-			enum tempExR
-			{
+			enum tempExR {
 				TEMPEX_CANNOTOVEWRITE,
 				TEMPEX_FILEISSHORTERTHANGIVENPOSITION,
 				TEMPEX_NOTOPENED
@@ -60,8 +56,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum tempFunctionsID
-			{
+			enum tempFunctionsID {
 				TEMPEX_TEMP,
 				TEMPEX_CLOSE,
 				TEMPEX_CLONE,

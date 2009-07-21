@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace base
-		{
+namespace dodo {
+	namespace data {
+		namespace base {
 			/**
 			 * libdodo defined errors
 			 */
-			enum postgresqlExR
-			{
+			enum postgresqlExR {
 				POSTGRESQLEX_NOTOPENED,
 			};
 
@@ -56,8 +52,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum postgresqlFunctionsID
-			{
+			enum postgresqlFunctionsID {
 				POSTGRESQLEX_CONNECT,
 				POSTGRESQLEX_EXEC,
 				POSTGRESQLEX_POSTGRESQL,

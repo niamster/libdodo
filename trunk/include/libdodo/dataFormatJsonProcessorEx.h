@@ -34,19 +34,14 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace data
-	{
-		namespace format
-		{
-			namespace json
-			{
+namespace dodo {
+	namespace data {
+		namespace format {
+			namespace json {
 				/**
 				 * libdodo defined errors
 				 */
-				enum processorExR
-				{
+				enum processorExR {
 					PROCESSOREX_MALFORMEDJSONNUMERIC,
 					PROCESSOREX_MALFORMEDJSONNULL,
 					PROCESSOREX_MALFORMEDJSONBOOLEAN,
@@ -62,8 +57,7 @@ namespace dodo
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
-				enum processorFunctionsID
-				{
+				enum processorFunctionsID {
 					PROCESSOREX_PROCESSBOOLEAN,
 					PROCESSOREX_PROCESSNULL,
 					PROCESSOREX_PROCESSNUMERIC,

@@ -34,19 +34,14 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
-{
-	namespace io
-	{
+namespace dodo {
+	namespace io {
 		class channel;
 	};
 
-	namespace data
-	{
-		namespace format
-		{
-			namespace xml
-			{
+	namespace data {
+		namespace format {
+			namespace xml {
 				class node;
 
 				struct __node__;
@@ -57,8 +52,7 @@ namespace dodo
 				 * @struct __nodeDef__
 				 * @brief defines processor tree definition
 				 */
-				struct __nodeDef__
-				{
+				struct __nodeDef__ {
 					/**
 					 * constructor
 					 */
@@ -69,25 +63,24 @@ namespace dodo
 					 * @param ns defines namespace of the node
 					 */
 					__nodeDef__(const dodoString &name,
-							  const            dodoString &ns = __dodostring__);
+								const            dodoString &ns = __dodostring__);
 
-					dodoString                     name;            ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
+					dodoString                       name;              ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-					dodoMap<dodoString, __nodeDef__> children;        ///< children definitions
-					bool                           allChildren;     ///< if true - get all children tree[true by default]
+					dodoMap<dodoString, __nodeDef__> children;          ///< children definitions
+					bool                             allChildren;       ///< if true - get all children tree[true by default]
 
-					dodoStringArray                attributes;      ///< node attrributes; if empty - take all
-					bool                           allAttributes;   ///< if true - get all attributes[true by default]
+					dodoStringArray                  attributes;        ///< node attrributes; if empty - take all
+					bool                             allAttributes;     ///< if true - get all attributes[true by default]
 
-					dodoString                     ns;              ///< node namespace; if empty parser skips namespace specification
+					dodoString                       ns;                ///< node namespace; if empty parser skips namespace specification
 				};
 
 				/**
 				 * @struct __info__
 				 * @brief desribes info got about given XML document
 				 */
-				struct __info__
-				{
+				struct __info__ {
 					/**
 					 * constructor
 					 */
@@ -98,23 +91,22 @@ namespace dodo
 					 * @note initializes with user values
 					 */
 					__info__(const dodoString &version,
-						   const            dodoString &encoding,
-						   const            dodoString &root,
-						   int              compression);
+							 const            dodoString &encoding,
+							 const            dodoString &root,
+							 int              compression);
 
-					dodoString version;                             ///< version of XML document
-					dodoString encoding;                            ///< encoding of XML document
-					dodoString root;                                ///< name of the root element of XML document
+					dodoString version;                                 ///< version of XML document
+					dodoString encoding;                                ///< encoding of XML document
+					dodoString root;                                    ///< name of the root element of XML document
 
-					int        compression;                         ///< compression of XML document
+					int        compression;                             ///< compression of XML document
 				};
 
 				/**
 				 * @class processor
 				 * @brief provides XML parsing
 				 */
-				class processor
-				{
+				class processor {
 				  private:
 
 					/**
@@ -141,7 +133,7 @@ namespace dodo
 					 * @param definition defines structure of XML
 					 * @param io defines input source that contains XML
 					 */
-					virtual node process(const __nodeDef__  &definition,
+					virtual node process(const __nodeDef__ &definition,
 										 const io::channel &io);
 
 					/**
@@ -182,9 +174,9 @@ namespace dodo
 					 * @param version defines XML version
 					 * @param io defines output destination for XML
 					 */
-					virtual void make(const node       &root,
- 									  const dodoString &encoding,
-									  const dodoString &version,
+					virtual void make(const node        &root,
+									  const dodoString  &encoding,
+									  const dodoString  &version,
 									  const io::channel &io)  const;
 
 					/**
@@ -192,7 +184,7 @@ namespace dodo
 					 * @param node defines root node of XML document
 					 * @param io defines output destination for XML
 					 */
-					virtual void make(const node &node,
+					virtual void make(const node        &node,
 									  const io::channel &io) const;
 
 				  protected:
@@ -225,15 +217,15 @@ namespace dodo
 					 * @param chNode defines XML tree node
 					 */
 					virtual dodoArray<node> parse(const __nodeDef__ &definition,
-												  const __node__	  &xnode);
+												  const __node__    &xnode);
 
 					/**
 					 * get node attributes
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					virtual void getAttributes(const __node__		&xnode,
-											   dodoStringMap    &attributes);
+					virtual void getAttributes(const __node__ &xnode,
+											   dodoStringMap  &attributes);
 
 					/**
 					 * get node attributes
@@ -241,9 +233,9 @@ namespace dodo
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					virtual void getAttributes(const __nodeDef__  &definition,
-											   const __node__		&xnode,
-											   dodoStringMap    &attributes);
+					virtual void getAttributes(const __nodeDef__ &definition,
+											   const __node__    &xnode,
+											   dodoStringMap     &attributes);
 
 					/**
 					 * get node info
@@ -251,7 +243,7 @@ namespace dodo
 					 * @param sample defines buffer for node
 					 */
 					virtual void getNodeInfo(const __node__ &xnode,
-											 node		  &sample);
+											 node           &sample);
 #endif
 
 				  private:
@@ -264,7 +256,7 @@ namespace dodo
 					 * @param two defines string to compare
 					 */
 					typedef int (*strCmp)(const unsigned char *one, const unsigned char *two);
-					strCmp cmpFunc;   ///< name compare function
+					strCmp cmpFunc;     ///< name compare function
 
 					/**
 					 * find node by definition
@@ -272,9 +264,9 @@ namespace dodo
 					 * @param node defines node content
 					 */
 					__node__ findNode(const __nodeDef__ &definition,
-									const __node__	&node);
+									  const __node__    &node);
 
-					__doc__ *document; ///< XML Document
+					__doc__ *document;  ///< XML Document
 #endif
 
 #define DATAFORMATXMLPROCESSOR_STATEMENTS 11
@@ -283,8 +275,7 @@ namespace dodo
 					 * @enum processorStatementEnum defines processor statements
 					 * @note defines positions of string representation in 'statements' class property
 					 */
-					enum processorStatementEnum
-					{
+					enum processorStatementEnum {
 						PROCESSOR_STATEMENT_LT = 0,
 						PROCESSOR_STATEMENT_COLON,
 						PROCESSOR_STATEMENT_SPACE,

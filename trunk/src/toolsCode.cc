@@ -85,8 +85,7 @@ using namespace dodo::tools;
 
 //-------------------------------------------------------------------
 
-const unsigned char code::MD5Padding[] =
-{
+const unsigned char code::MD5Padding[] = {
 	0x80, 0,    0,        0,    0,        0,        0,    0,        0,    0,        0,    0,        0,    0,        0,    0,        0, 0, 0, 0, 0, 0,
 	0,    0,    0,        0,    0,        0,        0,    0,        0,    0,        0,    0,        0,    0,        0,    0,        0, 0, 0, 0, 0, 0, 0,
 	0,    0,    0,        0,    0,        0,        0,    0,        0,    0,        0,    0,        0,    0,        0,    0,        0, 0, 0
@@ -157,8 +156,7 @@ const unsigned char code::MD5Padding[] =
 /**
  * for ASCII85 decode
  */
-const unsigned long code::powASCII85[] =
-{
+const unsigned long code::powASCII85[] = {
 	85 * 85 * 85 * 85,
 	85 * 85 * 85,
 	85 * 85,
@@ -275,9 +273,7 @@ code::codesetConversion(const dodoString &buffer,
 {
 	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
 
 	size_t in, out, outBefore;
 	char *inFake, *outFake;
@@ -328,9 +324,7 @@ code::zCompress(const dodoString &buffer,
 	strm.opaque = Z_NULL;
 
 	if ((ret = deflateInit2(&strm, level, Z_DEFLATED, 15, level, type)) < 0)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
-	}
 
 	strm.avail_in =  buffer.size();
 	strm.next_in = (Bytef *)buffer.c_str();
@@ -339,13 +333,11 @@ code::zCompress(const dodoString &buffer,
 
 	strBuf.clear();
 
-	do
-	{
+	do {
 		strm.avail_out = ZLIB_CHUNK;
 		strm.next_out = byteBuf;
 
-		if ((ret = deflate(&strm, Z_FINISH)) < 0)
-		{
+		if ((ret = deflate(&strm, Z_FINISH)) < 0) {
 			delete [] byteBuf;
 
 			throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
@@ -376,9 +368,7 @@ code::zDecompress(const dodoString &buffer)
 	strm.opaque = Z_NULL;
 
 	if ((ret = inflateInit2(&strm, 15)) < 0)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
-	}
 
 	byteBuf = new Bytef[ZLIB_CHUNK];
 
@@ -387,13 +377,11 @@ code::zDecompress(const dodoString &buffer)
 
 	strBuf.clear();
 
-	do
-	{
+	do {
 		strm.avail_out = ZLIB_CHUNK;
 		strm.next_out = byteBuf;
 
-		if ((ret = inflate(&strm, Z_NO_FLUSH)) < 0)
-		{
+		if ((ret = inflate(&strm, Z_NO_FLUSH)) < 0) {
 			delete [] byteBuf;
 
 			throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
@@ -417,8 +405,7 @@ code::hexToChar(char first,
 {
 	int val = 0;
 
-	switch (first)
-	{
+	switch (first) {
 		case '0':
 		case '1':
 		case '2':
@@ -437,15 +424,12 @@ code::hexToChar(char first,
 		default:
 
 			if (first > 90)
-			{
 				first -= 32;
-			}
 
 			val = 16 * int(first) - 55;
 	}
 
-	switch (second)
-	{
+	switch (second) {
 		case '0':
 		case '1':
 		case '2':
@@ -464,9 +448,7 @@ code::hexToChar(char first,
 		default:
 
 			if (second > 90)
-			{
 				second -= 32;
-			}
 
 			val += int(second) - 55;
 	}
@@ -481,15 +463,12 @@ code::hexToLong(const dodoString &string)
 {
 	long i = string.size() - 1;
 	if (i < 0)
-	{
 		return 0;
-	}
 
 	unsigned long val = 0;
 
 	char first = string[i];
-	switch (first)
-	{
+	switch (first) {
 		case '0':
 		case '1':
 		case '2':
@@ -508,19 +487,15 @@ code::hexToLong(const dodoString &string)
 		default:
 
 			if (first > 90)
-			{
 				first -= 32;
-			}
 
 			val = int(first) - 55;
 	}
 	--i;
 
-	for (long j = 1; i >= 0; --i, ++j)
-	{
+	for (long j = 1; i >= 0; --i, ++j) {
 		first = string[i];
-		switch (first)
-		{
+		switch (first) {
 			case '0':
 			case '1':
 			case '2':
@@ -539,9 +514,7 @@ code::hexToLong(const dodoString &string)
 			default:
 
 				if (first > 90)
-				{
 					first -= 32;
-				}
 
 				val += (2 << ((4 * j) - 1)) * (int(first) - 55);
 		}
@@ -570,9 +543,7 @@ code::longToHex(unsigned long numeric)
 	dodoString hex;
 
 	for (long i = 2 * sizeof(unsigned long) - 1; i >= 0; --i)
-	{
 		hex.append(1, hexEncodeChars[(numeric >> i * 4) & 0xf]);
-	}
 
 	return hex;
 }
@@ -585,10 +556,8 @@ code::decodeUrl(const dodoString &string)
 	dodoString result;
 	unsigned long o(0), k(string.size());
 
-	for (; o < k; ++o)
-	{
-		switch (string[o])
-		{
+	for (; o < k; ++o) {
+		switch (string[o]) {
 			case '+':
 
 				result.append(1, ' ');
@@ -597,15 +566,11 @@ code::decodeUrl(const dodoString &string)
 
 			case '%':
 
-				if ((k - o) >= 2 && std::isxdigit(string[o + 1]) && std::isxdigit(string[o + 2]))
-				{
+				if ((k - o) >= 2 && std::isxdigit(string[o + 1]) && std::isxdigit(string[o + 2])) {
 					result.append(1, code::hexToChar(string[o + 1], string[o + 2]));
 					o += 2;
-				}
-				else
-				{
+				} else
 					result.append(1, '%');
-				}
 
 				break;
 
@@ -628,10 +593,8 @@ code::encodeUrl(const dodoString &string)
 	unsigned long i(0), j(string.size());
 	char temp[3];
 
-	for (; i != j; ++i)
-	{
-		switch (string[i])
-		{
+	for (; i != j; ++i) {
+		switch (string[i]) {
 			case ' ':
 
 				result.append(1, '+');
@@ -730,17 +693,15 @@ code::_encodeASCII85(dodoString    &result,
 	short i(5);
 	char buf[5], *s = buf;
 
-	do
-	{
+	do {
 		*s++ = tuple % 85;
 		tuple /= 85;
 	} while (--i > 0);
 
 	i = count;
 	do
-	{
 		result.append(1, (char)(*--s + '!'));
-	} while (i-- > 0);
+	while (i-- > 0);
 }
 
 //-------------------------------------------------------------------
@@ -754,10 +715,8 @@ code::encodeASCII85(const dodoString &string)
 	unsigned short count(0);
 	int j = string.size();
 
-	for (int k(0); k < j; ++k)
-	{
-		switch (count++)
-		{
+	for (int k(0); k < j; ++k) {
+		switch (count++) {
 			case 0:
 
 				tuple |= (string[k] << 24);
@@ -781,13 +740,9 @@ code::encodeASCII85(const dodoString &string)
 				tuple |= string[k];
 
 				if (tuple == 0)
-				{
 					result.append(1, 'z');
-				}
 				else
-				{
 					code::_encodeASCII85(result, tuple, count);
-				}
 
 				tuple = 0;
 				count = 0;
@@ -797,9 +752,7 @@ code::encodeASCII85(const dodoString &string)
 	}
 
 	if (count > 0)
-	{
 		code::_encodeASCII85(result, tuple, count);
-	}
 
 	result.append("~>");
 
@@ -813,8 +766,7 @@ code::_decodeASCII85(dodoString    &result,
 					 unsigned long tuple,
 					 int           count)
 {
-	switch (count)
-	{
+	switch (count) {
 		case 4:
 
 			result.append(1, (char)(tuple >> 24));
@@ -856,23 +808,16 @@ code::decodeASCII85(const dodoString &string)
 	bool _break = false;
 	dodoString result;
 
-	for (unsigned long k(0); k < j; ++k)
-	{
-		if (string[k] == '<')
-		{
-			if ((j - k) >= 1 && string[++k] == '~')
-			{
+	for (unsigned long k(0); k < j; ++k) {
+		if (string[k] == '<') {
+			if ((j - k) >= 1 && string[++k] == '~') {
 				_break = false;
-				while (!_break && k < j)
-				{
-					switch (string[++k])
-					{
+				while (!_break && k < j) {
+					switch (string[++k]) {
 						case 'z':
 
 							if (count != 0)
-							{
 								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
-							}
 
 							result.append(4, '\0');
 
@@ -880,10 +825,8 @@ code::decodeASCII85(const dodoString &string)
 
 						case '~':
 
-							if ((k - j) >= 1 && string[++k] == '>')
-							{
-								if (count > 0)
-								{
+							if ((k - j) >= 1 && string[++k] == '>') {
+								if (count > 0) {
 									count--;
 									tuple += powASCII85[count];
 									_decodeASCII85(result, tuple, count);
@@ -910,30 +853,22 @@ code::decodeASCII85(const dodoString &string)
 						default:
 
 							if (string[k] < '!' || string[k] > 'u')
-							{
 								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
-							}
 
 							tuple += (string[k] - '!') * powASCII85[count++];
-							if (count == 5)
-							{
+							if (count == 5) {
 								_decodeASCII85(result, tuple, 4);
 								count = 0;
 								tuple = 0;
 							}
 					}
 				}
-			}
-			else
-			{
+			} else {
 				result.append(1, '<');
 				result.append(1, string[k]);
 			}
-		}
-		else
-		{
+		} else
 			result.append(1, string[k]);
-		}
 	}
 
 	return result;
@@ -962,30 +897,21 @@ code::encodeBase64(const dodoString &string)
 	unsigned short i, len;
 	dodoString result;
 
-	for (unsigned long k(0); k < j;)
-	{
+	for (unsigned long k(0); k < j;) {
 		len = 0;
-		for (i = 0; i < 3; ++i)
-		{
+		for (i = 0; i < 3; ++i) {
 			++k;
-			if (k <= j)
-			{
+			if (k <= j) {
 				in[i] = string[k - 1];
 				++len;
-			}
-			else
-			{
+			} else
 				in[i] = 0;
-			}
 		}
 
-		if (len > 0)
-		{
+		if (len > 0) {
 			_encodeBase64(in, out, len);
 			for (i = 0; i < 4; ++i)
-			{
 				result.append(1, out[i]);
-			}
 		}
 	}
 
@@ -1013,43 +939,29 @@ code::decodeBase64(const dodoString &string)
 	unsigned short i, len;
 	dodoString result;
 
-	for (unsigned long k(0); k < j;)
-	{
+	for (unsigned long k(0); k < j;) {
 		len = 0;
-		for (len = 0, i = 0; i < 4 && k < j; ++i)
-		{
+		for (len = 0, i = 0; i < 4 && k < j; ++i) {
 			v = 0;
-			while (k < j && v == 0)
-			{
+			while (k < j && v == 0) {
 				v = string[k++];
 				v = (unsigned char)((v < 43 || v > 122) ? 0 : base64DecodeChars[v - 43]);
 				if (v)
-				{
 					v = (unsigned char)(v == '$' ? 0 : v - 61);
-				}
 			}
 
-			if (k < j)
-			{
+			if (k < j) {
 				++len;
 				if (v)
-				{
 					in[i] = (unsigned char)(v - 1);
-				}
-			}
-			else
-			{
+			} else
 				in[i] = 0;
-			}
 		}
 
-		if (len > 0)
-		{
+		if (len > 0) {
 			_decodeBase64(in, out);
 			for (i = 0; i < len - 1; ++i)
-			{
 				result.append(1, out[i]);
-			}
 		}
 	}
 
@@ -1065,72 +977,51 @@ code::parseUrl(const dodoString &url)
 
 	__url__ temp;
 
-	if ((pos = url.find("://", 0)) != dodoString::npos)
-	{
+	if ((pos = url.find("://", 0)) != dodoString::npos) {
 		temp.protocol.assign(url.data(), pos);
 
 		begin = pos + 3;
 	}
 
-	if ((pos = url.find('@', begin)) != dodoString::npos)
-	{
-		if ((pos1 = url.find(':', begin)) < pos)
-		{
+	if ((pos = url.find('@', begin)) != dodoString::npos) {
+		if ((pos1 = url.find(':', begin)) < pos) {
 			temp.login.assign(url.data() + begin, pos1 - begin);
 
 			++pos1;
 
 			temp.password.assign(url.data() + pos1, pos - pos1);
-		}
-		else
-		{
+		} else
 			temp.login.assign(url.data() + begin, pos - begin);
-		}
 
 		begin = pos + 1;
 	}
 
-	if ((pos = url.find('/', begin)) != dodoString::npos)
-	{
-		if ((pos1 = url.find(':', begin)) < pos)
-		{
+	if ((pos = url.find('/', begin)) != dodoString::npos) {
+		if ((pos1 = url.find(':', begin)) < pos) {
 			temp.host.assign(url.data() + begin, pos1 - begin);
 
 			++pos1;
 
 			temp.port.assign(url.data() + pos1, pos - pos1);
-		}
-		else
-		{
+		} else
 			temp.host.assign(url.data() + begin, pos - begin);
-		}
 
 		begin = pos + 1;
 
-		if ((pos = url.find('?', begin)) != dodoString::npos)
-		{
+		if ((pos = url.find('?', begin)) != dodoString::npos) {
 			temp.path.assign(url.data() + begin, pos - begin);
 			temp.request.assign(url.data() + pos + 1, url.size() - pos - 1);
-		}
-		else
-		{
+		} else
 			temp.path.assign(url.data() + begin, url.size() - begin);
-		}
-	}
-	else
-	{
-		if ((pos1 = url.find(':', begin)) != dodoString::npos)
-		{
+	} else {
+		if ((pos1 = url.find(':', begin)) != dodoString::npos) {
 			temp.host.assign(url.data() + begin, pos1 - begin);
 
 			++pos1;
 
 			temp.port.assign(url.data() + pos1, url.size() - pos1);
-		}
-		else
-		{
+		} else
 			temp.host.assign(url.data() + begin, url.size() - begin);
-		}
 	}
 
 	return temp;
@@ -1145,34 +1036,26 @@ code::makeUrl(const __url__ &url)
 
 	unsigned long loginSize = url.login.size();
 
-	if (url.protocol.size() > 0)
-	{
+	if (url.protocol.size() > 0) {
 		stringUrl.append(url.protocol);
 		stringUrl.append("://" );
 	}
 	if (loginSize > 0)
-	{
 		stringUrl.append(url.login);
-	}
-	if (url.password.size() > 0)
-	{
+	if (url.password.size() > 0) {
 		stringUrl.append(":");
 		stringUrl.append(url.password);
 	}
 	if (loginSize > 0)
-	{
 		stringUrl.append("@");
-	}
 	stringUrl.append(url.host);
-	if (url.port.size() > 0)
-	{
+	if (url.port.size() > 0) {
 		stringUrl.append(":");
 		stringUrl.append(url.port);
 	}
 	stringUrl.append("/");
 	stringUrl.append(url.path);
-	if (url.request.size() > 0)
-	{
+	if (url.request.size() > 0) {
 		stringUrl.append("?");
 		stringUrl.append(url.request);
 	}
@@ -1193,9 +1076,7 @@ code::bzCompress(const dodoString &buffer,
 
 	int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
 	if (ret != BZ_OK)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZCOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZCOMPRESSION, TOOLSCODEEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
-	}
 
 	return dodoString(dst, len);
 }
@@ -1212,9 +1093,7 @@ code::bzDecompress(const dodoString &buffer)
 
 	int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
 	if (ret != BZ_OK)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONINIT, TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
-	}
 
 	int src_len = buffer.size();
 	char *src = new char[src_len + 1];
@@ -1231,24 +1110,20 @@ code::bzDecompress(const dodoString &buffer)
 
 	dodoString _buffer;
 
-	while ((ret = BZ2_bzDecompress(&bzs)) == BZ_OK && bzs.avail_in > 0)
-	{
+	while ((ret = BZ2_bzDecompress(&bzs)) == BZ_OK && bzs.avail_in > 0) {
 		bzs.avail_out = src_len;
 		size = (bzs.total_out_hi32 * (unsigned int)-1) + bzs.total_out_lo32;
 		dst = (char *)realloc(dst, size + bzs.avail_out + 1);
 		bzs.next_out = dst + size;
 	}
 
-	if (ret == BZ_STREAM_END || ret == BZ_OK)
-	{
+	if (ret == BZ_STREAM_END || ret == BZ_OK) {
 		size = (bzs.total_out_hi32 * (unsigned int)-1) + bzs.total_out_lo32;
 		_buffer.assign(dst, size);
 
 		delete [] src;
 		free(dst);
-	}
-	else
-	{
+	} else {
 		delete [] src;
 		free(dst);
 
@@ -1257,9 +1132,7 @@ code::bzDecompress(const dodoString &buffer)
 
 	ret = BZ2_bzDecompressEnd(&bzs);
 	if (ret != BZ_OK)
-	{
 		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONFINISH, TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
-	}
 
 	return _buffer;
 }
@@ -1287,9 +1160,7 @@ code::MD5Transform(unsigned int        state[4],
 	unsigned int a = state[0], b = state[1], c = state[2], d = state[3], x[16];
 
 	for (unsigned int i = 0, j = 0; j < 64; ++i, j += 4)
-	{
 		x[i] = ((unsigned int)block[j]) | (((unsigned int)block[j + 1]) << 8) | (((unsigned int)block[j + 2]) << 16) | (((unsigned int)block[j + 3]) << 24);
-	}
 
 	FF(a, b, c, d, x[ 0], S11, 0xd76aa478);
 	FF(d, a, b, c, x[ 1], S12, 0xe8c7b756);
@@ -1368,16 +1239,15 @@ code::MD5Transform(unsigned int        state[4],
 //-------------------------------------------------------------------
 
 void
-code::MD5Final(unsigned char digest[16],
-			   __MD5Context__  *context)
+code::MD5Final(unsigned char  digest[16],
+			   __MD5Context__ *context)
 {
 	unsigned char bits[8];
 	unsigned int index, padLen;
 
 	unsigned int i, j;
 
-	for (i = 0, j = 0; j < 8; ++i, j += 4)
-	{
+	for (i = 0, j = 0; j < 8; ++i, j += 4) {
 		bits[j] = (unsigned char)(context->count[i] & 0xff);
 		bits[j + 1] = (unsigned char)((context->count[i] >> 8) & 0xff);
 		bits[j + 2] = (unsigned char)((context->count[i] >> 16) & 0xff);
@@ -1390,8 +1260,7 @@ code::MD5Final(unsigned char digest[16],
 
 	MD5Update(context, bits, 8);
 
-	for (i = 0, j = 0; j < 16; ++i, j += 4)
-	{
+	for (i = 0, j = 0; j < 16; ++i, j += 4) {
 		digest[j] = (unsigned char)(context->state[i] & 0xff);
 		digest[j + 1] = (unsigned char)((context->state[i] >> 8) & 0xff);
 		digest[j + 2] = (unsigned char)((context->state[i] >> 16) & 0xff);
@@ -1404,7 +1273,7 @@ code::MD5Final(unsigned char digest[16],
 //-------------------------------------------------------------------
 
 void
-code::MD5Update(__MD5Context__        *context,
+code::MD5Update(__MD5Context__      *context,
 				const unsigned char *input,
 				unsigned int        inputLen)
 {
@@ -1413,31 +1282,23 @@ code::MD5Update(__MD5Context__        *context,
 	index = (unsigned int )((context->count[0] >> 3) & 0x3F);
 
 	if ((context->count[0] += (inputLen << 3)) < (inputLen << 3))
-	{
 		++context->count[1];
-	}
 
 	context->count[1] += (inputLen >> 29);
 
 	partLen = 64 - index;
 
-	if (inputLen >= partLen)
-	{
+	if (inputLen >= partLen) {
 		memcpy(&context->buffer[index], input, partLen);
 
 		MD5Transform(context->state, context->buffer);
 
 		for (i = partLen; i + 63 < inputLen; i += 64)
-		{
 			MD5Transform(context->state, &input[i]);
-		}
 
 		index = 0;
-	}
-	else
-	{
+	} else
 		i = 0;
-	}
 
 	memcpy(&context->buffer[index], &input[i], inputLen - i);
 }
@@ -1474,8 +1335,7 @@ code::binToHex(const dodoString &string)
 	dodoString hex;
 	char tmp[3];
 
-	for (int i = 0; i < j; ++i)
-	{
+	for (int i = 0; i < j; ++i) {
 		charToHex(tmp, string[i]);
 		hex.append(tmp, 2);
 	}
@@ -1491,7 +1351,7 @@ code::SHA1Init(__SHA1_256Context__ *context)
 	context->length = 0;
 	context->messageBlockIndex = 0;
 
-	/* Initial Hash Values: FIPS-180-2 section 5.3.1 */
+		/* Initial Hash Values: FIPS-180-2 section 5.3.1 */
 	context->intermediateHash[0] = 0x67452301;
 	context->intermediateHash[1] = 0xEFCDAB89;
 	context->intermediateHash[2] = 0x98BADCFE;
@@ -1502,24 +1362,19 @@ code::SHA1Init(__SHA1_256Context__ *context)
 //-------------------------------------------------------------------
 
 void
-code::SHA1Input(__SHA1_256Context__        *context,
+code::SHA1Input(__SHA1_256Context__ *context,
 				const unsigned char *bytes,
 				unsigned int        bytecount)
 {
 	if (bytecount == 0)
-	{
 		return;
-	}
 
-	while (bytecount--)
-	{
+	while (bytecount--) {
 		context->messageBlock[context->messageBlockIndex++] = (*bytes & 0xFF);
 
 		context->length += 8;
 		if (context->messageBlockIndex == 64)
-		{
 			SHA1ProcessMessageBlock(context);
-		}
 
 		++bytes;
 	}
@@ -1528,43 +1383,33 @@ code::SHA1Input(__SHA1_256Context__        *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA1Result(__SHA1_256Context__  *context,
-				 unsigned char digest[20])
+code::SHA1Result(__SHA1_256Context__ *context,
+				 unsigned char       digest[20])
 {
 	SHA1PadMessage(context, 0x80);
 
 	for (int i = 0; i < 20; ++i)
-	{
 		digest[i] = context->intermediateHash[i >> 2] >> 8 * ( 3 - ( i & 0x03 ));
-	}
 }
 
 //-------------------------------------------------------------------
 
 void
-code::SHA1PadMessage(__SHA1_256Context__  *context,
-					 unsigned char padByte)
+code::SHA1PadMessage(__SHA1_256Context__ *context,
+					 unsigned char       padByte)
 {
-	if (context->messageBlockIndex >= 56)
-	{
+	if (context->messageBlockIndex >= 56) {
 		context->messageBlock[context->messageBlockIndex++] = padByte;
 
 		while (context->messageBlockIndex < 64)
-		{
 			context->messageBlock[context->messageBlockIndex++] = 0;
-		}
 
 		SHA1ProcessMessageBlock(context);
-	}
-	else
-	{
+	} else
 		context->messageBlock[context->messageBlockIndex++] = padByte;
-	}
 
 	while (context->messageBlockIndex < 56)
-	{
 		context->messageBlock[context->messageBlockIndex++] = 0;
-	}
 
 	context->messageBlock[56] = context->length >> 56;
 	context->messageBlock[57] = context->length >> 48;
@@ -1583,9 +1428,8 @@ code::SHA1PadMessage(__SHA1_256Context__  *context,
 void
 code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 {
-	/* Constants defined in FIPS-180-2, section 4.2.1 */
-	const static unsigned long K[4] =
-	{
+		/* Constants defined in FIPS-180-2, section 4.2.1 */
+	const static unsigned long K[4] = {
 		0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xCA62C1D6
 	};
 
@@ -1594,8 +1438,7 @@ code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 	unsigned long W[80];
 	unsigned long A, B, C, D, E;
 
-	for (t = 0; t < 16; ++t)
-	{
+	for (t = 0; t < 16; ++t) {
 		W[t]  = (unsigned long)context->messageBlock[t * 4] << 24;
 		W[t] |= (unsigned long)context->messageBlock[t * 4 + 1] << 16;
 		W[t] |= (unsigned long)context->messageBlock[t * 4 + 2] << 8;
@@ -1603,9 +1446,7 @@ code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 	}
 
 	for (t = 16; t < 80; ++t)
-	{
 		W[t] = SHA1_ROTL(1, W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16]);
-	}
 
 	A = context->intermediateHash[0];
 	B = context->intermediateHash[1];
@@ -1613,8 +1454,7 @@ code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 	D = context->intermediateHash[3];
 	E = context->intermediateHash[4];
 
-	for (t = 0; t < 20; ++t)
-	{
+	for (t = 0; t < 20; ++t) {
 		temp = SHA1_ROTL(5, A) + SHA_Ch(B, C, D) + E + W[t] + K[0];
 		E = D;
 		D = C;
@@ -1623,8 +1463,7 @@ code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 		A = temp;
 	}
 
-	for (t = 20; t < 40; ++t)
-	{
+	for (t = 20; t < 40; ++t) {
 		temp = SHA1_ROTL(5, A) + SHA_Parity(B, C, D) + E + W[t] + K[1];
 		E = D;
 		D = C;
@@ -1633,8 +1472,7 @@ code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 		A = temp;
 	}
 
-	for (t = 40; t < 60; ++t)
-	{
+	for (t = 40; t < 60; ++t) {
 		temp = SHA1_ROTL(5, A) + SHA_Maj(B, C, D) + E + W[t] + K[2];
 		E = D;
 		D = C;
@@ -1643,8 +1481,7 @@ code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 		A = temp;
 	}
 
-	for (t = 60; t < 80; ++t)
-	{
+	for (t = 60; t < 80; ++t) {
 		temp = SHA1_ROTL(5, A) + SHA_Parity(B, C, D) + E + W[t] + K[3];
 		E = D;
 		D = C;
@@ -1694,7 +1531,7 @@ code::SHA256Init(__SHA1_256Context__ *context)
 	context->length = 0;
 	context->messageBlockIndex = 0;
 
-	/* Initial Hash Values: FIPS-180-2 section 5.3.2 */
+		/* Initial Hash Values: FIPS-180-2 section 5.3.2 */
 	context->intermediateHash[0] = 0x6A09E667;
 	context->intermediateHash[1] = 0xBB67AE85;
 	context->intermediateHash[2] = 0x3C6EF372;
@@ -1708,24 +1545,19 @@ code::SHA256Init(__SHA1_256Context__ *context)
 //-------------------------------------------------------------------
 
 void
-code::SHA256Input(__SHA1_256Context__        *context,
+code::SHA256Input(__SHA1_256Context__ *context,
 				  const unsigned char *bytes,
 				  unsigned int        bytecount)
 {
 	if (bytecount == 0)
-	{
 		return;
-	}
 
-	while (bytecount--)
-	{
+	while (bytecount--) {
 		context->messageBlock[context->messageBlockIndex++] = (*bytes & 0xFF);
 
 		context->length += 8;
 		if (context->messageBlockIndex == 64)
-		{
 			SHA256ProcessMessageBlock(context);
-		}
 
 		bytes++;
 	}
@@ -1734,43 +1566,33 @@ code::SHA256Input(__SHA1_256Context__        *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA256Result(__SHA1_256Context__  *context,
-				   unsigned char digest[32])
+code::SHA256Result(__SHA1_256Context__ *context,
+				   unsigned char       digest[32])
 {
 	SHA256PadMessage(context, 0x80);
 
 	for (int i = 0; i < 32; ++i)
-	{
 		digest[i] = (unsigned char)(context->intermediateHash[i >> 2] >> 8 * ( 3 - ( i & 0x03 )));
-	}
 }
 
 //-------------------------------------------------------------------
 
 void
-code::SHA256PadMessage(__SHA1_256Context__  *context,
-					   unsigned char padByte)
+code::SHA256PadMessage(__SHA1_256Context__ *context,
+					   unsigned char       padByte)
 {
-	if (context->messageBlockIndex >= 56)
-	{
+	if (context->messageBlockIndex >= 56) {
 		context->messageBlock[context->messageBlockIndex++] = padByte;
 
 		while (context->messageBlockIndex < 64)
-		{
 			context->messageBlock[context->messageBlockIndex++] = 0;
-		}
 
 		SHA256ProcessMessageBlock(context);
-	}
-	else
-	{
+	} else
 		context->messageBlock[context->messageBlockIndex++] = padByte;
-	}
 
 	while (context->messageBlockIndex < 56)
-	{
 		context->messageBlock[context->messageBlockIndex++] = 0;
-	}
 
 	context->messageBlock[56] = context->length >> 56;
 	context->messageBlock[57] = context->length >> 48;
@@ -1790,8 +1612,7 @@ void
 code::SHA256ProcessMessageBlock(__SHA1_256Context__ *context)
 {
 		/* Constants defined in FIPS-180-2, section 4.2.2 */
-	static const uint32_t K[64] =
-	{
+	static const uint32_t K[64] = {
 		0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b,
 		0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01,
 		0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7,
@@ -1815,8 +1636,7 @@ code::SHA256ProcessMessageBlock(__SHA1_256Context__ *context)
 	/*
 	 * Initialize the first 16 words in the array W
 	 */
-	for (t = t4 = 0; t < 16; t++, t4 += 4)
-	{
+	for (t = t4 = 0; t < 16; t++, t4 += 4) {
 		W[t] = ((unsigned long)context->messageBlock[t4] << 24) |
 			   ((unsigned long)context->messageBlock[t4 + 1] << 16) |
 			   ((unsigned long)context->messageBlock[t4 + 2] << 8) |
@@ -1824,9 +1644,7 @@ code::SHA256ProcessMessageBlock(__SHA1_256Context__ *context)
 	}
 
 	for (t = 16; t < 64; t++)
-	{
 		W[t] = SHA256_sigma1(W[t - 2]) + W[t - 7] + SHA256_sigma0(W[t - 15]) + W[t - 16];
-	}
 
 	A = context->intermediateHash[0];
 	B = context->intermediateHash[1];
@@ -1837,8 +1655,7 @@ code::SHA256ProcessMessageBlock(__SHA1_256Context__ *context)
 	G = context->intermediateHash[6];
 	H = context->intermediateHash[7];
 
-	for (t = 0; t < 64; t++)
-	{
+	for (t = 0; t < 64; t++) {
 		temp1 = H + SHA256_SIGMA1(E) + SHA_Ch(E, F, G) + K[t] + W[t];
 		temp2 = SHA256_SIGMA0(A) + SHA_Maj(A, B, C);
 		H = G;
@@ -1910,27 +1727,22 @@ code::SHA512Init(__SHA512Context__ *context)
 //-------------------------------------------------------------------
 
 void
-code::SHA512Input(__SHA512Context__        *context,
+code::SHA512Input(__SHA512Context__   *context,
 				  const unsigned char *bytes,
 				  unsigned int        bytecount)
 {
 	if (bytecount == 0)
-	{
 		return;
-	}
 
 	unsigned long addTemp;
 #define SHA512AddLength(context, length) (addTemp = (context)->lengthLow, (context)->corrupted = (((context)->lengthLow += (length)) < addTemp) && (++(context)->lengthHigh == 0))
 
-	while (bytecount-- && !context->corrupted)
-	{
+	while (bytecount-- && !context->corrupted) {
 		context->messageBlock[context->messageBlockIndex++] = (*bytes & 0xFF);
 
 		SHA512AddLength(context, 8);
 		if (!context->corrupted && (context->messageBlockIndex == 128))
-		{
 			SHA512ProcessMessageBlock(context);
-		}
 
 		bytes++;
 	}
@@ -1941,13 +1753,12 @@ code::SHA512Input(__SHA512Context__        *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA512Result(__SHA512Context__  *context,
-				   unsigned char digest[64])
+code::SHA512Result(__SHA512Context__ *context,
+				   unsigned char     digest[64])
 {
 	SHA512PadMessage(context, 0x80);
 
-	for (int i = -1, j = 0; i < 63; ++j)
-	{
+	for (int i = -1, j = 0; i < 63; ++j) {
 		digest[++i] = context->intermediateHash[j] >> 56;
 		digest[++i] = context->intermediateHash[j] >> 48;
 		digest[++i] = context->intermediateHash[j] >> 40;
@@ -1962,29 +1773,21 @@ code::SHA512Result(__SHA512Context__  *context,
 //-------------------------------------------------------------------
 
 void
-code::SHA512PadMessage(__SHA512Context__  *context,
-					   unsigned char padByte)
+code::SHA512PadMessage(__SHA512Context__ *context,
+					   unsigned char     padByte)
 {
-	if (context->messageBlockIndex >= 112)
-	{
+	if (context->messageBlockIndex >= 112) {
 		context->messageBlock[context->messageBlockIndex++] = padByte;
 
 		while (context->messageBlockIndex < 128)
-		{
 			context->messageBlock[context->messageBlockIndex++] = 0;
-		}
 
 		SHA512ProcessMessageBlock(context);
-	}
-	else
-	{
+	} else
 		context->messageBlock[context->messageBlockIndex++] = padByte;
-	}
 
 	while (context->messageBlockIndex < 112)
-	{
 		context->messageBlock[context->messageBlockIndex++] = 0;
-	}
 
 	context->messageBlock[112] = context->lengthHigh >> 56;
 	context->messageBlock[113] = context->lengthHigh >> 48;
@@ -2012,9 +1815,8 @@ code::SHA512PadMessage(__SHA512Context__  *context,
 void
 code::SHA512ProcessMessageBlock(__SHA512Context__ *context)
 {
-	/* Constants defined in FIPS-180-2, section 4.2.3 */
-	const unsigned long long K[80] =
-	{
+		/* Constants defined in FIPS-180-2, section 4.2.3 */
+	const unsigned long long K[80] = {
 		0x428A2F98D728AE22ULL, 0x7137449123EF65CDULL, 0xB5C0FBCFEC4D3B2FULL, 0xE9B5DBA58189DBBCULL,
 		0x3956C25BF348B538ULL, 0x59F111F1B605D019ULL, 0x923F82A4AF194F9BULL, 0xAB1C5ED5DA6D8118ULL,
 		0xD807AA98A3030242ULL, 0x12835B0145706FBEULL, 0x243185BE4EE4B28CULL, 0x550C7DC3D5FFB4E2ULL,
@@ -2042,22 +1844,19 @@ code::SHA512ProcessMessageBlock(__SHA512Context__ *context)
 	unsigned long long W[80];
 	unsigned long long A, B, C, D, E, F, G, H;
 
-	for (t = t8 = 0; t < 16; t8 += 8, ++t)
-	{
+	for (t = t8 = 0; t < 16; t8 += 8, ++t) {
 		W[t] = ((unsigned long long)context->messageBlock[t8] << 56) |
-			((unsigned long long)context->messageBlock[t8 + 1] << 48) |
-			((unsigned long long)context->messageBlock[t8 + 2] << 40) |
-			((unsigned long long)context->messageBlock[t8 + 3] << 32) |
-			((unsigned long long)context->messageBlock[t8 + 4] << 24) |
-			((unsigned long long)context->messageBlock[t8 + 5] << 16) |
-			((unsigned long long)context->messageBlock[t8 + 6] <<  8) |
-			((unsigned long long)context->messageBlock[t8 + 7]);
+			   ((unsigned long long)context->messageBlock[t8 + 1] << 48) |
+			   ((unsigned long long)context->messageBlock[t8 + 2] << 40) |
+			   ((unsigned long long)context->messageBlock[t8 + 3] << 32) |
+			   ((unsigned long long)context->messageBlock[t8 + 4] << 24) |
+			   ((unsigned long long)context->messageBlock[t8 + 5] << 16) |
+			   ((unsigned long long)context->messageBlock[t8 + 6] <<  8) |
+			   ((unsigned long long)context->messageBlock[t8 + 7]);
 	}
 
 	for (t = 16; t < 80; ++t)
-	{
-		W[t] = SHA512_sigma1(W[t-2]) + W[t-7] + SHA512_sigma0(W[t-15]) + W[t-16];
-	}
+		W[t] = SHA512_sigma1(W[t - 2]) + W[t - 7] + SHA512_sigma0(W[t - 15]) + W[t - 16];
 
 	A = context->intermediateHash[0];
 	B = context->intermediateHash[1];
@@ -2068,11 +1867,10 @@ code::SHA512ProcessMessageBlock(__SHA512Context__ *context)
 	G = context->intermediateHash[6];
 	H = context->intermediateHash[7];
 
-	for (t = 0; t < 80; ++t)
-	{
-		temp1 = H + SHA512_SIGMA1(E) + SHA512_Ch(E,F,G) + K[t] + W[t];
+	for (t = 0; t < 80; ++t) {
+		temp1 = H + SHA512_SIGMA1(E) + SHA512_Ch(E, F, G) + K[t] + W[t];
 
-		temp2 = SHA512_SIGMA0(A) + SHA512_Maj(A,B,C);
+		temp2 = SHA512_SIGMA0(A) + SHA512_Maj(A, B, C);
 
 		H = G;
 		G = F;

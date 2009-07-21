@@ -37,17 +37,13 @@
 #include <libdodo/ioStreamChannel.h>
 #include <libdodo/xexec.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
+namespace dodo {
+	namespace io {
+		namespace network {
 			/**
 			 * @enum exchangeOperationTypeEnum defines type of operation for hook
 			 */
-			enum exchangeOperationTypeEnum
-			{
+			enum exchangeOperationTypeEnum {
 				EXCHANGE_OPERATION_CLOSE = 128,
 			};
 
@@ -55,8 +51,7 @@ namespace dodo
 			 * @class __initialAccept__
 			 * @brief holds info that passes to accept call, and then inits exchange;
 			 */
-			class __initialAccept__
-			{
+			class __initialAccept__ {
 				friend class exchange;
 				friend class client;
 				friend class server;
@@ -89,8 +84,7 @@ namespace dodo
 			 * writesStream* put extra '\0' in the end of the string
 			 */
 			class exchange : public connection,
-							 virtual public stream::channel
-			{
+							 virtual public stream::channel {
 				friend class server;
 				friend class client;
 				friend class http::client;
@@ -117,7 +111,7 @@ namespace dodo
 				 * @note the object that has inited the object of current instance can be used for another connections
 				 */
 				exchange(__initialAccept__ &init,
-						 short           protection = CHANNEL_PROTECTION_PROCESS);
+						 short             protection = CHANNEL_PROTECTION_PROCESS);
 
 				/**
 				 * destructor

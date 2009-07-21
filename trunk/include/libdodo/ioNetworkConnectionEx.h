@@ -34,17 +34,13 @@
 
 #include <libdodo/exceptionBasic.h>
 
-namespace dodo
-{
-	namespace io
-	{
-		namespace network
-		{
+namespace dodo {
+	namespace io {
+		namespace network {
 			/**
 			 * libdodo defined errors
 			 */
-			enum connectionExR
-			{
+			enum connectionExR {
 				CONNECTIONEX_NOSOCKETCREATED,
 				CONNECTIONEX_WRONGPARAMETER,
 			};
@@ -58,8 +54,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum connectionFunctionsID
-			{
+			enum connectionFunctionsID {
 				CONNECTIONEX_SETINBUFFERSIZE,
 				CONNECTIONEX_SETOUTBUFFERSIZE,
 				CONNECTIONEX_SETINTIMEOUT,

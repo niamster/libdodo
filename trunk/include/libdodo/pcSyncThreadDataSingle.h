@@ -34,24 +34,18 @@
 
 #include <libdodo/pcSyncDataSingle.h>
 
-namespace dodo
-{
-	namespace pc
-	{
-		namespace sync
-		{
-			namespace thread
-			{
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			namespace thread {
 				struct __lock__;
 
-				namespace data
-				{
+				namespace data {
 					/**
 					 * @class single
 					 * @brief provides shared data management functionality for threads
 					 */
-					class single : public sync::data::single
-					{
+					class single : public sync::data::single {
 					  private:
 
 						/**
@@ -100,7 +94,7 @@ namespace dodo
 
 						void *data;             ///< shared data
 
-						__lock__ *lock; ///< lock
+						__lock__ *lock;         ///< lock
 					};
 				};
 			};

@@ -56,32 +56,28 @@ section::section() : lock(new __lock__)
 #ifdef PTHREAD_EXT
 	pthread_mutexattr_t attr;
 	errno = pthread_mutexattr_init(&attr);
-	if (errno != 0)
-	{
+	if (errno != 0) {
 		delete lock;
 
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADSECTION, SECTIONEX_SECTION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
-	if (errno != 0)
-	{
+	if (errno != 0) {
 		delete lock;
 
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADSECTION, SECTIONEX_SECTION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	errno = pthread_mutex_init(&lock->keeper, &attr);
-	if (errno != 0)
-	{
+	if (errno != 0) {
 		delete lock;
 
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADSECTION, SECTIONEX_SECTION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	errno = pthread_mutexattr_destroy(&attr);
-	if (errno != 0)
-	{
+	if (errno != 0) {
 		delete lock;
 
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADSECTION, SECTIONEX_SECTION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -109,9 +105,8 @@ section::acquire()
 #ifdef PTHREAD_EXT
 	errno = pthread_mutex_lock(&lock->keeper);
 	if (errno != 0 && errno != EDEADLK)
-	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADSECTION, SECTIONEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
+
 #endif
 }
 
@@ -123,9 +118,8 @@ section::release()
 #ifdef PTHREAD_EXT
 	errno = pthread_mutex_unlock(&lock->keeper);
 	if (errno != 0)
-	{
 		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADSECTION, SECTIONEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
+
 #endif
 }
 
