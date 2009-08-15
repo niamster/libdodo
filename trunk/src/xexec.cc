@@ -66,7 +66,7 @@ xexec::xexec() : safeXExecs(true),
 				 execs(0),
 				 execObject(XEXEC_OBJECT_XEXEC),
 				 execObjectData(NULL),
-				 disabledXExecs(false)
+				 disableXExecs(false)
 {
 }
 
@@ -194,19 +194,19 @@ xexec::performPostExec() const
 void
 xexec::performXExec(dodoList<__xexecItem__> &list) const
 {
-	if (disabledXExecs)
+	if (disableXExecs)
 		return;
 
 	dodoList<__xexecItem__>::iterator i(list.begin()), j(list.end());
 
 	for (; i != j; ++i) {
 		if (safeXExecs)
-			disabledXExecs = true;
+			disableXExecs = true;
 
 		i->func(execObjectData, execObject, i->data);
 
 		if (safeXExecs)
-			disabledXExecs = false;
+			disableXExecs = false;
 	}
 }
 

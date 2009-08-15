@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 		}
 
 #ifndef DATABASE_WO_XEXEC
-		pp->disabledXExecs = true;
+		pp->disableXExecs = true;
 #endif
 
 		tools::filesystem::unlink("test.db");

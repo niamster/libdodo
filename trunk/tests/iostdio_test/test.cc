@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 		st.flush();
 
 #ifndef IO_WO_XEXEC
-		st.disabledXExecs = true;
+		st.disableXExecs = true;
 #endif
 		dodoString o;
 

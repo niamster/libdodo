@@ -219,7 +219,7 @@ namespace dodo {
 		 */
 		bool safeXExecs;
 
-		mutable bool                    disabledXExecs;	  ///< if true hooks are disabled
+		mutable bool                    disableXExecs;	  ///< if true hooks are disabled
 
 #ifdef DL_EXT
 		/**
