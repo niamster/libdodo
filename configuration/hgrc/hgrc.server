@@ -15,7 +15,7 @@ push_ssl = false
 [hooks]
 incoming.notify_push = for i in $(cat <path to list with email>); do echo -n -e "$(hg log -r $HG_NODE --template '{node|short}\nchangeset: {rev}:{node|short}\nuser:     {author}\ndate:     {date|date}\n\ndescription:\n{desc}\n\nDo not forget to update meta and docs.\n')" | mail -s "libdodo: $HG_NODE" "$i" -a "From: <<from>>"; done; /bin/true
 
-outgoing.notify_pull = if test $HG_SOURCE == "serve"; then for i in $(cat <path to list with email>); do echo "libdodo was pulled" | mail -s 'libdodo pulled' "$i" -a "From: <<from>>"; done; fi; /bin/true
+outgoing.notify_pull = if test "$HG_SOURCE" = "serve"; then for i in $(cat <path to list with email>); do echo "libdodo was pulled" | mail -s 'libdodo pulled' "$i" -a "From: <<from>>"; done; fi; /bin/true
 
 changegroup.mirror = for i in $(cat <path to list with mirrors>); do hg push -f $i; done
 
