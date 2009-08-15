@@ -164,7 +164,7 @@ exchange::close()
 
 #ifndef IO_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (socket != -1) {
@@ -175,7 +175,7 @@ exchange::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 

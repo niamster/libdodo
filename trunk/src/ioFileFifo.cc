@@ -303,7 +303,7 @@ fifo::close()
 
 #ifndef IO_WO_XEXEC
 	operType = FIFO_OPERATION_CLOSE;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (handle->file != NULL) {
@@ -314,7 +314,7 @@ fifo::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -328,7 +328,7 @@ fifo::open(const dodoString &a_path,
 
 #ifndef IO_WO_XEXEC
 	operType = FIFO_OPERATION_OPEN;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	path = a_path;
@@ -399,7 +399,7 @@ fifo::open(const dodoString &a_path,
 		throw exception::basic(exception::ERRMODULE_IOFILEFIFO, FIFOEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 

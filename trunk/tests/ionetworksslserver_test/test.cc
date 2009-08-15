@@ -37,10 +37,8 @@ void
 process(exchange fse)
 {
 #ifndef IO_WO_XEXEC
-
-		fse.addPreExec(&hook, NULL);
-		fse.addPostExec(&hook, NULL);
-
+	fse.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
+	fse.addXExec(XEXEC_ACTION_POSTEXEC, ::hook, NULL);
 #endif
 
 	fse.inSize = 4;

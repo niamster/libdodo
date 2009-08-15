@@ -285,7 +285,7 @@ regular::close()
 
 #ifndef IO_WO_XEXEC
 	operType = REGULAR_OPERATION_CLOSE;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (handle->file !=  NULL) {
@@ -296,7 +296,7 @@ regular::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -310,7 +310,7 @@ regular::open(const dodoString &a_path,
 
 #ifndef IO_WO_XEXEC
 	operType = REGULAR_OPERATION_OPEN;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	path = a_path;
@@ -368,7 +368,7 @@ regular::open(const dodoString &a_path,
 		tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 

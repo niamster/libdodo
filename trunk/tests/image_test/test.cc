@@ -59,12 +59,8 @@ int main(int argc, char **argv)
 		draw dr(&im);
 
 #ifndef GRAPHICS_WO_XEXEC
-
-		int prewrite = im.addPreExec(hook, NULL);
-
-		///another one to revert
-		int postwrite = im.addPostExec(hook, NULL);
-
+		int prewrite = im.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
+		int postwrite = im.addXExec(XEXEC_ACTION_POSTEXEC, ::hook, NULL); ///another one to revert
 #endif
 
 		im.readFile("test.png");
@@ -78,10 +74,8 @@ int main(int argc, char **argv)
 		im.writeFile("test.jpg");
 
 #ifndef GRAPHICS_WO_XEXEC
-
-		im.delPreExec(prewrite);
-		im.delPostExec(postwrite);
-
+		im.delXExec(prewrite);
+		im.delXExec(postwrite);
 #endif
 
 		dodoString img;
@@ -118,7 +112,7 @@ int main(int argc, char **argv)
 		mygreen.opacity = 65535/2;
 		dr.circle(point(250, 250), 50, mygreen, color::white, 5);
 		im.writeFile("new-2.png");
-		
+
 		im.create(400, 400);
 		dr.circle(point(200, 200), 100, color::red, color::green, 5);
 		dodoArray<point> points;
@@ -130,7 +124,7 @@ int main(int argc, char **argv)
 		for (int i=0;i<360;++i)
 			dr.point(point((unsigned long)(cos(i)*100 + 150), (unsigned long)(200 - sin(i)*100)), color::black);
 		im.writeFile("new-3.png");
-		
+
 		im.create(400, 400);
 		dr.circle(point(200, 200), 100, color::red, color::green, 5);
 		dr.text(point(100, 200), "libdodo", "Arial", 70, color::blue, color::green);

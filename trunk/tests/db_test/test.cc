@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 		{
 			info.path = "test.lite";
 		}
-		
+
 		connector *pp;
 
 		///parse command line arguments to figure out what db to use
@@ -89,9 +89,7 @@ int main(int argc, char **argv)
 			return 1;
 
 #ifndef DATABASE_WO_XEXEC
-
-		int pos = pp->addPreExec(hook, (void *)"id");
-
+		int pos = pp->addXExec(XEXEC_ACTION_PREEXEC, ::hook, (void *)"id");
 #endif
 
 		///define session charset
@@ -195,9 +193,7 @@ int main(int argc, char **argv)
 		}
 
 #ifndef DATABASE_WO_XEXEC
-
-		pp->disablePreExec(pos);
-
+		pp->disabledXExecs = true;
 #endif
 
 		tools::filesystem::unlink("test.db");
@@ -211,7 +207,7 @@ int main(int argc, char **argv)
 
 		pp->insert("test", arr);
 		pp->exec();
-		
+
 		pp->disconnect();
 		pp->connect(info);
 
@@ -223,7 +219,7 @@ int main(int argc, char **argv)
 		///put fetched binary data to file
 		if (store.fields.size() == 3 && store.rows.size() > 0)
 			tools::filesystem::writeToFile("test.db", (*store.rows.begin())[2]);
-		
+
 		delete pp;
 	}
 	catch (dodo::exception::basic ex)

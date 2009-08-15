@@ -255,7 +255,7 @@ image::readFile(const dodoString &str)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	unsigned long size = str.size() + 1;
@@ -281,7 +281,7 @@ image::readFile(const dodoString &str)
 	strcpy(collectedData.handle->imInfo->magick, collectedData.handle->im->magick);
 
 #ifndef GRAPHICS_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -292,7 +292,7 @@ image::readMemory(const dodoString &data)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	GetExceptionInfo((ExceptionInfo *)exInfo);
@@ -311,7 +311,7 @@ image::readMemory(const dodoString &data)
 	strcpy(collectedData.handle->imInfo->magick, collectedData.handle->im->magick);
 
 #ifndef GRAPHICS_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -322,7 +322,7 @@ image::readMemory(const __imageInfo__ &info)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (info.mapping < 0 || info.mapping >= IMAGE_MAPPINGSTATEMENTS || info.pixelSize < 0 || info.pixelSize >= IMAGE_PIXELSIZESTATEMENTS)
@@ -344,7 +344,7 @@ image::readMemory(const __imageInfo__ &info)
 	strcpy(collectedData.handle->imInfo->magick, collectedData.handle->im->magick);
 
 #ifndef GRAPHICS_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -358,7 +358,7 @@ image::create(unsigned long   width,
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_CREATE;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	GetExceptionInfo((ExceptionInfo *)exInfo);
@@ -390,7 +390,7 @@ image::create(unsigned long   width,
 	strcpy(collectedData.handle->imInfo->magick, collectedData.handle->im->magick);
 
 #ifndef GRAPHICS_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -477,7 +477,7 @@ image::writeFile(const dodoString &str)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (collectedData.handle->im == NULL)
@@ -496,7 +496,7 @@ image::writeFile(const dodoString &str)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, collectedData.handle->im->exception.error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description);
 
 #ifndef GRAPHICS_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -507,7 +507,7 @@ image::writeMemory(dodoString &data)
 {
 #ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (collectedData.handle->im == NULL)
@@ -523,7 +523,7 @@ image::writeMemory(dodoString &data)
 	data.assign((char *)imData, size);
 
 #ifndef GRAPHICS_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 

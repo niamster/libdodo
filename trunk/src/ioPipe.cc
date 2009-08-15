@@ -226,7 +226,7 @@ io::pipe::close()
 
 #ifndef IO_WO_XEXEC
 	operType = PIPE_OPERATION_CLOSE;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (in->file != NULL) {
@@ -244,7 +244,7 @@ io::pipe::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -257,7 +257,7 @@ io::pipe::open()
 
 #ifndef IO_WO_XEXEC
 	operType = PIPE_OPERATION_OPEN;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (in->file != NULL) {
@@ -288,7 +288,7 @@ io::pipe::open()
 		throw exception::basic(exception::ERRMODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 

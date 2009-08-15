@@ -121,7 +121,7 @@ sqlite::connect(const __connectionInfo__ &info)
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_CONNECT;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (handle->handle != NULL) {
@@ -143,7 +143,7 @@ sqlite::connect(const __connectionInfo__ &info)
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -155,7 +155,7 @@ sqlite::disconnect()
 	if (handle->handle != NULL) {
 #ifndef DATABASE_WO_XEXEC
 		operType = DATABASE_OPERATION_DISCONNECT;
-		performXExec(preExec);
+		performPreExec();
 #endif
 
 		if (!empty) {
@@ -167,7 +167,7 @@ sqlite::disconnect()
 			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_DISCONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-		performXExec(postExec);
+		performPostExec();
 #endif
 
 		handle->handle = NULL;
@@ -184,7 +184,7 @@ sqlite::fetchRows() const
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHROW;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	dodoArray<dodoStringArray> rows;
@@ -271,7 +271,7 @@ sqlite::fetchRows() const
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	return rows;
@@ -287,7 +287,7 @@ sqlite::fetchFields() const
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHFIELD;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	dodoStringArray fields;
@@ -305,7 +305,7 @@ sqlite::fetchFields() const
 		fields.push_back(sqlite3_column_name(handle->result, i));
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	return fields;
@@ -585,7 +585,7 @@ sqlite::exec(const dodoString &query,
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_EXEC;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (query.size() == 0)
@@ -624,7 +624,7 @@ sqlite::exec(const dodoString &query,
 			throw exception::basic(exception::ERRMODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	cleanCollected();

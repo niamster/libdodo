@@ -180,7 +180,7 @@ server::serve(const dodoString &host,
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	makeSocket();
@@ -225,7 +225,7 @@ server::serve(const dodoString &host,
 			throw exception::basic(exception::ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -238,7 +238,7 @@ server::serve(const dodoString &path,
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN_UNIX;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	makeSocket();
@@ -280,7 +280,7 @@ server::serve(const dodoString &path,
 	unixSock = path;
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -292,7 +292,7 @@ server::accept(__initialAccept__ &init,
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (type != CONNECTION_TRANSFER_TYPE_STREAM) {
@@ -372,7 +372,7 @@ server::accept(__initialAccept__ &init,
 	init.blockInherited = blockInherited;
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	return true;
@@ -385,7 +385,7 @@ server::accept(__initialAccept__ &init)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (type != CONNECTION_TRANSFER_TYPE_STREAM) {
@@ -409,7 +409,7 @@ server::accept(__initialAccept__ &init)
 	init.blockInherited = blockInherited;
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	return true;

@@ -13,7 +13,6 @@ using namespace dodo;
 using namespace io;
 
 #ifdef DL_EXT
-
 extern "C"
 {
 
@@ -23,20 +22,18 @@ hook(__xexecCollectedData__ *odata,
 	 void *udata)
 {
 #ifndef IO_WO_XEXEC
-
 	if (type == XEXEC_OBJECT_IOSTDIO)
 	{
-		std::cout << "stdio module\t";
+		std::cout << "stdio module ";
 
 		__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
 		if (st->operType == IO_OPERATION_WRITE)
 		{
-			int *a = (int *)(st->buffer.c_str());
+			int *a = (int *)(st->buffer.data());
 			st->buffer.assign(tools::string::iToString(*a * 3) + "\n");
 		}
 	}
-	std::cout << "activation\n";
-
+	std::cout << "hook\n";
 #endif
 }
 
@@ -46,17 +43,17 @@ empty(__xexecCollectedData__ *odata,
 	  void *udata)
 {
 
-	std::cout << "empty activation\n";
+	std::cout << "empty hook\n";
 }
 
-__xexecMod__
-initXexecModule(void *data)
+__xexecModule__
+xexecModuleInit(void *data)
 {
-	__xexecMod__ module;
+	__xexecModule__ module;
 
 	strcpy(module.name, "test");
 	strcpy(module.discription, "test module");
-	module.execType = XEXEC_MODULEACTIONTYPE_PRE;
+	module.type = XEXEC_ACTION_PREEXEC;
 
 	if (data == NULL)
 		strcpy(module.hook, "empty");
@@ -67,11 +64,10 @@ initXexecModule(void *data)
 }
 
 void
-deinitXexecModule()
+xexecModuleDeinit()
 {
-	std::cout << "deactivation.\n";
+	std::cout << "deactivation\n";
 }
 
 };
-
 #endif

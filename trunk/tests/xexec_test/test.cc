@@ -15,7 +15,6 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-
 	try
 	{
 		stdio st;
@@ -23,20 +22,17 @@ int main(int argc, char **argv)
 		st.outSize = sizeof(int);
 
 #ifdef DL_EXT
-
 #ifndef IO_WO_XEXEC
-
+		int preExecId, postExecId;
 		cout << stdio::getModuleInfo("./module").name << endl;
 
-		cout << st.addPreExec("./module", NULL) << endl;
+		st.addXExec("./module", NULL, preExecId, postExecId);
 
-		st.delPreExec(1);
+		st.delXExec(preExecId);
 
-		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL, (void *)"perform") << endl;
-
+		st.addXExec("./module", NULL, preExecId, postExecId);
+		st.addXExec("./module", NULL, preExecId, postExecId, (void *)"perform");
 #endif
-
 #endif
 
 		int a = 10;

@@ -77,10 +77,10 @@ int main(int argc, char **argv)
 		sock.serve("127.0.0.1",7778,3);
 		//sock.serve("::",7777);
 		//sock.serve("./sock",10,true);
-		
+
 		sock.blockInherited = false;
 		sock.block(false);
-		
+
 		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
 
 		exchange conn;

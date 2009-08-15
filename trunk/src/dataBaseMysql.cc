@@ -160,7 +160,7 @@ mysql::connect(const __connectionInfo__ &info)
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_CONNECT;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (handle->handle != NULL) {
@@ -195,7 +195,7 @@ mysql::connect(const __connectionInfo__ &info)
 #endif
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -207,7 +207,7 @@ mysql::disconnect()
 	if (handle->handle != NULL) {
 #ifndef DATABASE_WO_XEXEC
 		operType = DATABASE_OPERATION_DISCONNECT;
-		performXExec(preExec);
+		performPreExec();
 #endif
 
 		if (!empty) {
@@ -218,7 +218,7 @@ mysql::disconnect()
 		mysql_close(handle->handle);
 
 #ifndef DATABASE_WO_XEXEC
-		performXExec(postExec);
+		performPostExec();
 #endif
 
 		handle->handle = NULL;
@@ -235,7 +235,7 @@ mysql::fetchRows() const
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHROW;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	dodoArray<dodoStringArray> rows;
@@ -277,7 +277,7 @@ mysql::fetchRows() const
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	return rows;
@@ -293,7 +293,7 @@ mysql::fetchFields() const
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHFIELD;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	dodoStringArray fields;
@@ -314,7 +314,7 @@ mysql::fetchFields() const
 		fields.push_back(mysqlFields[i].name);
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	return fields;
@@ -457,7 +457,7 @@ mysql::exec(const dodoString &query,
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_EXEC;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (query.size() == 0)
@@ -491,7 +491,7 @@ mysql::exec(const dodoString &query,
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	cleanCollected();

@@ -31,7 +31,7 @@ hook(__xexecCollectedData__ *odata,
 
 		++a;
 		dodoString str = tools::string::iToString(a) + "\n";
- 
+
 		io->outSize = str.size();
 		st->buffer.assign(str);
 	}
@@ -48,9 +48,7 @@ int main(int argc, char **argv)
 		cout << st.peerInfo().host << endl;
 
 #ifndef IO_WO_XEXEC
-
-		int pos = st.addPreExec(&hook, NULL);
-
+		int pos = st.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
 #endif
 
 		st.outSize = sizeof(int);
@@ -60,9 +58,7 @@ int main(int argc, char **argv)
 		st.flush();
 
 #ifndef IO_WO_XEXEC
-
-		st.disablePreExec(pos);
-
+		st.disabledXExecs = true;
 #endif
 		dodoString o;
 

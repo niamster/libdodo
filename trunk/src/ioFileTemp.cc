@@ -195,7 +195,7 @@ temp::close()
 
 #ifndef IO_WO_XEXEC
 	operType = TEMP_OPERATION_CLOSE;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (handle->file != NULL) {
@@ -206,7 +206,7 @@ temp::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -219,7 +219,7 @@ temp::open()
 
 #ifndef IO_WO_XEXEC
 	operType = TEMP_OPERATION_OPEN;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (handle->file != NULL) {
@@ -234,7 +234,7 @@ temp::open()
 		throw exception::basic(exception::ERRMODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #ifndef IO_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 

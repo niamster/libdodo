@@ -49,9 +49,7 @@ int main(int argc, char **argv)
 		sqlite pp(info);
 
 #ifndef DATABASE_WO_XEXEC
-
-		int pos = pp.addPreExec(hook, (void *)"id");
-
+		int pos = pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, (void *)"id");
 #endif
 
 		try
@@ -94,7 +92,7 @@ int main(int argc, char **argv)
 
 			arr["operation"] = "mu";
 		}
-		
+
 		pp.disconnect();
 		pp.connect(info);
 

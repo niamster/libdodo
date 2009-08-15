@@ -39,26 +39,22 @@ namespace dodo {
 	 * libdodo defined errors
 	 */
 	enum xexecExR {
-		XEXECEX_EXECNOTFOUND,
+		XEXECEX_WRONGTYPE,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define XEXECEX_EXECNOTFOUND_STR "XExec is not found."
+#define XEXECEX_WRONGTYPE_STR "Wrong xExec type."
 
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
 	enum xexecFunctionsID {
-		XEXECEX_REPLACEXEXEC,
-
 #ifdef DL_EXT
-
-		XEXECEX_ADDXEXECMODULE,
 		XEXECEX_GETMODULEINFO,
-		XEXECEX_DELXEXEC,
-
+		XEXECEX_ADD,
+		XEXECEX_DEL,
 #endif
 	};
 };

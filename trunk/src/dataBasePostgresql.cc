@@ -177,7 +177,7 @@ postgresql::connect(const __connectionInfo__ &info)
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_CONNECT;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	if (handle->handle != NULL) {
@@ -209,7 +209,7 @@ postgresql::connect(const __connectionInfo__ &info)
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 }
 
@@ -221,7 +221,7 @@ postgresql::disconnect()
 	if (handle->handle != NULL) {
 #ifndef DATABASE_WO_XEXEC
 		operType = DATABASE_OPERATION_DISCONNECT;
-		performXExec(preExec);
+		performPreExec();
 #endif
 
 		if (!empty) {
@@ -232,7 +232,7 @@ postgresql::disconnect()
 		PQfinish(handle->handle);
 
 #ifndef DATABASE_WO_XEXEC
-		performXExec(postExec);
+		performPostExec();
 #endif
 
 		handle->handle = NULL;
@@ -249,7 +249,7 @@ postgresql::fetchRows() const
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHROW;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	dodoArray<dodoStringArray> rows;
@@ -285,7 +285,7 @@ postgresql::fetchRows() const
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	return rows;
@@ -301,7 +301,7 @@ postgresql::fetchFields() const
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_FETCHFIELD;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	dodoStringArray fields;
@@ -319,7 +319,7 @@ postgresql::fetchFields() const
 		fields.push_back(PQfname(handle->result, i));
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	return fields;
@@ -478,7 +478,7 @@ postgresql::exec(const dodoString &query,
 
 #ifndef DATABASE_WO_XEXEC
 	operType = DATABASE_OPERATION_EXEC;
-	performXExec(preExec);
+	performPreExec();
 #endif
 
 	int status;
@@ -531,7 +531,7 @@ postgresql::exec(const dodoString &query,
 	empty = false;
 
 #ifndef DATABASE_WO_XEXEC
-	performXExec(postExec);
+	performPostExec();
 #endif
 
 	cleanCollected();
