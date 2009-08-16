@@ -73,16 +73,8 @@ __initialAccept__::~__initialAccept__()
 
 //-------------------------------------------------------------------
 
-exchange::exchange(exchange &fse) : network::exchange(fse),
-									stream::channel(fse.protection)
+exchange::exchange(exchange &fse) : stream::channel(fse.protection)
 {
-#ifndef IO_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
-#endif
-
-	handle = fse.handle;
-
-	fse.handle = NULL;
 }
 
 //-------------------------------------------------------------------
@@ -105,7 +97,10 @@ exchange::exchange(__initialAccept__ &a_init,
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLEXCHANGE);
 #endif
 
-	init(a_init);
+	init(a_init.socket, a_init.handle, a_init.blocked, a_init.blockInherited);
+
+	a_init.socket = -1;
+	a_init.handle->handle = NULL;
 }
 
 //-------------------------------------------------------------------
@@ -120,17 +115,6 @@ exchange::~exchange()
 	}
 
 	delete handle;
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::init(__initialAccept__ &a_init)
-{
-	init(a_init.socket, a_init.handle, a_init.blocked, a_init.blockInherited);
-
-	a_init.socket = -1;
-	a_init.handle->handle = NULL;
 }
 
 //-------------------------------------------------------------------
@@ -213,8 +197,9 @@ exchange::init(int                        a_socket,
 			block(false);
 		else
 			block(true);
-	} else
+	} else {
 		block(true);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -325,8 +310,6 @@ exchange::_read(char * const a_data) const
 	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	memset(a_data, '\0', inSize);
-
 	unsigned long iter = inSize / inSocketBuffer;
 	unsigned long rest = inSize % inSocketBuffer;
 
@@ -388,6 +371,9 @@ exchange::_read(char * const a_data) const
 				}
 			}
 
+			if (n < rest)
+				continue;
+
 			break;
 		}
 	}
@@ -400,8 +386,6 @@ exchange::_readStream(char * const data) const
 {
 	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-
-	memset(data, '\0', inSize);
 
 	long n;
 
@@ -436,6 +420,5 @@ exchange::_readStream(char * const data) const
 }
 
 //-------------------------------------------------------------------
-
 #endif
 

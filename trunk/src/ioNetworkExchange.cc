@@ -59,23 +59,6 @@ __initialAccept__::__initialAccept__(__initialAccept__ &init) : socket(init.sock
 
 exchange::exchange(exchange &fse) : stream::channel(fse.protection)
 {
-#ifndef IO_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
-#endif
-
-	inSize = fse.inSize;
-	outSize = fse.outSize;
-	socketOpts = fse.socketOpts;
-	inTimeout = fse.inTimeout;
-	outTimeout = fse.outTimeout;
-	inSocketBuffer = fse.inSocketBuffer;
-	outSocketBuffer = fse.outSocketBuffer;
-	lingerOpts = fse.lingerOpts;
-	lingerSeconds = fse.lingerSeconds;
-	blocked = fse.blocked;
-	socket = fse.socket;
-
-	fse.socket = -1;
 }
 
 //-------------------------------------------------------------------
@@ -96,7 +79,9 @@ exchange::exchange(__initialAccept__ &a_init,
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
 #endif
 
-	init(a_init);
+	init(a_init.socket, a_init.blocked, a_init.blockInherited);
+
+	a_init.socket = -1;
 }
 
 //-------------------------------------------------------------------
@@ -108,16 +93,6 @@ exchange::~exchange()
 
 		::close(socket);
 	}
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::init(__initialAccept__ &a_init)
-{
-	init(a_init.socket, a_init.blocked, a_init.blockInherited);
-
-	a_init.socket = -1;
 }
 
 //-------------------------------------------------------------------
@@ -271,8 +246,6 @@ exchange::_read(char * const a_data) const
 	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	memset(a_data, '\0', inSize);
-
 	unsigned long iter = inSize / inSocketBuffer;
 	unsigned long rest = inSize % inSocketBuffer;
 
@@ -361,8 +334,6 @@ exchange::_readStream(char * const data) const
 {
 	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-
-	memset(data, '\0', inSize);
 
 	unsigned long n = 0;
 

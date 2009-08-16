@@ -89,6 +89,14 @@ namespace dodo {
 				friend class client;
 				friend class http::client;
 
+			  private:
+
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				exchange(exchange &fse);
+
 			  public:
 
 				/**
@@ -96,13 +104,6 @@ namespace dodo {
 				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
 				 */
 				exchange(short protection = CHANNEL_PROTECTION_PROCESS);
-
-				/**
-				 * copy constructor
-				 * @note the object that has inited the object of current instance is unusable anymore and can be used for another connections
-				 * xexec object is not copied
-				 */
-				exchange(exchange &fse);
 
 				/**
 				 * constructor
@@ -117,12 +118,6 @@ namespace dodo {
 				 * destructor
 				 */
 				virtual ~exchange();
-
-				/**
-				 * init object
-				 * @param init defines initial data[got from ::accept method]
-				 */
-				virtual void init(__initialAccept__ &init);
 
 				/**
 				 * @return true if connection is alive
