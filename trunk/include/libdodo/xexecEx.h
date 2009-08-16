@@ -51,9 +51,9 @@ namespace dodo {
 	 * IDs of functions where exception might be thrown
 	 */
 	enum xexecFunctionsID {
+		XEXECEX_ADD,
 #ifdef DL_EXT
 		XEXECEX_GETMODULEINFO,
-		XEXECEX_ADD,
 		XEXECEX_DEL,
 #endif
 	};

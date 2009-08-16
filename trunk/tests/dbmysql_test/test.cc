@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
 #ifndef DATABASE_WO_XEXEC
 
-		int pos = pp.addPreExec(hook, NULL);
+		int pos = pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
 
 #endif
 
@@ -114,9 +114,7 @@ int main(int argc, char **argv)
 		pp.exec();
 
 #ifndef DATABASE_WO_XEXEC
-
-		pp.disablePreExec(pos);
-
+		pp.disableXExecs = true;
 #endif
 
 		for (int o = 0; o < 100000; o++)
@@ -126,9 +124,7 @@ int main(int argc, char **argv)
 		}
 
 #ifndef DATABASE_WO_XEXEC
-
-		pp.enablePreExec(pos);
-
+		pp.disableXExecs = false;
 #endif
 
 		dodoStringArray uni;

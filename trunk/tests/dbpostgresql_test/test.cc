@@ -13,11 +13,9 @@ using namespace dodo;
 using namespace std;
 
 #ifdef POSTGRESQL_EXT
-
 using namespace data::base;
 
 #ifndef DATABASE_WO_XEXEC
-
 void
 hook(__xexecCollectedData__ *odata, short int type, void *udata)
 {
@@ -28,15 +26,12 @@ hook(__xexecCollectedData__ *odata, short int type, void *udata)
 		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->queryCollect() << endl << endl;
 	}
 }
-
 #endif
-
 #endif
 
 int main(int argc, char **argv)
 {
 #ifdef POSTGRESQL_EXT
-
 	try
 	{
 		__connectionInfo__ info;
@@ -48,9 +43,7 @@ int main(int argc, char **argv)
 		postgresql pp(info);
 
 #ifndef DATABASE_WO_XEXEC
-
-		pp.addPreExec(&hook, NULL);
-
+		pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
 #endif
 
 		try
@@ -89,7 +82,7 @@ int main(int argc, char **argv)
 
 			arr["operation"] = "mu";
 		}
-		
+
 		pp.disconnect();
 		pp.connect(info);
 
@@ -116,7 +109,6 @@ int main(int argc, char **argv)
 	{
 		cout << (dodoString)ex << ex.line;
 	}
-
 #else
 
 	cout << "No Postresql extension was compiled";
