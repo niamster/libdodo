@@ -102,7 +102,8 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		xml::client client(httpIO("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi"));
+		httpIO io("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi");
+		xml::client client(io);
 
 		method method;
 		value argument;

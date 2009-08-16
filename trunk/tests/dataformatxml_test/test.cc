@@ -16,6 +16,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+#ifdef LIBXML2_EXT
 	try
 	{
 		processor xmlp;
@@ -67,7 +68,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (dodoString)ex << "\t" << ex.line << endl << ex.getCallStack() << endl;
+		cout << (dodoString)ex << "\t" << ex.line << endl;
 	}
 	catch (std::exception &ex)
 	{
@@ -77,11 +78,8 @@ int main(int argc, char **argv)
 	{
 		cout << "WTF";
 	}
-
-#ifndef LIBXML2_EXT
-
+#else
 	cout << "No XML extension was compiled!";
-
 #endif
 
 	return 0;

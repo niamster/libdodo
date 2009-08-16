@@ -91,27 +91,23 @@ int main(int argc, char **argv)
 
 	try
 	{
-		int *shared = new int (1);
+		int *shared = new int(1);
 		sh.set((void *)shared);
 
 #ifdef FASTCGI_EXT
-
 		using namespace cgi::fast;
 
-		server c(5);
+		server c(5,false);
 		if (!c.isFastCgi())
 		{
 			cout << "Not a fastCGI.";
 			return 1;
 		}
-
 #else
 		using namespace cgi::basic;
-
 		server c;
-
 #endif
-
+\
 		c.serve(&cgif);
 
 		delete shared;

@@ -29,6 +29,8 @@
 
 #include <libdodo/directives.h>
 
+#include <string.h>
+
 #include <libdodo/ioStreamChannel.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/xexec.h>
@@ -57,16 +59,14 @@ channel::read() const
 
 	dodoString a_str;
 
-	unsigned long readSize = inSize + 1;
-
 #ifndef IO_WO_XEXEC
 	operType = IO_OPERATION_READ;
 	performPreExec();
 
-	collectedData.buffer.reserve(readSize);
+	collectedData.buffer.reserve(inSize);
 #endif
 
-	a_str.assign(readSize, '\0');
+	a_str.assign(inSize, '\0');
 
 	try {
 		_read((char *)a_str.data());
@@ -89,7 +89,6 @@ channel::read() const
 
 	collectedData.buffer.clear();
 #else
-
 #endif
 
 	return a_str;
@@ -109,11 +108,12 @@ channel::readStream() const
 	performPreExec();
 #endif
 
-	a_str.assign(inSize + 1, '\0');
+	a_str.assign(inSize, '\0');
 	unsigned long n = 0;
 
 	try {
 		n = _readStream((char *)a_str.data());
+		a_str.resize(strnlen(a_str.data(), a_str.size()));
 	} catch (...) {
 		a_str.clear();
 
@@ -134,7 +134,6 @@ channel::readStream() const
 #else
 	if (n == 0)
 		a_str.clear();
-
 #endif
 
 	return a_str;

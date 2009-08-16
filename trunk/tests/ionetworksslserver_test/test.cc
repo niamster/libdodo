@@ -13,11 +13,9 @@ using namespace dodo;
 using namespace std;
 
 #ifdef OPENSSL_EXT
-
 using namespace io::network::ssl;
 
 #ifndef IO_WO_XEXEC
-
 void
 hook(__xexecCollectedData__ *odata,
 	 short int type,
@@ -28,13 +26,12 @@ hook(__xexecCollectedData__ *odata,
 	__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
 
 	cout << st->buffer << endl;
-	cout << dynamic_cast<exchange *>(st->executor)->isAlive() << endl;
+	/* cout << dynamic_cast<exchange *>(st->executor)->isAlive() << endl; */ /* FIXME: issue #61 */
 }
-
 #endif
 
 void
-process(exchange fse)
+process(exchange &fse)
 {
 #ifndef IO_WO_XEXEC
 	fse.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
@@ -76,7 +73,6 @@ process(exchange fse)
 		cout.flush();
 	}
 }
-
 #endif
 
 int main(int argc, char **argv)
@@ -84,13 +80,12 @@ int main(int argc, char **argv)
 	try
 	{
 #ifdef OPENSSL_EXT
-
 		server sock(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 
 		io::network::__peerInfo__ info;
-		__initialAccept__ fake;
+		__initialAccept__ accepted;
 
-		sock.serve("127.0.0.1",7778,3);
+		sock.serve("127.0.0.1", 7778, 3);
 
 		io::ssl::__certificates__ certs;
 		certs.ca = "host.pem";
@@ -98,21 +93,19 @@ int main(int argc, char **argv)
 
 		sock.setSertificates(certs);
 
-		exchange conn;
-
 		while(true)
 		{
-			if (sock.accept(fake,info))
+			if (sock.accept(accepted, info))
 			{
-					if (sock.isBlocked())
-					{
-							cout << "PARENT BLOCKED\n";
-							cout.flush();
-					}
+				if (sock.isBlocked())
+				{
+					cout << "PARENT BLOCKED\n";
+					cout.flush();
+				}
 
-					conn.init(fake);
+				exchange ex(accepted);
 
-					process(conn);
+				process(ex);
 			}
 		}
 #endif

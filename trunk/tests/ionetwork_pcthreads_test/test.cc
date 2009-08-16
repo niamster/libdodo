@@ -21,7 +21,7 @@ int
 process(void *data)
 {
 	exchange *fse = (exchange *)data;
-	
+
 	try
 	{
 		if (fse->isBlocked())
@@ -104,14 +104,12 @@ int main(int argc, char **argv)
 		server sock(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 
 		__peerInfo__ info;
-		__initialAccept__ fake;
+		__initialAccept__ accepted;
 
 		sock.serve("127.0.0.1", 7778, 3);
 		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
 		sock.blockInherited = false;
 		sock.block(false);
-
-		exchange conn;
 
 		bool exit_st(false);
 
@@ -124,7 +122,7 @@ int main(int argc, char **argv)
 		{
 			th.sweepTrash();
 
-			if (sock.accept(fake, info))
+			if (sock.accept(accepted, info))
 			{
 				if (sock.isBlocked())
 				{
@@ -132,11 +130,10 @@ int main(int argc, char **argv)
 					cout.flush();
 				}
 
-				conn.init(fake);
-				positions.push_back(th.add(::process, (void *)(new exchange(conn))));
+				exchange *ex = new exchange(accepted);
+				positions.push_back(th.add(::process, (void *)ex));
 				th.run(positions.back());
 				th.setExecutionLimit(positions.back(), 1);
-				conn.close();
 
 				try
 				{

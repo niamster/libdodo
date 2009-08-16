@@ -15,7 +15,7 @@ using namespace io::network;
 using namespace std;
 
 void
-process(exchange fse)
+process(exchange &fse)
 {
 
 	if (fse.isBlocked())
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 		//server sock(CONNECTION_PROTO_FAMILY_UNIX_SOCKET,CONNECTION_TRANSFER_TYPE_STREAM);
 
 		__peerInfo__ info;
-		__initialAccept__ fake;
+		__initialAccept__ accepted;
 
 		sock.serve("127.0.0.1",7778,3);
 		//sock.serve("::",7777);
@@ -83,11 +83,9 @@ int main(int argc, char **argv)
 
 		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
 
-		exchange conn;
-
 		while(true)
 		{
-			if (sock.accept(fake,info))
+			if (sock.accept(accepted, info))
 			{
 					if (sock.isBlocked())
 					{
@@ -95,9 +93,9 @@ int main(int argc, char **argv)
 							cout.flush();
 					}
 
-					conn.init(fake);
+					exchange ex(accepted);
 
-					process(conn);
+					process(ex);
 			}
 		}
 	}

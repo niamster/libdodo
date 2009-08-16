@@ -26,8 +26,8 @@ hook(__xexecCollectedData__ *odata,
 		int a = *(int *)(st->buffer.c_str());
 
 		stdio *io = dynamic_cast<stdio *>(st->executor);
-		io->outSize = 100;
-		io->writeStream("\nhook\n");
+		/* io->outSize = 100; */ /* FIXME: issue #61 */
+		/* io->writeStream("\nhook\n"); */
 
 		++a;
 		dodoString str = tools::string::iToString(a) + "\n";

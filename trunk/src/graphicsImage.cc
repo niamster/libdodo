@@ -273,7 +273,7 @@ image::readFile(const dodoString &str)
 
 	collectedData.handle->im = ReadImage(collectedData.handle->imInfo, (ExceptionInfo *)exInfo);
 	if (collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description?((ExceptionInfo *)exInfo)->description:__dodostring__);
 
 	collectedData.handle->imInfo->compression = collectedData.handle->im->compression;
 	collectedData.handle->imInfo->quality = collectedData.handle->im->quality;
@@ -303,7 +303,7 @@ image::readMemory(const dodoString &data)
 
 	collectedData.handle->im = BlobToImage(collectedData.handle->imInfo, data.data(), data.size(), (ExceptionInfo *)exInfo);
 	if (collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description?((ExceptionInfo *)exInfo)->description:__dodostring__);
 
 	collectedData.handle->imInfo->compression = collectedData.handle->im->compression;
 	collectedData.handle->imInfo->quality = collectedData.handle->im->quality;
@@ -336,7 +336,7 @@ image::readMemory(const __imageInfo__ &info)
 
 	collectedData.handle->im = ConstituteImage(info.width, info.height, mappingStArr[info.mapping], (StorageType)pixelSizeStArr[info.pixelSize], info.data, (ExceptionInfo *)exInfo);
 	if (collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description?((ExceptionInfo *)exInfo)->description:__dodostring__);
 
 	collectedData.handle->imInfo->compression = collectedData.handle->im->compression;
 	collectedData.handle->imInfo->quality = collectedData.handle->im->quality;
@@ -382,7 +382,7 @@ image::create(unsigned long   width,
 
 	collectedData.handle->im = NewMagickImage(collectedData.handle->imInfo, width, height, &bg);
 	if (collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_CREATE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_CREATE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description?((ExceptionInfo *)exInfo)->description:__dodostring__);
 
 	collectedData.handle->imInfo->compression = collectedData.handle->im->compression;
 	collectedData.handle->imInfo->quality = collectedData.handle->im->quality;
@@ -493,7 +493,7 @@ image::writeFile(const dodoString &str)
 	GetExceptionInfo((ExceptionInfo *)exInfo);
 
 	if (WriteImage(collectedData.handle->imInfo, collectedData.handle->im) == MagickFalse)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, collectedData.handle->im->exception.error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, collectedData.handle->im->exception.error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description?((ExceptionInfo *)exInfo)->description:__dodostring__);
 
 #ifndef GRAPHICS_WO_XEXEC
 	performPostExec();
@@ -518,7 +518,7 @@ image::writeMemory(dodoString &data)
 	unsigned long size = 0;
 	unsigned char *imData = ImageToBlob(collectedData.handle->imInfo, collectedData.handle->im, (size_t *)&size, (ExceptionInfo *)exInfo);
 	if (imData == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description?((ExceptionInfo *)exInfo)->description:__dodostring__);
 
 	data.assign((char *)imData, size);
 

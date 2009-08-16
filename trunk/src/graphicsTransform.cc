@@ -89,7 +89,7 @@ transform::scale(unsigned long width,
 	Image *image = ScaleImage(im->collectedData.handle->im, width, height, (ExceptionInfo *)im->exInfo);
 
 	if (image == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description?((ExceptionInfo *)im->exInfo)->description:__dodostring__);
 
 	DestroyImage(im->collectedData.handle->im);
 
@@ -111,7 +111,7 @@ transform::scale(unsigned long size)
 	Image *image = ScaleImage(im->collectedData.handle->im, (unsigned long)floor(im->collectedData.handle->im->columns * mult), (unsigned long)floor(im->collectedData.handle->im->rows * mult), (ExceptionInfo *)im->exInfo);
 
 	if (image == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description?((ExceptionInfo *)im->exInfo)->description:__dodostring__);
 
 	DestroyImage(im->collectedData.handle->im);
 
@@ -131,7 +131,7 @@ transform::rotate(double angle)
 	Image *image = RotateImage(im->collectedData.handle->im, angle, (ExceptionInfo *)im->exInfo);
 
 	if (image == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description);
+		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description?((ExceptionInfo *)im->exInfo)->description:__dodostring__);
 
 	DestroyImage(im->collectedData.handle->im);
 

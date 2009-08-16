@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	{
 		server sock(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 
-		__initialAccept__ fake;
+		__initialAccept__ accepted;
 
 		sock.serve("127.0.0.1", 7778, 1);
 		sock.setOption(CONNECTION_OPTION_REUSE_ADDRESS, true);
@@ -27,24 +27,22 @@ int main(int argc, char **argv)
 		sock.blockInherited = true;
 		sock.block(false);
 
-		exchange conn;
-
 		io::event nb;
 
 		char trimSym[] = { '\r', '\n' };
 
 		while (true)
 		{
-			if (sock.accept(fake))
+			if (sock.accept(accepted))
 			{
-				conn.init(fake);
+				exchange ex(accepted);
 
-				if (conn.isBlocked())
+				if (ex.isBlocked())
 					cout << "is Blocked" << endl;
 				else
 					cout << "is not Blocked" << endl;
 
-				int pos = nb.addChannel(conn);
+				int pos = nb.addChannel(ex);
 
 				dodoString data;
 
@@ -52,8 +50,8 @@ int main(int argc, char **argv)
 				{
 					if (nb.isReadable(pos))
 					{
-						data = conn.readStream();
-						cout << data << endl;
+						data = ex.readStream();
+						cout << "'" << tools::string::trim(data, trimSym, 2) << "'" << endl;
 
 						if (tools::string::trim(data, trimSym, 2) == "exit")
 							tools::os::die(data);

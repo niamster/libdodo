@@ -1228,6 +1228,7 @@ client::getContent(exchange *ex,
 					response.data.append(data, 0, chunkSize);
 
 					data.erase(0, chunkSize);
+					chunkSize = 0;
 				}
 
 				if (data.size() == 0) {
@@ -1243,8 +1244,9 @@ client::getContent(exchange *ex,
 					eoc = data.find('\n');
 					if (eoc != dodoString::npos)
 						++eoc;
-				} else
+				} else {
 					eoc += 2;
+				}
 
 				if (eoc != dodoString::npos) {
 					chunkSizeHex.clear();
@@ -1280,9 +1282,9 @@ client::getContent(exchange *ex,
 					break;
 				}
 
-				if (endOfHeaders != 0)
+				if (endOfHeaders != 0) {
 					response.data.append(data);
-				else {
+				} else {
 					endOfHeaders = extractHeaders(data, headers);
 
 					if (endOfHeaders > 0) {
@@ -1299,18 +1301,18 @@ client::getContent(exchange *ex,
 							++authTries;
 
 							if (proxyAuthInfo.authType != PROXYAUTHTYPE_NONE) {
-								if (tools::string::contains(response.headers[RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
+								if (tools::string::contains(response.headers[RESPONSEHEADER_WWWAUTHENTICATE], "Basic")) {
 									return GETCONTENTSTATUS_WWWPROXYBASICAUTH;
-								else {
+								} else {
 									if (tools::string::contains(response.headers[RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 										return GETCONTENTSTATUS_WWWPROXYDIGESTAUTH;
 									else
 										throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, CLIENTEX_GETCONTENT, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
 								}
 							} else {
-								if (tools::string::contains(response.headers[RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
+								if (tools::string::contains(response.headers[RESPONSEHEADER_WWWAUTHENTICATE], "Basic")) {
 									return GETCONTENTSTATUS_WWWBASICAUTH;
-								else {
+								} else {
 									if (tools::string::contains(response.headers[RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 										return GETCONTENTSTATUS_WWWDIGESTAUTH;
 									else
@@ -1331,16 +1333,17 @@ client::getContent(exchange *ex,
 									proxyAuthInfo.authType = PROXYAUTHTYPE_DIGEST;
 
 									return GETCONTENTSTATUS_PROXYDIGESTAUTH;
-								} else
+								} else {
 									throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, CLIENTEX_GETCONTENT, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
+								}
 							}
 						}
 
 						chunked = tools::string::equal(response.headers[RESPONSEHEADER_TRANSFERENCODING], "chunked");
 
-						if (chunked)
+						if (chunked) {
 							data.erase(0, endOfHeaders);
-						else {
+						} else {
 							response.data = data.substr(endOfHeaders);
 
 							contentSize = tools::string::stringToUL(response.headers[RESPONSEHEADER_CONTENTLENGTH]);
@@ -1366,8 +1369,9 @@ client::getContent(exchange *ex,
 					response.data.assign(headers);
 
 				break;
-			} else
+			} else {
 				throw;
+			}
 		}
 	}
 

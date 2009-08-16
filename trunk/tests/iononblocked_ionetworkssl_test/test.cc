@@ -26,21 +26,19 @@ int main(int argc, char **argv)
 
 		server sock(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 
-		__initialAccept__ fake;
+		__initialAccept__ accepted;
 
 		sock.serve("127.0.0.1", 7778, 1);
 		sock.setOption(io::network::CONNECTION_OPTION_REUSE_ADDRESS, true);
 		sock.setLingerOption(io::network::CONNECTION_LINGEROPTION_HARD_CLOSE);
 		sock.blockInherited = true;
 		sock.block(false);
-		
+
 		io::ssl::__certificates__ certs;
 		certs.ca = "host.pem";
 		certs.cipher = "RC4-MD5";
 
 		sock.setSertificates(certs);
-
-		exchange conn;
 
 		io::event nb;
 
@@ -48,16 +46,16 @@ int main(int argc, char **argv)
 
 		while (true)
 		{
-			if (sock.accept(fake))
+			if (sock.accept(accepted))
 			{
-				conn.init(fake);
+				exchange ex(accepted);
 
-				if (conn.isBlocked())
+				if (ex.isBlocked())
 					cout << "is Blocked" << endl;
 				else
 					cout << "is not Blocked" << endl;
 
-				int pos = nb.addChannel(conn);
+				int pos = nb.addChannel(ex);
 
 				dodoString data;
 
@@ -65,12 +63,12 @@ int main(int argc, char **argv)
 				{
 					if (nb.isReadable(pos))
 					{
-						data = conn.readStream();
+						data = ex.readStream();
 						cout << data << endl;
 
 						if (tools::string::trim(data, trimSym, 2) == "exit")
 						{
-							conn.close();
+							ex.close();
 
 							tools::os::die(data);
 						}

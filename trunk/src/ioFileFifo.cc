@@ -457,8 +457,6 @@ fifo::_read(char * const a_data) const
 
 	char *data = a_data;
 
-	memset(a_data, '\0', inSize);
-
 	unsigned long iter = inSize / inFileFifoBuffer;
 	unsigned long rest = inSize % inFileFifoBuffer;
 

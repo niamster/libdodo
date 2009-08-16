@@ -107,8 +107,6 @@ exchange::getOutDescriptor() const
 void
 exchange::_read(char * const a_data) const
 {
-	memset(a_data, '\0', inSize);
-
 	FCGX_GetStr(a_data, inSize, request->request->in);
 }
 

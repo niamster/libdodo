@@ -302,8 +302,6 @@ io::pipe::_read(char * const a_data) const
 
 	char *data = a_data;
 
-	memset(a_data, '\0', inSize);
-
 	unsigned long iter = inSize / inPipeBuffer;
 	unsigned long rest = inSize % inPipeBuffer;
 

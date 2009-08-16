@@ -484,6 +484,9 @@ code::hexToLong(const dodoString &string)
 
 			break;
 
+			case '\0':
+				return 0;
+
 		default:
 
 			if (first > 90)
@@ -510,6 +513,9 @@ code::hexToLong(const dodoString &string)
 				val += (2 << ((4 * j) - 1)) * (int(first) - 48);
 
 				break;
+
+			case '\0':
+				return val;
 
 			default:
 

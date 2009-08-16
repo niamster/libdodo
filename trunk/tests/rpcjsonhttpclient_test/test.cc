@@ -101,7 +101,8 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		json::client client(httpIO("http://localhost/libdodo/rpcjsoncgiserver_test/test.cgi"));
+		httpIO io("http://localhost/libdodo/rpcjsoncgiserver_test/test.cgi");
+		json::client client(io);
 
 		method method;
 		value argument;

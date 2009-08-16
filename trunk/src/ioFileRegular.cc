@@ -385,8 +385,6 @@ regular::_read(char * const a_data) const
 	if (fseek(handle->file, pos, SEEK_SET) == -1)
 		throw exception::basic(exception::ERRMODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	memset(a_data, '\0', inSize);
-
 	while (true) {
 		if (fread(a_data, inSize, 1, handle->file) == 0) {
 			if (feof(handle->file) != 0 || errno == EAGAIN)
