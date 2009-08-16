@@ -60,7 +60,6 @@ channel::channel(short protection) : inSize(IO_INSIZE),
 		keeper = new pc::sync::thread::section;
 	else if (protection == CHANNEL_PROTECTION_PROCESS)
 		keeper = new pc::sync::process::section(0);
-
 }
 
 //-------------------------------------------------------------------

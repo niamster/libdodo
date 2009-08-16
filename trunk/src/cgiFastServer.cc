@@ -153,6 +153,7 @@ server::serve(serverHandler func)
 
 		FCGX_Request req;
 		__request__ request = &req;
+
 		FCGX_InitRequest(request.request, 0, 0);
 
 		exchange cfSTD(request);
