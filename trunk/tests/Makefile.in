@@ -1,6 +1,11 @@
-all:
-	@for i in *; do if test -d $$i; then echo "-- Building test for $${i%_test}"; $(MAKE) -s -C $$i; if test $$? != 0; then exit $$?; fi; fi; done;
+TESTS=@TESTS@
+
+.PHONY:$(TESTS)
+
+all: $(TESTS)
+$(TESTS):
+	@echo "-- Building test for $@"; $(MAKE) -s -C $@; if test $$? != 0; then exit $$?; fi 
 
 clean:
-	@for i in *; do if test -d $$i; then $(MAKE) -s -C $$i clean; fi; done;
+	@for i in $(TESTS); do $(MAKE) -s -C $$i clean; done;
 
