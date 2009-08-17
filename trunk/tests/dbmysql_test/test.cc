@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << ex.file << endl << ex.baseErrstr << endl << ex.line << endl << ex.message << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 #else
