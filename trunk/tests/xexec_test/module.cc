@@ -28,10 +28,7 @@ hook(__xexecCollectedData__ *odata,
 
 		__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
 		if (st->operType == IO_OPERATION_WRITE)
-		{
-			int *a = (int *)(st->buffer.data());
-			st->buffer.assign(tools::string::iToString(*a * 3) + "\n");
-		}
+			st->buffer.assign("<" + dodoString(1, st->buffer[0]) + ">\n");
 	}
 	std::cout << "hook\n";
 #endif

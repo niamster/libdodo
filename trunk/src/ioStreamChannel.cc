@@ -113,7 +113,7 @@ channel::readStream() const
 
 	try {
 		n = _readStream((char *)a_str.data());
-		a_str.resize(strnlen(a_str.data(), a_str.size()));
+		a_str.resize(n);
 	} catch (...) {
 		a_str.clear();
 

@@ -14,7 +14,6 @@ using namespace io;
 using namespace std;
 
 #ifndef IO_WO_XEXEC
-
 void
 hook(__xexecCollectedData__ *odata,
 	 short int type,
@@ -23,20 +22,16 @@ hook(__xexecCollectedData__ *odata,
 	__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
 	if (st->operType == IO_OPERATION_WRITE)
 	{
-		int a = *(int *)(st->buffer.c_str());
-
 		stdio *io = dynamic_cast<stdio *>(st->executor);
 		/* io->outSize = 100; */ /* FIXME: issue #61 */
 		/* io->writeStream("\nhook\n"); */
 
-		++a;
-		dodoString str = tools::string::iToString(a) + "\n";
+		dodoString str = ">" + st->buffer + "<\n";
 
 		io->outSize = str.size();
 		st->buffer.assign(str);
 	}
 }
-
 #endif
 
 int main(int argc, char **argv)
@@ -51,10 +46,8 @@ int main(int argc, char **argv)
 		int pos = st.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
 #endif
 
-		st.outSize = sizeof(int);
-
-		int a = 10;
-		st.write((char *)&a);
+		st.outSize = sizeof("write");
+		st.write("write");
 		st.flush();
 
 #ifndef IO_WO_XEXEC

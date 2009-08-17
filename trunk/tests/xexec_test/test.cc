@@ -18,9 +18,6 @@ int main(int argc, char **argv)
 	try
 	{
 		stdio st;
-
-		st.outSize = sizeof(int);
-
 #ifdef DL_EXT
 #ifndef IO_WO_XEXEC
 		int preExecId, postExecId;
@@ -35,8 +32,8 @@ int main(int argc, char **argv)
 #endif
 #endif
 
-		int a = 10;
-		st.write((char *)&a);
+		st.outSize = sizeof("xexec");
+		st.write("xexec");
 		st.flush();
 	}
 	catch (dodo::exception::basic ex)
