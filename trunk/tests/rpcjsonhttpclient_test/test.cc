@@ -19,8 +19,8 @@ class httpIO : public io::stream::channel, public io::network::http::client
   public:
 
 	httpIO(const dodoString &url) : io::stream::channel(io::CHANNEL_PROTECTION_NONE),
-									response(NULL),
-									io::network::http::client(url)
+									io::network::http::client(url),
+									response(NULL)
 	{
 	}
 
@@ -93,8 +93,8 @@ class httpIO : public io::stream::channel, public io::network::http::client
 		data.clear();
 	}
 
-	mutable io::network::http::response *response;
 	mutable dodoString data;
+	mutable io::network::http::response *response;
 };
 
 int main(int argc, char **argv)

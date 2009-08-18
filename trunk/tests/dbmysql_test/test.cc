@@ -13,11 +13,9 @@ using namespace dodo;
 using namespace std;
 
 #ifdef MYSQL_EXT
-
 using namespace data::base;
 
 #ifndef DATABASE_WO_XEXEC
-
 void
 hook(__xexecCollectedData__ *odata,
 	 short int type,
@@ -30,9 +28,7 @@ hook(__xexecCollectedData__ *odata,
 		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->queryCollect() << endl << endl;
 	}
 }
-
 #endif
-
 #endif
 
 int main(int argc, char **argv)
@@ -40,15 +36,12 @@ int main(int argc, char **argv)
 	long now = tools::time::now();
 
 #ifdef MYSQL_EXT
-
 	try
 	{
 		mysql pp(__connectionInfo__("test", "localhost", "root", "password", "", 3306));
 
 #ifndef DATABASE_WO_XEXEC
-
-		int pos = pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
-
+		pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
 #endif
 
 		try
@@ -171,11 +164,8 @@ int main(int argc, char **argv)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
-
 #else
-
 	cout << "No MySQL extension was compiled!";
-
 #endif
 
 	now = tools::time::now() - now;

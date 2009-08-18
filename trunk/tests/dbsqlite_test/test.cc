@@ -13,11 +13,9 @@ using namespace std;
 using namespace dodo;
 
 #ifdef SQLITE3_EXT
-
 using namespace data::base;
 
 #ifndef DATABASE_WO_XEXEC
-
 void
 hook(__xexecCollectedData__ *odata,
 	 short int type,
@@ -30,15 +28,12 @@ hook(__xexecCollectedData__ *odata,
 		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->queryCollect() << endl << endl;
 	}
 }
-
 #endif
-
 #endif
 
 int main(int argc, char **argv)
 {
 #ifdef SQLITE3_EXT
-
 	try
 	{
 		tools::filesystem::unlink("test.lite", true);
@@ -49,7 +44,7 @@ int main(int argc, char **argv)
 		sqlite pp(info);
 
 #ifndef DATABASE_WO_XEXEC
-		int pos = pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, (void *)"id");
+		pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, (void *)"id");
 #endif
 
 		try
@@ -121,11 +116,8 @@ int main(int argc, char **argv)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << endl << endl;
 	}
-
 #else
-
 	cout << "No SQLite exteinsion was compiled!";
-
 #endif
 
 	return 0;

@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 	{
 		dodoArray<__userInfo__> info = os::getUsers();
 
-		for (int i(0); i < info.size(); i++)
+		for (unsigned int i(0); i < info.size(); i++)
 			cout << info[i].name << endl;
 	}
 
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 	{
 		dodoArray<__groupInfo__> info = os::getGroups();
 
-		for (int i(0); i < info.size(); i++)
+		for (unsigned int i(0); i < info.size(); i++)
 			cout << info[i].name << endl;
 	}
 

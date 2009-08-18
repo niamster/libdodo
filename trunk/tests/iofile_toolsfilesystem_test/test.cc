@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 		cout << tools::code::MD5Hex(filesystem::getFileContents("test.cc.copy")) << endl;
 
 		dodoStringArray arr = filesystem::getFileContentsArr("test.cc");
-		for (int i = 0; i < arr.size(); i++)
+		for (unsigned int i = 0; i < arr.size(); i++)
 		{
 			cout << arr[i];
 		}

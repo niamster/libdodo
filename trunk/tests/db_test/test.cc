@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 			return 1;
 
 #ifndef DATABASE_WO_XEXEC
-		int pos = pp->addXExec(XEXEC_ACTION_PREEXEC, ::hook, (void *)"id");
+		pp->addXExec(XEXEC_ACTION_PREEXEC, ::hook, (void *)"id");
 #endif
 
 		///define session charset

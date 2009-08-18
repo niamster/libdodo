@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 		cout << st.peerInfo().host << endl;
 
 #ifndef IO_WO_XEXEC
-		int pos = st.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
+		st.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
 #endif
 
 		st.outSize = sizeof("write");
