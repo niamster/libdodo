@@ -43,16 +43,16 @@
 
 using namespace dodo::cgi::fast;
 
-exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
-								   io::stream::channel(cf.protection)
+exchange::exchange(exchange &cf) : io::stream::channel(cf.protection),
+								   dodo::cgi::exchange(cf.protection)
 {
 }
 
 //-------------------------------------------------------------------
 
 exchange::exchange(const __request__ &req,
-				   short             protection) : dodo::cgi::exchange(protection),
-												   io::stream::channel(protection),
+				   short             protection) : io::stream::channel(protection),
+												   dodo::cgi::exchange(protection),
 												   request(new __request__)
 {
 #ifndef IO_WO_XEXEC

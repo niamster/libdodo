@@ -53,8 +53,8 @@ __additionalData__::__additionalData__(dodoString &version,
 
 server::server(io::channel &io) : rpc::server(io),
 								  rpVersion("1.1"),
-								  rpId(0),
-								  rqId(0)
+								  rqId(0),
+								  rpId(0)
 {
 }
 

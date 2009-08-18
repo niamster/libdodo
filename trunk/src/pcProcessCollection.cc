@@ -82,10 +82,10 @@ namespace dodo {
 using namespace dodo::pc::process;
 
 __process__::__process__() : isRunning(false),
-							 executed(0),
-							 executeLimit(0),
 							 joined(false),
-							 status(0)
+							 status(0),
+							 executed(0),
+							 executeLimit(0)
 {
 }
 

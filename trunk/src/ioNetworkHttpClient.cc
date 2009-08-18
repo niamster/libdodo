@@ -1206,7 +1206,7 @@ client::getContent(exchange *ex,
 
 	unsigned long contentSize = 0;
 
-	long chunkSize = 0;
+	unsigned long chunkSize = 0;
 	dodoString chunkSizeHex;
 
 	unsigned long eoc;

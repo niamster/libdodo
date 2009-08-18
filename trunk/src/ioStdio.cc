@@ -40,8 +40,8 @@
 
 using namespace dodo::io;
 
-stdio::stdio(short protection) : pipe(false, protection),
-								 stream::channel(protection)
+stdio::stdio(short protection) : stream::channel(protection),
+								 pipe(false, protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOSTDIO);

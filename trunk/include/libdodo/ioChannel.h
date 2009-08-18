@@ -181,12 +181,12 @@ namespace dodo {
 			 */
 			virtual void _writeStream(const char * const data) const = 0;
 
+			pc::sync::section *keeper;                                  ///< section locker
+			short protection;                                           ///< type of IO protection[see channelProtectionTypeEnum]
+
 #ifndef IO_WO_XEXEC
 			mutable __xexecIoChannelCollectedData__ collectedData;      ///< data collected for xexec
 #endif
-
-			pc::sync::section *keeper;                                  ///< section locker
-			short protection;                                           ///< type of IO protection[see channelProtectionTypeEnum]
 		};
 	};
 };

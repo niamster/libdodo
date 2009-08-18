@@ -59,9 +59,9 @@ client::client(client &fs) : network::client(fs)
 client::client(short a_family,
 			   short a_type) : network::client(a_family,
 											   a_type),
-							   sslConnected(false),
 							   handle(new io::ssl::__sslConnection__),
-							   ctx(new io::ssl::__sslContext__)
+							   ctx(new io::ssl::__sslContext__),
+							   sslConnected(false)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKSSLCLIENT);

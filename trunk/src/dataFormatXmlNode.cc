@@ -44,10 +44,10 @@ node::node() : CDATA(false)
 node::node(const dodoString    &name,
 		   const dodoStringMap &attributes,
 		   const dodoString    &value,
-		   const dodoString    &a_ns) : CDATA(false),
+		   const dodoString    &a_ns) : attributes(attributes),
 										name(name),
-										attributes(attributes),
-										value(value)
+										value(value),
+										CDATA(false)
 {
 	ns.prefix = a_ns;
 }

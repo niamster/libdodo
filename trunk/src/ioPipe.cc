@@ -49,12 +49,12 @@
 using namespace dodo;
 
 io::pipe::pipe(bool  open,
-			   short protection) : inPipeBuffer(IOPIPE_INSIZE),
+			   short protection) : stream::channel(protection),
+								   inPipeBuffer(IOPIPE_INSIZE),
 								   outPipeBuffer(IOPIPE_OUTSIZE),
-								   blocked(true),
 								   in(new io::__file__),
 								   out(new io::__file__),
-								   stream::channel(protection)
+								   blocked(true)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOPIPE);
@@ -78,12 +78,12 @@ io::pipe::pipe(bool  open,
 
 //-------------------------------------------------------------------
 
-io::pipe::pipe(const pipe &fd) : inPipeBuffer(fd.inPipeBuffer),
+io::pipe::pipe(const pipe &fd) : stream::channel(protection),
+								 inPipeBuffer(fd.inPipeBuffer),
 								 outPipeBuffer(fd.outPipeBuffer),
-								 blocked(fd.blocked),
 								 in(new io::__file__),
 								 out(new io::__file__),
-								 stream::channel(protection)
+								 blocked(fd.blocked)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOPIPE);

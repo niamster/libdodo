@@ -115,9 +115,9 @@ __nodeDef__::__nodeDef__() : allChildren(true),
 //-------------------------------------------------------------------
 
 __nodeDef__::__nodeDef__(const dodoString &name,
-						 const dodoString &ns) : allChildren(true),
+						 const dodoString &ns) : name(name),
+												 allChildren(true),
 												 allAttributes(true),
-												 name(name),
 												 ns(ns)
 {
 }

@@ -37,15 +37,15 @@
 
 using namespace dodo::cgi::basic;
 
-exchange::exchange(exchange &cf) : dodo::cgi::exchange(cf.protection),
-								   io::stream::channel(cf.protection)
+exchange::exchange(exchange &cf) : io::stream::channel(cf.protection),
+								   dodo::cgi::exchange(cf.protection)
 {
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange(short protection) : dodo::cgi::exchange(protection),
-									   io::stream::channel(protection)
+exchange::exchange(short protection) : 	io::stream::channel(protection),
+										dodo::cgi::exchange(protection)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_CGIBASICEXCHANGE);

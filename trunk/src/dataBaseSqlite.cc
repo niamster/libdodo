@@ -64,8 +64,8 @@ namespace dodo {
 
 using namespace dodo::data::base;
 
-sqlite::sqlite() : empty(true),
-				   handle(new __sqlite__)
+sqlite::sqlite() : handle(new __sqlite__),
+				   empty(true)
 {
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);
@@ -74,8 +74,8 @@ sqlite::sqlite() : empty(true),
 
 //-------------------------------------------------------------------
 
-sqlite::sqlite(const __connectionInfo__ &info) : empty(true),
-												 handle(new __sqlite__)
+sqlite::sqlite(const __connectionInfo__ &info) : handle(new __sqlite__),
+												 empty(true)
 {
 #ifndef DATABASE_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_DATABASESQLITE);

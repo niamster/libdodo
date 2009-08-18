@@ -163,12 +163,12 @@ dialogue::dialogue(dialogue &ct) : cgiIO(ct.cgiIO)
 dialogue::dialogue(exchange   &a_cf,
 				   bool       a_autocleanFiles,
 				   bool       a_postFilesInMem,
-				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+				   dodoString a_postFilesTmpDir) : returnCode(CGI_STATUSCODE_OK),
+												   postFilesInMem(a_postFilesInMem),
+												   autocleanFiles(a_autocleanFiles),
 												   postFilesTmpDir(a_postFilesTmpDir),
 												   cgiIO(a_cf),
-												   autocleanFiles(a_autocleanFiles),
-												   headersPrinted(false),
-												   returnCode(CGI_STATUSCODE_OK)
+												   headersPrinted(false)
 
 {
 	authInfo.type = CGI_AUTHTYPE_NONE;
@@ -195,12 +195,12 @@ dialogue::dialogue(exchange &a_cf,
 				   dodoMap<short, dodoString> &headers,
 				   bool a_autocleanFiles,
 				   bool a_postFilesInMem,
-				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+				   dodoString a_postFilesTmpDir) : returnCode(CGI_STATUSCODE_OK),
+												   postFilesInMem(a_postFilesInMem),
+												   autocleanFiles(a_autocleanFiles),
 												   postFilesTmpDir(a_postFilesTmpDir),
 												   cgiIO(a_cf),
-												   autocleanFiles(a_autocleanFiles),
-												   headersPrinted(false),
-												   returnCode(CGI_STATUSCODE_OK)
+												   headersPrinted(false)
 
 {
 	authInfo.type = CGI_AUTHTYPE_NONE;

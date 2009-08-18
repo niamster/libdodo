@@ -51,8 +51,8 @@ namespace dodo {
 			{
 			}
 
-			ImageInfo     *imInfo;  ///< image info handler
 			Image         *im;      ///< image handler
+			ImageInfo     *imInfo;  ///< image info handler
 		};
 	};
 };

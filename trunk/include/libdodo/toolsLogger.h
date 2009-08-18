@@ -124,7 +124,7 @@ namespace dodo {
 			struct __logMap__ {
 				short       level;                              ///< log level[see loggerLogLevelEnum]
 				io::channel *handler;                           ///< log handler
-				long        position;                           ///< log handler identificator
+				unsigned long position;                           ///< log handler identificator
 			};
 
 			dodoList<__logMap__> handlers;                      ///< list of log maps

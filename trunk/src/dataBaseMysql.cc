@@ -63,8 +63,8 @@ namespace dodo {
 using namespace dodo::data::base;
 
 mysql::mysql() : empty(true),
-				 type(CLIENT_MULTI_STATEMENTS),
-				 handle(new __mysql__)
+				 handle(new __mysql__),
+				 type(CLIENT_MULTI_STATEMENTS)
 
 {
 #ifndef DATABASE_WO_XEXEC
@@ -77,8 +77,8 @@ mysql::mysql() : empty(true),
 //-------------------------------------------------------------------
 
 mysql::mysql(const __connectionInfo__ &info) : empty(true),
-											   type(CLIENT_MULTI_STATEMENTS),
-											   handle(new __mysql__)
+											   handle(new __mysql__),
+											   type(CLIENT_MULTI_STATEMENTS)
 
 {
 #ifndef DATABASE_WO_XEXEC

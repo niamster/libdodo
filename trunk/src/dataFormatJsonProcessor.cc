@@ -236,6 +236,8 @@ processor::processValue(node             &node,
 				return processNumeric(node.numericValue, root, i);
 		}
 	}
+
+	return (unsigned long)-1;
 }
 
 //-------------------------------------------------------------------

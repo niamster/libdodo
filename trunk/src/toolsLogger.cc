@@ -69,9 +69,9 @@ const int logger::syslogLevels[] = {
 
 //-------------------------------------------------------------------
 
-logger::logger() : handlersNum(0),
+logger::logger() : forward(false),
 				   timeFormat(" %d/%m/%Y.%H-%M-%S: "),
-				   forward(false),
+				   handlersNum(0),
 				   keeper(new pc::sync::process::section(0))
 {
 }

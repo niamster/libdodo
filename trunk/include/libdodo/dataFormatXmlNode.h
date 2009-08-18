@@ -91,46 +91,46 @@ namespace dodo {
 					 * add child to the node
 					 * @param child defines child to be appended
 					 */
-					virtual void addChild(const node &child);
+					void addChild(const node &child);
 
 					/**
 					 * set children of the node
 					 * @param children defines children to be set
 					 */
-					virtual void setChildren(const dodoArray<node> &children);
+					void setChildren(const dodoArray<node> &children);
 
 					/**
 					 * @return children of the node
 					 * @param name defines name of child nodes to get
 					 * @param recursive defines if walk through all children in deep
 					 */
-					virtual dodoArray<node> getChildren(const dodoString &name,
+					dodoArray<node> getChildren(const dodoString &name,
 														bool             recursive = false);
 
 					/**
 					 * @return names of children nodes
 					 * @param recursive defines if walk through all children in deep
 					 */
-					virtual dodoStringArray getChildrenNames(bool recursive = false);
+					dodoStringArray getChildrenNames(bool recursive = false);
 
 					/**
 					 * @return attribute value
 					 * @param name defines attribute name
 					 */
-					virtual dodoString operator[](const dodoString &name);
+					dodoString operator[](const dodoString &name);
 
 					/**
 					 * set value of the node
 					 * @param value defines value to be set
 					 * @param CDATA defines if value is CDATA
 					 */
-					virtual void setValue(const dodoString &value,
+					void setValue(const dodoString &value,
 										  bool             CDATA = false);
 
 					/**
 					 * @return value of the node
 					 */
-					virtual dodoString getValue();
+					dodoString getValue();
 
 					dodoStringMap attributes;                                                   ///< attributes
 

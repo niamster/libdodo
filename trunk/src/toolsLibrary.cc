@@ -118,6 +118,8 @@ library::get(const dodoString &name)
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_GET, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+
+	return NULL;
 }
 
 //-------------------------------------------------------------------
@@ -131,6 +133,8 @@ library::operator[](const dodoString &name)
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+
+	return NULL;
 }
 
 //-------------------------------------------------------------------

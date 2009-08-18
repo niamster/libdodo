@@ -191,7 +191,7 @@ exchange::_write(const char * const a_data) const
 
 	const char *data = a_data;
 
-	unsigned long batch, n;
+	long batch, n;
 
 	for (unsigned long i = 0; i < iter; ++i) {
 		batch = outSocketBuffer;
@@ -251,7 +251,7 @@ exchange::_read(char * const a_data) const
 
 	char *data = a_data;
 
-	unsigned long batch, n;
+	long batch, n;
 
 	for (unsigned long i = 0; i < iter; ++i) {
 		batch = inSocketBuffer;
@@ -335,7 +335,7 @@ exchange::_readStream(char * const data) const
 	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	unsigned long n = 0;
+	long n = 0;
 
 	while (true) {
 		if ((n = ::recv(socket, data, inSize, 0)) == -1) {

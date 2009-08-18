@@ -69,9 +69,9 @@ client::client(client &fs)
 //-------------------------------------------------------------------
 
 client::client(short a_family,
-			   short a_type) : family(a_family),
-							   type(a_type),
-							   blockInherited(false)
+			   short a_type) : blockInherited(false),
+							   family(a_family),
+							   type(a_type)
 #ifndef IO_WO_XEXEC
 							   ,
 							   collectedData(this, XEXEC_OBJECT_IONETWORKCLIENT)

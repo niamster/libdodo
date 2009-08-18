@@ -44,8 +44,8 @@ memory::memory(char          *a_data,
 			   unsigned long size,
 			   short         flags,
 			   short         protection) : block::channel(protection),
-										   flags(flags),
-										   size(size)
+										   size(size),
+										   flags(flags)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
@@ -65,9 +65,9 @@ memory::memory(char          *a_data,
 //-------------------------------------------------------------------
 
 memory::memory(short protection) : block::channel(protection),
-								   flags(MEMORYFLAGS_NORMAL),
+								   data(NULL),
 								   size(0),
-								   data(NULL)
+								   flags(MEMORYFLAGS_NORMAL)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
@@ -77,8 +77,8 @@ memory::memory(short protection) : block::channel(protection),
 //-------------------------------------------------------------------
 
 memory::memory(const memory &fd) : block::channel(fd.protection),
-								   flags(fd.flags),
-								   size(fd.size)
+								   size(fd.size),
+								   flags(fd.flags)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
@@ -102,8 +102,8 @@ memory::memory(const memory &fd) : block::channel(fd.protection),
 
 memory::memory(const dodoString &buffer,
 			   short            protection) : block::channel(protection),
-											  flags(MEMORYFLAGS_NORMAL),
-											  size(buffer.size())
+											  size(buffer.size()),
+											  flags(MEMORYFLAGS_NORMAL)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);

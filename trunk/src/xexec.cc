@@ -62,11 +62,11 @@ xexec::xexec(const xexec &exec)
 //-------------------------------------------------------------------
 
 xexec::xexec() : safeXExecs(true),
+				 disableXExecs(false),
 				 operType(XEXEC_OPERTYPE_NONE),
 				 execs(0),
 				 execObject(XEXEC_OBJECT_XEXEC),
-				 execObjectData(NULL),
-				 disableXExecs(false)
+				 execObjectData(NULL)
 {
 }
 

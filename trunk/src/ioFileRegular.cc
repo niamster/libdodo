@@ -47,8 +47,8 @@
 
 using namespace dodo::io::file;
 
-regular::regular(short protection) : handle(new io::__file__),
-									 block::channel(protection)
+regular::regular(short protection) : block::channel(protection),
+									 handle(new io::__file__)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
@@ -59,10 +59,10 @@ regular::regular(short protection) : handle(new io::__file__),
 
 regular::regular(const dodoString &a_path,
 				 short            a_mode,
-				 short            protection) : handle(new io::__file__),
+				 short            protection) : block::channel(protection),
 												path(a_path),
 												mode(a_mode),
-												block::channel(protection)
+												handle(new io::__file__)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
@@ -133,10 +133,10 @@ regular::regular(const dodoString &a_path,
 
 //-------------------------------------------------------------------
 
-regular::regular(const regular &fd) : path(fd.path),
+regular::regular(const regular &fd) : block::channel(fd.protection),
+									  path(fd.path),
 									  mode(fd.mode),
-									  handle(new io::__file__),
-									  block::channel(fd.protection)
+									  handle(new io::__file__)
 
 {
 #ifndef IO_WO_XEXEC

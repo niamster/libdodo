@@ -95,10 +95,10 @@ __thread__::__thread__() :
 	thread(0),
 #endif
 	isRunning(false),
-	executed(0),
-	executeLimit(0),
 	joined(false),
-	status(0)
+	status(0),
+	executed(0),
+	executeLimit(0)
 {
 }
 

@@ -565,6 +565,8 @@ image::getCompression()
 	for (int i = 0; i < IMAGE_COMPRESSIONSTATEMENTS; ++i)
 		if (collectedData.handle->imInfo->compression == compressionStArr[i])
 			return i;
+
+	return -1;
 }
 
 //-------------------------------------------------------------------
@@ -583,6 +585,8 @@ image::getEncoder()
 	for (int i = 0; i < IMAGE_ENCODERSTATEMENTS; ++i)
 		if (strcmp(collectedData.handle->imInfo->magick, encoderStArr[i]) == 0)
 			return i;
+
+	return -1;
 }
 
 //-------------------------------------------------------------------

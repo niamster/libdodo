@@ -47,11 +47,11 @@
 using namespace dodo::io::file;
 
 temp::temp(bool  open,
-		   short protection) : overwrite(false),
+		   short protection) : block::channel(protection),
 							   block(true),
 							   append(false),
-							   handle(new io::__file__),
-							   block::channel(protection)
+							   overwrite(false),
+							   handle(new io::__file__)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILETEMP);
@@ -69,11 +69,11 @@ temp::temp(bool  open,
 
 //-------------------------------------------------------------------
 
-temp::temp(const temp &fd) : overwrite(fd.overwrite),
+temp::temp(const temp &fd) : block::channel(protection),
 							 block(fd.block),
 							 append(fd.append),
-							 handle(new io::__file__),
-							 block::channel(protection)
+							 overwrite(fd.overwrite),
+							 handle(new io::__file__)
 
 {
 #ifndef IO_WO_XEXEC

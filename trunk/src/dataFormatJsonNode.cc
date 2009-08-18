@@ -42,36 +42,36 @@ node::node() : valueDataType(DATATYPE_NULL)
 
 //-------------------------------------------------------------------
 
-node::node(const dodoString &value) : valueDataType(DATATYPE_STRING),
-									  stringValue(new dodoString(value))
+node::node(const dodoString &value) : stringValue(new dodoString(value)),
+									  valueDataType(DATATYPE_STRING)
 {
 }
 
 //-------------------------------------------------------------------
 
-node::node(long value) : valueDataType(DATATYPE_NUMERIC),
-						 numericValue(value)
+node::node(long value) : numericValue(value),
+						 valueDataType(DATATYPE_NUMERIC)
 {
 }
 
 //-------------------------------------------------------------------
 
-node::node(bool value) : valueDataType(DATATYPE_BOOLEAN),
-						 booleanValue(value)
+node::node(bool value) : booleanValue(value),
+						 valueDataType(DATATYPE_BOOLEAN)
 {
 }
 
 //-------------------------------------------------------------------
 
-node::node(const dodoArray<node> &value) : valueDataType(DATATYPE_ARRAY),
-										   arrayValue(new dodoArray<node>(value))
+node::node(const dodoArray<node> &value) : arrayValue(new dodoArray<node>(value)),
+										   valueDataType(DATATYPE_ARRAY)
 {
 }
 
 //-------------------------------------------------------------------
 
-node::node(const dodoMap<dodoString, node, dodoMapStringCompare> &value) : valueDataType(DATATYPE_OBJECT),
-																		   objectValue(new dodoMap<dodoString, node, dodoMapStringCompare>(value))
+node::node(const dodoMap<dodoString, node, dodoMapStringCompare> &value) : objectValue(new dodoMap<dodoString, node, dodoMapStringCompare>(value)),
+																		   valueDataType(DATATYPE_OBJECT)
 {
 }
 

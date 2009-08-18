@@ -310,14 +310,14 @@ exchange::_read(char * const a_data) const
 	if (socket == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	unsigned long iter = inSize / inSocketBuffer;
-	unsigned long rest = inSize % inSocketBuffer;
+	long iter = inSize / inSocketBuffer;
+	long rest = inSize % inSocketBuffer;
 
 	char *data = a_data;
 
 	long n;
 
-	for (unsigned long i = 0; i < iter; ++i) {
+	for (long i = 0; i < iter; ++i) {
 		while (true) {
 			if ((n = SSL_read(handle->handle, data, inSocketBuffer)) <= 0) {
 				switch (SSL_get_error(handle->handle, n)) {

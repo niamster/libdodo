@@ -47,11 +47,11 @@
 
 using namespace dodo::io::file;
 
-fifo::fifo(short protection) : inFileFifoBuffer(IOPIPE_INSIZE),
+fifo::fifo(short protection) : stream::channel(protection),
+							   inFileFifoBuffer(IOPIPE_INSIZE),
 							   outFileFifoBuffer(IOPIPE_OUTSIZE),
-							   blocked(true),
 							   handle(new io::__file__),
-							   stream::channel(protection)
+							   blocked(true)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEFIFO);
@@ -62,13 +62,13 @@ fifo::fifo(short protection) : inFileFifoBuffer(IOPIPE_INSIZE),
 
 fifo::fifo(const dodoString &path,
 		   short            mode,
-		   short            protection) : inFileFifoBuffer(IOPIPE_INSIZE),
+		   short            protection) : stream::channel(protection),
+										  inFileFifoBuffer(IOPIPE_INSIZE),
 										  outFileFifoBuffer(IOPIPE_OUTSIZE),
-										  blocked(true),
-										  handle(new io::__file__),
 										  path(path),
 										  mode(mode),
-										  stream::channel(protection)
+										  handle(new io::__file__),
+										  blocked(true)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEFIFO);
@@ -154,13 +154,13 @@ fifo::fifo(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-fifo::fifo(const fifo &fd) : inFileFifoBuffer(fd.inFileFifoBuffer),
+fifo::fifo(const fifo &fd) : stream::channel(fd.protection),
+							 inFileFifoBuffer(fd.inFileFifoBuffer),
 							 outFileFifoBuffer(fd.outFileFifoBuffer),
-							 blocked(fd.blocked),
-							 mode(fd.mode),
 							 path(fd.path),
+							 mode(fd.mode),
 							 handle(new __file__),
-							 stream::channel(fd.protection)
+							 blocked(fd.blocked)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(XEXEC_OBJECT_IOFILEFIFO);
