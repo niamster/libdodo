@@ -4,7 +4,7 @@ TESTS=@TESTS@
 
 all: $(TESTS)
 $(TESTS):
-	@echo "-- Building test for $@"; $(MAKE) -s -C $@; if test $$? != 0; then exit $$?; fi 
+	@echo "-- Building test for $@"; $(MAKE) -s -C $@; if test $$? != 0; then echo "-- Building test for $@ failed" >&2; exit $$?; fi 
 
 clean:
 	@for i in $(TESTS); do $(MAKE) -s -C $$i clean; done;
