@@ -352,7 +352,7 @@ client::connectSsl()
 void
 client::connect(const dodoString &host,
 				int              port,
-				exchange         &exchange)
+				network::exchange         &ex)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT;
@@ -396,7 +396,8 @@ client::connect(const dodoString &host,
 
 	connectSsl();
 
-	exchange.init(socket, handle, blocked, blockInherited);
+	exchange &sslEx = dynamic_cast<exchange &>(ex);
+	sslEx.init(socket, handle, blocked, blockInherited);
 
 	socket = -1;
 	handle->handle = NULL;
@@ -412,7 +413,7 @@ void
 client::connectFrom(const dodoString &local,
 					const dodoString &host,
 					int              port,
-					exchange         &exchange)
+					network::exchange         &ex)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECTFROM;
@@ -474,7 +475,8 @@ client::connectFrom(const dodoString &local,
 
 	connectSsl();
 
-	exchange.init(socket, handle, blocked, blockInherited);
+	exchange &sslEx = dynamic_cast<exchange &>(ex);
+	sslEx.init(socket, handle, blocked, blockInherited);
 
 	socket = -1;
 	handle->handle = NULL;
@@ -488,7 +490,7 @@ client::connectFrom(const dodoString &local,
 
 void
 client::connect(const dodoString &path,
-				exchange         &exchange)
+				network::exchange         &ex)
 {
 #ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT_UNIX;
@@ -519,7 +521,8 @@ client::connect(const dodoString &path,
 
 	connectSsl();
 
-	exchange.init(socket, handle, blocked, blockInherited);
+	exchange &sslEx = dynamic_cast<exchange &>(ex);
+	sslEx.init(socket, handle, blocked, blockInherited);
 
 	socket = -1;
 	handle->handle = NULL;

@@ -199,7 +199,7 @@ namespace dodo {
 			/**
 			 * destructor
 			 */
-			virtual ~image();
+			~image();
 
 			/**
 			 * create image
@@ -208,7 +208,7 @@ namespace dodo {
 			 * @param background defines image background
 			 * @param backgroundDepth defines the color depth of the image background in bits
 			 */
-			virtual void create(unsigned long   width,
+			void create(unsigned long   width,
 								unsigned long   height,
 								const __color__ &background = color::transparent,
 								unsigned short  backgroundDepth = 32);
@@ -217,103 +217,103 @@ namespace dodo {
 			 * read image
 			 * @param path defines path to image
 			 */
-			virtual void readFile(const dodoString &path);
+			void readFile(const dodoString &path);
 
 			/**
 			 * read image
 			 * @param info defines image info
 			 */
-			virtual void readMemory(const __imageInfo__ &info);
+			void readMemory(const __imageInfo__ &info);
 
 			/**
 			 * read image
 			 * @param data defines image data
 			 */
-			virtual void readMemory(const dodoString &data);
+			void readMemory(const dodoString &data);
 
 			/**
 			 * write image
 			 * @param path describes path to image
 			 */
-			virtual void writeFile(const dodoString &path);
+			void writeFile(const dodoString &path);
 
 			/**
 			 * write image
 			 * @param data defines image data
 			 */
-			virtual void writeMemory(dodoString &data);
+			void writeMemory(dodoString &data);
 
 			/**
 			 * close access to image
 			 */
-			virtual void close();
+			void close();
 
 			/**
 			 * @return info about image
 			 */
-			virtual __imageSize__ getImageSize();
+			__imageSize__ getImageSize();
 
 			/**
 			 * set image type
 			 * @param type defines image type[see imageTypeEnum]
 			 */
-			virtual void setType(short type);
+			void setType(short type);
 
 			/**
 			 * set image alpha channel
 			 */
-			virtual void setAlpha();
+			void setAlpha();
 
 			/**
 			 * remove image alpha channel
 			 */
-			virtual void removeAlpha();
+			void removeAlpha();
 
 			/**
 			 * set image opacity
 			 * @param opacity define image opacity
 			 * @note 0 is fully opaque and 65535 is fully transparent
 			 */
-			virtual void setOpacity(unsigned short opacity);
+			void setOpacity(unsigned short opacity);
 
 			/**
 			 * set image background
 			 * @param background define image background color
 			 */
-			virtual void setBackgroundColor(__color__ background);
+			void setBackgroundColor(__color__ background);
 
 			/**
 			 * set image output encoder
 			 * @param encoder defines image encoder[see imageEncoderEnum]
 			 */
-			virtual void setEncoder(short encoder);
+			void setEncoder(short encoder);
 
 			/**
 			 * set image compression type
 			 * @param type defines type of image compression[see imageCompressionEnum]
 			 */
-			virtual void setCompression(short type);
+			void setCompression(short type);
 
 			/**
 			 * set image quality
 			 * @param quality defines image quality
 			 */
-			virtual void setQuality(short quality);
+			void setQuality(short quality);
 
 			/**
 			 * @return image output encoder
 			 */
-			virtual short getEncoder();
+			short getEncoder();
 
 			/**
 			 * @return image compression type
 			 */
-			virtual short getCompression();
+			short getCompression();
 
 			/**
 			 * @return image quality
 			 */
-			virtual short getQuality();
+			short getQuality();
 
 		  protected:
 

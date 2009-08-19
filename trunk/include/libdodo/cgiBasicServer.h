@@ -42,6 +42,14 @@ namespace dodo {
 			 * @brief provides basic CGI server functionality
 			 */
 			class server : public cgi::server {
+			  private:
+
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				server(server &);
+
 			  public:
 
 				/**
@@ -59,14 +67,6 @@ namespace dodo {
 				 * @param func define request handler
 				 */
 				virtual void serve(serverHandler func);
-
-			  private:
-
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				server(server &);
 			};
 		};
 	};

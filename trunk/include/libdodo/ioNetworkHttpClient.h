@@ -167,14 +167,14 @@ namespace dodo {
 					/**
 					 * destructor
 					 */
-					virtual ~client();
+					~client();
 
 #ifdef OPENSSL_EXT
 					/**
 					 * set certificates information
 					 * @param certs defines certificates information
 					 */
-					virtual void setSertificates(const io::ssl::__certificates__ &certs) const;
+					void setSertificates(const io::ssl::__certificates__ &certs) const;
 #endif
 
 					mutable dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see requestHeaderEnum]
@@ -183,7 +183,7 @@ namespace dodo {
 					 * @param url defines Url
 					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
-					virtual void setUrl(const dodoString &url) const;
+					void setUrl(const dodoString &url) const;
 
 					/**
 					 * @param host defines proxy ip
@@ -191,7 +191,7 @@ namespace dodo {
 					 * @param user defines proxy user for authentication
 					 * @param password defines proxy password for authentication
 					 */
-					virtual void setProxy(const dodoString &host,
+					void setProxy(const dodoString &host,
 										  unsigned int     port = 3128,
 										  const dodoString &user = __dodostring__,
 										  const dodoString &password = __dodostring__) const;
@@ -200,7 +200,7 @@ namespace dodo {
 					 * set cookies for the request
 					 * @param cookies defines cookies
 					 */
-					virtual void setCookies(const dodoStringMap &cookies) const;
+					void setCookies(const dodoStringMap &cookies) const;
 
 					/**
 					 * perform GET request
@@ -208,12 +208,12 @@ namespace dodo {
 					 * @param url defines Url
 					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
-					virtual response GET(const dodoString &url) const;
+					response GET(const dodoString &url) const;
 
 					/**
 					 * perform GET request
 					 */
-					virtual response GET() const;
+					response GET() const;
 
 					/**
 					 * perform POST request
@@ -223,7 +223,7 @@ namespace dodo {
 					 * @param type defines content type of the POST request
 					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
-					virtual response POST(const dodoString &url,
+					response POST(const dodoString &url,
 										  const dodoString &data,
 										  const dodoString &type) const;
 
@@ -232,7 +232,7 @@ namespace dodo {
 					 * @param data defines POST data
 					 * @param type defines content type of the POST request
 					 */
-					virtual response POST(const dodoString &data,
+					response POST(const dodoString &data,
 										  const dodoString &type) const;
 
 					/**
@@ -242,14 +242,14 @@ namespace dodo {
 					 * @param arguments defines request arguments
 					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
-					virtual response POST(const dodoString    &url,
+					response POST(const dodoString    &url,
 										  const dodoStringMap &arguments) const;
 
 					/**
 					 * perform POST request
 					 * @param arguments defines request arguments
 					 */
-					virtual response POST(const dodoStringMap &arguments) const;
+					response POST(const dodoStringMap &arguments) const;
 
 					/**
 					 * perform POST request
@@ -259,7 +259,7 @@ namespace dodo {
 					 * @param files defines files for POST request
 					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
-					virtual response POST(const dodoString &url,
+					response POST(const dodoString &url,
 										  const dodoStringMap &arguments,
 										  const dodoMap<dodoString, file> &files) const;
 
@@ -268,7 +268,7 @@ namespace dodo {
 					 * @param arguments defines request arguments
 					 * @param files defines files for POST request
 					 */
-					virtual response POST(const dodoStringMap &arguments,
+					response POST(const dodoStringMap &arguments,
 										  const dodoMap<dodoString, file> &files) const;
 
 					/**
@@ -276,7 +276,7 @@ namespace dodo {
 					 * @param user defines user name for HTTP authentification
 					 * @param password defines password for HTTP authentification
 					 */
-					virtual void setAuthInfo(const dodoString &user,
+					void setAuthInfo(const dodoString &user,
 											 const dodoString &password) const;
 
 					bool followRedirection;     ///< if true follow the `Location` header; true by default
@@ -289,7 +289,7 @@ namespace dodo {
 					 * @return cookie parse from the header
 					 * @param header defines `Set-Cookie` value
 					 */
-					virtual cgi::cookie parseCookie(const dodoString &header) const;
+					cgi::cookie parseCookie(const dodoString &header) const;
 
 					/**
 					 * @enum getContentStatusEnum defines status of getContent routine
@@ -311,7 +311,7 @@ namespace dodo {
 					 * @param ex defines network connection
 					 * @param response defines response data to be filled
 					 */
-					virtual short getContent(exchange *ex,
+					short getContent(exchange *ex,
 											 response &response) const;
 
 					/**
@@ -321,7 +321,7 @@ namespace dodo {
 					 * @param ex defines network connection
 					 * @param response defines response data to be filled
 					 */
-					virtual short getProxyConnectResponse(exchange *ex,
+					short getProxyConnectResponse(exchange *ex,
 														  response &response) const;
 
 					mutable unsigned short authTries;                                                               ///< autherization request counter
@@ -336,14 +336,14 @@ namespace dodo {
 					/**
 					 * @return status code from header
 					 */
-					virtual short getStatusCode(const dodoString &header) const;
+					short getStatusCode(const dodoString &header) const;
 
 					/**
 					 * @return offset of HTTP body in data or zero if headers are not complete
 					 * @param data defines response data
 					 * @param headers defines data with headers
 					 */
-					virtual unsigned int extractHeaders(const dodoString &data,
+					unsigned int extractHeaders(const dodoString &data,
 														dodoString       &headers) const;
 
 					/**
@@ -351,7 +351,7 @@ namespace dodo {
 					 * @param headers defines data with headers
 					 * @param response defines response data to be filled
 					 */
-					virtual void getHeaders(const dodoString &headers,
+					void getHeaders(const dodoString &headers,
 											response         &response) const;
 
 					/**
@@ -359,7 +359,7 @@ namespace dodo {
 					 * @param user defines user name
 					 * @param password defines user password
 					 */
-					virtual void makeBasicAuth(short            responseHeader,
+					void makeBasicAuth(short            responseHeader,
 											   const dodoString &user,
 											   const dodoString &password) const;
 
@@ -371,7 +371,7 @@ namespace dodo {
 					 * @param password defines user password
 					 * @param response defines response data to be filled
 					 */
-					virtual void makeDigestAuth(short            requestHeader,
+					void makeDigestAuth(short            requestHeader,
 												short            responseHeader,
 												const dodoString &method,
 												const dodoString &user,
@@ -381,7 +381,7 @@ namespace dodo {
 					/**
 					 * clear authentification/cookies information
 					 */
-					virtual void clear() const;
+					void clear() const;
 
 					/**
 					 * @enum schemeEnum defines URI scheme of connection

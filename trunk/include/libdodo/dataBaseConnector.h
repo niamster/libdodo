@@ -185,18 +185,12 @@ namespace dodo {
 				 * @param table defines table name
 				 * @param fields defines names of fields
 				 * @param where defines `where` statement
-				 * @note if (length(table) == 0) => 'from `table`' is not used
+				 * @note if param table is empty 'from `table`' is not used
+				 * if param fields is empty all fields are fetched
 				 */
 				virtual void select(const dodoString      &table,
-									const dodoStringArray &fields,
+									const dodoStringArray &fields = __dodostringarray__,
 									const dodoString      &where = __dodostring__) = 0;
-
-				/**
-				 * @param table defines table name
-				 * @param where defines `where` statement
-				 */
-				virtual void selectAll(const dodoString &table,
-									   const dodoString &where = __dodostring__) = 0;
 
 				/**
 				 * @param table defines table name
@@ -229,19 +223,6 @@ namespace dodo {
 				virtual void insert(const dodoString                 &table,
 									const dodoArray<dodoStringArray> &values,
 									const dodoStringArray            &fields = __dodostringarray__) = 0;
-
-				/**
-				 * @param tableTo defines table where data will be stored
-				 * @param tableFrom defines table where data will be fetched
-				 * @param fieldsTo defines fields where data will be stored
-				 * @param fieldsFrom defines fields that will be fetched
-				 * @param where defines `where` statement
-				 */
-				virtual void insertSelect(const dodoString      &tableTo,
-										  const dodoString      &tableFrom,
-										  const dodoStringArray &fieldsTo,
-										  const dodoStringArray &fieldsFrom = __dodostringarray__,
-										  const dodoString      &where = __dodostring__) = 0;
 
 				/**
 				 * @param table defines table name

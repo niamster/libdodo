@@ -64,7 +64,6 @@ namespace dodo {
 				dodoStringArray fields;                 ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
 				dodoArray<dodoStringArray> values;      ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
 				dodoString table;                       ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-				dodoString tableTo;                     ///< `tableTo` for the request
 				dodoString order;                       ///< `order` for the request
 				dodoString having;                      ///< `having` for the request
 				dodoString group;                       ///< `group` for the request
@@ -77,8 +76,8 @@ namespace dodo {
 
 				__connectionInfo__ dbInfo;              ///< data info to connect to the server
 
-				int qType;                              ///< type of operation
-				int qShift;                             ///< additional actions[see accumulatorAddEnum]
+				int type;                              ///< type of operation
+				int additional;                             ///< additional actions[see accumulatorAddRequestEnum]
 			};
 
 			/**
@@ -120,18 +119,12 @@ namespace dodo {
 				 * @param table defines table name
 				 * @param fields defines names of fields
 				 * @param where defines `where` statement
-				 * @note if (length(table) == 0) => 'from `table`' is not used
+				 * @note if param table is empty 'from `table`' is not used
+				 * if param fields is empty all fields are fetched
 				 */
 				virtual void select(const dodoString      &table,
-									const dodoStringArray &fields,
+									const dodoStringArray &fields = __dodostringarray__,
 									const dodoString      &where = __dodostring__);
-
-				/**
-				 * @param table defines table name
-				 * @param where defines `where` statement
-				 */
-				virtual void selectAll(const dodoString &table,
-									   const dodoString &where = __dodostring__);
 
 				/**
 				 * @param table defines table name
@@ -165,18 +158,6 @@ namespace dodo {
 									const dodoArray<dodoStringArray> &values,
 									const dodoStringArray            &fields = __dodostringarray__);
 
-				/**
-				 * @param tableTo defines table where data will be stored
-				 * @param tableFrom defines table where data will be fetched
-				 * @param fieldsTo defines fields where data will be stored
-				 * @param fieldsFrom defines fields that will be fetched
-				 * @param where defines `where` statement
-				 */
-				virtual void insertSelect(const dodoString      &tableTo,
-										  const dodoString      &tableFrom,
-										  const dodoStringArray &fieldsTo,
-										  const dodoStringArray &fieldsFrom = __dodostringarray__,
-										  const dodoString      &where = __dodostring__);
 
 				/**
 				 * @param table defines table name
@@ -282,7 +263,6 @@ namespace dodo {
 				enum accumulatorRequestEnum {
 					ACCUMULATOR_REQUEST_SELECT = SUBREQUESTSTATEMENTS + 1,
 					ACCUMULATOR_REQUEST_INSERT,
-					ACCUMULATOR_REQUEST_INSERT_SELECT,
 					ACCUMULATOR_REQUEST_UPDATE,
 					ACCUMULATOR_REQUEST_DELETE,
 
@@ -295,7 +275,7 @@ namespace dodo {
 				/**
 				 * free collected data
 				 */
-				virtual void cleanCollected();
+				void cleanCollected();
 
 				bool show;                                                  ///< if true try to get result from the request[select]
 

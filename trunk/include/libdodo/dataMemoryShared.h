@@ -77,7 +77,7 @@ namespace dodo {
 				/**
 				 * destructor
 				 */
-				virtual ~shared();
+				~shared();
 
 				/**
 				 * open or create shared memory object
@@ -86,12 +86,12 @@ namespace dodo {
 				 * if you want to share data between different instances of process - set own key,
 				 * otherwise(like fork) - it may be generated
 				 */
-				virtual void open(const int key) const;
+				void open(const int key) const;
 
 				/**
 				 * close shared memory object
 				 */
-				virtual void close() const;
+				void close() const;
 
 				/**
 				 * map shared data
@@ -100,23 +100,23 @@ namespace dodo {
 				 * @note if map is called twice - old data will be unmapped
 				 * is size is 0 it will be detected automatically
 				 */
-				virtual void *map(unsigned long size = 0) const;
+				void *map(unsigned long size = 0) const;
 
 				/**
 				 * unmap shared data
 				 */
-				virtual void unmap() const;
+				void unmap() const;
 
 				/**
 				 * @return shared data
 				 */
-				virtual void *data() const;
+				void *data() const;
 
 				/**
 				 * @return size of shared data
 				 * @note this should be called before map to obtain the size of the already allocated shared memory
 				 */
-				virtual unsigned long size() const;
+				unsigned long size() const;
 
 				/**
 				 * remove the shared data from the system

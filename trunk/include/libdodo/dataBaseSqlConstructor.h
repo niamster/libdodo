@@ -127,11 +127,6 @@ namespace dodo {
 					virtual void insertCollect();
 
 					/**
-					 * construct `insert ... select` statement
-					 */
-					virtual void insertSelectCollect();
-
-					/**
 					 * construct `update` statement
 					 */
 					virtual void updateCollect();

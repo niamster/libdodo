@@ -50,7 +50,7 @@ namespace dodo {
 				 * @class __initialAccept__
 				 * @brief holds info that passes to accept call, and then inits exchange;
 				 */
-				class __initialAccept__ {
+				class __initialAccept__ : public network::__initialAccept__ {
 					friend class exchange;
 					friend class client;
 					friend class server;
@@ -71,16 +71,11 @@ namespace dodo {
 					/**
 					 * destructor
 					 */
-					~__initialAccept__();
+					virtual ~__initialAccept__();
 
-				  private:
-
-					int socket;                                 ///< socket
+				  protected:
 
 					io::ssl::__sslConnection__ *handle;         ///< SSL connection handle
-
-					bool blocked;                               ///< true if blocked
-					bool blockInherited;                        ///< true if block flag is inherited
 				};
 
 				/**
@@ -141,7 +136,7 @@ namespace dodo {
 					 * @param socket defines socket descriptor
 					 * @param ssl defines SSL handle
 					 */
-					virtual void _close(int                        socket,
+					void _close(int                        socket,
 										io::ssl::__sslConnection__ *handle);
 
 					/**
@@ -151,7 +146,7 @@ namespace dodo {
 					 * @param blocked defines the connection block status
 					 * @param blockInherited defines block flag inheritance
 					 */
-					virtual void init(int                        socket,
+					void init(int                        socket,
 									  io::ssl::__sslConnection__ *handle,
 									  bool                       blocked,
 									  bool                       blockInherited);

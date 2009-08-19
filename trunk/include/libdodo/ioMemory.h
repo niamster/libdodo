@@ -96,7 +96,7 @@ namespace dodo {
 			 * @param fd defines object to clone
 			 * @note xexec object is not copied
 			 */
-			virtual void clone(const memory &fd);
+			void clone(const memory &fd);
 
 			/**
 			 * erase node on position

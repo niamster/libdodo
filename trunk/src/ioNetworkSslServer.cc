@@ -373,7 +373,7 @@ server::serve(const dodoString &path,
 //-------------------------------------------------------------------
 
 bool
-server::accept(__initialAccept__ &init,
+server::accept(network::__initialAccept__ &init,
 			   __peerInfo__      &info)
 {
 #ifndef IO_WO_XEXEC
@@ -457,7 +457,7 @@ server::accept(__initialAccept__ &init,
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	acceptSsl(init);
+	acceptSsl(dynamic_cast<__initialAccept__ &>(init));
 
 #ifndef IO_WO_XEXEC
 	performPostExec();
@@ -469,7 +469,7 @@ server::accept(__initialAccept__ &init,
 //-------------------------------------------------------------------
 
 bool
-server::accept(__initialAccept__ &init)
+server::accept(network::__initialAccept__ &init)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
@@ -496,7 +496,7 @@ server::accept(__initialAccept__ &init)
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	acceptSsl(init);
+	acceptSsl(dynamic_cast<__initialAccept__ &>(init));
 
 #ifndef IO_WO_XEXEC
 	performPostExec();

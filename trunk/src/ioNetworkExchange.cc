@@ -57,6 +57,12 @@ __initialAccept__::__initialAccept__(__initialAccept__ &init) : socket(init.sock
 
 //-------------------------------------------------------------------
 
+__initialAccept__::~__initialAccept__()
+{
+}
+
+//-------------------------------------------------------------------
+
 exchange::exchange(exchange &fse) : stream::channel(fse.protection)
 {
 }

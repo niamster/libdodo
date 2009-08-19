@@ -76,20 +76,20 @@ namespace dodo {
 			 * @param method defines name of rpc method
 			 * @param handler defines function that will process rpc call
 			 */
-			virtual void setHandler(const dodoString &method,
+			void setHandler(const dodoString &method,
 									handler          handler);
 
 			/**
 			 * remove handler for method
 			 * @param method defines name of rpc method
 			 */
-			virtual void removeHandler(const dodoString &method);
+			void removeHandler(const dodoString &method);
 
 			/**
 			 * set function that will process unregistered calls
 			 * @param handler defines function that will process rpc call
 			 */
-			virtual void setDefault(handler handler);
+			void setDefault(handler handler);
 
 			/**
 			 * serve rpc call

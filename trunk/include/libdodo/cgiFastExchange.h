@@ -46,6 +46,14 @@ namespace dodo {
 			 * @brief provides interface to fast CGI I/O functionality
 			 */
 			class exchange : virtual public cgi::exchange {
+			  private:
+
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				exchange(exchange &);
+
 			  public:
 
 				/**
@@ -71,14 +79,6 @@ namespace dodo {
 				 * @param data defines name of environment variable
 				 */
 				virtual char *getenv(const char *data);
-
-			  private:
-
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				exchange(exchange &);
 
 			  protected:
 

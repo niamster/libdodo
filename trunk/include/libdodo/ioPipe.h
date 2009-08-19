@@ -83,7 +83,7 @@ namespace dodo {
 			 * @param fd defines object to clone
 			 * @note xexec object is not copied
 			 */
-			virtual void clone(const pipe &fd);
+			void clone(const pipe &fd);
 
 			/**
 			 * @return info about source of inputting

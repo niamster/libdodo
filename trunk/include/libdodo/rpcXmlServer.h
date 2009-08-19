@@ -79,7 +79,7 @@ namespace dodo {
 				/**
 				 * @param encoding defines response encoding
 				 */
-				virtual void setResponseEncoding(const dodoString &encoding);
+				void setResponseEncoding(const dodoString &encoding);
 
 				/**
 				 * serve rpc call

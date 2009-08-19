@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 		dodoStringArray fields;
 		__tuples__ storage;
 
-		pp.selectAll("test");
+		pp.select("test");
 		pp.join("test1", JOINTYPE_JOIN, "test.operation = test1.operation");
 		pp.limit(10);
 		pp.exec();
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 
 		dodoStringArray uni;
 
-		pp.selectAll("test", "id>1");
+		pp.select("test", dodoStringArray(), "id>1");
 		pp.limit(10);
 		pp.offset(23);
 
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 		pp.subquery(uni);
 		sub = pp.queryCollect();
 
-		pp.selectAll("test", "id<100");
+		pp.select("test", dodoStringArray(), "id<100");
 
 		uni.clear();
 		uni.push_back(sub);
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
 		pp.limit(5);
 		pp.exec();
 
-		pp.selectAll("test");
+		pp.select("test");
 		pp.limit(10);
 		pp.exec();
 

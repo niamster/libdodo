@@ -65,12 +65,12 @@ namespace dodo {
 				/**
 				 * @param encoding defines request encoding
 				 */
-				virtual void setRequestEncoding(const dodoString &encoding);
+				void setRequestEncoding(const dodoString &encoding);
 
 				/**
 				 * @return response encoding
 				 */
-				virtual dodoString getResponseEncoding();
+				dodoString getResponseEncoding();
 
 			  protected:
 

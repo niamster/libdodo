@@ -59,35 +59,35 @@ namespace dodo {
 					/**
 					 * destructor
 					 */
-					virtual ~processor();
+					~processor();
 
 					/**
 					 * @param root defines root of unserialized JSON object
 					 * @param io defines output destination for serialized JSON object
 					 */
-					virtual void make(const node        &root,
+					void make(const node        &root,
 									  const io::channel &io);
 
 					/**
 					 * @return root of unserialized JSON object
 					 * @param io defines input source that contains serialized JSON object
 					 */
-					virtual node process(const io::channel &io);
+					node process(const io::channel &io);
 
 					/**
 					 * @return string that contains serialized JSON object
 					 * @param root defines root of unserialized JSON object
 					 */
-					virtual void fromMap(const dodoStringMap &root,
+					void fromMap(const dodoStringMap &root,
 										 const io::channel   &io);
 
 					/**
 					 * @param io defines IO source that contains serialized JSON object
 					 * @param io defines output destination for serialized JSON object
 					 */
-					virtual dodoStringMap toMap(const io::channel &io);
+					dodoStringMap toMap(const io::channel &io);
 
-				  protected:
+				  private:
 
 					/**
 					 * process string value
@@ -96,7 +96,7 @@ namespace dodo {
 					 * @param root defines serialized JSON string object
 					 * @param pos defines start position for parsing in serialized JSON string object
 					 */
-					virtual unsigned long processString(dodoString       &node,
+					unsigned long processString(dodoString       &node,
 														const dodoString &root,
 														unsigned long    pos);
 
@@ -107,7 +107,7 @@ namespace dodo {
 					 * @param root defines serialized JSON string object
 					 * @param pos defines start position for parsing in serialized JSON string object
 					 */
-					virtual unsigned long processArray(dodoArray<node>  &node,
+					unsigned long processArray(dodoArray<node>  &node,
 													   const dodoString &root,
 													   unsigned long    pos);
 
@@ -118,7 +118,7 @@ namespace dodo {
 					 * @param root defines serialized JSON string object
 					 * @param pos defines start position for parsing in serialized JSON string object
 					 */
-					virtual unsigned long processObject(dodoMap<dodoString, node, dodoMapStringCompare> &node,
+					unsigned long processObject(dodoMap<dodoString, node, dodoMapStringCompare> &node,
 														const dodoString &root,
 														unsigned long pos);
 
@@ -129,7 +129,7 @@ namespace dodo {
 					 * @param root defines serialized JSON string object
 					 * @param pos defines start position for parsing in serialized JSON string object
 					 */
-					virtual unsigned long processValue(node             &node,
+					unsigned long processValue(node             &node,
 													   const dodoString &root,
 													   unsigned long    pos);
 
@@ -140,7 +140,7 @@ namespace dodo {
 					 * @param root defines serialized JSON string object
 					 * @param pos defines start position for parsing in serialized JSON string object
 					 */
-					virtual unsigned long processBoolean(bool             &node,
+					unsigned long processBoolean(bool             &node,
 														 const dodoString &root,
 														 unsigned long    pos);
 
@@ -151,7 +151,7 @@ namespace dodo {
 					 * @param root defines serialized JSON string object
 					 * @param pos defines start position for parsing in serialized JSON string object
 					 */
-					virtual unsigned long processNumeric(long             &node,
+					unsigned long processNumeric(long             &node,
 														 const dodoString &root,
 														 unsigned long    pos);
 
@@ -161,7 +161,7 @@ namespace dodo {
 					 * @param root defines serialized JSON string object
 					 * @param pos defines start position for parsing in serialized JSON string object
 					 */
-					virtual unsigned long processNull(const dodoString &root,
+					unsigned long processNull(const dodoString &root,
 													  unsigned long    pos);
 
 					/**

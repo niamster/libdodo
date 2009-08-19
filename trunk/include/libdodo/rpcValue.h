@@ -121,112 +121,112 @@ namespace dodo {
 			/**
 			 * destructor
 			 */
-			virtual ~value();
+			~value();
 
 			/**
 			 * set string, date/time, base64 value
 			 * @param value defines string value
 			 */
-			virtual void setString(const dodoString &value);
+			void setString(const dodoString &value);
 
 			/**
 			 * set boolean value
 			 * @param value defines boolean value
 			 */
-			virtual void setBoolean(bool value);
+			void setBoolean(bool value);
 
 			/**
 			 * set integer value
 			 * @param value defines integer value
 			 */
-			virtual void setInteger(long value);
+			void setInteger(long value);
 
 			/**
 			 * set double value
 			 * @param value defines double value
 			 */
-			virtual void setDouble(double value);
+			void setDouble(double value);
 
 			/**
 			 * add array value
 			 * @param value defines array member value
 			 */
-			virtual void addArrayElement(const value &value);
+			void addArrayElement(const value &value);
 
 			/**
 			 * add struct value element
 			 * @param name defines struct member name
 			 * @param value defines struct member value
 			 */
-			virtual void addStructMember(const dodoString &name,
+			void addStructMember(const dodoString &name,
 										 const value      &value);
 
 			/**
 			 * set array value member
 			 * @param value defines array value
 			 */
-			virtual void setArray(const dodoArray<value> &value);
+			void setArray(const dodoArray<value> &value);
 
 			/**
 			 * set struct value
 			 * @param value defines struct value
 			 */
-			virtual void setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &value);
+			void setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &value);
 
 			/**
 			 * @return structure member
 			 * @param name defines structure member name
 			 * @note throws exception if data type is not DATATYPE_STRUCT
 			 */
-			virtual value operator[](const dodoString &name);
+			value operator[](const dodoString &name);
 
 			/**
 			 * @return array element
 			 * @param key defines array index
 			 * @note throws exception if data type is not DATATYPE_ARRAY
 			 */
-			virtual value operator[](unsigned long key);
+			value operator[](unsigned long key);
 
 			/**
 			 * get argument type
 			 */
-			virtual short getType();
+			short getType();
 
 			/**
 			 * get string, date/time, base64 value
 			 * @note throws exception if data type is not DATATYPE_STRING, DATATYPE_DATETIME, DATATYPE_BASE64
 			 */
-			virtual dodoString getString();
+			dodoString getString();
 
 			/**
 			 * get boolean value
 			 * @note throws exception if data type is not DATATYPE_BOOLEAN
 			 */
-			virtual bool getBoolean();
+			bool getBoolean();
 
 			/**
 			 * get integer value
 			 * @note throws exception if data type is not DATATYPE_INTEGER
 			 */
-			virtual long getInteger();
+			long getInteger();
 
 			/**
 			 * get double value
 			 * @note throws exception if data type is not DATATYPE_DOUBLE
 			 */
-			virtual double getDouble();
+			double getDouble();
 
 			/**
 			 * get array value
 			 * @note throws exception if data type is not DATATYPE_ARRAY
 			 */
-			virtual dodoArray<value> getArray();
+			dodoArray<value> getArray();
 
 			/**
 			 * get struct value
 			 * @note throws exception if data type is not DATATYPE_STRUCT
 			 */
-			virtual dodoMap<dodoString, value, dodoMapStringCompare> getStruct();
+			dodoMap<dodoString, value, dodoMapStringCompare> getStruct();
 
 		  protected:
 

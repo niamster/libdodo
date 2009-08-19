@@ -114,110 +114,110 @@ namespace dodo {
 					/**
 					 * destructor
 					 */
-					virtual ~node();
+					~node();
 
 					/**
 					 * set string, date/time, base64 value
 					 * @param value defines string value
 					 */
-					virtual void setString(const dodoString &value);
+					void setString(const dodoString &value);
 
 					/**
 					 * set boolean value
 					 * @param value defines boolean value
 					 */
-					virtual void setBoolean(bool value);
+					void setBoolean(bool value);
 
 					/**
 					 * set integer value
 					 * @param value defines integer value
 					 */
-					virtual void setNumeric(long value);
+					void setNumeric(long value);
 
 					/**
 					 * set null value
 					 */
-					virtual void setNull();
+					void setNull();
 
 					/**
 					 * add array value
 					 * @param value defines array member value
 					 */
-					virtual void addArrayElement(const node &value);
+					void addArrayElement(const node &value);
 
 					/**
 					 * add struct value element
 					 * @param name defines struct member name
 					 * @param value defines struct member value
 					 */
-					virtual void addObjectMember(const dodoString &name,
+					void addObjectMember(const dodoString &name,
 												 const node       &value);
 
 					/**
 					 * set array value member
 					 * @param value defines array value
 					 */
-					virtual void setArray(const dodoArray<node> &value);
+					void setArray(const dodoArray<node> &value);
 
 					/**
 					 * set struct value
 					 * @param value defines struct value
 					 */
-					virtual void setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value);
+					void setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value);
 
 					/**
 					 * @return node by string key
 					 * @param key defines key to search for node
 					 * @note throws exception if data type is not DATATYPE_OBJECT
 					 */
-					virtual node operator[](const dodoString &key) const;
+					node operator[](const dodoString &key) const;
 
 					/**
 					 * @return node by numeric key
 					 * @param key defines key to search for node
 					 * @note throws exception if data type is not DATATYPE_ARRAY
 					 */
-					virtual node operator[](unsigned long key) const;
+					node operator[](unsigned long key) const;
 
 					/**
 					 * @return type of node[see jsonDataTypeEnum]
 					 */
-					virtual short getType() const;
+					short getType() const;
 
 					/**
 					 * @return true if node is `null`
 					 */
-					virtual bool isNull() const;
+					bool isNull() const;
 
 					/**
 					 * @return string value
 					 * @note throws exception if data type is not DATATYPE_STRING
 					 */
-					virtual dodoString getString() const;
+					dodoString getString() const;
 
 					/**
 					 * @return boolean value
 					 * @note throws exception if data type is not DATATYPE_BOOLEAN
 					 */
-					virtual bool getBoolean() const;
+					bool getBoolean() const;
 
 					/**
 					 * @return numeric value
 					 * @note throws exception if data type is not DATATYPE_NUMERIC
 					 */
-					virtual long getNumeric() const;
+					long getNumeric() const;
 
 					/**
 					 * @return array value
 					 * @note throws exception if data type is not DATATYPE_ARRAY
 					 */
-					virtual dodoArray<node> getArray() const;
+					dodoArray<node> getArray() const;
 
 					/**
 					 * @return object value
 					 * @note throws exception if data type is not DATATYPE_OBJECT
 					 */
-					virtual dodoMap<dodoString, node, dodoMapStringCompare> getObject() const;
+					dodoMap<dodoString, node, dodoMapStringCompare> getObject() const;
 
 				  private:
 

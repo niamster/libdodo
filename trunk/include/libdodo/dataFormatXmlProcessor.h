@@ -125,7 +125,7 @@ namespace dodo {
 					/**
 					 * destructor
 					 */
-					virtual ~processor();
+					~processor();
 
 					/**
 					 * parse XML file using __nodeDef__ XML definition
@@ -133,7 +133,7 @@ namespace dodo {
 					 * @param definition defines structure of XML
 					 * @param io defines input source that contains XML
 					 */
-					virtual node process(const __nodeDef__ &definition,
+					node process(const __nodeDef__ &definition,
 										 const io::channel &io);
 
 					/**
@@ -141,14 +141,14 @@ namespace dodo {
 					 * @return parsed XML in node structure
 					 * @param io defines input source that contains XML
 					 */
-					virtual node process(const io::channel &io);
+					node process(const io::channel &io);
 
 					bool icaseNames; ///< if true ignore case of names[false by default]
 
 					/**
 					 * @return XML info
 					 */
-					virtual __info__ getInfo();
+					__info__ getInfo();
 
 					/**
 					 * clear parameters of the give node
@@ -165,7 +165,7 @@ namespace dodo {
 					/**
 					 * free internal structures
 					 */
-					virtual void clear();
+					void clear();
 
 					/**
 					 * @return XML string
@@ -174,7 +174,7 @@ namespace dodo {
 					 * @param version defines XML version
 					 * @param io defines output destination for XML
 					 */
-					virtual void make(const node        &root,
+					void make(const node        &root,
 									  const dodoString  &encoding,
 									  const dodoString  &version,
 									  const io::channel &io)  const;
@@ -184,7 +184,7 @@ namespace dodo {
 					 * @param node defines root node of XML document
 					 * @param io defines output destination for XML
 					 */
-					virtual void make(const node        &node,
+					void make(const node        &node,
 									  const io::channel &io) const;
 
 				  protected:
@@ -194,7 +194,7 @@ namespace dodo {
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
 					 */
-					virtual node parse(const __nodeDef__ &definition);
+					node parse(const __nodeDef__ &definition);
 
 #ifdef LIBXML2_EXT
 					/**
@@ -208,7 +208,7 @@ namespace dodo {
 					 * @return parsed XML in node structure
 					 * @param xnode defines XML tree node
 					 */
-					virtual dodoArray<node> parse(__node__ xnode);
+					dodoArray<node> parse(__node__ xnode);
 
 					/**
 					 * parses XML using __nodeDef__ XML definition
@@ -216,7 +216,7 @@ namespace dodo {
 					 * @param definition defines structure of XML
 					 * @param chNode defines XML tree node
 					 */
-					virtual dodoArray<node> parse(const __nodeDef__ &definition,
+					dodoArray<node> parse(const __nodeDef__ &definition,
 												  const __node__    &xnode);
 
 					/**
@@ -224,7 +224,7 @@ namespace dodo {
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					virtual void getAttributes(const __node__ &xnode,
+					void getAttributes(const __node__ &xnode,
 											   dodoStringMap  &attributes);
 
 					/**
@@ -233,7 +233,7 @@ namespace dodo {
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					virtual void getAttributes(const __nodeDef__ &definition,
+					void getAttributes(const __nodeDef__ &definition,
 											   const __node__    &xnode,
 											   dodoStringMap     &attributes);
 
@@ -242,7 +242,7 @@ namespace dodo {
 					 * @param xnode defines node content
 					 * @param sample defines buffer for node
 					 */
-					virtual void getNodeInfo(const __node__ &xnode,
+					void getNodeInfo(const __node__ &xnode,
 											 node           &sample);
 #endif
 

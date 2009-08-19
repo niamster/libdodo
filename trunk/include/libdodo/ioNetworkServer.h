@@ -156,6 +156,8 @@ namespace dodo {
 
 				bool blockInherited;                                    ///< if true - children(exchange objects) become unblocked, if parent(Server) in unblocked; false by default
 
+			  protected:
+
 				/**
 				 * @return descriptor of input stream
 				 */
@@ -166,20 +168,18 @@ namespace dodo {
 				 */
 				virtual int getOutDescriptor() const;
 
-			  protected:
-
 				short family;                                           ///< socket family
 				short type;                                             ///< socket type
 
 				/**
 				 * restore options on connect/bind
 				 */
-				virtual void restoreOptions();
+				void restoreOptions();
 
 				/**
 				 * create socket
 				 */
-				virtual void makeSocket();
+				void makeSocket();
 
 				dodoString unixSock;                                    ///< path to unix socket
 

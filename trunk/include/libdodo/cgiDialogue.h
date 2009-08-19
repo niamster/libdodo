@@ -54,6 +54,14 @@ namespace dodo {
 		 * object of this class should be contructed in the early begin
 		 */
 		class dialogue {
+		  private:
+
+			/**
+			 * copy constructor
+			 * @note to prevent copying
+			 */
+			dialogue(dialogue &);
+
 		  public:
 
 			/**
@@ -87,19 +95,19 @@ namespace dodo {
 			/**
 			 * destructor
 			 */
-			virtual ~dialogue();
+			~dialogue();
 
 			/**
 			 * @return authentication info
 			 */
-			virtual __cgiAuthInfo__ getAuthenticationInfo();
+			__cgiAuthInfo__ getAuthenticationInfo();
 
 			/**
 			 * request the authentication
 			 * @param realm defines authentication request string
 			 * @param type defines type of authentication[see cgiAuthTypeEnum]
 			 */
-			virtual void requestAuthentication(const dodoString &realm,
+			void requestAuthentication(const dodoString &realm,
 											   short            type = CGI_AUTHTYPE_DIGEST);
 
 			/**
@@ -108,26 +116,26 @@ namespace dodo {
 			 * @param user defines user for authentication
 			 * @param password defined user's password for authentication
 			 */
-			virtual bool isAuthenticated(const dodoString &user,
+			bool isAuthenticated(const dodoString &user,
 										 const dodoString &password);
 
 			/**
 			 * set response code and message
 			 * @param code defines return code[see cgiStatusCodeEnum]
 			 */
-			virtual void setResponseStatus(short code);
+			void setResponseStatus(short code);
 
 			/**
 			 * @return method type[see cgiRequestMethodEnum]
 			 */
-			virtual int getMethod() const;
+			int getMethod() const;
 
 			/**
 			 * @return array of request variables of given method
 			 * @param method defines defines type of array of request variables to return[see requestMethodEnum]
 			 * @note example: classObj[CGI_REQUESTMETHOD_POST]["name"]
 			 */
-			virtual const dodoStringMap &operator[](short method);
+			const dodoStringMap &operator[](short method);
 
 			/**
 			 * specific variables (from POST, GET, ENV or COOKIE)
@@ -147,85 +155,77 @@ namespace dodo {
 			 * @param varName defines name of the variable
 			 * @note searches in GET first
 			 */
-			virtual dodoString request(const dodoString &varName);
+			dodoString request(const dodoString &varName);
 
 			/**
 			 * print data to the output
 			 * @param data defines data that would be printed
 			 */
-			virtual void print(const dodoString &data);
+			void print(const dodoString &data);
 
 			/**
 			 * print data to the output
 			 * @param data defines data that would be printed
 			 * @note print until '\n' is reached
 			 */
-			virtual void printStream(const dodoString &data);
+			void printStream(const dodoString &data);
 
 			/**
 			 * flush output
 			 */
-			virtual void flush() const;
+			void flush() const;
 
 			/**
 			 * set cookie
 			 * @param cookie defines the cookie
 			 * @note cookies are printed with printHeaders method
 			 */
-			virtual void setCookie(const cookie &cookie);
+			void setCookie(const cookie &cookie);
 
 			/**
 			 * @return charset of the request
 			 */
-			virtual dodoString getCharset();
+			dodoString getCharset();
 
 			/**
 			 * cast to exchange *
 			 * @return I/O interface
 			 * @note headers are printed before the cast
 			 */
-			virtual operator exchange*();
+			operator exchange*();
 
 		  private:
 
 			/**
-			 * copy constructor
-			 * @note to prevent copying
-			 */
-			dialogue(dialogue &);
-
-		  protected:
-
-			/**
 			 * fetch auth information
 			 */
-			virtual void makeAuth();
+			void makeAuth();
 
 			/**
 			 * write detected method to method class property
 			 */
-			virtual void detectMethod();
+			void detectMethod();
 
 			/**
 			 * fill POST variables and files if defined
 			 */
-			virtual void makePost();
+			void makePost();
 
 			/**
 			 * get contents of stdin for the POST request
 			 */
-			virtual void makeContent();
+			void makeContent();
 
 			/**
 			 * get environment variables
 			 */
-			virtual void makeEnv();
+			void makeEnv();
 
 			/**
 			 * initiate HEADERS class property with given tuples name->value
 			 * @param headers defines init headers
 			 */
-			virtual void initHeaders(dodoMap<short, dodoString> &headers);
+			void initHeaders(dodoMap<short, dodoString> &headers);
 
 			/**
 			 * process serialized string of tuples key->value
@@ -236,17 +236,15 @@ namespace dodo {
 			 * from : name1=value1`delim`name2=value2
 			 * to : val["name1"]=value1; val["name2"]=value2;
 			 */
-			virtual void makeKeyValue(dodoStringMap    &val,
-									  const dodoString &string,
-									  const char       *delim = "&");
+			void makeKeyValue(dodoStringMap    &val,
+							  const dodoString &string,
+							  const char       *delim = "&");
 
 			/**
 			 * print cgi headers
 			 * @note prints cookies also
 			 */
-			virtual void printHeaders() const;
-
-		  private:
+			void printHeaders() const;
 
 			short returnCode;                                                                   ///< HTTP return code
 			dodoString returnMessage;                                                           ///< HTTP return message
@@ -263,7 +261,7 @@ namespace dodo {
 			/**
 			 * delete temp POST files that have been created
 			 */
-			virtual void cleanTmp();
+			void cleanTmp();
 
 			exchange &cgiIO;                                                                    ///< CGI I/O instance
 

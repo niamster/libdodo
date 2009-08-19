@@ -77,20 +77,20 @@ namespace dodo {
 			/**
 			 * destructor
 			 */
-			virtual ~transform();
+			~transform();
 
 			/**
 			 * set image for transformations
 			 * @param im defines image for transformations
 			 */
-			virtual void setImage(image *im);
+			void setImage(image *im);
 
 			/**
 			 * scale transform
 			 * @param width defines width of the transform
 			 * @param height defines height of the transform
 			 */
-			virtual void scale(unsigned long width,
+			void scale(unsigned long width,
 							   unsigned long height);
 
 			/**
@@ -98,13 +98,13 @@ namespace dodo {
 			 * @param size defines size of the transform
 			 * @note scales transform by reducing size of the greater side saving proportions
 			 */
-			virtual void scale(unsigned long size);
+			void scale(unsigned long size);
 
 			/**
 			 * rotate transform
 			 * @param angle defines rotation degree[see also transformRotateDirectionAngleEnum]
 			 */
-			virtual void rotate(double angle);
+			void rotate(double angle);
 
 		  protected:
 

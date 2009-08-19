@@ -86,7 +86,7 @@ namespace dodo {
 				 * @param fd defines object to clone
 				 * @note xexec object is not copied
 				 */
-				virtual void clone(const temp &fd);
+				void clone(const temp &fd);
 
 				/**
 				 * open file

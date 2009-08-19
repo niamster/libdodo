@@ -89,13 +89,13 @@ namespace dodo {
 			/**
 			 * destructor
 			 */
-			virtual ~draw();
+			~draw();
 
 			/**
 			 * set image for drawations
 			 * @param im defines image for drawations
 			 */
-			virtual void setImage(graphics::image *im);
+			void setImage(graphics::image *im);
 
 			/**
 			 * draw circle
@@ -105,7 +105,7 @@ namespace dodo {
 			 * @param borderColor defines circle border color
 			 * @param borderWidth defines the width of the border of the circle
 			 */
-			virtual void circle(const graphics::point &center,
+			void circle(const graphics::point &center,
 								unsigned long         radius,
 								const __color__       &fillColor,
 								const __color__       &borderColor,
@@ -119,7 +119,7 @@ namespace dodo {
 			 * @param borderColor defines rectangle border color
 			 * @param borderWidth defines the width of the border of the rectangle
 			 */
-			virtual void rectangle(const graphics::point &tl,
+			void rectangle(const graphics::point &tl,
 								   const graphics::point &br,
 								   const __color__       &fillColor,
 								   const __color__       &borderColor,
@@ -136,7 +136,7 @@ namespace dodo {
 			 * @param borderWidth defines the width of the border of the text
 			 * @param angle defines the deflection angle in degrees of the text relatively to horison
 			 */
-			virtual void text(const graphics::point &position,
+			void text(const graphics::point &position,
 							  const dodoString      &text,
 							  const dodoString      &font,
 							  unsigned short        fontWidth,
@@ -151,7 +151,7 @@ namespace dodo {
 			 * @param im defines image to render
 			 * @param angle defines the deflection angle in degrees of the image relatively to horison
 			 */
-			virtual void image(const graphics::point &position,
+			void image(const graphics::point &position,
 							   const graphics::image &im,
 							   double                angle = 0);
 
@@ -161,7 +161,7 @@ namespace dodo {
 			 * @param lineColor defines line color
 			 * @param lineWidth defines the width of the line
 			 */
-			virtual void line(const dodoArray<graphics::point> &points,
+			void line(const dodoArray<graphics::point> &points,
 							  const __color__                  &lineColor,
 							  unsigned short                   lineWidth = 1);
 
@@ -172,7 +172,7 @@ namespace dodo {
 			 * @param pointWidth defines the width of the point
 			 * @note for point width > 1 point is emulated as a circle, it's possible to get some side-effects
 			 */
-			virtual void point(const graphics::point &position,
+			void point(const graphics::point &position,
 							   const __color__       &pointColor,
 							   unsigned short        pointWidth = 1);
 
@@ -185,7 +185,7 @@ namespace dodo {
 			 * @param borderColor defines primitive border color
 			 * @param borderWidth defines the width of the border of the primitive
 			 */
-			virtual void primitive(char            *description,
+			void primitive(char            *description,
 								   const __color__ &fillColor,
 								   const __color__ &borderColor,
 								   unsigned short  borderWidth);

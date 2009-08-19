@@ -117,14 +117,14 @@ constructor::setFieldType(const dodoString &table,
 //-------------------------------------------------------------------
 
 void
-constructor::additionalCollect(unsigned int     qTypeTocheck,
+constructor::additionalCollect(unsigned int     typeTocheck,
 							   const dodoString &collectedString)
 {
-	if (collectedData.qShift == ACCUMULATOR_NONE)
+	if (collectedData.additional == ACCUMULATOR_NONE)
 		return ;
 
-	if (isSetFlag(collectedData.qShift, 1 << qTypeTocheck)) {
-		request.append(sqlAddArr[qTypeTocheck - 1]);
+	if (isSetFlag(collectedData.additional, 1 << typeTocheck)) {
+		request.append(sqlAddArr[typeTocheck - 1]);
 		request.append(collectedString);
 	}
 }
@@ -263,30 +263,6 @@ constructor::insertCollect()
 //-------------------------------------------------------------------
 
 void
-constructor::insertSelectCollect()
-{
-	dodoString fieldsPartTo = tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
-
-	dodoString fieldsPartFrom;
-
-	dodoArray<dodoStringArray>::iterator i = collectedData.values.begin();
-	if (i != collectedData.values.end())
-		fieldsPartFrom = tools::misc::join(*i, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
-
-	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
-	request.append(collectedData.tableTo);
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-	request.append(fieldsPartTo);
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETSELECT]);
-	request.append(fieldsPartFrom);
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
-	request.append(collectedData.table);
-}
-
-//-------------------------------------------------------------------
-
-void
 constructor::updateCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_UPDATE];
@@ -376,7 +352,7 @@ constructor::delCollect()
 void
 constructor::subCollect()
 {
-	request = tools::misc::join(collectedData.subQueries, sqlQStArr[collectedData.qType - 1]);
+	request = tools::misc::join(collectedData.subQueries, sqlQStArr[collectedData.type - 1]);
 }
 
 //-------------------------------------------------------------------
@@ -410,7 +386,7 @@ constructor::queryCollect()
 	bool additionalActions = true;
 	bool selectAction = false;
 
-	switch (collectedData.qType) {
+	switch (collectedData.type) {
 		case ACCUMULATOR_REQUEST_SELECT:
 
 			selectCollect();
@@ -434,13 +410,6 @@ constructor::queryCollect()
 		case ACCUMULATOR_REQUEST_DELETE:
 
 			delCollect();
-
-			break;
-
-		case ACCUMULATOR_REQUEST_INSERT_SELECT:
-
-			insertSelectCollect();
-			selectAction = true;
 
 			break;
 
@@ -473,7 +442,7 @@ constructor::queryCollect()
 	}
 
 	if (additionalActions) {
-		if (selectAction && isSetFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_JOIN))
+		if (selectAction && isSetFlag(collectedData.additional, 1 << ACCUMULATOR_ADDREQUEST_JOIN))
 			joinCollect();
 		additionalCollect(ACCUMULATOR_ADDREQUEST_AS, collectedData.where);
 		additionalCollect(ACCUMULATOR_ADDREQUEST_WHERE, collectedData.where);

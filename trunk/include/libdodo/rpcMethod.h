@@ -70,24 +70,24 @@ namespace dodo {
 			/**
 			 * destructor
 			 */
-			virtual ~method();
+			~method();
 
 			/**
 			 * set method name
 			 * @param name defines method name
 			 */
-			virtual void setName(const dodoString &name);
+			void setName(const dodoString &name);
 
 			/**
 			 * clear arguments information
 			 */
-			virtual void clear();
+			void clear();
 
 			/**
 			 * add argument
 			 * @param argument defines method argument
 			 */
-			virtual void addArgument(const value &argument);
+			void addArgument(const value &argument);
 
 		  private:
 

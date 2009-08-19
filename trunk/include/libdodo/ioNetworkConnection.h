@@ -113,13 +113,13 @@ namespace dodo {
 				 * @param option defines option that will be applied to the socket[see connectionOptionEnum]
 				 * @param flag defines state of option
 				 */
-				virtual void setOption(short option,
+				void setOption(short option,
 									   bool  flag);
 
 				/**
 				 * @return true if socket option is set[see connectionOptionEnum]
 				 */
-				virtual bool isSetOption(int option) const;
+				bool isSetOption(int option) const;
 
 				/**
 				 * set linger option
@@ -127,63 +127,63 @@ namespace dodo {
 				 * @param seconds how long to wait
 				 * @note for CONNECTION_LINGEROPTION_WAIT_CLOSE only
 				 */
-				virtual void setLingerOption(short option,
+				void setLingerOption(short option,
 											 int   seconds = 1);
 
 				/**
 				 * @return linger option that was set[see connectionLingerOptionEnum]
 				 */
-				virtual short getLingerOption() const;
+				short getLingerOption() const;
 
 				/**
 				 * @return amount of seconds to wait
 				 * @note for CONNECTION_LINGEROPTION_WAIT_CLOSE only
 				 */
-				virtual int getLingerPeriod() const;
+				int getLingerPeriod() const;
 
 				/**
 				 * set input buffer size
 				 * @param bytes defines size of the buffer in bytes
 				 */
-				virtual void setInBufferSize(unsigned long bytes);
+				void setInBufferSize(unsigned long bytes);
 
 				/**
 				 * set output buffer size
 				 * @param bytes defines size of the buffer in bytes
 				 */
-				virtual void setOutBufferSize(unsigned long bytes);
+				void setOutBufferSize(unsigned long bytes);
 
 				/**
 				 * @return input buffer size in bytes
 				 */
-				virtual unsigned long getInBufferSize() const;
+				unsigned long getInBufferSize() const;
 
 				/**
 				 * @return output buffer size in bytes
 				 */
-				virtual unsigned long getOutBufferSize() const;
+				unsigned long getOutBufferSize() const;
 
 				/**
 				 * set input timeout value of socket
 				 * @param microseconds defines amount of time of timeout
 				 */
-				virtual void setInTimeout(unsigned long microseconds);
+				void setInTimeout(unsigned long microseconds);
 
 				/**
 				 * set output timeout value of socket
 				 * @param microseconds defines amount of time of timeout
 				 */
-				virtual void setOutTimeout(unsigned long microseconds);
+				void setOutTimeout(unsigned long microseconds);
 
 				/**
 				 * @return input timeout value
 				 */
-				virtual unsigned long getInTimeout() const;
+				unsigned long getInTimeout() const;
 
 				/**
 				 * @return output timeout value
 				 */
-				virtual unsigned long getOutTimeout() const;
+				unsigned long getOutTimeout() const;
 
 				/**
 				 * @return true if socked is blocked
@@ -202,7 +202,7 @@ namespace dodo {
 				 * close socket connection
 				 * @param socket defines socket descriptor
 				 */
-				virtual void _close(int socket);
+				void _close(int socket);
 
 				int socketOpts;                 ///< socket options
 

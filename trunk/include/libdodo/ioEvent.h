@@ -67,19 +67,19 @@ namespace dodo {
 			/**
 			 * destructor
 			 */
-			virtual ~event();
+			~event();
 
 			/**
 			 * @return identificator of stream pair
 			 * @param fl defines a stream[file, stdio, exchange, ...]
 			 */
-			virtual int addChannel(const eventInfo &fl);
+			int addChannel(const eventInfo &fl);
 
 			/**
 			 * delete stream pair from watchers
 			 * @param pos defines identificator of stream pair
 			 */
-			virtual void delChannel(int pos);
+			void delChannel(int pos);
 
 			/**
 			 * @return true if io* is readable
@@ -87,7 +87,7 @@ namespace dodo {
 			 * @param timeout defines amount of time to wait for result[in milliseconds]
 			 * @note if timeout is negative - infinit timeout
 			 */
-			virtual bool isReadable(int pos,
+			bool isReadable(int pos,
 									int timeout = 100) const;
 
 			/**
@@ -96,7 +96,7 @@ namespace dodo {
 			 * @param timeout defines amount of time to wait for result[in milliseconds]
 			 * @note if timeout is negative - infinit timeout
 			 */
-			virtual dodoArray<bool> isReadable(const dodoArray<int> &pos,
+			dodoArray<bool> isReadable(const dodoArray<int> &pos,
 											   int                  timeout = 100) const;
 
 			/**
@@ -105,7 +105,7 @@ namespace dodo {
 			 * @param timeout defines amount of time to wait for result[in milliseconds]
 			 * @note if timeout is negative - infinit timeout
 			 */
-			virtual bool isWritable(int pos,
+			bool isWritable(int pos,
 									int timeout = 100) const;
 
 			/**
@@ -114,7 +114,7 @@ namespace dodo {
 			 * @param timeout defines amount of time to wait for result[in milliseconds]
 			 * @note if timeout is negative - infinit timeout
 			 */
-			virtual dodoArray<bool> isWritable(const dodoArray<int> &pos,
+			dodoArray<bool> isWritable(const dodoArray<int> &pos,
 											   int                  timeout = 100) const;
 
 		  protected:

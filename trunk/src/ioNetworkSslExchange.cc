@@ -48,19 +48,18 @@
 
 using namespace dodo::io::network::ssl;
 
-__initialAccept__::__initialAccept__() : socket(-1),
+__initialAccept__::__initialAccept__() : network::__initialAccept__(),
 										 handle(new io::ssl::__sslConnection__)
 {
 }
 
 //-------------------------------------------------------------------
 
-__initialAccept__::__initialAccept__(__initialAccept__ &init) : socket(init.socket),
+__initialAccept__::__initialAccept__(__initialAccept__ &init) : network::__initialAccept__(init),
 																handle(new io::ssl::__sslConnection__)
 {
 	handle->handle = init.handle->handle;
 
-	init.socket = -1;
 	init.handle = NULL;
 }
 

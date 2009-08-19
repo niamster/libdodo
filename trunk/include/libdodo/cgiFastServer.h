@@ -46,6 +46,14 @@ namespace dodo {
 			 * @brief provides fast CGI functionality
 			 */
 			class server : public cgi::server {
+			  private:
+
+				/**
+				 * copy constructor
+				 * @note to prevent copying
+				 */
+				server(server &);
+
 			  public:
 
 				/**
@@ -74,15 +82,7 @@ namespace dodo {
 				/**
 				 * @return true if called as a fast CGI
 				 */
-				virtual bool isFastCgi();
-
-			  private:
-
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				server(server &);
+				bool isFastCgi();
 
 			  private:
 

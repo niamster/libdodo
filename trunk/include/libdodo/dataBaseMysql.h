@@ -92,7 +92,7 @@ namespace dodo {
 				 *  CLIENT_COMPRESS         Use compression protocol
 				 *	CLIENT_MULTI_STATEMENTS Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
 				 */
-				virtual void connectSettings(unsigned long             type,
+				void connectSettings(unsigned long             type,
 											 const __mysqlSslOptions__ &options = __mysqlSslOptions__());
 
 				/**
@@ -159,18 +159,18 @@ namespace dodo {
 				 * set sessions charset
 				 * @param charset defines charset
 				 */
-				virtual void setCharset(const dodoString &charset);
+				void setCharset(const dodoString &charset);
 
 				/**
 				 * @return current session charset
 				 */
-				virtual dodoString getCharset() const;
+				dodoString getCharset() const;
 
 				/**
 				 * set connection timeout
 				 * @param time defines connection timeout in seconds
 				 */
-				virtual void setConnectTimeout(unsigned int time);
+				void setConnectTimeout(unsigned int time);
 
 			  private:
 

@@ -261,7 +261,7 @@ namespace dodo {
 				 * @return true if process is running
 				 * @param position defines process identificator
 				 */
-				virtual bool _isRunning(dodoList<__process__ *>::iterator &position) const;
+				bool _isRunning(dodoList<__process__ *>::iterator &position) const;
 
 				/**
 				 * search processes by identificator
@@ -269,7 +269,7 @@ namespace dodo {
 				 * @param position defines process identificator
 				 * @note this sets internal class parameter 'current' to found process
 				 */
-				virtual bool getProcess(unsigned long position) const;
+				bool getProcess(unsigned long position) const;
 
 				unsigned long processNum;                           ///< number of registered processes
 

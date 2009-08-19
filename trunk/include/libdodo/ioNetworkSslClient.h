@@ -89,12 +89,12 @@ namespace dodo {
 					 * set certificates information
 					 * @param certs defines certificates information
 					 */
-					virtual void setSertificates(const io::ssl::__certificates__ &certs);
+					void setSertificates(const io::ssl::__certificates__ &certs);
 
 					/**
 					 * remove certificates information
 					 */
-					virtual void removeSertificates();
+					void removeSertificates();
 
 					/**
 					 * connect from specific address
@@ -106,7 +106,7 @@ namespace dodo {
 					virtual void connectFrom(const dodoString &local,
 											 const dodoString &host,
 											 int              port,
-											 exchange         &exchange);
+											 network::exchange         &exchange);
 
 					/**
 					 * connect
@@ -116,7 +116,7 @@ namespace dodo {
 					 */
 					virtual void connect(const dodoString &host,
 										 int              port,
-										 exchange         &exchange);
+										 network::exchange         &exchange);
 
 					/**
 					 * connect
@@ -124,19 +124,19 @@ namespace dodo {
 					 * @param exchange defines an oject that will perform I/O operations
 					 */
 					virtual void connect(const dodoString &path,
-										 exchange         &exchange);
+										 network::exchange         &exchange);
 
 				  protected:
 
 					/**
 					 * initialize SSL objects
 					 */
-					virtual void initSsl();
+					void initSsl();
 
 					/**
 					 * establish SSL connection
 					 */
-					virtual void connectSsl();
+					void connectSsl();
 
 					io::ssl::__sslConnection__ *handle; ///< ssl connection handle
 					io::ssl::__sslContext__ *ctx;       ///< ssl connection context

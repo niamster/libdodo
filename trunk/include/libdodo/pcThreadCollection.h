@@ -284,7 +284,7 @@ namespace dodo {
 				 * @return true if thread is running
 				 * @param position indicates for what thread to set limit
 				 */
-				virtual bool _isRunning(dodoList<__thread__ *>::iterator &position) const;
+				bool _isRunning(dodoList<__thread__ *>::iterator &position) const;
 
 				/**
 				 * search threads by identificator
@@ -292,7 +292,7 @@ namespace dodo {
 				 * @param position defines thread identificator
 				 * @note this sets internal class parameter 'current' to found thread
 				 */
-				virtual bool getThread(unsigned long position) const;
+				bool getThread(unsigned long position) const;
 
 				mutable dodoList<__thread__ *> threads;             ///< identificators of threads
 

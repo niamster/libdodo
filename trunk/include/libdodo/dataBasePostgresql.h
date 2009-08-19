@@ -136,12 +136,12 @@ namespace dodo {
 				 * set sessions charset
 				 * @param charset defines charset
 				 */
-				virtual void setCharset(const dodoString &charset);
+				void setCharset(const dodoString &charset);
 
 				/**
 				 * @return current session charset
 				 */
-				virtual dodoString getCharset() const;
+				dodoString getCharset() const;
 
 			  protected:
 

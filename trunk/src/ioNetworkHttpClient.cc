@@ -303,7 +303,7 @@ client::GET() const
 
 #ifdef OPENSSL_EXT
 		else {
-			net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
+			net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *ex);
 			data.append("CONNECT ");
 			data.append(urlComponents.host);
 			data.append(":");
@@ -376,12 +376,12 @@ client::GET() const
 			else
 				((ssl::client *)net)->initSsl();
 
-			((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
+			net->socket = ex->socket;
 			((ssl::client *)net)->connectSsl();
 
 			((ssl::exchange *)ex)->handle->handle = ((ssl::client *)net)->handle->handle;
 
-			((ssl::client *)net)->socket = -1;
+			net->socket = -1;
 			((ssl::client *)net)->handle->handle = NULL;
 		}
 #endif
@@ -402,7 +402,7 @@ client::GET() const
 					if (certsSet)
 						((ssl::client *)net)->setSertificates(certs);
 
-					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
+					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
 					ex->setInBufferSize(512);
 					ex->inSize = 512;
 				}
@@ -821,12 +821,12 @@ client::POST(const dodoString &rdata,
 			else
 				((ssl::client *)net)->initSsl();
 
-			((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
+			net->socket = ex->socket;
 			((ssl::client *)net)->connectSsl();
 
 			((ssl::exchange *)ex)->handle->handle = ((ssl::client *)net)->handle->handle;
 
-			((ssl::client *)net)->socket = -1;
+			net->socket = -1;
 			((ssl::client *)net)->handle->handle = NULL;
 		}
 #endif
@@ -847,7 +847,7 @@ client::POST(const dodoString &rdata,
 					if (certsSet)
 						((ssl::client *)net)->setSertificates(certs);
 
-					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
+					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
 					ex->setInBufferSize(512);
 					ex->inSize = 512;
 				}

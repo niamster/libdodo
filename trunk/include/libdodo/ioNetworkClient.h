@@ -150,7 +150,7 @@ namespace dodo {
 				/**
 				 * restore options on connect/bind
 				 */
-				virtual void restoreOptions();
+				void restoreOptions();
 
 				/**
 				 * create socket

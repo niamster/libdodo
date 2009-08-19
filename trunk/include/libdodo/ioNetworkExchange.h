@@ -40,6 +40,9 @@
 namespace dodo {
 	namespace io {
 		namespace network {
+			namespace ssl {
+				class server;
+			};
 			/**
 			 * @enum exchangeOperationTypeEnum defines type of operation for hook
 			 */
@@ -55,6 +58,7 @@ namespace dodo {
 				friend class exchange;
 				friend class client;
 				friend class server;
+				friend class ssl::server;
 
 			  public:
 
@@ -69,7 +73,12 @@ namespace dodo {
 				 */
 				__initialAccept__(__initialAccept__ &init);
 
-			  private:
+				/**
+				 * destructor
+				 */
+				virtual ~__initialAccept__();
+
+			  protected:
 
 				int socket;             ///< socket
 
@@ -147,9 +156,9 @@ namespace dodo {
 				 * @param blocked defines the connection block status
 				 * @param blockInherited defines block flag inheritance
 				 */
-				virtual void init(int  socket,
-								  bool blocked,
-								  bool blockInherited);
+				void init(int  socket,
+						  bool blocked,
+						  bool blockInherited);
 
 				/**
 				 * flush output

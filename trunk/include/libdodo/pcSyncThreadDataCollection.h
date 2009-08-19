@@ -108,7 +108,7 @@ namespace dodo {
 						 * @param position describes defines shared data identificator
 						 * @note this sets internal class parameter 'current' to found shared data
 						 */
-						virtual bool getShare(unsigned long position);
+						bool getShare(unsigned long position);
 
 						dodoList<pc::sync::data::__info__> shares;              ///< identificators of shared data
 

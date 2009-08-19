@@ -41,7 +41,7 @@ namespace dodo {
 		class eventInfo {
 			friend class event;
 
-		  public:
+		  protected:
 
 			/**
 			 * destructor
