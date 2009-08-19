@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << ex.getCallStack() << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;
