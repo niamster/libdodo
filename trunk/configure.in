@@ -284,7 +284,14 @@ then
 	then
 		MOD_BFD_DIR=/usr
 	fi
-	BFD_SO=$(ldconfig -p | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
+	case "$OS" in
+		FreeBSD)
+			BFD_SO=$(ldconfig -r | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
+			;;
+		Linux)
+			BFD_SO=$(ldconfig -p | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
+			;;
+	esac
 	CPPFLAGS="$CPPFLAGS -I$MOD_BFD_DIR/include"
 	LDFLAGS="$LDFLAGS -L$MOD_BFD_DIR/lib -l$BFD_SO"
 	AC_CHECK_LIB([$BFD_SO], [bfd_fopen], [], AC_MSG_ERROR(bfd lib was not found))
