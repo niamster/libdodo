@@ -103,7 +103,6 @@ library::close()
 	if (handle != NULL)
 		if (dlclose(handle) != 0)
 			throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_CLOSE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-
 #endif
 }
 
@@ -119,7 +118,7 @@ library::get(const dodoString &name)
 	if (func == NULL)
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_GET, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	return NULL;
+	return func;
 }
 
 //-------------------------------------------------------------------
@@ -134,7 +133,7 @@ library::operator[](const dodoString &name)
 	if (func == NULL)
 		throw exception::basic(exception::ERRMODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	return NULL;
+	return func;
 }
 
 //-------------------------------------------------------------------
