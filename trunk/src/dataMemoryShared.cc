@@ -223,7 +223,7 @@ void
 shared::remove(int a_key)
 {
 #ifdef XSI_IPC
-	int shm = shmget(a_key, 0, O_RDWR);
+	int shm = shmget(a_key, 0, S_IRUSR | S_IWUSR);
 	if (shm == -1)
 		throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
@@ -257,11 +257,11 @@ shared::map(unsigned long a_shSize) const
 
 #ifdef XSI_IPC
 	if (a_shSize == 0) {
-		shm = shmget(key->key, 0, O_RDWR);
+		shm = shmget(key->key, 0, S_IRUSR | S_IWUSR);
 		if (shm == -1)
 			throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	} else {
-		shm = shmget(key->key, a_shSize, IPC_CREAT | O_RDWR);
+		shm = shmget(key->key, a_shSize, IPC_CREAT | S_IRUSR | S_IWUSR);
 		if (shm == -1)
 			throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_MAP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
@@ -329,7 +329,7 @@ shared::size() const
 {
 #ifdef XSI_IPC
 	if (shm == -1) {
-		shm = shmget(key->key, 0, O_RDWR);
+		shm = shmget(key->key, 0, S_IRUSR | S_IWUSR);
 		if (shm == -1)
 			throw exception::basic(exception::ERRMODULE_DATAMEMORYSHARED, SHAREDEX_SIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}

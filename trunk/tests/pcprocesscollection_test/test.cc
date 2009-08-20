@@ -144,6 +144,7 @@ int main(int argc, char **argv)
 	try
 	{
 		dodo::data::memory::shared::remove(shKey);
+		dg1.remove(sKey);
 	}
 	catch (dodo::exception::basic ex)
 	{
