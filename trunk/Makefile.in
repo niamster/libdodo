@@ -19,12 +19,13 @@ CFLAGS+=@CFLAGS@ @DEFS@
 ###########################################################
 
 OBJECTS:=@OBJECTS@
+DEPS:=@DEPS@
 
 ###########################################################
 
 VPATH:=src
 
-all: @PACKAGE_NAME@
+all: deps @PACKAGE_NAME@
 dodo: all
 build: all
 
@@ -38,9 +39,14 @@ build: all
 	@echo ""
 	@echo "Now you can run 'make install'."
 
-.cc.o:
+.cc.o: include/libdodo/directives.runtime.h
 	@echo "-- Compiling: $<"
 	@$(CXX) $(CFLAGS) $(CPPFLAGS) -fPIC -c $<
+
+deps: $(DEPS)
+%.d: %.cc
+	@$(CXX) -MM $(CFLAGS) $(CPPFLAGS) -o $@ $<
+-include $(DEPS:.cc=.d)
 
 install: @PACKAGE_NAME@
 	@echo "" > install_manifest.txt

@@ -642,6 +642,7 @@ LIBOBJS
 CXXCPP
 DEBUG
 TESTS
+DEPS
 OBJECTS
 TAGS
 INSTALL_DATA
@@ -5342,6 +5343,8 @@ fi
 
 
 OBJECTS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/o} "; done)
+
+DEPS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/d} "; done)
 
 
 TESTS=$(for i in tests/*; do test -d $i && echo -n "${i#tests/} "; done)
