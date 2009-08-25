@@ -19,4 +19,4 @@ outgoing.notify_pull = if test "$HG_SOURCE" = "serve"; then for i in $(cat <path
 
 changegroup.mirror = for i in $(cat <path to list with mirrors>); do hg push -f $i; done
 
-incoming.trac = /usr/bin/python /var/hg/libdodo/.hg/trac-post-commit-hook -p /var/trac/libdodo -r '{rev}'; /bin/true
+incoming.trac = /usr/bin/python /var/hg/libdodo/.hg/trac-post-commit-hook -p /var/trac/libdodo -r $HG_NODE; /bin/true
