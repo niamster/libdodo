@@ -34,7 +34,7 @@
 #include <libdodo/ioBlockChannel.h>
 #include <libdodo/ioEventManager.h>
 #include <libdodo/ioEventManagerEx.h>
-#include <libdodo/ioEventInfo.h>
+#include <libdodo/ioEventDescriptor.h>
 #include <libdodo/ioFileFifo.h>
 #include <libdodo/ioFileFifoEx.h>
 #include <libdodo/ioFileRegular.h>
