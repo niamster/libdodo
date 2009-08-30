@@ -1,7 +1,7 @@
 /***************************************************************************
- *            pcProcessCollectionEx.h
+ *            pcJobManager.cc
  *
- *  Tue Feb 27 08:42:14 2007
+ *  Sun Oct  30 13:24:19 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,48 +27,14 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCPROCESSCOLLECTIONEX_H_
-#define _PCPROCESSCOLLECTIONEX_H_ 1
-
 #include <libdodo/directives.h>
 
-#include <libdodo/exceptionBasic.h>
+#include <libdodo/pcJobManager.h>
 
-namespace dodo {
-	namespace pc {
-		namespace process {
-			/**
-			 * libdodo defined errors
-			 */
-			enum collectionExR {
-				COLLECTIONEX_ISALREADYRUNNING,
-				COLLECTIONEX_NOTFOUND,
-			};
+using namespace dodo::pc::job;
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
-#define PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR "Process is currently running"
-#define PCPROCESSCOLLECTIONEX_NOTFOUND_STR         "Process not found"
+manager::~manager()
+{
+}
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum collectionFunctionsID {
-				COLLECTIONEX__ISRUNNING,
-				COLLECTIONEX_ADDNRUN,
-				COLLECTIONEX_RUN,
-				COLLECTIONEX_REMOVE,
-				COLLECTIONEX_STOP,
-				COLLECTIONEX_WAIT,
-				COLLECTIONEX_ISRUNNING,
-#ifdef DL_EXT
-				COLLECTIONEX_MODULE,
-				COLLECTIONEX_ADD,
-#endif
-			};
-		};
-	};
-};
-#endif
-
+//-------------------------------------------------------------------

@@ -43,7 +43,7 @@ namespace dodo {
 		};
 
 		namespace thread {
-			class collection;
+			class manager;
 		};
 	};
 
@@ -53,7 +53,7 @@ namespace dodo {
 		 * @brief provides os operations
 		 */
 		class os {
-			friend class pc::thread::collection;
+			friend class pc::thread::manager;
 
 		  public:
 

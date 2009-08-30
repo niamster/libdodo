@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcProcessCollection.cc
+ *            pcProcessManager.cc
  *
  *  Tue Feb 27 08:47:16 2007
  *  Copyright  2007  Ni@m
@@ -40,7 +40,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include <libdodo/pcJobCollection.h>
+#include <libdodo/pcJobManager.h>
 
 namespace dodo {
 	namespace pc {
@@ -62,7 +62,7 @@ namespace dodo {
 				int           status;           ///< process exit status
 				unsigned long position;         ///< identificator
 				job::routine  func;             ///< function to execute
-				short         action;           ///< action on object destruction[@see job::collection::onDestructionEnum]
+				short         action;           ///< action on object destruction[@see job::manager::onDestructionEnum]
 #ifdef DL_EXT
 				void          *handle;          ///< handle to library
 #endif
@@ -71,10 +71,10 @@ namespace dodo {
 	};
 };
 
-#include <libdodo/pcProcessCollection.h>
+#include <libdodo/pcProcessManager.h>
 #include <libdodo/types.h>
-#include <libdodo/pcJobCollection.h>
-#include <libdodo/pcProcessCollectionEx.h>
+#include <libdodo/pcJobManager.h>
+#include <libdodo/pcProcessManagerEx.h>
 
 using namespace dodo::pc::process;
 
@@ -86,19 +86,19 @@ __process__::__process__() : isRunning(false),
 
 //-------------------------------------------------------------------
 
-collection::collection(collection &sp)
+manager::manager(manager &sp)
 {
 }
 
 //-------------------------------------------------------------------
 
-collection::collection() : processNum(0)
+manager::manager() : processNum(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-collection::~collection()
+manager::~manager()
 {
 	dodoList<__process__ *>::iterator i(processes.begin()), j(processes.end());
 
@@ -151,7 +151,7 @@ collection::~collection()
 //-------------------------------------------------------------------
 
 unsigned long
-collection::add(job::routine func,
+manager::add(job::routine func,
 				void         *data,
 				short        action)
 {
@@ -174,7 +174,7 @@ collection::add(job::routine func,
 //-------------------------------------------------------------------
 
 unsigned long
-collection::addNRun(job::routine  func,
+manager::addNRun(job::routine  func,
 					void          *data,
 					short         action)
 {
@@ -197,7 +197,7 @@ collection::addNRun(job::routine  func,
 		_exit(func(data));
 	else {
 		if (pid == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			process->pid = pid;
 	}
@@ -210,15 +210,15 @@ collection::addNRun(job::routine  func,
 //-------------------------------------------------------------------
 
 void
-collection::remove(unsigned long position,
+manager::remove(unsigned long position,
 				bool          force)
 {
 	if (getProcess(position)) {
 		if (_isRunning(current)) {
 			if (!force)
-				throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCPROCESSMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else if (kill((*current)->pid, 2) == -1)
-				throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		}
 
@@ -232,7 +232,7 @@ collection::remove(unsigned long position,
 
 #ifndef DL_FAST
 			if (dlclose((*current)->handle) != 0)
-				throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 		}
@@ -242,13 +242,13 @@ collection::remove(unsigned long position,
 
 		processes.erase(current);
 	} else
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 bool
-collection::getProcess(unsigned long position) const
+manager::getProcess(unsigned long position) const
 {
 	dodoList<__process__ *>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i) {
@@ -265,7 +265,7 @@ collection::getProcess(unsigned long position) const
 //-------------------------------------------------------------------
 
 bool
-collection::_isRunning(dodoList<__process__ *>::iterator &position) const
+manager::_isRunning(dodoList<__process__ *>::iterator &position) const
 {
 	if (!(*position)->isRunning)
 		return false;
@@ -278,7 +278,7 @@ collection::_isRunning(dodoList<__process__ *>::iterator &position) const
 			return false;
 		}
 
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	return true;
@@ -287,12 +287,12 @@ collection::_isRunning(dodoList<__process__ *>::iterator &position) const
 //-------------------------------------------------------------------
 
 void
-collection::run(unsigned long position,
+manager::run(unsigned long position,
 				bool          force)
 {
 	if (getProcess(position)) {
 		if (_isRunning(current) && !force)
-			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCPROCESSMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 		pid_t pid = fork();
 
@@ -300,34 +300,34 @@ collection::run(unsigned long position,
 			_exit((*current)->func((*current)->data));
 		else {
 			if (pid == -1)
-				throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			else
 				(*current)->pid = pid;
 		}
 
 		(*current)->isRunning = true;
 	} else
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-collection::stop(unsigned long position)
+manager::stop(unsigned long position)
 {
 	if (getProcess(position)) {
 		if (kill((*current)->pid, 9) == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		(*current)->isRunning = false;
 	} else
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-collection::stop()
+manager::stop()
 {
 	dodoList<__process__ *>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i) {
@@ -335,7 +335,7 @@ collection::stop()
 			continue;
 
 		if (kill((*i)->pid, 9) == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		(*i)->isRunning = false;
 	}
@@ -344,7 +344,7 @@ collection::stop()
 //-------------------------------------------------------------------
 
 int
-collection::wait(unsigned long position)
+manager::wait(unsigned long position)
 {
 	if (getProcess(position)) {
 		if ((*current)->joined)
@@ -353,7 +353,7 @@ collection::wait(unsigned long position)
 		int status;
 
 		if (waitpid((*current)->pid, &status, 0) == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (WIFEXITED(status))
 			(*current)->status = WEXITSTATUS(status);
@@ -362,13 +362,13 @@ collection::wait(unsigned long position)
 
 		return (*current)->status;
 	} else
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-collection::wait()
+manager::wait()
 {
 	int status;
 
@@ -378,7 +378,7 @@ collection::wait()
 			continue;
 
 		if (waitpid((*i)->pid, &status, 0) == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (WIFEXITED(status))
 			(*i)->status = WEXITSTATUS(status);
@@ -390,18 +390,18 @@ collection::wait()
 //-------------------------------------------------------------------
 
 bool
-collection::isRunning(unsigned long position) const
+manager::isRunning(unsigned long position) const
 {
 	if (getProcess(position))
 		return _isRunning(current);
 	else
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ISRUNNING, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-collection::running() const
+manager::running() const
 {
 	unsigned long amount(0);
 
@@ -417,7 +417,7 @@ collection::running() const
 
 #ifdef DL_EXT
 __module__
-collection::module(const dodoString &module,
+manager::module(const dodoString &module,
 						  void             *toInit)
 {
 #ifdef DL_FAST
@@ -426,17 +426,17 @@ collection::module(const dodoString &module,
 	void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initModule init = (initModule)dlsym(handle, "initPcProcessModule");
 	if (init == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__module__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 
@@ -446,7 +446,7 @@ collection::module(const dodoString &module,
 //-------------------------------------------------------------------
 
 unsigned long
-collection::add(const dodoString &module,
+manager::add(const dodoString &module,
 				void             *data,
 				void             *toInit)
 {
@@ -461,17 +461,17 @@ collection::add(const dodoString &module,
 	process->handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (process->handle == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initModule init = (initModule)dlsym(process->handle, "initPcProcessModule");
 	if (init == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__module__ temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(process->handle, temp.hook);
 	if (in == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	process->action = temp.action;
 	process->func = in;
@@ -485,7 +485,7 @@ collection::add(const dodoString &module,
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>
-collection::jobs()
+manager::jobs()
 {
 	dodoList<unsigned long> ids;
 

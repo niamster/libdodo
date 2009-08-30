@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcThreadCollectionEx.h
+ *            pcThreadManagerEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCTHREADCOLLECTIONEX_H_
-#define _PCTHREADCOLLECTIONEX_H_ 1
+#ifndef _PCTHREADMANAGEREX_H_
+#define _PCTHREADMANAGEREX_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -40,35 +40,35 @@ namespace dodo {
 			/**
 			 * libdodo defined errors
 			 */
-			enum collectionExR {
-				COLLECTIONEX_ISALREADYRUNNING,
-				COLLECTIONEX_NOTFOUND,
-				COLLECTIONEX_ISDETACHED,
+			enum managerExR {
+				MANAGEREX_ISALREADYRUNNING,
+				MANAGEREX_NOTFOUND,
+				MANAGEREX_ISDETACHED,
 			};
 
 			/**
 			 * libdodo defined errors' explanation
 			 */
-#define PCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR    "Thread is currently running"
-#define PCTHREADCOLLECTIONEX_NOTFOUND_STR            "Thread not found"
-#define PCTHREADCOLLECTIONEX_ISDETACHED_STR          "Thread is detached"
+#define PCTHREADMANAGEREX_ISALREADYRUNNING_STR    "Thread is currently running"
+#define PCTHREADMANAGEREX_NOTFOUND_STR            "Thread not found"
+#define PCTHREADMANAGEREX_ISDETACHED_STR          "Thread is detached"
 
 			/**
 			 * ID of function where exception was thrown
 			 */
-			enum collectionFunctionsID {
-				COLLECTIONEX_RUN,
-				COLLECTIONEX_ADDNRUN,
-				COLLECTIONEX_REMOVE,
-				COLLECTIONEX_WAIT,
-				COLLECTIONEX_STOP,
-				COLLECTIONEX_ISRUNNING,
-				COLLECTIONEX_CONSTRUCTOR,
-				COLLECTIONEX__ISRUNNING,
-				COLLECTIONEX_SETSTACKSIZE,
+			enum managerFunctionsID {
+				MANAGEREX_RUN,
+				MANAGEREX_ADDNRUN,
+				MANAGEREX_REMOVE,
+				MANAGEREX_WAIT,
+				MANAGEREX_STOP,
+				MANAGEREX_ISRUNNING,
+				MANAGEREX_CONSTRUCTOR,
+				MANAGEREX__ISRUNNING,
+				MANAGEREX_SETSTACKSIZE,
 #ifdef DL_EXT
-				COLLECTIONEX_MODULE,
-				COLLECTIONEX_ADD,
+				MANAGEREX_MODULE,
+				MANAGEREX_ADD,
 #endif
 			};
 		};

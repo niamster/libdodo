@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcProcessCollection.h
+ *            pcProcessManager.h
  *
  *  Tue Feb 27 08:38:55 2007
  *  Copyright  2007  Ni@m
@@ -27,13 +27,13 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCPROCESSCOLLECTION_H_
-#define _PCPROCESSCOLLECTION_H_ 1
+#ifndef _PCPROCESSMANAGER_H_
+#define _PCPROCESSMANAGER_H_ 1
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/pcJobCollection.h>
+#include <libdodo/pcJobManager.h>
 
 namespace dodo {
 	namespace pc {
@@ -43,13 +43,13 @@ namespace dodo {
 #ifdef DL_EXT
 			/**
 			 * @struct __module__
-			 * @brief defines data that is returned from initPcProcessCollectionModule in the library
+			 * @brief defines data that is returned from initPcProcessManagerModule in the library
 			 */
 			struct __module__ {
 				char          name[64];         ///< name of module
 				char          discription[256]; ///< discription of module
 				char          hook[64];         ///< name of function in module that will be a hook
-				short         action;           ///< action on object destruction, @see job::collection::onDestructionEnum
+				short         action;           ///< action on object destruction, @see job::manager::onDestructionEnum
 			};
 
 			/**
@@ -69,36 +69,36 @@ namespace dodo {
 #endif
 
 			/**
-			 * @class collection
+			 * @class manager
 			 * @brief provides processes management functionality
 			 */
-			class collection : public job::collection {
+			class manager : public job::manager {
 			  private:
 
 				/**
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				collection(collection &);
+				manager(manager &);
 
 			  public:
 
 				/**
 				 * constructor
 				 */
-				collection();
+				manager();
 
 				/**
 				 * destructor
 				 */
-				virtual ~collection();
+				virtual ~manager();
 
 				/**
 				 * add function as a process
 				 * @return process identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if process is running, @see job::collection::onDestructionEnum
+				 * @param action defines action on object destruction if process is running, @see job::manager::onDestructionEnum
 				 * @note func must not call `exit` family call
 				 */
 				virtual unsigned long add(job::routine func,
@@ -110,7 +110,7 @@ namespace dodo {
 				 * @return process identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if process is running, @see job::collection::onDestructionEnum
+				 * @param action defines action on object destruction if process is running, @see job::manager::onDestructionEnum
 				 * @note func must not call `exit` family call
 				 * this will immediately execute the process
 				 */

@@ -1,7 +1,7 @@
 /***************************************************************************
- *            pcJobCollection.cc
+ *            pcProcessManagerEx.h
  *
- *  Sun Oct  30 13:24:19 2007
+ *  Tue Feb 27 08:42:14 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,14 +27,48 @@
  * set shiftwidth=4
  */
 
+#ifndef _PCPROCESSMANAGEREX_H_
+#define _PCPROCESSMANAGEREX_H_ 1
+
 #include <libdodo/directives.h>
 
-#include <libdodo/pcJobCollection.h>
+#include <libdodo/exceptionBasic.h>
 
-using namespace dodo::pc::job;
+namespace dodo {
+	namespace pc {
+		namespace process {
+			/**
+			 * libdodo defined errors
+			 */
+			enum managerExR {
+				MANAGEREX_ISALREADYRUNNING,
+				MANAGEREX_NOTFOUND,
+			};
 
-collection::~collection()
-{
-}
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define PCPROCESSMANAGEREX_ISALREADYRUNNING_STR "Process is currently running"
+#define PCPROCESSMANAGEREX_NOTFOUND_STR         "Process not found"
 
-//-------------------------------------------------------------------
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum managerFunctionsID {
+				MANAGEREX__ISRUNNING,
+				MANAGEREX_ADDNRUN,
+				MANAGEREX_RUN,
+				MANAGEREX_REMOVE,
+				MANAGEREX_STOP,
+				MANAGEREX_WAIT,
+				MANAGEREX_ISRUNNING,
+#ifdef DL_EXT
+				MANAGEREX_MODULE,
+				MANAGEREX_ADD,
+#endif
+			};
+		};
+	};
+};
+#endif
+

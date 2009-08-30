@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcThreadCollection.h
+ *            pcThreadManager.h
  *
  *  Tue Nov 29 23:31:55 2005
  *  Copyright  2005  Ni@m
@@ -27,12 +27,12 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCTHREADCOLLECTION_H_
-#define _PCTHREADCOLLECTION_H_ 1
+#ifndef _PCTHREADMANAGER_H_
+#define _PCTHREADMANAGER_H_ 1
 
 #include <libdodo/directives.h>
 
-#include <libdodo/pcJobCollection.h>
+#include <libdodo/pcJobManager.h>
 #include <libdodo/types.h>
 
 namespace dodo {
@@ -51,7 +51,7 @@ namespace dodo {
 				char          hook[64];         ///< name of function in module that will be a hook
 				bool          detached;         ///< true if thread is detached
 				int           stackSize;        ///< size of stack for thread[in bytes]
-				short         action;           ///< action on object destruction, @see job::collection::onDestructionEnum
+				short         action;           ///< action on object destruction, @see job::manager::onDestructionEnum
 			};
 
 			/**
@@ -71,36 +71,36 @@ namespace dodo {
 #endif
 
 			/**
-			 * @class collection
+			 * @class manager
 			 * @brief provides threads management functionality
 			 */
-			class collection : public job::collection {
+			class manager : public job::manager {
 			  private:
 
 				/**
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				collection(collection &);
+				manager(manager &);
 
 			  public:
 
 				/**
 				 * constructor
 				 */
-				collection();
+				manager();
 
 				/**
 				 * destructor
 				 */
-				virtual ~collection();
+				virtual ~manager();
 
 				/**
 				 * add function to run as a thread
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running, @see job::collection::onDestructionEnum
+				 * @param action defines action on object destruction if thread is running, @see job::manager::onDestructionEnum
 				 */
 				virtual unsigned long add(job::routine func,
 										  void         *data,
@@ -111,7 +111,7 @@ namespace dodo {
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running, @see job::collection::onDestructionEnum
+				 * @param action defines action on object destruction if thread is running, @see job::manager::onDestructionEnum
 				 * @note this will immediately execute the process
 				 */
 				virtual unsigned long addNRun(job::routine  func,
@@ -123,7 +123,7 @@ namespace dodo {
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running, @see job::collection::onDestructionEnum
+				 * @param action defines action on object destruction if thread is running, @see job::manager::onDestructionEnum
 				 * @note this will immediately execute the process
 				 * the thread will be detached
 				 */
@@ -231,7 +231,7 @@ namespace dodo {
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running, @see job::collection::onDestructionEnum
+				 * @param action defines action on object destruction if thread is running, @see job::manager::onDestructionEnum
 				 * @param detached defines whether thread will be detached or not
 				 * @note this will immediately execute the process
 				 */

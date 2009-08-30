@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcJobCollection.h
+ *            pcJobManager.h
  *
  *  Mon Mar 05 13:01:55 2007
  *  Copyright  2007  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCJOBCOLLECTION_H_
-#define _PCJOBCOLLECTION_H_ 1
+#ifndef _PCJOBMANAGER_H_
+#define _PCJOBMANAGER_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -45,10 +45,10 @@ namespace dodo {
 			typedef int (*routine)(void *data);
 
 			/**
-			 * @class collection
+			 * @class manager
 			 * @brief provides interface for jobs management
 			 */
-			class collection {
+			class manager {
 			  public:
 
 				/**
@@ -63,14 +63,14 @@ namespace dodo {
 				/**
 				 * destructor
 				 */
-				virtual ~collection() = 0;
+				virtual ~manager() = 0;
 
 				/**
 				 * add function as a job
 				 * @return job identificator
 				 * @param func defines function to execute
 				 * @param data defines job data
-				 * @param action defines action on object destruction if process is running, @see job::collection::onDestructionEnum
+				 * @param action defines action on object destruction if process is running, @see job::manager::onDestructionEnum
 				 */
 				virtual unsigned long add(routine func,
 										  void    *data,
@@ -81,7 +81,7 @@ namespace dodo {
 				 * @return job identificator
 				 * @param func defines function to execute
 				 * @param data defines job data
-				 * @param action defines action on object destruction if process is running, @see job::collection::onDestructionEnum
+				 * @param action defines action on object destruction if process is running, @see job::manager::onDestructionEnum
 				 * @note this will immediately execute the job
 				 */
 				virtual unsigned long addNRun(routine func,
