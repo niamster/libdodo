@@ -164,6 +164,8 @@ namespace dodo {
 			mutable unsigned long size; ///< size of data
 
 			short flags;
+
+			mutable bool nullEnd;		///< true if null is set up in the end
 		};
 	};
 };

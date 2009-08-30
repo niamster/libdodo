@@ -45,7 +45,8 @@ memory::memory(char          *a_data,
 			   short         flags,
 			   short         protection) : block::channel(protection),
 										   size(size),
-										   flags(flags)
+										   flags(flags),
+										   nullEnd(false)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(xexec::OBJECT_IOMEMORY);
@@ -67,7 +68,8 @@ memory::memory(char          *a_data,
 memory::memory(short protection) : block::channel(protection),
 								   data(NULL),
 								   size(0),
-								   flags(FLAGS_NORMAL)
+								   flags(FLAGS_NORMAL),
+								   nullEnd(false)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(xexec::OBJECT_IOMEMORY);
@@ -78,18 +80,24 @@ memory::memory(short protection) : block::channel(protection),
 
 memory::memory(const memory &fd) : block::channel(fd.protection),
 								   size(fd.size),
-								   flags(fd.flags)
+								   flags(fd.flags),
+								   nullEnd(fd.nullEnd)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(xexec::OBJECT_IOFILEREGULAR);
 #endif
 
 	if (flags & FLAGS_NORMAL) {
-		data = new char[size];
-		memcpy(data, fd.data, size);
-	} else if (flags & FLAGS_EXTERN)
+		if (nullEnd) {
+			data = new char[size + 1];
+			memcpy(data, fd.data, size + 1);
+		} else {
+			data = new char[size + 1];
+			memcpy(data, fd.data, size + 1);
+		}
+	} else if (flags & FLAGS_EXTERN) {
 		data = fd.data;
-
+	}
 
 	block = fd.block;
 	append = fd.append;
@@ -103,7 +111,8 @@ memory::memory(const memory &fd) : block::channel(fd.protection),
 memory::memory(const dodoString &buffer,
 			   short            protection) : block::channel(protection),
 											  size(buffer.size()),
-											  flags(FLAGS_NORMAL)
+											  flags(FLAGS_NORMAL),
+											  nullEnd(false)
 {
 #ifndef IO_WO_XEXEC
 	collectedData.setExecObject(xexec::OBJECT_IOFILEREGULAR);
@@ -159,8 +168,7 @@ memory::clear()
 
 //-------------------------------------------------------------------
 
-memory::operator const char
-*()
+memory::operator const char *()
 {
 	return data;
 }
@@ -334,6 +342,7 @@ memory::_writeString(const char *const a_data) const
 	newData[size] = '\0';
 	delete [] data;
 	data = newData;
+	nullEnd = true;
 }
 
 //-------------------------------------------------------------------
