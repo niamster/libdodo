@@ -75,15 +75,14 @@ namespace dodo {
 					node process(const io::channel &io);
 
 					/**
-					 * @return string that contains serialized JSON object
 					 * @param root defines root of unserialized JSON object
+					 * @param io defines output destination for serialized JSON object
 					 */
 					void fromMap(const dodoStringMap &root,
 										 const io::channel   &io);
 
 					/**
 					 * @param io defines IO source that contains serialized JSON object
-					 * @param io defines output destination for serialized JSON object
 					 */
 					dodoStringMap toMap(const io::channel &io);
 

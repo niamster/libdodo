@@ -88,7 +88,7 @@ namespace dodo {
 			 * @return compressed buffer
 			 * @param buffer defines data to compress
 			 * @param level defines compression level[1..9]
-			 * @param type defines compression strategy[see codeZlibCompressionStrategyEnum]
+			 * @param type defines compression strategy, @see code::zlibCompressionStrategyEnum
 			 */
 			static dodoString zCompress(const dodoString &buffer,
 										unsigned short   level = 6,
@@ -123,13 +123,13 @@ namespace dodo {
 
 			/**
 			 * @return numeric converted from HEX
-			 * @param first defines numeric in HEX
+			 * @param string defines numeric in HEX
 			 */
 			static unsigned long hexToLong(const dodoString &string);
 
 			/**
 			 * @return numeric converted to HEX
-			 * @param first defines numeric
+			 * @param numeric defines numeric
 			 */
 			static dodoString longToHex(unsigned long numeric);
 

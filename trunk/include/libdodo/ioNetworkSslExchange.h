@@ -99,14 +99,14 @@ namespace dodo {
 
 					/**
 					 * constructor
-					 * @param protection defines type of IO protection[see channelProtectionEnum]
+					 * @param protection defines type of IO protection, @see io::channel::protectionEnum
 					 */
 					exchange(short protection = channel::PROTECTION_PROCESS);
 
 					/**
 					 * constructor
 					 * @param init is initial data[got from the ::accept method]
-					 * @param protection defines type of IO protection[see channelProtectionEnum]
+					 * @param protection defines type of IO protection, @see io::channel::protectionEnum
 					 * @note the object that has inited the object of current instance can be used for another connections
 					 */
 					exchange(__init__ &init,
@@ -134,7 +134,7 @@ namespace dodo {
 					/**
 					 * close socket connection
 					 * @param socket defines socket descriptor
-					 * @param ssl defines SSL handle
+					 * @param handle defines SSL handle
 					 */
 					void _close(int                        socket,
 										io::ssl::__connection__ *handle);

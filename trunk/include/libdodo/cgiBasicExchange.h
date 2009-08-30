@@ -57,7 +57,7 @@ namespace dodo {
 
 				/**
 				 * constructor
-				 * @param protection defines type of IO protection[see channelProtectionEnum]
+				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
 				 */
 				exchange(short protection = io::channel::PROTECTION_PROCESS);
 

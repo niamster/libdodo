@@ -156,7 +156,7 @@ namespace dodo {
 				char  name[64];         ///< name of the library
 				char  discription[256]; ///< discription of the library
 				char  hook[64];         ///< name of the function in module that will be as a hook
-				bool modules[MODULE_ENUMSIZE];           ///< for what modules handler should be set[see moduleEnum]
+				bool modules[MODULE_ENUMSIZE];           ///< for what modules handler should be set, @see exception::moduleEnum
 			};
 
 			/**
@@ -176,9 +176,9 @@ namespace dodo {
 #endif
 
 			/**
-			 * @typedef errorHandler
+			 * @typedef handler
 			 * @brief defines type of hook function
-			 * @param module defines module where exception occured[see errorModuleEnum]
+			 * @param module defines module where exception occured, @see exception::moduleEnum
 			 * @param ex defines pointer to basic object with exception information
 			 * @param data defines user data
 			 */
@@ -187,8 +187,8 @@ namespace dodo {
 			/**
 			 * constructor
 			 * @param module defines module where exception has been thrown
-			 * @param function defines function where exception has been thrown[see *Ex.h headers for IDs]
-			 * @param errnoSource defines source of the error code and of the error string[see errnoSourceEnum]
+			 * @param function defines function where exception has been thrown, @see *Ex.h headers for IDs
+			 * @param errnoSource defines source of the error code and of the error string, @see exception::errnoEnum
 			 * @param errNo defines error code
 			 * @param errStr defines error string
 			 * @param line defines line where exception has been thrown
@@ -227,7 +227,7 @@ namespace dodo {
 #endif
 
 			int source;                      ///< module where exception has been thrown
-			int function;                         ///< function where exception has been thrown[see *Ex.h headers for IDs]
+			int function;                         ///< function where exception has been thrown, @see *Ex.h headers for IDs
 			int errnoSource;                    ///< the source of the error code and of the error string
 			int errNo;                      ///< error code
 			dodoString errStr;              ///< error string
@@ -283,7 +283,7 @@ namespace dodo {
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param data decribes data that will be passed to the handler
 			 * @param toInit defines data that will be passed to the init function
-			 * @note module for what to set handler is taken from the library information[see __module__]
+			 * @note module for what to set handler is taken from the library information, @see exception::basic::__module__
 			 */
 			static void setHandler(const dodoString &path,
 										void             *data,

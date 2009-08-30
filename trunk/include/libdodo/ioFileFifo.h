@@ -60,7 +60,7 @@ namespace dodo {
 #endif
 
 				/**
-				 * @enum openModeEnum defines modes to open file
+				 * @enum file::fifo::openModeEnum defines modes to open file
 				 */
 				enum openModeEnum {
 					OPEN_MODE_READ,                 ///< normaly blocks until some other process opens the same FIFO for writing
@@ -70,15 +70,15 @@ namespace dodo {
 
 				/**
 				 * constructor
-				 * @param protection defines type of IO protection[see protectionEnum]
+				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
 				 */
 				fifo(short protection = channel::PROTECTION_PROCESS);
 
 				/**
 				 * constructor
 				 * @param path defines path to the file
-				 * @param mode defines mode to open file[see openModeEnum]
-				 * @param protection defines type of IO protection[see protectionEnum]
+				 * @param mode defines mode to open file, @see file::fifo::openModeEnum
+				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
 				 */
 				fifo(const dodoString &path,
 					 short            mode,
@@ -105,7 +105,7 @@ namespace dodo {
 				/**
 				 * open file
 				 * @param path defines path to the file
-				 * @param mode defines mode to open file[see openModeEnum]
+				 * @param mode defines mode to open file, @see file::fifo::openModeEnum
 				 */
 				virtual void open(const dodoString &path,
 								  short            mode);
@@ -174,7 +174,7 @@ namespace dodo {
 			  private:
 
 				dodoString path;        ///< file path
-				short mode;             ///< file open mode[see openModeEnum]
+				short mode;             ///< file open mode, @see file::fifo::openModeEnum
 
 				__file__ *handle;       ///< file handle
 

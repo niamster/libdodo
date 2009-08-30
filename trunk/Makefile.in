@@ -87,4 +87,4 @@ tags:
 	fi
 
 clean:
-	@rm -rf *.o *.so* *.a*
+	@rm -rf *.o *.so* *.a* *.d

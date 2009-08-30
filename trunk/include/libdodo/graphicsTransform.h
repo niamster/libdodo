@@ -77,7 +77,7 @@ namespace dodo {
 			/**
 			 * rotate transform
 			 * @param image defines image on which perform transformation
-			 * @param angle defines rotation degree[see also transformRotateDirectionAngleEnum]
+			 * @param angle defines rotation degree, @see also transform::rotateDirectionAngleEnum
 			 */
 			static void rotate(image &image,
 							  double angle);

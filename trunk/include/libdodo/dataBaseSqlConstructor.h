@@ -83,7 +83,7 @@ namespace dodo {
 					 * set field type
 					 * @param table defines table for which rules will be applied
 					 * @param field defines field name
-					 * @param type defines field type[see fieldEnum]
+					 * @param type defines field type, @see data::base::sql::fieldEnum
 					 */
 					virtual void setFieldType(const dodoString &table,
 											  const dodoString &field,

@@ -71,7 +71,7 @@ namespace dodo {
 			char  name[64];         ///< name of the library
 			char  discription[256]; ///< discription of the library
 			char  hook[64];         ///< name of function in the library that will be used as hook
-			short type;				///< type of hook[see xexecActionEnum][could me grouped with OR]
+			short type;				///< type of hook, @see xexec::actionEnum, could me grouped with OR
 		};
 
 		/**
@@ -138,13 +138,13 @@ namespace dodo {
 			/**
 			 * constructor
 			 * @param executor defines class that executed hook
-			 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+			 * @param execObject defines type of object that executed a hook, @see xexec::objectEnum
 			 */
 			__collected_data__(xexec *executor,
 								   short execObject);
 
 			/**
-			 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+			 * @param execObject defines type of object that executed a hook, @see xexec::objectEnum
 			 */
 			void setExecObject(short execObject);
 
@@ -157,7 +157,7 @@ namespace dodo {
 		 * @typedef hook
 		 * @brief defines function that will be called as hook
 		 * @param odata defines object data
-		 * @param object defines type of object that called hook[see xexecObjectEnum]
+		 * @param object defines type of object that called hook, @see xexec::objectEnum
 		 * @param udata defines user data
 		 */
 		typedef void (*hook)(__collected_data__ *odata, short object, void *udata);
@@ -175,7 +175,7 @@ namespace dodo {
 		/**
 		 * set function that will be executed before/after the main action call
 		 * @return exec identificator
-		 * @param type defines type of hook[see xexecActionEnum]
+		 * @param type defines type of hook, @see xexec::actionEnum
 		 * @param func defines function that will be called
 		 * @param data defines hook data
 		 */
@@ -286,7 +286,7 @@ namespace dodo {
 
 		dodoList<__item__>::iterator current;    ///< iterator for list[for matched with getXexec method]
 
-		short execObject;                               ///< type of object[see xexecObjectEnum]
+		short execObject;                               ///< type of object, @see xexec::objectEnum
 		__collected_data__ *execObjectData;         ///< object data
 	};
 };

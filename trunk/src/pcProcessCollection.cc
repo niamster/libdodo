@@ -62,7 +62,7 @@ namespace dodo {
 				int           status;           ///< process exit status
 				unsigned long position;         ///< identificator
 				job::routine  func;             ///< function to execute
-				short         action;           ///< action on object destruction[see collectionOnDestructEnum]
+				short         action;           ///< action on object destruction[@see job::collection::onDestructionEnum]
 #ifdef DL_EXT
 				void          *handle;          ///< handle to library
 #endif

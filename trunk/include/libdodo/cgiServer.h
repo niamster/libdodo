@@ -44,7 +44,7 @@ namespace dodo {
 		  public:
 
 			/**
-			 * @typedef serverHandler
+			 * @typedef handler
 			 * @brief defines type of function that will be called on new cgi request
 			 * @param e defines cgi::exchange object for I/O
 			 */

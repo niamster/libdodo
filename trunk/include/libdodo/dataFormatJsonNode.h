@@ -180,7 +180,7 @@ namespace dodo {
 					node operator[](unsigned long key) const;
 
 					/**
-					 * @return type of node[see jsonDataEnum]
+					 * @return type of node, @see json::dataEnum
 					 */
 					short type() const;
 

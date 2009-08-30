@@ -280,13 +280,13 @@ namespace dodo {
 
 			/**
 			 * @return os limits info
-			 * @param type defines type of limits[see osLimitEnum]
+			 * @param type defines type of limits, @see os::limitEnum
 			 */
 			static __limit__ limit(short type);
 
 			/**
 			 * set os limits
-			 * @param type defines type limits[see osLimitEnum]
+			 * @param type defines type limits, @see os::limitEnum
 			 * @param lim defines os limits
 			 */
 			static void setLimit(short            type,
@@ -294,13 +294,13 @@ namespace dodo {
 
 			/**
 			 * @return priority of current process
-			 * @param type defines type of UID[see osIdEnum]
+			 * @param type defines type of UID, @see os::idEnum
 			 */
 			static int priority(short type);
 
 			/**
 			 * set priority of current process
-			 * @param type defines type of UID[see osIdEnum]
+			 * @param type defines type of UID, @see os::idEnum
 			 * @param prio defines priority
 			 */
 			static void setPriority(short type,
@@ -308,13 +308,13 @@ namespace dodo {
 
 			/**
 			 * @return UID of the current process
-			 * @param type defines type of UID[see osIdEnum]
+			 * @param type defines type of UID, @see os::idEnum
 			 */
 			static int UID(short type);
 
 			/**
 			 * set user id of the current process
-			 * @param type defines type of UID[see osIdEnum]
+			 * @param type defines type of UID, @see os::idEnum
 			 * @param uid defines UID
 			 */
 			static void setUID(short type,
@@ -322,13 +322,13 @@ namespace dodo {
 
 			/**
 			 * get group id of the current process
-			 * @param type defines type of GID[see osIdEnum]
+			 * @param type defines type of GID, @see os::idEnum
 			 */
 			static int GID(short type);
 
 			/**
 			 * set group id of the current process
-			 * @param type defines type of GID[see osIdEnum]
+			 * @param type defines type of GID, @see os::idEnum
 			 * @param gid defines group id
 			 */
 			static void setGID(short type,
@@ -425,7 +425,7 @@ namespace dodo {
 
 			/**
 			 * set signal handler
-			 * @param signal defines os signal[see osSignalsEnum]
+			 * @param signal defines os signal, @see os::signalEnum
 			 * @param handler defines handle function
 			 * @param blockSignals defines signals to block during signal handling; -1 to ignore
 			 */
@@ -435,13 +435,13 @@ namespace dodo {
 
 			/**
 			 * @return true if handler is set on signal
-			 * @param signal defines os signal[see osSignalsEnum]
+			 * @param signal defines os signal, @see os::signalEnum
 			 */
 			static bool isSignalHandled(long signal);
 
 			/**
 			 * remove signal handler
-			 * @param signal defines os signal[see osSignalsEnum]
+			 * @param signal defines os signal, @see os::signalEnum
 			 */
 			static void removeSignalHandler(long signal);
 
@@ -466,14 +466,14 @@ namespace dodo {
 			/**
 			 * send signal to process
 			 * @param pid defines PID of the process
-			 * @param signal defines os signal[see osSignalsEnum]
+			 * @param signal defines os signal, @see os::signalEnum
 			 */
 			static void sendSignal(int  pid,
 								   long signal);
 
 			/**
 			 * block or unblock signals
-			 * @param signal defines os signal[see osSignalsEnum]
+			 * @param signal defines os signal, @see os::signalEnum
 			 * @param block defines block condition
 			 */
 			static void blockSignal(long signal,
@@ -500,14 +500,14 @@ namespace dodo {
 												void          *pw);
 
 			/**
-			 * @return os signal number that refers to osSignalsEnum
-			 * @param signal defines signal to convert[see osSignalsEnum]
+			 * @return os signal number that refers to os::signalEnum
+			 * @param signal defines signal to convert, @see os::signalEnum
 			 */
 			static int toRealSignal(long signal);
 
 			/**
-			 * @return signal number that refers to given osSignalsEnum
-			 * @param signal defines signal to convert[see osSignalsEnum]
+			 * @return signal number that refers to given os::signalEnum
+			 * @param signal defines signal to convert, @see os::signalEnum
 			 * @note returns position in the internal structures
 			 */
 			static int toSignalNumber(long signal);

@@ -145,7 +145,7 @@ namespace dodo {
 
 					dodoString nodeValue;                                                           ///< value of the node
 
-					bool CDATA;                                                                 ///< true if node doesn't have contents : `<node />`
+					bool CDATA;                                                                 ///< true if node contains CDATA
 				};
 			};
 		};

@@ -183,7 +183,7 @@ namespace dodo {
 			dodoString mime;                            ///< mimetype of the file
 			dodoString path;                        ///< path where it was temporary saved[empty, if file is stored in the memory]
 			unsigned long size;                         ///< size of the file
-			short error;                                ///< error code[see dialoguePostFileErrEnum]
+			short error;                                ///< error code, @see cgi::ileErrorEnum
 			dodoString data;                            ///< contains file data[if file is stored in the memory]
 		};
 
@@ -248,7 +248,7 @@ namespace dodo {
 		 */
 		struct __auth__ {
 			dodoString user;            ///< user name
-			short      type;            ///< authenfication type[see cgiAuthEnum]
+			short      type;            ///< authenfication type, @see cgi::authEnum
 		};
 	};
 };

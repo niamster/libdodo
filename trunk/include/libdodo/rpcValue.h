@@ -217,7 +217,7 @@ namespace dodo {
 
 		  protected:
 
-			mutable short valueDataType;                                                                                    ///< argument type[see dataEnum]
+			mutable short valueDataType;                                                                                    ///< argument type, @see rpc::dataEnum
 
 			union {
 				dodoString                                       *stringValue;                                              ///< string, datetime, base64 value

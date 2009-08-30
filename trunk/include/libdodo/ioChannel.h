@@ -69,7 +69,7 @@ namespace dodo {
 
 			/**
 			 * constructor
-			 * @param protection defines type of IO protection[see channel::protectionEnum]
+			 * @param protection defines type of IO protection, @see channel::io::channel::protectionEnum
 			 */
 			channel(short protection);
 
@@ -81,7 +81,7 @@ namespace dodo {
 		  public:
 
 			/**
-			 * @enum protectionEnum defines type of protection for io objects
+			 * @enum io::channel::protectionEnum defines type of protection for io objects
 			 * in IO interaction in parallel environment
 			 */
 			enum protectionEnum {
@@ -111,7 +111,7 @@ namespace dodo {
 				/**
 				 * constructor
 				 * @param executor defines class that executed hook
-				 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+				 * @param execObject defines type of object that executed a hook, @see xexec::objectEnum
 				 */
 				__collected_data__(xexec *executor,
 									   short execObject);
@@ -183,7 +183,7 @@ namespace dodo {
 			virtual void _writeStream(const char * const data) const = 0;
 
 			pc::sync::section *keeper;                                  ///< section locker
-			short protection;                                           ///< type of IO protection[see channelProtectionEnum]
+			short protection;                                           ///< type of IO protection, @see io::channel::protectionEnum
 
 #ifndef IO_WO_XEXEC
 			mutable __collected_data__ collectedData;      ///< data collected for xexec

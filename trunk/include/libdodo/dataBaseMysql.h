@@ -87,7 +87,7 @@ namespace dodo {
 
 				/*
 				 * set connection settings
-				 * @param type defines type of connection[see mySQL documentation]
+				 * @param type defines type of connection, @see mySQL documentation
 				 * @param options defines options of ssl connection
 				 * @note type can be:
 				 *  CLIENT_COMPRESS         Use compression protocol

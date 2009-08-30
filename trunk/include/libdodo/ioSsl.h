@@ -72,7 +72,7 @@ namespace dodo {
 
 				dodoString key;         ///< pathname to the key file
 				dodoString keyPassword; ///< password for the key file
-				short      keyType;     ///< type of the key[see keyEnum]
+				short      keyType;     ///< type of the key, @see io::ssl::keyEnum
 				dodoString cert;        ///< pathname to the certificate file
 				dodoString ca;          ///< pathname to the certificate authority file
 				dodoString caPath;      ///< pathname to a directory that contains trusted SSL CA certificates in PEM format or to a file of CA certificates in PEM format

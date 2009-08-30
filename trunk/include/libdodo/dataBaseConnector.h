@@ -254,7 +254,7 @@ namespace dodo {
 				/**
 				 * store query, made from subquery with requested method
 				 * @param subqueries defines subqueries
-				 * @param type defines type of combining subqueries[see subrequestEnum]
+				 * @param type defines type of combining subqueries, @see data::base::subrequestEnum
 				 */
 				virtual void subquery(const dodoStringArray &subqueries,
 									  int                   type = SUBREQUEST_UNION) = 0;
@@ -293,7 +293,7 @@ namespace dodo {
 				 * append join statement
 				 * @param table defines table to join
 				 * @param condition defines condition for joining
-				 * @param type defines join type[see joinEnum]
+				 * @param type defines join type, @see data::base::joinEnum
 				 */
 				virtual void join(const dodoString &table,
 								  int              type,

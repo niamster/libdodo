@@ -51,7 +51,7 @@ namespace dodo {
 				char          hook[64];         ///< name of function in module that will be a hook
 				bool          detached;         ///< true if thread is detached
 				int           stackSize;        ///< size of stack for thread[in bytes]
-				short         action;           ///< action on object destruction[see collectionOnDestructEnum]
+				short         action;           ///< action on object destruction, @see job::collection::onDestructionEnum
 			};
 
 			/**
@@ -96,22 +96,22 @@ namespace dodo {
 				virtual ~collection();
 
 				/**
-				 * add function to became a thread
+				 * add function to run as a thread
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
+				 * @param action defines action on object destruction if thread is running, @see job::collection::onDestructionEnum
 				 */
 				virtual unsigned long add(job::routine func,
 										  void         *data,
 										  short        action);
 
 				/**
-				 * add function to became a thread
+				 * add function to run as a thread
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
+				 * @param action defines action on object destruction if thread is running, @see job::collection::onDestructionEnum
 				 * @note this will immediately execute the process
 				 */
 				virtual unsigned long addNRun(job::routine  func,
@@ -119,12 +119,11 @@ namespace dodo {
 											  short         action);
 
 				/**
-				 * add function to became a thread
+				 * add function to run as a thread
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param limit defines limit on executions
-				 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
+				 * @param action defines action on object destruction if thread is running, @see job::collection::onDestructionEnum
 				 * @note this will immediately execute the process
 				 * the thread will be detached
 				 */
@@ -219,7 +218,7 @@ namespace dodo {
 
 				/**
 				 * block signals to thread
-				 * @param signals defines signals to block/unblock[see tools::osSignalsEnum]
+				 * @param signals defines signals to block/unblock, @see tools::osSignalsEnum
 				 * @param block defines block condition
 				 */
 				static void blockSignal(int  signals,
@@ -228,11 +227,11 @@ namespace dodo {
 			  protected:
 
 				/**
-				 * add function to became a thread
+				 * add function to run as a thread
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
+				 * @param action defines action on object destruction if thread is running, @see job::collection::onDestructionEnum
 				 * @param detached defines whether thread will be detached or not
 				 * @note this will immediately execute the process
 				 */

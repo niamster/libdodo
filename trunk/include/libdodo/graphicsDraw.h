@@ -135,6 +135,7 @@ namespace dodo {
 
 			/**
 			 * draw line
+			 * @param image defines image on which perform drawing
 			 * @param points defines vector of points of the line
 			 * @param lineColor defines line color
 			 * @param lineWidth defines the width of the line

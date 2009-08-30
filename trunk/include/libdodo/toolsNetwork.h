@@ -150,7 +150,7 @@ namespace dodo {
 			 * @param message defines a message to send
 			 * @param login defines a login for auth
 			 * @param pass defines a password for auth
-			 * @param headers defines extra headers[each must ends with `\r\n`]
+			 * @param headers defines extra headers[each must ends with CR NR]
 			 * @note if login is emty no auth is performed
 			 */
 			static void mail(const dodoString &host,

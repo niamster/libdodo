@@ -36,7 +36,7 @@ namespace dodo {
 	namespace io {
 		namespace event {
 			/**
-			 * @class event::info
+			 * @class info
 			 * @brief provides interface for event
 			 */
 			class info {

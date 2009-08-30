@@ -61,7 +61,7 @@ namespace dodo {
 					/**
 					 * constructor
 					 * @param executor defines class that executed hook
-					 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+					 * @param execObject defines type of object that executed a hook, @see xexec::objectEnum
 					 */
 					__collected_data__(xexec *executor,
 															  short execObject);
@@ -84,7 +84,7 @@ namespace dodo {
 					__connection__ dbInfo;              ///< data info to connect to the server
 
 					int type;                              ///< type of operation
-					int additional;                             ///< additional actions[see accumulator::additionalRequestEnum]
+					int additional;                             ///< additional actions, @see accumulator::additionalRequestEnum
 				};
 
 				/*
@@ -189,7 +189,7 @@ namespace dodo {
 				/**
 				 * store query, made from subquery with requested method
 				 * @param subqueries defines subqueries
-				 * @param type defines type of combining subqueries[see subrequestEnum]
+				 * @param type defines type of combining subqueries, @see data::base::subrequestEnum
 				 */
 				virtual void subquery(const dodoStringArray &subqueries,
 									  int                   type = SUBREQUEST_UNION);
@@ -228,21 +228,21 @@ namespace dodo {
 				 * append join statement
 				 * @param table defines table to join
 				 * @param condition defines condition for joining
-				 * @param type defines join type[see accumulatorJoinEnum]
+				 * @param type defines join type, @see data::base::joinEnum
 				 */
 				virtual void join(const dodoString &table,
 								  int              type,
 								  const dodoString &condition);
 
 				/**
-				 * @enum accumulatorNoneEnum defines empty state of the db object
+				 * @enum stateNoneEnum defines empty state of the db object
 				 */
 				enum stateNoneEnum {
 					STATE_NONE
 				};
 
 				/**
-				 * @enum accumulatorAddRequestEnum defines additional properties for the request
+				 * @enum additionalRequestEnum defines additional properties for the request
 				 */
 				enum additionalRequestEnum {
 					ADDITIONAL_REQUEST_WHERE = 1,

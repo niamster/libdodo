@@ -65,7 +65,7 @@ namespace dodo {
 			/**
 			 * constructor
 			 * @param open defines whether pipe should be opened in constructor
-			 * @param protection defines type of IO protection[see channelProtectionEnum]
+			 * @param protection defines type of IO protection, @see io::channel::protectionEnum
 			 */
 			pipe(bool  open = false,
 				 short protection = channel::PROTECTION_PROCESS);
@@ -77,7 +77,7 @@ namespace dodo {
 
 			/**
 			 * clone pipe object
-			 * @param fd defines object to clone
+			 * @param pipe defines object to clone
 			 * @note xexec object is not copied
 			 */
 			void clone(const pipe &pipe);

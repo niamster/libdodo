@@ -76,7 +76,7 @@ namespace dodo {
 				unsigned long id;         ///< identificator
 				job::routine  func;             ///< function to execute
 				int           stackSize;        ///< size of stack for thread[in bytes]
-				short         action;           ///< action on object destruction[see collectionOnDestructEnum]
+				short         action;           ///< action on object destruction[@see job::collection::onDestructionEnum]
 
 #ifdef DL_EXT
 				void          *handle;          ///< handle to library

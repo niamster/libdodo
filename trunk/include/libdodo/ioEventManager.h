@@ -121,7 +121,7 @@ namespace dodo {
 			  protected:
 
 				/**
-				 * @struct __eventInOutDescriptors__
+				 * @struct __descriptors__
 				 * @brief defines input and output descriptors of the io::* classes
 				 */
 				struct __descriptors__ {

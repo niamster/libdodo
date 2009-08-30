@@ -110,20 +110,20 @@ namespace dodo {
 
 				/**
 				 * set connection options
-				 * @param option defines option that will be applied to the socket[see connectionOptionEnum]
+				 * @param option defines option that will be applied to the socket, @see network::connection::optionEnum
 				 * @param flag defines state of option
 				 */
 				void setOption(short option,
 									   bool  flag);
 
 				/**
-				 * @return true if socket option is set[see connectionOptionEnum]
+				 * @return true if socket option is set, @see network::connection::optionEnum
 				 */
 				bool isSetOption(int option) const;
 
 				/**
 				 * set linger option
-				 * @param option is linger option[see connectionLingerOptionEnum]
+				 * @param option is linger option, @see network::connection::lingerOptionEnum
 				 * @param seconds how long to wait
 				 * @note for CONNECTION_LINGEROPTION_WAIT_CLOSE only
 				 */
@@ -131,7 +131,7 @@ namespace dodo {
 											 int   seconds = 1);
 
 				/**
-				 * @return linger option that was set[see connectionLingerOptionEnum]
+				 * @return linger option that was set, @see network::connection::lingerOptionEnum
 				 */
 				short lingerOption() const;
 

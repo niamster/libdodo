@@ -49,7 +49,7 @@ namespace dodo {
 				char          name[64];         ///< name of module
 				char          discription[256]; ///< discription of module
 				char          hook[64];         ///< name of function in module that will be a hook
-				short         action;           ///< action on object destruction[see collectionOnDestructEnum]
+				short         action;           ///< action on object destruction, @see job::collection::onDestructionEnum
 			};
 
 			/**
@@ -98,7 +98,7 @@ namespace dodo {
 				 * @return process identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if process is running[see collectionOnDestructEnum]
+				 * @param action defines action on object destruction if process is running, @see job::collection::onDestructionEnum
 				 * @note func must not call `exit` family call
 				 */
 				virtual unsigned long add(job::routine func,
@@ -110,7 +110,7 @@ namespace dodo {
 				 * @return process identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if process is running[see collectionOnDestructEnum]
+				 * @param action defines action on object destruction if process is running, @see job::collection::onDestructionEnum
 				 * @note func must not call `exit` family call
 				 * this will immediately execute the process
 				 */

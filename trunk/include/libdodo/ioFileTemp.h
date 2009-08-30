@@ -65,7 +65,7 @@ namespace dodo {
 				/**
 				 * constructor
 				 * @param open defines whether temp file should be opened in constructor
-				 * @param protection defines type of IO protection[see protectionEnum]
+				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
 				 */
 				temp(bool  open = false,
 					 short protection = channel::PROTECTION_PROCESS);

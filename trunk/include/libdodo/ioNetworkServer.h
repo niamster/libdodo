@@ -88,7 +88,7 @@ namespace dodo {
 					/**
 					 * constructor
 					 * @param executor defines class that executed hook
-					 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+					 * @param execObject defines type of object that executed a hook, @see xexec::objectEnum
 					 */
 					__collected_data__(xexec *executor, short execObject);
 				};
@@ -96,8 +96,8 @@ namespace dodo {
 
 				/**
 				 * constructor
-				 * @param family defines family of the socket[see connectionProtoFamilyEnum]
-				 * @param type defines type of the socket[see connectionTransferEnum]
+				 * @param family defines family of the socket, @see connection::ProtocolFamilyEnum
+				 * @param type defines type of the socket, @see connection::transferEnum
 				 */
 				server(short family,
 					   short type);

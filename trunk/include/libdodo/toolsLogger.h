@@ -83,7 +83,7 @@ namespace dodo {
 			/**
 			 * register log handler
 			 * @return log handler identificator
-			 * @param level defines log level[see loggerLogLevelEnum]
+			 * @param level defines log level, @see logger::logLevelEnum
 			 * @param handler defines log handler
 			 * @note if handler is NULL logger will pass message to the syslog
 			 */
@@ -98,7 +98,7 @@ namespace dodo {
 
 			/**
 			 * log message
-			 * @param level defines log level[see loggerLogLevelEnum]
+			 * @param level defines log level, @see logger::logLevelEnum
 			 * @param msg defines log message
 			 */
 			virtual void log(short            level,
@@ -106,7 +106,7 @@ namespace dodo {
 
 			/**
 			 * set date/time format for log messages
-			 * @param format defines date/time format[see tools::time]
+			 * @param format defines date/time format, @see tools::time
 			 * @note date/time format is not used for syslog
 			 */
 			virtual void setTimeFormat(const dodoString &format);
@@ -122,7 +122,7 @@ namespace dodo {
 			 * @brief defines map between log level and log handler
 			 */
 			struct __log_map__ {
-				short       level;                              ///< log level[see loggerLogLevelEnum]
+				short       level;                              ///< log level, @see logger::logLevelEnum
 				io::channel *handler;                           ///< log handler
 				unsigned long position;                           ///< log handler identificator
 			};

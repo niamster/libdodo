@@ -80,7 +80,7 @@ namespace dodo {
 			/**
 			 * constructor
 			 * @param io defines I/O interface
-			 * @param silent defines whether to print headers in constructor or not
+			 * @param headers defines response headers
 			 * @param autocleanFiles defines whether to clean POST files in destructor
 			 * @param filesInMem defines place of POST files[disk or memory]
 			 * @param tmpDir defines directory for POST files if on they are saved on the disk
@@ -105,7 +105,7 @@ namespace dodo {
 			/**
 			 * request the authentication
 			 * @param realm defines authentication request string
-			 * @param type defines type of authentication[see cgi::authEnum]
+			 * @param type defines type of authentication, @see cgi::authEnum
 			 */
 			void requestAuthentication(const dodoString &realm,
 									   short            type = AUTH_DIGEST);
@@ -121,18 +121,18 @@ namespace dodo {
 
 			/**
 			 * set response code and message
-			 * @param code defines return code[see cgi::statusCodeEnum]
+			 * @param code defines return code, @see cgi::statusCodeEnum
 			 */
 			void setResponseStatus(short code);
 
 			/**
-			 * @return method type[see cgi::requestMethodEnum]
+			 * @return method type, @see cgi::requestMethodEnum
 			 */
 			int method() const;
 
 			/**
 			 * @return array of request variables of given method
-			 * @param method defines defines type of array of request variables to return[see cgi::requestMethodEnum]
+			 * @param method defines defines type of array of request variables to return, @see cgi::requestMethodEnum
 			 * @note example: dialogue[cgi::REQUEST_METHOD_POST]["name"]
 			 */
 			const dodoStringMap &operator[](short method);
@@ -150,7 +150,7 @@ namespace dodo {
 			 */
 			dodoStringMap POST;                                         ///< POST variables
 			dodoStringMap GET;                                          ///< GET variables
-			mutable dodoMap<short, dodoString> ENVIRONMENT;             ///< environment variables[see cgiEnvironmentEnum]
+			mutable dodoMap<short, dodoString> ENVIRONMENT;             ///< environment variables, @see cgi::environmentEnum
 			dodoStringMap COOKIES;                                      ///< cookies sent by browser
 			dodoMap<dodoString, file, dodoMapStringCompare> FILES;      ///< POST files
 
@@ -268,9 +268,9 @@ namespace dodo {
 
 			mutable bool headersPrinted;                                                        ///< true if headers have been printed
 
-			static const char *environmentStatements[ENVIRONMENT_ENUMSIZE];                ///< names of environment variables[see cgiEnvironmentEnum]
-			static const dodoString responseHeaderStatements[RESPONSE_HEADER_ENUMSIZE];    ///< HTTP response headers[see cgiResponseHeaderEnum]
-			static const dodoString responseStatusStatements[STATUS_CODE_ENUMSIZE];             ///< HTTP response headers[see cgiStatusCodeEnum]
+			static const char *environmentStatements[ENVIRONMENT_ENUMSIZE];                ///< names of environment variables, @see cgi::environmentEnum
+			static const dodoString responseHeaderStatements[RESPONSE_HEADER_ENUMSIZE];    ///< HTTP response headers, @see cgi::responseHeaderEnum
+			static const dodoString responseStatusStatements[STATUS_CODE_ENUMSIZE];             ///< HTTP response headers, @see cgi::statusCodeEnum
 
 			/**
 			 * @struct __auth__ defines authenfication information
@@ -286,7 +286,7 @@ namespace dodo {
 				dodoString uri;                                                                 ///< URI from Request-URI
 				dodoString qop;                                                                 ///< quality of protection
 				dodoString response;                                                            ///< 32 hex digits. which proves that the user knows a password
-				short      type;                                                                ///< authenfication type[see cgiAuthEnum]
+				short      type;                                                                ///< authenfication type, @see cgi::authEnum
 			};
 
 			__auth__ authInfo;                                                              ///< authentication information

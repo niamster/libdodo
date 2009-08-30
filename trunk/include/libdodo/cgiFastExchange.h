@@ -59,7 +59,7 @@ namespace dodo {
 				/**
 				 * constructor
 				 * @param request defines CGI request descriptor
-				 * @param protection defines type of IO protection[see channel::protectionEnum]
+				 * @param protection defines type of IO protection, @see channel::io::channel::protectionEnum
 				 */
 				exchange(const __request__ &request,
 						 short             protection = io::channel::PROTECTION_PROCESS);

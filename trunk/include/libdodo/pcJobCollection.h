@@ -70,7 +70,7 @@ namespace dodo {
 				 * @return job identificator
 				 * @param func defines function to execute
 				 * @param data defines job data
-				 * @param action defines action on object destruction if process is running[see onDestructEnum]
+				 * @param action defines action on object destruction if process is running, @see job::collection::onDestructionEnum
 				 */
 				virtual unsigned long add(routine func,
 										  void    *data,
@@ -81,7 +81,7 @@ namespace dodo {
 				 * @return job identificator
 				 * @param func defines function to execute
 				 * @param data defines job data
-				 * @param action defines action on object destruction if process is running[see onDestructEnum]
+				 * @param action defines action on object destruction if process is running, @see job::collection::onDestructionEnum
 				 * @note this will immediately execute the job
 				 */
 				virtual unsigned long addNRun(routine func,

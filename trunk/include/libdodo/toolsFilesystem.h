@@ -91,8 +91,8 @@ namespace dodo {
 			 */
 			struct __file__ {
 				dodoString name;    ///< file name
-				int        perm;    ///< file permissions[see filePermissionModesEnum]
-				int        type;    ///< file type[see filesystemFileEnum]
+				int        perm;    ///< file permissions, @see filesystem::permissionModesEnum
+				int        type;    ///< file type, @see filesystem::fileEnum
 				long       size;    ///< file size
 				long       modTime; ///< modyfication time
 				long       accTime; ///< access time
@@ -206,7 +206,7 @@ namespace dodo {
 			/**
 			 * make fifo(pipe)
 			 * @param path defines path to file
-			 * @param permissions defines fifo permissions[see filePermissionModesEnum]
+			 * @param permissions defines fifo permissions, @see filesystem::permissionModesEnum
 			 */
 			static void mkfifo(const dodoString &path,
 							   int              permissions = PERMISSION_OWNER_ALL_ACCESS);
@@ -214,7 +214,7 @@ namespace dodo {
 			/**
 			 * make directory recursively
 			 * @param path defines path to directory
-			 * @param permissions defines directory permissions[see filePermissionModesEnum]
+			 * @param permissions defines directory permissions, @see filesystem::permissionModesEnum
 			 */
 			static void mkdir(const dodoString &path,
 							  int              permissions = PERMISSION_OWNER_ALL_ACCESS);
@@ -236,7 +236,7 @@ namespace dodo {
 			/**
 			 * change permissions
 			 * @param path defines path to file/directory/...
-			 * @param permissions defines file/directory/... permissions[see filePermissionModesEnum]
+			 * @param permissions defines file/directory/... permissions, @see filesystem::permissionModesEnum
 			 */
 			static void chmod(const dodoString &path,
 							  int              permissions);
@@ -325,13 +325,13 @@ namespace dodo {
 			static int groupOwner(const dodoString &path);
 
 			/**
-			 * @return file info[see __file__]
+			 * @return file info, @see filesystem::__file__
 			 * @param path defines path to file
 			 */
 			static __file__ file(const dodoString &path);
 
 			/**
-			 * @return info of files in directory[see __file__]
+			 * @return info of files in directory, @see filesystem::__file__
 			 * @param path defines path to file
 			 */
 			static dodoArray<__file__> dir(const dodoString &path);

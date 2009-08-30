@@ -100,7 +100,7 @@ namespace dodo {
 			/**
 			 * @enum encoderEnum defines image encoder
 			 */
-			enum imageEncoderEnum {
+			enum encoderEnum {
 				ENCODER_PNG,
 				ENCODER_JPEG,
 				ENCODER_GIF,
@@ -135,7 +135,7 @@ namespace dodo {
 				void          *data;            ///< 2D array of pixels
 				unsigned long width;            ///< width of the image
 				unsigned long height;           ///< height of the image
-				short         mapping;          ///< type of mapping[see imageMappingEnum]
+				short         mapping;          ///< type of mapping, @see image::mappingEnum
 				short         pixelSize;        ///< type of pixel
 			};
 
@@ -172,7 +172,7 @@ namespace dodo {
 				/**
 				 * constructor
 				 * @param executor defines class that executed hook
-				 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+				 * @param execObject defines type of object that executed a hook, @see xexec::objectEnum
 				 */
 				__collected_data__(xexec *executor,
 									   short execObject);
@@ -255,7 +255,7 @@ namespace dodo {
 
 			/**
 			 * set image color specification
-			 * @param type defines image type[see colorSpecificationEnum]
+			 * @param type defines image type, @see image::colorSpecificationEnum
 			 */
 			void setColorSpecification(short type);
 
@@ -284,13 +284,13 @@ namespace dodo {
 
 			/**
 			 * set image output encoder
-			 * @param encoder defines image encoder[see imageEncoderEnum]
+			 * @param encoder defines image encoder, @see image::encoderEnum
 			 */
 			void setEncoder(short encoder);
 
 			/**
 			 * set image compression type
-			 * @param type defines type of image compression[see imageCompressionEnum]
+			 * @param type defines type of image compression, @see image::compressionEnum
 			 */
 			void setCompression(short type);
 

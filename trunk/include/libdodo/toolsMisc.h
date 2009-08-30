@@ -76,7 +76,7 @@ namespace dodo {
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * RANDOM_STRENGTH_STRONG may block
-			 * '\0' is replaced with '*'
+			 * nulls are replaced with '*'
 			 */
 			static dodoString stringRandom(unsigned long size,
 										   short         strength = RANDOM_STRENGTH_DEFAULT);
@@ -188,7 +188,6 @@ namespace dodo {
 			 * @return string of substrings, separated with separator
 			 * @param fields defines substrings to join
 			 * @param separator defines separator string
-			 * @param frame defines frame string[frame='; substring => 'substring']
 			 * @param limit defines maximum number of parts to divide string; -1 for unlimit
 			 */
 			static dodoString join(const dodoStringArray &fields,

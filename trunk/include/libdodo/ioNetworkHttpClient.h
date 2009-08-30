@@ -46,7 +46,7 @@ namespace dodo {
 
 			namespace http {
 				/**
-				 * @enum requestHeaderEnum defines HTTP request headers
+				 * @enum http::requestHeaderEnum defines HTTP request headers
 				 */
 				enum requestHeaderEnum {
 					REQUEST_HEADER_ACCEPT,                   ///< content-types that are acceptable
@@ -66,7 +66,7 @@ namespace dodo {
 				};
 
 				/**
-				 * @enum responseHeaderEnum defines HTTP response headers
+				 * @enum http::responseHeaderEnum defines HTTP response headers
 				 */
 				enum responseHeaderEnum {
 					RESPONSE_HEADER_ACCEPTRANGES,            ///< what partial content range types this server supports
@@ -105,7 +105,7 @@ namespace dodo {
 					 */
 					response();
 
-					dodoMap<short, dodoString> headers;     ///< response headers[see responseHeaderEnum]
+					dodoMap<short, dodoString> headers;     ///< response headers, @see http::responseHeaderEnum
 					dodoArray<cgi::cookie> cookies;         ///< cookies from the server
 					dodoString data;                        ///< response data
 					short code;                             ///< response code
@@ -176,7 +176,7 @@ namespace dodo {
 					void setSertificates(const io::ssl::__certificates__ &certs) const;
 #endif
 
-					mutable dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see requestHeaderEnum]
+					mutable dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request, @see http::requestHeaderEnum
 
 					/**
 					 * @param url defines Url
@@ -325,8 +325,8 @@ namespace dodo {
 
 					mutable unsigned short authTries;                                                               ///< autherization request counter
 
-					static const dodoString requestHeaderStatements[REQUEST_HEADER_ENUMSIZE];                  ///< HTTP request headers[see requestHeaderEnum]
-					static const dodoString responseHeaderStatements[RESPONSE_HEADER_ENUMSIZE];                ///< HTTP response headers[see responseHeaderEnum]
+					static const dodoString requestHeaderStatements[REQUEST_HEADER_ENUMSIZE];                  ///< HTTP request headers, @see http::requestHeaderEnum
+					static const dodoString responseHeaderStatements[RESPONSE_HEADER_ENUMSIZE];                ///< HTTP response headers, @see http::responseHeaderEnum
 
 					mutable __url__ urlComponents;                                                           ///< HTTP URL components
 					mutable dodoString urlQuery;                                                                    ///< HTTP URL query
@@ -413,7 +413,7 @@ namespace dodo {
 						dodoString   password;                  ///< user password
 						dodoString   host;                      ///< proxy ip address
 						unsigned int port;                      ///< proxy port
-						short        authType;                  ///< type of proxy authentication[see proxyAuthEnum]
+						short        authType;                  ///< type of proxy authentication, @see http::proxyAuthEnum
 					};
 
 					mutable __proxy_auth__ proxyAuthInfo;    ///< proxy authentication information

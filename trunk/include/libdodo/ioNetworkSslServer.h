@@ -65,8 +65,8 @@ namespace dodo {
 
 					/**
 					 * constructor
-					 * @param family defines family of the socket[see connectionProtoFamilyEnum]
-					 * @param type defines type of the socket[see connectionTransferEnum]
+					 * @param family defines family of the socket, @see connection::protocolFamilyEnum
+					 * @param type defines type of the socket, @see connection::transferEnum
 					 */
 					server(short family,
 						   short type);

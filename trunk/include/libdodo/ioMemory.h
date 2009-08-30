@@ -56,10 +56,10 @@ namespace dodo {
 
 			/**
 			 * constructor
-			 * @param shared defines pointer to memory region
-			 * @param shared defines memory region size
-			 * @param shared defines memory region flags[see flagsEnum]
-			 * @param protection defines flags of IO protection[see protectionEnum]
+			 * @param data defines pointer to memory region
+			 * @param size defines memory region size
+			 * @param flags defines memory region flags, @see io::memory::flagsEnum
+			 * @param protection defines flags of IO protection, @see io::channel::protectionEnum
 			 */
 			memory(char          *data,
 				   unsigned long size,
@@ -68,7 +68,7 @@ namespace dodo {
 
 			/**
 			 * constructor
-			 * @param protection defines flags of IO protection[see protectionEnum]
+			 * @param protection defines flags of IO protection, @see io::channel::protectionEnum
 			 */
 			memory(short protection = channel::PROTECTION_PROCESS);
 
@@ -81,7 +81,7 @@ namespace dodo {
 			/**
 			 * constructor
 			 * @param data defines initial data for the interface
-			 * @param protection defines flags of IO protection[see protectionEnum]
+			 * @param protection defines flags of IO protection, @see io::channel::protectionEnum
 			 */
 			memory(const dodoString &data,
 				   short            protection = channel::PROTECTION_PROCESS);
