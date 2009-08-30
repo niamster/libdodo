@@ -10,7 +10,9 @@ function build()
 		make clean && \
 		make -s -C tests clean && \
 		echo Building libdodo >&3 && \
-		make;  \
+		make && \
+		echo Building tests >&3 && \
+		make -s -C tests; \
 	
 		exec 1>&3
 	)
