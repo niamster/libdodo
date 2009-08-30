@@ -1140,7 +1140,7 @@ client::getProxyConnectResponse(exchange *ex,
 
 	while (true) {
 		try {
-			size = ex->exchange::_readStream(data);
+			size = ex->exchange::_readString(data);
 
 			if (size == 0)
 				break;
@@ -1233,7 +1233,7 @@ client::getContent(exchange *ex,
 
 				if (data.size() == 0) {
 					ex->inSize = 512;
-					data = ex->readStream();
+					data = ex->readString();
 
 					if (data.size() == 0)
 						break;
@@ -1270,10 +1270,10 @@ client::getContent(exchange *ex,
 						break;
 				} else {
 					ex->inSize = 512;
-					data.append(ex->readStream());
+					data.append(ex->readString());
 				}
 			} else {
-				data = ex->readStream();
+				data = ex->readString();
 
 				if (data.size() == 0 && contentSize <= 0) {
 					if (endOfHeaders == 0 && headers.size() > 0)

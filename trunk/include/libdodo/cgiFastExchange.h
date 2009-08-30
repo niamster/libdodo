@@ -104,7 +104,7 @@ namespace dodo {
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
-				virtual unsigned long _readStream(char * const data) const;
+				virtual unsigned long _readString(char * const data) const;
 
 				/**
 				 * write
@@ -117,7 +117,7 @@ namespace dodo {
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
 				 */
-				virtual void _writeStream(const char * const data) const;
+				virtual void _writeString(const char * const data) const;
 
 			  private:
 

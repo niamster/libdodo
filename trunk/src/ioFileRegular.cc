@@ -473,7 +473,7 @@ regular::flush() const
 //-------------------------------------------------------------------
 
 unsigned long
-regular::_readStream(char * const a_data) const
+regular::_readString(char * const a_data) const
 {
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
@@ -526,7 +526,7 @@ regular::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-regular::_writeStream(const char *const a_data) const
+regular::_writeString(const char *const a_data) const
 {
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);

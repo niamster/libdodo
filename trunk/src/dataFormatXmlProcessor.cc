@@ -210,7 +210,7 @@ processor::process(const __definition__ &definition,
 
 	dodoString buffer, bufferPart;
 	while (true) {
-		bufferPart = io.readStream();
+		bufferPart = io.readString();
 		if (bufferPart.size() == 0)
 			break;
 
@@ -588,7 +588,7 @@ processor::process(const io::channel &io)
 
 	dodoString buffer, bufferPart;
 	while (true) {
-		bufferPart = io.readStream();
+		bufferPart = io.readString();
 		if (bufferPart.size() == 0)
 			break;
 
@@ -694,11 +694,11 @@ processor::make(const node        &root,
 	if (root.name.empty())
 		throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
 
-	io.writeStream("<?xml version=\"");
-	io.writeStream(version);
-	io.writeStream("\" encoding=\"");
-	io.writeStream(encoding);
-	io.writeStream("\"?>\r\n");
+	io.writeString("<?xml version=\"");
+	io.writeString(version);
+	io.writeString("\" encoding=\"");
+	io.writeString(encoding);
+	io.writeString("\"?>\r\n");
 
 	make(root, io);
 }
@@ -712,46 +712,46 @@ processor::make(const node        &xnode,
 	if (xnode.name.empty())
 		throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
 
-	io.writeStream(statements[STATEMENT_LT]);
+	io.writeString(statements[STATEMENT_LT]);
 
 	if (!xnode.ns.prefix.empty()) {
-		io.writeStream(xnode.ns.prefix);
-		io.writeStream(statements[STATEMENT_COLON]);
+		io.writeString(xnode.ns.prefix);
+		io.writeString(statements[STATEMENT_COLON]);
 	}
-	io.writeStream(xnode.name);
-	io.writeStream(statements[STATEMENT_SPACE]);
+	io.writeString(xnode.name);
+	io.writeString(statements[STATEMENT_SPACE]);
 
 	if (!xnode.nsDef.prefix.empty()) {
-		io.writeStream(statements[STATEMENT_XMLNS]);
-		io.writeStream(xnode.nsDef.prefix);
-		io.writeStream(statements[STATEMENT_EQUALDQUOTE]);
-		io.writeStream(xnode.nsDef.href);
-		io.writeStream(statements[STATEMENT_DQUOTESPACE]);
+		io.writeString(statements[STATEMENT_XMLNS]);
+		io.writeString(xnode.nsDef.prefix);
+		io.writeString(statements[STATEMENT_EQUALDQUOTE]);
+		io.writeString(xnode.nsDef.href);
+		io.writeString(statements[STATEMENT_DQUOTESPACE]);
 	}
 
 	dodoMap<dodoString, dodoString, dodoMapStringCompare>::const_iterator i = xnode.attributes.begin(), j = xnode.attributes.end();
 	for (; i != j; ++i) {
-		io.writeStream(i->first);
-		io.writeStream(statements[STATEMENT_EQUALDQUOTE]);
-		io.writeStream(i->second);
-		io.writeStream(statements[STATEMENT_DQUOTESPACE]);
+		io.writeString(i->first);
+		io.writeString(statements[STATEMENT_EQUALDQUOTE]);
+		io.writeString(i->second);
+		io.writeString(statements[STATEMENT_DQUOTESPACE]);
 	}
 
 	if (xnode.nodeValue.empty() && xnode.nodeChildren.empty()) {
-		io.writeStream(statements[STATEMENT_SLASHGT]);
+		io.writeString(statements[STATEMENT_SLASHGT]);
 
 		return;
 	}
 
-	io.writeStream(statements[STATEMENT_GT]);
+	io.writeString(statements[STATEMENT_GT]);
 
 	if (!xnode.nodeValue.empty()) {
 		if (xnode.CDATA) {
-			io.writeStream(statements[STATEMENT_CDATAOPEN]);
-			io.writeStream(xnode.nodeValue);
-			io.writeStream(statements[STATEMENT_CDATACLOSE]);
+			io.writeString(statements[STATEMENT_CDATAOPEN]);
+			io.writeString(xnode.nodeValue);
+			io.writeString(statements[STATEMENT_CDATACLOSE]);
 		} else
-			io.writeStream(xnode.nodeValue);
+			io.writeString(xnode.nodeValue);
 	}
 
 	dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::const_iterator o = xnode.nodeChildren.begin(), p = xnode.nodeChildren.end();
@@ -763,15 +763,15 @@ processor::make(const node        &xnode,
 			make(*x, io);
 	}
 
-	io.writeStream(statements[STATEMENT_LTSLASH]);
+	io.writeString(statements[STATEMENT_LTSLASH]);
 
 	if (!xnode.ns.prefix.empty()) {
-		io.writeStream(xnode.ns.prefix);
-		io.writeStream(statements[STATEMENT_COLON]);
+		io.writeString(xnode.ns.prefix);
+		io.writeString(statements[STATEMENT_COLON]);
 	}
 
-	io.writeStream(xnode.name);
-	io.writeStream(statements[STATEMENT_GT]);
+	io.writeString(xnode.name);
+	io.writeString(statements[STATEMENT_GT]);
 }
 
 //-------------------------------------------------------------------

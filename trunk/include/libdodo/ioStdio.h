@@ -80,7 +80,7 @@ namespace dodo {
 			 * write to stream null terminated string
 			 * @param data defines data that will be written
 			 */
-			virtual void _writeStream(const char * const data) const;
+			virtual void _writeString(const char * const data) const;
 
 		  private:
 

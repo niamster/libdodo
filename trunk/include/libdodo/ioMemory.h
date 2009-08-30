@@ -143,7 +143,7 @@ namespace dodo {
 			 * @note not more then inSize(including null)
 			 * if block is true read offset is calculated as pos*'# of \n terminated memorys' otherwise offset it taken pos bytes from the beginning
 			 */
-			virtual unsigned long _readStream(char * const data) const;
+			virtual unsigned long _readString(char * const data) const;
 
 			/**
 			 * @param data defines data that will be written
@@ -156,7 +156,7 @@ namespace dodo {
 			 * @param data defines data that will be written
 			 * @note write only to the end of the file(append)
 			 */
-			virtual void _writeStream(const char * const data) const;
+			virtual void _writeString(const char * const data) const;
 
 		  protected:
 

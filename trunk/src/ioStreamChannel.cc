@@ -97,7 +97,7 @@ channel::read() const
 //-------------------------------------------------------------------
 
 dodoString
-channel::readStream() const
+channel::readString() const
 {
 	pc::sync::protector pg(keeper);
 
@@ -112,7 +112,7 @@ channel::readStream() const
 	unsigned long n = 0;
 
 	try {
-		n = _readStream((char *)a_str.data());
+		n = _readString((char *)a_str.data());
 		a_str.resize(n);
 	} catch (...) {
 		a_str.clear();
@@ -173,7 +173,7 @@ channel::write(const dodoString &a_data) const
 //-------------------------------------------------------------------
 
 void
-channel::writeStream(const dodoString &a_data) const
+channel::writeString(const dodoString &a_data) const
 {
 	pc::sync::protector pg(keeper);
 
@@ -184,14 +184,14 @@ channel::writeStream(const dodoString &a_data) const
 	performPreExec();
 
 	try {
-		_writeStream(collectedData.buffer.data());
+		_writeString(collectedData.buffer.data());
 	} catch (...) {
 		collectedData.buffer.clear();
 
 		throw;
 	}
 #else
-	_writeStream(a_data.data());
+	_writeString(a_data.data());
 #endif
 
 #ifndef IO_WO_XEXEC

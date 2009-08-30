@@ -381,7 +381,7 @@ exchange::_read(char * const a_data) const
 //-------------------------------------------------------------------
 
 unsigned long
-exchange::_readStream(char * const data) const
+exchange::_readString(char * const data) const
 {
 	if (socket == -1)
 		throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);

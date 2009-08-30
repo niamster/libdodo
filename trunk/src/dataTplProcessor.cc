@@ -272,11 +272,11 @@ processor::_processString(const dodoString &buffer,
 
 		i = buffer.find(statements[STATEMENT_OPEN_ST], begin);
 		if (i == dodoString::npos) {
-			tpl.writeStream(dodoString(buffer.data() + begin, buffer.size() - begin));
+			tpl.writeString(dodoString(buffer.data() + begin, buffer.size() - begin));
 
 			break;
 		} else
-			tpl.writeStream(dodoString(buffer.data() + begin, i - begin));
+			tpl.writeString(dodoString(buffer.data() + begin, i - begin));
 
 		i += 2;
 
@@ -284,7 +284,7 @@ processor::_processString(const dodoString &buffer,
 			j = buffer.find(statements[STATEMENT_CLOSE_NP], i);
 
 			++i;
-			tpl.writeStream(dodoString(buffer.data() + i, j - i));
+			tpl.writeString(dodoString(buffer.data() + i, j - i));
 			j += 3;
 
 			continue;
@@ -417,7 +417,7 @@ processor::_processString(const dodoString &buffer,
 		}
 
 		if (keywordNotFound)
-			tpl.writeStream(dodoString(buffer.data() + i - 2, j - i + 2));
+			tpl.writeString(dodoString(buffer.data() + i - 2, j - i + 2));
 
 		if (breakLoop)
 			break;
@@ -726,11 +726,11 @@ processor::_print(unsigned long    start,
 {
 	dodoStringArray temp = tools::misc::split(statement, statements[STATEMENT_COMA]);
 	if (temp.size() <= 1)
-		tpl.writeStream(getVar(statement, start, path));
+		tpl.writeString(getVar(statement, start, path));
 	else {
 		dodoStringArray::iterator i(temp.begin()), j(temp.end());
 		for (; i != j; ++i)
-			tpl.writeStream(getVar(*i, start, path));
+			tpl.writeString(getVar(*i, start, path));
 	}
 
 	return start;

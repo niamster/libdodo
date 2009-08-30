@@ -588,7 +588,7 @@ fifo::flush() const
 //-------------------------------------------------------------------
 
 unsigned long
-fifo::_readStream(char * const a_data) const
+fifo::_readString(char * const a_data) const
 {
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READSTREAM, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
@@ -618,7 +618,7 @@ fifo::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-fifo::_writeStream(const char *const a_data) const
+fifo::_writeString(const char *const a_data) const
 {
 	unsigned long _outSize = outSize;
 

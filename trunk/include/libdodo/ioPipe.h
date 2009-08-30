@@ -43,7 +43,7 @@ namespace dodo {
 		/**
 		 * @class pipe
 		 * @brief provides interface for PIPE I/O operations
-		 * @note writeStream* put extra newline to the end of the string, so no need to add it manually
+		 * @note writeString* put extra newline to the end of the string, so no need to add it manually
 		 */
 		class pipe : virtual public stream::channel {
 		  public:
@@ -140,7 +140,7 @@ namespace dodo {
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including null)
 			 */
-			virtual unsigned long _readStream(char * const data) const;
+			virtual unsigned long _readString(char * const data) const;
 
 			/**
 			 * @param data defines data that will be written
@@ -152,7 +152,7 @@ namespace dodo {
 			 * @param data defines data that will be written
 			 * @note puts extra newline to the end of the string
 			 */
-			virtual void _writeStream(const char * const data) const;
+			virtual void _writeString(const char * const data) const;
 
 			__file__ *in;       ///< input stream descriptor
 			__file__ *out;      ///< output stream descriptor

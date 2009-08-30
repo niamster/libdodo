@@ -58,46 +58,46 @@ processor::make(const node        &root,
 	switch (root.valueDataType) {
 		case node::DATA_STRING:
 		{
-			io.writeStream("\"");
+			io.writeString("\"");
 			dodoString stringValue = *root.stringValue;
 			tools::string::replace("\"", "\\\"", stringValue);
-			io.writeStream(stringValue);
-			io.writeStream("\"");
+			io.writeString(stringValue);
+			io.writeString("\"");
 
 			break;
 		}
 
 		case node::DATA_OBJECT:
 		{
-			io.writeStream("{");
+			io.writeString("{");
 
 			dodoMap<dodoString, node, dodoMapStringCompare>::const_iterator
 			i = root.objectValue->begin(),
 			j = root.objectValue->end();
 			if (i != j) {
 				for (--j; i != j; ++i) {
-					io.writeStream("\"");
-					io.writeStream(i->first);
-					io.writeStream("\":");
+					io.writeString("\"");
+					io.writeString(i->first);
+					io.writeString("\":");
 
 					make(i->second, io);
-					io.writeStream(",");
+					io.writeString(",");
 				}
-				io.writeStream("\"");
-				io.writeStream(i->first);
-				io.writeStream("\":");
+				io.writeString("\"");
+				io.writeString(i->first);
+				io.writeString("\":");
 
 				make(i->second, io);
 			}
 
-			io.writeStream("}");
+			io.writeString("}");
 
 			break;
 		}
 
 		case node::DATA_ARRAY:
 		{
-			io.writeStream("[");
+			io.writeString("[");
 
 			dodoArray<node>::const_iterator
 			i = root.arrayValue->begin(),
@@ -106,29 +106,29 @@ processor::make(const node        &root,
 				--j;
 				for (; i != j; ++i) {
 					make(*i, io);
-					io.writeStream(",");
+					io.writeString(",");
 				}
 				make(*i, io);
 			}
 
-			io.writeStream("]");
+			io.writeString("]");
 
 			break;
 		}
 
 		case node::DATA_NUMERIC:
-			io.writeStream(tools::string::lToString(root.numericValue));
+			io.writeString(tools::string::lToString(root.numericValue));
 
 			break;
 
 		case node::DATA_BOOLEAN:
-			io.writeStream(root.booleanValue ? "true" : "false");
+			io.writeString(root.booleanValue ? "true" : "false");
 
 			break;
 
 		case node::DATA_NULL:
 		default:
-			io.writeStream("null");
+			io.writeString("null");
 	}
 }
 
@@ -432,7 +432,7 @@ processor::process(const io::channel &io)
 	dodoString json, jsonPart;
 
 	while (true) {
-		jsonPart = io.readStream();
+		jsonPart = io.readString();
 		if (jsonPart.size() == 0)
 			break;
 

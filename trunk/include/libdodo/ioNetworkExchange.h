@@ -47,7 +47,7 @@ namespace dodo {
 			/**
 			 * @class exchange
 			 * @brief provides communication interface[send/receive data]
-			 * @note readStream*: if length of read data is inSize, data will contain exact inSize, no null will be set in the end this is specific only for network sessions
+			 * @note readString*: if length of read data is inSize, data will contain exact inSize, no null will be set in the end this is specific only for network sessions
 			 * writesStream* put extra null in the end of the string
 			 */
 			class exchange : public connection,
@@ -178,7 +178,7 @@ namespace dodo {
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including null)
 				 */
-				virtual unsigned long _readStream(char * const data) const;
+				virtual unsigned long _readString(char * const data) const;
 
 				/**
 				 * @param data defines data that will be written
@@ -190,7 +190,7 @@ namespace dodo {
 				 * @param data defines data that will be written
 				 * @note puts extra null in the end of the string
 				 */
-				virtual void _writeStream(const char * const data) const;
+				virtual void _writeString(const char * const data) const;
 			};
 		};
 	};

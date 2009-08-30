@@ -73,14 +73,14 @@ namespace dodo {
 				 * @return read data
 				 * @note not more then inSize
 				 */
-				virtual dodoString readStream() const;
+				virtual dodoString readString() const;
 
 				/**
 				 * write to stream null terminated string
 				 * @param data defines data that will be written
 				 * @note not more then outSize
 				 */
-				virtual void writeStream(const dodoString &data) const;
+				virtual void writeString(const dodoString &data) const;
 			};
 		};
 	};

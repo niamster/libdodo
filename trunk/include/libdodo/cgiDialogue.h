@@ -70,7 +70,7 @@ namespace dodo {
 			 * @param autocleanFiles defines whether to clean POST files in destructor
 			 * @param filesInMem defines place of POST files[disk or memory]
 			 * @param tmpDir defines directory for POST files if on they are saved on the disk
-			 * @note header won't be printed until print/printStream/desctructor is called
+			 * @note header won't be printed until print/printString/desctructor is called
 			 */
 			dialogue(exchange   &io,
 					 bool       autocleanFiles = true,
@@ -169,7 +169,7 @@ namespace dodo {
 			 * @param data defines data that would be printed
 			 * @note print until '\n' is reached
 			 */
-			void printStream(const dodoString &data);
+			void printString(const dodoString &data);
 
 			/**
 			 * flush output

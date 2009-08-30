@@ -44,10 +44,10 @@ namespace dodo {
 			 * @class temp
 			 * @brief provides I/O manipulations with temporary file
 			 * @note  if block is false then read/write position is amount of bytes from the beginning, if true then:
-			 * writeStream, writeStream write only to the end of the file(append)
+			 * writeString, writeString write only to the end of the file(append)
 			 * write offset for write, write is calculated as pos*outSize
 			 * read offset for read, read is calculated as pos*inSize
-			 * read offset for readStream, readStream is calculated as pos*'# of \n terminated strings'
+			 * read offset for readString, readString is calculated as pos*'# of \n terminated strings'
 			 */
 			class temp : virtual public block::channel {
 			  public:
@@ -138,7 +138,7 @@ namespace dodo {
 				 * @note not more then inSize(including null)
 				 * if block is true read offset is calculated as pos*'# of \n terminated strings' otherwise offset it taken pos bytes from the beginning
 				 */
-				virtual unsigned long _readStream(char * const data) const;
+				virtual unsigned long _readString(char * const data) const;
 
 				/**
 				 * @param data defines data that will be written
@@ -151,7 +151,7 @@ namespace dodo {
 				 * @param data defines data that will be written
 				 * @note write only to the end of the file(append)
 				 */
-				virtual void _writeStream(const char * const data) const;
+				virtual void _writeString(const char * const data) const;
 
 			  private:
 

@@ -313,7 +313,7 @@ exchange::_read(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-exchange::_writeStream(const char * const data) const
+exchange::_writeString(const char * const data) const
 {
 	unsigned long _outSize = outSize;
 
@@ -336,7 +336,7 @@ exchange::_writeStream(const char * const data) const
 //-------------------------------------------------------------------
 
 unsigned long
-exchange::_readStream(char * const data) const
+exchange::_readString(char * const data) const
 {
 	if (socket == -1)
 		throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);

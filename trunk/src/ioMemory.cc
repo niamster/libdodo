@@ -269,7 +269,7 @@ memory::erase()
 //-------------------------------------------------------------------
 
 unsigned long
-memory::_readStream(char * const a_data) const
+memory::_readString(char * const a_data) const
 {
 	unsigned long readSize = inSize + 1;
 
@@ -316,7 +316,7 @@ memory::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-memory::_writeStream(const char *const a_data) const
+memory::_writeString(const char *const a_data) const
 {
 	if (flags & FLAGS_FIXED_LENGTH)
 		throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITESTREAM, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);

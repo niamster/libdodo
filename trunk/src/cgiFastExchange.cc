@@ -122,7 +122,7 @@ exchange::_write(const char *const buf) const
 //-------------------------------------------------------------------
 
 void
-exchange::_writeStream(const char * const data) const
+exchange::_writeString(const char * const data) const
 {
 	unsigned long _outSize = outSize;
 
@@ -145,7 +145,7 @@ exchange::_writeStream(const char * const data) const
 //-------------------------------------------------------------------
 
 unsigned long
-exchange::_readStream(char * const data) const
+exchange::_readString(char * const data) const
 {
 	unsigned long _inSize = inSize++;
 

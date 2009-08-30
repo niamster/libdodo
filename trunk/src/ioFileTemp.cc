@@ -360,7 +360,7 @@ temp::flush() const
 //-------------------------------------------------------------------
 
 unsigned long
-temp::_readStream(char * const a_data) const
+temp::_readString(char * const a_data) const
 {
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -413,7 +413,7 @@ temp::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-temp::_writeStream(const char *const a_data) const
+temp::_writeString(const char *const a_data) const
 {
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);

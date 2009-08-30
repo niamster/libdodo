@@ -134,7 +134,7 @@ logger::log(short            level,
 	for (; i != j; ++i) {
 		if (i->level == level) {
 			if (i->handler != NULL) {
-				i->handler->writeStream(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
+				i->handler->writeString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
 				i->handler->flush();
 			} else
 				syslog(syslogLevels[level], "%s", msg.data());
@@ -147,7 +147,7 @@ logger::log(short            level,
 		for (; i != j; ++i) {
 			if (i->level == level) {
 				if (i->handler != NULL) {
-					i->handler->writeStream(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
+					i->handler->writeString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
 					i->handler->flush();
 				} else
 					syslog(syslogLevels[level], "%s", msg.data());

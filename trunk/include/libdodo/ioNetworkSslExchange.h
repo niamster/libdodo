@@ -162,7 +162,7 @@ namespace dodo {
 					 * @param data defines buffer that will be filled
 					 * @note not more then inSize(including null)
 					 */
-					virtual unsigned long _readStream(char * const data) const;
+					virtual unsigned long _readString(char * const data) const;
 
 					/**
 					 * @param data defines data that will be written

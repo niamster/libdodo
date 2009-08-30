@@ -137,14 +137,14 @@ namespace dodo {
 			 * @return read data
 			 * @note not more then inSize
 			 */
-			virtual dodoString readStream() const = 0;
+			virtual dodoString readString() const = 0;
 
 			/**
 			 * write to stream null- terminated string
 			 * @param data defines data that will be written
 			 * @note not more then outSize
 			 */
-			virtual void writeStream(const dodoString &data) const = 0;
+			virtual void writeString(const dodoString &data) const = 0;
 
 			/**
 			 * flush output
@@ -167,7 +167,7 @@ namespace dodo {
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including null)
 			 */
-			virtual unsigned long _readStream(char * const data) const = 0;
+			virtual unsigned long _readString(char * const data) const = 0;
 
 			/**
 			 * @param data defines data that will be written
@@ -180,7 +180,7 @@ namespace dodo {
 			 * @param data defines data that will be written
 			 * @note not more then outSize(including null)
 			 */
-			virtual void _writeStream(const char * const data) const = 0;
+			virtual void _writeString(const char * const data) const = 0;
 
 			pc::sync::section *keeper;                                  ///< section locker
 			short protection;                                           ///< type of IO protection, @see io::channel::protectionEnum

@@ -554,7 +554,7 @@ io::pipe::block(bool flag)
 //-------------------------------------------------------------------
 
 unsigned long
-io::pipe::_readStream(char * const a_data) const
+io::pipe::_readString(char * const a_data) const
 {
 	if (in->file == NULL)
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -584,7 +584,7 @@ io::pipe::_readStream(char * const a_data) const
 //-------------------------------------------------------------------
 
 void
-io::pipe::_writeStream(const char * const data) const
+io::pipe::_writeString(const char * const data) const
 {
 	if (out->file == NULL)
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);

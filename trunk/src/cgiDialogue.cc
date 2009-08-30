@@ -253,11 +253,11 @@ dialogue::flush() const
 //-------------------------------------------------------------------
 
 void
-dialogue::printStream(const dodoString &buf)
+dialogue::printString(const dodoString &buf)
 {
 	printHeaders();
 
-	io.writeStream(buf);
+	io.writeString(buf);
 }
 
 //-------------------------------------------------------------------
@@ -575,30 +575,30 @@ dialogue::printHeaders() const
 
 	headersPrinted = true;
 
-	io.writeStream(responseStatusStatements[returnCode]);
+	io.writeString(responseStatusStatements[returnCode]);
 
 	dodoMap<short, dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
-		io.writeStream(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
+		io.writeString(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
 
 	if (cookies.size() > 0) {
 		dodoList<cookie>::const_iterator i(cookies.begin()), j(cookies.end());
 		for (; i != j; ++i) {
-			io.writeStream("Set-Cookie: ");
-			io.writeStream(i->name + "=" + i->value + "; ");
+			io.writeString("Set-Cookie: ");
+			io.writeString(i->name + "=" + i->value + "; ");
 			if (i->path.size() > 0)
-				io.writeStream("path=" + i->path + "; ");
+				io.writeString("path=" + i->path + "; ");
 			if (i->expires.size() > 0)
-				io.writeStream("expires=" + i->expires + "; ");
+				io.writeString("expires=" + i->expires + "; ");
 			if (i->domain.size() > 0)
-				io.writeStream("domain=" + i->domain + "; ");
+				io.writeString("domain=" + i->domain + "; ");
 			if (i->secure)
-				io.writeStream("secure");
-			io.writeStream("\r\n");
+				io.writeString("secure");
+			io.writeString("\r\n");
 		}
 	}
 
-	io.writeStream("\r\n");
+	io.writeString("\r\n");
 	io.flush();
 }
 
