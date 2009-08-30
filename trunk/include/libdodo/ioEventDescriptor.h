@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioEventInfo.cc
+ *            ioEventDescriptor.h
  *
  *  Fri Jan 18 02:51:24 2008
  *  Copyright  2008  Ni@m
@@ -27,15 +27,39 @@
  * set shiftwidth=4
  */
 
+#ifndef _IOEVENTDESCRIPTOR_H_
+#define _IOEVENTDESCRIPTOR_H_ 1
+
 #include <libdodo/directives.h>
 
-#include <libdodo/ioEventInfo.h>
+namespace dodo {
+	namespace io {
+		namespace event {
+			/**
+			 * @class descriptor
+			 * @brief provides interface for event to get descriptors for io::event::manager
+			 */
+			class descriptor {
+				friend class manager;
 
-using namespace dodo::io::event;
+			  protected:
 
-info::~info()
-{
-}
+				/**
+				 * destructor
+				 */
+				virtual ~descriptor() = 0;
 
-//-------------------------------------------------------------------
+				/**
+				 * @return descriptor of input stream
+				 */
+				virtual int inDescriptor() const = 0;
 
+				/**
+				 * @return descriptor of output stream
+				 */
+				virtual int outDescriptor() const = 0;
+			};
+		};
+	};
+};
+#endif

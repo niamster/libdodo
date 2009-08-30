@@ -43,7 +43,7 @@
 #include <libdodo/ioNetworkConnection.h>
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/xexec.h>
-#include <libdodo/ioEventInfo.h>
+#include <libdodo/ioEventDescriptor.h>
 
 using namespace dodo::io::network;
 

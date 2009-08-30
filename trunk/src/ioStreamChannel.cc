@@ -35,7 +35,6 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
-#include <libdodo/ioEventInfo.h>
 #include <libdodo/pcSyncProtector.h>
 
 using namespace dodo::io::stream;

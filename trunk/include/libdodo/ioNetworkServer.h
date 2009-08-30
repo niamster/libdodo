@@ -35,7 +35,7 @@
 #include <libdodo/types.h>
 #include <libdodo/ioNetworkConnection.h>
 #include <libdodo/xexec.h>
-#include <libdodo/ioEventInfo.h>
+#include <libdodo/ioEventDescriptor.h>
 #include <libdodo/ioNetworkExchange.h>
 
 namespace dodo {
@@ -50,7 +50,7 @@ namespace dodo {
 			 * @brief provides network connection interface
 			 */
 			class server : public connection,
-						   virtual public event::info
+						   virtual public event::descriptor
 #ifndef IO_WO_XEXEC
 						   ,
 						   public xexec

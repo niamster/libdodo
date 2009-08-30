@@ -37,7 +37,7 @@
 #include <libdodo/ioEventManagerEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/ioEventInfo.h>
+#include <libdodo/ioEventDescriptor.h>
 #include <libdodo/pcSyncProcessSection.h>
 #include <libdodo/pcSyncProtector.h>
 
@@ -64,7 +64,7 @@ manager::~manager()
 //-------------------------------------------------------------------
 
 int
-manager::add(const info &fl)
+manager::add(const descriptor &fl)
 {
 	pc::sync::protector pg(keeper);
 

@@ -43,7 +43,7 @@ namespace dodo {
 
 	namespace io {
 		namespace event {
-			class info;
+			class descriptor;
 
 			/**
 			 * @class manager
@@ -74,7 +74,7 @@ namespace dodo {
 				 * @return identificator of channel pair
 				 * @param fl defines a stream[file, stdio, exchange, ...]
 				 */
-				int add(const info &fl);
+				int add(const descriptor &fl);
 
 				/**
 				 * delete channel pair from watchers

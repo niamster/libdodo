@@ -34,7 +34,7 @@
 
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
-#include <libdodo/ioEventInfo.h>
+#include <libdodo/ioEventDescriptor.h>
 
 namespace dodo {
 	namespace pc {
@@ -56,7 +56,7 @@ namespace dodo {
 		 * @class channel
 		 * @brief implements an interface for I/O operations
 		 */
-		class channel : virtual public event::info
+		class channel : virtual public event::descriptor
 #ifndef IO_WO_XEXEC
 						,
 						public xexec

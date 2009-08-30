@@ -46,7 +46,6 @@
 #include <libdodo/types.h>
 #include <libdodo/ioNetworkSslExchange.h>
 #include <libdodo/xexec.h>
-#include <libdodo/ioEventInfo.h>
 
 using namespace dodo::io::network::ssl;
 
