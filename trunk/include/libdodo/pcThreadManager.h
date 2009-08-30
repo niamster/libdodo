@@ -51,7 +51,7 @@ namespace dodo {
 				char          hook[64];         ///< name of function in module that will be a hook
 				bool          detached;         ///< true if thread is detached
 				int           stackSize;        ///< size of stack for thread[in bytes]
-				short         action;           ///< action on object destruction, @see job::manager::onDestructionEnum
+				short         action;           ///< action on object destruction, @see job::onDestructionEnum
 			};
 
 			/**
@@ -100,7 +100,7 @@ namespace dodo {
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running, @see job::manager::onDestructionEnum
+				 * @param action defines action on object destruction if thread is running, @see job::onDestructionEnum
 				 */
 				virtual unsigned long add(job::routine func,
 										  void         *data,
@@ -111,7 +111,7 @@ namespace dodo {
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running, @see job::manager::onDestructionEnum
+				 * @param action defines action on object destruction if thread is running, @see job::onDestructionEnum
 				 * @note this will immediately execute the process
 				 */
 				virtual unsigned long addNRun(job::routine  func,
@@ -123,7 +123,7 @@ namespace dodo {
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running, @see job::manager::onDestructionEnum
+				 * @param action defines action on object destruction if thread is running, @see job::onDestructionEnum
 				 * @note this will immediately execute the process
 				 * the thread will be detached
 				 */
@@ -231,7 +231,7 @@ namespace dodo {
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param action defines action on object destruction if thread is running, @see job::manager::onDestructionEnum
+				 * @param action defines action on object destruction if thread is running, @see job::onDestructionEnum
 				 * @param detached defines whether thread will be detached or not
 				 * @note this will immediately execute the process
 				 */

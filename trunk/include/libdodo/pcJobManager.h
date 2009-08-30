@@ -45,21 +45,20 @@ namespace dodo {
 			typedef int (*routine)(void *data);
 
 			/**
+			 * @enum onDestructionEnum defines action with processes on object destruction
+			 */
+			enum onDestructionEnum {
+				ON_DESTRUCTION_KEEP_ALIVE,
+				ON_DESTRUCTION_STOP,     ///< send SIGINT to process
+				ON_DESTRUCTION_WAIT
+			};
+
+			/**
 			 * @class manager
 			 * @brief provides interface for jobs management
 			 */
 			class manager {
 			  public:
-
-				/**
-				 * @enum onDestructionEnum defines action with processes on object destruction
-				 */
-				enum onDestructionEnum {
-					ON_DESTRUCTION_KEEP_ALIVE,
-					ON_DESTRUCTION_STOP,     ///< send SIGINT to process
-					ON_DESTRUCTION_WAIT
-				};
-
 				/**
 				 * destructor
 				 */
@@ -70,7 +69,7 @@ namespace dodo {
 				 * @return job identificator
 				 * @param func defines function to execute
 				 * @param data defines job data
-				 * @param action defines action on object destruction if process is running, @see job::manager::onDestructionEnum
+				 * @param action defines action on object destruction if process is running, @see job::onDestructionEnum
 				 */
 				virtual unsigned long add(routine func,
 										  void    *data,
@@ -81,7 +80,7 @@ namespace dodo {
 				 * @return job identificator
 				 * @param func defines function to execute
 				 * @param data defines job data
-				 * @param action defines action on object destruction if process is running, @see job::manager::onDestructionEnum
+				 * @param action defines action on object destruction if process is running, @see job::onDestructionEnum
 				 * @note this will immediately execute the job
 				 */
 				virtual unsigned long addNRun(routine func,

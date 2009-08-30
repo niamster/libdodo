@@ -62,7 +62,7 @@ namespace dodo {
 				int           status;           ///< process exit status
 				unsigned long position;         ///< identificator
 				job::routine  func;             ///< function to execute
-				short         action;           ///< action on object destruction[@see job::manager::onDestructionEnum]
+				short         action;           ///< action on object destruction[@see job::onDestructionEnum]
 #ifdef DL_EXT
 				void          *handle;          ///< handle to library
 #endif
@@ -114,19 +114,19 @@ manager::~manager()
 		}
 
 		switch ((*i)->action) {
-			case ON_DESTRUCTION_KEEP_ALIVE:
+			case job::ON_DESTRUCTION_KEEP_ALIVE:
 
 				waitpid((*i)->pid, NULL, WNOHANG);
 
 				break;
 
-			case ON_DESTRUCTION_STOP:
+			case job::ON_DESTRUCTION_STOP:
 
 				kill((*i)->pid, 2);
 
 				break;
 
-			case ON_DESTRUCTION_WAIT:
+			case job::ON_DESTRUCTION_WAIT:
 			default:
 
 				waitpid((*i)->pid, NULL, 0);

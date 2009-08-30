@@ -76,7 +76,7 @@ namespace dodo {
 				unsigned long id;         ///< identificator
 				job::routine  func;             ///< function to execute
 				int           stackSize;        ///< size of stack for thread[in bytes]
-				short         action;           ///< action on object destruction[@see job::manager::onDestructionEnum]
+				short         action;           ///< action on object destruction[@see job::onDestructionEnum]
 
 #ifdef DL_EXT
 				void          *handle;          ///< handle to library
@@ -149,7 +149,7 @@ manager::~manager()
 		}
 
 		switch ((*i)->action) {
-			case ON_DESTRUCTION_KEEP_ALIVE:
+			case job::ON_DESTRUCTION_KEEP_ALIVE:
 
 #ifdef PTHREAD_EXT
 				pthread_detach((*i)->thread);
@@ -157,7 +157,7 @@ manager::~manager()
 
 				break;
 
-			case ON_DESTRUCTION_STOP:
+			case job::ON_DESTRUCTION_STOP:
 
 #ifdef PTHREAD_EXT
 				pthread_cancel((*i)->thread);
@@ -165,7 +165,7 @@ manager::~manager()
 
 				break;
 
-			case ON_DESTRUCTION_WAIT:
+			case job::ON_DESTRUCTION_WAIT:
 			default:
 
 #ifdef PTHREAD_EXT
