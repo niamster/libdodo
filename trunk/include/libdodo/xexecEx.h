@@ -45,18 +45,17 @@ namespace dodo {
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define XEXECEX_WRONGTYPE_STR "Wrong xExec type."
+#define XEXECEX_WRONGTYPE_STR "Wrong xExec type"
 
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
 	enum xexecFunctionsID {
-		XEXECEX_ADD,
+		XEXECEX_ADDXEXEC,
 #ifdef DL_EXT
-		XEXECEX_GETMODULEINFO,
-		XEXECEX_DEL,
+		XEXECEX_MODULE,
+		XEXECEX_REMOVEXEXEC,
 #endif
 	};
 };
-
 #endif

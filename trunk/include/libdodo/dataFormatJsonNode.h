@@ -47,18 +47,6 @@ namespace dodo {
 		namespace format {
 			namespace json {
 				/**
-				 * @enum nodeDataTypeEnum defines JSON data types
-				 */
-				enum nodeDataTypeEnum {
-					DATATYPE_STRING,
-					DATATYPE_OBJECT,
-					DATATYPE_ARRAY,
-					DATATYPE_BOOLEAN,
-					DATATYPE_NUMERIC,
-					DATATYPE_NULL,
-				};
-
-				/**
 				 * @class node
 				 * @brief defines JSON object reprasentation
 				 */
@@ -69,6 +57,18 @@ namespace dodo {
 					friend class rpc::json::value;
 
 				  public:
+
+					/**
+					 * @enum dataEnum defines JSON data types
+					 */
+					enum dataEnum {
+						DATA_STRING,
+						DATA_OBJECT,
+						DATA_ARRAY,
+						DATA_BOOLEAN,
+						DATA_NUMERIC,
+						DATA_NULL,
+					};
 
 					/**
 					 * copy constructor
@@ -168,21 +168,21 @@ namespace dodo {
 					/**
 					 * @return node by string key
 					 * @param key defines key to search for node
-					 * @note throws exception if data type is not DATATYPE_OBJECT
+					 * @note throws exception if data type is not DATA_OBJECT
 					 */
 					node operator[](const dodoString &key) const;
 
 					/**
 					 * @return node by numeric key
 					 * @param key defines key to search for node
-					 * @note throws exception if data type is not DATATYPE_ARRAY
+					 * @note throws exception if data type is not DATA_ARRAY
 					 */
 					node operator[](unsigned long key) const;
 
 					/**
-					 * @return type of node[see jsonDataTypeEnum]
+					 * @return type of node[see jsonDataEnum]
 					 */
-					short getType() const;
+					short type() const;
 
 					/**
 					 * @return true if node is `null`
@@ -191,33 +191,33 @@ namespace dodo {
 
 					/**
 					 * @return string value
-					 * @note throws exception if data type is not DATATYPE_STRING
+					 * @note throws exception if data type is not DATA_STRING
 					 */
-					dodoString getString() const;
+					dodoString string() const;
 
 					/**
 					 * @return boolean value
-					 * @note throws exception if data type is not DATATYPE_BOOLEAN
+					 * @note throws exception if data type is not DATA_BOOLEAN
 					 */
-					bool getBoolean() const;
+					bool boolean() const;
 
 					/**
 					 * @return numeric value
-					 * @note throws exception if data type is not DATATYPE_NUMERIC
+					 * @note throws exception if data type is not DATA_NUMERIC
 					 */
-					long getNumeric() const;
+					long numeric() const;
 
 					/**
 					 * @return array value
-					 * @note throws exception if data type is not DATATYPE_ARRAY
+					 * @note throws exception if data type is not DATA_ARRAY
 					 */
-					dodoArray<node> getArray() const;
+					dodoArray<node> array() const;
 
 					/**
 					 * @return object value
-					 * @note throws exception if data type is not DATATYPE_OBJECT
+					 * @note throws exception if data type is not DATA_OBJECT
 					 */
-					dodoMap<dodoString, node, dodoMapStringCompare> getObject() const;
+					dodoMap<dodoString, node, dodoMapStringCompare> object() const;
 
 				  private:
 
@@ -235,5 +235,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

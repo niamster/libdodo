@@ -37,6 +37,7 @@
 namespace dodo {
 	namespace tools {
 		struct __regexp__;
+
 		/**
 		 * @class regexp
 		 * @brief provides REGEXP support
@@ -131,10 +132,10 @@ namespace dodo {
 		  protected:
 
 			/**
-			 * @struct __regexMatch__
+			 * @struct __regex_match__
 			 * @brief defines begin and end of matched substring
 			 */
-			struct __regexMatch__ {
+			struct __regex_match__ {
 				int begin;
 				int end;
 			};
@@ -150,9 +151,8 @@ namespace dodo {
 
 			__regexp__ *regex;                      ///< regexp handle
 
-			dodoArray<__regexMatch__> boundaries;   ///< list of boundaries matched in match string by pattern
+			dodoArray<__regex_match__> boundaries;   ///< list of boundaries matched in match string by pattern
 		};
 	};
 };
-
 #endif

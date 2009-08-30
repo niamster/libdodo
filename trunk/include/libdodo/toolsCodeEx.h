@@ -50,15 +50,12 @@ namespace dodo {
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define TOOLSCODEEX_BADASCII85_STR "Bad character in ASCII85."
-
+#define TOOLSCODEEX_BADASCII85_STR "Bad character in ASCII85"
 #ifdef BZIP2_EXT
-
-#define TOOLSCODEEX_BADBZCOMPRESSION_STR         "Error occured during comression."
-#define TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR   "Error occured during preparations for decompression."
-#define TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
-#define TOOLSCODEEX_BADBZDECOMPRESSION_STR       "Error occured during decompression."
-
+#define TOOLSCODEEX_BADBZCOMPRESSION_STR         "Error occured during comression"
+#define TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR   "Error occured during preparations for decompression"
+#define TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression"
+#define TOOLSCODEEX_BADBZDECOMPRESSION_STR       "Error occured during decompression"
 #endif
 
 		/**
@@ -66,28 +63,18 @@ namespace dodo {
 		 */
 		enum codeFunctionsID {
 #ifdef ICONV_EXT
-
 			CODEEX_CODESETCONVERSION,
-
 #endif
-
 #ifdef ZLIB_EXT
-
 			CODEEX_ZCOMPRESS,
 			CODEEX_ZDECOMPRESS,
-
 #endif
-
 			CODEEX_DECODEASCII85,
-
 #ifdef BZIP2_EXT
-
 			CODEEX_BZCOMPRESS,
 			CODEEX_BZDECOMPRESS,
-
 #endif
 		};
 	};
 };
-
 #endif

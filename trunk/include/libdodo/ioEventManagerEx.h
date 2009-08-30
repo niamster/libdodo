@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOEVENTEX_H_
-#define _IOEVENTEX_H_ 1
+#ifndef _IOEVENTMANAGEREX_H_
+#define _IOEVENTMANAGEREX_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -36,14 +36,15 @@
 
 namespace dodo {
 	namespace io {
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum eventFunctionsID {
-			EVENTEX_ISREADABLE,
-			EVENTEX_ISWRITABLE,
+		namespace event {
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum managerFunctionsID {
+				MANAGEREX_ISREADABLE,
+				MANAGEREX_ISWRITABLE,
+			};
 		};
 	};
 };
-
 #endif

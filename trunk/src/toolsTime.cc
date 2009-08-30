@@ -84,11 +84,11 @@ tools::time::byFormat(const dodoString &format,
 		tTime = gmtime((const time_t *)&timestamp);
 
 	if (tTime == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSTIME, TIMEEX_GETBYFORMAT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_BYFORMAT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	char formatted[30];
 
-	strftime(formatted, 30, format.c_str(), tTime);
+	strftime(formatted, 30, format.data(), tTime);
 
 	return formatted;
 }
@@ -100,7 +100,7 @@ tools::time::now()
 {
 	time_t tTime = ::time(NULL);
 	if (tTime == (time_t)-1)
-		throw exception::basic(exception::ERRMODULE_TOOLSTIME, TIMEEX_NOW, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_NOW, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return tTime;
 }
@@ -187,7 +187,7 @@ tools::time::timestamp(long seconds,
 		tTime = gmtime((const time_t *)&seconds);
 
 	if (tTime == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSTIME, TIMEEX_MAKETIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_MAKETIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__time__ timeInfo;
 
@@ -257,7 +257,7 @@ tools::time::byFormat(const dodoString &format,
 					  const dodoString &dt)
 {
 	tm tTime;
-	strptime(dt.c_str(), format.c_str(), &tTime);
+	strptime(dt.data(), format.data(), &tTime);
 
 	return ::mktime(&tTime);
 }

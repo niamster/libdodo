@@ -121,19 +121,19 @@ os::syncThreadSection::syncThreadSection()
 	pthread_mutexattr_t attr;
 	errno = pthread_mutexattr_init(&attr);
 	if (errno != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
 	if (errno != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	errno = pthread_mutex_init(&keeper.keeper, &attr);
 	if (errno != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	errno = pthread_mutexattr_destroy(&attr);
 	if (errno != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -155,7 +155,7 @@ os::syncThreadSection::acquire()
 #ifdef PTHREAD_EXT
 	errno = pthread_mutex_lock(&keeper.keeper);
 	if (errno != 0 && errno != EDEADLK)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -168,7 +168,7 @@ os::syncThreadSection::release()
 #ifdef PTHREAD_EXT
 	errno = pthread_mutex_unlock(&keeper.keeper);
 	if (errno != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -193,12 +193,12 @@ os::syncThreadStack::~syncThreadStack()
 //-------------------------------------------------------------------
 
 dodoString
-os::getWorkingDir()
+os::workingDir()
 {
 	char wd[MAXPATHLEN];
 
 	if (getcwd(wd, MAXPATHLEN) == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETWORKINGDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_WORKINGDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return wd;
 }
@@ -208,19 +208,18 @@ os::getWorkingDir()
 void
 os::setWorkingDir(const dodoString &path)
 {
-	if (chdir(path.c_str()) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETWORKINGDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (chdir(path.data()) == -1)
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETWORKINGDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
-
-__usage__
-os::getUsageInfo()
+os::__usage__
+os::usage()
 {
 	rusage use;
 	if (getrusage(RUSAGE_SELF, &use) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUSAGEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_USAGE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__usage__ info;
 	info.time = use.ru_utime.tv_sec * 100 + use.ru_utime.tv_usec;
@@ -236,51 +235,51 @@ os::changeRoot(const dodoString &path)
 {
 	setWorkingDir(path);
 
-	if (chroot(path.c_str()) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_CHANGEROOT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	if (chroot(path.data()) == -1)
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_CHANGEROOT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
 
-__limits__
-os::getLimit(short type)
+os::__limit__
+os::limit(short type)
 {
 	rlimit limit;
 
 	int realRes(0);
 
 	switch (type) {
-		case OS_CPUTIME:
+		case LIMIT_CPUTIME:
 
 			realRes = RLIMIT_CPU;
 
 			break;
 
-		case OS_MAXFILESIZE:
+		case LIMIT_MAXFILESIZE:
 
 			realRes = RLIMIT_FSIZE;
 
 			break;
 
-		case OS_MAXMEMUSAGE:
+		case LIMIT_MAXMEMUSAGE:
 
 			realRes = RLIMIT_DATA;
 
 			break;
 
-		case OS_MAXSTACK:
+		case LIMIT_MAXSTACK:
 
 			realRes = RLIMIT_STACK;
 
 			break;
 
-		case OS_MAXPROC:
+		case LIMIT_MAXPROC:
 
 			realRes = RLIMIT_NPROC;
 
 			break;
 
-		case OS_MAXOPENFILES:
+		case LIMIT_MAXOPENFILES:
 
 #ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
@@ -292,13 +291,13 @@ os::getLimit(short type)
 
 		default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETLIMIT, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_LIMIT, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (getrlimit(realRes, &limit) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETLIMIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_LIMIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	__limits__ lim;
+	__limit__ lim;
 
 	lim.current = limit.rlim_cur;
 	lim.max = limit.rlim_max;
@@ -310,44 +309,44 @@ os::getLimit(short type)
 
 void
 os::setLimit(short            type,
-			 const __limits__ &lim)
+			 const __limit__ &lim)
 {
 	rlimit limit;
 
 	int realRes(0);
 
 	switch (type) {
-		case OS_CPUTIME:
+		case LIMIT_CPUTIME:
 
 			realRes = RLIMIT_CPU;
 
 			break;
 
-		case OS_MAXFILESIZE:
+		case LIMIT_MAXFILESIZE:
 
 			realRes = RLIMIT_FSIZE;
 
 			break;
 
-		case OS_MAXMEMUSAGE:
+		case LIMIT_MAXMEMUSAGE:
 
 			realRes = RLIMIT_DATA;
 
 			break;
 
-		case OS_MAXSTACK:
+		case LIMIT_MAXSTACK:
 
 			realRes = RLIMIT_STACK;
 
 			break;
 
-		case OS_MAXPROC:
+		case LIMIT_MAXPROC:
 
 			realRes = RLIMIT_NPROC;
 
 			break;
 
-		case OS_MAXOPENFILES:
+		case LIMIT_MAXOPENFILES:
 
 #ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
@@ -359,24 +358,24 @@ os::setLimit(short            type,
 
 		default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETLIMIT, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETLIMIT, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	limit.rlim_cur = lim.current;
 	limit.rlim_max = lim.max;
 
 	if (setrlimit(realRes, &limit) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETLIMIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETLIMIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-os::getPriority(short type)
+os::priority(short type)
 {
-	int prio = getpriority(PRIO_PROCESS, getUID(type));
+	int prio = getpriority(PRIO_PROCESS, UID(type));
 	if (prio == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETPRIORITY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_PRIORITY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return prio;
 }
@@ -387,27 +386,27 @@ void
 os::setPriority(short type,
 				int   prio)
 {
-	if (setpriority(PRIO_PROCESS, getUID(type), prio) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETPRIORITY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (setpriority(PRIO_PROCESS, UID(type), prio) == -1)
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETPRIORITY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-os::getUID(short type)
+os::UID(short type)
 {
 	switch (type) {
-		case OS_UID:
+		case ID_UID:
 
 			return getuid();
 
-		case OS_EUID:
+		case ID_EUID:
 
 			return geteuid();
 
 		default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_UID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 }
 
@@ -420,13 +419,13 @@ os::setUID(short type,
 	int res(0);
 
 	switch (type) {
-		case OS_UID:
+		case ID_UID:
 
 			res = setuid(uid);
 
 			break;
 
-		case OS_EUID:
+		case ID_EUID:
 
 			res = seteuid(uid);
 
@@ -434,30 +433,30 @@ os::setUID(short type,
 
 		default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETUID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETUID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (res == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETUID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETUID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-os::getGID(short type)
+os::GID(short type)
 {
 	switch (type) {
-		case OS_UID:
+		case ID_UID:
 
 			return getgid();
 
-		case OS_EUID:
+		case ID_EUID:
 
 			return getegid();
 
 		default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_GID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 }
 
@@ -470,13 +469,13 @@ os::setGID(short type,
 	int res(0);
 
 	switch (type) {
-		case OS_UID:
+		case ID_UID:
 
 			res = setgid(uid);
 
 			break;
 
-		case OS_EUID:
+		case ID_EUID:
 
 			res = setegid(uid);
 
@@ -484,54 +483,54 @@ os::setGID(short type,
 
 		default:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETGID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETGID, exception::ERRNO_LIBDODO, OSEX_WRONGPARAMETER, TOOLSOSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (res == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETGID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETGID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
-__userInfo__
-os::getUserInfo(int uid)
+os::__user__
+os::user(int uid)
 {
 	passwd *in = getpwuid(uid);
 	if (in == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUSERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_USER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	__userInfo__ info;
+	__user__ info;
 
-	return fillUserInfo(info, in);
+	return fillUser(info, in);
 }
 
 //-------------------------------------------------------------------
 
-__userInfo__
-os::getUserInfo(const dodoString &uid)
+os::__user__
+os::user(const dodoString &uid)
 {
-	passwd *in = getpwnam(uid.c_str());
+	passwd *in = getpwnam(uid.data());
 	if (in == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUSERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_USER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	__userInfo__ info;
+	__user__ info;
 
-	return fillUserInfo(info, in);
+	return fillUser(info, in);
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<__userInfo__>
-os::getUsers()
+dodoArray<os::__user__>
+os::users()
 {
-	dodoArray<__userInfo__> users;
+	dodoArray<__user__> users;
 
 	passwd *in;
 
-	__userInfo__ info;
+	__user__ info;
 
 	while ((in = getpwent()) != NULL)
-		users.push_back(fillUserInfo(info, in));
+		users.push_back(fillUser(info, in));
 
 	switch (errno) {
 		case EIO:
@@ -539,7 +538,7 @@ os::getUsers()
 		case ENFILE:
 		case ENOMEM:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETUSERS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_USERS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	endpwent();
@@ -549,8 +548,8 @@ os::getUsers()
 
 //-------------------------------------------------------------------
 
-__userInfo__ &
-os::fillUserInfo(__userInfo__ &info,
+os::__user__ &
+os::fillUser(__user__ &info,
 				 void         *in)
 {
 	info.gid = ((passwd *)in)->pw_gid;
@@ -566,64 +565,64 @@ os::fillUserInfo(__userInfo__ &info,
 
 //-------------------------------------------------------------------
 
-__groupInfo__ &
-os::fillGroupInfo(__groupInfo__ &info,
+os::__group__ &
+os::fillGroup(__group__ &info,
 				  void          *pw)
 {
-	info.gid = ((group *)pw)->gr_gid;
-	info.name = ((group *)pw)->gr_name;
+	info.gid = ((::group *)pw)->gr_gid;
+	info.name = ((::group *)pw)->gr_name;
 
 	info.members.clear();
 
 	int i(0);
 
-	while (((group *)pw)->gr_mem[i] != NULL)
-		info.members.push_back(((group *)pw)->gr_mem[i++]);
+	while (((::group *)pw)->gr_mem[i] != NULL)
+		info.members.push_back(((::group *)pw)->gr_mem[i++]);
 
 	return info;
 }
 
 //-------------------------------------------------------------------
 
-__groupInfo__
-os::getGroupInfo(int uid)
+os::__group__
+os::group(int uid)
 {
-	group *in = getgrgid(uid);
+	::group *in = getgrgid(uid);
 	if (in == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGROUPINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_GROUP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	__groupInfo__ info;
+	__group__ info;
 
-	return fillGroupInfo(info, in);
+	return fillGroup(info, in);
 }
 
 //-------------------------------------------------------------------
 
-__groupInfo__
-os::getGroupInfo(const dodoString &uid)
+os::__group__
+os::group(const dodoString &uid)
 {
-	group *in = getgrnam(uid.c_str());
+	::group *in = getgrnam(uid.data());
 	if (in == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGROUPINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_GROUP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	__groupInfo__ info;
+	__group__ info;
 
-	return fillGroupInfo(info, in);
+	return fillGroup(info, in);
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<__groupInfo__>
-os::getGroups()
+dodoArray<os::__group__>
+os::groups()
 {
-	dodoArray<__groupInfo__> groups;
+	dodoArray<__group__> groups;
 
-	group *in;
+	::group *in;
 
-	__groupInfo__ info;
+	__group__ info;
 
 	while ((in = getgrent()) != NULL)
-		groups.push_back(fillGroupInfo(info, in));
+		groups.push_back(fillGroup(info, in));
 
 	switch (errno) {
 		case EIO:
@@ -632,7 +631,7 @@ os::getGroups()
 		case EINTR:
 		case ENOMEM:
 
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGROUPS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_GROUPS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	endgrent();
@@ -646,7 +645,7 @@ void
 os::die(const dodoString &message,
 		int              status)
 {
-	fwrite(message.c_str(), message.size(), 1, stderr);
+	fwrite(message.data(), message.size(), 1, stderr);
 	fflush(stderr);
 
 	kill(0, SIGTERM);
@@ -681,13 +680,13 @@ void
 os::atExit(void (*func)())
 {
 	if (atexit(func) != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_ATEXIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_ATEXIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-os::getPID()
+os::PID()
 {
 	return getpid();
 }
@@ -695,7 +694,7 @@ os::getPID()
 //-------------------------------------------------------------------
 
 int
-os::getParentPID()
+os::PPID()
 {
 	return getppid();
 }
@@ -703,7 +702,7 @@ os::getParentPID()
 //-------------------------------------------------------------------
 
 int
-os::getGroupPID()
+os::GPID()
 {
 	return getpgrp();
 }
@@ -711,11 +710,11 @@ os::getGroupPID()
 //-------------------------------------------------------------------
 
 int
-os::getGroupPID(int pid)
+os::GPID(int pid)
 {
 	int pgid = getpgid(pid);
 	if (pgid == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETGROUPPID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_GPID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return pgid;
 }
@@ -723,20 +722,20 @@ os::getGroupPID(int pid)
 //-------------------------------------------------------------------
 
 void
-os::setGroupPID(int gpid)
+os::setGPID(int gpid)
 {
 	if (setpgid(0, gpid) == 1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETGROUPPID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETGROUPPID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-os::setGroupPID(int pid,
+os::setGPID(int pid,
 				int gpid)
 {
 	if (setpgid(pid, gpid) == 1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETGROUPPID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETGROUPPID, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -746,61 +745,61 @@ os::sigMask(sigset_t *set,
 			long     blockSignals)
 {
 	if (blockSignals != -1) {
-		if (isSetFlag(blockSignals, OS_SIGNAL_HANGUP))
+		if (isSetFlag(blockSignals, SIGNAL_HANGUP))
 			sigaddset(set, SIGHUP);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_INTERRUPT))
+		if (isSetFlag(blockSignals, SIGNAL_INTERRUPT))
 			sigaddset(set, SIGINT);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_QUIT))
+		if (isSetFlag(blockSignals, SIGNAL_QUIT))
 			sigaddset(set, SIGQUIT);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_ILLEGAL_INSTRUCTION))
+		if (isSetFlag(blockSignals, SIGNAL_ILLEGAL_INSTRUCTION))
 			sigaddset(set, SIGILL);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_ABORT))
+		if (isSetFlag(blockSignals, SIGNAL_ABORT))
 			sigaddset(set, SIGABRT);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_BUS_FAULT))
+		if (isSetFlag(blockSignals, SIGNAL_BUS_FAULT))
 			sigaddset(set, SIGBUS);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_FLOATINGPOINT_FAULT))
+		if (isSetFlag(blockSignals, SIGNAL_FLOATINGPOINT_FAULT))
 			sigaddset(set, SIGFPE);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_USER_DEFINED1))
+		if (isSetFlag(blockSignals, SIGNAL_USER_DEFINED1))
 			sigaddset(set, SIGUSR1);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_SEGMENTATION_FAULT))
+		if (isSetFlag(blockSignals, SIGNAL_SEGMENTATION_FAULT))
 			sigaddset(set, SIGSEGV);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_USER_DEFINED2))
+		if (isSetFlag(blockSignals, SIGNAL_USER_DEFINED2))
 			sigaddset(set, SIGUSR2);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_PIPE_FAULT))
+		if (isSetFlag(blockSignals, SIGNAL_PIPE_FAULT))
 			sigaddset(set, SIGPIPE);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_ALARM))
+		if (isSetFlag(blockSignals, SIGNAL_ALARM))
 			sigaddset(set, SIGALRM);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_TERMINATION))
+		if (isSetFlag(blockSignals, SIGNAL_TERMINATION))
 			sigaddset(set, SIGTERM);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_CHILD_CHANGED))
+		if (isSetFlag(blockSignals, SIGNAL_CHILD_CHANGED))
 			sigaddset(set, SIGCHLD);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_CONTINUE))
+		if (isSetFlag(blockSignals, SIGNAL_CONTINUE))
 			sigaddset(set, SIGCONT);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_KEYBOARD_STOP))
+		if (isSetFlag(blockSignals, SIGNAL_KEYBOARD_STOP))
 			sigaddset(set, SIGTSTP);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_CPULIMIT_EXCEEDED))
+		if (isSetFlag(blockSignals, SIGNAL_CPULIMIT_EXCEEDED))
 			sigaddset(set, SIGXCPU);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_FILESIZE_EXCEEDED))
+		if (isSetFlag(blockSignals, SIGNAL_FILESIZE_EXCEEDED))
 			sigaddset(set, SIGXFSZ);
 
-		if (isSetFlag(blockSignals, OS_SIGNAL_BAD_SYSCALL))
+		if (isSetFlag(blockSignals, SIGNAL_BAD_SYSCALL))
 			sigaddset(set, SIGSYS);
 	}
 }
@@ -815,11 +814,11 @@ os::setSignalHandler(long          signal,
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-	deinitOsSignalModule deinit;
+	deinitSignalModule deinit;
 
 	int handleSignal = toSignalNumber(signal);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
-		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
+		deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -837,12 +836,12 @@ os::setSignalHandler(long          signal,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, blockSignals);
 
 	if (sigaction(os::toRealSignal(signal), &act, NULL) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -855,11 +854,11 @@ os::setMicroTimer(unsigned long timeout,
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-	deinitOsSignalModule deinit;
+	deinitSignalModule deinit;
 
-	int handleSignal = toSignalNumber(OS_SIGNAL_ALARM);
+	int handleSignal = toSignalNumber(SIGNAL_ALARM);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
-		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
+		deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -877,7 +876,7 @@ os::setMicroTimer(unsigned long timeout,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETMICROTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETMICROTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, blockSignals);
 
@@ -895,10 +894,10 @@ os::setMicroTimer(unsigned long timeout,
 	value.it_value.tv_usec = tMicrosec;
 
 	if (sigaction(SIGALRM, &act, NULL) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETMICROTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETMICROTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETMICROTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETMICROTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -911,11 +910,11 @@ os::setTimer(long          timeout,
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-	deinitOsSignalModule deinit;
+	deinitSignalModule deinit;
 
-	int handleSignal = toSignalNumber(OS_SIGNAL_ALARM);
+	int handleSignal = toSignalNumber(SIGNAL_ALARM);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
-		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
+		deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -933,7 +932,7 @@ os::setTimer(long          timeout,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, blockSignals);
 
@@ -944,10 +943,10 @@ os::setTimer(long          timeout,
 	value.it_value.tv_usec = 0;
 
 	if (sigaction(SIGALRM, &act, NULL) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETTIMER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -957,7 +956,7 @@ os::isSignalHandled(long signal)
 {
 	struct sigaction act;
 	if (sigaction(os::toRealSignal(signal), NULL, &act) == 1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (act.sa_sigaction != NULL || act.sa_handler != NULL)
 		return true;
@@ -972,22 +971,22 @@ os::sendSignal(int  pid,
 			   long signal)
 {
 	if (kill(pid, os::toRealSignal(signal)) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SENDSIGNAL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SENDSIGNAL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-os::unsetSignalHandler(long signal)
+os::removeSignalHandler(long signal)
 {
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-	deinitOsSignalModule deinit;
+	deinitSignalModule deinit;
 
 	int handleSignal = toSignalNumber(signal);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
-		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
+		deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -1004,33 +1003,33 @@ os::unsetSignalHandler(long signal)
 	act.sa_sigaction = NULL;
 
 	if (sigaction(os::toRealSignal(signal), &act, NULL) == 1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_UNSETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_REMOVESIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
-__signalMod__
-os::getModuleInfo(const dodoString &module,
+os::__signal_module__
+os::module(const dodoString &module,
 				  void             *toInit)
 {
 #ifdef DL_FAST
-	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
+	void *handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initOsSignalModule init = (initOsSignalModule)dlsym(handle, "initOsSignalModule");
+	initSignalModule init = (initSignalModule)dlsym(handle, "initToolsOsSignalModule");
 	if (init == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__signalMod__ mod = init(toInit);
+	__signal_module__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 
@@ -1046,24 +1045,24 @@ os::setSignalHandler(const dodoString &path,
 	syncThreadStack tg;
 
 #ifdef DL_FAST
-	void *handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
+	void *handle = dlopen(path.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	void *handle = dlopen(path.c_str(), RTLD_LAZY);
+	void *handle = dlopen(path.data(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	initOsSignalModule init = (initOsSignalModule)dlsym(handle, "initOsSignalModule");
+	initSignalModule init = (initSignalModule)dlsym(handle, "initToolsOsSignalModule");
 	if (init == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	__signalMod__ mod = init(toInit);
+	__signal_module__ mod = init(toInit);
 
-	deinitOsSignalModule deinit;
+	deinitSignalModule deinit;
 
 	int handleSignal = toSignalNumber(mod.signal);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
-		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
+		deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -1079,19 +1078,19 @@ os::setSignalHandler(const dodoString &path,
 
 	signalHandler in = (signalHandler)dlsym(handlesSig[mod.signal], mod.hook);
 	if (in == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	struct sigaction act;
 	act.sa_sigaction = (void(*) (int, siginfo_t *, void*))in;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, mod.blockSignals);
 
 	if (sigaction(os::toRealSignal(mod.signal), &act, NULL) == 1)
-		throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	handlesOpenedSig[handleSignal] = true;
 }
@@ -1103,79 +1102,79 @@ int
 os::toSignalNumber(long signal)
 {
 	switch (signal) {
-		case OS_SIGNAL_HANGUP:
+		case SIGNAL_HANGUP:
 
 			return 0;
 
-		case OS_SIGNAL_INTERRUPT:
+		case SIGNAL_INTERRUPT:
 
 			return 1;
 
-		case OS_SIGNAL_QUIT:
+		case SIGNAL_QUIT:
 
 			return 2;
 
-		case OS_SIGNAL_ILLEGAL_INSTRUCTION:
+		case SIGNAL_ILLEGAL_INSTRUCTION:
 
 			return 3;
 
-		case OS_SIGNAL_ABORT:
+		case SIGNAL_ABORT:
 
 			return 4;
 
-		case OS_SIGNAL_BUS_FAULT:
+		case SIGNAL_BUS_FAULT:
 
 			return 5;
 
-		case OS_SIGNAL_FLOATINGPOINT_FAULT:
+		case SIGNAL_FLOATINGPOINT_FAULT:
 
 			return 6;
 
-		case OS_SIGNAL_USER_DEFINED1:
+		case SIGNAL_USER_DEFINED1:
 
 			return 7;
 
-		case OS_SIGNAL_SEGMENTATION_FAULT:
+		case SIGNAL_SEGMENTATION_FAULT:
 
 			return 8;
 
-		case OS_SIGNAL_USER_DEFINED2:
+		case SIGNAL_USER_DEFINED2:
 
 			return 9;
 
-		case OS_SIGNAL_PIPE_FAULT:
+		case SIGNAL_PIPE_FAULT:
 
 			return 10;
 
-		case OS_SIGNAL_ALARM:
+		case SIGNAL_ALARM:
 
 			return 11;
 
-		case OS_SIGNAL_TERMINATION:
+		case SIGNAL_TERMINATION:
 
 			return 12;
 
-		case OS_SIGNAL_CHILD_CHANGED:
+		case SIGNAL_CHILD_CHANGED:
 
 			return 13;
 
-		case OS_SIGNAL_CONTINUE:
+		case SIGNAL_CONTINUE:
 
 			return 14;
 
-		case OS_SIGNAL_KEYBOARD_STOP:
+		case SIGNAL_KEYBOARD_STOP:
 
 			return 15;
 
-		case OS_SIGNAL_CPULIMIT_EXCEEDED:
+		case SIGNAL_CPULIMIT_EXCEEDED:
 
 			return 16;
 
-		case OS_SIGNAL_FILESIZE_EXCEEDED:
+		case SIGNAL_FILESIZE_EXCEEDED:
 
 			return 17;
 
-		case OS_SIGNAL_BAD_SYSCALL:
+		case SIGNAL_BAD_SYSCALL:
 
 			return 18;
 
@@ -1191,79 +1190,79 @@ int
 os::toRealSignal(long signal)
 {
 	switch (signal) {
-		case OS_SIGNAL_HANGUP:
+		case SIGNAL_HANGUP:
 
 			return SIGHUP;
 
-		case OS_SIGNAL_INTERRUPT:
+		case SIGNAL_INTERRUPT:
 
 			return SIGINT;
 
-		case OS_SIGNAL_QUIT:
+		case SIGNAL_QUIT:
 
 			return SIGQUIT;
 
-		case OS_SIGNAL_ILLEGAL_INSTRUCTION:
+		case SIGNAL_ILLEGAL_INSTRUCTION:
 
 			return SIGILL;
 
-		case OS_SIGNAL_ABORT:
+		case SIGNAL_ABORT:
 
 			return SIGABRT;
 
-		case OS_SIGNAL_BUS_FAULT:
+		case SIGNAL_BUS_FAULT:
 
 			return SIGBUS;
 
-		case OS_SIGNAL_FLOATINGPOINT_FAULT:
+		case SIGNAL_FLOATINGPOINT_FAULT:
 
 			return SIGFPE;
 
-		case OS_SIGNAL_USER_DEFINED1:
+		case SIGNAL_USER_DEFINED1:
 
 			return SIGUSR1;
 
-		case OS_SIGNAL_SEGMENTATION_FAULT:
+		case SIGNAL_SEGMENTATION_FAULT:
 
 			return SIGSEGV;
 
-		case OS_SIGNAL_USER_DEFINED2:
+		case SIGNAL_USER_DEFINED2:
 
 			return SIGUSR2;
 
-		case OS_SIGNAL_PIPE_FAULT:
+		case SIGNAL_PIPE_FAULT:
 
 			return SIGPIPE;
 
-		case OS_SIGNAL_ALARM:
+		case SIGNAL_ALARM:
 
 			return SIGALRM;
 
-		case OS_SIGNAL_TERMINATION:
+		case SIGNAL_TERMINATION:
 
 			return SIGTERM;
 
-		case OS_SIGNAL_CHILD_CHANGED:
+		case SIGNAL_CHILD_CHANGED:
 
 			return SIGCHLD;
 
-		case OS_SIGNAL_CONTINUE:
+		case SIGNAL_CONTINUE:
 
 			return SIGCONT;
 
-		case OS_SIGNAL_KEYBOARD_STOP:
+		case SIGNAL_KEYBOARD_STOP:
 
 			return SIGTSTP;
 
-		case OS_SIGNAL_CPULIMIT_EXCEEDED:
+		case SIGNAL_CPULIMIT_EXCEEDED:
 
 			return SIGXCPU;
 
-		case OS_SIGNAL_FILESIZE_EXCEEDED:
+		case SIGNAL_FILESIZE_EXCEEDED:
 
 			return SIGXFSZ;
 
-		case OS_SIGNAL_BAD_SYSCALL:
+		case SIGNAL_BAD_SYSCALL:
 
 			return SIGSYS;
 
@@ -1299,20 +1298,20 @@ os::becomeDaemon()
 
 	if (pid == 0) {
 		if (setsid() == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (close(0) == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		if (close(1) == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		if (close(2) == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (chdir("/") == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	} else {
 		if (pid == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			_exit(0);
 	}
@@ -1328,24 +1327,24 @@ os::releaseDaemon(daemon func,
 
 	if (pid == 0) {
 		if (setsid() == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (close(0) == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		if (close(1) == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		if (close(2) == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (chdir("/") == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		func(data);
 
 		exit(0);
 	} else {
 		if (pid == -1)
-			throw exception::basic(exception::ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSOS, OSEX_DAEMONIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			_exit(0);
 	}

@@ -43,54 +43,12 @@ namespace dodo {
 			namespace ssl {
 				class server;
 			};
-			/**
-			 * @enum exchangeOperationTypeEnum defines type of operation for hook
-			 */
-			enum exchangeOperationTypeEnum {
-				EXCHANGE_OPERATION_CLOSE = 128,
-			};
-
-			/**
-			 * @class __initialAccept__
-			 * @brief holds info that passes to accept call, and then inits exchange;
-			 */
-			class __initialAccept__ {
-				friend class exchange;
-				friend class client;
-				friend class server;
-				friend class ssl::server;
-
-			  public:
-
-				/**
-				 * constructor
-				 */
-				__initialAccept__();
-
-				/**
-				 * copy constructor
-				 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
-				 */
-				__initialAccept__(__initialAccept__ &init);
-
-				/**
-				 * destructor
-				 */
-				virtual ~__initialAccept__();
-
-			  protected:
-
-				int socket;             ///< socket
-
-				bool blocked;           ///< true if blocked
-				bool blockInherited;    ///< true if block flag is inherited
-			};
 
 			/**
 			 * @class exchange
 			 * @brief provides communication interface[send/receive data]
-			 * @note readStream*: if length of read data is inSize, data will contain exact inSize, no '\0' will be set in the end - this is specific only for network sessions
-			 * writesStream* put extra '\0' in the end of the string
+			 * @note readStream*: if length of read data is inSize, data will contain exact inSize, no null will be set in the end this is specific only for network sessions
+			 * writesStream* put extra null in the end of the string
 			 */
 			class exchange : public connection,
 							 virtual public stream::channel {
@@ -104,24 +62,67 @@ namespace dodo {
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				exchange(exchange &fse);
+				exchange(exchange &);
 
 			  public:
 
 				/**
-				 * constructor
-				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+				 * @enum operationEnum defines type of operation for xexec
 				 */
-				exchange(short protection = CHANNEL_PROTECTION_PROCESS);
+				enum operationEnum {
+					OPERATION_CLOSE = 128,
+				};
+
+				/**
+				 * @class __init__
+				 * @brief holds info that is passed to accept call, and then inits exchange
+				 */
+				class __init__ {
+					friend class exchange;
+					friend class client;
+					friend class server;
+					friend class ssl::server;
+
+				  public:
+
+					/**
+					 * constructor
+					 */
+					__init__();
+
+					/**
+					 * copy constructor
+					 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
+					 */
+					__init__(__init__ &);
+
+					/**
+					 * destructor
+					 */
+					virtual ~__init__();
+
+				  protected:
+
+					int socket;             ///< socket
+
+					bool blocked;           ///< true if blocked
+					bool blockInherited;    ///< true if block flag is inherited
+				};
+
+				/**
+				 * constructor
+				 * @param protection defines type of IO protection[see channelProtectionEnum]
+				 */
+				exchange(short protection = channel::PROTECTION_PROCESS);
 
 				/**
 				 * constructor
 				 * @param init is initial data[got from the ::accept method]
-				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+				 * @param protection defines type of IO protection[see channelProtectionEnum]
 				 * @note the object that has inited the object of current instance can be used for another connections
 				 */
-				exchange(__initialAccept__ &init,
-						 short             protection = CHANNEL_PROTECTION_PROCESS);
+				exchange(__init__ &init,
+						 short             protection = channel::PROTECTION_PROCESS);
 
 				/**
 				 * destructor
@@ -143,12 +144,12 @@ namespace dodo {
 				/**
 				 * @return descriptor of input stream
 				 */
-				virtual int getInDescriptor() const;
+				virtual int inDescriptor() const;
 
 				/**
 				 * @return descriptor of output stream
 				 */
-				virtual int getOutDescriptor() const;
+				virtual int outDescriptor() const;
 
 				/**
 				 * init current instance
@@ -168,14 +169,14 @@ namespace dodo {
 
 				/**
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
+				 * @note not more then inSize(including null)
 				 */
 				virtual void _read(char * const data) const;
 
 				/**
-				 * read from stream - '\0' or '\n' - terminated string
+				 * read from stream null or newline terminated string
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
+				 * @note not more then inSize(including null)
 				 */
 				virtual unsigned long _readStream(char * const data) const;
 
@@ -185,14 +186,13 @@ namespace dodo {
 				virtual void _write(const char * const data) const;
 
 				/**
-				 * write to stream - '\0' - terminated string
+				 * write to stream null terminated string
 				 * @param data defines data that will be written
-				 * @note puts extra '\0' in the end of the string
+				 * @note puts extra null in the end of the string
 				 */
 				virtual void _writeStream(const char * const data) const;
 			};
 		};
 	};
 };
-
 #endif

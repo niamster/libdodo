@@ -88,9 +88,9 @@ string::contains(const dodoString &str,
 				 bool             icase)
 {
 	if (icase) {
-		if (strcasestr(str.c_str(), needle.c_str()) != NULL)
+		if (strcasestr(str.data(), needle.data()) != NULL)
 			return true;
-	} else if (strstr(str.c_str(), needle.c_str()) != NULL)
+	} else if (strstr(str.data(), needle.data()) != NULL)
 		return true;
 
 
@@ -111,15 +111,15 @@ string::find(const dodoString &str,
 	char *pos = NULL;
 
 	if (icase) {
-		if ((pos = strcasestr((char *)(str.c_str() + position), needle.c_str())) == NULL)
+		if ((pos = strcasestr((char *)(str.data() + position), needle.data())) == NULL)
 			return dodoString::npos;
 		else
-			return (pos - str.c_str());
+			return (pos - str.data());
 	} else {
-		if ((pos = strstr((char *)(str.c_str() + position), needle.c_str())) == NULL)
+		if ((pos = strstr((char *)(str.data() + position), needle.data())) == NULL)
 			return dodoString::npos;
 		else
-			return (pos - str.c_str());
+			return (pos - str.data());
 	}
 
 	return dodoString::npos;
@@ -147,7 +147,7 @@ string::format(const dodoString &format,
 	va_list ap;
 
 	va_start(ap, format);
-	vsnprintf(str, length, format.c_str(), ap);
+	vsnprintf(str, length, format.data(), ap);
 	va_end(ap);
 
 	dodoString res = str;
@@ -222,7 +222,6 @@ string::usToString(unsigned short number)
 
 	return temp;
 }
-
 
 //-------------------------------------------------------------------
 
@@ -340,7 +339,7 @@ string::trim(const dodoString &data,
 long
 string::stringToL(const dodoString &data)
 {
-	return atol(data.c_str());
+	return atol(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -348,7 +347,7 @@ string::stringToL(const dodoString &data)
 unsigned long
 string::stringToUL(const dodoString &data)
 {
-	return strtoul(data.c_str(), NULL, 10);
+	return strtoul(data.data(), NULL, 10);
 }
 
 //-------------------------------------------------------------------
@@ -356,7 +355,7 @@ string::stringToUL(const dodoString &data)
 int
 string::stringToI(const dodoString &data)
 {
-	return atoi(data.c_str());
+	return atoi(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -364,7 +363,7 @@ string::stringToI(const dodoString &data)
 unsigned int
 string::stringToUI(const dodoString &data)
 {
-	return (unsigned int)atol(data.c_str());
+	return (unsigned int)atol(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -372,7 +371,7 @@ string::stringToUI(const dodoString &data)
 short
 string::stringToS(const dodoString &data)
 {
-	return (short)atoi(data.c_str());
+	return (short)atoi(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -380,7 +379,7 @@ string::stringToS(const dodoString &data)
 unsigned short
 string::stringToUS(const dodoString &data)
 {
-	return (unsigned short)atoi(data.c_str());
+	return (unsigned short)atoi(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -388,7 +387,7 @@ string::stringToUS(const dodoString &data)
 float
 string::stringToF(const dodoString &data)
 {
-	return (float)atof(data.c_str());
+	return (float)atof(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -396,7 +395,7 @@ string::stringToF(const dodoString &data)
 double
 string::stringToD(const dodoString &data)
 {
-	return atof(data.c_str());
+	return atof(data.data());
 }
 
 //-------------------------------------------------------------------

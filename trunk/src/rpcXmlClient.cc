@@ -63,7 +63,7 @@ client::setRequestEncoding(const dodoString &a_encoding)
 //-------------------------------------------------------------------
 
 dodoString
-client::getResponseEncoding()
+client::responseEncoding()
 {
 	return rpEncoding;
 }
@@ -87,13 +87,13 @@ client::processCallResult()
 {
 	dodo::data::format::xml::processor xmlValue;
 
-	dodo::data::format::xml::__nodeDef__ xmlMethodResponse;
+	dodo::data::format::xml::__definition__ xmlMethodResponse;
 	xmlMethodResponse.name = "methodResponse";
 	xmlMethodResponse.allChildren = true;
 
 	dodo::data::format::xml::node node = xmlValue.process(xmlMethodResponse, io);
 
-	rpEncoding = xmlValue.getInfo().encoding;
+	rpEncoding = xmlValue.information().encoding;
 
 	return response::xmlToResponse(node);
 }

@@ -36,6 +36,7 @@
 #include <libdodo/ioNetworkConnection.h>
 #include <libdodo/xexec.h>
 #include <libdodo/ioEventInfo.h>
+#include <libdodo/ioNetworkExchange.h>
 
 namespace dodo {
 	namespace io {
@@ -44,43 +45,12 @@ namespace dodo {
 				class server;
 			};
 
-			class __initialAccept__;
-
-			/**
-			 * @enum serverOperationTypeEnum defines type of operation for hook
-			 */
-			enum serverOperationTypeEnum {
-				SERVER_OPERATION_CONNECT = 128,
-				SERVER_OPERATION_CONNECTFROM,
-				SERVER_OPERATION_CONNECT_UNIX,
-				SERVER_OPERATION_BINDNLISTEN,
-				SERVER_OPERATION_BINDNLISTEN_UNIX,
-				SERVER_OPERATION_ACCEPT,
-			};
-
-#ifndef IO_WO_XEXEC
-			/**
-			 * @class __xexecIoNetworkServerCollectedData__
-			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
-			 */
-			class __xexecIoNetworkServerCollectedData__ : public __xexecCollectedData__ {
-			  public:
-
-				/**
-				 * constructor
-				 * @param executor defines class that executed hook
-				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
-				 */
-				__xexecIoNetworkServerCollectedData__(xexec *executor, short execObject);
-			};
-#endif
-
 			/**
 			 * @class server
 			 * @brief provides network connection interface
 			 */
 			class server : public connection,
-						   virtual public eventInfo
+						   virtual public event::info
 #ifndef IO_WO_XEXEC
 						   ,
 						   public xexec
@@ -95,14 +65,39 @@ namespace dodo {
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				server(server &fs);
+				server(server &);
 
 			  public:
 
 				/**
+				 * @enum operationEnum defines type of operation for hook
+				 */
+				enum operationEnum {
+					OPERATION_BINDNLISTEN,
+					OPERATION_ACCEPT,
+				};
+
+#ifndef IO_WO_XEXEC
+				/**
+				 * @class __collected_data__
+				 * @brief defines data that could be retrieved from class(to modificate)[contains references]
+				 */
+				class __collected_data__ : public xexec::__collected_data__ {
+				  public:
+
+					/**
+					 * constructor
+					 * @param executor defines class that executed hook
+					 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+					 */
+					__collected_data__(xexec *executor, short execObject);
+				};
+#endif
+
+				/**
 				 * constructor
 				 * @param family defines family of the socket[see connectionProtoFamilyEnum]
-				 * @param type defines type of the socket[see connectionTransferTypeEnum]
+				 * @param type defines type of the socket[see connectionTransferEnum]
 				 */
 				server(short family,
 					   short type);
@@ -139,20 +134,20 @@ namespace dodo {
 				 * @return true on new connection acceptance
 				 * @param init defines object that will be filled with info that may init exchange object
 				 * @param info defines info about remote host
-				 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
+				 * @note for OPTIONS_TRANSFER_DATAGRAM true is always returned
 				 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 				 */
-				virtual bool accept(__initialAccept__ &init,
-									__peerInfo__      &info);
+				virtual bool accept(exchange::__init__ &init,
+									__peer__      &info);
 
 				/**
 				 * accept incoming connections
 				 * @return true on new connection acceptance
 				 * @param init defines object that will be filled with info that may init exchange object
-				 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
+				 * @note for OPTIONS_TRANSFER_DATAGRAM true is always returned
 				 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 				 */
-				virtual bool accept(__initialAccept__ &init);
+				virtual bool accept(exchange::__init__ &init);
 
 				bool blockInherited;                                    ///< if true - children(exchange objects) become unblocked, if parent(Server) in unblocked; false by default
 
@@ -161,12 +156,12 @@ namespace dodo {
 				/**
 				 * @return descriptor of input stream
 				 */
-				virtual int getInDescriptor() const;
+				virtual int inDescriptor() const;
 
 				/**
 				 * @return descriptor of output stream
 				 */
-				virtual int getOutDescriptor() const;
+				virtual int outDescriptor() const;
 
 				short family;                                           ///< socket family
 				short type;                                             ///< socket type
@@ -184,11 +179,10 @@ namespace dodo {
 				dodoString unixSock;                                    ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
-				__xexecIoNetworkServerCollectedData__ collectedData;    ///< data collected for xexec
+				__collected_data__ collectedData;    ///< data collected for xexec
 #endif
 			};
 		};
 	};
 };
-
 #endif

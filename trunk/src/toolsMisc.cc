@@ -50,17 +50,17 @@ misc::random(void          *data,
 {
 	FILE *file;
 
-	if (strength == MISC_RANDOMSTRENGTH_DEFAULT) {
+	if (strength == RANDOM_STRENGTH_DEFAULT) {
 		file = fopen("/dev/urandom", "r");
 		if (file == NULL)
-			throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	} else {
-		if (strength == MISC_RANDOMSTRENGTH_STRONG) {
+		if (strength == RANDOM_STRENGTH_STRONG) {
 			file = fopen("/dev/random", "r");
 			if (file == NULL)
-				throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		} else
-			throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
 	}
 
 	while (true) {
@@ -72,14 +72,14 @@ misc::random(void          *data,
 				continue;
 
 			if (ferror(file) != 0)
-				throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
 	}
 
 	if (fclose(file) != 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -304,7 +304,7 @@ misc::join(const dodoStringArray &fields,
 		   int                   limit)
 {
 	if (fields.size() == 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSMISC, MISCEX_JOIN, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_JOIN, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
 
 	int k(0);
 

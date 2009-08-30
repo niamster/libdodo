@@ -47,7 +47,7 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define IONETWORKEXCHANGEEX_NOCONNECTION_STR "No connection."
+#define IONETWORKEXCHANGEEX_NOCONNECTION_STR "No connection"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -60,5 +60,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

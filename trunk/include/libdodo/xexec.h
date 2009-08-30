@@ -36,110 +36,6 @@
 
 namespace dodo {
 	/**
-	 * @enum xexecObjectTypeEnum defines objects that access xexec
-	 */
-	enum xexecObjectTypeEnum {
-		XEXEC_OBJECT_XEXEC,
-		XEXEC_OBJECT_DATABASEMYSQL,
-		XEXEC_OBJECT_DATABASESQLITE,
-		XEXEC_OBJECT_DATABASEPOSTGRESQL,
-		XEXEC_OBJECT_IOSTDIO,
-		XEXEC_OBJECT_IOFILEREGULAR,
-		XEXEC_OBJECT_IOFILETEMP,
-		XEXEC_OBJECT_IOFILEFIFO,
-		XEXEC_OBJECT_IOPIPE,
-		XEXEC_OBJECT_IOMEMORY,
-		XEXEC_OBJECT_IONETWORKCLIENT,
-		XEXEC_OBJECT_IONETWORKSERVER,
-		XEXEC_OBJECT_IONETWORKEXCHANGE,
-		XEXEC_OBJECT_IONETWORKSSLCLIENT,
-		XEXEC_OBJECT_IONETWORKSSLSERVER,
-		XEXEC_OBJECT_IONETWORKSSLEXCHANGE,
-		XEXEC_OBJECT_CGIFASTEXCHANGE,
-		XEXEC_OBJECT_CGIBASICEXCHANGE,
-		XEXEC_OBJECT_GRAPHICSIMAGE,
-	};
-
-	class __xexecCollectedData__;
-
-	/**
-	 * @typedef hook
-	 * @brief defines function that will be called as hook
-	 * @param odata defines object data
-	 * @param object defines type of object that called hook[see xexecObjectTypeEnum]
-	 * @param udata defines user data
-	 */
-	typedef void (*hook)(__xexecCollectedData__ *odata, short object, void *udata);
-
-	/**
-	 * @enum xexecOperTypeEnum defines default operation type
-	 */
-	enum xexecOperTypeEnum {
-		XEXEC_OPERTYPE_NONE,
-	};
-
-	/**
-	 * @enum xexecModuleActionTypeEnum defines what type of exec[pre/post] will be used for module
-	 */
-	enum xexecActionEnum {
-		XEXEC_ACTION_PREEXEC = 2,
-		XEXEC_ACTION_POSTEXEC = 4,
-	};
-
-#ifdef DL_EXT
-	/**
-	 * @struct __xexecModule__
-	 * @brief is returned from xexecModuleInit in the library
-	 */
-	struct __xexecModule__ {
-		char  name[64];         ///< name of the library
-		char  discription[256]; ///< discription of the library
-		char  hook[64];         ///< name of function in the library that will be used as hook
-		short type;				///< type of hook[see xexecActionEnum][could me grouped with OR]
-	};
-
-	/**
-	 * @typedef xexecModuleInit
-	 * @brief defines type of init function for library
-	 * @param data defines user data
-	 */
-	typedef __xexecModule__ (*xexecModuleInit)(void *data);
-
-	/**
-	 * @typedef xexecModuleDeinit
-	 * @brief defines type of deinit function for library
-	 */
-	typedef void (*xexecModuleDeinit)();
-#endif
-
-	class xexec;
-
-	/**
-	 * @class __xexecCollectedData__
-	 * @brief defines data that could be retrieved from the object where xexec action raised
-	 */
-	class __xexecCollectedData__ {
-	  public:
-
-		/**
-		 * constructor
-		 * @param executor defines class that executed hook
-		 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
-		 */
-		__xexecCollectedData__(xexec *executor,
-							   short execObject);
-
-		/**
-		 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
-		 */
-		void setExecObject(short execObject);
-
-		int &operType;      ///< xexec operation
-
-		xexec *executor;    ///< class that executed hook
-	};
-
-	/**
 	 * example of exec function that performs xexec
 	 *
 	 *	void
@@ -156,17 +52,115 @@ namespace dodo {
 	 * @brief provides pre/post exec actions for defrived classes
 	 */
 	class xexec {
-		friend class __xexecCollectedData__;
-
 	  private:
 
 		/*
 		 * copy constructor
 		 * @note to prevent copying
 		 */
-		xexec(const xexec &exec);
+		xexec(const xexec &);
 
 	  public:
+
+#ifdef DL_EXT
+		/**
+		 * @struct __module__
+		 * @brief is returned from moduleInit in the library
+		 */
+		struct __module__ {
+			char  name[64];         ///< name of the library
+			char  discription[256]; ///< discription of the library
+			char  hook[64];         ///< name of function in the library that will be used as hook
+			short type;				///< type of hook[see xexecActionEnum][could me grouped with OR]
+		};
+
+		/**
+		 * @typedef moduleInit
+		 * @brief defines type of init function for library
+		 * @param data defines user data
+		 */
+		typedef __module__ (*moduleInit)(void *data);
+
+		/**
+		 * @typedef moduleDeinit
+		 * @brief defines type of deinit function for library
+		 */
+		typedef void (*moduleDeinit)();
+#endif
+
+		/**
+		 * @enum objectEnum defines objects that access xexec
+		 */
+		enum objectEnum {
+			OBJECT_XEXEC,
+			OBJECT_DATABASEMYSQL,
+			OBJECT_DATABASESQLITE,
+			OBJECT_DATABASEPOSTGRESQL,
+			OBJECT_IOSTDIO,
+			OBJECT_IOFILEREGULAR,
+			OBJECT_IOFILETEMP,
+			OBJECT_IOFILEFIFO,
+			OBJECT_IOPIPE,
+			OBJECT_IOMEMORY,
+			OBJECT_IONETWORKCLIENT,
+			OBJECT_IONETWORKSERVER,
+			OBJECT_IONETWORKEXCHANGE,
+			OBJECT_IONETWORKSSLCLIENT,
+			OBJECT_IONETWORKSSLSERVER,
+			OBJECT_IONETWORKSSLEXCHANGE,
+			OBJECT_CGIFASTEXCHANGE,
+			OBJECT_CGIBASICEXCHANGE,
+			OBJECT_GRAPHICSIMAGE,
+		};
+
+		/**
+		 * @enum operationEnum defines default operation type
+		 */
+		enum operationEnum {
+			OPERATION_NONE,
+		};
+
+		/**
+		 * @enum actionEnum defines what type of exec[pre/post] will be used for module
+		 */
+		enum actionEnum {
+			ACTION_PREEXEC = 2,
+			ACTION_POSTEXEC = 4,
+		};
+
+		/**
+		 * @class __collected_data__
+		 * @brief defines data that could be retrieved from the object where xexec action raised
+		 */
+		class __collected_data__ {
+		  public:
+
+			/**
+			 * constructor
+			 * @param executor defines class that executed hook
+			 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+			 */
+			__collected_data__(xexec *executor,
+								   short execObject);
+
+			/**
+			 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+			 */
+			void setExecObject(short execObject);
+
+			int &operType;      ///< xexec operation
+
+			xexec *executor;    ///< class that executed hook
+		};
+
+		/**
+		 * @typedef hook
+		 * @brief defines function that will be called as hook
+		 * @param odata defines object data
+		 * @param object defines type of object that called hook[see xexecObjectEnum]
+		 * @param udata defines user data
+		 */
+		typedef void (*hook)(__collected_data__ *odata, short object, void *udata);
 
 		/*
 		 * constructor
@@ -210,7 +204,7 @@ namespace dodo {
 		 * delete hook
 		 * @param id defines exec identificator
 		 */
-		void delXExec(int id);
+		void removeXExec(int id);
 
 		/**
 		 * enable/disable other hooks during hook execution
@@ -227,7 +221,7 @@ namespace dodo {
 		 * @param path defines path to the library[if not in ldconfig db] or library name
 		 * @param initData defines data that will be passed to the init function
 		 */
-		static __xexecModule__ getModuleInfo(const dodoString &path,
+		static __module__ module(const dodoString &path,
 										  void             *initData = NULL);
 #endif
 
@@ -248,10 +242,10 @@ namespace dodo {
 	  private:
 
 		/**
-		 * @struct __xexecItem__
+		 * @struct __item__
 		 * @brief defines xexec node
 		 */
-		struct __xexecItem__ {
+		struct __item__ {
 			hook func;                                ///< function to execute
 			void   *data;                               ///< user data
 			int    id;                            ///< object identificator
@@ -265,7 +259,7 @@ namespace dodo {
 		 * @param list defines list of hooks
 		 * @param id defines XExec identificator
 		 */
-		bool getXexec(dodoList<__xexecItem__> &list,
+		bool getXexec(dodoList<__item__> &list,
 							  int                       id);
 
 		/**
@@ -275,7 +269,7 @@ namespace dodo {
 		 * @param func defines function that will be called
 		 * @param data defines hook data
 		 */
-		int addXExec(dodoList<__xexecItem__> &list,
+		int addXExec(dodoList<__item__> &list,
 							 hook                    func,
 							 void                      *data);
 
@@ -283,18 +277,17 @@ namespace dodo {
 		 * perform enabled hooks
 		 * @param list defines list of hooks
 		 */
-		void performXExec(dodoList<__xexecItem__> &list) const;
+		void performXExec(dodoList<__item__> &list) const;
 
-		mutable dodoList<__xexecItem__> preExec;      ///< preExec hooks
-		mutable dodoList<__xexecItem__> postExec;     ///< postExec hooks
+		mutable dodoList<__item__> preExec;      ///< preExec hooks
+		mutable dodoList<__item__> postExec;     ///< postExec hooks
 
 		int execs;                                      ///< hook counter
 
-		dodoList<__xexecItem__>::iterator current;    ///< iterator for list[for matched with getXexec method]
+		dodoList<__item__>::iterator current;    ///< iterator for list[for matched with getXexec method]
 
-		short execObject;                               ///< type of object[see xexecObjectTypeEnum]
-		__xexecCollectedData__ *execObjectData;         ///< object data
+		short execObject;                               ///< type of object[see xexecObjectEnum]
+		__collected_data__ *execObjectData;         ///< object data
 	};
 };
-
 #endif

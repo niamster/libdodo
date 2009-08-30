@@ -49,15 +49,6 @@ namespace dodo {
 				class processor;
 
 				/**
-				 * @struct __nodeNamespace__
-				 * @brief defines node namespace
-				 */
-				struct __nodeNamespace__ {
-					dodoString prefix;  ///< prefix for the namespace
-					dodoString href;    ///< URL for the namespace
-				};
-
-				/**
 				 * @class node
 				 * @brief defines xml tree
 				 * @note children is a map of vectors of xml nodes where map key is node name and vector contains nodes with name given in key
@@ -69,6 +60,15 @@ namespace dodo {
 					friend class rpc::xml::response;
 
 				  public:
+
+					/**
+					 * @struct __namespace__
+					 * @brief defines node namespace
+					 */
+					struct __namespace__ {
+						dodoString prefix;  ///< prefix for the namespace
+						dodoString href;    ///< URL for the namespace
+					};
 
 					/**
 					 * constructor
@@ -104,14 +104,14 @@ namespace dodo {
 					 * @param name defines name of child nodes to get
 					 * @param recursive defines if walk through all children in deep
 					 */
-					dodoArray<node> getChildren(const dodoString &name,
+					dodoArray<node> children(const dodoString &name,
 														bool             recursive = false);
 
 					/**
 					 * @return names of children nodes
 					 * @param recursive defines if walk through all children in deep
 					 */
-					dodoStringArray getChildrenNames(bool recursive = false);
+					dodoStringArray childrenNames(bool recursive = false);
 
 					/**
 					 * @return attribute value
@@ -130,20 +130,20 @@ namespace dodo {
 					/**
 					 * @return value of the node
 					 */
-					dodoString getValue();
+					dodoString value();
 
 					dodoStringMap attributes;                                                   ///< attributes
 
 					dodoString name;                                                            ///< name of the node [[tag]]
 
-					__nodeNamespace__ ns;                                                       ///< namespace of the node
-					__nodeNamespace__ nsDef;                                                    ///< namespace definition of the node
+					__namespace__ ns;                                                       ///< namespace of the node
+					__namespace__ nsDef;                                                    ///< namespace definition of the node
 
 				  protected:
 
-					dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> children;        ///< children
+					dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> nodeChildren;        ///< children
 
-					dodoString value;                                                           ///< value of the node
+					dodoString nodeValue;                                                           ///< value of the node
 
 					bool CDATA;                                                                 ///< true if node doesn't have contents : `<node />`
 				};
@@ -151,6 +151,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

@@ -45,97 +45,67 @@
 
 using namespace dodo::graphics;
 
-transform::transform(transform &a_transform)
-{
-}
-
-//-------------------------------------------------------------------
-
-transform::transform() : im(NULL)
-{
-}
-
-//-------------------------------------------------------------------
-
-transform::transform(image *im) : im(im)
-{
-}
-
-//-------------------------------------------------------------------
-
-transform::~transform()
-{
-}
-
 //-------------------------------------------------------------------
 
 void
-transform::setImage(image *a_im)
-{
-	im = a_im;
-}
-
-//-------------------------------------------------------------------
-
-void
-transform::scale(unsigned long width,
+transform::scale(image &image,
+				 unsigned long width,
 				 unsigned long height)
 {
-	if (im == NULL || im->collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	if (image.collectedData.handle->im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	GetExceptionInfo((ExceptionInfo *)im->exInfo);
+	GetExceptionInfo((ExceptionInfo *)image.exInfo);
 
-	Image *image = ScaleImage(im->collectedData.handle->im, width, height, (ExceptionInfo *)im->exInfo);
+	Image *im = ScaleImage(image.collectedData.handle->im, width, height, (ExceptionInfo *)image.exInfo);
+	if (im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)image.exInfo)->error_number, ((ExceptionInfo *)image.exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)image.exInfo)->description?((ExceptionInfo *)image.exInfo)->description:__dodostring__);
 
-	if (image == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description?((ExceptionInfo *)im->exInfo)->description:__dodostring__);
+	DestroyImage(image.collectedData.handle->im);
 
-	DestroyImage(im->collectedData.handle->im);
-
-	im->collectedData.handle->im = image;
+	image.collectedData.handle->im = im;
 }
 
 //-------------------------------------------------------------------
 
 void
-transform::scale(unsigned long size)
+transform::scale(image &image,
+							  unsigned long size)
 {
-	if (im == NULL || im->collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	if (image.collectedData.handle->im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	float mult = (float)size / (float)((im->collectedData.handle->im->columns > im->collectedData.handle->im->rows) ? im->collectedData.handle->im->columns : im->collectedData.handle->im->rows);
+	float mult = (float)size / (float)((image.collectedData.handle->im->columns > image.collectedData.handle->im->rows) ? image.collectedData.handle->im->columns : image.collectedData.handle->im->rows);
 
-	GetExceptionInfo((ExceptionInfo *)im->exInfo);
+	GetExceptionInfo((ExceptionInfo *)image.exInfo);
 
-	Image *image = ScaleImage(im->collectedData.handle->im, (unsigned long)floor(im->collectedData.handle->im->columns * mult), (unsigned long)floor(im->collectedData.handle->im->rows * mult), (ExceptionInfo *)im->exInfo);
+	Image *im = ScaleImage(image.collectedData.handle->im, (unsigned long)floor(image.collectedData.handle->im->columns * mult), (unsigned long)floor(image.collectedData.handle->im->rows * mult), (ExceptionInfo *)image.exInfo);
+	if (im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)image.exInfo)->error_number, ((ExceptionInfo *)image.exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)image.exInfo)->description?((ExceptionInfo *)image.exInfo)->description:__dodostring__);
 
-	if (image == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_SCALE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description?((ExceptionInfo *)im->exInfo)->description:__dodostring__);
+	DestroyImage(image.collectedData.handle->im);
 
-	DestroyImage(im->collectedData.handle->im);
-
-	im->collectedData.handle->im = image;
+	image.collectedData.handle->im = im;
 }
 
 //-------------------------------------------------------------------
 
 void
-transform::rotate(double angle)
+transform::rotate(image &image,
+							  double angle)
 {
-	if (im == NULL || im->collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	if (image.collectedData.handle->im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, TRANSFORMEX_EMPTYIMAGE, GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	GetExceptionInfo((ExceptionInfo *)im->exInfo);
+	GetExceptionInfo((ExceptionInfo *)image.exInfo);
 
-	Image *image = RotateImage(im->collectedData.handle->im, angle, (ExceptionInfo *)im->exInfo);
+	Image *im = RotateImage(image.collectedData.handle->im, angle, (ExceptionInfo *)image.exInfo);
+	if (im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)image.exInfo)->error_number, ((ExceptionInfo *)image.exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)image.exInfo)->description?((ExceptionInfo *)image.exInfo)->description:__dodostring__);
 
-	if (image == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSTRANSFORM, TRANSFORMEX_ROTATE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)im->exInfo)->error_number, ((ExceptionInfo *)im->exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)im->exInfo)->description?((ExceptionInfo *)im->exInfo)->description:__dodostring__);
+	DestroyImage(image.collectedData.handle->im);
 
-	DestroyImage(im->collectedData.handle->im);
-
-	im->collectedData.handle->im = image;
+	image.collectedData.handle->im = im;
 }
 #endif
 

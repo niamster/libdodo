@@ -105,7 +105,7 @@ server::serve()
 			processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL));
 	} catch (exception::basic &ex) {
 		response response;
-		response.fault(ex.baseErrstr);
+		response.fault(ex.errStr);
 
 		processCallResult(response);
 	} catch (...) {

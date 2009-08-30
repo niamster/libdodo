@@ -63,9 +63,6 @@ namespace dodo {
 				unsigned long position;         ///< identificator
 				job::routine  func;             ///< function to execute
 				short         action;           ///< action on object destruction[see collectionOnDestructEnum]
-				unsigned long executed;         ///< amount of times process was executed
-				unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
-
 #ifdef DL_EXT
 				void          *handle;          ///< handle to library
 #endif
@@ -83,9 +80,7 @@ using namespace dodo::pc::process;
 
 __process__::__process__() : isRunning(false),
 							 joined(false),
-							 status(0),
-							 executed(0),
-							 executeLimit(0)
+							 status(0)
 {
 }
 
@@ -108,7 +103,7 @@ collection::~collection()
 	dodoList<__process__ *>::iterator i(processes.begin()), j(processes.end());
 
 #ifdef DL_EXT
-	deinitIpcProcessCollectionModule deinit;
+	deinitModule deinit;
 #endif
 
 	for (; i != j; ++i) {
@@ -119,19 +114,19 @@ collection::~collection()
 		}
 
 		switch ((*i)->action) {
-			case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
+			case ON_DESTRUCTION_KEEP_ALIVE:
 
 				waitpid((*i)->pid, NULL, WNOHANG);
 
 				break;
 
-			case COLLECTION_ONDESTRUCT_STOP:
+			case ON_DESTRUCTION_STOP:
 
 				kill((*i)->pid, 2);
 
 				break;
 
-			case COLLECTION_ONDESTRUCT_WAIT:
+			case ON_DESTRUCTION_WAIT:
 			default:
 
 				waitpid((*i)->pid, NULL, 0);
@@ -139,7 +134,7 @@ collection::~collection()
 
 #ifdef DL_EXT
 		if ((*i)->handle != NULL) {
-			deinit = (deinitIpcProcessCollectionModule)dlsym((*i)->handle, "deinitIpcProcessCollectionModule");
+			deinit = (deinitModule)dlsym((*i)->handle, "deinitPcProcessModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -166,7 +161,6 @@ collection::add(job::routine func,
 	process->func = func;
 	process->position = ++processNum;
 	process->action = action;
-	process->executeLimit = 0;
 
 #ifdef DL_EXT
 	process->handle = NULL;
@@ -180,27 +174,8 @@ collection::add(job::routine func,
 //-------------------------------------------------------------------
 
 unsigned long
-collection::add(job::routine func,
-				void         *data)
-{
-	return add(func, data, COLLECTION_ONDESTRUCT_WAIT);
-}
-
-//-------------------------------------------------------------------
-
-unsigned long
-collection::addNRun(job::routine func,
-					void         *data)
-{
-	return addNRun(func, data, 1, COLLECTION_ONDESTRUCT_WAIT);
-}
-
-//-------------------------------------------------------------------
-
-unsigned long
 collection::addNRun(job::routine  func,
 					void          *data,
-					unsigned long limit,
 					short         action)
 {
 	__process__ *process = new __process__;
@@ -209,7 +184,6 @@ collection::addNRun(job::routine  func,
 	process->func = func;
 	process->position = ++processNum;
 	process->action = action;
-	process->executeLimit = 0;
 
 #ifdef DL_EXT
 	process->handle = NULL;
@@ -223,13 +197,12 @@ collection::addNRun(job::routine  func,
 		_exit(func(data));
 	else {
 		if (pid == -1)
-			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			process->pid = pid;
 	}
 
 	process->isRunning = true;
-	++(process->executed);
 
 	return process->position;
 }
@@ -237,29 +210,29 @@ collection::addNRun(job::routine  func,
 //-------------------------------------------------------------------
 
 void
-collection::del(unsigned long position,
+collection::remove(unsigned long position,
 				bool          force)
 {
 	if (getProcess(position)) {
 		if (_isRunning(current)) {
 			if (!force)
-				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else if (kill((*current)->pid, 2) == -1)
-				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		}
 
 #ifdef DL_EXT
 		if ((*current)->handle != NULL) {
-			deinitIpcProcessCollectionModule deinit;
+			deinitModule deinit;
 
-			deinit = (deinitIpcProcessCollectionModule)dlsym((*current)->handle, "deinitIpcProcessCollectionModule");
+			deinit = (deinitModule)dlsym((*current)->handle, "deinitPcProcessModule");
 			if (deinit != NULL)
 				deinit();
 
 #ifndef DL_FAST
 			if (dlclose((*current)->handle) != 0)
-				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 		}
@@ -269,7 +242,7 @@ collection::del(unsigned long position,
 
 		processes.erase(current);
 	} else
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -305,52 +278,10 @@ collection::_isRunning(dodoList<__process__ *>::iterator &position) const
 			return false;
 		}
 
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	return true;
-}
-
-//-------------------------------------------------------------------
-
-void
-collection::replace(unsigned long position,
-					job::routine  func,
-					void          *data,
-					bool          force,
-					short         action)
-{
-	if (getProcess(position)) {
-		if (_isRunning(current)) {
-			if (!force)
-				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
-			else if (kill((*current)->pid, 2) == -1)
-				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		}
-
-#ifdef DL_EXT
-		if ((*current)->handle != NULL) {
-			deinitIpcProcessCollectionModule deinit;
-
-			deinit = (deinitIpcProcessCollectionModule)dlsym((*current)->handle, "deinitIpcProcessCollectionModule");
-			if (deinit != NULL)
-				deinit();
-
-#ifndef DL_FAST
-			if (dlclose((*current)->handle) != 0)
-				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-
-#endif
-		}
-#endif
-
-		(*current)->data = data;
-		(*current)->func = func;
-		(*current)->isRunning = false;
-		(*current)->action = action;
-	} else
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -360,14 +291,8 @@ collection::run(unsigned long position,
 				bool          force)
 {
 	if (getProcess(position)) {
-		if ((*current)->executeLimit > 0 && ((*current)->executeLimit <= (*current)->executed)) {
-			processes.erase(current);
-
-			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_SWEPT, PCPROCESSCOLLECTIONEX_SWEPT_STR, __LINE__, __FILE__);
-		}
-
 		if (_isRunning(current) && !force)
-			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 		pid_t pid = fork();
 
@@ -375,15 +300,14 @@ collection::run(unsigned long position,
 			_exit((*current)->func((*current)->data));
 		else {
 			if (pid == -1)
-				throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			else
 				(*current)->pid = pid;
 		}
 
 		(*current)->isRunning = true;
-		++((*current)->executed);
 	} else
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -393,11 +317,11 @@ collection::stop(unsigned long position)
 {
 	if (getProcess(position)) {
 		if (kill((*current)->pid, 9) == -1)
-			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		(*current)->isRunning = false;
 	} else
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -411,7 +335,7 @@ collection::stop()
 			continue;
 
 		if (kill((*i)->pid, 9) == -1)
-			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		(*i)->isRunning = false;
 	}
@@ -429,7 +353,7 @@ collection::wait(unsigned long position)
 		int status;
 
 		if (waitpid((*current)->pid, &status, 0) == -1)
-			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (WIFEXITED(status))
 			(*current)->status = WEXITSTATUS(status);
@@ -438,7 +362,7 @@ collection::wait(unsigned long position)
 
 		return (*current)->status;
 	} else
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -454,7 +378,7 @@ collection::wait()
 			continue;
 
 		if (waitpid((*i)->pid, &status, 0) == -1)
-			throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (WIFEXITED(status))
 			(*i)->status = WEXITSTATUS(status);
@@ -471,7 +395,7 @@ collection::isRunning(unsigned long position) const
 	if (getProcess(position))
 		return _isRunning(current);
 	else
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ISRUNNING, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ISRUNNING, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -491,65 +415,28 @@ collection::running() const
 
 //-------------------------------------------------------------------
 
-void
-collection::sweepTrash()
-{
-	dodoList<__process__ *>::iterator i(processes.begin()), j(processes.end());
-	while (i != j) {
-		if (_isRunning(i)) {
-			++i;
-
-			continue;
-		}
-
-		if ((*i)->executeLimit > 0 && ((*i)->executeLimit <= (*i)->executed)) {
-			delete *i;
-
-			i = processes.erase(i);
-
-			continue;
-		}
-
-		++i;
-	}
-}
-
-//-------------------------------------------------------------------
-
-void
-collection::setExecutionLimit(unsigned long position,
-							  unsigned long limit)
-{
-	if (getProcess(position))
-		(*current)->executeLimit = limit;
-	else
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_SETEXECUTIONLIMIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
-}
-
-//-------------------------------------------------------------------
-
 #ifdef DL_EXT
-__processMod__
-collection::getModuleInfo(const dodoString &module,
+__module__
+collection::module(const dodoString &module,
 						  void             *toInit)
 {
 #ifdef DL_FAST
-	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
+	void *handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initIpcProcessCollectionModule init = (initIpcProcessCollectionModule)dlsym(handle, "initIpcProcessCollectionModule");
+	initModule init = (initModule)dlsym(handle, "initPcProcessModule");
 	if (init == NULL)
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__processMod__ mod = init(toInit);
+	__module__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 
@@ -569,24 +456,23 @@ collection::add(const dodoString &module,
 	process->position = ++processNum;
 
 #ifdef DL_FAST
-	process->handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
+	process->handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	process->handle = dlopen(module.c_str(), RTLD_LAZY);
+	process->handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (process->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initIpcProcessCollectionModule init = (initIpcProcessCollectionModule)dlsym(process->handle, "initIpcProcessCollectionModule");
+	initModule init = (initModule)dlsym(process->handle, "initPcProcessModule");
 	if (init == NULL)
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__processMod__ temp = init(toInit);
+	__module__ temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(process->handle, temp.hook);
 	if (in == NULL)
-		throw exception::basic(exception::ERRMODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCPROCESSCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	process->executeLimit = temp.executeLimit;
 	process->action = temp.action;
 	process->func = in;
 
@@ -599,7 +485,7 @@ collection::add(const dodoString &module,
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>
-collection::getIds()
+collection::jobs()
 {
 	dodoList<unsigned long> ids;
 

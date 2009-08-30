@@ -47,8 +47,8 @@ namespace dodo {
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define GRAPHICSDRAWEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
-#define GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR "Can not draw a primitive."
+#define GRAPHICSDRAWEX_EMPTYIMAGE_STR "Image is empty"
+#define GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR "Can not draw a primitive"
 
 		/**
 		 * IDs of functions where exception might be thrown
@@ -61,5 +61,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

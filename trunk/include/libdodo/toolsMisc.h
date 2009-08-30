@@ -44,14 +44,6 @@ namespace dodo {
 		typedef dodoString (*escape)(const dodoString &data);
 
 		/**
-		 * @enum miscRandomStrengthEnum defines type of randomness
-		 */
-		enum miscRandomStrengthEnum {
-			MISC_RANDOMSTRENGTH_DEFAULT,
-			MISC_RANDOMSTRENGTH_STRONG
-		};
-
-		/**
 		 * @class misc
 		 * @brief provides misc functionality
 		 */
@@ -59,99 +51,107 @@ namespace dodo {
 		  public:
 
 			/**
+			 * @enum randomStrengthEnum defines type of randomness
+			 */
+			enum randomStrengthEnum {
+				RANDOM_STRENGTH_DEFAULT,
+				RANDOM_STRENGTH_STRONG
+			};
+
+			/**
 			 * generate random data
 			 * @param data defines pointer to store data
 			 * @param size defines size of random data in bytes
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
 			static void random(void          *data,
 							   unsigned long size,
-							   short         strength = MISC_RANDOMSTRENGTH_DEFAULT);
+							   short         strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random data
 			 * @param size defines size of random data in bytes
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 * '\0' is replaced with '*'
 			 */
 			static dodoString stringRandom(unsigned long size,
-										   short         strength = MISC_RANDOMSTRENGTH_DEFAULT);
+										   short         strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned long
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
-			static unsigned long ulRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			static unsigned long ulRandom(short strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random long
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
-			static long lRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			static long lRandom(short strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned int
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
-			static unsigned int uiRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			static unsigned int uiRandom(short strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random int
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
-			static int iRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			static int iRandom(short strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned short
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
-			static unsigned short usRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			static unsigned short usRandom(short strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random short
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
-			static short sRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			static short sRandom(short strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned char
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
-			static unsigned char ucRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			static unsigned char ucRandom(short strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random char
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
-			static char cRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			static char cRandom(short strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return random double
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * MISC_RANDOMSTRENGTH_STRONG may block
+			 * RANDOM_STRENGTH_STRONG may block
 			 */
-			static double dRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
+			static double dRandom(short strength = RANDOM_STRENGTH_DEFAULT);
 
 			/**
 			 * @return true if needle has been found

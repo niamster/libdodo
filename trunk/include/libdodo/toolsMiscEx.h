@@ -47,8 +47,8 @@ namespace dodo {
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define TOOLSMISCEX_WRONGSTRENGTH_STR  "Wrong strength argument."
-#define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty."
+#define TOOLSMISCEX_WRONGSTRENGTH_STR  "Wrong strength argument"
+#define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty"
 
 		/**
 		 * IDs of functions where exception might be thrown
@@ -59,5 +59,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

@@ -55,7 +55,7 @@ namespace dodo {
 						 * copy constructor
 						 * @note to prevent copying
 						 */
-						single(single &sts);
+						single(single &);
 
 					  public:
 
@@ -101,7 +101,7 @@ namespace dodo {
 						/**
 						 * set shared data to NULL
 						 */
-						virtual void del();
+						virtual void remove();
 
 						/**
 						 * lock and return shared data
@@ -136,6 +136,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

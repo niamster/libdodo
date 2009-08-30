@@ -38,80 +38,51 @@ namespace dodo {
 		class image;
 
 		/**
-		 * @enum transformRotateDirectionAngleEnum defines rotation options
-		 */
-		enum transformRotateDirectionAngleEnum {
-			TRANSFORM_ROTATEDIRECTIONANGLE_90CW = -90,
-			TRANSFORM_ROTATEDIRECTIONANGLE_90CCW = 90,
-			TRANSFORM_ROTATEDIRECTIONANGLE_180 = 180,
-			TRANSFORM_ROTATEDIRECTIONANGLE_270CW = -270,
-			TRANSFORM_ROTATEDIRECTIONANGLE_270CCW = 270,
-		};
-
-		/**
 		 * @class transform
 		 * @brief provides simple image transformations
 		 */
 		class transform {
-		  private:
-
-			/**
-			 * copy constructor
-			 * @note to prevent copying
-			 */
-			transform(transform &im);
-
 		  public:
 
 			/**
-			 * contructor
+			 * @enum rotateDirectionAngleEnum defines rotation options
 			 */
-			transform();
-
-			/**
-			 * contructor
-			 * @param im defines image for transformations
-			 */
-			transform(image *im);
-
-			/**
-			 * destructor
-			 */
-			~transform();
-
-			/**
-			 * set image for transformations
-			 * @param im defines image for transformations
-			 */
-			void setImage(image *im);
+			enum rotateDirectionAngleEnum {
+				ROTATE_DIRECTION_ANGLE_90CW = -90,
+				ROTATE_DIRECTION_ANGLE_90CCW = 90,
+				ROTATE_DIRECTION_ANGLE_180 = 180,
+				ROTATE_DIRECTION_ANGLE_270CW = -270,
+				ROTATE_DIRECTION_ANGLE_270CCW = 270,
+			};
 
 			/**
 			 * scale transform
+			 * @param image defines image on which perform transformation
 			 * @param width defines width of the transform
 			 * @param height defines height of the transform
 			 */
-			void scale(unsigned long width,
+			static void scale(image &image,
+							  unsigned long width,
 							   unsigned long height);
 
 			/**
 			 * scale transform
+			 * @param image defines image on which perform transformation
 			 * @param size defines size of the transform
 			 * @note scales transform by reducing size of the greater side saving proportions
 			 */
-			void scale(unsigned long size);
+			static void scale(image &image,
+							  unsigned long size);
 
 			/**
 			 * rotate transform
+			 * @param image defines image on which perform transformation
 			 * @param angle defines rotation degree[see also transformRotateDirectionAngleEnum]
 			 */
-			void rotate(double angle);
-
-		  protected:
-
-			image *im; ///< image to perform transformations
+			static void rotate(image &image,
+							  double angle);
 		};
 	};
 };
 #endif
-
 #endif

@@ -42,52 +42,6 @@ namespace dodo {
 			};
 
 			/**
-			 * @enum connectionTransferTypeEnum defines type of socket
-			 */
-			enum connectionTransferTypeEnum {
-				CONNECTION_TRANSFER_TYPE_STREAM,        ///< Sequenced, reliable, connection-based byte streams
-				CONNECTION_TRANSFER_TYPE_DATAGRAM,      ///< Connectionless, unreliable datagrams of fixed maximum length
-			};
-
-			/**
-			 * @enum connectionProtoFamilyEnum defines type of domain of socket
-			 */
-			enum connectionProtoFamilyEnum {
-				CONNECTION_PROTO_FAMILY_IPV4,
-				CONNECTION_PROTO_FAMILY_IPV6,
-				CONNECTION_PROTO_FAMILY_UNIX_SOCKET,
-			};
-
-			/**
-			 * @enum connectionOptionEnum defines connection for socket
-			 */
-			enum connectionOptionEnum {
-				CONNECTION_OPTION_KEEP_ALIVE = 1,       ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-				CONNECTION_OPTION_REUSE_ADDRESS,        ///< Should allow reuse of local addresses[it's accepted by default].
-				CONNECTION_OPTION_DONOT_USE_GATEWAY,    ///< Requests  that outgoing messages bypass the standard routing facilities.
-				CONNECTION_OPTION_BROADCAST,            ///< Permits  sending of broadcast messages, if this is supported by the protocol.
-				CONNECTION_OPTION_OOB_INLINE,           ///< Out-of-band(marked urgent) data keep inline in recieve operation.
-			};
-
-			/**
-			 * @enum connectionLingerOptionEnum defines linger connection for socket
-			 */
-			enum connectionLingerOptionEnum {
-				CONNECTION_LINGEROPTION_GRACEFUL_CLOSE, ///< close returns immediately, but any unsent data is transmitted (after close returns).
-				CONNECTION_LINGEROPTION_HARD_CLOSE,     ///< close returns immediately, and any unsent data is discarded.
-				CONNECTION_LINGEROPTION_WAIT_CLOSE,     ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
-			};
-
-			/**
-			 * @struct __peerInfo__
-			 * @brief defines peer information
-			 */
-			struct __peerInfo__ {
-				dodoString host;                        ///< host of the box
-				int        port;                        ///< port of the box
-			};
-
-			/**
 			 * @class connection
 			 * @brief provides option manipulation for network connections
 			 */
@@ -107,6 +61,52 @@ namespace dodo {
 				virtual ~connection();
 
 			  public:
+
+				/**
+				 * @struct __peer__
+				 * @brief defines peer information
+				 */
+				struct __peer__ {
+					dodoString host;                        ///< host of the box
+					int        port;                        ///< port of the box
+				};
+
+				/**
+				 * @enum transferEnum defines type of socket
+				 */
+				enum transferEnum {
+					TRANSFER_STREAM,        ///< Sequenced, reliable, connection-based byte streams
+					TRANSFER_DATAGRAM,      ///< Connectionless, unreliable datagrams of fixed maximum length
+				};
+
+				/**
+				 * @enum protocolFamilyEnum defines type of domain of socket
+				 */
+				enum protocolFamilyEnum {
+					PROTOCOL_FAMILY_IPV4,
+					PROTOCOL_FAMILY_IPV6,
+					PROTOCOL_FAMILY_UNIX_SOCKET,
+				};
+
+				/**
+				 * @enum optionEnum defines connection for socket
+				 */
+				enum optionEnum {
+					OPTION_KEEP_ALIVE = 1,       ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+					OPTION_REUSE_ADDRESS,        ///< Should allow reuse of local addresses[it's accepted by default].
+					OPTION_DONOT_USE_GATEWAY,    ///< Requests  that outgoing messages bypass the standard routing facilities.
+					OPTION_BROADCAST,            ///< Permits  sending of broadcast messages, if this is supported by the protocol.
+					OPTION_OOB_INLINE,           ///< Out-of-band(marked urgent) data keep inline in recieve operation.
+				};
+
+				/**
+				 * @enum lingerOptionEnum defines linger connection for socket
+				 */
+				enum lingerOptionEnum {
+					LINGER_OPTION_GRACEFUL_CLOSE, ///< close returns immediately, but any unsent data is transmitted (after close returns).
+					LINGER_OPTION_HARD_CLOSE,     ///< close returns immediately, and any unsent data is discarded.
+					LINGER_OPTION_WAIT_CLOSE,     ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+				};
 
 				/**
 				 * set connection options
@@ -133,13 +133,13 @@ namespace dodo {
 				/**
 				 * @return linger option that was set[see connectionLingerOptionEnum]
 				 */
-				short getLingerOption() const;
+				short lingerOption() const;
 
 				/**
 				 * @return amount of seconds to wait
 				 * @note for CONNECTION_LINGEROPTION_WAIT_CLOSE only
 				 */
-				int getLingerPeriod() const;
+				int lingerPeriod() const;
 
 				/**
 				 * set input buffer size
@@ -156,12 +156,12 @@ namespace dodo {
 				/**
 				 * @return input buffer size in bytes
 				 */
-				unsigned long getInBufferSize() const;
+				unsigned long inBufferSize() const;
 
 				/**
 				 * @return output buffer size in bytes
 				 */
-				unsigned long getOutBufferSize() const;
+				unsigned long outBufferSize() const;
 
 				/**
 				 * set input timeout value of socket
@@ -178,12 +178,12 @@ namespace dodo {
 				/**
 				 * @return input timeout value
 				 */
-				unsigned long getInTimeout() const;
+				unsigned long inTimeout() const;
 
 				/**
 				 * @return output timeout value
 				 */
-				unsigned long getOutTimeout() const;
+				unsigned long outTimeout() const;
 
 				/**
 				 * @return true if socked is blocked
@@ -209,8 +209,8 @@ namespace dodo {
 				short lingerOpts;               ///< socket linger option
 				int lingerSeconds;              ///< socket linger timeout
 
-				unsigned long inTimeout;        ///< incomming operation timeout of socket; in microseconds
-				unsigned long outTimeout;       ///< outgoing operation timeout of socket; in microseconds
+				unsigned long inSocketTimeout;        ///< incomming operation timeout of socket; in microseconds
+				unsigned long outSocketTimeout;       ///< outgoing operation timeout of socket; in microseconds
 
 				unsigned long inSocketBuffer;   ///< incoming buffer size of socket; in bytes
 				unsigned long outSocketBuffer;  ///< outgoing buffer size of socket; in bytes
@@ -222,5 +222,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

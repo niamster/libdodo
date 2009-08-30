@@ -40,12 +40,11 @@ namespace dodo {
 		 * IDs of functions where exception might be thrown
 		 */
 		enum timeFunctionsID {
-			TIMEEX_GETBYFORMAT,
+			TIMEEX_BYFORMAT,
 			TIMEEX_NOW,
 			TIMEEX_MAKETIME,
 		};
 	};
 };
-
 #endif
 

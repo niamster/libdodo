@@ -38,15 +38,6 @@
 
 namespace dodo {
 	namespace io {
-		/*
-		 * @enum memoryFlagsEnum defines flags of memory serviced by io::memory interface
-		 */
-		enum memoryFlagsEnum {
-			MEMORYFLAGS_NORMAL = 1,
-			MEMORYFLAGS_EXTERN = 2,
-			MEMORYFLAGS_FIXED_LENGTH = 4,
-		};
-
 		/**
 		 * @class memory
 		 * @brief provides memory I/O manipulations
@@ -54,23 +45,32 @@ namespace dodo {
 		class memory : virtual public block::channel {
 		  public:
 
+			/*
+			 * @enum flagsEnum defines flags of memory serviced by io::memory interface
+			 */
+			enum flagsEnum {
+				FLAGS_NORMAL = 1,
+				FLAGS_EXTERN = 2,
+				FLAGS_FIXED_LENGTH = 4,
+			};
+
 			/**
 			 * constructor
 			 * @param shared defines pointer to memory region
 			 * @param shared defines memory region size
-			 * @param shared defines memory region flags[see memoryFlagsEnum]
-			 * @param protection defines flags of IO protection[see channelProtectionFlagsEnum]
+			 * @param shared defines memory region flags[see flagsEnum]
+			 * @param protection defines flags of IO protection[see protectionEnum]
 			 */
 			memory(char          *data,
 				   unsigned long size,
-				   short         flags = MEMORYFLAGS_NORMAL,
-				   short         protection = CHANNEL_PROTECTION_PROCESS);
+				   short         flags = FLAGS_NORMAL,
+				   short         protection = channel::PROTECTION_PROCESS);
 
 			/**
 			 * constructor
-			 * @param protection defines flags of IO protection[see channelProtectionFlagsEnum]
+			 * @param protection defines flags of IO protection[see protectionEnum]
 			 */
-			memory(short protection = CHANNEL_PROTECTION_PROCESS);
+			memory(short protection = channel::PROTECTION_PROCESS);
 
 			/**
 			 * copy constructor
@@ -81,10 +81,10 @@ namespace dodo {
 			/**
 			 * constructor
 			 * @param data defines initial data for the interface
-			 * @param protection defines flags of IO protection[see channelProtectionFlagsEnum]
+			 * @param protection defines flags of IO protection[see protectionEnum]
 			 */
 			memory(const dodoString &data,
-				   short            protection = CHANNEL_PROTECTION_PROCESS);
+				   short            protection = channel::PROTECTION_PROCESS);
 
 			/**
 			 * destructor
@@ -123,25 +123,25 @@ namespace dodo {
 			/**
 			 * @return descriptor of the input stream
 			 */
-			virtual int getInDescriptor() const;
+			virtual int inDescriptor() const;
 
 			/**
 			 * @return descriptor of the output stream
 			 */
-			virtual int getOutDescriptor() const;
+			virtual int outDescriptor() const;
 
 			/**
 			 * @param data defines buffer that will be filled
-			 * @note not more then inSize(including '\0')
+			 * @note not more then inSize(including null)
 			 * if block is true read offset is calculated as pos*inSize otherwise offset it taken pos bytes from the beginning
 			 */
 			virtual void _read(char * const data) const;
 
 			/**
-			 * read from stream - '\0' or '\n' - terminated memory
+			 * read from stream null- or newline- terminated memory
 			 * @param data defines buffer that will be filled
-			 * @note not more then inSize(including '\0')
-			 * if block is true read offset is calculated as pos*'# of \n - terminated memorys' otherwise offset it taken pos bytes from the beginning
+			 * @note not more then inSize(including null)
+			 * if block is true read offset is calculated as pos*'# of \n terminated memorys' otherwise offset it taken pos bytes from the beginning
 			 */
 			virtual unsigned long _readStream(char * const data) const;
 
@@ -152,7 +152,7 @@ namespace dodo {
 			virtual void _write(const char * const data) const;
 
 			/**
-			 * write to stream - '\0' - terminated memory
+			 * write to stream null- terminated memory
 			 * @param data defines data that will be written
 			 * @note write only to the end of the file(append)
 			 */
@@ -167,5 +167,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

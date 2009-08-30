@@ -52,6 +52,15 @@ namespace dodo {
 			  public:
 
 				/**
+				 * @enum onDestructionEnum defines action with processes on object destruction
+				 */
+				enum onDestructionEnum {
+					ON_DESTRUCTION_KEEP_ALIVE,
+					ON_DESTRUCTION_STOP,     ///< send SIGINT to process
+					ON_DESTRUCTION_WAIT
+				};
+
+				/**
 				 * destructor
 				 */
 				virtual ~collection() = 0;
@@ -61,41 +70,45 @@ namespace dodo {
 				 * @return job identificator
 				 * @param func defines function to execute
 				 * @param data defines job data
+				 * @param action defines action on object destruction if process is running[see onDestructEnum]
 				 */
 				virtual unsigned long add(routine func,
-										  void    *data) = 0;
+										  void    *data,
+										  short        action) = 0;
 
 				/**
 				 * add function as a job
 				 * @return job identificator
 				 * @param func defines function to execute
 				 * @param data defines job data
+				 * @param action defines action on object destruction if process is running[see onDestructEnum]
 				 * @note this will immediately execute the job
 				 */
 				virtual unsigned long addNRun(routine func,
-											  void    *data) = 0;
+											  void    *data,
+											  short        action) = 0;
 
 				/**
 				 * remove registered job
-				 * @param position defines job identificator
-				 * @param force defines termination condition; if true and job is running stop execution of the job
+				 * @param id defines job identificator
+				 * @param terminate defines termination condition; if true and job is running stop execution of the job
 				 */
-				virtual void del(unsigned long position,
-								 bool          force = false) = 0;
+				virtual void remove(unsigned long id,
+								 bool          terminate = false) = 0;
 
 				/**
 				 * execute job
-				 * @param position defines job identificator
+				 * @param id defines job identificator
 				 * @param force defines run condition; if true and job is running run job anyway
 				 */
-				virtual void run(unsigned long position,
+				virtual void run(unsigned long id,
 								 bool          force = false) = 0;
 
 				/**
 				 * stop job
-				 * @param position defines job identificator
+				 * @param id defines job identificator
 				 */
-				virtual void stop(unsigned long position) = 0;
+				virtual void stop(unsigned long id) = 0;
 
 				/**
 				 * stop all registered jobs
@@ -105,9 +118,9 @@ namespace dodo {
 				/**
 				 * wait for job termination
 				 * @return status of the job
-				 * @param position defines job identificator
+				 * @param id defines job identificator
 				 */
-				virtual int wait(unsigned long position) = 0;
+				virtual int wait(unsigned long id) = 0;
 
 				/**
 				 * wait for all registered jobs termination
@@ -116,9 +129,9 @@ namespace dodo {
 
 				/**
 				 * @return true if job is running
-				 * @param position defines job identificator
+				 * @param id defines job identificator
 				 */
-				virtual bool isRunning(unsigned long position) const = 0;
+				virtual bool isRunning(unsigned long id) const = 0;
 
 				/**
 				 * @return amount of running jobs
@@ -126,22 +139,9 @@ namespace dodo {
 				virtual unsigned long running() const = 0;
 
 				/**
-				 * sweep jobs if their time has been already passed
-				 */
-				virtual void sweepTrash() = 0;
-
-				/**
 				 * @return list of jobs in object
 				 */
-				virtual dodoList<unsigned long> getIds() = 0;
-
-				/**
-				 * set maximum execution time
-				 * @param position defines job identificator
-				 * @param limit defines the limit on executions of the job
-				 */
-				virtual void setExecutionLimit(unsigned long position,
-											   unsigned long limit = 1) = 0;
+				virtual dodoList<unsigned long> jobs() = 0;
 
 #ifdef DL_EXT
 				/**
@@ -159,5 +159,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

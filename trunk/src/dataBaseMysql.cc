@@ -68,7 +68,7 @@ mysql::mysql() : empty(true),
 
 {
 #ifndef DATABASE_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_DATABASEMYSQL);
+	collectedData.setExecObject(xexec::OBJECT_DATABASEMYSQL);
 #endif
 
 	handle->handle = mysql_init(NULL);
@@ -76,13 +76,13 @@ mysql::mysql() : empty(true),
 
 //-------------------------------------------------------------------
 
-mysql::mysql(const __connectionInfo__ &info) : empty(true),
+mysql::mysql(const __connection__ &info) : empty(true),
 											   handle(new __mysql__),
 											   type(CLIENT_MULTI_STATEMENTS)
 
 {
 #ifndef DATABASE_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_DATABASEMYSQL);
+	collectedData.setExecObject(xexec::OBJECT_DATABASEMYSQL);
 #endif
 
 	collectedData.dbInfo = info;
@@ -90,16 +90,16 @@ mysql::mysql(const __connectionInfo__ &info) : empty(true),
 	handle->handle = mysql_init(NULL);
 
 	if (!mysql_real_connect(handle->handle,
-							collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
-							collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
-							collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.c_str(),
-							collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
+							collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.data(),
+							collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.data(),
+							collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.data(),
+							collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.data(),
 							collectedData.dbInfo.port,
-							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
+							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.data(),
 							type)) {
 		delete handle;
 
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_MYSQL, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_MYSQL, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
 	}
 
 #ifndef MYSQL_NO_OPT_RECONNECT
@@ -134,32 +134,32 @@ mysql::~mysql()
 //-------------------------------------------------------------------
 
 void
-mysql::connectSettings(unsigned long             a_type,
-					   const __mysqlSslOptions__ &options)
+mysql::setConnectionSettings(unsigned long             a_type,
+					   const __ssl_options__ &options)
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	type = a_type;
 
 	if (mysql_ssl_set(handle->handle,
-					  options.key.size() == 0 ? NULL : options.key.c_str(),
-					  options.cert.size() == 0 ? NULL : options.cert.c_str(),
-					  options.ca.size() == 0 ? NULL : options.ca.c_str(),
-					  options.capath.size() == 0 ? NULL : options.capath.c_str(),
-					  options.cipher.size() == 0 ? NULL : options.cipher.c_str()) == 0)
+					  options.key.size() == 0 ? NULL : options.key.data(),
+					  options.cert.size() == 0 ? NULL : options.cert.data(),
+					  options.ca.size() == 0 ? NULL : options.ca.data(),
+					  options.capath.size() == 0 ? NULL : options.capath.data(),
+					  options.cipher.size() == 0 ? NULL : options.cipher.data()) == 0)
 		type |= CLIENT_SSL;
 }
 
 //-------------------------------------------------------------------
 
 void
-mysql::connect(const __connectionInfo__ &info)
+mysql::connect(const __connection__ &info)
 {
 	collectedData.dbInfo = info;
 
 #ifndef DATABASE_WO_XEXEC
-	operType = DATABASE_OPERATION_CONNECT;
+	operType = OPERATION_CONNECT;
 	performPreExec();
 #endif
 
@@ -177,14 +177,14 @@ mysql::connect(const __connectionInfo__ &info)
 	handle->handle = mysql_init(NULL);
 
 	if (!mysql_real_connect(handle->handle,
-							collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
-							collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
-							collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.c_str(),
-							collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
+							collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.data(),
+							collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.data(),
+							collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.data(),
+							collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.data(),
 							collectedData.dbInfo.port,
-							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
+							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.data(),
 							type))
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_CONNECT, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_CONNECT, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
 
 #ifndef MYSQL_NO_OPT_RECONNECT
 	if (reconnect) {
@@ -206,7 +206,7 @@ mysql::disconnect()
 {
 	if (handle->handle != NULL) {
 #ifndef DATABASE_WO_XEXEC
-		operType = DATABASE_OPERATION_DISCONNECT;
+		operType = OPERATION_DISCONNECT;
 		performPreExec();
 #endif
 
@@ -231,10 +231,10 @@ dodoArray<dodo::dodoStringArray>
 mysql::fetchRows() const
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = DATABASE_OPERATION_FETCHROW;
+	operType = OPERATION_FETCHROW;
 	performPreExec();
 #endif
 
@@ -270,7 +270,7 @@ mysql::fetchRows() const
 			if (mysqlRow[j] != NULL)
 				rowsPart.push_back(dodoString(mysqlRow[j], length[j]));
 			else
-				rowsPart.push_back(statements[SQLCONSTRUCTOR_STATEMENT_NULL]);
+				rowsPart.push_back(statements[sql::constructor::STATEMENT_NULL]);
 		}
 
 		rows.push_back(rowsPart);
@@ -289,10 +289,10 @@ dodo::dodoStringArray
 mysql::fetchFields() const
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = DATABASE_OPERATION_FETCHFIELD;
+	operType = OPERATION_FETCHFIELD;
 	performPreExec();
 #endif
 
@@ -331,10 +331,10 @@ mysql::fetch() const
 //-------------------------------------------------------------------
 
 unsigned int
-mysql::rowsCount() const
+mysql::requestedRows() const
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (empty || !show)
 		return 0;
@@ -345,10 +345,10 @@ mysql::rowsCount() const
 //-------------------------------------------------------------------
 
 unsigned int
-mysql::fieldsCount() const
+mysql::requestedFields() const
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (empty || !show)
 		return 0;
@@ -359,10 +359,10 @@ mysql::fieldsCount() const
 //-------------------------------------------------------------------
 
 unsigned int
-mysql::affectedRowsCount() const
+mysql::affectedRows() const
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	if (empty || show)
 		return 0;
@@ -373,12 +373,12 @@ mysql::affectedRowsCount() const
 //-------------------------------------------------------------------
 
 void
-mysql::getFieldsTypes(const dodoString &table)
+mysql::requestFieldsTypes(const dodoString &table)
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	dodoString temp = collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + table;
+	dodoString temp = collectedData.dbInfo.db + statements[sql::constructor::STATEMENT_COLON] + table;
 
 	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
 
@@ -387,19 +387,19 @@ mysql::getFieldsTypes(const dodoString &table)
 
 	request = "describe " + table;
 
-	if (mysql_real_query(handle->handle, request.c_str(), request.size()) != 0) {
+	if (mysql_real_query(handle->handle, request.data(), request.size()) != 0) {
 		int mysqlErrno = mysql_errno(handle->handle);
 		if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST)) {
 			connect(collectedData.dbInfo);
-			if (mysql_real_query(handle->handle, request.c_str(), request.size()) != 0)
-				throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
+			if (mysql_real_query(handle->handle, request.data(), request.size()) != 0)
+				throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
 		} else
-			throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
+			throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
 	}
 
 	handle->result = mysql_store_result(handle->handle);
 	if (handle->result == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
 
 	empty = false;
 
@@ -417,12 +417,12 @@ mysql::getFieldsTypes(const dodoString &table)
 				strcasestr(mysqlRow[1], "text") != NULL ||
 				strcasestr(mysqlRow[1], "enum") != NULL ||
 				strcasestr(mysqlRow[1], "set") != NULL)
-				types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELDTYPE_TEXT));
+				types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELD_TEXT));
 			else {
 				if (strcasestr(mysqlRow[1], "blob") != NULL)
-					types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELDTYPE_BINARY));
+					types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELD_BINARY));
 				else
-					types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELDTYPE_NUMERIC));
+					types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELD_NUMERIC));
 			}
 		} else {
 			if (strcasestr(mysqlRow[1], "char") != NULL ||
@@ -431,12 +431,12 @@ mysql::getFieldsTypes(const dodoString &table)
 				strcasestr(mysqlRow[1], "text") != NULL ||
 				strcasestr(mysqlRow[1], "enum") != NULL ||
 				strcasestr(mysqlRow[1], "set") != NULL)
-				field->second = sql::FIELDTYPE_TEXT;
+				field->second = sql::FIELD_TEXT;
 			else {
 				if (strcasestr(mysqlRow[1], "blob") != NULL)
-					field->second = sql::FIELDTYPE_BINARY;
+					field->second = sql::FIELD_BINARY;
 				else
-					field->second = sql::FIELDTYPE_NUMERIC;
+					field->second = sql::FIELD_NUMERIC;
 			}
 		}
 	}
@@ -453,28 +453,28 @@ mysql::exec(const dodoString &query,
 			bool             result)
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = DATABASE_OPERATION_EXEC;
+	operType = OPERATION_EXEC;
 	performPreExec();
 #endif
 
 	if (query.size() == 0)
-		queryCollect();
+		construct();
 	else {
 		request = query;
 		show = result;
 	}
 
-	if (mysql_real_query(handle->handle, request.c_str(), request.size()) != 0) {
+	if (mysql_real_query(handle->handle, request.data(), request.size()) != 0) {
 		int mysqlErrno = mysql_errno(handle->handle);
 		if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST)) {
 			connect(collectedData.dbInfo);
-			if (mysql_real_query(handle->handle, request.c_str(), request.size()) != 0)
-				throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
+			if (mysql_real_query(handle->handle, request.data(), request.size()) != 0)
+				throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
 		} else
-			throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
+			throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
 	}
 
 	if (show) {
@@ -485,7 +485,7 @@ mysql::exec(const dodoString &query,
 
 		handle->result = mysql_store_result(handle->handle);
 		if (handle->result == NULL)
-			throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
 
 		empty = false;
 	}
@@ -504,18 +504,18 @@ void
 mysql::setCharset(const dodoString &charset)
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	mysql_options(handle->handle, MYSQL_SET_CHARSET_NAME, charset.c_str());
+	mysql_options(handle->handle, MYSQL_SET_CHARSET_NAME, charset.data());
 }
 
 //-------------------------------------------------------------------
 
 void
-mysql::setConnectTimeout(unsigned int time)
+mysql::setConnectionTimeout(unsigned int time)
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	mysql_options(handle->handle, MYSQL_OPT_CONNECT_TIMEOUT, (char *)&time);
 }
@@ -523,10 +523,10 @@ mysql::setConnectTimeout(unsigned int time)
 //-------------------------------------------------------------------
 
 dodoString
-mysql::getCharset() const
+mysql::charset() const
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	return mysql_character_set_name(handle->handle);
 }
@@ -537,7 +537,7 @@ dodo::dodoStringMapArray
 mysql::fetchFieldsToRows() const
 {
 	if (handle->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 	dodoStringMapArray rowsFields;
 
@@ -568,7 +568,7 @@ mysql::fetchFieldsToRows() const
 			if (mysqlRow[j] != NULL)
 				rowFieldsPart.insert(make_pair(mysqlFields[j].name, dodoString(mysqlRow[j], length[j])));
 			else
-				rowFieldsPart.insert(make_pair(mysqlFields[j].name, statements[SQLCONSTRUCTOR_STATEMENT_NULL]));
+				rowFieldsPart.insert(make_pair(mysqlFields[j].name, statements[sql::constructor::STATEMENT_NULL]));
 		}
 	}
 

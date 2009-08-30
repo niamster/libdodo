@@ -52,12 +52,12 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define DATATPLPROCESSOREX_WRONGFORSTATEMENT_STR     "Wrong `for` statement."
-#define DATATPLPROCESSOREX_WRONGVARSTATEMENT_STR     "In variable statement `}` wasn't closed."
-#define DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR "dodo.* is reserved variable name."
-#define DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR  "Wrong `assing` statement."
-#define DATATPLPROCESSOREX_WRONGBLOCK_STR            "Wrong block construction."
-#define DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR "Bracket was opened(closed) but not closed(opened)."
+#define DATATPLPROCESSOREX_WRONGFORSTATEMENT_STR     "Wrong `for` statement"
+#define DATATPLPROCESSOREX_WRONGVARSTATEMENT_STR     "In variable statement `}` wasn't closed"
+#define DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR "dodo.* are reserved variable names"
+#define DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR  "Wrong `assing` statement"
+#define DATATPLPROCESSOREX_WRONGBLOCK_STR            "Wrong block construction"
+#define DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR "Bracket was opened(closed) but not closed(opened)"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -74,5 +74,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

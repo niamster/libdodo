@@ -42,29 +42,30 @@ namespace dodo {
 			struct __mysql__;
 
 			/**
-			 * @struct __mysqlSslOptions__
-			 * @brief defines SSL mySQL options
-			 */
-			struct __mysqlSslOptions__ {
-				dodoString key;     ///< pathname to the key file
-				dodoString cert;    ///< pathname to the certificate file
-				dodoString ca;      ///< pathname to the certificate authority file
-				dodoString capath;  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
-				dodoString cipher;  ///< allowed SSL ciphers
-			};
-
-			/**
 			 * @class mysql
 			 * @brief provides an interface to MySQL db
 			 */
 			class mysql : public sql::constructor {
+			  public:
+				/**
+				 * @struct __ssl_options__
+				 * @brief defines SSL mySQL options
+				 */
+				struct __ssl_options__ {
+					dodoString key;     ///< pathname to the key file
+					dodoString cert;    ///< pathname to the certificate file
+					dodoString ca;      ///< pathname to the certificate authority file
+					dodoString capath;  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
+					dodoString cipher;  ///< allowed SSL ciphers
+				};
+
 			  private:
 
 				/**
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				mysql(mysql &mypp);
+				mysql(mysql &);
 
 			  public:
 
@@ -77,7 +78,7 @@ namespace dodo {
 				 * constructor
 				 * @param dbInfo defines information for connection to db
 				 */
-				mysql(const __connectionInfo__ &dbInfo);
+				mysql(const __connection__ &dbInfo);
 
 				/**
 				 * destructor
@@ -87,19 +88,19 @@ namespace dodo {
 				/*
 				 * set connection settings
 				 * @param type defines type of connection[see mySQL documentation]
-				 * @param options defines options of ssl connection[see __mysqlSslOptions__]
+				 * @param options defines options of ssl connection
 				 * @note type can be:
 				 *  CLIENT_COMPRESS         Use compression protocol
 				 *	CLIENT_MULTI_STATEMENTS Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
 				 */
-				void connectSettings(unsigned long             type,
-											 const __mysqlSslOptions__ &options = __mysqlSslOptions__());
+				void setConnectionSettings(unsigned long             type,
+										   const __ssl_options__ &options = __ssl_options__());
 
 				/**
 				 * connect to the database
 				 * @param dbInfo defines information for connection to db
 				 */
-				virtual void connect(const __connectionInfo__ &dbInfo);
+				virtual void connect(const __connection__ &dbInfo);
 
 				/**
 				 * disconnect from the database
@@ -110,22 +111,22 @@ namespace dodo {
 				 * automaticaly detect fields types
 				 * @param table defines table for which rules will be applied
 				 */
-				virtual void getFieldsTypes(const dodoString &table);
+				virtual void requestFieldsTypes(const dodoString &table);
 
 				/**
 				 * @return amount of affected rows from the evaluated request
 				 */
-				virtual unsigned int affectedRowsCount() const;
+				virtual unsigned int affectedRows() const;
 
 				/**
 				 * @return amount of received rows from the evaluated request
 				 */
-				virtual unsigned int rowsCount() const;
+				virtual unsigned int requestedRows() const;
 
 				/**
 				 * @return amount of received fields from the evaluated request
 				 */
-				virtual unsigned int fieldsCount() const;
+				virtual unsigned int requestedFields() const;
 
 				/**
 				 * @return received rows from the evaluated request
@@ -164,13 +165,13 @@ namespace dodo {
 				/**
 				 * @return current session charset
 				 */
-				dodoString getCharset() const;
+				dodoString charset() const;
 
 				/**
 				 * set connection timeout
 				 * @param time defines connection timeout in seconds
 				 */
-				void setConnectTimeout(unsigned int time);
+				void setConnectionTimeout(unsigned int time);
 
 			  private:
 
@@ -184,5 +185,4 @@ namespace dodo {
 	};
 };
 #endif
-
 #endif

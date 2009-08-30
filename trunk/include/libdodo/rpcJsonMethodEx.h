@@ -48,8 +48,8 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define RPCJSONMETHODEX_ROOTNOTANOBJECT_STR "Root node is not an object."
-#define RPCJSONMETHODEX_PARAMSNOTANARRAY_STR "Params is not an array."
+#define RPCJSONMETHODEX_ROOTNOTANOBJECT_STR "Root node is not an object"
+#define RPCJSONMETHODEX_PARAMSNOTANARRAY_STR "Parameters are not an array"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -60,5 +60,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

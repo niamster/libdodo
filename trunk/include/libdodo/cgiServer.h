@@ -37,18 +37,19 @@ namespace dodo {
 		class exchange;
 
 		/**
-		 * @typedef serverHandler
-		 * @brief defines type of function that will be called on new cgi request
-		 * @param ex defines cgi::exchange object for I/O
-		 */
-		typedef void (*serverHandler)(exchange &ex);
-
-		/**
 		 * @class server
 		 * @brief provides CGI server functionality
 		 */
 		class server {
 		  public:
+
+			/**
+			 * @typedef serverHandler
+			 * @brief defines type of function that will be called on new cgi request
+			 * @param e defines cgi::exchange object for I/O
+			 */
+			typedef void (*handler)(exchange &e);
+
 
 			/**
 			 * destructor
@@ -57,11 +58,10 @@ namespace dodo {
 
 			/**
 			 * listen for incoming requests
-			 * @param func define request handler
+			 * @param handler define request handler
 			 */
-			virtual void serve(serverHandler func) = 0;
+			virtual void serve(handler handler) = 0;
 		};
 	};
 };
-
 #endif

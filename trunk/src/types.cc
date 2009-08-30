@@ -68,7 +68,7 @@ bool
 dodoMapStringCompare::operator()(const dodoString &first,
 								 const dodoString &second)
 {
-	return strcmp(first.c_str(), second.c_str()) < 0 ? true : false;
+	return strcmp(first.data(), second.data()) < 0 ? true : false;
 }
 
 //-------------------------------------------------------------------
@@ -77,7 +77,7 @@ bool
 dodoMapICaseStringCompare::operator()(const dodoString &first,
 									  const dodoString &second)
 {
-	return strcasecmp(first.c_str(), second.c_str()) < 0 ? true : false;
+	return strcasecmp(first.data(), second.data()) < 0 ? true : false;
 }
 
 //-------------------------------------------------------------------
@@ -86,7 +86,7 @@ bool
 dodoMapStringCompare::operator()(const dodoString &first,
 								 const dodoString &second) const
 {
-	return strcmp(first.c_str(), second.c_str()) < 0 ? true : false;
+	return strcmp(first.data(), second.data()) < 0 ? true : false;
 }
 
 //-------------------------------------------------------------------
@@ -95,7 +95,7 @@ bool
 dodoMapICaseStringCompare::operator()(const dodoString &first,
 									  const dodoString &second) const
 {
-	return strcasecmp(first.c_str(), second.c_str()) < 0 ? true : false;
+	return strcasecmp(first.data(), second.data()) < 0 ? true : false;
 }
 
 //-------------------------------------------------------------------

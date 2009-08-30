@@ -34,20 +34,18 @@
 
 #ifdef OPENSSL_EXT
 #include <libdodo/ioNetworkServer.h>
+#include <libdodo/ioNetworkSslExchange.h>
 #include <libdodo/types.h>
 
 namespace dodo {
 	namespace io {
 		namespace ssl {
-			struct __sslContext__;
+			struct __context__;
 			struct __certificates__;
 		};
 
 		namespace network {
 			namespace ssl {
-				class exchange;
-				class __initialAccept__;
-
 				/**
 				 * @class server
 				 * @brief provides SSL network connection interface
@@ -61,14 +59,14 @@ namespace dodo {
 					 * copy constructor
 					 * @note to prevent copying
 					 */
-					server(server &fs);
+					server(server &);
 
 				  public:
 
 					/**
 					 * constructor
 					 * @param family defines family of the socket[see connectionProtoFamilyEnum]
-					 * @param type defines type of the socket[see connectionTransferTypeEnum]
+					 * @param type defines type of the socket[see connectionTransferEnum]
 					 */
 					server(short family,
 						   short type);
@@ -116,20 +114,20 @@ namespace dodo {
 					 * @return true on new connection acceptance
 					 * @param init defines object that will be filled with info that may init exchange object
 					 * @param info defines info about remote host
-					 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
+					 * @note for OPTIONS_TRANSFER_DATAGRAM true is always returned
 					 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 					 */
-					virtual bool accept(network::__initialAccept__ &init,
-										__peerInfo__      &info);
+					virtual bool accept(network::exchange::__init__ &init,
+										__peer__      &info);
 
 					/**
 					 * accept incoming connections
 					 * @return true on new connection acceptance
 					 * @param init defines object that will be filled with info that may init exchange object
-					 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
+					 * @note for OPTIONS_TRANSFER_DATAGRAM true is always returned
 					 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 					 */
-					virtual bool accept(network::__initialAccept__ &init);
+					virtual bool accept(network::exchange::__init__ &init);
 
 				  protected:
 
@@ -142,14 +140,13 @@ namespace dodo {
 					 * accept SSL connection
 					 * @param init defines object that will be filled with info that may init exchange object
 					 */
-					void acceptSsl(__initialAccept__ &init);
+					void acceptSsl(exchange::__init__ &init);
 
-					io::ssl::__sslContext__ *ctx; ///< SSL context
+					io::ssl::__context__ *ctx; ///< SSL context
 				};
 			};
 		};
 	};
 };
 #endif
-
 #endif

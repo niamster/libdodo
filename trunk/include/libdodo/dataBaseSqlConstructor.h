@@ -40,12 +40,12 @@ namespace dodo {
 		namespace base {
 			namespace sql {
 				/**
-				 * @enum fieldTypeEnum defines field type
+				 * @enum fieldEnum defines field type
 				 */
-				enum fieldTypeEnum {
-					FIELDTYPE_TEXT,
-					FIELDTYPE_BINARY,
-					FIELDTYPE_NUMERIC,
+				enum fieldEnum {
+					FIELD_TEXT,
+					FIELD_BINARY,
+					FIELD_NUMERIC,
 				};
 
 				/**
@@ -71,19 +71,19 @@ namespace dodo {
 					 * @return constructed query from collected data
 					 * @note it doesn't clean collected data
 					 */
-					virtual dodoString queryCollect();
+					virtual dodoString construct();
 
 					/**
 					 * automaticaly detect fields types
 					 * @param table defines table for which rules will be applied
 					 */
-					virtual void getFieldsTypes(const dodoString &table) = 0;
+					virtual void requestFieldsTypes(const dodoString &table) = 0;
 
 					/**
 					 * set field type
 					 * @param table defines table for which rules will be applied
 					 * @param field defines field name
-					 * @param type defines field type[see fieldTypeEnum]
+					 * @param type defines field type[see fieldEnum]
 					 */
 					virtual void setFieldType(const dodoString &table,
 											  const dodoString &field,
@@ -104,12 +104,12 @@ namespace dodo {
 					/**
 					 * construct `SELECT function` statement
 					 */
-					virtual void callFunctionCollect();
+					virtual void functionCollect();
 
 					/**
 					 * construct `select procedure` statement
 					 */
-					virtual void callProcedureCollect();
+					virtual void procedureCollect();
 
 					/**
 					 * construct `select` statement
@@ -161,46 +161,45 @@ namespace dodo {
 												 const dodoString      &frame,
 												 int                   limit = -1);
 
-#define SQLCONSTRUCTOR_STATEMENTS 21
-
 					/**
-					 * @enum sqlConstructorStatementEnum defines sqlConstructor statements
+					 * @enum statementEnum defines constructor statements
 					 * @note defines positions of string representation in 'statements' class property
 					 */
-					enum sqlConstructorStatementEnum {
-						SQLCONSTRUCTOR_STATEMENT_EQUAL,
-						SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE,
-						SQLCONSTRUCTOR_STATEMENT_APOSTROPHE,
-						SQLCONSTRUCTOR_STATEMENT_COMA,
-						SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET,
-						SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET,
-						SQLCONSTRUCTOR_STATEMENT_SELECT,
-						SQLCONSTRUCTOR_STATEMENT_CALL,
-						SQLCONSTRUCTOR_STATEMENT_FROM,
-						SQLCONSTRUCTOR_STATEMENT_COLON,
-						SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA,
-						SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA,
-						SQLCONSTRUCTOR_STATEMENT_INSERT,
-						SQLCONSTRUCTOR_STATEMENT_INTO,
-						SQLCONSTRUCTOR_STATEMENT_VALUES,
-						SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETSELECT,
-						SQLCONSTRUCTOR_STATEMENT_UPDATE,
-						SQLCONSTRUCTOR_STATEMENT_SET,
-						SQLCONSTRUCTOR_STATEMENT_DELETE,
-						SQLCONSTRUCTOR_STATEMENT_NULL,
+					enum statementEnum {
+						STATEMENT_EQUAL,
+						STATEMENT_EQUALAPOSTROPHE,
+						STATEMENT_APOSTROPHE,
+						STATEMENT_COMA,
+						STATEMENT_LEFTBRACKET,
+						STATEMENT_RIGHTBRACKET,
+						STATEMENT_SELECT,
+						STATEMENT_CALL,
+						STATEMENT_FROM,
+						STATEMENT_COLON,
+						STATEMENT_APOSTROPHECOMA,
+						STATEMENT_RIGHTBRACKETCOMA,
+						STATEMENT_INSERT,
+						STATEMENT_INTO,
+						STATEMENT_VALUES,
+						STATEMENT_RIGHTBRACKETSELECT,
+						STATEMENT_UPDATE,
+						STATEMENT_SET,
+						STATEMENT_DELETE,
+						STATEMENT_NULL,
+
+						STATEMENT_ENUMSIZE
 					};
 
-					static const dodoString statements[SQLCONSTRUCTOR_STATEMENTS];          ///< sqlConstructor statements
+					static const dodoString statements[STATEMENT_ENUMSIZE];          ///< constructor statements
 
-					static const dodoString sqlAddArr[ACCUMULATOR_ADDREQUESTSTATEMENTS];    ///< additional statements(`where`, `limit`, ...)
+					static const dodoString additionalRequestStatements[ADDITIONAL_REQUEST_ENUMSIZE];    ///< additional statements(`where`, `limit`, ...)
 
-					static const dodoString sqlQStArr[SUBREQUESTSTATEMENTS];                ///< statements for complex queries(`union`, ...)
+					static const dodoString subrequestStatements[SUBREQUEST_ENUMSIZE];                ///< statements for complex queries(`union`, ...)
 
-					static const dodoString sqlJoinArr[JOINTYPESTSTATEMENTS];               ///< statements for `join` queries
+					static const dodoString joinStatements[JOIN_ENUMSIZE];               ///< statements for `join` queries
 				};
 			};
 		};
 	};
 };
-
 #endif

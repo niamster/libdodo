@@ -49,5 +49,4 @@
 #include <libdodo/rpcXmlResponse.h>
 #include <libdodo/rpcXmlServer.h>
 #include <libdodo/rpcXmlValue.h>
-
 #endif

@@ -46,19 +46,18 @@ namespace dodo {
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define TOOLSLIBRARYEX_NOTOPENED_STR "Library was not opened."
+#define TOOLSLIBRARYEX_NOTOPENED_STR "Library not opened"
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
 		enum libraryFunctionsID {
 			LIBRARYEX_OPEN,
 			LIBRARYEX_CLOSE,
-			LIBRARYEX_GET,
+			LIBRARYEX_FUNCTION,
 			LIBRARYEX_BROPERATORSTRING,
-			LIBRARYEX_GETSYMBOLS,
+			LIBRARYEX_SYMBOLS,
 			LIBRARYEX_LIBRARY,
 		};
 	};
 };
-
 #endif

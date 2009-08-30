@@ -51,7 +51,7 @@ unsigned long basic::instances = 0;
 
 //-------------------------------------------------------------------
 
-bool basic::handlerSetEx[] = {
+bool basic::handlerMap[] = {
 	false,
 	false,
 	false,
@@ -107,7 +107,7 @@ bool basic::handlerSetEx[] = {
 
 //-------------------------------------------------------------------
 
-errorHandler basic::handlersEx[] = {
+basic::handler basic::handlers[] = {
 	NULL,
 	NULL,
 	NULL,
@@ -163,7 +163,7 @@ errorHandler basic::handlersEx[] = {
 
 //-------------------------------------------------------------------
 
-void *basic::handlerDataEx[] = {
+void *basic::handlerData[] = {
 	NULL,
 	NULL,
 	NULL,
@@ -220,7 +220,7 @@ void *basic::handlerDataEx[] = {
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
-bool basic::handlesOpenedEx[] = {
+bool basic::handlesOpened[] = {
 	false,
 	false,
 	false,
@@ -275,7 +275,7 @@ bool basic::handlesOpenedEx[] = {
 
 //-------------------------------------------------------------------
 
-void *basic::handlesEx[] = {
+void *basic::handles[] = {
 	NULL,
 	NULL,
 	NULL,
@@ -407,18 +407,18 @@ basic::basic() throw ()
 
 //-------------------------------------------------------------------
 
-basic::basic(int              a_errModule,
+basic::basic(int              a_module,
 			 int              functionID,
 			 int              errnoSource,
 			 int              a_errno,
 			 const dodoString &a_errstr,
 			 unsigned long    a_line,
 			 const dodoString &a_file,
-			 const dodoString &a_message) throw () : errModule(a_errModule),
-													 funcID(functionID),
+			 const dodoString &a_message) throw () : source(a_module),
+													 function(functionID),
 													 errnoSource(errnoSource),
-													 baseErrno(a_errno),
-													 baseErrstr(a_errstr),
+													 errNo(a_errno),
+													 errStr(a_errstr),
 													 line(a_line),
 													 file(a_file),
 													 message(a_message)
@@ -438,7 +438,7 @@ basic::basic(int              a_errModule,
 
 	__call__ call;
 
-	int trace_size = backtrace(trace, MAXCALLSTACKLEN);
+	int trace_size = ::backtrace(trace, MAXCALLSTACKLEN);
 	char **symbols = backtrace_symbols(trace, trace_size);
 
 	for (int i = 0; i < trace_size; ++i) {
@@ -464,12 +464,12 @@ basic::basic(int              a_errModule,
 	free(symbols);
 #endif
 
-	getInstance();
+	instance();
 
 	++instances;
 
-	if (handlerSetEx[errModule])
-		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);
+	if (handlerMap[source])
+		handlers[source](source, this, handlerData[source]);
 }
 
 //-------------------------------------------------------------------
@@ -482,20 +482,20 @@ basic::~basic() throw ()
 
 	if (instances == 0) {
 #ifdef DL_EXT
-		deinitBaseExModule deinit;
+		deinitModule deinit;
 
-		for (int i(0); i < BASEEX_MODULES; ++i) {
-			if (!handlesOpenedEx[i])
+		for (int i(0); i < MODULE_ENUMSIZE; ++i) {
+			if (!handlesOpened[i])
 				continue;
 
-			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
+			deinit = (deinitModule)dlsym(handles[i], "deinitExceptionBasicModule");
 			if (deinit != NULL)
 				deinit();
 
-			handlesOpenedEx[i] = false;
+			handlesOpened[i] = false;
 
 #ifndef DL_FAST
-			dlclose(handlesEx[i]);
+			dlclose(handles[i]);
 #endif
 		}
 #endif
@@ -506,7 +506,7 @@ basic::~basic() throw ()
 
 #ifdef CALLSTACK_EX
 dodoString
-basic::getCallStack()
+basic::backtrace()
 {
 	dodoString stack;
 
@@ -529,7 +529,7 @@ basic::operator const dodoString
 {
 	syncThreadStack tg;
 
-	return baseErrstr;
+	return errStr;
 }
 
 //-------------------------------------------------------------------
@@ -539,272 +539,221 @@ basic::what() const throw ()
 {
 	syncThreadStack tg;
 
-	return baseErrstr.c_str();
+	return errStr.data();
 }
 
 //-------------------------------------------------------------------
 
 void
-basic::setErrorHandler(errorModuleEnum module,
-					   errorHandler    handler,
+basic::setHandler(moduleEnum module,
+					   handler    handler,
 					   void            *data)
 {
 	syncThreadStack tg;
 
-	getInstance();
+	instance();
 
 #ifdef DL_EXT
-	if (handlesOpenedEx[module]) {
-		deinitBaseExModule deinit;
+	if (handlesOpened[module]) {
+		deinitModule deinit;
 
-		deinit = (deinitBaseExModule)dlsym(handlesEx[module], "deinitBaseExModule");
+		deinit = (deinitModule)dlsym(handles[module], "deinitExceptionBasicModule");
 		if (deinit != NULL)
 			deinit();
 
 #ifndef DL_FAST
-		dlclose(handlesEx[module]);
+		dlclose(handles[module]);
 #endif
 
-		handlesOpenedEx[module] = false;
-		handlesEx[module] = NULL;
+		handlesOpened[module] = false;
+		handles[module] = NULL;
 	}
 #endif
 
-	handlersEx[module] = handler;
-	handlerSetEx[module] = true;
-	handlerDataEx[module] = data;
+	handlers[module] = handler;
+	handlerMap[module] = true;
+	handlerData[module] = data;
 }
 
 //-------------------------------------------------------------------
 
 void
-basic::setErrorHandlers(errorHandler handler,
+basic::setHandler(handler handler,
 						void         *data)
 {
 	syncThreadStack tg;
 
-	getInstance();
+	instance();
 
 #ifdef DL_EXT
-	deinitBaseExModule deinit;
+	deinitModule deinit;
 #endif
 
-	for (int i(0); i < BASEEX_MODULES; ++i) {
+	for (int i(0); i < MODULE_ENUMSIZE; ++i) {
 #ifdef DL_EXT
-		if (handlesOpenedEx[i]) {
-			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
+		if (handlesOpened[i]) {
+			deinit = (deinitModule)dlsym(handles[i], "deinitExceptionBasicModule");
 			if (deinit != NULL)
 				deinit();
 
 #ifndef DL_FAST
-			dlclose(handlesEx[i]);
+			dlclose(handles[i]);
 #endif
 
-			handlesOpenedEx[i] = false;
-			handlesEx[i] = NULL;
+			handlesOpened[i] = false;
+			handles[i] = NULL;
 		}
 #endif
 
-		handlersEx[i] = handler;
-		handlerSetEx[i] = true;
-		handlerDataEx[i] = data;
+		handlers[i] = handler;
+		handlerMap[i] = true;
+		handlerData[i] = data;
 	}
 }
 
 //-------------------------------------------------------------------
 
 void
-basic::unsetErrorHandler(errorModuleEnum module)
+basic::removeHandler(moduleEnum module)
 {
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-	if (handlesOpenedEx[module]) {
-		deinitBaseExModule deinit;
+	if (handlesOpened[module]) {
+		deinitModule deinit;
 
-		deinit = (deinitBaseExModule)dlsym(handlesEx[module], "deinitBaseExModule");
+		deinit = (deinitModule)dlsym(handles[module], "deinitExceptionBasicModule");
 		if (deinit != NULL)
 			deinit();
 
 #ifndef DL_FAST
-		dlclose(handlesEx[module]);
+		dlclose(handles[module]);
 #endif
 
-		handlesOpenedEx[module] = false;
-		handlesEx[module] = NULL;
+		handlesOpened[module] = false;
+		handles[module] = NULL;
 	}
 #endif
 
-	handlersEx[module] = NULL;
-	handlerSetEx[module] = false;
-	handlerDataEx[module] = NULL;
+	handlers[module] = NULL;
+	handlerMap[module] = false;
+	handlerData[module] = NULL;
 }
 
 //-------------------------------------------------------------------
 
 void
-basic::unsetErrorHandlers()
+basic::removeHandlers()
 {
 	syncThreadStack tg;
 
 #ifdef DL_EXT
-	deinitBaseExModule deinit;
+	deinitModule deinit;
 #endif
 
-	for (int i(0); i < BASEEX_MODULES; ++i) {
+	for (int i(0); i < MODULE_ENUMSIZE; ++i) {
 #ifdef DL_EXT
-		if (handlesOpenedEx[i]) {
-			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
+		if (handlesOpened[i]) {
+			deinit = (deinitModule)dlsym(handles[i], "deinitExceptionBasicModule");
 			if (deinit != NULL)
 				deinit();
 
 #ifndef DL_FAST
-			dlclose(handlesEx[i]);
+			dlclose(handles[i]);
 #endif
 
-			handlesOpenedEx[i] = false;
-			handlesEx[i] = NULL;
+			handlesOpened[i] = false;
+			handles[i] = NULL;
 		}
 #endif
 
-		handlersEx[i] = NULL;
-		handlerSetEx[i] = false;
-		handlerDataEx[i] = NULL;
+		handlers[i] = NULL;
+		handlerMap[i] = false;
+		handlerData[i] = NULL;
 	}
 }
 
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
-bool
-basic::setErrorHandlers(const dodoString &path,
-						void             *data,
-						void             *toInit)
-{
-	syncThreadStack tg;
-
-	getInstance();
-
-	initBaseExModule init;
-	errorHandler in;
-	deinitBaseExModule deinit;
-
-	for (int i(0); i < BASEEX_MODULES; ++i) {
-		if (handlesOpenedEx[i]) {
-			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
-			if (deinit != NULL)
-				deinit();
-
-#ifndef DL_FAST
-			dlclose(handlesEx[i]);
-#endif
-
-			handlesOpenedEx[i] = false;
-			handlesEx[i] = NULL;
-		}
-
-#ifdef DL_FAST
-		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
-#else
-		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY);
-#endif
-		if (handlesEx[i] == NULL)
-			return false;
-
-		init = (initBaseExModule)dlsym(handlesEx[i], "initBaseExModule");
-		if (init == NULL)
-			return false;
-
-		in = (errorHandler)dlsym(handlesEx[i], init(toInit).hook);
-		if (in == NULL)
-			return false;
-
-		handlesOpenedEx[i] = true;
-
-		handlersEx[i] = in;
-		handlerSetEx[i] = true;
-		handlerDataEx[i] = data;
-	}
-
-	return true;
-}
-
-//-------------------------------------------------------------------
-
-bool
-basic::setErrorHandler(const dodoString &path,
+void
+basic::setHandler(const dodoString &path,
 					   void             *data,
 					   void             *toInit)
 {
 	syncThreadStack tg;
 
-	getInstance();
+	instance();
 
 #ifdef DL_FAST
-	void *handler = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
+	void *h = dlopen(path.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	void *handler = dlopen(path.c_str(), RTLD_LAZY);
+	void *h = dlopen(path.data(), RTLD_LAZY);
 #endif
-	if (handler == NULL)
-		return false;
+	if (h == NULL)
+		return;
 
-	initBaseExModule init = (initBaseExModule)dlsym(handler, "initBaseExModule");
+	initModule init = (initModule)dlsym(h, "initExceptionBasicModule");
 	if (init == NULL)
-		return false;
+		return;
 
-	__basicMod__ mod = init(toInit);
+	__module__ mod = init(toInit);
 
-	deinitBaseExModule deinit;
+	deinitModule deinit;
 
-	if (handlesOpenedEx[mod.module]) {
-		deinit = (deinitBaseExModule)dlsym(handlesEx[mod.module], "deinitBaseExModule");
-		if (deinit != NULL)
-			deinit();
+	for (int i=0;i<MODULE_ENUMSIZE;++i) {
+		if (!mod.modules[i])
+			continue;
+
+		if (handlesOpened[i]) {
+			deinit = (deinitModule)dlsym(handles[i], "deinitExceptionBasicModule");
+			if (deinit != NULL)
+				deinit();
 
 #ifndef DL_FAST
-		dlclose(handlesEx[mod.module]);
+			dlclose(handles[i]);
 #endif
 
-		handlesOpenedEx[mod.module] = false;
-		handlesEx[mod.module] = NULL;
+			handlesOpened[i] = false;
+			handles[i] = NULL;
+		}
+
+
+		handles[i] = h;
+
+		handler in = (handler)dlsym(handles[i], mod.hook);
+		if (in == NULL)
+			continue;
+
+		handlesOpened[i] = true;
+
+		handlers[i] = in;
+		handlerMap[i] = true;
+		handlerData[i] = data;
 	}
-
-	handlesEx[mod.module] = handler;
-
-	errorHandler in = (errorHandler)dlsym(handlesEx[mod.module], mod.hook);
-	if (in == NULL)
-		return false;
-
-	handlesOpenedEx[mod.module] = true;
-
-	handlersEx[mod.module] = in;
-	handlerSetEx[mod.module] = true;
-	handlerDataEx[mod.module] = data;
-
-	return true;
 }
 
 //-------------------------------------------------------------------
 
-__basicMod__
-basic::getModuleInfo(const dodoString &module,
+basic::__module__
+basic::module(const dodoString &module,
 					 void             *toInit)
 {
 	syncThreadStack tg;
 
 #ifdef DL_FAST
-	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
+	void *handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		return __basicMod__();
+		return __module__();
 
-	initBaseExModule init = (initBaseExModule)dlsym(handle, "initBaseExModule");
+	initModule init = (initModule)dlsym(handle, "initExceptionBasicModule");
 	if (init == NULL)
-		return __basicMod__();
+		return __module__();
 
-	__basicMod__ mod = init(toInit);
+	__module__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)

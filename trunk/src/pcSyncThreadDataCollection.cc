@@ -65,62 +65,62 @@ collection::add(void *data)
 
 	pc::sync::data::__info__ share;
 
-	share.position = ++shareNum;
+	share.id = ++shareNum;
 	share.data = data;
 
 	shares.push_back(share);
 
-	return share.position;
+	return share.id;
 }
 
 //-------------------------------------------------------------------
 
 void
-collection::del(unsigned long position)
+collection::remove(unsigned long id)
 {
 	pc::sync::protector tg(keeper);
 
-	if (getShare(position))
+	if (getShare(id))
 		shares.erase(current);
 	else
-		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATACOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCSYNCTHREADDATACOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-collection::set(unsigned long position,
+collection::set(unsigned long id,
 				void          *data)
 {
 	pc::sync::protector tg(keeper);
 
-	if (getShare(position))
+	if (getShare(id))
 		current->data = data;
 	else
-		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATACOLLECTION, COLLECTIONEX_SET, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCSYNCTHREADDATACOLLECTION, COLLECTIONEX_SET, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 const void *
-collection::get(unsigned long position)
+collection::get(unsigned long id)
 {
 	pc::sync::protector tg(keeper);
 
-	if (getShare(position))
+	if (getShare(id))
 		return current->data;
 	else
-		throw exception::basic(exception::ERRMODULE_PCSYNCTHREADDATACOLLECTION, COLLECTIONEX_SET, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCSYNCTHREADDATACOLLECTION, COLLECTIONEX_SET, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 bool
-collection::getShare(unsigned long position)
+collection::getShare(unsigned long id)
 {
 	dodoList<pc::sync::data::__info__>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i) {
-		if (i->position == position) {
+		if (i->id == id) {
 			current = i;
 
 			return true;
@@ -133,13 +133,13 @@ collection::getShare(unsigned long position)
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>
-collection::getIds()
+collection::identificators()
 {
 	dodoList<unsigned long> ids;
 
 	dodoList<pc::sync::data::__info__>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
-		ids.push_back(i->position);
+		ids.push_back(i->id);
 
 	return ids;
 }

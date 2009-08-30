@@ -53,12 +53,13 @@ namespace dodo {
 				/**
 				 * explanations for libdodo defined errors
 				 */
-#define IONETWORKSSLSERVEREX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-#define IONETWORKSSLSERVEREX_WRONGFILENAME_STR  "Probably wrong filename, type of file is wrong or `path` is empty!"
-#define IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection."
-#define IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR "Unable to initialize SSL object."
-#define IONETWORKSSLSERVEREX_UNKNOWNKEYTYPE_STR "Unknown key type."
-#define IONETWORKSSLSERVEREX_LONGPATH_STR "Path to socket is too long."
+#define IONETWORKSSLSERVEREX_WRONGPARAMETER_STR "Wrong paramather passed to function"
+#define IONETWORKSSLSERVEREX_WRONGFILENAME_STR  "Wrong filename"
+#define IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection"
+#define IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR "Unable to initialize SSL object"
+#define IONETWORKSSLSERVEREX_UNKNOWNKEY_STR "Unknown key type"
+#define IONETWORKSSLSERVEREX_LONGPATH_STR "Path to socket is too long"
+
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
@@ -74,5 +75,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

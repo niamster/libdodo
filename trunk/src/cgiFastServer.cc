@@ -58,7 +58,7 @@ dummyfastCGIThread(dodo::cgi::exchange &data)
 
 //-------------------------------------------------------------------
 
-dodo::cgi::serverHandler server::handler = &dummyfastCGIThread;
+dodo::cgi::server::handler server::handler = &dummyfastCGIThread;
 
 //-------------------------------------------------------------------
 
@@ -116,7 +116,7 @@ server::fastCGIThread(void *data)
 		acceptLock.release();
 
 		if (res == -1)
-			throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
 		handler(cfSTD);
 
@@ -129,10 +129,10 @@ server::fastCGIThread(void *data)
 //-------------------------------------------------------------------
 
 void
-server::serve(serverHandler func)
+server::serve(cgi::server::handler func)
 {
 	if (!isFastCgi())
-		throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ISCGI, CGIFASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ISCGI, CGIFASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);
 
 	handler = func;
 
@@ -167,7 +167,7 @@ server::serve(serverHandler func)
 			}
 
 			if (FCGX_Accept_r(request.request) == -1)
-				throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
 			handler(cfSTD);
 

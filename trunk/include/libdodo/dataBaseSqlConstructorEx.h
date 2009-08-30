@@ -43,26 +43,22 @@ namespace dodo {
 				 * libdodo defined errors
 				 */
 				enum sqlConstructorExR {
-					SQLCONSTRUCTOREX_EMPTYREQUEST,
 					SQLCONSTRUCTOREX_UNKNOWNJOINTYPE,
 				};
 
 				/**
 				 * explanations for libdodo defined errors
 				 */
-#define DATABASESQLCONSTRUCTOREX_EMPTYREQUEST_STR    "Query is empty. Are you sure?"
-#define DATABASESQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR "Unknown join type."
+#define DATABASESQLCONSTRUCTOREX_UNKNOWNJOIN_STR "Unknown join type"
 
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
 				enum sqlConstructorFunctionsID {
-					SQLCONSTRUCTOREX_QUERYCOLLECT,
 					SQLCONSTRUCTOREX_JOINCOLLECT,
 				};
 			};
 		};
 	};
 };
-
 #endif

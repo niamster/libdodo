@@ -54,51 +54,20 @@ point::point(unsigned long x, unsigned long y) : x(x),
 
 //-------------------------------------------------------------------
 
-draw::draw(draw &a_draw)
-{
-}
-
-//-------------------------------------------------------------------
-
-draw::draw() : im(NULL)
-{
-}
-
-//-------------------------------------------------------------------
-
-draw::draw(graphics::image *im) : im(im)
-{
-}
-
-//-------------------------------------------------------------------
-
-draw::~draw()
-{
-}
-
-//-------------------------------------------------------------------
-
 void
-draw::setImage(graphics::image *a_im)
-{
-	im = a_im;
-}
-
-//-------------------------------------------------------------------
-
-void
-draw::primitive(char            *description,
+draw::primitive(graphics::image &image,
+				char            *description,
 				const __color__ &fillColor,
 				const __color__ &borderColor,
 				unsigned short  borderWidth)
 {
-	if (im == NULL || im->collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	if (image.collectedData.handle->im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
 #ifndef IMAGEMAGICK_PRE_63
 	DrawInfo *di = AcquireDrawInfo();
 #else
-	DrawInfo *di = CloneDrawInfo(im->collectedData.handle->imInfo, NULL);
+	DrawInfo *di = CloneDrawInfo(image.collectedData.handle->imInfo, NULL);
 #endif
 
 	di->primitive = description;
@@ -115,11 +84,11 @@ draw::primitive(char            *description,
 	di->fill.blue = fillColor.blue;
 	di->fill.opacity = fillColor.opacity;
 
-	if (DrawImage(im->collectedData.handle->im, di) == MagickFalse) {
+	if (DrawImage(image.collectedData.handle->im, di) == MagickFalse) {
 		di->primitive = NULL;
 		DestroyDrawInfo(di);
 
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
 	}
 
 	di->primitive = NULL;
@@ -129,7 +98,8 @@ draw::primitive(char            *description,
 //-------------------------------------------------------------------
 
 void
-draw::circle(const graphics::point &center,
+draw::circle(graphics::image &image,
+			 const graphics::point &center,
 			 unsigned long         radius,
 			 const __color__       &fillColor,
 			 const __color__       &borderColor,
@@ -138,13 +108,14 @@ draw::circle(const graphics::point &center,
 	char description[128];
 	snprintf(description, 128, "circle %ld,%ld %ld,%ld", center.x, center.y, center.x + radius, center.y);
 
-	primitive(description, fillColor, borderColor, borderWidth);
+	primitive(image, description, fillColor, borderColor, borderWidth);
 }
 
 //-------------------------------------------------------------------
 
 void
-draw::line(const dodoArray<graphics::point> &points,
+draw::line(graphics::image &image,
+		   const dodoArray<graphics::point> &points,
 		   const __color__                  &lineColor,
 		   unsigned short                   lineWidth)
 {
@@ -159,13 +130,14 @@ draw::line(const dodoArray<graphics::point> &points,
 		description.append(pointDesc);
 	}
 
-	primitive((char *)description.c_str(), color::transparent, lineColor, lineWidth);
+	primitive(image, (char *)description.data(), color::transparent, lineColor, lineWidth);
 }
 
 //-------------------------------------------------------------------
 
 void
-draw::rectangle(const graphics::point &tl,
+draw::rectangle(graphics::image &image,
+				const graphics::point &tl,
 				const graphics::point &br,
 				const __color__       &fillColor,
 				const __color__       &borderColor,
@@ -174,13 +146,14 @@ draw::rectangle(const graphics::point &tl,
 	char description[128];
 	snprintf(description, 128, "rectangle %ld,%ld %ld,%ld", tl.x, tl.y, br.x, br.y);
 
-	primitive(description, fillColor, borderColor, borderWidth);
+	primitive(image, description, fillColor, borderColor, borderWidth);
 }
 
 //-------------------------------------------------------------------
 
 void
-draw::text(const graphics::point &position,
+draw::text(graphics::image &image,
+		   const graphics::point &position,
 		   const dodoString      &text,
 		   const dodoString      &font,
 		   unsigned short        fontWidth,
@@ -189,8 +162,8 @@ draw::text(const graphics::point &position,
 		   unsigned short        borderWidth,
 		   double                angle)
 {
-	if (im == NULL || im->collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	if (image.collectedData.handle->im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
 	dodoString txt = "text 0,0 \"";
 	txt.append(text);
@@ -199,7 +172,7 @@ draw::text(const graphics::point &position,
 #ifndef IMAGEMAGICK_PRE_63
 	DrawInfo *di = AcquireDrawInfo();
 #else
-	DrawInfo *di = CloneDrawInfo(im->collectedData.handle->imInfo, NULL);
+	DrawInfo *di = CloneDrawInfo(image.collectedData.handle->imInfo, NULL);
 #endif
 
 	double radians = angle * M_PI / 180;
@@ -226,9 +199,9 @@ draw::text(const graphics::point &position,
 	di->affine.tx = current.sx * affine.tx + current.ry * affine.ty + current.tx;
 	di->affine.ty = current.rx * affine.tx + current.sy * affine.ty + current.ty;
 
-	di->primitive = (char *)txt.c_str();
+	di->primitive = (char *)txt.data();
 
-	di->font = (char *)font.c_str();
+	di->font = (char *)font.data();
 	di->pointsize = fontWidth;
 
 	di->stroke.red = borderColor.red;
@@ -243,12 +216,12 @@ draw::text(const graphics::point &position,
 	di->fill.blue = fillColor.blue;
 	di->fill.opacity = fillColor.opacity;
 
-	if (DrawImage(im->collectedData.handle->im, di) == MagickFalse) {
+	if (DrawImage(image.collectedData.handle->im, di) == MagickFalse) {
 		di->primitive = NULL;
 		di->font = NULL;
 		DestroyDrawInfo(di);
 
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
 	}
 
 	di->primitive = NULL;
@@ -259,12 +232,13 @@ draw::text(const graphics::point &position,
 //-------------------------------------------------------------------
 
 void
-draw::image(const graphics::point &position,
+draw::image(graphics::image &image,
+			const graphics::point &position,
 			const graphics::image &a_im,
 			double                angle)
 {
-	if (im == NULL || im->collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	if (image.collectedData.handle->im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
 	AffineMatrix current;
 	GetAffineMatrix(&current);
@@ -293,19 +267,20 @@ draw::image(const graphics::point &position,
 	current.tx = _current.sx * affine.tx + _current.ry * affine.ty + _current.tx;
 	current.ty = _current.rx * affine.tx + _current.sy * affine.ty + _current.ty;
 
-	if (DrawAffineImage(im->collectedData.handle->im, a_im.collectedData.handle->im, &current) == MagickFalse)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
+	if (DrawAffineImage(image.collectedData.handle->im, a_im.collectedData.handle->im, &current) == MagickFalse)
+		throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-draw::point(const graphics::point &position,
+draw::point(graphics::image &image,
+			const graphics::point &position,
 			const __color__       &pointColor,
 			unsigned short        pointWidth)
 {
-	if (im == NULL || im->collectedData.handle->im == NULL)
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	if (image.collectedData.handle->im == NULL)
+		throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
 	char description[128];
 
@@ -317,7 +292,7 @@ draw::point(const graphics::point &position,
 #ifndef IMAGEMAGICK_PRE_63
 	DrawInfo *di = AcquireDrawInfo();
 #else
-	DrawInfo *di = CloneDrawInfo(im->collectedData.handle->imInfo, NULL);
+	DrawInfo *di = CloneDrawInfo(image.collectedData.handle->imInfo, NULL);
 #endif
 
 	di->primitive = description;
@@ -327,11 +302,11 @@ draw::point(const graphics::point &position,
 	di->fill.blue = pointColor.blue;
 	di->fill.opacity = pointColor.opacity;
 
-	if (DrawImage(im->collectedData.handle->im, di) == MagickFalse) {
+	if (DrawImage(image.collectedData.handle->im, di) == MagickFalse) {
 		di->primitive = NULL;
 		DestroyDrawInfo(di);
 
-		throw exception::basic(exception::ERRMODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
 	}
 
 	di->primitive = NULL;

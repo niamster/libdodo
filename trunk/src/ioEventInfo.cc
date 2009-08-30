@@ -31,9 +31,9 @@
 
 #include <libdodo/ioEventInfo.h>
 
-using namespace dodo::io;
+using namespace dodo::io::event;
 
-eventInfo::~eventInfo()
+info::~info()
 {
 }
 

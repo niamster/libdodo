@@ -15,37 +15,32 @@ using namespace io;
 using namespace std;
 
 #ifdef IMAGEMAGICK_EXT
-
 using namespace graphics;
 
 #ifndef GRAPHICS_WO_XEXEC
-
 void
-hook(__xexecCollectedData__ *odata,
+hook(xexec::__xexecCollectedData__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecImageCollectedData__ *imData = (__xexecImageCollectedData__ *)odata;
+	image::__xexecCollectedData__ *imData = (image::__xexecCollectedData__ *)odata;
 
-	if (imData->operType == IMAGE_OPERATION_WRITE)
+	if (imData->operType == image::OPERATION_WRITE)
 	{
 		try
 		{
 			cout << "Rotating" << endl;
 
 			image *img = dynamic_cast<image *>(imData->executor);
-			graphics::transform tr(img);
-			tr.rotate(TRANSFORM_ROTATEDIRECTIONANGLE_180);
+			transform::rotate(*img, transform::ROTATE_DIRECTION_ANGLE_180);
 		}
 		catch (dodo::exception::basic ex)
 		{
-		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+			cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 		}
 	}
 }
-
 #endif
-
 #endif
 
 int main(int argc, char **argv)
@@ -55,21 +50,18 @@ int main(int argc, char **argv)
 #ifdef IMAGEMAGICK_EXT
 		image im;
 
-		graphics::transform tr(&im);
-		draw dr(&im);
-
 #ifndef GRAPHICS_WO_XEXEC
-		int prewrite = im.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
-		int postwrite = im.addXExec(XEXEC_ACTION_POSTEXEC, ::hook, NULL); ///another one to revert
+		int prewrite = im.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
+		int postwrite = im.addXExec(xexec::ACTION_POSTEXEC, ::hook, NULL); ///another one to revert
 #endif
 
 		im.readFile("test.png");
-		cout << im.getCompression() << " " << im.getEncoder() << " " << im.getQuality() << endl;
+		cout << im.compression() << " " << im.encoder() << " " << im.quality() << endl;
 
-		tr.scale(1000, 1000);
+		transform::scale(im, 1000, 1000);
 
-		dr.circle(point(300, 300), 100, color::red, color::green, 5);
-		dr.circle(point(300, 300), 50, color::blue, color::white, 5);
+		draw::circle(im, point(300, 300), 100, color::red, color::green, 5);
+		draw::circle(im, point(300, 300), 50, color::blue, color::white, 5);
 
 		im.writeFile("test.jpg");
 
@@ -79,23 +71,23 @@ int main(int argc, char **argv)
 #endif
 
 		dodoString img;
-		im.setEncoder(IMAGE_ENCODER_PNG);
-		im.setCompression(IMAGE_COMPRESSION_ZIP);
+		im.setEncoder(image::ENCODER_PNG);
+		im.setCompression(image::COMPRESSION_ZIP);
 		im.setQuality(4);
-		im.setType(IMAGE_TYPE_GRAYSCALE);
+		im.setType(image::TYPE_GRAYSCALE);
 		im.writeMemory(img);
 
 		file::regular io;
-		io.open("my.png", file::REGULAR_OPENMODE_READ_WRITE_TRUNCATE);
+		io.open("my.png", file::regular::OPEN_MODE_READ_WRITE_TRUNCATE);
 		io.outSize = img.size();
 		io.write(img);
 
 		cout << img.size() << endl;
 
 		im.create(400, 400);
-		dr.circle(point(200, 200), 100, color::red, color::green, 5);
-		dr.circle(point(200, 200), 50, color::blue, color::white, 5);
-		dr.rectangle(point(200, 200), point(300, 300), color::green, color::red, 15);
+		draw::circle(im, point(200, 200), 100, color::red, color::green, 5);
+		draw::circle(im, point(200, 200), 50, color::blue, color::white, 5);
+		draw::rectangle(im, point(200, 200), point(300, 300), color::green, color::red, 15);
 		im.writeFile("new.png");
 
 		im.readFile("new.png");
@@ -104,40 +96,40 @@ int main(int argc, char **argv)
 
 		im.readFile("new-1.png");
 		im.setBackgroundColor(color::transparent);
-		dr.circle(point(200, 200), 100, color::red, color::green, 5);
-		im.setType(IMAGE_TYPE_GRAYSCALE);
-		dr.circle(point(200, 200), 50, color::blue, color::white, 5);
+		draw::circle(im, point(200, 200), 100, color::red, color::green, 5);
+		im.setType(image::TYPE_GRAYSCALE);
+		draw::circle(im, point(200, 200), 50, color::blue, color::white, 5);
 		im.setOpacity(65535/2);
 		__color__ mygreen = color::green;
 		mygreen.opacity = 65535/2;
-		dr.circle(point(250, 250), 50, mygreen, color::white, 5);
+		draw::circle(im, point(250, 250), 50, mygreen, color::white, 5);
 		im.writeFile("new-2.png");
 
 		im.create(400, 400);
-		dr.circle(point(200, 200), 100, color::red, color::green, 5);
+		draw::circle(im, point(200, 200), 100, color::red, color::green, 5);
 		dodoArray<point> points;
 		for (int i=0;i<10;++i)
 			points.push_back(point(i*20, (unsigned long)(390 - pow(i, 2)*5)));
-		dr.line(points, color::black, 1);
+		draw::line(im, points, color::black, 1);
 		for (int i=0;i<10;++i)
-			dr.point(point(i*20+100, (unsigned long)(390 - pow(i, 2)*5)), color::blue, 5);
+			draw::point(im, point(i*20+100, (unsigned long)(390 - pow(i, 2)*5)), color::blue, 5);
 		for (int i=0;i<360;++i)
-			dr.point(point((unsigned long)(cos(i)*100 + 150), (unsigned long)(200 - sin(i)*100)), color::black);
+			draw::point(im, point((unsigned long)(cos(i)*100 + 150), (unsigned long)(200 - sin(i)*100)), color::black);
 		im.writeFile("new-3.png");
 
 		im.create(400, 400);
-		dr.circle(point(200, 200), 100, color::red, color::green, 5);
-		dr.text(point(100, 200), "libdodo", "Arial", 70, color::blue, color::green);
-		dr.text(point(100, 100), "libdodo", "Arial", 30);
-		dr.text(point(150, 150), "libdodo", "Arial", 50, color::blue, color::green, 2, 180);
-		dr.text(point(150, 200), "libdodo", "Arial", 50, color::blue, color::green, 2, 90);
+		draw::circle(im, point(200, 200), 100, color::red, color::green, 5);
+		draw::text(im, point(100, 200), "libdodo", "Arial", 70, color::blue, color::green);
+		draw::text(im, point(100, 100), "libdodo", "Arial", 30);
+		draw::text(im, point(150, 150), "libdodo", "Arial", 50, color::blue, color::green, 2, 180);
+		draw::text(im, point(150, 200), "libdodo", "Arial", 50, color::blue, color::green, 2, 90);
 		im.writeFile("new-4.png");
 
 		image wm;
 		wm.readFile("new-4.png");
 
 		im.create(600, 600);
-		dr.image(point(100, 100), wm, 45);
+		draw::image(im, point(100, 100), wm, 45);
 		im.setOpacity(65535/2);
 		im.writeFile("new-5.png");
 #endif

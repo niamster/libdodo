@@ -47,7 +47,7 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR "Root node is not an object."
+#define RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR "Root node is not an object"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -58,5 +58,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

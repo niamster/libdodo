@@ -54,6 +54,7 @@ namespace dodo {
 
 				/**
 				 * constructor
+				 * @param io defines input/output sources
 				 */
 				client(const io::channel &io);
 
@@ -70,7 +71,7 @@ namespace dodo {
 				/**
 				 * @return response encoding
 				 */
-				dodoString getResponseEncoding();
+				dodoString responseEncoding();
 
 			  protected:
 
@@ -92,5 +93,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

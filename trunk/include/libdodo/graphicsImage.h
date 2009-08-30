@@ -42,134 +42,6 @@ namespace dodo {
 		struct __image__;
 
 		/**
-		 * @enum imageOperTypeEnum defines type of operation for hook
-		 */
-		enum imageOperTypeEnum {
-			IMAGE_OPERATION_WRITE,
-			IMAGE_OPERATION_READ,
-			IMAGE_OPERATION_CREATE,
-		};
-
-		/**
-		 * @class __xexecImageCollectedData__
-		 * @brief defines data that could be retrieved from the image object
-		 */
-		class __xexecImageCollectedData__
-#ifndef GRAPHICS_WO_XEXEC
-			: public __xexecCollectedData__
-#endif
-		{
-		  public:
-
-#ifndef GRAPHICS_WO_XEXEC
-			/**
-			 * constructor
-			 * @param executor defines class that executed hook
-			 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
-			 */
-			__xexecImageCollectedData__(xexec *executor,
-										short execObject);
-#else
-			/**
-			 * constructor
-			 */
-			__xexecImageCollectedData__();
-#endif
-
-			/**
-			 * destructor
-			 */
-			~__xexecImageCollectedData__();
-
-			__image__ *handle; ///< ImageMagic handle
-		};
-
-#define IMAGE_MAPPINGSTATEMENTS 2
-
-		/**
-		 * @enum imageMappingEnum defines the order of pixels
-		 */
-		enum imageMappingEnum {
-			IMAGE_MAPPING_RGB,
-			IMAGE_MAPPING_RGBA,
-		};
-
-#define IMAGE_TYPESTATEMENTS 2
-
-		/**
-		 * @enum imageTypeEnum defines the type of the image
-		 */
-		enum imageTypeEnum {
-			IMAGE_TYPE_TRUECOLOR,
-			IMAGE_TYPE_GRAYSCALE
-		};
-
-#define IMAGE_PIXELSIZESTATEMENTS 6
-
-		/**
-		 * @enum imagePixelSizeEnum defines size of pixel
-		 */
-		enum imagePixelSizeEnum {
-			IMAGE_PIXELSIZE_CHAR,   ///< 8 bits
-			IMAGE_PIXELSIZE_SHORT,  ///< 16 bits
-			IMAGE_PIXELSIZE_INT,    ///< 32(16 on some CPUs) bits
-			IMAGE_PIXELSIZE_LONG,   ///< 32(32 on some CPUs) bits
-			IMAGE_PIXELSIZE_FLOAT,  ///< 32 bits
-			IMAGE_PIXELSIZE_DOUBLE, ///< 64 bits
-		};
-
-#define IMAGE_ENCODERSTATEMENTS 6
-
-		/**
-		 * @enum imageEncoderEnum defines image encoder
-		 */
-		enum imageEncoderEnum {
-			IMAGE_ENCODER_PNG,
-			IMAGE_ENCODER_JPEG,
-			IMAGE_ENCODER_GIF,
-			IMAGE_ENCODER_BMP,
-			IMAGE_ENCODER_XPM,
-			IMAGE_ENCODER_ICO,
-		};
-
-#define IMAGE_COMPRESSIONSTATEMENTS 8
-
-		/**
-		 * @enum imageCompressionEnum defines type of compression
-		 */
-		enum imageCompressionEnum {
-			IMAGE_COMPRESSION_NO,
-			IMAGE_COMPRESSION_BZIP,
-			IMAGE_COMPRESSION_LZW,
-			IMAGE_COMPRESSION_RLE,
-			IMAGE_COMPRESSION_ZIP,
-			IMAGE_COMPRESSION_JPEG,         ///< only for JPEG
-			IMAGE_COMPRESSION_LOSSLESSJPEG, ///< only for JPEG
-			IMAGE_COMPRESSION_JPEG2000,     ///< only for JPEG
-		};
-
-		/**
-		 * @struct __imageInfo__
-		 * @brief defines image information
-		 */
-		struct __imageInfo__ {
-			void          *data;            ///< 2D array of pixels
-			unsigned long width;            ///< width of the image
-			unsigned long height;           ///< height of the image
-			short         mapping;          ///< type of mapping[see imageMappingEnum]
-			short         pixelSize;        ///< type of pixel
-		};
-
-		/**
-		 * @struct __imageSize__
-		 * @brief defines image dimensions
-		 */
-		struct __imageSize__ {
-			unsigned long width;            ///< width of the image
-			unsigned long height;           ///< height of the image
-		};
-
-		/**
 		 * @class image
 		 * @brief provides simple image manipulations
 		 */
@@ -187,9 +59,137 @@ namespace dodo {
 			 * copy constructor
 			 * @note to prevent copying
 			 */
-			image(image &im);
+			image(image &);
 
 		  public:
+
+			/**
+			 * @enum mappingEnum defines the order of pixels
+			 */
+			enum mappingEnum {
+				MAPPING_RGB,
+				MAPPING_RGBA,
+
+				MAPPING_ENUMSIZE
+			};
+
+			/**
+			 * @enum colorSpecificationEnum defines the type of the image
+			 */
+			enum colorSpecificationEnum {
+				COLOR_SPECIFICATION_TRUECOLOR,
+				COLOR_SPECIFICATION_GRAYSCALE,
+
+				COLOR_SPECIFICATION_ENUMSIZE
+			};
+
+			/**
+			 * @enum pixelSizeEnum defines size of pixel
+			 */
+			enum pixelSizeEnum {
+				PIXEL_SIZE_CHAR,   ///< 8 bits
+				PIXEL_SIZE_SHORT,  ///< 16 bits
+				PIXEL_SIZE_INT,    ///< 32(16 on some CPUs) bits
+				PIXEL_SIZE_LONG,   ///< 32(32 on some CPUs) bits
+				PIXEL_SIZE_FLOAT,  ///< 32 bits
+				PIXEL_SIZE_DOUBLE, ///< 64 bits
+
+				PIXEL_SIZE_ENUMSIZE
+			};
+
+			/**
+			 * @enum encoderEnum defines image encoder
+			 */
+			enum imageEncoderEnum {
+				ENCODER_PNG,
+				ENCODER_JPEG,
+				ENCODER_GIF,
+				ENCODER_BMP,
+				ENCODER_XPM,
+				ENCODER_ICO,
+
+				ENCODER_ENUMSIZE
+			};
+
+			/**
+			 * @enum compressionEnum defines type of compression
+			 */
+			enum compressionEnum {
+				COMPRESSION_NO,
+				COMPRESSION_BZIP,
+				COMPRESSION_LZW,
+				COMPRESSION_RLE,
+				COMPRESSION_ZIP,
+				COMPRESSION_JPEG,         ///< only for JPEG
+				COMPRESSION_LOSSLESSJPEG, ///< only for JPEG
+				COMPRESSION_JPEG2000,     ///< only for JPEG
+
+				COMPRESSION_ENUMSIZE
+			};
+
+			/**
+			 * @struct __info__
+			 * @brief defines image information
+			 */
+			struct __info__ {
+				void          *data;            ///< 2D array of pixels
+				unsigned long width;            ///< width of the image
+				unsigned long height;           ///< height of the image
+				short         mapping;          ///< type of mapping[see imageMappingEnum]
+				short         pixelSize;        ///< type of pixel
+			};
+
+			/**
+			 * @struct __size__
+			 * @brief defines image dimensions
+			 */
+			struct __size__ {
+				unsigned long width;            ///< width of the image
+				unsigned long height;           ///< height of the image
+			};
+
+			/**
+			 * @enum operationEnum defines type of operation for xexec
+			 */
+			enum operationEnum {
+				OPERATION_WRITE,
+				OPERATION_READ,
+				OPERATION_CREATE,
+			};
+
+			/**
+			 * @class __collected_data__
+			 * @brief defines data that could be retrieved from the image object
+			 */
+			class __collected_data__
+#ifndef GRAPHICS_WO_XEXEC
+				: public xexec::__collected_data__
+#endif
+			{
+			  public:
+
+#ifndef GRAPHICS_WO_XEXEC
+				/**
+				 * constructor
+				 * @param executor defines class that executed hook
+				 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+				 */
+				__collected_data__(xexec *executor,
+									   short execObject);
+#else
+				/**
+				 * constructor
+				 */
+				__collected_data__();
+#endif
+
+				/**
+				 * destructor
+				 */
+				~__collected_data__();
+
+				__image__ *handle; ///< ImageMagic handle
+			};
 
 			/**
 			 * contructor
@@ -223,7 +223,7 @@ namespace dodo {
 			 * read image
 			 * @param info defines image info
 			 */
-			void readMemory(const __imageInfo__ &info);
+			void readMemory(const __info__ &info);
 
 			/**
 			 * read image
@@ -251,13 +251,13 @@ namespace dodo {
 			/**
 			 * @return info about image
 			 */
-			__imageSize__ getImageSize();
+			__size__ imageSize();
 
 			/**
-			 * set image type
-			 * @param type defines image type[see imageTypeEnum]
+			 * set image color specification
+			 * @param type defines image type[see colorSpecificationEnum]
 			 */
-			void setType(short type);
+			void setColorSpecification(short type);
 
 			/**
 			 * set image alpha channel
@@ -303,34 +303,33 @@ namespace dodo {
 			/**
 			 * @return image output encoder
 			 */
-			short getEncoder();
+			short encoder();
 
 			/**
 			 * @return image compression type
 			 */
-			short getCompression();
+			short compression();
 
 			/**
 			 * @return image quality
 			 */
-			short getQuality();
+			short quality();
 
 		  protected:
 
 			void *exInfo;                                                                   ///< exception info handler
 
-			__xexecImageCollectedData__ collectedData;                                      ///< data collected for xexec
+			__collected_data__ collectedData;                                      ///< data collected for xexec
 
 		  private:
 
-			static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                       ///< image mapping statements
-			static const int pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];                     ///< pixel type statements
-			static const int typeStArr[IMAGE_TYPESTATEMENTS];                               ///< color space statements
-			static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                       ///< image encoder
-			static const int compressionStArr[IMAGE_COMPRESSIONSTATEMENTS];                 ///< image compression
+			static const char *mappingStatements[MAPPING_ENUMSIZE];                       ///< image mapping statements
+			static const int pixelSizeStatements[PIXEL_SIZE_ENUMSIZE];                     ///< pixel type statements
+			static const int typeStatements[COLOR_SPECIFICATION_ENUMSIZE];                               ///< color space statements
+			static const char *encoderStatements[ENCODER_ENUMSIZE];                       ///< image encoder
+			static const int compressionStatements[COMPRESSION_ENUMSIZE];                 ///< image compression
 		};
 	};
 };
 #endif
-
 #endif

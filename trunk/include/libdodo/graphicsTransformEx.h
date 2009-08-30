@@ -46,7 +46,7 @@ namespace dodo {
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
+#define GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR "Image is empty"
 
 		/**
 		 * IDs of functions where exception might be thrown
@@ -57,5 +57,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

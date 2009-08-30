@@ -75,9 +75,9 @@ namespace dodo {
 
 				/**
 				 * listen for incoming requests
-				 * @param func define request handler
+				 * @param handler defines request handler
 				 */
-				virtual void serve(serverHandler func);
+				virtual void serve(handler handler);
 
 				/**
 				 * @return true if called as a fast CGI
@@ -96,16 +96,15 @@ namespace dodo {
 				 */
 				static void *fastCGIThread(void *data);
 
-				static pc::sync::thread::section acceptLock;    ///< accept request mutex
-				static pc::sync::thread::section requestLock;   ///< accept request mutex
+				static pc::sync::thread::section acceptLock;    ///< accept mutex
+				static pc::sync::thread::section requestLock;   ///< request mutex
 
-				static serverHandler handler;                   ///< function to be called on new request
+				static handler handler;                   ///< function to be called on new request
 
-				unsigned long limit;                            ///< limit of requests to serve; if 0 server forever[0 by default]
+				unsigned long limit;                            ///< limit of requests to serve; if 0 serve forever[0 by default]
 			};
 		};
 	};
 };
 #endif
-
 #endif

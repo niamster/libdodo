@@ -165,17 +165,16 @@ namespace dodo {
 													  unsigned long    pos);
 
 					/**
-					 * @enum jsonStateEnum describes states for json processor
+					 * @enum stateEnum describes states for json processor
 					 */
-					enum jsonStateEnum {
-						JSON_STATE_OBJECT_INITIAL,
-						JSON_STATE_OBJECT_OBJECTNAME,
-						JSON_STATE_OBJECT_OBJECTVALUE,
+					enum stateEnum {
+						STATE_OBJECT_INITIAL,
+						STATE_OBJECT_OBJECTNAME,
+						STATE_OBJECT_OBJECTVALUE,
 					};
 				};
 			};
 		};
 	};
 };
-
 #endif

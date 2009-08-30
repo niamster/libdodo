@@ -48,17 +48,17 @@ memory::memory(char          *a_data,
 										   flags(flags)
 {
 #ifndef IO_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
+	collectedData.setExecObject(xexec::OBJECT_IOMEMORY);
 #endif
 
-	if (flags & MEMORYFLAGS_NORMAL) {
+	if (flags & FLAGS_NORMAL) {
 		data = new char[size];
 		memcpy(data, a_data, size);
 	} else {
-		if (flags & MEMORYFLAGS_EXTERN)
+		if (flags & FLAGS_EXTERN)
 			data = a_data;
 		else
-			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_MEMORY, exception::ERRNO_LIBDODO, MEMORYEX_WRONGFLAGS, IOMEMORYEX_WRONGFLAGS_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_MEMORY, exception::ERRNO_LIBDODO, MEMORYEX_WRONGFLAGS, IOMEMORYEX_WRONGFLAGS_STR, __LINE__, __FILE__);
 	}
 }
 
@@ -67,10 +67,10 @@ memory::memory(char          *a_data,
 memory::memory(short protection) : block::channel(protection),
 								   data(NULL),
 								   size(0),
-								   flags(MEMORYFLAGS_NORMAL)
+								   flags(FLAGS_NORMAL)
 {
 #ifndef IO_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_IOMEMORY);
+	collectedData.setExecObject(xexec::OBJECT_IOMEMORY);
 #endif
 }
 
@@ -81,13 +81,13 @@ memory::memory(const memory &fd) : block::channel(fd.protection),
 								   flags(fd.flags)
 {
 #ifndef IO_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
+	collectedData.setExecObject(xexec::OBJECT_IOFILEREGULAR);
 #endif
 
-	if (flags & MEMORYFLAGS_NORMAL) {
+	if (flags & FLAGS_NORMAL) {
 		data = new char[size];
 		memcpy(data, fd.data, size);
-	} else if (flags & MEMORYFLAGS_EXTERN)
+	} else if (flags & FLAGS_EXTERN)
 		data = fd.data;
 
 
@@ -103,10 +103,10 @@ memory::memory(const memory &fd) : block::channel(fd.protection),
 memory::memory(const dodoString &buffer,
 			   short            protection) : block::channel(protection),
 											  size(buffer.size()),
-											  flags(MEMORYFLAGS_NORMAL)
+											  flags(FLAGS_NORMAL)
 {
 #ifndef IO_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_IOFILEREGULAR);
+	collectedData.setExecObject(xexec::OBJECT_IOFILEREGULAR);
 #endif
 
 	data = new char[size];
@@ -117,24 +117,24 @@ memory::memory(const dodoString &buffer,
 
 memory::~memory()
 {
-	if (!(flags & MEMORYFLAGS_EXTERN))
+	if (!(flags & FLAGS_EXTERN))
 		delete [] data;
 }
 
 //-------------------------------------------------------------------
 
 int
-memory::getInDescriptor() const
+memory::inDescriptor() const
 {
-	throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_GETINDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
+	throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-memory::getOutDescriptor() const
+memory::outDescriptor() const
 {
-	throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_GETOUTDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
+	throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -149,7 +149,7 @@ memory::flush() const
 void
 memory::clear()
 {
-	if (!(flags & MEMORYFLAGS_EXTERN)) {
+	if (!(flags & FLAGS_EXTERN)) {
 		delete [] data;
 		data = NULL;
 
@@ -180,10 +180,10 @@ memory::clone(const memory &fd)
 	flags = fd.flags;
 	size = fd.size;
 
-	if (flags == MEMORYFLAGS_NORMAL) {
+	if (flags == FLAGS_NORMAL) {
 		data = new char[size];
 		memcpy(data, fd.data, size);
-	} else if (flags == MEMORYFLAGS_EXTERN)
+	} else if (flags == FLAGS_EXTERN)
 		data = fd.data;
 
 }
@@ -196,7 +196,7 @@ memory::_read(char * const a_data) const
 	unsigned long pos = block ? this->pos * inSize : this->pos;
 
 	if ((pos + inSize) > size)
-		throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__READ, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__READ, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
 
 	memcpy(a_data, data + pos, inSize);
 }
@@ -207,8 +207,8 @@ void
 memory::_write(const char *const a_data) const
 {
 	if (append) {
-		if (flags & MEMORYFLAGS_FIXED_LENGTH)
-			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_APPENDTOFIXED, IOMEMORYEX_APPENDTOFIXED_STR, __LINE__, __FILE__);
+		if (flags & FLAGS_FIXED_LENGTH)
+			throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_APPENDTOFIXED, IOMEMORYEX_APPENDTOFIXED_STR, __LINE__, __FILE__);
 		else {
 			char *newData = new char[size + outSize];
 			memcpy(newData, data, size);
@@ -222,8 +222,8 @@ memory::_write(const char *const a_data) const
 
 		unsigned long shift = pos + outSize;
 		if (shift > size) {
-			if (flags & MEMORYFLAGS_FIXED_LENGTH)
-				throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+			if (flags & FLAGS_FIXED_LENGTH)
+				throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
 			else {
 				shift -= size;
 				char *newData = new char[size + shift];
@@ -250,8 +250,8 @@ memory::erase()
 
 	unsigned long shift = pos + outSize;
 	if (shift > size) {
-		if (flags & MEMORYFLAGS_FIXED_LENGTH)
-			throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX_ERASE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+		if (flags & FLAGS_FIXED_LENGTH)
+			throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_ERASE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
 		else {
 			shift -= size;
 			char *newData = new char[size + shift];
@@ -318,8 +318,8 @@ memory::_readStream(char * const a_data) const
 void
 memory::_writeStream(const char *const a_data) const
 {
-	if (flags & MEMORYFLAGS_FIXED_LENGTH)
-		throw exception::basic(exception::ERRMODULE_IOMEMORY, MEMORYEX__WRITESTREAM, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+	if (flags & FLAGS_FIXED_LENGTH)
+		throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITESTREAM, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
 
 	unsigned long _outSize = outSize;
 	unsigned int bufSize = strlen(a_data);

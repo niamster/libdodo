@@ -53,15 +53,15 @@ namespace dodo {
 			  private:
 
 				/**
-				 * copyructor
+				 * copy constructor
 				 * @note to prevent copying
 				 */
-				shared(shared &sts);
+				shared(shared &);
 
 			  public:
 
 				/**
-				 *ructor
+				 * constructor
 				 * @param key defines shared memory key
 				 * @note if key is 0 - key will be generated
 				 * if you want to share data between different instances of process - set own key,
@@ -70,7 +70,7 @@ namespace dodo {
 				shared(const int key);
 
 				/**
-				 *ructor
+				 * constructor
 				 */
 				shared();
 
@@ -126,11 +126,32 @@ namespace dodo {
 
 			  protected:
 
-				mutable int shm;                ///< shared data descriptor
-				mutable void *shData;           ///< shared data
+				mutable int handle;                ///< shared data descriptor
+
+				/**
+				 * @struct __shared__
+				 * @brief defines shared data
+				 */
+				struct __shared__ {
+					/**
+					 * constructor
+					 * @param data defines pointer to the shared data
+					 */
+					__shared__(void *data);
+
+					/**
+					 * constructor
+					 */
+					__shared__();
+
+
+					mutable void *data;           ///< shared data
 #ifndef XSI_IPC
-				mutable unsigned long shSize;   ///< size of shared data
+					mutable unsigned long size;   ///< size of shared data
 #endif
+				};
+
+				struct __shared__ sh; ///< shared data
 
 				__key__ *key;                   ///< key for the shared data
 
@@ -139,6 +160,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

@@ -271,9 +271,9 @@ code::codesetConversion(const dodoString &buffer,
 						const dodoString &toCode,
 						const dodoString &fromCode)
 {
-	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
+	iconv_t conv = iconv_open(toCode.data(), fromCode.data());
 	if (conv == (iconv_t)(-1))
-		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	size_t in, out, outBefore;
 	char *inFake, *outFake;
@@ -282,7 +282,7 @@ code::codesetConversion(const dodoString &buffer,
 	outBefore = out = (in + 1) * 4;
 	char *outBuffer = new char[out];
 
-	inFake = (char *)buffer.c_str();
+	inFake = (char *)buffer.data();
 	outFake = outBuffer;
 
 #ifdef __FreeBSD__
@@ -293,7 +293,7 @@ code::codesetConversion(const dodoString &buffer,
 	{
 		delete [] outBuffer;
 
-		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	dodoString result;
@@ -324,10 +324,10 @@ code::zCompress(const dodoString &buffer,
 	strm.opaque = Z_NULL;
 
 	if ((ret = deflateInit2(&strm, level, Z_DEFLATED, 15, level, type)) < 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 
 	strm.avail_in =  buffer.size();
-	strm.next_in = (Bytef *)buffer.c_str();
+	strm.next_in = (Bytef *)buffer.data();
 
 	byteBuf = new Bytef[ZLIB_CHUNK];
 
@@ -340,7 +340,7 @@ code::zCompress(const dodoString &buffer,
 		if ((ret = deflate(&strm, Z_FINISH)) < 0) {
 			delete [] byteBuf;
 
-			throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 		}
 
 		strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -368,12 +368,12 @@ code::zDecompress(const dodoString &buffer)
 	strm.opaque = Z_NULL;
 
 	if ((ret = inflateInit2(&strm, 15)) < 0)
-		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 
 	byteBuf = new Bytef[ZLIB_CHUNK];
 
 	strm.avail_in = buffer.size();
-	strm.next_in = (Bytef *)buffer.c_str();
+	strm.next_in = (Bytef *)buffer.data();
 
 	strBuf.clear();
 
@@ -384,7 +384,7 @@ code::zDecompress(const dodoString &buffer)
 		if ((ret = inflate(&strm, Z_NO_FLUSH)) < 0) {
 			delete [] byteBuf;
 
-			throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 		}
 
 		strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -823,7 +823,7 @@ code::decodeASCII85(const dodoString &string)
 						case 'z':
 
 							if (count != 0)
-								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+								throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
 							result.append(4, '\0');
 
@@ -843,7 +843,7 @@ code::decodeASCII85(const dodoString &string)
 								break;
 							}
 
-							throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+							throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
 						case '\n':
 						case '\r':
@@ -859,7 +859,7 @@ code::decodeASCII85(const dodoString &string)
 						default:
 
 							if (string[k] < '!' || string[k] > 'u')
-								throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+								throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
 							tuple += (string[k] - '!') * powASCII85[count++];
 							if (count == 5) {
@@ -976,7 +976,7 @@ code::decodeBase64(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-__url__
+dodo::__url__
 code::parseUrl(const dodoString &url)
 {
 	unsigned long begin(0), pos, pos1;
@@ -1080,9 +1080,9 @@ code::bzCompress(const dodoString &buffer,
 	unsigned int len = buffer.size();
 	char *dst = new char[len + 1];
 
-	int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
+	int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.data(), len, level, 0, type);
 	if (ret != BZ_OK)
-		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZCOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZCOMPRESSION, TOOLSCODEEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZCOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZCOMPRESSION, TOOLSCODEEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
 
 	return dodoString(dst, len);
 }
@@ -1099,11 +1099,11 @@ code::bzDecompress(const dodoString &buffer)
 
 	int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
 	if (ret != BZ_OK)
-		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONINIT, TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONINIT, TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
 
 	int src_len = buffer.size();
 	char *src = new char[src_len + 1];
-	memcpy(src, buffer.c_str(), src_len);
+	memcpy(src, buffer.data(), src_len);
 
 	unsigned long long size = 0;
 
@@ -1133,12 +1133,12 @@ code::bzDecompress(const dodoString &buffer)
 		delete [] src;
 		free(dst);
 
-		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSION, TOOLSCODEEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSION, TOOLSCODEEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
 	}
 
 	ret = BZ2_bzDecompressEnd(&bzs);
 	if (ret != BZ_OK)
-		throw exception::basic(exception::ERRMODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONFINISH, TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONFINISH, TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
 
 	return _buffer;
 }
@@ -1318,7 +1318,7 @@ code::MD5(const dodoString &string)
 	unsigned char digest[16];
 
 	MD5Init(&context);
-	MD5Update(&context, (unsigned char *)string.c_str(), string.size());
+	MD5Update(&context, (unsigned char *)string.data(), string.size());
 	MD5Final(digest, &context);
 
 	return dodoString((char *)digest, 16);
@@ -1506,7 +1506,6 @@ code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 	context->messageBlockIndex = 0;
 }
 
-
 //-------------------------------------------------------------------
 
 dodoString
@@ -1516,7 +1515,7 @@ code::SHA1(const dodoString &string)
 	unsigned char digest[20];
 
 	SHA1Init(&context);
-	SHA1Input(&context, (unsigned char *)string.c_str(), string.size());
+	SHA1Input(&context, (unsigned char *)string.data(), string.size());
 	SHA1Result(&context, digest);
 
 	return dodoString((char *)digest, 20);
@@ -1529,6 +1528,7 @@ code::SHA1Hex(const dodoString &string)
 {
 	return binToHex(SHA1(string));
 }
+
 //-------------------------------------------------------------------
 
 void
@@ -1686,7 +1686,6 @@ code::SHA256ProcessMessageBlock(__SHA1_256Context__ *context)
 	context->messageBlockIndex = 0;
 }
 
-
 //-------------------------------------------------------------------
 
 dodoString
@@ -1696,7 +1695,7 @@ code::SHA256(const dodoString &string)
 	unsigned char digest[32];
 
 	SHA256Init(&context);
-	SHA256Input(&context, (unsigned char *)string.c_str(), string.size());
+	SHA256Input(&context, (unsigned char *)string.data(), string.size());
 	SHA256Result(&context, digest);
 
 	return dodoString((char *)digest, 32);
@@ -1709,6 +1708,7 @@ code::SHA256Hex(const dodoString &string)
 {
 	return binToHex(SHA256(string));
 }
+
 //-------------------------------------------------------------------
 
 void
@@ -1903,7 +1903,6 @@ code::SHA512ProcessMessageBlock(__SHA512Context__ *context)
 	context->messageBlockIndex = 0;
 }
 
-
 //-------------------------------------------------------------------
 
 dodoString
@@ -1913,7 +1912,7 @@ code::SHA512(const dodoString &string)
 	unsigned char digest[64];
 
 	SHA512Init(&context);
-	SHA512Input(&context, (unsigned char *)string.c_str(), string.size());
+	SHA512Input(&context, (unsigned char *)string.data(), string.size());
 	SHA512Result(&context, digest);
 
 	return dodoString((char *)digest, 64);

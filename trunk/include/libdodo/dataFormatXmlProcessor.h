@@ -43,31 +43,29 @@ namespace dodo {
 		namespace format {
 			namespace xml {
 				class node;
-
 				struct __node__;
-
 				struct __doc__;
 
 				/**
-				 * @struct __nodeDef__
+				 * @struct __definition__
 				 * @brief defines processor tree definition
 				 */
-				struct __nodeDef__ {
+				struct __definition__ {
 					/**
 					 * constructor
 					 */
-					__nodeDef__();
+					__definition__();
 
 					/**
 					 * @param name defines node name
 					 * @param ns defines namespace of the node
 					 */
-					__nodeDef__(const dodoString &name,
+					__definition__(const dodoString &name,
 								const            dodoString &ns = __dodostring__);
 
 					dodoString                       name;              ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-					dodoMap<dodoString, __nodeDef__> children;          ///< children definitions
+					dodoMap<dodoString, __definition__> children;          ///< children definitions
 					bool                             allChildren;       ///< if true - get all children tree[true by default]
 
 					dodoStringArray                  attributes;        ///< node attrributes; if empty - take all
@@ -78,7 +76,7 @@ namespace dodo {
 
 				/**
 				 * @struct __info__
-				 * @brief desribes info got about given XML document
+				 * @brief desribes information about given XML document
 				 */
 				struct __info__ {
 					/**
@@ -113,7 +111,7 @@ namespace dodo {
 					 * copy constructor
 					 * @note to prevent copying
 					 */
-					processor(processor &xt);
+					processor(processor &);
 
 				  public:
 
@@ -128,12 +126,12 @@ namespace dodo {
 					~processor();
 
 					/**
-					 * parse XML file using __nodeDef__ XML definition
+					 * parse XML file using __definition__ XML definition
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
 					 * @param io defines input source that contains XML
 					 */
-					node process(const __nodeDef__ &definition,
+					node process(const __definition__ &definition,
 										 const io::channel &io);
 
 					/**
@@ -148,19 +146,7 @@ namespace dodo {
 					/**
 					 * @return XML info
 					 */
-					__info__ getInfo();
-
-					/**
-					 * clear parameters of the give node
-					 * @param xnode defines node to clean
-					 */
-					static void initNode(node &xnode);
-
-					/**
-					 * clear parameters of the give node definition
-					 * @param xnode defines node definition to clean
-					 */
-					static void initNodeDef(__nodeDef__ &xnode);
+					__info__ information();
 
 					/**
 					 * free internal structures
@@ -181,20 +167,27 @@ namespace dodo {
 
 					/**
 					 * @return XML string
-					 * @param node defines root node of XML document
+					 * @param xnode defines root node of XML document
 					 * @param io defines output destination for XML
 					 */
-					void make(const node        &node,
+					void make(const node        &xnode,
 									  const io::channel &io) const;
 
-				  protected:
+				  private:
 
 					/**
-					 * parse XML using __nodeDef__ XML definition
+					 * clear parameters of the give node
+					 * @param xnode defines node to clean
+					 */
+					static void initNode(node &xnode);
+
+
+					/**
+					 * parse XML using __definition__ XML definition
 					 * @return parsed XML in node structure
 					 * @param definition defines structure of XML
 					 */
-					node parse(const __nodeDef__ &definition);
+					node parse(const __definition__ &definition);
 
 #ifdef LIBXML2_EXT
 					/**
@@ -208,15 +201,15 @@ namespace dodo {
 					 * @return parsed XML in node structure
 					 * @param xnode defines XML tree node
 					 */
-					dodoArray<node> parse(__node__ xnode);
+					dodoArray<node> parse(__node__ node);
 
 					/**
-					 * parses XML using __nodeDef__ XML definition
+					 * parses XML using __definition__ XML definition
 					 * @return parsed XML nodes in node structures
 					 * @param definition defines structure of XML
-					 * @param chNode defines XML tree node
+					 * @param chxnode defines XML tree node
 					 */
-					dodoArray<node> parse(const __nodeDef__ &definition,
+					dodoArray<node> parse(const __definition__ &definition,
 												  const __node__    &xnode);
 
 					/**
@@ -233,7 +226,7 @@ namespace dodo {
 					 * @param xnode defines node content
 					 * @param attributes defines buffer for attributes
 					 */
-					void getAttributes(const __nodeDef__ &definition,
+					void getAttributes(const __definition__ &definition,
 											   const __node__    &xnode,
 											   dodoStringMap     &attributes);
 
@@ -242,12 +235,9 @@ namespace dodo {
 					 * @param xnode defines node content
 					 * @param sample defines buffer for node
 					 */
-					void getNodeInfo(const __node__ &xnode,
+					void getNode(const __node__ &xnode,
 											 node           &sample);
 #endif
-
-				  private:
-
 #ifdef LIBXML2_EXT
 					/**
 					 * @typedef strCmp
@@ -261,35 +251,35 @@ namespace dodo {
 					/**
 					 * find node by definition
 					 * @param definition defines structure of XML
-					 * @param node defines node content
+					 * @param xnode defines node content
 					 */
-					__node__ findNode(const __nodeDef__ &definition,
-									  const __node__    &node);
+					__node__ findNode(const __definition__ &definition,
+									  const __node__    &xnode);
 
 					__doc__ *document;  ///< XML Document
 #endif
-
-#define DATAFORMATXMLPROCESSOR_STATEMENTS 11
 
 					/**
 					 * @enum processorStatementEnum defines processor statements
 					 * @note defines positions of string representation in 'statements' class property
 					 */
 					enum processorStatementEnum {
-						PROCESSOR_STATEMENT_LT = 0,
-						PROCESSOR_STATEMENT_COLON,
-						PROCESSOR_STATEMENT_SPACE,
-						PROCESSOR_STATEMENT_XMLNS,
-						PROCESSOR_STATEMENT_EQUALDQUOTE,
-						PROCESSOR_STATEMENT_DQUOTESPACE,
-						PROCESSOR_STATEMENT_SLASHGT,
-						PROCESSOR_STATEMENT_GT,
-						PROCESSOR_STATEMENT_CDATAOPEN,
-						PROCESSOR_STATEMENT_CDATACLOSE,
-						PROCESSOR_STATEMENT_LTSLASH,
+						STATEMENT_LT = 0,
+						STATEMENT_COLON,
+						STATEMENT_SPACE,
+						STATEMENT_XMLNS,
+						STATEMENT_EQUALDQUOTE,
+						STATEMENT_DQUOTESPACE,
+						STATEMENT_SLASHGT,
+						STATEMENT_GT,
+						STATEMENT_CDATAOPEN,
+						STATEMENT_CDATACLOSE,
+						STATEMENT_LTSLASH,
+
+						STATEMENT_ENUMSIZE
 					};
 
-					static const dodoString statements[DATAFORMATXMLPROCESSOR_STATEMENTS]; ///< processor statements
+					static const dodoString statements[STATEMENT_ENUMSIZE]; ///< processor statements
 
 					__info__ info;
 				};
@@ -297,6 +287,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

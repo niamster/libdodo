@@ -37,7 +37,7 @@
 
 using namespace dodo::data::base::sql;
 
-const dodoString constructor::sqlQStArr[] = {
+const dodoString constructor::subrequestStatements[] = {
 	" union ",
 	" union all ",
 	" minus ",
@@ -46,7 +46,7 @@ const dodoString constructor::sqlQStArr[] = {
 
 //-------------------------------------------------------------------
 
-const dodoString constructor::sqlJoinArr[] = {
+const dodoString constructor::joinStatements[] = {
 	" join ",
 	" left outer join ",
 	" right outer join ",
@@ -57,7 +57,7 @@ const dodoString constructor::sqlJoinArr[] = {
 
 //-------------------------------------------------------------------
 
-const dodoString constructor::sqlAddArr[] = {
+const dodoString constructor::additionalRequestStatements[] = {
 	" where ",
 	" having ",
 	" group by ",
@@ -111,7 +111,7 @@ constructor::setFieldType(const dodoString &table,
 						  const dodoString &field,
 						  short            type)
 {
-	fieldTypes[collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + table][field] = type;
+	fieldTypes[collectedData.dbInfo.db + statements[STATEMENT_COLON] + table][field] = type;
 }
 
 //-------------------------------------------------------------------
@@ -120,11 +120,11 @@ void
 constructor::additionalCollect(unsigned int     typeTocheck,
 							   const dodoString &collectedString)
 {
-	if (collectedData.additional == ACCUMULATOR_NONE)
+	if (collectedData.additional == STATE_NONE)
 		return ;
 
 	if (isSetFlag(collectedData.additional, 1 << typeTocheck)) {
-		request.append(sqlAddArr[typeTocheck - 1]);
+		request.append(additionalRequestStatements[typeTocheck - 1]);
 		request.append(collectedString);
 	}
 }
@@ -132,25 +132,25 @@ constructor::additionalCollect(unsigned int     typeTocheck,
 //-------------------------------------------------------------------
 
 void
-constructor::callFunctionCollect()
+constructor::functionCollect()
 {
-	request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
+	request = statements[STATEMENT_SELECT];
 	request.append(collectedData.table);
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-	request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
+	request.append(statements[STATEMENT_LEFTBRACKET]);
+	request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
+	request.append(statements[STATEMENT_RIGHTBRACKET]);
 }
 
 //-------------------------------------------------------------------
 
 void
-constructor::callProcedureCollect()
+constructor::procedureCollect()
 {
-	request = statements[SQLCONSTRUCTOR_STATEMENT_CALL];
+	request = statements[STATEMENT_CALL];
 	request.append(collectedData.table);
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-	request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
+	request.append(statements[STATEMENT_LEFTBRACKET]);
+	request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
+	request.append(statements[STATEMENT_RIGHTBRACKET]);
 }
 
 //-------------------------------------------------------------------
@@ -159,13 +159,13 @@ void
 constructor::selectCollect()
 {
 	if (collectedData.table.size() > 0) {
-		request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
-		request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
-		request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
+		request = statements[STATEMENT_SELECT];
+		request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
+		request.append(statements[STATEMENT_FROM]);
 		request.append(collectedData.table);
 	} else {
-		request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
-		request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+		request = statements[STATEMENT_SELECT];
+		request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
 	}
 }
 
@@ -174,19 +174,19 @@ constructor::selectCollect()
 void
 constructor::insertCollect()
 {
-	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
+	request = statements[STATEMENT_INSERT];
+	request.append(statements[STATEMENT_INTO]);
 	request.append(collectedData.table);
 	if (collectedData.fields.size() != 0) {
-		request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-		request.append(tools::misc::join(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
-		request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
+		request.append(statements[STATEMENT_LEFTBRACKET]);
+		request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
+		request.append(statements[STATEMENT_RIGHTBRACKET]);
 	}
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_VALUES]);
+	request.append(statements[STATEMENT_VALUES]);
 
 	dodoArray<dodoStringArray>::iterator k(collectedData.values.begin()), l(collectedData.values.end());
 	if (k != l) {
-		dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
+		dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[STATEMENT_COLON] + collectedData.table);
 		if (types != fieldTypes.end()) {
 			dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
 			dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
@@ -195,7 +195,7 @@ constructor::insertCollect()
 
 			--l;
 			for (; k != l; ++k) {
-				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
+				request.append(statements[STATEMENT_LEFTBRACKET]);
 
 				t = collectedData.fields.begin();
 
@@ -203,25 +203,25 @@ constructor::insertCollect()
 				for (; i != j; ++i, ++t) {
 					type = types->second.find(*t);
 					if (type != typesEnd) {
-						if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
-							request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+						if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
+							request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
 						else
-							request.append(*i + statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+							request.append(*i + statements[STATEMENT_COMA]);
 					} else
-						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+						request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
 				}
 				type = types->second.find(*t);
 				if (type != typesEnd) {
-					if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
-						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+					if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
+						request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
 					else
 						request.append(*i);
 				} else
-					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+					request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
 
-				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
+				request.append(statements[STATEMENT_RIGHTBRACKETCOMA]);
 			}
-			request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
+			request.append(statements[STATEMENT_LEFTBRACKET]);
 
 			t = collectedData.fields.begin();
 
@@ -229,33 +229,33 @@ constructor::insertCollect()
 			for (; i != j; ++i, ++t) {
 				type = types->second.find(*t);
 				if (type != typesEnd) {
-					if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
-						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+					if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
+						request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
 					else
-						request.append(*i + statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+						request.append(*i + statements[STATEMENT_COMA]);
 				} else
-					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+					request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
 			}
 			type = types->second.find(*t);
 			if (type != typesEnd) {
-				if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
-					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+				if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
+					request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
 				else
 					request.append(*i);
 			} else
-				request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+				request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
 
-			request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
+			request.append(statements[STATEMENT_RIGHTBRACKET]);
 		} else {
 			--l;
 			for (; k != l; ++k) {
-				request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-				request.append(joinFields(*k, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
-				request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA]);
+				request.append(statements[STATEMENT_LEFTBRACKET]);
+				request.append(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
+				request.append(statements[STATEMENT_RIGHTBRACKETCOMA]);
 			}
-			request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-			request.append(joinFields(*k, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
-			request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
+			request.append(statements[STATEMENT_LEFTBRACKET]);
+			request.append(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
+			request.append(statements[STATEMENT_RIGHTBRACKET]);
 		}
 	}
 }
@@ -265,9 +265,9 @@ constructor::insertCollect()
 void
 constructor::updateCollect()
 {
-	request = statements[SQLCONSTRUCTOR_STATEMENT_UPDATE];
+	request = statements[STATEMENT_UPDATE];
 	request.append(collectedData.table);
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_SET]);
+	request.append(statements[STATEMENT_SET]);
 
 	dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
 	if (v != collectedData.values.end()) {
@@ -277,7 +277,7 @@ constructor::updateCollect()
 
 			unsigned int o(fn <= fv ? fn : fv);
 
-			dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
+			dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[STATEMENT_COLON] + collectedData.table);
 			if (types != fieldTypes.end()) {
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
 				dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
@@ -288,50 +288,50 @@ constructor::updateCollect()
 
 					type = types->second.find(*i);
 					if (type != typesEnd) {
-						if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY) {
-							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+						if (type->second == FIELD_TEXT || type->second == FIELD_BINARY) {
+							request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
 							request.append(escapeFields(*j));
-							request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+							request.append(statements[STATEMENT_APOSTROPHECOMA]);
 						} else {
-							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
+							request.append(statements[STATEMENT_EQUAL]);
 							request.append(*j);
-							request.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+							request.append(statements[STATEMENT_COMA]);
 						}
 					} else {
-						request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+						request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
 						request.append(escapeFields(*j));
-						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+						request.append(statements[STATEMENT_APOSTROPHECOMA]);
 					}
 				}
 				request.append(*i);
 
 				type = types->second.find(*i);
 				if (type != typesEnd) {
-					if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY) {
-						request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+					if (type->second == FIELD_TEXT || type->second == FIELD_BINARY) {
+						request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
 						request.append(escapeFields(*j));
-						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+						request.append(statements[STATEMENT_APOSTROPHE]);
 					} else {
-						request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
+						request.append(statements[STATEMENT_EQUAL]);
 						request.append(*j);
 					}
 				} else {
-					request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+					request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
 					request.append(escapeFields(*j));
-					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+					request.append(statements[STATEMENT_APOSTROPHE]);
 				}
 			} else {
 				--o;
 				for (unsigned int k(0); k < o; ++i, ++k, ++j) {
 					request.append(*i);
-					request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+					request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
 					request.append(escapeFields(*j));
-					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+					request.append(statements[STATEMENT_APOSTROPHECOMA]);
 				}
 				request.append(*i);
-				request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+				request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
 				request.append(escapeFields(*j));
-				request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+				request.append(statements[STATEMENT_APOSTROPHE]);
 			}
 		}
 	}
@@ -342,8 +342,8 @@ constructor::updateCollect()
 void
 constructor::delCollect()
 {
-	request = statements[SQLCONSTRUCTOR_STATEMENT_DELETE];
-	request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
+	request = statements[STATEMENT_DELETE];
+	request.append(statements[STATEMENT_FROM]);
 	request.append(collectedData.table);
 }
 
@@ -352,7 +352,7 @@ constructor::delCollect()
 void
 constructor::subCollect()
 {
-	request = tools::misc::join(collectedData.subQueries, sqlQStArr[collectedData.type - 1]);
+	request = tools::misc::join(collectedData.subQueries, subrequestStatements[collectedData.type - 1]);
 }
 
 //-------------------------------------------------------------------
@@ -364,10 +364,10 @@ constructor::joinCollect()
 	dodoStringArray::iterator o = collectedData.joinConds.begin(), p = collectedData.joinConds.end();
 	dodoArray<int>::iterator m = collectedData.joinTypes.begin(), n = collectedData.joinTypes.end();
 	for (; i != j; ++i, ++o, ++m) {
-		if (*m >= 0 && *m < JOINTYPESTSTATEMENTS)
-			request.append(sqlJoinArr[*m]);
+		if (*m >= 0 && *m < JOIN_ENUMSIZE)
+			request.append(joinStatements[*m]);
 		else
-			throw exception::basic(exception::ERRMODULE_DATABASESQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DATABASESQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATABASESQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DATABASESQLCONSTRUCTOREX_UNKNOWNJOIN_STR, __LINE__, __FILE__);
 
 		request.append(*i);
 
@@ -381,33 +381,33 @@ constructor::joinCollect()
 //-------------------------------------------------------------------
 
 dodoString
-constructor::queryCollect()
+constructor::construct()
 {
 	bool additionalActions = true;
 	bool selectAction = false;
 
 	switch (collectedData.type) {
-		case ACCUMULATOR_REQUEST_SELECT:
+		case REQUEST_SELECT:
 
 			selectCollect();
 			selectAction = true;
 
 			break;
 
-		case ACCUMULATOR_REQUEST_INSERT:
+		case REQUEST_INSERT:
 
 			insertCollect();
 			additionalActions = false;
 
 			break;
 
-		case ACCUMULATOR_REQUEST_UPDATE:
+		case REQUEST_UPDATE:
 
 			updateCollect();
 
 			break;
 
-		case ACCUMULATOR_REQUEST_DELETE:
+		case REQUEST_DELETE:
 
 			delCollect();
 
@@ -423,16 +423,16 @@ constructor::queryCollect()
 
 			break;
 
-		case ACCUMULATOR_REQUEST_CALL_FUNCTION:
+		case REQUEST_FUNCTION:
 
-			callFunctionCollect();
+			functionCollect();
 			selectAction = true;
 
 			break;
 
-		case ACCUMULATOR_REQUEST_CALL_PROCEDURE:
+		case REQUEST_PROCEDURE:
 
-			callProcedureCollect();
+			procedureCollect();
 
 			break;
 
@@ -442,17 +442,17 @@ constructor::queryCollect()
 	}
 
 	if (additionalActions) {
-		if (selectAction && isSetFlag(collectedData.additional, 1 << ACCUMULATOR_ADDREQUEST_JOIN))
+		if (selectAction && isSetFlag(collectedData.additional, 1 << ADDITIONAL_REQUEST_JOIN))
 			joinCollect();
-		additionalCollect(ACCUMULATOR_ADDREQUEST_AS, collectedData.where);
-		additionalCollect(ACCUMULATOR_ADDREQUEST_WHERE, collectedData.where);
+		additionalCollect(ADDITIONAL_REQUEST_AS, collectedData.where);
+		additionalCollect(ADDITIONAL_REQUEST_WHERE, collectedData.where);
 		if (selectAction) {
-			additionalCollect(ACCUMULATOR_ADDREQUEST_GROUPBY, collectedData.group);
-			additionalCollect(ACCUMULATOR_ADDREQUEST_HAVING, collectedData.having);
+			additionalCollect(ADDITIONAL_REQUEST_GROUPBY, collectedData.group);
+			additionalCollect(ADDITIONAL_REQUEST_HAVING, collectedData.having);
 		}
-		additionalCollect(ACCUMULATOR_ADDREQUEST_ORDERBY, collectedData.order);
-		additionalCollect(ACCUMULATOR_ADDREQUEST_LIMIT, collectedData.limit);
-		additionalCollect(ACCUMULATOR_ADDREQUEST_OFFSET, collectedData.offset);
+		additionalCollect(ADDITIONAL_REQUEST_ORDERBY, collectedData.order);
+		additionalCollect(ADDITIONAL_REQUEST_LIMIT, collectedData.limit);
+		additionalCollect(ADDITIONAL_REQUEST_OFFSET, collectedData.offset);
 	}
 
 	return request;

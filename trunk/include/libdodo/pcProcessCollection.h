@@ -40,40 +40,32 @@ namespace dodo {
 		namespace process {
 			struct __process__;
 
-			/**
-			 * @enum collectionOnDestructEnum defines action with processes on object destruction
-			 */
-			enum collectionOnDestructEnum {
-				COLLECTION_ONDESTRUCT_KEEP_ALIVE,
-				COLLECTION_ONDESTRUCT_STOP,     ///< send SIGINT to process
-				COLLECTION_ONDESTRUCT_WAIT
-			};
-
 #ifdef DL_EXT
 			/**
-			 * @struct __processMod__
-			 * @brief defines data that is returned from initIpcProcessCollectionModule in the library
+			 * @struct __module__
+			 * @brief defines data that is returned from initPcProcessCollectionModule in the library
 			 */
-			struct __processMod__ {
+			struct __module__ {
 				char          name[64];         ///< name of module
 				char          discription[256]; ///< discription of module
 				char          hook[64];         ///< name of function in module that will be a hook
-				unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
 				short         action;           ///< action on object destruction[see collectionOnDestructEnum]
 			};
 
 			/**
-			 * @typedef initIpcProcessCollectionModule
+			 * @typedef initModule
 			 * @brief defines type of init function for library
 			 * @param data defines user data
+			 * @note name in the library must be initPcProcessModule
 			 */
-			typedef __processMod__ (*initIpcProcessCollectionModule)(void *data);
+			typedef __module__ (*initModule)(void *data);
 
 			/**
-			 * @typedef deinitIpcProcessCollectionModule
+			 * @typedef deinitModule
 			 * @brief defines type of deinit function for library
+			 * @note name in the library must be deinitPcProcessModule
 			 */
-			typedef void (*deinitIpcProcessCollectionModule)();
+			typedef void (*deinitModule)();
 #endif
 
 			/**
@@ -87,7 +79,7 @@ namespace dodo {
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				collection(collection &sp);
+				collection(collection &);
 
 			  public:
 
@@ -118,75 +110,36 @@ namespace dodo {
 				 * @return process identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param limit defines limit on executions
 				 * @param action defines action on object destruction if process is running[see collectionOnDestructEnum]
 				 * @note func must not call `exit` family call
 				 * this will immediately execute the process
 				 */
 				virtual unsigned long addNRun(job::routine  func,
 											  void          *data,
-											  unsigned long limit,
 											  short         action);
 
 				/**
-				 * add function as a process
-				 * @return process identificator
-				 * @param func defines function to execute
-				 * @param data defines process data
-				 * @note func must not call `exit` family call
-				 * action = COLLECTION_ONDESTRUCT_WAIT
-				 */
-				virtual unsigned long add(job::routine func,
-										  void         *data);
-
-				/**
-				 * add function as a process
-				 * @return process identificator
-				 * @param func defines function to execute
-				 * @param data defines process data
-				 * @note func must not call `exit` family call
-				 * this will immediately execute the process
-				 * action = COLLECTION_ONDESTRUCT_WAIT
-				 */
-				virtual unsigned long addNRun(job::routine func,
-											  void         *data);
-
-				/**
 				 * remove registered process
-				 * @param position defines process identificator
-				 * @param force defines termination condition; if true and process is running stop execution of the process
+				 * @param id defines process identificator
+				 * @param terminate defines termination condition; if true and process is running stop execution of the process
 				 */
-				virtual void del(unsigned long position,
-								 bool          force = false);
-
-				/**
-				 * replace process function
-				 * @param position defines process identificator
-				 * @param func defines function to execute
-				 * @param data defines process data
-				 * @param force defines termination condition; if true and process is running stop execution of the process
-				 * @param action defines action on object destruction if process is running[see collectionOnDestructEnum]
-				 */
-				virtual void replace(unsigned long position,
-									 job::routine  func,
-									 void          *data,
-									 bool          force = false,
-									 short         action = COLLECTION_ONDESTRUCT_WAIT);
+				virtual void remove(unsigned long id,
+								 bool          terminate = false);
 
 				/**
 				 * execute process
-				 * @param position defines process identificator
+				 * @param id defines process identificator
 				 * @param force defines run condition; if true and job is running run process anyway
 				 */
-				virtual void run(unsigned long position,
+				virtual void run(unsigned long id,
 								 bool          force = false);
 
 				/**
 				 * stop process
-				 * @param position defines process identificator
+				 * @param id defines process identificator
 				 * @note sends SIGKILL to process
 				 */
-				virtual void stop(unsigned long position);
+				virtual void stop(unsigned long id);
 
 				/**
 				 * stop all registered processes
@@ -196,9 +149,9 @@ namespace dodo {
 				/**
 				 * waits for process termination
 				 * @return status of the job
-				 * @param position defines process identificator
+				 * @param id defines process identificator
 				 */
-				virtual int wait(unsigned long position);
+				virtual int wait(unsigned long id);
 
 				/**
 				 * wait for all registered processes termination
@@ -207,9 +160,9 @@ namespace dodo {
 
 				/**
 				 * @return true if process is running
-				 * @param position defines process identificator
+				 * @param id defines process identificator
 				 */
-				virtual bool isRunning(unsigned long position) const;
+				virtual bool isRunning(unsigned long id) const;
 
 				/**
 				 * @return amount of running processes
@@ -217,22 +170,9 @@ namespace dodo {
 				virtual unsigned long running() const;
 
 				/**
-				 * sweep processes if their time has been already passed
-				 */
-				virtual void sweepTrash();
-
-				/**
 				 * @return list of processes in object
 				 */
-				virtual dodoList<unsigned long> getIds();
-
-				/**
-				 * set maximum execution time
-				 * @param position defines process identificator
-				 * @param limit defines the limit on executions of the process
-				 */
-				virtual void setExecutionLimit(unsigned long position,
-											   unsigned long limit = 1);
+				virtual dodoList<unsigned long> jobs();
 
 #ifdef DL_EXT
 				/**
@@ -251,7 +191,7 @@ namespace dodo {
 				 * @param module defines path to the library[if not in ldconfig db] or library name
 				 * @param toInit defines library init data
 				 */
-				static __processMod__ getModuleInfo(const dodoString &module,
+				static __module__ module(const dodoString &module,
 													void             *toInit = NULL);
 #endif
 
@@ -259,17 +199,17 @@ namespace dodo {
 
 				/**
 				 * @return true if process is running
-				 * @param position defines process identificator
+				 * @param id defines process identificator
 				 */
-				bool _isRunning(dodoList<__process__ *>::iterator &position) const;
+				bool _isRunning(dodoList<__process__ *>::iterator &id) const;
 
 				/**
 				 * search processes by identificator
 				 * @return true if process has been found
-				 * @param position defines process identificator
+				 * @param id defines process identificator
 				 * @note this sets internal class parameter 'current' to found process
 				 */
-				bool getProcess(unsigned long position) const;
+				bool getProcess(unsigned long id) const;
 
 				unsigned long processNum;                           ///< number of registered processes
 
@@ -280,5 +220,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

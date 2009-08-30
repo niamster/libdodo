@@ -48,8 +48,8 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR "No socket was created."
-#define IONETWORKCONNECTIONEX_WRONGPARAMETER_STR  "Wrong paramather passed to function."
+#define IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR "No socket was created"
+#define IONETWORKCONNECTIONEX_WRONGPARAMETER_STR  "Wrong paramather passed to function"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -67,5 +67,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

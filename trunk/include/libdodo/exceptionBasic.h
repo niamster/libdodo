@@ -55,105 +55,68 @@ namespace dodo {
 			ERRNO_POSIXREGEX,
 			ERRNO_PCRE,
 			ERRNO_BFD,
-			ERRNO_OPENSSL
+			ERRNO_OPENSSL,
 		};
 
 		/**
-		 * @enum errorModuleEnum defines modules where exception might be thrown
+		 * @enum moduleEnum defines modules where exception might be thrown
 		 */
-		enum errorModuleEnum {
-			ERRMODULE_DATABASEMYSQL = 0,
-			ERRMODULE_DATABASEPOSTGRESQL,
-			ERRMODULE_DATABASESQLCONSTRUCTOR,
-			ERRMODULE_DATABASESQLITE,
-			ERRMODULE_DATAFORMATXMLPROCESSOR,
-			ERRMODULE_DATAFORMATJSONNODE,
-			ERRMODULE_DATAFORMATJSONPROCESSOR,
-			ERRMODULE_DATATPLPROCESSOR,
-			ERRMODULE_DATAMEMORYSHARED,
-			ERRMODULE_XEXEC,
-			ERRMODULE_TOOLSFILESYSTEM,
-			ERRMODULE_TOOLSOS,
-			ERRMODULE_TOOLSOSSYNCTHREADSECTION,
-			ERRMODULE_TOOLSTIME,
-			ERRMODULE_TOOLSMISC,
-			ERRMODULE_TOOLSCODE,
-			ERRMODULE_TOOLSNETWORK,
-			ERRMODULE_TOOLSLIBRARY,
-			ERRMODULE_TOOLSREGEXP,
-			ERRMODULE_IOFILEREGULAR,
-			ERRMODULE_IOFILETEMP,
-			ERRMODULE_IOFILEFIFO,
-			ERRMODULE_IOPIPE,
-			ERRMODULE_IOSTDIO,
-			ERRMODULE_IOMEMORY,
-			ERRMODULE_IONETWORKCONNECTION,
-			ERRMODULE_IONETWORKCLIENT,
-			ERRMODULE_IONETWORKSERVER,
-			ERRMODULE_IONETWORKSSLCLIENT,
-			ERRMODULE_IONETWORKSSLSERVER,
-			ERRMODULE_IONETWORKEXCHANGE,
-			ERRMODULE_IONETWORKSSLEXCHANGE,
-			ERRMODULE_IONETWORKHTTP,
-			ERRMODULE_IOEVENT,
-			ERRMODULE_PCPROCESSCOLLECTION,
-			ERRMODULE_PCTHREADCOLLECTION,
-			ERRMODULE_PCSYNCTHREADDATASINGLE,
-			ERRMODULE_PCSYNCPROCESSDATASINGLE,
-			ERRMODULE_PCSYNCTHREADDATACOLLECTION,
-			ERRMODULE_PCSYNCPROCESSDATACOLLECTION,
-			ERRMODULE_PCSYNCTHREADSECTION,
-			ERRMODULE_PCSYNCPROCESSSECTION,
-			ERRMODULE_GRAPHICSIMAGE,
-			ERRMODULE_GRAPHICSTRANSFORM,
-			ERRMODULE_GRAPHICSDRAW,
-			ERRMODULE_CGIFASTSERVER,
-			ERRMODULE_CGIFASTEXCHANGE,
-			ERRMODULE_CGIDIALOGUE,
-			ERRMODULE_RPCVALUE,
-			ERRMODULE_RPCRESPONSE,
-			ERRMODULE_RPCJSONMETHOD,
-			ERRMODULE_RPCJSONRESPONSE,
+		enum moduleEnum {
+			MODULE_DATABASEMYSQL = 0,
+			MODULE_DATABASEPOSTGRESQL,
+			MODULE_DATABASESQLCONSTRUCTOR,
+			MODULE_DATABASESQLITE,
+			MODULE_DATAFORMATXMLPROCESSOR,
+			MODULE_DATAFORMATJSONNODE,
+			MODULE_DATAFORMATJSONPROCESSOR,
+			MODULE_DATATPLPROCESSOR,
+			MODULE_DATAMEMORYSHARED,
+			MODULE_XEXEC,
+			MODULE_TOOLSFILESYSTEM,
+			MODULE_TOOLSOS,
+			MODULE_TOOLSOSSYNCTHREADSECTION,
+			MODULE_TOOLSTIME,
+			MODULE_TOOLSMISC,
+			MODULE_TOOLSCODE,
+			MODULE_TOOLSNETWORK,
+			MODULE_TOOLSLIBRARY,
+			MODULE_TOOLSREGEXP,
+			MODULE_IOFILEREGULAR,
+			MODULE_IOFILETEMP,
+			MODULE_IOFILEFIFO,
+			MODULE_IOPIPE,
+			MODULE_IOSTDIO,
+			MODULE_IOMEMORY,
+			MODULE_IONETWORKCONNECTION,
+			MODULE_IONETWORKCLIENT,
+			MODULE_IONETWORKSERVER,
+			MODULE_IONETWORKSSLCLIENT,
+			MODULE_IONETWORKSSLSERVER,
+			MODULE_IONETWORKEXCHANGE,
+			MODULE_IONETWORKSSLEXCHANGE,
+			MODULE_IONETWORKHTTP,
+			MODULE_IOEVENTMANAGER,
+			MODULE_PCPROCESSCOLLECTION,
+			MODULE_PCTHREADCOLLECTION,
+			MODULE_PCSYNCTHREADDATASINGLE,
+			MODULE_PCSYNCPROCESSDATASINGLE,
+			MODULE_PCSYNCTHREADDATACOLLECTION,
+			MODULE_PCSYNCPROCESSDATACOLLECTION,
+			MODULE_PCSYNCTHREADSECTION,
+			MODULE_PCSYNCPROCESSSECTION,
+			MODULE_GRAPHICSIMAGE,
+			MODULE_GRAPHICSTRANSFORM,
+			MODULE_GRAPHICSDRAW,
+			MODULE_CGIFASTSERVER,
+			MODULE_CGIFASTEXCHANGE,
+			MODULE_CGIDIALOGUE,
+			MODULE_RPCVALUE,
+			MODULE_RPCRESPONSE,
+			MODULE_RPCJSONMETHOD,
+			MODULE_RPCJSONRESPONSE,
+
+			MODULE_ENUMSIZE
 		};
-
-#define BASEEX_MODULES    51
-
-#ifdef DL_EXT
-		/**
-		 * @struct __basicMod__
-		 * @brief is returned from initBaseExModule in the library
-		 */
-		struct __basicMod__ {
-			char  name[64];         ///< name of the library
-			char  discription[256]; ///< discription of the library
-			char  hook[64];         ///< name of the function in module that will be as a hook
-			short module;           ///< for what module handler should be set[see errorModuleEnum]
-		};
-
-		/**
-		 * @typedef initBaseExModule
-		 * @brief defines type of init function for library
-		 * @param data defines user data
-		 */
-		typedef __basicMod__ (*initBaseExModule)(void *data);
-
-		/**
-		 * @typedef deinitBaseExModule
-		 * @brief defines type of deinit function for library
-		 */
-		typedef void (*deinitBaseExModule)();
-#endif
-
-		class basic;
-
-		/**
-		 * @typedef errorHandler
-		 * @brief defines type of hook function
-		 * @param module defines module where exception occured[see errorModuleEnum]
-		 * @param ex defines pointer to basic object with exception information
-		 * @param data defines user data
-		 */
-		typedef void (*errorHandler)(int module, basic *ex, void *data);
 
 #ifdef CALLSTACK_EX
 		/**
@@ -184,22 +147,59 @@ namespace dodo {
 
 		  public:
 
+#ifdef DL_EXT
+			/**
+			 * @struct __module__
+			 * @brief is returned from initExceptionBasicModule in the library
+			 */
+			struct __module__ {
+				char  name[64];         ///< name of the library
+				char  discription[256]; ///< discription of the library
+				char  hook[64];         ///< name of the function in module that will be as a hook
+				bool modules[MODULE_ENUMSIZE];           ///< for what modules handler should be set[see moduleEnum]
+			};
+
+			/**
+			 * @typedef initModule
+			 * @brief defines type of init function for library
+			 * @param data defines user data
+			 * @note name in the library must be initExceptionBasicModule
+			 */
+			typedef __module__ (*initModule)(void *data);
+
+			/**
+			 * @typedef deinitModule
+			 * @brief defines type of deinit function for library
+			 * @note name in the library must be deinitExceptionBasicModule
+			 */
+			typedef void (*deinitModule)();
+#endif
+
+			/**
+			 * @typedef errorHandler
+			 * @brief defines type of hook function
+			 * @param module defines module where exception occured[see errorModuleEnum]
+			 * @param ex defines pointer to basic object with exception information
+			 * @param data defines user data
+			 */
+			typedef void (*handler)(int module, basic *ex, void *data);
+
 			/**
 			 * constructor
-			 * @param errModule defines module where exception has been thrown
-			 * @param functionID defines function where exception has been thrown[see *Ex.h headers for IDs]
+			 * @param module defines module where exception has been thrown
+			 * @param function defines function where exception has been thrown[see *Ex.h headers for IDs]
 			 * @param errnoSource defines source of the error code and of the error string[see errnoSourceEnum]
-			 * @param baseErrno defines error code
-			 * @param baseErrstr defines error string
+			 * @param errNo defines error code
+			 * @param errStr defines error string
 			 * @param line defines line where exception has been thrown
 			 * @param file defines file where exception has been thrown
 			 * @param message defines custom message that might clarify the exception
 			 */
-			basic(int              errModule,
-				  int              functionID,
+			basic(int              module,
+				  int              function,
 				  int              errnoSource,
-				  int              baseErrno,
-				  const dodoString &baseErrstr,
+				  int              errNo,
+				  const dodoString &errStr,
 				  unsigned long    line,
 				  const dodoString &file,
 				  const dodoString &message = __dodostring__) throw ();
@@ -223,19 +223,16 @@ namespace dodo {
 			/**
 			 * @return call stack to the exception point
 			 */
-			virtual dodoString getCallStack();
+			virtual dodoString backtrace();
 #endif
 
-			int errModule;                      ///< module where exception has been thrown
-			int funcID;                         ///< function where exception has been thrown[see *Ex.h headers for IDs]
+			int source;                      ///< module where exception has been thrown
+			int function;                         ///< function where exception has been thrown[see *Ex.h headers for IDs]
 			int errnoSource;                    ///< the source of the error code and of the error string
-
-			int baseErrno;                      ///< error code
-			dodoString baseErrstr;              ///< error string
-
+			int errNo;                      ///< error code
+			dodoString errStr;              ///< error string
 			unsigned long line;                 ///< line where exception has been thrown
 			dodoString file;                    ///< file where exception has been thrown
-
 			dodoString message;                 ///< custom message that might clarify the exception
 
 #ifdef CALLSTACK_EX
@@ -248,8 +245,8 @@ namespace dodo {
 			 * @param handler defines function that will be called when exception is thrown
 			 * @param data decribes data that will be passed to the handler
 			 */
-			static void setErrorHandler(errorModuleEnum module,
-										errorHandler    handler,
+			static void setHandler(moduleEnum module,
+										handler    handler,
 										void            *data);
 
 			/**
@@ -257,19 +254,19 @@ namespace dodo {
 			 * @param handler defines function that will be called when exception is thrown
 			 * @param data decribes data that will be passed to the handler
 			 */
-			static void setErrorHandlers(errorHandler handler,
+			static void setHandler(handler handler,
 										 void         *data);
 
 			/**
 			 * remove handler set for exceptions for specific module
 			 * @param module defines for what module to remove handler
 			 */
-			static void unsetErrorHandler(errorModuleEnum module);
+			static void removeHandler(moduleEnum module);
 
 			/**
 			 * remove handlers set for exceptions for all modules
 			 */
-			static void unsetErrorHandlers();
+			static void removeHandlers();
 
 #ifdef DL_EXT
 			/**
@@ -277,7 +274,7 @@ namespace dodo {
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			static __basicMod__ getModuleInfo(const dodoString &path,
+			static __module__ module(const dodoString &path,
 											  void             *toInit = NULL);
 
 			/**
@@ -286,36 +283,25 @@ namespace dodo {
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param data decribes data that will be passed to the handler
 			 * @param toInit defines data that will be passed to the init function
-			 * @note module for what to set handler is taken from the library information[see __basicMod__]
+			 * @note module for what to set handler is taken from the library information[see __module__]
 			 */
-			static bool setErrorHandler(const dodoString &path,
+			static void setHandler(const dodoString &path,
 										void             *data,
 										void             *toInit = NULL);
-
-			/**
-			 * set handlers for exceptions for all modules
-			 * @return false on error
-			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param data decribes data that will be passed to the handler
-			 * @param toInit defines data that will be passed to the init function
-			 */
-			static bool setErrorHandlers(const dodoString &path,
-										 void             *data,
-										 void             *toInit = NULL);
 #endif
 
 		  protected:
 
-			static errorHandler handlersEx[BASEEX_MODULES]; ///< exception handlers
+			static handler handlers[MODULE_ENUMSIZE]; ///< exception handlers
 
-			static bool handlerSetEx[BASEEX_MODULES];       ///< map of set handlers
+			static bool handlerMap[MODULE_ENUMSIZE];       ///< map of set handlers
 
-			static void *handlerDataEx[BASEEX_MODULES];     ///< data that will be passed to the handler
+			static void *handlerData[MODULE_ENUMSIZE];     ///< data that will be passed to the handler
 
 #ifdef DL_EXT
-			static void *handlesEx[BASEEX_MODULES];         ///< handles to the libraries
+			static void *handles[MODULE_ENUMSIZE];         ///< handles to the libraries
 
-			static bool handlesOpenedEx[BASEEX_MODULES];    ///< map of the opened libraries
+			static bool handlesOpened[MODULE_ENUMSIZE];    ///< map of the opened libraries
 #endif
 
 			/**
@@ -377,5 +363,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

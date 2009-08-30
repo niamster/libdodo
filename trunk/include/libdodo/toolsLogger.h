@@ -46,29 +46,29 @@ namespace dodo {
 	};
 
 	namespace tools {
-#define LOGGER_LEVELS 9
-
-		/**
-		 * @enum loggerLogLevelEnum defines log levels
-		 */
-		enum loggerLogLevelEnum {
-			LOGGER_INFO = 0,
-			LOGGER_NOTICE,
-			LOGGER_DEBUG,
-			LOGGER_WARNING,
-			LOGGER_ERROR,
-			LOGGER_ALERT,
-			LOGGER_CRITICAL,
-			LOGGER_EMERGENCY,
-			LOGGER_USER
-		};
-
 		/**
 		 * @class logger
 		 * @brief provides logging function
 		 */
 		class logger : public singleton<logger>{
 		  public:
+
+			/**
+			 * @enum logLevelEnum defines log levels
+			 */
+			enum logLevelEnum {
+				LOG_LEVEL_INFO = 0,
+				LOG_LEVEL_NOTICE,
+				LOG_LEVEL_DEBUG,
+				LOG_LEVEL_WARNING,
+				LOG_LEVEL_ERROR,
+				LOG_LEVEL_ALERT,
+				LOG_LEVEL_CRITICAL,
+				LOG_LEVEL_EMERGENCY,
+				LOG_LEVEL_USER,
+
+				LOG_LEVEL_ENUMSIZE
+			};
 
 			/**
 			 * constructor
@@ -118,25 +118,24 @@ namespace dodo {
 			dodoString timeFormat;                              ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
 
 			/**
-			 * @struct __logMap__
+			 * @struct __log_map__
 			 * @brief defines map between log level and log handler
 			 */
-			struct __logMap__ {
+			struct __log_map__ {
 				short       level;                              ///< log level[see loggerLogLevelEnum]
 				io::channel *handler;                           ///< log handler
 				unsigned long position;                           ///< log handler identificator
 			};
 
-			dodoList<__logMap__> handlers;                      ///< list of log maps
+			dodoList<__log_map__> handlers;                      ///< list of log maps
 
 			unsigned long handlersNum;                          ///< number of registered handlers
 
-			static const dodoString levels[LOGGER_LEVELS];      ///< log levels statements
-			static const int syslogLevels[LOGGER_LEVELS];       ///< syslog log levels
+			static const dodoString levels[LOG_LEVEL_ENUMSIZE];      ///< log levels statements
+			static const int syslogLevels[LOG_LEVEL_ENUMSIZE];       ///< syslog log levels
 
 			pc::sync::section *keeper;                          ///< section locker
 		};
 	};
 };
-
 #endif

@@ -37,40 +37,6 @@
 namespace dodo {
 	namespace tools {
 		/**
-		 * @struct __interfaceInfo__
-		 * @brief defines interface information
-		 */
-		struct __interfaceInfo__ {
-			dodoString address;         ///< ip address of the interface
-			dodoString broadcast;       ///< broadcast address of the interface
-			dodoString netmask;         ///< netmask of the interface
-			dodoString hwaddr;          ///< harware address of the interface(MAC)
-
-			bool       up;              ///< true if interface is up
-			bool       loop;            ///< true if interface is a loopback
-		};
-
-		/**
-		 * @struct __hostInfo__
-		 * @brief defines information about host
-		 */
-		struct __hostInfo__ {
-			dodoString      name;       ///< original name of the host
-			dodoStringArray aliases;    ///< aliases of the host
-			dodoStringArray addresses;  ///< addresses of the host
-		};
-
-		/**
-		 * @struct __serviceInfo__
-		 * @brief defines info about service
-		 */
-		struct __serviceInfo__ {
-			dodoString      name;       ///< original name of the service
-			dodoStringArray aliases;    ///< aliases of the service
-			int             port;       ///< port of the service
-		};
-
-		/**
 		 * @class network
 		 * @brief provides information about network environment
 		 */
@@ -78,32 +44,65 @@ namespace dodo {
 		  public:
 
 			/**
+			 * @struct __interface__
+			 * @brief defines interface information
+			 */
+			struct __interface__ {
+				dodoString address;         ///< ip address of the interface
+				dodoString broadcast;       ///< broadcast address of the interface
+				dodoString netmask;         ///< netmask of the interface
+				dodoString hwaddr;          ///< harware address of the interface(MAC)
+				bool       up;              ///< true if interface is up
+				bool       loop;            ///< true if interface is a loopback
+			};
+
+			/**
+			 * @struct __host__
+			 * @brief defines information about host
+			 */
+			struct __host__ {
+				dodoString      name;       ///< original name of the host
+				dodoStringArray aliases;    ///< aliases of the host
+				dodoStringArray addresses;  ///< addresses of the host
+			};
+
+			/**
+			 * @struct __service__
+			 * @brief defines info about service
+			 */
+			struct __service__ {
+				dodoString      name;       ///< original name of the service
+				dodoStringArray aliases;    ///< aliases of the service
+				int             port;       ///< port of the service
+			};
+
+			/**
 			 * @return a list of interfaces
 			 */
-			static dodoStringArray getInterfacesNames();
+			static dodoStringArray interfacesNames();
 
 			/**
 			 * @return information about the interface
 			 * @param interface defines a name of the interface
 			 */
-			static __interfaceInfo__ getInterfaceInfo(const dodoString &interface);
+			static __interface__ interface(const dodoString &interface);
 
 			/**
 			 * @return information about the given host
 			 * @param host defines a name of the host
 			 */
-			static __hostInfo__ getHostInfo(const dodoString &host);
+			static __host__ host(const dodoString &host);
 
 			/**
 			 * @return primary host ip
 			 * @param host defines a name of the host
 			 */
-			static dodoString getHostPrimaryIp(const dodoString &host);
+			static dodoString hostPrimaryIp(const dodoString &host);
 
 			/**
 			 * @return name of the local host
 			 */
-			static dodoString getLocalName();
+			static dodoString localName();
 
 			/**
 			 * set local host name
@@ -116,7 +115,7 @@ namespace dodo {
 			 * @param service defices name of the service
 			 * @param protocol defines protocol of the service(tcp, udp ..)
 			 */
-			static __serviceInfo__ getServiceInfo(const dodoString &service,
+			static __service__ service(const dodoString &service,
 												  const dodoString &protocol);
 
 			/**
@@ -124,7 +123,7 @@ namespace dodo {
 			 * @param port defices port of the service
 			 * @param protocol defines protocol of the service(tcp, udp ..)
 			 */
-			static __serviceInfo__ getServiceInfo(int              port,
+			static __service__ service(int              port,
 												  const dodoString &protocol);
 
 			/**
@@ -166,5 +165,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

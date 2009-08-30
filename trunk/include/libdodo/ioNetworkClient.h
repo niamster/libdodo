@@ -46,35 +46,6 @@ namespace dodo {
 			class exchange;
 
 			/**
-			 * @enum clientOperationTypeEnum defines type of operation for hook
-			 */
-			enum clientOperationTypeEnum {
-				CLIENT_OPERATION_CONNECT = 128,
-				CLIENT_OPERATION_CONNECTFROM,
-				CLIENT_OPERATION_CONNECT_UNIX,
-				CLIENT_OPERATION_BINDNLISTEN,
-				CLIENT_OPERATION_BINDNLISTEN_UNIX,
-				CLIENT_OPERATION_ACCEPT,
-			};
-
-#ifndef IO_WO_XEXEC
-			/**
-			 * @class __xexecIoNetworkClientCollectedData__
-			 * @brief defines data that could be retrieved from class(to modificate)[contains references]
-			 */
-			class __xexecIoNetworkClientCollectedData__ : public __xexecCollectedData__ {
-			  public:
-
-				/**
-				 * constructor
-				 * @param executor defines class that executed hook
-				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
-				 */
-				__xexecIoNetworkClientCollectedData__(xexec *executor, short execObject);
-			};
-#endif
-
-			/**
 			 * @class client
 			 * @brief provides network connection interface
 			 */
@@ -93,14 +64,40 @@ namespace dodo {
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				client(client &fs);
+				client(client &);
 
 			  public:
+
+
+				/**
+				 * @enum operationEnum defines type of operation for xexec
+				 */
+				enum operationEnum {
+					OPERATION_CONNECT,
+					OPERATION_CONNECTFROM,
+				};
+
+#ifndef IO_WO_XEXEC
+				/**
+				 * @class __collected_data__
+				 * @brief defines data that could be retrieved from class
+				 */
+				class __collected_data__ : public xexec::__collected_data__ {
+				  public:
+
+					/**
+					 * constructor
+					 * @param executor defines class that executed hook
+					 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+					 */
+					__collected_data__(xexec *executor, short execObject);
+				};
+#endif
 
 				/**
 				 * constructor
 				 * @param family defines family of the socket[see connectionProtoFamilyEnum]
-				 * @param type defines type of the socket[see connectionTransferTypeEnum]
+				 * @param type defines type of the socket[see connectionTransferEnum]
 				 */
 				client(short family,
 					   short type);
@@ -160,11 +157,10 @@ namespace dodo {
 				dodoString unixSock;                                    ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
-				__xexecIoNetworkClientCollectedData__ collectedData;    ///< data collected for xexec
+				__collected_data__ collectedData;    ///< data collected for xexec
 #endif
 			};
 		};
 	};
 };
-
 #endif

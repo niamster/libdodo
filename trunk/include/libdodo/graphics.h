@@ -37,5 +37,4 @@
 #include <libdodo/graphicsImageEx.h>
 #include <libdodo/graphicsTransform.h>
 #include <libdodo/graphicsTransformEx.h>
-
 #endif

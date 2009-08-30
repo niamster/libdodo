@@ -50,9 +50,9 @@ namespace dodo {
 				/**
 				 * explanations for libdodo defined errors
 				 */
-#define DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
-#define DATAFORMATJSONNODEEX_ARRAYOUTOFRANGE_STR    "Array key is out of range."
-#define DATAFORMATJSONNODEEX_MALFORMEDJSON_STR      "Malformed json object."
+#define DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested"
+#define DATAFORMATJSONNODEEX_ARRAYOUTOFRANGE_STR    "Array key is out of range"
+#define DATAFORMATJSONNODEEX_MALFORMEDJSON_STR      "Malformed json object"
 
 				/**
 				 * IDs of functions where exception might be thrown
@@ -70,5 +70,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

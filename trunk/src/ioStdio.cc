@@ -44,7 +44,7 @@ stdio::stdio(short protection) : stream::channel(protection),
 								 pipe(false, protection)
 {
 #ifndef IO_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_IOSTDIO);
+	collectedData.setExecObject(xexec::OBJECT_IOSTDIO);
 #endif
 
 	in->file = stdin;

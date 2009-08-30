@@ -50,8 +50,8 @@ namespace dodo {
 					/**
 					 * explanations for libdodo defined errors
 					 */
-#define PCSYNCPROCESSDATASINGLEEX_CANNOTLOCK_STR      "The share is currently locked. Timeout exhousted."
-#define PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR      "The semaphore was not opened."
+#define PCSYNCPROCESSDATASINGLEEX_CANNOTLOCK_STR      "Item is currently locked, timeout exhousted"
+#define PCSYNCPROCESSDATASINGLEEX_NOTOPENED_STR      "Semaphore not opened"
 
 					/**
 					 * IDs of functions where exception might be thrown
@@ -70,6 +70,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

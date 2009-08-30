@@ -60,5 +60,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

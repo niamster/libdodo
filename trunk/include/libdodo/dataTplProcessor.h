@@ -265,9 +265,9 @@ namespace dodo {
 				 */
 				void clear();
 
-				dodoString tplBasePath; ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
+				dodoString basePath; ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
 
-			  protected:
+			  private:
 
 				/**
 				 * @return preprocessed template
@@ -472,49 +472,48 @@ namespace dodo {
 
 				unsigned int namespaceDeepness;                                         ///< cgi object through what output will be performed
 
-#define DATATPLPROCESSOR_STATEMENTS 30
-
 				/**
 				 * @enum processorStatementEnum defines processor statements
 				 * @note defines positions of string representation in 'statements' class property
 				 */
 				enum processorStatementEnum {
-					PROCESSOR_STATEMENT_DODO = 0,
-					PROCESSOR_STATEMENT_OPEN_ST,
-					PROCESSOR_STATEMENT_CLOSE_ST,
-					PROCESSOR_STATEMENT_OPEN_NP,
-					PROCESSOR_STATEMENT_CLOSE_NP,
-					PROCESSOR_STATEMENT_OPEN_COMM,
-					PROCESSOR_STATEMENT_CLOSE_COMM,
-					PROCESSOR_STATEMENT_OPEN_IF,
-					PROCESSOR_STATEMENT_ELSE,
-					PROCESSOR_STATEMENT_CLOSE_IF,
-					PROCESSOR_STATEMENT_OPEN_FOR,
-					PROCESSOR_STATEMENT_IN,
-					PROCESSOR_STATEMENT_KEY_VALUE,
-					PROCESSOR_STATEMENT_CLOSE_FOR,
-					PROCESSOR_STATEMENT_PRINT,
-					PROCESSOR_STATEMENT_BREAK,
-					PROCESSOR_STATEMENT_CONT,
-					PROCESSOR_STATEMENT_ASSIGN,
-					PROCESSOR_STATEMENT_ASSIGN_OP,
-					PROCESSOR_STATEMENT_OPEN_NS,
-					PROCESSOR_STATEMENT_CLOSE_NS,
-					PROCESSOR_STATEMENT_INCLUDE,
-					PROCESSOR_STATEMENT_ITERATOR,
-					PROCESSOR_STATEMENT_VERSION,
-					PROCESSOR_STATEMENT_DOT,
-					PROCESSOR_STATEMENT_COMA,
-					PROCESSOR_STATEMENT_DOLLAR,
-					PROCESSOR_STATEMENT_FALSE,
-					PROCESSOR_STATEMENT_OPEN_VARPART,
-					PROCESSOR_STATEMENT_CLOSE_VARPART,
+					STATEMENT_DODO = 0,
+					STATEMENT_OPEN_ST,
+					STATEMENT_CLOSE_ST,
+					STATEMENT_OPEN_NP,
+					STATEMENT_CLOSE_NP,
+					STATEMENT_OPEN_COMM,
+					STATEMENT_CLOSE_COMM,
+					STATEMENT_OPEN_IF,
+					STATEMENT_ELSE,
+					STATEMENT_CLOSE_IF,
+					STATEMENT_OPEN_FOR,
+					STATEMENT_IN,
+					STATEMENT_KEY_VALUE,
+					STATEMENT_CLOSE_FOR,
+					STATEMENT_PRINT,
+					STATEMENT_BREAK,
+					STATEMENT_CONT,
+					STATEMENT_ASSIGN,
+					STATEMENT_ASSIGN_OP,
+					STATEMENT_OPEN_NS,
+					STATEMENT_CLOSE_NS,
+					STATEMENT_INCLUDE,
+					STATEMENT_ITERATOR,
+					STATEMENT_VERSION,
+					STATEMENT_DOT,
+					STATEMENT_COMA,
+					STATEMENT_DOLLAR,
+					STATEMENT_FALSE,
+					STATEMENT_OPEN_VARPART,
+					STATEMENT_CLOSE_VARPART,
+
+					STATEMENT_ENUMSIZE
 				};
 
-				static const dodoString statements[DATATPLPROCESSOR_STATEMENTS]; ///< processor statements[for dodo.*, ...]
+				static const dodoString statements[STATEMENT_ENUMSIZE]; ///< processor statements[for dodo.*, ...]
 			};
 		};
 	};
 };
-
 #endif

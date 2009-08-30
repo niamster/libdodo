@@ -37,8 +37,8 @@
 using namespace dodo::data::base;
 
 #ifndef DATABASE_WO_XEXEC
-__xexecDataBaseAccumulatorCollectedData__::__xexecDataBaseAccumulatorCollectedData__(xexec *a_executor,
-																					 short execObject) : __xexecCollectedData__(a_executor, execObject)
+accumulator::__collected_data__::__collected_data__(xexec *a_executor,
+															short execObject) : xexec::__collected_data__(a_executor, execObject)
 {
 }
 #endif
@@ -48,12 +48,12 @@ __xexecDataBaseAccumulatorCollectedData__::__xexecDataBaseAccumulatorCollectedDa
 accumulator::accumulator() : show(false)
 #ifndef DATABASE_WO_XEXEC
 							 ,
-							 collectedData(this, XEXEC_OBJECT_XEXEC)
+							 collectedData(this, xexec::OBJECT_XEXEC)
 #endif
 {
 	collectedData.type = -1;
 
-	collectedData.additional = ACCUMULATOR_NONE;
+	collectedData.additional = STATE_NONE;
 }
 
 //-------------------------------------------------------------------
@@ -65,20 +65,20 @@ accumulator::~accumulator()
 //-------------------------------------------------------------------
 
 void
-accumulator::callFunction(const dodoString      &name,
+accumulator::function(const dodoString      &name,
 						  const dodoStringArray &arguments,
 						  const dodoString      &as)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_CALL_FUNCTION;
+	collectedData.type = REQUEST_FUNCTION;
 
 	collectedData.table = name;
 	collectedData.fields = arguments;
 
 	if (as.size() != 0) {
-		collectedData.additional = 1 << ACCUMULATOR_ADDREQUEST_AS;
+		collectedData.additional = 1 << ADDITIONAL_REQUEST_AS;
 		collectedData.where = as;
 	} else
-		collectedData.additional = ACCUMULATOR_NONE;
+		collectedData.additional = STATE_NONE;
 
 	show = true;
 }
@@ -86,12 +86,12 @@ accumulator::callFunction(const dodoString      &name,
 //-------------------------------------------------------------------
 
 void
-accumulator::callProcedure(const dodoString      &name,
+accumulator::procedure(const dodoString      &name,
 						   const dodoStringArray &arguments)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_CALL_PROCEDURE;
+	collectedData.type = REQUEST_PROCEDURE;
 
-	collectedData.additional = ACCUMULATOR_NONE;
+	collectedData.additional = STATE_NONE;
 
 	collectedData.table = name;
 	collectedData.fields = arguments;
@@ -106,7 +106,7 @@ accumulator::select(const dodoString      &a_table,
 					const dodoStringArray &a_fields,
 					const dodoString      &a_where)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_SELECT;
+	collectedData.type = REQUEST_SELECT;
 
 	collectedData.table = a_table;
 	if (a_fields.empty()) {
@@ -117,10 +117,10 @@ accumulator::select(const dodoString      &a_table,
 	}
 
 	if (a_where.size() != 0) {
-		collectedData.additional = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
+		collectedData.additional = 1 << ADDITIONAL_REQUEST_WHERE;
 		collectedData.where = a_where;
 	} else
-		collectedData.additional = ACCUMULATOR_NONE;
+		collectedData.additional = STATE_NONE;
 
 	show = true;
 }
@@ -131,9 +131,9 @@ void
 accumulator::insert(const dodoString    &a_table,
 					const dodoStringMap &a_fields)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_INSERT;
+	collectedData.type = REQUEST_INSERT;
 
-	collectedData.additional = ACCUMULATOR_NONE;
+	collectedData.additional = STATE_NONE;
 
 	collectedData.table = a_table;
 
@@ -158,9 +158,9 @@ void
 accumulator::insert(const dodoString               &a_table,
 					const dodoArray<dodoStringMap> &a_fields)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_INSERT;
+	collectedData.type = REQUEST_INSERT;
 
-	collectedData.additional = ACCUMULATOR_NONE;
+	collectedData.additional = STATE_NONE;
 
 	collectedData.table = a_table;
 
@@ -195,9 +195,9 @@ accumulator::insert(const dodoString      &a_table,
 					const dodoStringArray &a_values,
 					const dodoStringArray &a_fields)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_INSERT;
+	collectedData.type = REQUEST_INSERT;
 
-	collectedData.additional = ACCUMULATOR_NONE;
+	collectedData.additional = STATE_NONE;
 
 	collectedData.table = a_table;
 	collectedData.fields = a_fields;
@@ -216,9 +216,9 @@ accumulator::insert(const dodoString                 &a_table,
 					const dodoArray<dodoStringArray> &a_values,
 					const dodoStringArray            &a_fields)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_INSERT;
+	collectedData.type = REQUEST_INSERT;
 
-	collectedData.additional = ACCUMULATOR_NONE;
+	collectedData.additional = STATE_NONE;
 
 	collectedData.table = a_table;
 	collectedData.fields = a_fields;
@@ -237,7 +237,7 @@ accumulator::update(const dodoString    &a_table,
 					const dodoStringMap &a_fields,
 					const dodoString    &a_where)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_UPDATE;
+	collectedData.type = REQUEST_UPDATE;
 
 	collectedData.table = a_table;
 
@@ -255,10 +255,10 @@ accumulator::update(const dodoString    &a_table,
 	collectedData.values.push_back(temp);
 
 	if (a_where.size() != 0) {
-		collectedData.additional = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
+		collectedData.additional = 1 << ADDITIONAL_REQUEST_WHERE;
 		collectedData.where = a_where;
 	} else
-		collectedData.additional = ACCUMULATOR_NONE;
+		collectedData.additional = STATE_NONE;
 
 	show = false;
 }
@@ -271,7 +271,7 @@ accumulator::update(const dodoString      &a_table,
 					const dodoStringArray &a_fields,
 					const dodoString      &a_where)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_UPDATE;
+	collectedData.type = REQUEST_UPDATE;
 
 	collectedData.table = a_table;
 	collectedData.fields = a_fields;
@@ -281,10 +281,10 @@ accumulator::update(const dodoString      &a_table,
 	collectedData.values.push_back(a_values);
 
 	if (a_where.size() != 0) {
-		collectedData.additional = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
+		collectedData.additional = 1 << ADDITIONAL_REQUEST_WHERE;
 		collectedData.where = a_where;
 	} else
-		collectedData.additional = ACCUMULATOR_NONE;
+		collectedData.additional = STATE_NONE;
 
 	show = false;
 }
@@ -295,17 +295,17 @@ void
 accumulator::del(const dodoString &a_table,
 				 const dodoString &a_where)
 {
-	collectedData.type = ACCUMULATOR_REQUEST_DELETE;
+	collectedData.type = REQUEST_DELETE;
 
-	collectedData.additional = ACCUMULATOR_NONE;
+	collectedData.additional = STATE_NONE;
 
 	collectedData.table = a_table;
 
 	if (a_where.size() != 0) {
-		collectedData.additional = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
+		collectedData.additional = 1 << ADDITIONAL_REQUEST_WHERE;
 		collectedData.where = a_where;
 	} else
-		collectedData.additional = ACCUMULATOR_NONE;
+		collectedData.additional = STATE_NONE;
 
 	show = false;
 }
@@ -326,7 +326,7 @@ accumulator::subquery(const dodoStringArray &sub,
 void
 accumulator::limit(unsigned int a_number)
 {
-	addFlag(collectedData.additional, 1 << ACCUMULATOR_ADDREQUEST_LIMIT);
+	addFlag(collectedData.additional, 1 << ADDITIONAL_REQUEST_LIMIT);
 
 	collectedData.limit = tools::string::lToString(a_number);
 }
@@ -336,7 +336,7 @@ accumulator::limit(unsigned int a_number)
 void
 accumulator::offset(unsigned int a_number)
 {
-	addFlag(collectedData.additional, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
+	addFlag(collectedData.additional, 1 << ADDITIONAL_REQUEST_OFFSET);
 
 	collectedData.offset = tools::string::ulToString(a_number);
 }
@@ -348,7 +348,7 @@ accumulator::order(const dodoString &order)
 {
 	collectedData.order = order;
 
-	addFlag(collectedData.additional, 1 << ACCUMULATOR_ADDREQUEST_ORDERBY);
+	addFlag(collectedData.additional, 1 << ADDITIONAL_REQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -358,7 +358,7 @@ accumulator::group(const dodoString &group)
 {
 	collectedData.group = group;
 
-	addFlag(collectedData.additional, 1 << ACCUMULATOR_ADDREQUEST_GROUPBY);
+	addFlag(collectedData.additional, 1 << ADDITIONAL_REQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -368,7 +368,7 @@ accumulator::having(const dodoString &having)
 {
 	collectedData.having = having;
 
-	addFlag(collectedData.additional, 1 << ACCUMULATOR_ADDREQUEST_HAVING);
+	addFlag(collectedData.additional, 1 << ADDITIONAL_REQUEST_HAVING);
 }
 
 //-------------------------------------------------------------------
@@ -382,7 +382,7 @@ accumulator::join(const dodoString &table,
 	collectedData.joinConds.push_back(condition);
 	collectedData.joinTypes.push_back(type);
 
-	addFlag(collectedData.additional, 1 << ACCUMULATOR_ADDREQUEST_JOIN);
+	addFlag(collectedData.additional, 1 << ADDITIONAL_REQUEST_JOIN);
 }
 
 //-------------------------------------------------------------------
@@ -392,7 +392,7 @@ accumulator::cleanCollected()
 {
 	collectedData.type = -1;
 
-	collectedData.additional = ACCUMULATOR_NONE;
+	collectedData.additional = STATE_NONE;
 
 	collectedData.where.clear();
 	collectedData.fields.clear();

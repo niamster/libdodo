@@ -51,7 +51,7 @@ namespace dodo {
 					 * copy constructor
 					 * @note to prevent copying
 					 */
-					section(section &sec);
+					section(section &);
 
 				  public:
 
@@ -83,5 +83,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

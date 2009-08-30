@@ -52,11 +52,11 @@ namespace dodo {
 				/**
 				 * explanations for libdodo defined errors
 				 */
-#define IONETWORKHTTPCLIENTEX_CANNOTCONNECT_STR        "Can't connect to the host(s)."
-#define IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR        "Aythorization required."
-#define IONETWORKHTTPCLIENTEX_UNKNOWNWWWAUTHTYPE_STR   "Unknown HTTP authentication type."
-#define IONETWORKHTTPCLIENTEX_UNKNOWNPROXYAUTHTYPE_STR "Unknown proxy authentication type."
-#define IONETWORKHTTPCLIENTEX_UNSUPPORTEDSURICHEME_STR "Unsupported URI scheme."
+#define IONETWORKHTTPCLIENTEX_CANNOTCONNECT_STR        "Can't connect to the host(s)"
+#define IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR        "Aythorization required"
+#define IONETWORKHTTPCLIENTEX_UNKNOWNWWWAUTH_STR   "Unknown HTTP authentication type"
+#define IONETWORKHTTPCLIENTEX_UNKNOWNPROXYAUTH_STR "Unknown proxy authentication type"
+#define IONETWORKHTTPCLIENTEX_UNSUPPORTEDSURICHEME_STR "Unsupported URI scheme"
 
 				/**
 				 * IDs of functions where exception might be thrown
@@ -72,5 +72,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

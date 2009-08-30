@@ -76,7 +76,7 @@ namespace dodo {
 			 * get function from the library
 			 * @param name defines function name
 			 */
-			virtual void *get(const dodoString &name);
+			virtual void *function(const dodoString &name);
 
 			/**
 			 * get function from the library
@@ -90,7 +90,7 @@ namespace dodo {
 			 * @return symbols of the library
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 */
-			static dodoStringArray getSymbols(const dodoString &path);
+			static dodoStringArray symbols(const dodoString &path);
 #endif
 
 		  protected:
@@ -100,5 +100,4 @@ namespace dodo {
 	};
 };
 #endif
-
 #endif

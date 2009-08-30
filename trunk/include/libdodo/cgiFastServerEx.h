@@ -48,8 +48,8 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define CGIFASTSERVEREX_ACCEPTFAILED_STR "Accept call failed."
-#define CGIFASTSERVEREX_ISCGI_STR        "Called as a CGI."
+#define CGIFASTSERVEREX_ACCEPTFAILED_STR "Accept call failed"
+#define CGIFASTSERVEREX_ISCGI_STR        "Called as a CGI"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -61,5 +61,4 @@ namespace dodo {
 		}
 	};
 };
-
 #endif

@@ -68,29 +68,29 @@ namespace dodo {
 			 * constructor
 			 * @param io defines I/O interface
 			 * @param autocleanFiles defines whether to clean POST files in destructor
-			 * @param postFilesInMem defines place of POST files[disk or memory]
-			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
+			 * @param filesInMem defines place of POST files[disk or memory]
+			 * @param tmpDir defines directory for POST files if on they are saved on the disk
 			 * @note header won't be printed until print/printStream/desctructor is called
 			 */
 			dialogue(exchange   &io,
 					 bool       autocleanFiles = true,
-					 bool       postFilesInMem = true,
-					 dodoString postFilesTmpDir = "/tmp/");
+					 bool       filesInMem = true,
+					 dodoString tmpDir = "/tmp/");
 
 			/**
 			 * constructor
 			 * @param io defines I/O interface
 			 * @param silent defines whether to print headers in constructor or not
 			 * @param autocleanFiles defines whether to clean POST files in destructor
-			 * @param postFilesInMem defines place of POST files[disk or memory]
-			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
+			 * @param filesInMem defines place of POST files[disk or memory]
+			 * @param tmpDir defines directory for POST files if on they are saved on the disk
 			 * @note headers will be printed in contructor
 			 */
 			dialogue(exchange &io,
 					 dodoMap<short, dodoString> &headers,
 					 bool autocleanFiles = true,
-					 bool postFilesInMem = true,
-					 dodoString postFilesTmpDir = "/tmp/");
+					 bool filesInMem = true,
+					 dodoString tmpDir = "/tmp/");
 
 			/**
 			 * destructor
@@ -98,17 +98,17 @@ namespace dodo {
 			~dialogue();
 
 			/**
-			 * @return authentication info
+			 * @return authentication response
 			 */
-			__cgiAuthInfo__ getAuthenticationInfo();
+			cgi::__auth__ authenticationResponse();
 
 			/**
 			 * request the authentication
 			 * @param realm defines authentication request string
-			 * @param type defines type of authentication[see cgiAuthTypeEnum]
+			 * @param type defines type of authentication[see cgi::authEnum]
 			 */
 			void requestAuthentication(const dodoString &realm,
-											   short            type = CGI_AUTHTYPE_DIGEST);
+									   short            type = AUTH_DIGEST);
 
 			/**
 			 * check authentication
@@ -121,21 +121,29 @@ namespace dodo {
 
 			/**
 			 * set response code and message
-			 * @param code defines return code[see cgiStatusCodeEnum]
+			 * @param code defines return code[see cgi::statusCodeEnum]
 			 */
 			void setResponseStatus(short code);
 
 			/**
-			 * @return method type[see cgiRequestMethodEnum]
+			 * @return method type[see cgi::requestMethodEnum]
 			 */
-			int getMethod() const;
+			int method() const;
 
 			/**
 			 * @return array of request variables of given method
-			 * @param method defines defines type of array of request variables to return[see requestMethodEnum]
-			 * @note example: classObj[CGI_REQUESTMETHOD_POST]["name"]
+			 * @param method defines defines type of array of request variables to return[see cgi::requestMethodEnum]
+			 * @note example: dialogue[cgi::REQUEST_METHOD_POST]["name"]
 			 */
 			const dodoStringMap &operator[](short method);
+
+			/**
+			 * @return value of the requested variable from POST and GET
+			 * @param name defines name of the variable
+			 * @note searches in GET first
+			 */
+			dodoString operator[](const dodoString &name);
+
 
 			/**
 			 * specific variables (from POST, GET, ENV or COOKIE)
@@ -149,13 +157,6 @@ namespace dodo {
 			dodoString content;                                         ///< contents of the stdin for the POST request
 
 			dodoMap<short, dodoString> HEADERS;                         ///< headers that will be printed with printHeaders method
-
-			/**
-			 * @return value of the requested variable from POST and GET
-			 * @param varName defines name of the variable
-			 * @note searches in GET first
-			 */
-			dodoString request(const dodoString &varName);
 
 			/**
 			 * print data to the output
@@ -185,7 +186,7 @@ namespace dodo {
 			/**
 			 * @return charset of the request
 			 */
-			dodoString getCharset();
+			dodoString charset();
 
 			/**
 			 * cast to exchange *
@@ -229,15 +230,15 @@ namespace dodo {
 
 			/**
 			 * process serialized string of tuples key->value
-			 * @param val defines map that will be filled with processed tuples key->value
-			 * @param string defines string to process
-			 * @param delim defines delimite
+			 * @param values defines map that will be filled with processed tuples key->value
+			 * @param request defines request string to process
+			 * @param delim defines delimiter
 			 * @note
 			 * from : name1=value1`delim`name2=value2
 			 * to : val["name1"]=value1; val["name2"]=value2;
 			 */
-			void makeKeyValue(dodoStringMap    &val,
-							  const dodoString &string,
+			void makeKeyValue(dodoStringMap    &values,
+							  const dodoString &request,
 							  const char       *delim = "&");
 
 			/**
@@ -254,7 +255,7 @@ namespace dodo {
 			dodoString postFilesTmpDir;                                                         ///< directory for POST files if on they are saved on the disk
 
 			dodoList<cookie> cookies;                                                           ///< cookies
-			int method;                                                                         ///< request method
+			int requestMethod;                                                                         ///< request method
 
 			dodoStringArray contenTypeExtensions;                                               ///< contains contentype extension[boundary, modification-date, etc]
 
@@ -263,18 +264,18 @@ namespace dodo {
 			 */
 			void cleanTmp();
 
-			exchange &cgiIO;                                                                    ///< CGI I/O instance
+			exchange &io;                                                                    ///< CGI I/O instance
 
 			mutable bool headersPrinted;                                                        ///< true if headers have been printed
 
-			static const char *environmentStatements[CGI_ENVIRONMENTSTATEMENTS];                ///< names of environment variables[see cgiEnvironmentEnum]
-			static const dodoString responseHeaderStatements[CGI_RESPONSEHEADERSTATEMENTSD];    ///< HTTP response headers[see cgiResponseHeaderEnum]
-			static const dodoString responseStatusStatements[CGI_STATUSSTATEMENTS];             ///< HTTP response headers[see cgiStatusCodeEnum]
+			static const char *environmentStatements[ENVIRONMENT_ENUMSIZE];                ///< names of environment variables[see cgiEnvironmentEnum]
+			static const dodoString responseHeaderStatements[RESPONSE_HEADER_ENUMSIZE];    ///< HTTP response headers[see cgiResponseHeaderEnum]
+			static const dodoString responseStatusStatements[STATUS_CODE_ENUMSIZE];             ///< HTTP response headers[see cgiStatusCodeEnum]
 
 			/**
-			 * @struct __authInfo__ defines authenfication information
+			 * @struct __auth__ defines authenfication information
 			 */
-			struct __authInfo__ {
+			struct __auth__ {
 				dodoString user;                                                                ///< user name
 				dodoString password;                                                            ///< user password
 				dodoString realm;                                                               ///< explanation of the authentication request
@@ -285,12 +286,11 @@ namespace dodo {
 				dodoString uri;                                                                 ///< URI from Request-URI
 				dodoString qop;                                                                 ///< quality of protection
 				dodoString response;                                                            ///< 32 hex digits. which proves that the user knows a password
-				short      type;                                                                ///< authenfication type[see cgiAuthTypeEnum]
+				short      type;                                                                ///< authenfication type[see cgiAuthEnum]
 			};
 
-			__authInfo__ authInfo;                                                              ///< authentication information
+			__auth__ authInfo;                                                              ///< authentication information
 		};
 	};
 };
-
 #endif

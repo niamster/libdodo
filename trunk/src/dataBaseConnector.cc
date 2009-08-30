@@ -34,7 +34,7 @@
 
 using namespace dodo::data::base;
 
-__connectionInfo__::__connectionInfo__(const dodoString &a_db,
+__connection__::__connection__(const dodoString &a_db,
 									   const dodoString &a_host,
 									   const dodoString &a_user,
 									   const dodoString &a_password,
@@ -50,7 +50,7 @@ __connectionInfo__::__connectionInfo__(const dodoString &a_db,
 
 //-------------------------------------------------------------------
 
-__connectionInfo__::__connectionInfo__()
+__connection__::__connection__()
 {
 }
 

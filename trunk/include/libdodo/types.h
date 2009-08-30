@@ -60,6 +60,20 @@ namespace dodo {
 #define dodoString std::string
 
 	/**
+	 * @struct __url__
+	 * @brief defines URL parts
+	 */
+	struct __url__ {
+		dodoString protocol;    ///< scheme
+		dodoString host;        ///< host name
+		dodoString path;        ///< path to CGI
+		dodoString request;     ///< CGI request
+		dodoString login;       ///< login
+		dodoString password;    ///< password
+		dodoString port;        ///< port
+	};
+
+	/**
 	 * @class dodoMapStringCompare
 	 * @brief defines compare functor
 	 */
@@ -120,7 +134,7 @@ namespace dodo {
 		 * @return logger instance which can be used globally
 		 */
 		static T &
-		getInstance()
+		instance()
 		{
 			static T t;
 
@@ -161,5 +175,4 @@ namespace dodo {
 
 	extern dodoStringMapArray __dodostringmaparray__;
 };
-
 #endif

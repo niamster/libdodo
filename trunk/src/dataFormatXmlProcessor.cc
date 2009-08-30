@@ -107,14 +107,14 @@ __info__::__info__()
 
 //-------------------------------------------------------------------
 
-__nodeDef__::__nodeDef__() : allChildren(true),
+__definition__::__definition__() : allChildren(true),
 							 allAttributes(true)
 {
 }
 
 //-------------------------------------------------------------------
 
-__nodeDef__::__nodeDef__(const dodoString &name,
+__definition__::__definition__(const dodoString &name,
 						 const dodoString &ns) : name(name),
 												 allChildren(true),
 												 allAttributes(true),
@@ -202,7 +202,7 @@ processor::isCDATA(const __node__ &a_xnode)
 //-------------------------------------------------------------------
 
 node
-processor::process(const __nodeDef__ &definition,
+processor::process(const __definition__ &definition,
 				   const io::channel &io)
 {
 #ifdef LIBXML2_EXT
@@ -218,14 +218,14 @@ processor::process(const __nodeDef__ &definition,
 	}
 	bufferPart.clear();
 
-	document->doc = xmlParseMemory(buffer.c_str(), buffer.size());
+	document->doc = xmlParseMemory(buffer.data(), buffer.size());
 	if (document->doc == NULL) {
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
 		else
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 #endif
 
@@ -235,7 +235,7 @@ processor::process(const __nodeDef__ &definition,
 //-------------------------------------------------------------------
 
 node
-processor::parse(const __nodeDef__ &definition)
+processor::parse(const __definition__ &definition)
 {
 #ifdef LIBXML2_EXT
 	__node__ xnode = xmlDocGetRootElement(document->doc);
@@ -243,9 +243,9 @@ processor::parse(const __nodeDef__ &definition)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
 		else
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	xnode = findNode(definition, xnode);
@@ -254,7 +254,7 @@ processor::parse(const __nodeDef__ &definition)
 		return node();
 
 	node sample;
-	getNodeInfo(xnode, sample);
+	getNode(xnode, sample);
 
 	getAttributes(definition, xnode, sample.attributes);
 
@@ -278,7 +278,7 @@ processor::parse(const __nodeDef__ &definition)
 				continue;
 			}
 
-			getNodeInfo(xnode, one);
+			getNode(xnode, one);
 
 			getAttributes(xnode, one.attributes);
 
@@ -289,10 +289,10 @@ processor::parse(const __nodeDef__ &definition)
 				i = children.begin();
 				j = children.end();
 				for (; i != j; ++i)
-					one.children[i->name].push_back(*i);
+					one.nodeChildren[i->name].push_back(*i);
 			}
 
-			sample.children[(char *)xnode.node->name].push_back(one);
+			sample.nodeChildren[(char *)xnode.node->name].push_back(one);
 
 			initNode(one);
 
@@ -300,9 +300,9 @@ processor::parse(const __nodeDef__ &definition)
 		}
 	} else {
 		if (definition.children.size() > 0) {
-			dodoMap<dodoString, __nodeDef__>::const_iterator i(definition.children.begin()), j(definition.children.end());
+			dodoMap<dodoString, __definition__>::const_iterator i(definition.children.begin()), j(definition.children.end());
 			for (; i != j; ++i)
-				sample.children.insert(make_pair(i->first, parse(i->second, xnode.node->children)));
+				sample.nodeChildren.insert(make_pair(i->first, parse(i->second, xnode.node->children)));
 		}
 	}
 
@@ -316,7 +316,7 @@ processor::parse(const __nodeDef__ &definition)
 
 #ifdef LIBXML2_EXT
 dodoArray<node>
-processor::parse(const __nodeDef__ &definition,
+processor::parse(const __definition__ &definition,
 				 const __node__    &a_xnode)
 {
 	xmlNodePtr xnode = a_xnode.node, subNode;
@@ -340,14 +340,14 @@ processor::parse(const __nodeDef__ &definition,
 				continue;
 			}
 
-			if (cmpFunc(xnode->ns->prefix, (unsigned char *)definition.ns.c_str()) != 0) {
+			if (cmpFunc(xnode->ns->prefix, (unsigned char *)definition.ns.data()) != 0) {
 				xnode = xnode->next;
 
 				continue;
 			}
 		}
 
-		if (cmpFunc(xnode->name, (unsigned char *)definition.name.c_str()) != 0) {
+		if (cmpFunc(xnode->name, (unsigned char *)definition.name.data()) != 0) {
 			xnode = xnode->next;
 
 			continue;
@@ -355,7 +355,7 @@ processor::parse(const __nodeDef__ &definition,
 
 		initNode(sample);
 
-		getNodeInfo(xnode, sample);
+		getNode(xnode, sample);
 		getAttributes(definition, xnode, sample.attributes);
 
 		sample.CDATA = isCDATA(xnode);
@@ -375,7 +375,7 @@ processor::parse(const __nodeDef__ &definition,
 					continue;
 				}
 
-				getNodeInfo(subNode, one);
+				getNode(subNode, one);
 
 				getAttributes(subNode, one.attributes);
 
@@ -386,10 +386,10 @@ processor::parse(const __nodeDef__ &definition,
 					i = chldrn.begin();
 					j = chldrn.end();
 					for (; i != j; ++i)
-						one.children[i->name].push_back(*i);
+						one.nodeChildren[i->name].push_back(*i);
 				}
 
-				sample.children[(char *)subNode->name].push_back(one);
+				sample.nodeChildren[(char *)subNode->name].push_back(one);
 
 				initNode(one);
 
@@ -397,9 +397,9 @@ processor::parse(const __nodeDef__ &definition,
 			}
 		} else {
 			if (definition.children.size() > 0) {
-				dodoMap<dodoString, __nodeDef__>::const_iterator i(definition.children.begin()), j(definition.children.end());
+				dodoMap<dodoString, __definition__>::const_iterator i(definition.children.begin()), j(definition.children.end());
 				for (; i != j; ++i)
-					sample.children.insert(make_pair(i->first, parse(i->second, xnode->children)));
+					sample.nodeChildren.insert(make_pair(i->first, parse(i->second, xnode->children)));
 			}
 		}
 
@@ -416,7 +416,7 @@ processor::parse(const __nodeDef__ &definition,
 
 #ifdef LIBXML2_EXT
 void
-processor::getAttributes(const __nodeDef__ &definition,
+processor::getAttributes(const __definition__ &definition,
 						 const __node__    &xnode,
 						 dodoStringMap     &attributes)
 {
@@ -439,7 +439,7 @@ processor::getAttributes(const __nodeDef__ &definition,
 				while (attribute != NULL) {
 					dodoStringArray::const_iterator iAttr = definition.attributes.begin();
 					for (; iAttr != jAttr; ++iAttr) {
-						if (xmlStrcmp(attribute->name, (unsigned char *)iAttr->c_str()) == 0) {
+						if (xmlStrcmp(attribute->name, (unsigned char *)iAttr->data()) == 0) {
 							unsigned char *xChar = xmlGetProp(xnode.node, attribute->name);
 							if (xChar != NULL) {
 								attributes[*iAttr] = (char *)xChar;
@@ -453,7 +453,7 @@ processor::getAttributes(const __nodeDef__ &definition,
 			} else {
 				dodoStringArray::const_iterator iAttr = definition.attributes.begin();
 				for (; iAttr != jAttr; ++iAttr) {
-					unsigned char *xChar = xmlGetProp(xnode.node, (unsigned char *)iAttr->c_str());
+					unsigned char *xChar = xmlGetProp(xnode.node, (unsigned char *)iAttr->data());
 					if (xChar != NULL) {
 						attributes[*iAttr] = (char *)xChar;
 						xmlFree(xChar);
@@ -486,7 +486,7 @@ processor::getAttributes(const __node__ &xnode,
 //-------------------------------------------------------------------
 
 void
-processor::getNodeInfo(const __node__ &xnode,
+processor::getNode(const __node__ &xnode,
 					   node           &resNode)
 {
 	if (xnode.node->ns != NULL) {
@@ -504,7 +504,7 @@ processor::getNodeInfo(const __node__ &xnode,
 
 	unsigned char *xChar = xmlNodeListGetString(document->doc, xnode.node->children, 1);
 	if (xChar != NULL) {
-		resNode.value.assign((char *)xChar);
+		resNode.nodeValue.assign((char *)xChar);
 		xmlFree(xChar);
 	}
 }
@@ -513,7 +513,7 @@ processor::getNodeInfo(const __node__ &xnode,
 //-------------------------------------------------------------------
 
 __info__
-processor::getInfo()
+processor::information()
 {
 	return info;
 }
@@ -538,7 +538,7 @@ processor::parse(__node__ xnode)
 			continue;
 		}
 
-		getNodeInfo(xnode, one);
+		getNode(xnode, one);
 
 		getAttributes(xnode, one.attributes);
 
@@ -549,7 +549,7 @@ processor::parse(__node__ xnode)
 			i = children.begin();
 			j = children.end();
 			for (; i != j; ++i)
-				one.children[i->name].push_back(*i);
+				one.nodeChildren[i->name].push_back(*i);
 		}
 
 		sample.push_back(one);
@@ -569,13 +569,13 @@ void
 processor::initNode(node &xnode)
 {
 	xnode.attributes.clear();
-	xnode.children.clear();
+	xnode.nodeChildren.clear();
 	xnode.name.clear();
 	xnode.ns.prefix.clear();
 	xnode.ns.href.clear();
 	xnode.nsDef.prefix.clear();
 	xnode.nsDef.href.clear();
-	xnode.value.clear();
+	xnode.nodeValue.clear();
 }
 
 //-------------------------------------------------------------------
@@ -596,14 +596,14 @@ processor::process(const io::channel &io)
 	}
 	bufferPart.clear();
 
-	document->doc = xmlParseMemory(buffer.c_str(), buffer.size());
+	document->doc = xmlParseMemory(buffer.data(), buffer.size());
 	if (document->doc == NULL) {
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
 		else
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	info = __info__(document->doc->version != NULL ? (char *)document->doc->version : __dodostring__,
@@ -617,9 +617,9 @@ processor::process(const io::channel &io)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
 		else
-			throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	return *(parse(__node__(xnode)).begin());
@@ -630,20 +630,9 @@ processor::process(const io::channel &io)
 
 //-------------------------------------------------------------------
 
-void
-processor::initNodeDef(__nodeDef__ &xnode)
-{
-	xnode.attributes.clear();
-	xnode.children.clear();
-	xnode.name.clear();
-	xnode.ns.clear();
-}
-
-//-------------------------------------------------------------------
-
 #ifdef LIBXML2_EXT
 __node__
-processor::findNode(const __nodeDef__ &definition,
+processor::findNode(const __definition__ &definition,
 					const __node__    &a_xnode)
 {
 	xmlNodePtr one, xnode = a_xnode.node;
@@ -663,12 +652,12 @@ processor::findNode(const __nodeDef__ &definition,
 		if (definition.ns.size() > 0) {
 			if (xnode->ns == NULL)
 				skip = true;
-			else if (cmpFunc(xnode->ns->prefix, (unsigned char *)definition.ns.c_str()) != 0)
+			else if (cmpFunc(xnode->ns->prefix, (unsigned char *)definition.ns.data()) != 0)
 				skip = true;
 		}
 
 		if (!skip && xnode->name != NULL)
-			if (cmpFunc(xnode->name, (unsigned char *)definition.name.c_str()) == 0)
+			if (cmpFunc(xnode->name, (unsigned char *)definition.name.data()) == 0)
 				return xnode;
 
 		one = findNode(definition, __node__(xnode->children)).node;
@@ -703,7 +692,7 @@ processor::make(const node        &root,
 				const io::channel &io) const
 {
 	if (root.name.empty())
-		throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
 
 	io.writeStream("<?xml version=\"");
 	io.writeStream(version);
@@ -721,51 +710,51 @@ processor::make(const node        &xnode,
 				const io::channel &io) const
 {
 	if (xnode.name.empty())
-		throw exception::basic(exception::ERRMODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
 
-	io.writeStream(statements[PROCESSOR_STATEMENT_LT]);
+	io.writeStream(statements[STATEMENT_LT]);
 
 	if (!xnode.ns.prefix.empty()) {
 		io.writeStream(xnode.ns.prefix);
-		io.writeStream(statements[PROCESSOR_STATEMENT_COLON]);
+		io.writeStream(statements[STATEMENT_COLON]);
 	}
 	io.writeStream(xnode.name);
-	io.writeStream(statements[PROCESSOR_STATEMENT_SPACE]);
+	io.writeStream(statements[STATEMENT_SPACE]);
 
 	if (!xnode.nsDef.prefix.empty()) {
-		io.writeStream(statements[PROCESSOR_STATEMENT_XMLNS]);
+		io.writeStream(statements[STATEMENT_XMLNS]);
 		io.writeStream(xnode.nsDef.prefix);
-		io.writeStream(statements[PROCESSOR_STATEMENT_EQUALDQUOTE]);
+		io.writeStream(statements[STATEMENT_EQUALDQUOTE]);
 		io.writeStream(xnode.nsDef.href);
-		io.writeStream(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
+		io.writeStream(statements[STATEMENT_DQUOTESPACE]);
 	}
 
 	dodoMap<dodoString, dodoString, dodoMapStringCompare>::const_iterator i = xnode.attributes.begin(), j = xnode.attributes.end();
 	for (; i != j; ++i) {
 		io.writeStream(i->first);
-		io.writeStream(statements[PROCESSOR_STATEMENT_EQUALDQUOTE]);
+		io.writeStream(statements[STATEMENT_EQUALDQUOTE]);
 		io.writeStream(i->second);
-		io.writeStream(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
+		io.writeStream(statements[STATEMENT_DQUOTESPACE]);
 	}
 
-	if (xnode.value.empty() && xnode.children.empty()) {
-		io.writeStream(statements[PROCESSOR_STATEMENT_SLASHGT]);
+	if (xnode.nodeValue.empty() && xnode.nodeChildren.empty()) {
+		io.writeStream(statements[STATEMENT_SLASHGT]);
 
 		return;
 	}
 
-	io.writeStream(statements[PROCESSOR_STATEMENT_GT]);
+	io.writeStream(statements[STATEMENT_GT]);
 
-	if (!xnode.value.empty()) {
+	if (!xnode.nodeValue.empty()) {
 		if (xnode.CDATA) {
-			io.writeStream(statements[PROCESSOR_STATEMENT_CDATAOPEN]);
-			io.writeStream(xnode.value);
-			io.writeStream(statements[PROCESSOR_STATEMENT_CDATACLOSE]);
+			io.writeStream(statements[STATEMENT_CDATAOPEN]);
+			io.writeStream(xnode.nodeValue);
+			io.writeStream(statements[STATEMENT_CDATACLOSE]);
 		} else
-			io.writeStream(xnode.value);
+			io.writeStream(xnode.nodeValue);
 	}
 
-	dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::const_iterator o = xnode.children.begin(), p = xnode.children.end();
+	dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::const_iterator o = xnode.nodeChildren.begin(), p = xnode.nodeChildren.end();
 	dodoArray<node>::const_iterator x, y;
 	for (; o != p; ++o) {
 		x = o->second.begin();
@@ -774,15 +763,15 @@ processor::make(const node        &xnode,
 			make(*x, io);
 	}
 
-	io.writeStream(statements[PROCESSOR_STATEMENT_LTSLASH]);
+	io.writeStream(statements[STATEMENT_LTSLASH]);
 
 	if (!xnode.ns.prefix.empty()) {
 		io.writeStream(xnode.ns.prefix);
-		io.writeStream(statements[PROCESSOR_STATEMENT_COLON]);
+		io.writeStream(statements[STATEMENT_COLON]);
 	}
 
 	io.writeStream(xnode.name);
-	io.writeStream(statements[PROCESSOR_STATEMENT_GT]);
+	io.writeStream(statements[STATEMENT_GT]);
 }
 
 //-------------------------------------------------------------------

@@ -53,7 +53,7 @@ namespace dodo {
 
 				/**
 				 * constructor
-				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+				 * @param protection defines type of IO protection[see channelProtectionEnum]
 				 */
 				channel(short protection);
 
@@ -75,14 +75,14 @@ namespace dodo {
 				virtual void write(const dodoString &data) const;
 
 				/**
-				 * read from stream - '\0' or '\n' - terminated string
+				 * read from stream null- or newline- terminated string
 				 * @return read data
 				 * @note not more then inSize
 				 */
 				virtual dodoString readStream() const;
 
 				/**
-				 * write to stream - '\0' - terminated string
+				 * write to stream null- terminated string
 				 * @param data defines data that will be written
 				 * @note not more then outSize
 				 */
@@ -96,5 +96,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

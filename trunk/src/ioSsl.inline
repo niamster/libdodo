@@ -36,14 +36,14 @@ namespace dodo {
 	namespace io {
 		namespace ssl {
 			/**
-			 * @struct __sslConnection__
+			 * @struct __connection__
 			 * @brief defines internal handlers for SSL
 			 */
-			struct __sslConnection__ {
+			struct __connection__ {
 				/**
 				 * constructor
 				 */
-				__sslConnection__() : handle(NULL)
+				__connection__() : handle(NULL)
 				{
 				}
 
@@ -51,14 +51,14 @@ namespace dodo {
 			};
 
 			/**
-			 * @struct __sslContext__
+			 * @struct __context__
 			 * @brief defines internal context for SSL
 			 */
-			struct __sslContext__ {
+			struct __context__ {
 				/**
 				 * constructor
 				 */
-				__sslContext__() : ctx(NULL)
+				__context__() : ctx(NULL)
 				{
 				}
 

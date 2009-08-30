@@ -47,25 +47,22 @@ namespace dodo {
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define TOOLSNETWORKEX_BADMAILHELO_STR    "Error occurd while sending EHLO."
-#define TOOLSNETWORKEX_BADMAILAUTH_STR    "Error during authentication."
+#define TOOLSNETWORKEX_BADMAILHELO_STR    "Error occurd while sending EHLO"
+#define TOOLSNETWORKEX_BADMAILAUTH_STR    "Error during authentication"
 
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
 		enum networkFunctionsID {
-			NETWORKEX_GETHOSTINFO,
-			NETWORKEX_GETHOSTPRIMARYIP,
+			NETWORKEX_HOST,
+			NETWORKEX_HOSTPRIMARYIP,
 			NETWORKEX_SETLOCALNAME,
-			NETWORKEX_GETLOCALNAME,
-			NETWORKEX_GETSERVICEINFO,
-			NETWORKEX_GETLOCALDOMAIN,
-			NETWORKEX_SETLOCALDOMAIN,
-			NETWORKEX_GETINTERFACEINFO,
-			NETWORKEX_GETINTERFACESNAMES,
+			NETWORKEX_LOCALNAME,
+			NETWORKEX_SERVICE,
+			NETWORKEX_INTERFACE,
+			NETWORKEX_INTERFACESNAMES,
 			NETWORKEX_MAIL,
 		};
 	};
 };
-
 #endif

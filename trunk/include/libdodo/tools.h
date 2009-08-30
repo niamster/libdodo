@@ -48,5 +48,4 @@
 #include <libdodo/toolsString.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsTimeEx.h>
-
 #endif

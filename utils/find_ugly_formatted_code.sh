@@ -9,5 +9,5 @@ pcregrep -Mn '\n\s*\n#(endif|else)' trunk/src/* trunk/include/libdodo/*
 #big gaps
 pcregrep -Mn '\n\s*\n\s*\n' trunk/src/* trunk/include/libdodo/*
 
-pcregrep -Mn '^\/\/-------------------------------------------------------------------\n[^\n]' trunk/src/*
+pcregrep -Mn '^\/\/-------------------------------------------------------------------\n[^\n#endif]+' trunk/src/*
 pcregrep -Mn '[^\n]\n\/\/-------------------------------------------------------------------' trunk/src/*

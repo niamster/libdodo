@@ -40,16 +40,6 @@ namespace dodo {
 		struct __file__;
 
 		namespace file {
-#ifndef IO_WO_XEXEC
-			/**
-			 * @enum tempOperationTypeEnum defines type of operation for hook
-			 */
-			enum tempOperationTypeEnum {
-				TEMP_OPERATION_OPEN = 128,
-				TEMP_OPERATION_CLOSE
-			};
-#endif
-
 			/**
 			 * @class temp
 			 * @brief provides I/O manipulations with temporary file
@@ -57,24 +47,34 @@ namespace dodo {
 			 * writeStream, writeStream write only to the end of the file(append)
 			 * write offset for write, write is calculated as pos*outSize
 			 * read offset for read, read is calculated as pos*inSize
-			 * read offset for readStream, readStream is calculated as pos*'# of \n - terminated strings'
+			 * read offset for readStream, readStream is calculated as pos*'# of \n terminated strings'
 			 */
 			class temp : virtual public block::channel {
 			  public:
 
+#ifndef IO_WO_XEXEC
+				/**
+				 * @enum operationEnum defines type of operation for xexec
+				 */
+				enum operationEnum {
+					OPERATION_OPEN = 128,
+					OPERATION_CLOSE
+				};
+#endif
+
 				/**
 				 * constructor
 				 * @param open defines whether temp file should be opened in constructor
-				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+				 * @param protection defines type of IO protection[see protectionEnum]
 				 */
 				temp(bool  open = false,
-					 short protection = CHANNEL_PROTECTION_PROCESS);
+					 short protection = channel::PROTECTION_PROCESS);
 
 				/**
 				 * copy constructor
 				 * @note xexec object is not copied
 				 */
-				temp(const temp &fd);
+				temp(const temp &);
 
 				/**
 				 * destructor
@@ -118,25 +118,25 @@ namespace dodo {
 				/**
 				 * @return descriptor of the input stream
 				 */
-				virtual int getInDescriptor() const;
+				virtual int inDescriptor() const;
 
 				/**
 				 * @return descriptor of the output stream
 				 */
-				virtual int getOutDescriptor() const;
+				virtual int outDescriptor() const;
 
 				/**
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
+				 * @note not more then inSize(including null)
 				 * if block is true read offset is calculated as pos*inSize otherwise offset it taken pos bytes from the beginning
 				 */
 				virtual void _read(char * const data) const;
 
 				/**
-				 * read from stream - '\0' or '\n' - terminated string
+				 * read from stream null- or newline- terminated string
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 * if block is true read offset is calculated as pos*'# of \n - terminated strings' otherwise offset it taken pos bytes from the beginning
+				 * @note not more then inSize(including null)
+				 * if block is true read offset is calculated as pos*'# of \n terminated strings' otherwise offset it taken pos bytes from the beginning
 				 */
 				virtual unsigned long _readStream(char * const data) const;
 
@@ -147,7 +147,7 @@ namespace dodo {
 				virtual void _write(const char * const data) const;
 
 				/**
-				 * write to stream - '\0' - terminated string
+				 * write to stream null- terminated string
 				 * @param data defines data that will be written
 				 * @note write only to the end of the file(append)
 				 */
@@ -160,5 +160,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

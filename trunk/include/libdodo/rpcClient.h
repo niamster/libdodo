@@ -52,6 +52,7 @@ namespace dodo {
 
 			/**
 			 * constructor
+			 * @param io defines input/output sources
 			 */
 			client(const io::channel &io);
 
@@ -84,5 +85,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

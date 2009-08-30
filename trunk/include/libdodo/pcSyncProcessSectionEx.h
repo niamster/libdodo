@@ -48,7 +48,7 @@ namespace dodo {
 				/**
 				 * explanations for libdodo defined errors
 				 */
-#define PCSYNCPROCESSSECTIONEX_NOTOPENED_STR      "The semaphore was not opened."
+#define PCSYNCPROCESSSECTIONEX_NOTOPENED_STR      "Semaphore not opened"
 
 				/**
 				 * IDs of functions where exception might be thrown
@@ -65,5 +65,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

@@ -69,22 +69,22 @@ namespace dodo {
 
 			/**
 			 * @return response value
-			 * @param position defines index of returned value
+			 * @param index defines index of returned value
 			 */
-			value getValue(unsigned long position = 0);
+			rpc::value value(unsigned long index = 0);
 
 			/**
 			 * @return response values
 			 */
-			dodoArray<value> getValues();
+			dodoArray<rpc::value> values();
 
 			/**
 			 * @return response values count
 			 */
-			unsigned long getValuesCount();
+			unsigned long valuesCount();
 
 			/**
-			 * @return true if request has
+			 * @return true if request was successful
 			 */
 			bool isSuccessful();
 
@@ -92,19 +92,19 @@ namespace dodo {
 			 * set argument for fault response
 			 * @param argument defines response argument
 			 */
-			void fault(const value &argument);
+			void fault(const rpc::value &argument);
 
 			/**
 			 * add argument for successful response
 			 * @param argument defines response argument
 			 */
-			void addArgument(const value &argument);
+			void addArgument(const rpc::value &argument);
 
 			/**
 			 * @return value for type casting
-			 * @param position defines index of returned value
+			 * @param index defines index of returned value
 			 */
-			value operator[](unsigned long position);
+			rpc::value operator[](unsigned long index);
 
 			/**
 			 * clear arguments information
@@ -113,10 +113,9 @@ namespace dodo {
 
 		  private:
 
-			dodoArray<value> values;    ///< response values
+			dodoArray<rpc::value> rValues;    ///< response values
 			bool succ;                  ///< true if server returned non-fail response
 		};
 	};
 };
-
 #endif

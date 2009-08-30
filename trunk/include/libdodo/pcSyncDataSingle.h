@@ -57,7 +57,7 @@ namespace dodo {
 					/**
 					 * set shared data to NULL
 					 */
-					virtual void del() = 0;
+					virtual void remove() = 0;
 
 					/**
 					 * lock and return shared data
@@ -76,6 +76,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

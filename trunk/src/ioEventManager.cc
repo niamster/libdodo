@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioEvent.cc
+ *            ioEventManager.cc
  *
  *  Thu Sep 09 03:21:24 2006
  *  Copyright  2006  Ni@m
@@ -33,32 +33,30 @@
 #include <errno.h>
 #include <string.h>
 
-#include <libdodo/ioEvent.h>
-#include <libdodo/ioEventEx.h>
+#include <libdodo/ioEventManager.h>
+#include <libdodo/ioEventManagerEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/ioEventInfo.h>
 #include <libdodo/pcSyncProcessSection.h>
 #include <libdodo/pcSyncProtector.h>
 
-using namespace dodo::io;
+using namespace dodo::io::event;
 
-//-------------------------------------------------------------------
-
-event::event(event &rt)
+manager::manager(manager &rt)
 {
 }
 
 //-------------------------------------------------------------------
 
-event::event() : descs(0),
+manager::manager() : descs(0),
 				 keeper(new pc::sync::process::section(0))
 {
 }
 
 //-------------------------------------------------------------------
 
-event::~event()
+manager::~manager()
 {
 	delete keeper;
 }
@@ -66,15 +64,15 @@ event::~event()
 //-------------------------------------------------------------------
 
 int
-event::addChannel(const eventInfo &fl)
+manager::add(const info &fl)
 {
 	pc::sync::protector pg(keeper);
 
-	__eventInOutDescriptors__ tempD;
+	__descriptors__ tempD;
 
 	tempD.position = ++descs;
-	tempD.in = fl.getInDescriptor();
-	tempD.out = fl.getOutDescriptor();
+	tempD.in = fl.inDescriptor();
+	tempD.out = fl.outDescriptor();
 
 	desc.push_back(tempD);
 
@@ -84,7 +82,7 @@ event::addChannel(const eventInfo &fl)
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-event::isReadable(const dodoArray<int> &pos,
+manager::isReadable(const dodoArray<int> &pos,
 				  int                  timeout) const
 {
 	pc::sync::protector pg(keeper);
@@ -93,7 +91,7 @@ event::isReadable(const dodoArray<int> &pos,
 
 	pollfd *fds = new pollfd[pos.size()];
 
-	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i) {
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
 		for (; m != n; ++m) {
@@ -135,7 +133,7 @@ event::isReadable(const dodoArray<int> &pos,
 			} else {
 				delete [] fds;
 
-				throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -151,7 +149,7 @@ event::isReadable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-event::isWritable(const dodoArray<int> &pos,
+manager::isWritable(const dodoArray<int> &pos,
 				  int                  timeout) const
 {
 	pc::sync::protector pg(keeper);
@@ -160,7 +158,7 @@ event::isWritable(const dodoArray<int> &pos,
 
 	pollfd *fds = new pollfd[pos.size()];
 
-	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i) {
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
 		for (; m != n; ++m) {
@@ -202,7 +200,7 @@ event::isWritable(const dodoArray<int> &pos,
 			} else {
 				delete [] fds;
 
-				throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -218,14 +216,14 @@ event::isWritable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 bool
-event::isReadable(int pos,
+manager::isReadable(int pos,
 				  int timeout) const
 {
 	pc::sync::protector pg(keeper);
 
 	pollfd fd;
 
-	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i) {
 		if (i->position == pos) {
 			fd.fd = i->in;
@@ -242,7 +240,7 @@ event::isReadable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -253,11 +251,11 @@ event::isReadable(int pos,
 //-------------------------------------------------------------------
 
 void
-event::delChannel(int pos)
+manager::remove(int pos)
 {
 	pc::sync::protector pg(keeper);
 
-	dodoArray<__eventInOutDescriptors__>::iterator i(desc.begin()), j(desc.end());
+	dodoArray<__descriptors__>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i) {
 		if (i->position == pos) {
 			desc.erase(i);
@@ -270,14 +268,14 @@ event::delChannel(int pos)
 //-------------------------------------------------------------------
 
 bool
-event::isWritable(int pos,
+manager::isWritable(int pos,
 				  int timeout) const
 {
 	pc::sync::protector pg(keeper);
 
 	pollfd fd;
 
-	dodoArray<__eventInOutDescriptors__>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i) {
 		if (i->position == pos) {
 			fd.fd = i->out;
@@ -294,7 +292,7 @@ event::isWritable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}

@@ -46,18 +46,17 @@ const char method::trimSymbols[] = {
 
 //-------------------------------------------------------------------
 
-
 dodo::rpc::method
 method::xmlToMethod(dodo::data::format::xml::node &node)
 {
 	rpc::method meth;
 
-	dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin(), j = node.children.end();
+	dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.nodeChildren.begin(), j = node.nodeChildren.end();
 	for (; i != j; ++i) {
 		if (tools::string::iequal(i->first, "methodName")) {
 			dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 			if (arr0.size() > 0)
-				meth.name = tools::string::trim(arr0[0].value, trimSymbols, 2);
+				meth.name = tools::string::trim(arr0[0].nodeValue, trimSymbols, 2);
 			else
 				meth.name = __dodostring__;
 		} else {
@@ -66,11 +65,11 @@ method::xmlToMethod(dodo::data::format::xml::node &node)
 				if (arr0.size() == 0)
 					return meth;
 
-				dodoArray<dodo::data::format::xml::node> &nodeArray = arr0[0].children["param"];
+				dodoArray<dodo::data::format::xml::node> &nodeArray = arr0[0].nodeChildren["param"];
 
 				dodoArray<dodo::data::format::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 				for (; o != p; ++o) {
-					dodoArray<dodo::data::format::xml::node> &arr1 = o->children["value"];
+					dodoArray<dodo::data::format::xml::node> &arr1 = o->nodeChildren["value"];
 					if (arr0.size() > 0)
 						meth.arguments.push_back(value::xmlToValue(arr1[0]));
 				}
@@ -93,10 +92,10 @@ method::methodToXml(const rpc::method &data)
 
 	dodo::data::format::xml::node methodName;
 	methodName.name = "methodName";
-	methodName.value = data.name;
+	methodName.nodeValue = data.name;
 
 	nodeArr.assign(1, methodName);
-	meth.children.insert(make_pair(methodName.name, nodeArr));
+	meth.nodeChildren.insert(make_pair(methodName.name, nodeArr));
 
 	dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
 	if (i != j) {
@@ -109,17 +108,17 @@ method::methodToXml(const rpc::method &data)
 		dodoArray<dodo::data::format::xml::node> subNodeArr;
 
 		for (; i != j; ++i) {
-			param.children.clear();
+			param.nodeChildren.clear();
 
 			nodeArr.assign(1, value::valueToXml(*i));
-			param.children.insert(make_pair("value", nodeArr));
+			param.nodeChildren.insert(make_pair("value", nodeArr));
 
 			subNodeArr.push_back(param);
 		}
-		params.children.insert(make_pair("param", subNodeArr));
+		params.nodeChildren.insert(make_pair("param", subNodeArr));
 
 		nodeArr.assign(1, params);
-		meth.children.insert(make_pair(params.name, nodeArr));
+		meth.nodeChildren.insert(make_pair(params.name, nodeArr));
 	}
 
 	return meth;

@@ -33,45 +33,42 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/ioChannel.h>
+#include <libdodo/ioNetworkExchange.h>
 #include <libdodo/ioStreamChannel.h>
 
 namespace dodo {
 	namespace io {
-		namespace network {
-			struct __peerInfo__;
-		};
-
 		struct __file__;
-
-		/**
-		 * @enum pipeOperationTypeEnum defines type of operation for hook
-		 */
-		enum pipeOperationTypeEnum {
-			PIPE_OPERATION_OPEN = 128,
-			PIPE_OPERATION_CLOSE
-		};
 
 		/**
 		 * @class pipe
 		 * @brief provides interface for PIPE I/O operations
-		 * @note writeStream* put extra '\n' to the end of the string, so no need to add it manually
+		 * @note writeStream* put extra newline to the end of the string, so no need to add it manually
 		 */
 		class pipe : virtual public stream::channel {
 		  public:
 
 			/**
+			 * @enum operationEnum defines type of operation for xexec
+			 */
+			enum operationEnum {
+				OPERATION_OPEN = 128,
+				OPERATION_CLOSE
+			};
+
+			/**
 			 * copy constructor
 			 * @note xexec object is not copied
 			 */
-			pipe(const pipe &fd);
+			pipe(const pipe &);
 
 			/**
 			 * constructor
 			 * @param open defines whether pipe should be opened in constructor
-			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+			 * @param protection defines type of IO protection[see channelProtectionEnum]
 			 */
 			pipe(bool  open = false,
-				 short protection = CHANNEL_PROTECTION_PROCESS);
+				 short protection = channel::PROTECTION_PROCESS);
 
 			/**
 			 * destructor
@@ -83,13 +80,13 @@ namespace dodo {
 			 * @param fd defines object to clone
 			 * @note xexec object is not copied
 			 */
-			void clone(const pipe &fd);
+			void clone(const pipe &pipe);
 
 			/**
 			 * @return info about source of inputting
-			 * @note it can be used to get info foreign 'inputter' if you ar using inetd
+			 * @note it can be used to get info about peer if you ar using inetd
 			 */
-			network::__peerInfo__ peerInfo();
+			network::exchange::__peer__ peer();
 
 			/**
 			 * open pipe
@@ -125,23 +122,23 @@ namespace dodo {
 			/**
 			 * @return descriptor of the input stream
 			 */
-			virtual int getInDescriptor() const;
+			virtual int inDescriptor() const;
 
 			/**
 			 * @return descriptor of the output stream
 			 */
-			virtual int getOutDescriptor() const;
+			virtual int outDescriptor() const;
 
 			/**
 			 * @param data defines buffer that will be filled
-			 * @note not more then inSize(including '\0')
+			 * @note not more then inSize(including null)
 			 */
 			virtual void _read(char * const data) const;
 
 			/**
-			 * read from stream - '\0' or '\n' - terminated string
+			 * read from stream null or newline terminated string
 			 * @param data defines buffer that will be filled
-			 * @note not more then inSize(including '\0')
+			 * @note not more then inSize(including null)
 			 */
 			virtual unsigned long _readStream(char * const data) const;
 
@@ -151,9 +148,9 @@ namespace dodo {
 			virtual void _write(const char * const data) const;
 
 			/**
-			 * write to stream - '\0' - terminated string
+			 * write to stream null terminated string
 			 * @param data defines data that will be written
-			 * @note puts extra '\n' to the end of the string
+			 * @note puts extra newline to the end of the string
 			 */
 			virtual void _writeStream(const char * const data) const;
 
@@ -166,5 +163,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

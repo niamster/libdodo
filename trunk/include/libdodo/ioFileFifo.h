@@ -41,48 +41,48 @@ namespace dodo {
 		struct __file__;
 
 		namespace file {
-#ifndef IO_WO_XEXEC
-			/**
-			 * @enum fileOperationTypeEnum defines type of operation for hook
-			 */
-			enum fileOperationTypeEnum {
-				FIFO_OPERATION_OPEN = 128,
-				FIFO_OPERATION_CLOSE
-			};
-#endif
-
-			/**
-			 * @enum fifoOpenmodeEnum defines modes to open file
-			 */
-			enum fifoOpenmodeEnum {
-				FIFO_OPENMODE_READ,                 ///< normaly blocks until some other process opens the same FIFO for writing
-				FIFO_OPENMODE_READ_OPENNONBLOCK,    ///< normaly does't block until some other process opens the same FIFO for writing, further I/O is in blocked mode
-				FIFO_OPENMODE_WRITE,                ///< normaly blocks until some other process opens the same FIFO for reading
-			};
-
 			/**
 			 * @class fifo
 			 * @brief provides I/O manipulations with fifo files
-			 * @note writeStream* put extra '\n' to the end of the string, so no need to add it manually
+			 * @note writeStream* put extra newline- to the end of the string, so no need to add it manually
 			 */
 			class fifo : virtual public stream::channel {
 			  public:
 
+#ifndef IO_WO_XEXEC
+				/**
+				 * @enum operationEnum defines type of operation for xexec
+				 */
+				enum operationEnum {
+					OPERATION_OPEN = 128,
+					OPERATION_CLOSE
+				};
+#endif
+
+				/**
+				 * @enum openModeEnum defines modes to open file
+				 */
+				enum openModeEnum {
+					OPEN_MODE_READ,                 ///< normaly blocks until some other process opens the same FIFO for writing
+					OPEN_MODE_READ_OPENNONBLOCK,    ///< normaly does't block until some other process opens the same FIFO for writing, further I/O is in blocked mode
+					OPEN_MODE_WRITE,                ///< normaly blocks until some other process opens the same FIFO for reading
+				};
+
 				/**
 				 * constructor
-				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+				 * @param protection defines type of IO protection[see protectionEnum]
 				 */
-				fifo(short protection = CHANNEL_PROTECTION_PROCESS);
+				fifo(short protection = channel::PROTECTION_PROCESS);
 
 				/**
 				 * constructor
 				 * @param path defines path to the file
-				 * @param mode defines mode to open file[see fifoOpenmodeEnum]
-				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+				 * @param mode defines mode to open file[see openModeEnum]
+				 * @param protection defines type of IO protection[see protectionEnum]
 				 */
 				fifo(const dodoString &path,
 					 short            mode,
-					 short            protection = CHANNEL_PROTECTION_PROCESS);
+					 short            protection = channel::PROTECTION_PROCESS);
 
 				/**
 				 * copy constructor
@@ -105,7 +105,7 @@ namespace dodo {
 				/**
 				 * open file
 				 * @param path defines path to the file
-				 * @param mode defines mode to open file[see fifoOpenmodeEnum]
+				 * @param mode defines mode to open file[see openModeEnum]
 				 */
 				virtual void open(const dodoString &path,
 								  short            mode);
@@ -131,31 +131,31 @@ namespace dodo {
 				 */
 				virtual void block(bool flag);
 
-				int inFileFifoBuffer;   ///< input buffer
-				int outFileFifoBuffer;  ///< output buffer
+				int inBuffer;   ///< input buffer
+				int outBuffer;  ///< output buffer
 
 			  protected:
 
 				/**
 				 * @return descriptor of the input stream
 				 */
-				virtual int getInDescriptor() const;
+				virtual int inDescriptor() const;
 
 				/**
 				 * @return descriptor of the output stream
 				 */
-				virtual int getOutDescriptor() const;
+				virtual int outDescriptor() const;
 
 				/**
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
+				 * @note not more then inSize(including null)
 				 */
 				virtual void _read(char * const data) const;
 
 				/**
-				 * read from stream - '\0' or '\n' - terminated string
+				 * read from stream null- or newline- terminated string
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
+				 * @note not more then inSize(including null)
 				 */
 				virtual unsigned long _readStream(char * const data) const;
 
@@ -165,16 +165,16 @@ namespace dodo {
 				virtual void _write(const char * const data) const;
 
 				/**
-				 * write to stream - '\0' - terminated string
+				 * write to stream null- terminated string
 				 * @param data defines data that will be written
-				 * @note puts extra '\n' to the end of the string
+				 * @note puts extra newline- to the end of the string
 				 */
 				virtual void _writeStream(const char * const data) const;
 
 			  private:
 
 				dodoString path;        ///< file path
-				short mode;             ///< file open mode[see fileOpenmodeEnum]
+				short mode;             ///< file open mode[see openModeEnum]
 
 				__file__ *handle;       ///< file handle
 
@@ -183,5 +183,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

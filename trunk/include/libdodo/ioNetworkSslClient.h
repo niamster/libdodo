@@ -45,8 +45,8 @@ namespace dodo {
 		};
 
 		namespace ssl {
-			struct __sslConnection__;
-			struct __sslContext__;
+			struct __connection__;
+			struct __context__;
 			struct __certificates__;
 		};
 
@@ -68,14 +68,14 @@ namespace dodo {
 					 * copy constructor
 					 * @note to prevent copying
 					 */
-					client(client &fs);
+					client(client &);
 
 				  public:
 
 					/**
 					 * constructor
 					 * @param family defines family of the socket[see connectionProtoFamilyEnum]
-					 * @param type defines type of the socket[see connectionTransferTypeEnum]
+					 * @param type defines type of the socket[see connectionTransferEnum]
 					 */
 					client(short family,
 						   short type);
@@ -138,8 +138,8 @@ namespace dodo {
 					 */
 					void connectSsl();
 
-					io::ssl::__sslConnection__ *handle; ///< ssl connection handle
-					io::ssl::__sslContext__ *ctx;       ///< ssl connection context
+					io::ssl::__connection__ *handle; ///< ssl connection handle
+					io::ssl::__context__ *ctx;       ///< ssl connection context
 
 					bool sslConnected;                  ///< true if SSL connection established
 				};
@@ -148,5 +148,4 @@ namespace dodo {
 	};
 };
 #endif
-
 #endif

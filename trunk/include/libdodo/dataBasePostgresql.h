@@ -52,7 +52,7 @@ namespace dodo {
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				postgresql(postgresql &pgpp);
+				postgresql(postgresql &);
 
 			  public:
 
@@ -65,7 +65,7 @@ namespace dodo {
 				 * constructor
 				 * @param dbInfo defines information for connection to db
 				 */
-				postgresql(const __connectionInfo__ &dbInfo);
+				postgresql(const __connection__ &dbInfo);
 
 				/**
 				 * destructor
@@ -76,7 +76,7 @@ namespace dodo {
 				 * connect to the database
 				 * @param dbInfo defines information for connection to db
 				 */
-				virtual void connect(const __connectionInfo__ &dbInfo);
+				virtual void connect(const __connection__ &dbInfo);
 
 				/**
 				 * disconnect from the database
@@ -87,22 +87,22 @@ namespace dodo {
 				 * automaticaly detect fields types
 				 * @param table defines table for which rules will be applied
 				 */
-				virtual void getFieldsTypes(const dodoString &table);
+				virtual void requestFieldsTypes(const dodoString &table);
 
 				/**
 				 * @return amount of affected rows from the evaluated request
 				 */
-				virtual unsigned int affectedRowsCount() const;
+				virtual unsigned int affectedRows() const;
 
 				/**
 				 * @return amount of received rows from the evaluated request
 				 */
-				virtual unsigned int rowsCount() const;
+				virtual unsigned int requestedRows() const;
 
 				/**
 				 * @return amount of received fields from the evaluated request
 				 */
-				virtual unsigned int fieldsCount() const;
+				virtual unsigned int requestedFields() const;
 
 				/**
 				 * @return received rows from the evaluated request
@@ -141,7 +141,7 @@ namespace dodo {
 				/**
 				 * @return current session charset
 				 */
-				dodoString getCharset() const;
+				dodoString charset() const;
 
 			  protected:
 
@@ -156,60 +156,57 @@ namespace dodo {
 				virtual void updateCollect();
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
-#define POSTGRESQL_ENCODINGSTATEMENTS 39
-
 				/**
 				 * @enum encodingIdentefiersEnum defines postgresql encoding identifiers
 				 * @note fetched from mb/pg_wchar.h
 				 */
 				enum encodingIdentefiersEnum {
-					PG_SQL_ASCII = 0,                                                           /* SQL/ASCII */
-					PG_EUC_JP,                                                                  /* EUC for Japanese */
-					PG_EUC_CN,                                                                  /* EUC for Chinese */
-					PG_EUC_KR,                                                                  /* EUC for Korean */
-					PG_EUC_TW,                                                                  /* EUC for Taiwan */
-					PG_JOHAB,                                                                   /* EUC for Korean JOHAB */
-					PG_UTF8,                                                                    /* Unicode UTF8 */
-					PG_MULE_INTERNAL,                                                           /* Mule internal code */
-					PG_LATIN1,                                                                  /* ISO-8859-1 Latin 1 */
-					PG_LATIN2,                                                                  /* ISO-8859-2 Latin 2 */
-					PG_LATIN3,                                                                  /* ISO-8859-3 Latin 3 */
-					PG_LATIN4,                                                                  /* ISO-8859-4 Latin 4 */
-					PG_LATIN5,                                                                  /* ISO-8859-9 Latin 5 */
-					PG_LATIN6,                                                                  /* ISO-8859-10 Latin6 */
-					PG_LATIN7,                                                                  /* ISO-8859-13 Latin7 */
-					PG_LATIN8,                                                                  /* ISO-8859-14 Latin8 */
-					PG_LATIN9,                                                                  /* ISO-8859-15 Latin9 */
-					PG_LATIN10,                                                                 /* ISO-8859-16 Latin10 */
-					PG_WIN1256,                                                                 /* windows-1256 */
-					PG_WIN1258,                                                                 /* Windows-1258 */
-					PG_WIN866,                                                                  /* (MS-DOS CP866) */
-					PG_WIN874,                                                                  /* windows-874 */
-					PG_KOI8R,                                                                   /* KOI8-R */
-					PG_WIN1251,                                                                 /* windows-1251 */
-					PG_WIN1252,                                                                 /* windows-1252 */
-					PG_ISO_8859_5,                                                              /* ISO-8859-5 */
-					PG_ISO_8859_6,                                                              /* ISO-8859-6 */
-					PG_ISO_8859_7,                                                              /* ISO-8859-7 */
-					PG_ISO_8859_8,                                                              /* ISO-8859-8 */
-					PG_WIN1250,                                                                 /* windows-1250 */
-					PG_WIN1253,                                                                 /* windows-1253 */
-					PG_WIN1254,                                                                 /* windows-1254 */
-					PG_WIN1255,                                                                 /* windows-1255 */
-					PG_WIN1257,                                                             /* windows-1257
-																							   PG_ENCODING_BE_LAST points to the above entry */
+					ENCODING_SQL_ASCII = 0,                                                           /* SQL/ASCII */
+					ENCODING_EUC_JP,                                                                  /* EUC for Japanese */
+					ENCODING_EUC_CN,                                                                  /* EUC for Chinese */
+					ENCODING_EUC_KR,                                                                  /* EUC for Korean */
+					ENCODING_EUC_TW,                                                                  /* EUC for Taiwan */
+					ENCODING_JOHAB,                                                                   /* EUC for Korean JOHAB */
+					ENCODING_UTF8,                                                                    /* Unicode UTF8 */
+					ENCODING_MULE_INTERNAL,                                                           /* Mule internal code */
+					ENCODING_LATIN1,                                                                  /* ISO-8859-1 Latin 1 */
+					ENCODING_LATIN2,                                                                  /* ISO-8859-2 Latin 2 */
+					ENCODING_LATIN3,                                                                  /* ISO-8859-3 Latin 3 */
+					ENCODING_LATIN4,                                                                  /* ISO-8859-4 Latin 4 */
+					ENCODING_LATIN5,                                                                  /* ISO-8859-9 Latin 5 */
+					ENCODING_LATIN6,                                                                  /* ISO-8859-10 Latin6 */
+					ENCODING_LATIN7,                                                                  /* ISO-8859-13 Latin7 */
+					ENCODING_LATIN8,                                                                  /* ISO-8859-14 Latin8 */
+					ENCODING_LATIN9,                                                                  /* ISO-8859-15 Latin9 */
+					ENCODING_LATIN10,                                                                 /* ISO-8859-16 Latin10 */
+					ENCODING_WIN1256,                                                                 /* windows-1256 */
+					ENCODING_WIN1258,                                                                 /* Windows-1258 */
+					ENCODING_WIN866,                                                                  /* (MS-DOS CP866) */
+					ENCODING_WIN874,                                                                  /* windows-874 */
+					ENCODING_KOI8R,                                                                   /* KOI8-R */
+					ENCODING_WIN1251,                                                                 /* windows-1251 */
+					ENCODING_WIN1252,                                                                 /* windows-1252 */
+					ENCODING_ISO_8859_5,                                                              /* ISO-8859-5 */
+					ENCODING_ISO_8859_6,                                                              /* ISO-8859-6 */
+					ENCODING_ISO_8859_7,                                                              /* ISO-8859-7 */
+					ENCODING_ISO_8859_8,                                                              /* ISO-8859-8 */
+					ENCODING_WIN1250,                                                                 /* windows-1250 */
+					ENCODING_WIN1253,                                                                 /* windows-1253 */
+					ENCODING_WIN1254,                                                                 /* windows-1254 */
+					ENCODING_WIN1255,                                                                 /* windows-1255 */
+					ENCODING_WIN1257,                                                             /* windows-1257 */
 
 																								/* followings are for client encoding only */
-					PG_SJIS,                                                                    /* Shift JIS (Winindows-932) */
-					PG_BIG5,                                                                    /* Big5 (Windows-950) */
-					PG_GBK,                                                                     /* GBK (Windows-936) */
-					PG_UHC,                                                                     /* UHC (Windows-949) */
-					PG_GB18030,                                                                 /* GB18030 */
+					ENCODING_SJIS,                                                                    /* Shift JIS (Winindows-932) */
+					ENCODING_BIG5,                                                                    /* Big5 (Windows-950) */
+					ENCODING_GBK,                                                                     /* GBK (Windows-936) */
+					ENCODING_UHC,                                                                     /* UHC (Windows-949) */
+					ENCODING_GB18030,                                                                 /* GB18030 */
 
-					_PG_LAST_ENCODING_                                                          /* mark only */
+					ENCODING_ENUMSIZE
 				};
 
-				const static dodoString encodingStatements[POSTGRESQL_ENCODINGSTATEMENTS];      ///< encoding string representation according to encodingIdentefiersEnum
+				const static dodoString encodingStatements[ENCODING_ENUMSIZE];      ///< encoding string representation according to encodingIdentefiersEnum
 #endif
 
 				/**
@@ -233,5 +230,4 @@ namespace dodo {
 	};
 };
 #endif
-
 #endif

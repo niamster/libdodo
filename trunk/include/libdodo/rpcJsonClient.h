@@ -54,6 +54,7 @@ namespace dodo {
 
 				/**
 				 * constructor
+				 * @param io defines input/output sources
 				 */
 				client(const io::channel &io);
 
@@ -71,12 +72,12 @@ namespace dodo {
 				/**
 				 * @return version of JSON-RPC response
 				 */
-				virtual dodoString getResponseVersion();
+				virtual dodoString responseVersion();
 
 				/**
 				 * @return ID of JSON-RPC response
 				 */
-				virtual long getResponseId();
+				virtual long responseId();
 
 			  protected:
 
@@ -101,5 +102,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

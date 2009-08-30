@@ -71,7 +71,7 @@
 /**
  * file permissions for newly created file(pipe)
  */
-#define DEFAULT_FILE_PERM dodo::tools::FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS
+#define DEFAULT_FILE_PERM dodo::tools::filesystem::PERMISSION_OWNER_ALL_ACCESS
 
 /**
  * size of buffer for random data for openssl library
@@ -84,15 +84,10 @@
 #define SIZEOFNUM     20
 
 /**
- * filesystem path delimiter
- */
-#define FILE_DELIM    '/'
-
-/**
  * socket default timeouts
  */
-#define IONETWORK_RECIEVE_TIMEOUT          1000
-#define IONETWORK_SEND_TIMEOUT             1000
+#define IONETWORKCONNECTION_SOCKET_RECIEVE_TIMEOUT          1000
+#define IONETWORKCONNECTION_SOCKET_SEND_TIMEOUT             1000
 
 /**
  * default values of buffer for io operations(io*)
@@ -127,7 +122,7 @@
  * linger options
  */
 #define IONETWORKCONNECTION_SOCKET_LINGER_PERIOD     1
-#define IONETWORKCONNECTION_SOCKET_LINGER_OPTION     CONNECTION_LINGEROPTION_WAIT_CLOSE
+#define IONETWORKCONNECTION_SOCKET_LINGER_OPTION     LINGER_OPTION_WAIT_CLOSE
 
 /**
  * max length of the filesystem path
@@ -138,5 +133,4 @@
  * max depth of calls for stack trace
  */
 #define MAXCALLSTACKLEN 128
-
 #endif

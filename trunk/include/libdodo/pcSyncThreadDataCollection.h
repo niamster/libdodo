@@ -53,7 +53,7 @@ namespace dodo {
 						 * copy constructor
 						 * @note to prevent copying
 						 */
-						collection(collection &sts);
+						collection(collection &);
 
 					  public:
 
@@ -76,39 +76,39 @@ namespace dodo {
 
 						/**
 						 * delete data from collection
-						 * @param position defines shared data identificator
+						 * @param id defines shared data identificator
 						 */
-						virtual void del(unsigned long position);
+						virtual void remove(unsigned long id);
 
 						/**
 						 * lock, set data, unlock
-						 * @param position defines shared data identificator
+						 * @param id defines shared data identificator
 						 * @param data defines shared data
 						 */
-						virtual void set(unsigned long position,
+						virtual void set(unsigned long id,
 										 void          *data);
 
 						/**
 						 * lock, return data, unlock
 						 * @return shared data
-						 * @param position defines shared data identificator
+						 * @param id defines shared data identificator
 						 */
-						virtual const void *get(unsigned long position);
+						virtual const void *get(unsigned long id);
 
 						/**
 						 * @return list of shared data in object
 						 */
-						virtual dodoList<unsigned long> getIds();
+						virtual dodoList<unsigned long> identificators();
 
 					  protected:
 
 						/**
 						 * search shared data by identificator
 						 * @return true if found
-						 * @param position describes defines shared data identificator
+						 * @param id describes defines shared data identificator
 						 * @note this sets internal class parameter 'current' to found shared data
 						 */
-						bool getShare(unsigned long position);
+						bool getShare(unsigned long id);
 
 						dodoList<pc::sync::data::__info__> shares;              ///< identificators of shared data
 
@@ -123,6 +123,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

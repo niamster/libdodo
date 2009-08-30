@@ -49,9 +49,9 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define IOFILEREGULAREX_WRONGFILENAME_STR                  "Probably wrong filename, type of file is wrong or `path` is empty."
-#define IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position."
-#define IOFILEREGULAREX_NOTOPENED_STR                       "File was not opened."
+#define IOFILEREGULAREX_WRONGFILENAME_STR                  "Wrong filename"
+#define IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR "Access data out of bounds"
+#define IOFILEREGULAREX_NOTOPENED_STR                       "File not opened"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -66,11 +66,10 @@ namespace dodo {
 				REGULAREX__READSTREAM,
 				REGULAREX__WRITESTREAM,
 				REGULAREX_FLUSH,
-				REGULAREX_GETINDESCRIPTOR,
-				REGULAREX_GETOUTDESCRIPTOR,
+				REGULAREX_INDESCRIPTOR,
+				REGULAREX_OUTDESCRIPTOR,
 			};
 		};
 	};
 };
-
 #endif

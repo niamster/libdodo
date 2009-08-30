@@ -46,7 +46,7 @@ namespace dodo {
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define CGIDIALOGUEEX_WRONGSTATUSCODE_STR "Wrong status code."
+#define CGIDIALOGUEEX_WRONGSTATUSCODE_STR "Wrong status code"
 
 		/**
 		 * IDs of functions where exception might be thrown
@@ -57,5 +57,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

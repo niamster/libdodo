@@ -52,7 +52,7 @@ namespace dodo {
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				sqlite(sqlite &spp);
+				sqlite(sqlite &);
 
 			  public:
 
@@ -65,7 +65,7 @@ namespace dodo {
 				 * constructor
 				 * @param dbInfo defines information for connection to db
 				 */
-				sqlite(const __connectionInfo__ &dbInfo);
+				sqlite(const __connection__ &dbInfo);
 
 				/**
 				 * destructor
@@ -76,7 +76,7 @@ namespace dodo {
 				 * connect to the database
 				 * @param dbInfo defines information for connection to db
 				 */
-				virtual void connect(const __connectionInfo__ &dbInfo);
+				virtual void connect(const __connection__ &dbInfo);
 
 				/**
 				 * disconnect from the database
@@ -87,22 +87,22 @@ namespace dodo {
 				 * automaticaly detect fields types
 				 * @param table defines table for which rules will be applied
 				 */
-				virtual void getFieldsTypes(const dodoString &table);
+				virtual void requestFieldsTypes(const dodoString &table);
 
 				/**
 				 * @return amount of affected rows from the evaluated request
 				 */
-				virtual unsigned int affectedRowsCount() const;
+				virtual unsigned int affectedRows() const;
 
 				/**
 				 * @return amount of received rows from the evaluated request
 				 */
-				virtual unsigned int rowsCount() const;
+				virtual unsigned int requestedRows() const;
 
 				/**
 				 * @return amount of received fields from the evaluated request
 				 */
-				virtual unsigned int fieldsCount() const;
+				virtual unsigned int requestedFields() const;
 
 				/**
 				 * @return received rows from the evaluated request
@@ -165,5 +165,4 @@ namespace dodo {
 	};
 };
 #endif
-
 #endif

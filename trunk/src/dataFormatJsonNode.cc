@@ -36,42 +36,42 @@
 
 using namespace dodo::data::format::json;
 
-node::node() : valueDataType(DATATYPE_NULL)
+node::node() : valueDataType(DATA_NULL)
 {
 }
 
 //-------------------------------------------------------------------
 
 node::node(const dodoString &value) : stringValue(new dodoString(value)),
-									  valueDataType(DATATYPE_STRING)
+									  valueDataType(DATA_STRING)
 {
 }
 
 //-------------------------------------------------------------------
 
 node::node(long value) : numericValue(value),
-						 valueDataType(DATATYPE_NUMERIC)
+						 valueDataType(DATA_NUMERIC)
 {
 }
 
 //-------------------------------------------------------------------
 
 node::node(bool value) : booleanValue(value),
-						 valueDataType(DATATYPE_BOOLEAN)
+						 valueDataType(DATA_BOOLEAN)
 {
 }
 
 //-------------------------------------------------------------------
 
 node::node(const dodoArray<node> &value) : arrayValue(new dodoArray<node>(value)),
-										   valueDataType(DATATYPE_ARRAY)
+										   valueDataType(DATA_ARRAY)
 {
 }
 
 //-------------------------------------------------------------------
 
 node::node(const dodoMap<dodoString, node, dodoMapStringCompare> &value) : objectValue(new dodoMap<dodoString, node, dodoMapStringCompare>(value)),
-																		   valueDataType(DATATYPE_OBJECT)
+																		   valueDataType(DATA_OBJECT)
 {
 }
 
@@ -80,23 +80,23 @@ node::node(const dodoMap<dodoString, node, dodoMapStringCompare> &value) : objec
 node::node(const node &on) : valueDataType(on.valueDataType)
 {
 	switch (valueDataType) {
-		case DATATYPE_STRING:
+		case DATA_STRING:
 			stringValue = new dodoString(*on.stringValue);
 			break;
 
-		case DATATYPE_OBJECT:
+		case DATA_OBJECT:
 			objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>(*on.objectValue);
 			break;
 
-		case DATATYPE_ARRAY:
+		case DATA_ARRAY:
 			arrayValue = new dodoArray<node>(*on.arrayValue);
 			break;
 
-		case DATATYPE_NUMERIC:
+		case DATA_NUMERIC:
 			numericValue = on.numericValue;
 			break;
 
-		case DATATYPE_BOOLEAN:
+		case DATA_BOOLEAN:
 			booleanValue = on.booleanValue;
 			break;
 	}
@@ -107,15 +107,15 @@ node::node(const node &on) : valueDataType(on.valueDataType)
 node::~node()
 {
 	switch (valueDataType) {
-		case DATATYPE_STRING:
+		case DATA_STRING:
 			delete stringValue;
 			break;
 
-		case DATATYPE_OBJECT:
+		case DATA_OBJECT:
 			delete objectValue;
 			break;
 
-		case DATATYPE_ARRAY:
+		case DATA_ARRAY:
 			delete arrayValue;
 			break;
 	}
@@ -126,18 +126,18 @@ node::~node()
 void
 node::setString(const dodoString &value)
 {
-	if (valueDataType != DATATYPE_STRING) {
+	if (valueDataType != DATA_STRING) {
 		switch (valueDataType) {
-			case DATATYPE_OBJECT:
+			case DATA_OBJECT:
 				delete objectValue;
 				break;
 
-			case DATATYPE_ARRAY:
+			case DATA_ARRAY:
 				delete arrayValue;
 				break;
 		}
 
-		valueDataType = DATATYPE_STRING;
+		valueDataType = DATA_STRING;
 		stringValue = new dodoString(value);
 	} else
 		*stringValue = value;
@@ -148,22 +148,22 @@ node::setString(const dodoString &value)
 void
 node::setBoolean(bool value)
 {
-	if (valueDataType != DATATYPE_BOOLEAN) {
+	if (valueDataType != DATA_BOOLEAN) {
 		switch (valueDataType) {
-			case DATATYPE_STRING:
+			case DATA_STRING:
 				delete stringValue;
 				break;
 
-			case DATATYPE_OBJECT:
+			case DATA_OBJECT:
 				delete objectValue;
 				break;
 
-			case DATATYPE_ARRAY:
+			case DATA_ARRAY:
 				delete arrayValue;
 				break;
 		}
 
-		valueDataType = DATATYPE_BOOLEAN;
+		valueDataType = DATA_BOOLEAN;
 	}
 
 	booleanValue = value;
@@ -174,22 +174,22 @@ node::setBoolean(bool value)
 void
 node::setNumeric(long value)
 {
-	if (valueDataType != DATATYPE_NUMERIC) {
+	if (valueDataType != DATA_NUMERIC) {
 		switch (valueDataType) {
-			case DATATYPE_STRING:
+			case DATA_STRING:
 				delete stringValue;
 				break;
 
-			case DATATYPE_OBJECT:
+			case DATA_OBJECT:
 				delete objectValue;
 				break;
 
-			case DATATYPE_ARRAY:
+			case DATA_ARRAY:
 				delete arrayValue;
 				break;
 		}
 
-		valueDataType = DATATYPE_NUMERIC;
+		valueDataType = DATA_NUMERIC;
 	}
 
 	numericValue = value;
@@ -200,22 +200,22 @@ node::setNumeric(long value)
 void
 node::setNull()
 {
-	if (valueDataType != DATATYPE_NULL) {
+	if (valueDataType != DATA_NULL) {
 		switch (valueDataType) {
-			case DATATYPE_STRING:
+			case DATA_STRING:
 				delete stringValue;
 				break;
 
-			case DATATYPE_OBJECT:
+			case DATA_OBJECT:
 				delete objectValue;
 				break;
 
-			case DATATYPE_ARRAY:
+			case DATA_ARRAY:
 				delete arrayValue;
 				break;
 		}
 
-		valueDataType = DATATYPE_NULL;
+		valueDataType = DATA_NULL;
 	}
 }
 
@@ -224,22 +224,22 @@ node::setNull()
 void
 node::addArrayElement(const node &value)
 {
-	if (valueDataType != DATATYPE_ARRAY) {
+	if (valueDataType != DATA_ARRAY) {
 		switch (valueDataType) {
-			case DATATYPE_STRING:
+			case DATA_STRING:
 				delete stringValue;
 				break;
 
-			case DATATYPE_OBJECT:
+			case DATA_OBJECT:
 				delete objectValue;
 				break;
 
-			case DATATYPE_ARRAY:
+			case DATA_ARRAY:
 				delete arrayValue;
 				break;
 		}
 
-		valueDataType = DATATYPE_ARRAY;
+		valueDataType = DATA_ARRAY;
 		arrayValue = new dodoArray<node>;
 	}
 
@@ -252,18 +252,18 @@ void
 node::addObjectMember(const dodoString &name,
 					  const node       &value)
 {
-	if (valueDataType != DATATYPE_OBJECT) {
+	if (valueDataType != DATA_OBJECT) {
 		switch (valueDataType) {
-			case DATATYPE_STRING:
+			case DATA_STRING:
 				delete stringValue;
 				break;
 
-			case DATATYPE_ARRAY:
+			case DATA_ARRAY:
 				delete arrayValue;
 				break;
 		}
 
-		valueDataType = DATATYPE_OBJECT;
+		valueDataType = DATA_OBJECT;
 		objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>;
 	}
 
@@ -275,18 +275,18 @@ node::addObjectMember(const dodoString &name,
 void
 node::setArray(const dodoArray<node> &value)
 {
-	if (valueDataType != DATATYPE_ARRAY) {
+	if (valueDataType != DATA_ARRAY) {
 		switch (valueDataType) {
-			case DATATYPE_STRING:
+			case DATA_STRING:
 				delete stringValue;
 				break;
 
-			case DATATYPE_OBJECT:
+			case DATA_OBJECT:
 				delete objectValue;
 				break;
 		}
 
-		valueDataType = DATATYPE_ARRAY;
+		valueDataType = DATA_ARRAY;
 		arrayValue = new dodoArray<node>(value);
 	} else
 		*arrayValue = value;
@@ -297,18 +297,18 @@ node::setArray(const dodoArray<node> &value)
 void
 node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
 {
-	if (valueDataType != DATATYPE_OBJECT) {
+	if (valueDataType != DATA_OBJECT) {
 		switch (valueDataType) {
-			case DATATYPE_STRING:
+			case DATA_STRING:
 				delete stringValue;
 				break;
 
-			case DATATYPE_ARRAY:
+			case DATA_ARRAY:
 				delete arrayValue;
 				break;
 		}
 
-		valueDataType = DATATYPE_OBJECT;
+		valueDataType = DATA_OBJECT;
 		objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>(value);
 	} else
 		*objectValue = value;
@@ -319,8 +319,8 @@ node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
 node
 node::operator[](const dodoString &key) const
 {
-	if (valueDataType != DATATYPE_OBJECT)
-		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	if (valueDataType != DATA_OBJECT)
+		throw exception::basic(exception::MODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return (*objectValue)[key];
 }
@@ -330,11 +330,11 @@ node::operator[](const dodoString &key) const
 node
 node::operator[](unsigned long key) const
 {
-	if (valueDataType != DATATYPE_ARRAY)
-		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	if (valueDataType != DATA_ARRAY)
+		throw exception::basic(exception::MODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	if (key >= (arrayValue)->size())
-		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, NODEEX_ARRAYOUTOFRANGE, DATAFORMATJSONNODEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, NODEEX_ARRAYOUTOFRANGE, DATAFORMATJSONNODEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
 
 	return (*arrayValue)[key];
 }
@@ -342,7 +342,7 @@ node::operator[](unsigned long key) const
 //-------------------------------------------------------------------
 
 short
-node::getType() const
+node::type() const
 {
 	return valueDataType;
 }
@@ -350,10 +350,10 @@ node::getType() const
 //-------------------------------------------------------------------
 
 dodoString
-node::getString() const
+node::string() const
 {
-	if (valueDataType != DATATYPE_STRING)
-		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETSTRING, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	if (valueDataType != DATA_STRING)
+		throw exception::basic(exception::MODULE_DATAFORMATJSONNODE, NODEEX_GETSTRING, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return *stringValue;
 }
@@ -361,10 +361,10 @@ node::getString() const
 //-------------------------------------------------------------------
 
 bool
-node::getBoolean() const
+node::boolean() const
 {
-	if (valueDataType != DATATYPE_BOOLEAN)
-		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETBOOLEAN, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	if (valueDataType != DATA_BOOLEAN)
+		throw exception::basic(exception::MODULE_DATAFORMATJSONNODE, NODEEX_GETBOOLEAN, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return booleanValue;
 }
@@ -372,10 +372,10 @@ node::getBoolean() const
 //-------------------------------------------------------------------
 
 long
-node::getNumeric() const
+node::numeric() const
 {
-	if (valueDataType != DATATYPE_NUMERIC)
-		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETNUMERIC, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	if (valueDataType != DATA_NUMERIC)
+		throw exception::basic(exception::MODULE_DATAFORMATJSONNODE, NODEEX_GETNUMERIC, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return numericValue;
 }
@@ -383,10 +383,10 @@ node::getNumeric() const
 //-------------------------------------------------------------------
 
 dodoArray<node>
-node::getArray() const
+node::array() const
 {
-	if (valueDataType != DATATYPE_ARRAY)
-		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETARRAY, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	if (valueDataType != DATA_ARRAY)
+		throw exception::basic(exception::MODULE_DATAFORMATJSONNODE, NODEEX_GETARRAY, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return *arrayValue;
 }
@@ -394,10 +394,10 @@ node::getArray() const
 //-------------------------------------------------------------------
 
 dodoMap<dodoString, node, dodo::dodoMapStringCompare>
-node::getObject() const
+node::object() const
 {
-	if (valueDataType != DATATYPE_OBJECT)
-		throw exception::basic(exception::ERRMODULE_DATAFORMATJSONNODE, NODEEX_GETOBJECT, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	if (valueDataType != DATA_OBJECT)
+		throw exception::basic(exception::MODULE_DATAFORMATJSONNODE, NODEEX_GETOBJECT, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return *objectValue;
 }
@@ -407,7 +407,7 @@ node::getObject() const
 bool
 node::isNull() const
 {
-	return (valueDataType == DATATYPE_NULL);
+	return (valueDataType == DATA_NULL);
 }
 
 //-------------------------------------------------------------------

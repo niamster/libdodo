@@ -46,16 +46,16 @@ namespace dodo {
 
 		namespace json {
 			/**
-			 * @struct __additionalData__
+			 * @struct __additional__
 			 * @brief defines response/request additional data
 			 */
-			struct __additionalData__ {
+			struct __additional__ {
 				/**
 				 * constructor
 				 * @param version defines response/request version
 				 * @param id defines response/request ID
 				 */
-				__additionalData__(dodoString &version, long &id);
+				__additional__(dodoString &version, long &id);
 
 				dodoString &version;    ///< response/request version
 				long       &id;         ///< response/request ID
@@ -70,6 +70,7 @@ namespace dodo {
 
 				/**
 				 * constructor
+				 * @param io defines input/output sources
 				 */
 				server(io::channel &io);
 
@@ -116,6 +117,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

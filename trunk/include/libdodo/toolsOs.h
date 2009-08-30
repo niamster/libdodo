@@ -49,161 +49,6 @@ namespace dodo {
 
 	namespace tools {
 		/**
-		 * @struct __usage__
-		 * @brief defines process information
-		 */
-		struct __usage__ {
-			long time;              ///< processor time of execution in miliseconds
-			long mem;               ///< memory usage in bytes
-		};
-
-		/**
-		 * @struct __limits__
-		 * @brief defines os limits
-		 */
-		struct __limits__ {
-			unsigned long current;  ///< current limit
-			unsigned long max;      ///< max limit
-		};
-
-		/**
-		 * @enum osLimitEnum defines limit types
-		 */
-		enum osLimitEnum {
-			OS_CPUTIME,
-			OS_MAXFILESIZE,
-			OS_MAXMEMUSAGE,
-			OS_MAXSTACK,
-			OS_MAXPROC,
-			OS_MAXOPENFILES
-		};
-
-		/**
-		 * @typedef signalHandler
-		 * @brief defines handler function on signal
-		 * @param signal defines received signal
-		 * @param info defines signal info
-		 * @param context defines signal context
-		 * @note info fields:
-		 * int si_signo;// Signal number
-		 * int si_errno;// An errno value
-		 * int si_code;// Signal code
-		 * pid_t si_pid;// Sending process ID
-		 * uid_t si_uid;// Real user ID of sending process
-		 * int  si_status;// Exit value or signal
-		 * clock_t si_utime;// User time consumed
-		 * clock_t si_stime;// System time consumed
-		 * sigval_t si_value;// Signal value
-		 * int si_int;// POSIX.1b signal
-		 * void *si_ptr;// POSIX.1b signal
-		 * void *si_addr;// Memory location which caused fault
-		 * int si_band;// Band event
-		 * int si_fd;// File descriptor
-		 *
-		 * context fields:
-		 * int __sc___onstack;// Sigstack state to restore
-		 * __sigset___t uc_sigmask;// The set of signals that are blocked when this context is active
-		 * mcontext_t uc_mcontext;// Machine-specific image of saved context
-		 * struct ucontext_t *uc_link;// Context resumed after this one returns
-		 * stack_t uc_stack;// Stack used by context
-		 */
-		typedef void (*signalHandler)(int signal, void *info, void *context);
-
-
-#define OS_SIGNALS 19
-
-		/**
-		 * @enum osSignalsEnum defines os signals
-		 */
-		enum osSignalsEnum {
-			OS_SIGNAL_HANGUP = 0,
-			OS_SIGNAL_INTERRUPT = 1 << 1,
-			OS_SIGNAL_QUIT = 1 << 2,
-			OS_SIGNAL_ILLEGAL_INSTRUCTION = 1 << 3,
-			OS_SIGNAL_ABORT = 1 << 4,
-			OS_SIGNAL_BUS_FAULT = 1 << 5,
-			OS_SIGNAL_FLOATINGPOINT_FAULT = 1 << 6,
-			OS_SIGNAL_USER_DEFINED1 = 1 << 7,
-			OS_SIGNAL_SEGMENTATION_FAULT = 1 << 8,
-			OS_SIGNAL_USER_DEFINED2 = 1 << 9,
-			OS_SIGNAL_PIPE_FAULT = 1 << 10,
-			OS_SIGNAL_ALARM = 1 << 11,
-			OS_SIGNAL_TERMINATION = 1 << 12,
-			OS_SIGNAL_CHILD_CHANGED = 1 << 13,
-			OS_SIGNAL_CONTINUE = 1 << 14,
-			OS_SIGNAL_KEYBOARD_STOP = 1 << 15,
-			OS_SIGNAL_CPULIMIT_EXCEEDED = 1 << 16,
-			OS_SIGNAL_FILESIZE_EXCEEDED = 1 << 17,
-			OS_SIGNAL_BAD_SYSCALL = 1 << 18,
-		};
-
-		/**
-		 * @typedef daemon
-		 * @brief defines daemon function
-		 * @param data defines user data
-		 */
-		typedef void (*daemon)(void *data);
-
-		/**
-		 * @enum osIdTypeEnum defines type of UID
-		 */
-		enum osIdTypeEnum {
-			OS_UID,
-			OS_EUID
-		};
-
-		/**
-		 * @struct __userInfo__
-		 * @brief defines user info
-		 */
-		struct  __userInfo__ {
-			dodoString name;            ///< user name
-			dodoString pass;            ///< user password
-			int        uid;             ///< user id
-			int        gid;             ///< user group
-			dodoString realName;        ///< user real name
-			dodoString home;            ///< user home directory
-			dodoString shell;           ///< user default shell
-		};
-
-		/**
-		 * @struct __groupInfo__
-		 * @brief defines group info
-		 */
-		struct __groupInfo__ {
-			dodoString      name;       ///< group name
-			int             gid;        ///< group id
-			dodoStringArray members;    ///< group members
-		};
-
-#ifdef DL_EXT
-		/**
-		 * @struct __signalMod__
-		 * @brief is returned from initOsSignalModule in the library
-		 */
-		struct __signalMod__ {
-			char name[64];              ///< name of the library
-			char discription[256];      ///< discription of the library
-			char hook[64];              ///< name of function in module that will be as a hook
-			long signal;                ///< signal to set handler
-			int  blockSignals;          ///< signals to block during signal handling; -1 to ignore
-		};
-
-		/**
-		 * @typedef initOsSignalModule
-		 * @brief defines type of init function for library
-		 * @param data defines user data
-		 */
-		typedef __signalMod__ (*initOsSignalModule)(void *data);
-
-		/**
-		 * @typedef deinitOsSignalModule
-		 * @brief defines type of deinit function for library
-		 */
-		typedef void (*deinitOsSignalModule)();
-#endif
-
-		/**
 		 * @class os
 		 * @brief provides os operations
 		 */
@@ -211,6 +56,162 @@ namespace dodo {
 			friend class pc::thread::collection;
 
 		  public:
+
+			/**
+			 * @typedef signalHandler
+			 * @brief defines handler function on signal
+			 * @param signal defines received signal
+			 * @param info defines signal info
+			 * @param context defines signal context
+			 * @note info fields:
+			 * int si_signo;// Signal number
+			 * int si_errno;// An errno value
+			 * int si_code;// Signal code
+			 * pid_t si_pid;// Sending process ID
+			 * uid_t si_uid;// Real user ID of sending process
+			 * int  si_status;// Exit value or signal
+			 * clock_t si_utime;// User time consumed
+			 * clock_t si_stime;// System time consumed
+			 * sigval_t si_value;// Signal value
+			 * int si_int;// POSIX.1b signal
+			 * void *si_ptr;// POSIX.1b signal
+			 * void *si_addr;// Memory location which caused fault
+			 * int si_band;// Band event
+			 * int si_fd;// File descriptor
+			 *
+			 * context fields:
+			 * int __sc___onstack;// Sigstack state to restore
+			 * __sigset___t uc_sigmask;// The set of signals that are blocked when this context is active
+			 * mcontext_t uc_mcontext;// Machine-specific image of saved context
+			 * struct ucontext_t *uc_link;// Context resumed after this one returns
+			 * stack_t uc_stack;// Stack used by context
+			 */
+			typedef void (*signalHandler)(int signal, void *info, void *context);
+
+			/**
+			 * @typedef daemon
+			 * @brief defines daemon function
+			 * @param data defines user data
+			 */
+			typedef void (*daemon)(void *data);
+
+#ifdef DL_EXT
+			/**
+			 * @struct __signal_module__
+			 * @brief is returned from initSignalModule in the library
+			 */
+			struct __signal_module__ {
+				char name[64];              ///< name of the library
+				char discription[256];      ///< discription of the library
+				char hook[64];              ///< name of function in module that will be as a hook
+				long signal;                ///< signal to set handler
+				int  blockSignals;          ///< signals to block during signal handling; -1 to ignore
+			};
+
+			/**
+			 * @typedef initSignalModule
+			 * @brief defines type of init function for library
+			 * @param data defines user data
+			 * @note name in the library must be initToolOsSignalModule
+			 */
+			typedef __signal_module__ (*initSignalModule)(void *data);
+
+			/**
+			 * @typedef deinitSignalModule
+			 * @brief defines type of deinit function for library
+			 * @note name in the library must be deinitToolOsSignalModule
+			 */
+			typedef void (*deinitSignalModule)();
+#endif
+
+			/**
+			 * @struct __usage__
+			 * @brief defines process information
+			 */
+			struct __usage__ {
+				long time;              ///< processor time of execution in miliseconds
+				long mem;               ///< memory usage in bytes
+			};
+
+			/**
+			 * @struct __limit__
+			 * @brief defines os limits
+			 */
+			struct __limit__ {
+				unsigned long current;  ///< current limit
+				unsigned long max;      ///< max limit
+			};
+
+			/**
+			 * @enum limitEnum defines limit types
+			 */
+			enum limitEnum {
+				LIMIT_CPUTIME,
+				LIMIT_MAXFILESIZE,
+				LIMIT_MAXMEMUSAGE,
+				LIMIT_MAXSTACK,
+				LIMIT_MAXPROC,
+				LIMIT_MAXOPENFILES
+			};
+
+			/**
+			 * @enum signalEnum defines os signals
+			 */
+			enum signalEnum {
+				SIGNAL_HANGUP = 1 << 0,
+				SIGNAL_INTERRUPT = 1 << 1,
+				SIGNAL_QUIT = 1 << 2,
+				SIGNAL_ILLEGAL_INSTRUCTION = 1 << 3,
+				SIGNAL_ABORT = 1 << 4,
+				SIGNAL_BUS_FAULT = 1 << 5,
+				SIGNAL_FLOATINGPOINT_FAULT = 1 << 6,
+				SIGNAL_USER_DEFINED1 = 1 << 7,
+				SIGNAL_SEGMENTATION_FAULT = 1 << 8,
+				SIGNAL_USER_DEFINED2 = 1 << 9,
+				SIGNAL_PIPE_FAULT = 1 << 10,
+				SIGNAL_ALARM = 1 << 11,
+				SIGNAL_TERMINATION = 1 << 12,
+				SIGNAL_CHILD_CHANGED = 1 << 13,
+				SIGNAL_CONTINUE = 1 << 14,
+				SIGNAL_KEYBOARD_STOP = 1 << 15,
+				SIGNAL_CPULIMIT_EXCEEDED = 1 << 16,
+				SIGNAL_FILESIZE_EXCEEDED = 1 << 17,
+				SIGNAL_BAD_SYSCALL = 1 << 18,
+
+				SIGNAL_ENUMSIZE = 19
+			};
+
+			/**
+			 * @enum idEnum defines type of UID
+			 */
+			enum idEnum {
+				ID_UID,
+				ID_EUID
+			};
+
+			/**
+			 * @struct __user__
+			 * @brief defines user info
+			 */
+			struct  __user__ {
+				dodoString name;            ///< user name
+				dodoString pass;            ///< user password
+				int        uid;             ///< user id
+				int        gid;             ///< user group
+				dodoString realName;        ///< user real name
+				dodoString home;            ///< user home directory
+				dodoString shell;           ///< user default shell
+			};
+
+			/**
+			 * @struct __group__
+			 * @brief defines group info
+			 */
+			struct __group__ {
+				dodoString      name;       ///< group name
+				int             gid;        ///< group id
+				dodoStringArray members;    ///< group members
+			};
 
 			/**
 			 * register function that will be called on normal program exit
@@ -249,7 +250,7 @@ namespace dodo {
 			 * print message to stderr and terminate the program and all child processes
 			 * @param message defines message
 			 * @param status defines exit status
-			 * @note OS_SIGNAL_TERMINATION is sent to the child processes
+			 * @note SIGNAL_TERMINATION is sent to the child processes
 			 */
 			static void die(const dodoString &message,
 							int              status = 1);
@@ -264,7 +265,7 @@ namespace dodo {
 			/**
 			 * @return current working directory
 			 */
-			static dodoString getWorkingDir();
+			static dodoString workingDir();
 
 			/**
 			 * set current working directory
@@ -275,13 +276,13 @@ namespace dodo {
 			/**
 			 * @return os usage info
 			 */
-			static __usage__ getUsageInfo();
+			static __usage__ usage();
 
 			/**
 			 * @return os limits info
 			 * @param type defines type of limits[see osLimitEnum]
 			 */
-			static __limits__ getLimit(short type);
+			static __limit__ limit(short type);
 
 			/**
 			 * set os limits
@@ -289,17 +290,17 @@ namespace dodo {
 			 * @param lim defines os limits
 			 */
 			static void setLimit(short            type,
-								 const __limits__ &lim);
+								 const __limit__ &lim);
 
 			/**
 			 * @return priority of current process
-			 * @param type defines type of UID[see osIdTypeEnum]
+			 * @param type defines type of UID[see osIdEnum]
 			 */
-			static int getPriority(short type);
+			static int priority(short type);
 
 			/**
 			 * set priority of current process
-			 * @param type defines type of UID[see osIdTypeEnum]
+			 * @param type defines type of UID[see osIdEnum]
 			 * @param prio defines priority
 			 */
 			static void setPriority(short type,
@@ -307,13 +308,13 @@ namespace dodo {
 
 			/**
 			 * @return UID of the current process
-			 * @param type defines type of UID[see osIdTypeEnum]
+			 * @param type defines type of UID[see osIdEnum]
 			 */
-			static int getUID(short type);
+			static int UID(short type);
 
 			/**
 			 * set user id of the current process
-			 * @param type defines type of UID[see osIdTypeEnum]
+			 * @param type defines type of UID[see osIdEnum]
 			 * @param uid defines UID
 			 */
 			static void setUID(short type,
@@ -321,13 +322,13 @@ namespace dodo {
 
 			/**
 			 * get group id of the current process
-			 * @param type defines type of GID[see osIdTypeEnum]
+			 * @param type defines type of GID[see osIdEnum]
 			 */
-			static int getGID(short type);
+			static int GID(short type);
 
 			/**
 			 * set group id of the current process
-			 * @param type defines type of GID[see osIdTypeEnum]
+			 * @param type defines type of GID[see osIdEnum]
 			 * @param gid defines group id
 			 */
 			static void setGID(short type,
@@ -337,69 +338,69 @@ namespace dodo {
 			 * @return user info
 			 * @param uid defines user id
 			 */
-			static __userInfo__ getUserInfo(int uid);
+			static __user__ user(int uid);
 
 			/**
 			 * @return user info
 			 * @param name defines user login name
 			 */
-			static __userInfo__ getUserInfo(const dodoString &name);
+			static __user__ user(const dodoString &name);
 
 			/**
 			 * @return users of the os
 			 */
-			static dodoArray<__userInfo__> getUsers();
+			static dodoArray<__user__> users();
 
 			/**
 			 * @return group info
 			 * @param gid defines group id
 			 */
-			static __groupInfo__ getGroupInfo(int gid);
+			static __group__ group(int gid);
 
 			/**
 			 * @return group info
 			 * @param name defines group name
 			 */
-			static __groupInfo__ getGroupInfo(const dodoString &name);
+			static __group__ group(const dodoString &name);
 
 			/**
 			 * @return groups of the os
 			 */
-			static dodoArray<__groupInfo__> getGroups();
+			static dodoArray<__group__> groups();
 
 			/**
 			 * @return PID of current process
 			 */
-			static int getPID();
+			static int PID();
 
 			/**
 			 * @return parent PID of current process
 			 */
-			static int getParentPID();
+			static int PPID();
 
 			/**
 			 * @return group PID of current process
 			 */
-			static int getGroupPID();
+			static int GPID();
 
 			/**
 			 * @return group PID of given PID
 			 * @param pid defines PID
 			 */
-			static int getGroupPID(int pid);
+			static int GPID(int pid);
 
 			/**
 			 * set group PID of current process
 			 * @param gpid defines group PID where to move current process
 			 */
-			static void setGroupPID(int gpid);
+			static void setGPID(int gpid);
 
 			/**
 			 * set group PID of given process
 			 * @param pid defines PID to move
 			 * @param gpid defines group PID where to move process
 			 */
-			static void setGroupPID(int pid,
+			static void setGPID(int pid,
 									int gpid);
 
 			/**
@@ -442,7 +443,7 @@ namespace dodo {
 			 * remove signal handler
 			 * @param signal defines os signal[see osSignalsEnum]
 			 */
-			static void unsetSignalHandler(long signal);
+			static void removeSignalHandler(long signal);
 
 #ifdef DL_EXT
 			/**
@@ -450,7 +451,7 @@ namespace dodo {
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			static __signalMod__ getModuleInfo(const dodoString &path,
+			static __signal_module__ module(const dodoString &path,
 											   void             *toInit = NULL);
 
 			/**
@@ -481,21 +482,21 @@ namespace dodo {
 		  protected:
 
 			/**
-			 * fill __userInfo__ with values from passwd structure
+			 * fill __user__ with values from passwd structure
 			 * @return user info
 			 * @param info defines structure to fill
 			 * @param pw defines structure with info
 			 */
-			static __userInfo__ &fillUserInfo(__userInfo__ &info,
+			static __user__ &fillUser(__user__ &info,
 											  void         *pw);
 
 			/**
-			 * fill __groupInfo__ with values from group structure
+			 * fill __group__ with values from group structure
 			 * @return group info
 			 * @param info defines structure to fill
 			 * @param pw defines structure with info
 			 */
-			static __groupInfo__ &fillGroupInfo(__groupInfo__ &info,
+			static __group__ &fillGroup(__group__ &info,
 												void          *pw);
 
 			/**
@@ -520,8 +521,8 @@ namespace dodo {
 								long     signal);
 
 #ifdef DL_EXT
-			static void *handlesSig[OS_SIGNALS];        ///< handles to modules
-			static bool handlesOpenedSig[OS_SIGNALS];   ///< map of opened modules
+			static void *handlesSig[SIGNAL_ENUMSIZE];        ///< handles to modules
+			static bool handlesOpenedSig[SIGNAL_ENUMSIZE];   ///< map of opened modules
 #endif
 			/**
 			 * @class syncThreadSection
@@ -578,5 +579,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

@@ -46,15 +46,15 @@ namespace dodo {
 
 		namespace xml {
 			/**
-			 * @struct __additionalData__
+			 * @struct __additional__
 			 * @brief defines response/request additional data
 			 */
-			struct __additionalData__ {
+			struct __additional__ {
 				/**
 				 * constructor
 				 * @param encoding defines response/request encoding
 				 */
-				__additionalData__(dodoString &encoding);
+				__additional__(dodoString &encoding);
 
 				dodoString &encoding; ///< response/request encoding
 			};
@@ -68,6 +68,7 @@ namespace dodo {
 
 				/**
 				 * constructor
+				 * @param io defines input/output sources
 				 */
 				server(io::channel &io);
 
@@ -109,5 +110,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

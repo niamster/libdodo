@@ -117,7 +117,7 @@ regexp::match(const dodoString &pattern,
 	try {
 		compile(pattern);
 	} catch (exception::basic &ex) {
-		if (ex.funcID == REGEXPEX_COMPILE)
+		if (ex.function == REGEXPEX_COMPILE)
 			return false;
 		else
 			throw;
@@ -140,7 +140,7 @@ regexp::match(const dodoString &sample,
 	pockets.reserve(boundaries.size());
 #endif
 
-	dodoArray<__regexMatch__>::const_iterator i(boundaries.begin()), j(boundaries.end());
+	dodoArray<__regex_match__>::const_iterator i(boundaries.begin()), j(boundaries.end());
 	for (; i != j; ++i)
 		pockets.push_back(dodoString(sample.data() + i->begin, i->end - i->begin));
 
@@ -164,14 +164,14 @@ regexp::boundMatch(const dodoString &sample)
 	subs += 3;
 
 	int *oVector = new int[subs];
-	int rc = pcre_exec(regex->code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
+	int rc = pcre_exec(regex->code, NULL, sample.data(), sample.size(), 0, 0, oVector, subs);
 	if (rc <= 0) {
 		delete [] oVector;
 
 		return false;
 	}
 
-	__regexMatch__ bound;
+	__regex_match__ bound;
 
 	for (int j = 1; j < rc; ++j) {
 		subs = j * 2;
@@ -187,13 +187,13 @@ regexp::boundMatch(const dodoString &sample)
 	int subs = regex->code.re_nsub + 1;
 	regmatch_t *pmatch = new regmatch_t[subs];
 
-	int res = regexec(&regex->code, sample.c_str(), subs, pmatch, 0);
+	int res = regexec(&regex->code, sample.data(), subs, pmatch, 0);
 	if (res != 0) {
 		delete [] pmatch;
 		return false;
 	}
 
-	__regexMatch__ bound;
+	__regex_match__ bound;
 
 	for (int i(1); i < subs; ++i) {
 		bound.begin = pmatch[i].rm_so;
@@ -225,9 +225,9 @@ regexp::compile(const dodoString &pattern)
 
 	int errOffset(0), errn(0);
 	const char *error;
-	regex->code = pcre_compile2(pattern.c_str(), bits, &errn, &error, &errOffset, NULL);
+	regex->code = pcre_compile2(pattern.data(), bits, &errn, &error, &errOffset, NULL);
 	if (regex->code == NULL)
-		throw exception::basic(exception::ERRMODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
+		throw exception::basic(exception::MODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
 
 #else
 	if (extended)
@@ -240,12 +240,12 @@ regexp::compile(const dodoString &pattern)
 	else
 		regfree(&regex->code);
 
-	int errn = regcomp(&regex->code, pattern.c_str(), bits);
+	int errn = regcomp(&regex->code, pattern.data(), bits);
 	if (errn != 0) {
 #define ERROR_LEN 256
 		char error[ERROR_LEN];
 		regerror(errn, &regex->code, error, ERROR_LEN);
-		throw exception::basic(exception::ERRMODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
+		throw exception::basic(exception::MODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
 	}
 #endif
 }
@@ -260,7 +260,7 @@ regexp::replace(const dodoString      &pattern,
 	try {
 		compile(pattern);
 	} catch (exception::basic &ex) {
-		if (ex.funcID == REGEXPEX_COMPILE)
+		if (ex.function == REGEXPEX_COMPILE)
 			return sample;
 		else
 			throw;
@@ -278,7 +278,7 @@ regexp::replace(const dodoString      &sample,
 	if (!boundMatch(sample))
 		return sample;
 
-	dodoArray<__regexMatch__>::const_iterator i(boundaries.begin()), j(boundaries.end()), o;
+	dodoArray<__regex_match__>::const_iterator i(boundaries.begin()), j(boundaries.end()), o;
 
 	dodoStringArray::const_iterator k(replacements.begin());
 	int subs = replacements.size();

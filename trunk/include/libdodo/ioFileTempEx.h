@@ -49,9 +49,9 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define IOFILETEMPEX_CANNOTOVEWRITE_STR                 "You set option not to overwrite but tried to do that."
-#define IOFILETEMPEX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
-#define IOFILETEMPEX_NOTOPENED_STR "File was not opened."
+#define IOFILETEMPEX_CANNOTOVEWRITE_STR                 "Overwriting is not permitted"
+#define IOFILETEMPEX_FILEISSHORTERTHANGIVENPOSITION_STR "Access data out of bounds"
+#define IOFILETEMPEX_NOTOPENED_STR "File not opened"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -66,11 +66,10 @@ namespace dodo {
 				TEMPEX__READSTREAM,
 				TEMPEX__WRITESTREAM,
 				TEMPEX_FLUSH,
-				TEMPEX_GETINDESCRIPTOR,
-				TEMPEX_GETOUTDESCRIPTOR,
+				TEMPEX_INDESCRIPTOR,
+				TEMPEX_OUTDESCRIPTOR,
 			};
 		};
 	};
 };
-
 #endif

@@ -47,7 +47,7 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define DATABASEPOSTGRESQLEX_NOTOPENED_STR      "The database was not opened."
+#define DATABASEPOSTGRESQLEX_NOTOPENED_STR      "Database not opened"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -62,5 +62,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

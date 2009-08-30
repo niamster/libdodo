@@ -44,20 +44,20 @@
 
 using namespace dodo::io::network;
 
-__initialAccept__::__initialAccept__() : socket(-1)
+exchange::__init__::__init__() : socket(-1)
 {
 }
 
 //-------------------------------------------------------------------
 
-__initialAccept__::__initialAccept__(__initialAccept__ &init) : socket(init.socket)
+exchange::__init__::__init__(__init__ &init) : socket(init.socket)
 {
 	init.socket = -1;
 }
 
 //-------------------------------------------------------------------
 
-__initialAccept__::~__initialAccept__()
+exchange::__init__::~__init__()
 {
 }
 
@@ -72,17 +72,17 @@ exchange::exchange(exchange &fse) : stream::channel(fse.protection)
 exchange::exchange(short protection) : stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
+	collectedData.setExecObject(xexec::OBJECT_IONETWORKEXCHANGE);
 #endif
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange(__initialAccept__ &a_init,
+exchange::exchange(__init__ &a_init,
 				   short             protection) : stream::channel(protection)
 {
 #ifndef IO_WO_XEXEC
-	collectedData.setExecObject(XEXEC_OBJECT_IONETWORKEXCHANGE);
+	collectedData.setExecObject(xexec::OBJECT_IONETWORKEXCHANGE);
 #endif
 
 	init(a_init.socket, a_init.blocked, a_init.blockInherited);
@@ -109,7 +109,7 @@ exchange::close()
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = EXCHANGE_OPERATION_CLOSE;
+	operType = OPERATION_CLOSE;
 	performPreExec();
 #endif
 
@@ -145,8 +145,8 @@ exchange::init(int  a_socket,
 	setInBufferSize(inSocketBuffer);
 	setOutBufferSize(outSocketBuffer);
 
-	setInTimeout(inTimeout);
-	setOutTimeout(outTimeout);
+	setInTimeout(inSocketTimeout);
+	setOutTimeout(outSocketTimeout);
 
 	setLingerOption(lingerOpts, lingerSeconds);
 
@@ -190,7 +190,7 @@ void
 exchange::_write(const char * const a_data) const
 {
 	if (socket == -1)
-		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
@@ -210,7 +210,7 @@ exchange::_write(const char * const a_data) const
 					if (errno == EAGAIN)
 						break;
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -232,7 +232,7 @@ exchange::_write(const char * const a_data) const
 					if (errno == EAGAIN)
 						break;
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -250,7 +250,7 @@ void
 exchange::_read(char * const a_data) const
 {
 	if (socket == -1)
-		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	unsigned long iter = inSize / inSocketBuffer;
 	unsigned long rest = inSize % inSocketBuffer;
@@ -270,7 +270,7 @@ exchange::_read(char * const a_data) const
 					if (errno == EAGAIN)
 						break;
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -295,7 +295,7 @@ exchange::_read(char * const a_data) const
 					if (errno == EAGAIN)
 						break;
 
-					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -339,7 +339,7 @@ unsigned long
 exchange::_readStream(char * const data) const
 {
 	if (socket == -1)
-		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	long n = 0;
 
@@ -351,7 +351,7 @@ exchange::_readStream(char * const data) const
 			if (errno == EAGAIN)
 				break;
 
-			throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -370,7 +370,7 @@ exchange::flush() const
 //-------------------------------------------------------------------
 
 int
-exchange::getInDescriptor() const
+exchange::inDescriptor() const
 {
 	pc::sync::protector pg(keeper);
 
@@ -380,7 +380,7 @@ exchange::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-exchange::getOutDescriptor() const
+exchange::outDescriptor() const
 {
 	pc::sync::protector pg(keeper);
 

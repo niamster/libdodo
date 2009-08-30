@@ -51,5 +51,4 @@
 #include <libdodo/dataMemorySharedEx.h>
 #include <libdodo/dataTplProcessor.h>
 #include <libdodo/dataTplProcessorEx.h>
-
 #endif

@@ -43,15 +43,13 @@ namespace dodo {
 			enum collectionExR {
 				COLLECTIONEX_ISALREADYRUNNING,
 				COLLECTIONEX_NOTFOUND,
-				COLLECTIONEX_SWEPT,
 			};
 
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR "The process is currently running. Please wait."
-#define PCPROCESSCOLLECTIONEX_NOTFOUND_STR         "Process not found."
-#define PCPROCESSCOLLECTIONEX_SWEPT_STR            "Limit of execution exceeded. Process swept."
+#define PCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR "Process is currently running"
+#define PCPROCESSCOLLECTIONEX_NOTFOUND_STR         "Process not found"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -60,21 +58,17 @@ namespace dodo {
 				COLLECTIONEX__ISRUNNING,
 				COLLECTIONEX_ADDNRUN,
 				COLLECTIONEX_RUN,
-				COLLECTIONEX_DEL,
-				COLLECTIONEX_REPLACE,
+				COLLECTIONEX_REMOVE,
 				COLLECTIONEX_STOP,
 				COLLECTIONEX_WAIT,
-				COLLECTIONEX_SETEXECUTIONLIMIT,
 				COLLECTIONEX_ISRUNNING,
-
 #ifdef DL_EXT
-				COLLECTIONEX_GETMODULEINFO,
+				COLLECTIONEX_MODULE,
 				COLLECTIONEX_ADD,
 #endif
 			};
 		};
 	};
 };
-
 #endif
 

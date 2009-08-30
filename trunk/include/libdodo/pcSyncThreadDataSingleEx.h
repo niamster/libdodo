@@ -50,14 +50,14 @@ namespace dodo {
 					/**
 					 * explanations for libdodo defined errors
 					 */
-#define PCSYNCTHREADDATASINGLEEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
-#define PCSYNCTHREADDATASINGLEEX_CANNOTLOCK_STR      "The share is currently locked. Timeout exhousted."
+#define PCSYNCTHREADDATASINGLEEX_ISALREADYLOCKED_STR "Item is currently locked"
+#define PCSYNCTHREADDATASINGLEEX_CANNOTLOCK_STR      "Item is currently locked, timeout exhousted"
 
 					/**
 					 * IDs of functions where exception might be thrown
 					 */
 					enum singleFunctionsID {
-						SINGLEEX_DEL,
+						SINGLEEX_REMOVE,
 						SINGLEEX_SET,
 						SINGLEEX_LOCK,
 						SINGLEEX_UNLOCK,
@@ -68,5 +68,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

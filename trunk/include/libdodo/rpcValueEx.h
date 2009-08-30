@@ -47,8 +47,8 @@ namespace dodo {
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define RPCVALUEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
-#define RPCVALUEEX_ARRAYOUTOFRANGE_STR    "Array key is out of range."
+#define RPCVALUEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested"
+#define RPCVALUEEX_ARRAYOUTOFRANGE_STR    "Array key is out of range"
 
 		/**
 		 * IDs of functions where exception might be thrown
@@ -56,14 +56,12 @@ namespace dodo {
 		enum valueFunctionsID {
 			VALUEEX_BROPERATORSTRING,
 			VALUEEX_BROPERATORNUMERIC,
-			VALUEEX_GETSTRING,
-			VALUEEX_GETBOOLEAN,
-			VALUEEX_GETINTEGER,
-			VALUEEX_GETDOUBLE,
-			VALUEEX_GETARRAY,
-			VALUEEX_GETSTRUCT,
+			VALUEEX_STRING,
+			VALUEEX_BOOLEAN,
+			VALUEEX_NUMERIC,
+			VALUEEX_ARRAY,
+			VALUEEX_STRUCT,
 		};
 	};
 };
-
 #endif

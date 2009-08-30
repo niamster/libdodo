@@ -73,12 +73,10 @@ namespace dodo {
 				bool          joined;           ///< true if the thread was joined
 				int           status;           ///< thread exit status
 				bool          detached;         ///< true if thread is detached
-				unsigned long position;         ///< identificator
+				unsigned long id;         ///< identificator
 				job::routine  func;             ///< function to execute
 				int           stackSize;        ///< size of stack for thread[in bytes]
 				short         action;           ///< action on object destruction[see collectionOnDestructEnum]
-				unsigned long executed;         ///< amount of times thread was executed
-				unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
 
 #ifdef DL_EXT
 				void          *handle;          ///< handle to library
@@ -96,9 +94,7 @@ __thread__::__thread__() :
 #endif
 	isRunning(false),
 	joined(false),
-	status(0),
-	executed(0),
-	executeLimit(0)
+	status(0)
 {
 }
 
@@ -142,7 +138,7 @@ collection::~collection()
 	dodoList<__thread__ *>::iterator i(threads.begin()), j(threads.end());
 
 #ifdef DL_EXT
-	deinitIpcThreadCollectionModule deinit;
+	deinitModule deinit;
 #endif
 
 	for (; i != j; ++i) {
@@ -153,7 +149,7 @@ collection::~collection()
 		}
 
 		switch ((*i)->action) {
-			case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
+			case ON_DESTRUCTION_KEEP_ALIVE:
 
 #ifdef PTHREAD_EXT
 				pthread_detach((*i)->thread);
@@ -161,7 +157,7 @@ collection::~collection()
 
 				break;
 
-			case COLLECTION_ONDESTRUCT_STOP:
+			case ON_DESTRUCTION_STOP:
 
 #ifdef PTHREAD_EXT
 				pthread_cancel((*i)->thread);
@@ -169,7 +165,7 @@ collection::~collection()
 
 				break;
 
-			case COLLECTION_ONDESTRUCT_WAIT:
+			case ON_DESTRUCTION_WAIT:
 			default:
 
 #ifdef PTHREAD_EXT
@@ -181,7 +177,7 @@ collection::~collection()
 
 #ifdef DL_EXT
 		if ((*i)->handle != NULL) {
-			deinit = (deinitIpcThreadCollectionModule)dlsym((*i)->handle, "deinitIpcThreadCollectionModule");
+			deinit = (deinitModule)dlsym((*i)->handle, "deinitPcThreadModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -199,29 +195,17 @@ collection::~collection()
 
 unsigned long
 collection::add(job::routine func,
-				void         *data)
-{
-	return add(func, data, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
-}
-
-//-------------------------------------------------------------------
-
-unsigned long
-collection::add(job::routine func,
 				void         *data,
-				bool         detached,
-				short        action,
-				int          stackSize)
+				short        action)
 {
 	__thread__ *thread = new __thread__;
 
-	thread->detached = detached;
+	thread->detached = false;
 	thread->data = data;
 	thread->func = func;
-	thread->position = ++threadNum;
-	thread->stackSize = stackSize;
+	thread->id = ++threadNum;
+	thread->stackSize = 8388608;
 	thread->action = action;
-	thread->executeLimit = 0;
 
 #ifdef DL_EXT
 	thread->handle = NULL;
@@ -229,17 +213,17 @@ collection::add(job::routine func,
 
 	threads.push_back(thread);
 
-	return thread->position;
+	return thread->id;
 }
 
 //-------------------------------------------------------------------
 
 bool
-collection::getThread(unsigned long position) const
+collection::getThread(unsigned long id) const
 {
 	dodoList<__thread__ *>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i) {
-		if ((*i)->position == position) {
+		if ((*i)->id == id) {
 			current = i;
 
 			return true;
@@ -252,18 +236,18 @@ collection::getThread(unsigned long position) const
 //-------------------------------------------------------------------
 
 void
-collection::del(unsigned long position,
+collection::remove(unsigned long id,
 				bool          force)
 {
-	if (getThread(position)) {
+	if (getThread(id)) {
 		if (_isRunning(current)) {
 			if (!force)
-				throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else {
 #ifdef PTHREAD_EXT
 				errno = pthread_cancel((*current)->thread);
 				if (errno != 0)
-					throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 			}
@@ -271,15 +255,15 @@ collection::del(unsigned long position,
 
 #ifdef DL_EXT
 		if ((*current)->handle != NULL) {
-			deinitIpcThreadCollectionModule deinit;
+			deinitModule deinit;
 
-			deinit = (deinitIpcThreadCollectionModule)dlsym((*current)->handle, "deinitIpcThreadCollectionModule");
+			deinit = (deinitModule)dlsym((*current)->handle, "deinitPcThreadModule");
 			if (deinit != NULL)
 				deinit();
 
 #ifndef DL_FAST
 			if (dlclose((*current)->handle) != 0)
-				throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 		}
@@ -289,77 +273,18 @@ collection::del(unsigned long position,
 
 		threads.erase(current);
 	} else
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_DEL, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_REMOVE, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-collection::replace(unsigned long position,
-					job::routine  func,
-					void          *data,
-					bool          force,
-					bool          detached,
-					short         action,
-					int           stackSize)
-{
-	if (getThread(position)) {
-		if (_isRunning(current)) {
-			if (!force)
-				throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
-			else {
-#ifdef PTHREAD_EXT
-				errno = pthread_cancel((*current)->thread);
-				if (errno != 0)
-					throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-#endif
-			}
-		}
-
-#ifdef DL_EXT
-		if ((*current)->handle != NULL) {
-			deinitIpcThreadCollectionModule deinit;
-
-			deinit = (deinitIpcThreadCollectionModule)dlsym((*current)->handle, "deinitIpcThreadCollectionModule");
-			if (deinit != NULL)
-				deinit();
-
-#ifndef DL_FAST
-			if (dlclose((*current)->handle) != 0)
-				throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-
-#endif
-
-			(*current)->handle = NULL;
-		}
-#endif
-
-		(*current)->data = data;
-		(*current)->func = func;
-		(*current)->isRunning = false;
-		(*current)->detached = detached;
-		(*current)->stackSize = stackSize;
-		(*current)->action = action;
-	} else
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_REPLACE, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
-}
-
-//-------------------------------------------------------------------
-
-void
-collection::run(unsigned long position,
+collection::run(unsigned long id,
 				bool          force)
 {
-	if (getThread(position)) {
-		if ((*current)->executeLimit > 0 && ((*current)->executeLimit <= (*current)->executed)) {
-			threads.erase(current);
-
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_SWEPT, PCTHREADCOLLECTIONEX_SWEPT_STR, __LINE__, __FILE__);
-		}
-
+	if (getThread(id)) {
 		if (_isRunning(current) && !force)
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, PCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
 		if ((*current)->detached)
@@ -369,28 +294,27 @@ collection::run(unsigned long position,
 
 		errno = pthread_attr_setstacksize(&attr, (*current)->stackSize);
 		if (errno != 0)
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		errno = pthread_create(&((*current)->thread), &attr, __thread__::routine, *current);
 		if (errno != 0)
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 
 		(*current)->isRunning = true;
-		++((*current)->executed);
 	} else
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_RUN, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-collection::wait(unsigned long position)
+collection::wait(unsigned long id)
 {
-	if (getThread(position)) {
+	if (getThread(id)) {
 		if ((*current)->detached)
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_ISDETACHED, PCTHREADCOLLECTIONEX_ISDETACHED_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_ISDETACHED, PCTHREADCOLLECTIONEX_ISDETACHED_STR, __LINE__, __FILE__);
 
 		if ((*current)->joined)
 			return (*current)->status;
@@ -400,7 +324,7 @@ collection::wait(unsigned long position)
 #ifdef PTHREAD_EXT
 		errno = pthread_join((*current)->thread, NULL);
 		if (errno != 0)
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		status = (*current)->status;
 #endif
@@ -410,7 +334,7 @@ collection::wait(unsigned long position)
 
 		return status;
 	} else
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -426,7 +350,7 @@ collection::wait()
 #ifdef PTHREAD_EXT
 		errno = pthread_join((*i)->thread, NULL);
 		if (errno != 0)
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 
@@ -438,19 +362,19 @@ collection::wait()
 //-------------------------------------------------------------------
 
 void
-collection::stop(unsigned long position)
+collection::stop(unsigned long id)
 {
-	if (getThread(position)) {
+	if (getThread(id)) {
 #ifdef PTHREAD_EXT
 		errno = pthread_cancel((*current)->thread);
 		if (errno != 0)
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 
 		(*current)->isRunning = false;
 	} else
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -466,7 +390,7 @@ collection::stop()
 #ifdef PTHREAD_EXT
 		errno = pthread_cancel((*i)->thread);
 		if (errno != 0)
-			throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 
@@ -477,32 +401,32 @@ collection::stop()
 //-------------------------------------------------------------------
 
 bool
-collection::isRunning(unsigned long position) const
+collection::isRunning(unsigned long id) const
 {
-	if (getThread(position))
+	if (getThread(id))
 		return _isRunning(current);
 	else
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_ISRUNNING, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_ISRUNNING, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 bool
-collection::_isRunning(dodoList<__thread__ *>::iterator &position) const
+collection::_isRunning(dodoList<__thread__ *>::iterator &id) const
 {
-	if (!(*position)->isRunning)
+	if (!(*id)->isRunning)
 		return false;
 
 #ifdef PTHREAD_EXT
-	errno = pthread_kill((*position)->thread, 0);
+	errno = pthread_kill((*id)->thread, 0);
 	if (errno != 0) {
 		if (errno == ESRCH || errno == EAGAIN) {
-			(*position)->isRunning = false;
+			(*id)->isRunning = false;
 
 			return false;
 		}
 
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 #endif
 
@@ -512,38 +436,13 @@ collection::_isRunning(dodoList<__thread__ *>::iterator &position) const
 //-------------------------------------------------------------------
 
 void
-collection::sweepTrash()
+collection::setStackSize(unsigned long id,
+						 unsigned long size)
 {
-	dodoList<__thread__ *>::iterator i(threads.begin()), j(threads.end());
-	while (i != j) {
-		if (_isRunning(i)) {
-			++i;
-
-			continue;
-		}
-
-		if ((*i)->executeLimit > 0 && ((*i)->executeLimit <= (*i)->executed)) {
-			delete *i;
-
-			i = threads.erase(i);
-
-			continue;
-		}
-
-		++i;
-	}
-}
-
-//-------------------------------------------------------------------
-
-void
-collection::setExecutionLimit(unsigned long position,
-							  unsigned long limit)
-{
-	if (getThread(position))
-		(*current)->executeLimit = limit;
+	if (getThread(id))
+		(*current)->stackSize = size;
 	else
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_SETEXECUTIONLIMIT, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_SETSTACKSIZE, exception::ERRNO_LIBDODO, COLLECTIONEX_NOTFOUND, PCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -564,27 +463,27 @@ collection::running() const
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
-__threadMod__
-collection::getModuleInfo(const dodoString &module,
+__module__
+collection::module(const dodoString &module,
 						  void             *toInit)
 {
 #ifdef DL_FAST
-	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
+	void *handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initIpcThreadCollectionModule init = (initIpcThreadCollectionModule)dlsym(handle, "initIpcThreadCollectionModule");
+	initModule init = (initModule)dlsym(handle, "initPcThreadModule");
 	if (init == NULL)
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__threadMod__ mod = init(toInit);
+	__module__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 
@@ -601,27 +500,26 @@ collection::add(const dodoString &module,
 	__thread__ *thread = new __thread__;
 
 	thread->data = data;
-	thread->position = ++threadNum;
+	thread->id = ++threadNum;
 
 #ifdef DL_FAST
-	thread->handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
+	thread->handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	thread->handle = dlopen(module.c_str(), RTLD_LAZY);
+	thread->handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (thread->handle == NULL)
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initIpcThreadCollectionModule init = (initIpcThreadCollectionModule)dlsym(thread->handle, "initIpcThreadCollectionModule");
+	initModule init = (initModule)dlsym(thread->handle, "initPcThreadModule");
 	if (init == NULL)
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__threadMod__ temp = init(toInit);
+	__module__ temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(thread->handle, temp.hook);
 	if (in == NULL)
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	thread->executeLimit = temp.executeLimit;
 	thread->detached = temp.detached;
 	thread->stackSize = temp.stackSize;
 	thread->action = temp.action;
@@ -629,7 +527,7 @@ collection::add(const dodoString &module,
 
 	threads.push_back(thread);
 
-	return thread->position;
+	return thread->id;
 }
 #endif
 
@@ -656,10 +554,21 @@ collection::blockSignal(int  signals,
 //-------------------------------------------------------------------
 
 unsigned long
-collection::addNRun(job::routine func,
-					void         *data)
+collection::addNRun(job::routine  func,
+					void          *data,
+					short         action)
 {
-	return addNRun(func, data, 1, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
+	return addNRun(func, data, action, false);
+}
+
+//-------------------------------------------------------------------
+
+unsigned long
+collection::addNRunDetached(job::routine  func,
+							void          *data,
+							short         action)
+{
+	return addNRun(func, data, action, true);
 }
 
 //-------------------------------------------------------------------
@@ -667,20 +576,17 @@ collection::addNRun(job::routine func,
 unsigned long
 collection::addNRun(job::routine  func,
 					void          *data,
-					unsigned long limit,
-					bool          detached,
 					short         action,
-					int           stackSize)
+					bool detached)
 {
 	__thread__ *thread = new __thread__;
 
 	thread->detached = detached;
 	thread->data = data;
 	thread->func = func;
-	thread->position = ++threadNum;
-	thread->stackSize = stackSize;
+	thread->id = ++threadNum;
+	thread->stackSize = 8388608;
 	thread->action = action;
-	thread->executeLimit = limit;
 
 #ifdef DL_EXT
 	thread->handle = NULL;
@@ -695,32 +601,31 @@ collection::addNRun(job::routine  func,
 	else
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-	errno = pthread_attr_setstacksize(&attr, stackSize);
+	errno = pthread_attr_setstacksize(&attr, thread->stackSize);
 	if (errno != 0)
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	errno = pthread_create(&ti->thread, &attr, __thread__::routine, ti);
 	if (errno != 0)
-		throw exception::basic(exception::ERRMODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 
 	thread->isRunning = true;
-	++(thread->executed);
 
-	return thread->position;
+	return thread->id;
 }
 
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>
-collection::getIds()
+collection::jobs()
 {
 	dodoList<unsigned long> ids;
 
 	dodoList<__thread__ *>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
-		ids.push_back((*i)->position);
+		ids.push_back((*i)->id);
 
 	return ids;
 }

@@ -48,8 +48,8 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define IONETWORKCLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-#define IONETWORKCLIENTEX_LONGPATH_STR "Path to socket is too long."
+#define IONETWORKCLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function"
+#define IONETWORKCLIENTEX_LONGPATH_STR "Path to socket is too long"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -62,5 +62,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

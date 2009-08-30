@@ -47,18 +47,6 @@ namespace dodo {
 		};
 
 		/**
-		 * @enum dataTypeEnum defines RPC data types
-		 */
-		enum dataTypeEnum {
-			DATATYPE_STRING,
-			DATATYPE_BOOLEAN,
-			DATATYPE_INTEGER,
-			DATATYPE_DOUBLE,
-			DATATYPE_ARRAY,
-			DATATYPE_STRUCT,
-		};
-
-		/**
 		 * @class value
 		 * @brief defines RPC value
 		 */
@@ -70,6 +58,17 @@ namespace dodo {
 			friend class json::response;
 
 		  public:
+
+			/**
+			 * @enum dataEnum defines RPC data types
+			 */
+			enum dataEnum {
+				DATA_STRING,
+				DATA_BOOLEAN,
+				DATA_NUMERIC,
+				DATA_ARRAY,
+				DATA_STRUCT,
+			};
 
 			/**
 			 * constructor
@@ -136,16 +135,10 @@ namespace dodo {
 			void setBoolean(bool value);
 
 			/**
-			 * set integer value
-			 * @param value defines integer value
-			 */
-			void setInteger(long value);
-
-			/**
 			 * set double value
 			 * @param value defines double value
 			 */
-			void setDouble(double value);
+			void setNumeric(double value);
 
 			/**
 			 * add array value
@@ -176,72 +169,64 @@ namespace dodo {
 			/**
 			 * @return structure member
 			 * @param name defines structure member name
-			 * @note throws exception if data type is not DATATYPE_STRUCT
+			 * @note throws exception if data type is not DATA_STRUCT
 			 */
 			value operator[](const dodoString &name);
 
 			/**
 			 * @return array element
 			 * @param key defines array index
-			 * @note throws exception if data type is not DATATYPE_ARRAY
+			 * @note throws exception if data type is not DATA_ARRAY
 			 */
 			value operator[](unsigned long key);
 
 			/**
 			 * get argument type
 			 */
-			short getType();
+			short type();
 
 			/**
 			 * get string, date/time, base64 value
-			 * @note throws exception if data type is not DATATYPE_STRING, DATATYPE_DATETIME, DATATYPE_BASE64
+			 * @note throws exception if data type is not DATA_STRING, DATA_DATETIME, DATA_BASE64
 			 */
-			dodoString getString();
+			dodoString string();
 
 			/**
 			 * get boolean value
-			 * @note throws exception if data type is not DATATYPE_BOOLEAN
+			 * @note throws exception if data type is not DATA_BOOLEAN
 			 */
-			bool getBoolean();
+			bool boolean();
 
 			/**
 			 * get integer value
-			 * @note throws exception if data type is not DATATYPE_INTEGER
+			 * @note throws exception if data type is not DATA_INTEGER
 			 */
-			long getInteger();
-
-			/**
-			 * get double value
-			 * @note throws exception if data type is not DATATYPE_DOUBLE
-			 */
-			double getDouble();
+			long numeric();
 
 			/**
 			 * get array value
-			 * @note throws exception if data type is not DATATYPE_ARRAY
+			 * @note throws exception if data type is not DATA_ARRAY
 			 */
-			dodoArray<value> getArray();
+			dodoArray<value> array();
 
 			/**
 			 * get struct value
-			 * @note throws exception if data type is not DATATYPE_STRUCT
+			 * @note throws exception if data type is not DATA_STRUCT
 			 */
-			dodoMap<dodoString, value, dodoMapStringCompare> getStruct();
+			dodoMap<dodoString, value, dodoMapStringCompare> structure();
 
 		  protected:
 
-			mutable short valueDataType;                                                                                    ///< argument type[see dataTypeEnum]
+			mutable short valueDataType;                                                                                    ///< argument type[see dataEnum]
 
 			union {
 				dodoString                                       *stringValue;                                              ///< string, datetime, base64 value
-				long                                             integerValue;                                              ///< integer value
 				mutable bool                                     booleanValue;                                              ///< boolean value
-				double                                           doubleValue;                                               ///< double value
+				double                                           numericValue;                                               ///< double value
 				dodoArray<value>                                 *arrayValue;                                               ///< array value
 				dodoMap<dodoString, value, dodoMapStringCompare> *structValue;                                              ///< struct value
 			};
 		};
 	};
 };
-
 #endif

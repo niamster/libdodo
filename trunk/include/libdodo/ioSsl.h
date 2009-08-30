@@ -38,13 +38,12 @@
 namespace dodo {
 	namespace io {
 		namespace ssl {
-			struct __sslConnection__;
+			struct __connection__;
+			struct __context__;
 
-			struct __sslContext__;
-
-			enum keyTypeEnum {
-				KEYTYPE_PKEY,
-				KEYTYPE_RSA,
+			enum keyEnum {
+				KEY_PKEY,
+				KEY_RSA,
 			};
 
 			/**
@@ -73,7 +72,7 @@ namespace dodo {
 
 				dodoString key;         ///< pathname to the key file
 				dodoString keyPassword; ///< password for the key file
-				short      keyType;     ///< type of the key[see keyTypeEnum]
+				short      keyType;     ///< type of the key[see keyEnum]
 				dodoString cert;        ///< pathname to the certificate file
 				dodoString ca;          ///< pathname to the certificate authority file
 				dodoString caPath;      ///< pathname to a directory that contains trusted SSL CA certificates in PEM format or to a file of CA certificates in PEM format
@@ -83,5 +82,4 @@ namespace dodo {
 	};
 };
 #endif
-
 #endif

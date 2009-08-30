@@ -64,12 +64,11 @@ namespace dodo {
 
 				/**
 				 * listen for incoming requests
-				 * @param func define request handler
+				 * @param handler defines request handler
 				 */
-				virtual void serve(serverHandler func);
+				virtual void serve(handler handler);
 			};
 		};
 	};
 };
-
 #endif

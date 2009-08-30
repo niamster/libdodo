@@ -45,6 +45,7 @@ namespace dodo {
 
 			/**
 			 * constructor
+			 * @param protection defines type of IO protection[see channel::protectionEnum]
 			 */
 			exchange(short protection);
 
@@ -55,11 +56,10 @@ namespace dodo {
 
 			/**
 			 * @return environment variable
-			 * @param data defines name of environment variable
+			 * @param var defines name of environment variable
 			 */
-			virtual char *getenv(const char *data) = 0;
+			virtual char *getenv(const char *var) = 0;
 		};
 	};
 };
-
 #endif

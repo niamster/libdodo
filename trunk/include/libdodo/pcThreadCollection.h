@@ -40,42 +40,34 @@ namespace dodo {
 		namespace thread {
 			struct __thread__;
 
-			/**
-			 * @enum collectionOnDestructEnum defines action with thread on object destruction
-			 */
-			enum collectionOnDestructEnum {
-				COLLECTION_ONDESTRUCT_KEEP_ALIVE,
-				COLLECTION_ONDESTRUCT_STOP,
-				COLLECTION_ONDESTRUCT_WAIT
-			};
-
 #ifdef DL_EXT
 			/**
-			 * @struct __threadMod__
-			 * @brief defines data that is returned from initIpcThreadCollectionModule in the library
+			 * @struct __module__
+			 * @brief defines data that is returned from initModule in the library
 			 */
-			struct __threadMod__ {
+			struct __module__ {
 				char          name[64];         ///< name of module
 				char          discription[256]; ///< discription of module
 				char          hook[64];         ///< name of function in module that will be a hook
-				unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
 				bool          detached;         ///< true if thread is detached
 				int           stackSize;        ///< size of stack for thread[in bytes]
 				short         action;           ///< action on object destruction[see collectionOnDestructEnum]
 			};
 
 			/**
-			 * @typedef initIpcThreadCollectionModule
+			 * @typedef initModule
 			 * @brief defines type of init function for library
 			 * @param data defines user data
+			 * @note name in the library must be initPcThreadModule
 			 */
-			typedef __threadMod__ (*initIpcThreadCollectionModule)(void *data);
+			typedef __module__ (*initModule)(void *data);
 
 			/**
-			 * @typedef deinitIpcThreadCollectionModule
+			 * @typedef deinitModule
 			 * @brief defines type of deinit function for library
+			 * @note name in the library must be deinitPcThreadModule
 			 */
-			typedef void (*deinitIpcThreadCollectionModule)();
+			typedef void (*deinitModule)();
 #endif
 
 			/**
@@ -89,7 +81,7 @@ namespace dodo {
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				collection(collection &st);
+				collection(collection &);
 
 			  public:
 
@@ -108,15 +100,23 @@ namespace dodo {
 				 * @return thread identificator
 				 * @param func defines function to execute
 				 * @param data defines process data
-				 * @param detached defines whether thread will be detached
 				 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
-				 * @param stackSize defines stack thread size
 				 */
 				virtual unsigned long add(job::routine func,
 										  void         *data,
-										  bool         detached,
-										  short        action,
-										  int          stackSize = 2097152);
+										  short        action);
+
+				/**
+				 * add function to became a thread
+				 * @return thread identificator
+				 * @param func defines function to execute
+				 * @param data defines process data
+				 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
+				 * @note this will immediately execute the process
+				 */
+				virtual unsigned long addNRun(job::routine  func,
+											  void          *data,
+											  short         action);
 
 				/**
 				 * add function to became a thread
@@ -124,84 +124,35 @@ namespace dodo {
 				 * @param func defines function to execute
 				 * @param data defines process data
 				 * @param limit defines limit on executions
-				 * @param detached defines whether thread will be detached
 				 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
-				 * @param stackSize defines stack thread size
 				 * @note this will immediately execute the process
+				 * the thread will be detached
 				 */
-				virtual unsigned long addNRun(job::routine  func,
+				virtual unsigned long addNRunDetached(job::routine  func,
 											  void          *data,
-											  unsigned long limit,
-											  bool          detached,
-											  short         action,
-											  int           stackSize = 2097152);
-
-				/**
-				 * add function to became a thread
-				 * @return thread identificator
-				 * @param func defines function to execute
-				 * @param data defines process data
-				 * @note
-				 * detached=false
-				 * action=COLLECTION_ONDESTRUCT_WAIT
-				 * stackSize=2097152
-				 */
-				virtual unsigned long add(job::routine func,
-										  void         *data);
-
-				/**
-				 * add function to became a thread
-				 * @return thread identificator
-				 * @param func defines function to execute
-				 * @param data defines process data
-				 * @note this will immediately execute the process
-				 * limit=1
-				 * detached=false
-				 * action=COLLECTION_ONDESTRUCT_WAIT
-				 * stackSize=2097152
-				 */
-				virtual unsigned long addNRun(job::routine func,
-											  void         *data);
+											  short         action);
 
 				/**
 				 * remove registered thread
-				 * @param position defines thread identificator
-				 * @param force defines termination condition; if true and thread is running stop execution of the process
+				 * @param id defines thread identificator
+				 * @param terminate defines termination condition; if true and thread is running stop execution of the process
 				 */
-				virtual void del(unsigned long position,
-								 bool          force = false);
-
-				/**
-				 * replace thread function
-				 * @param position defines thread identificator
-				 * @param func defines function to execute
-				 * @param data defines process data
-				 * @param force defines termination condition; if true and thread is running stop execution of the process
-				 * @param detached defines whether thread will be detached
-				 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
-				 * @param stackSize defines stack thread size
-				 */
-				virtual void replace(unsigned long position,
-									 job::routine  func,
-									 void          *data,
-									 bool          force = false,
-									 bool          detached = false,
-									 short         action = COLLECTION_ONDESTRUCT_WAIT,
-									 int           stackSize = 2097152);
+				virtual void remove(unsigned long id,
+								 bool          terminate = false);
 
 				/**
 				 * execute thread
-				 * @param position defines thread identificator
+				 * @param id defines thread identificator
 				 * @param force defines run condition; if true and thread is running run thread anyway
 				 */
-				virtual void run(unsigned long position,
+				virtual void run(unsigned long id,
 								 bool          force = false);
 
 				/**
 				 * stop thread
-				 * @param position defines thread identificator
+				 * @param id defines thread identificator
 				 */
-				virtual void stop(unsigned long position);
+				virtual void stop(unsigned long id);
 
 				/**
 				 * stop all registered threads
@@ -211,9 +162,9 @@ namespace dodo {
 				/**
 				 * wait for thread termination
 				 * @return status of the job
-				 * @param position defines thread identificator
+				 * @param id defines thread identificator
 				 */
-				virtual int wait(unsigned long position);
+				virtual int wait(unsigned long id);
 
 				/**
 				 * wait for all registered threads termination
@@ -222,9 +173,9 @@ namespace dodo {
 
 				/**
 				 * @return true if thread is running
-				 * @param position defines thread identificator
+				 * @param id defines thread identificator
 				 */
-				virtual bool isRunning(unsigned long position) const;
+				virtual bool isRunning(unsigned long id) const;
 
 				/**
 				 * @return amount of running threads
@@ -232,22 +183,18 @@ namespace dodo {
 				virtual unsigned long running() const;
 
 				/**
-				 * sweep threads if their time has been already passed
-				 */
-				virtual void sweepTrash();
-
-				/**
 				 * @return list of threads in object
 				 */
-				virtual dodoList<unsigned long> getIds();
+				virtual dodoList<unsigned long> jobs();
 
 				/**
-				 * set maximum execution time
-				 * @param position defines thread identificator
-				 * @param limit defines the limit on executions of the thread
+				 * set maximum stack size
+				 * @param id defines thread identificator
+				 * @param size defines stack size of the thread
 				 */
-				virtual void setExecutionLimit(unsigned long position,
-											   unsigned long limit = 1);
+				virtual void setStackSize(unsigned long id,
+										  unsigned long size);
+
 
 #ifdef DL_EXT
 				/**
@@ -266,7 +213,7 @@ namespace dodo {
 				 * @param module defines path to the library[if not in ldconfig db] or library name
 				 * @param toInit defines library init data
 				 */
-				static __threadMod__ getModuleInfo(const dodoString &module,
+				static __module__ module(const dodoString &module,
 												   void             *toInit = NULL);
 #endif
 
@@ -281,18 +228,33 @@ namespace dodo {
 			  protected:
 
 				/**
-				 * @return true if thread is running
-				 * @param position indicates for what thread to set limit
+				 * add function to became a thread
+				 * @return thread identificator
+				 * @param func defines function to execute
+				 * @param data defines process data
+				 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
+				 * @param detached defines whether thread will be detached or not
+				 * @note this will immediately execute the process
 				 */
-				bool _isRunning(dodoList<__thread__ *>::iterator &position) const;
+				unsigned long addNRun(job::routine  func,
+									  void          *data,
+									  short         action,
+									  bool detached);
+
+
+				/**
+				 * @return true if thread is running
+				 * @param id indicates for what thread to set limit
+				 */
+				bool _isRunning(dodoList<__thread__ *>::iterator &id) const;
 
 				/**
 				 * search threads by identificator
 				 * @return true if thread has been found
-				 * @param position defines thread identificator
+				 * @param id defines thread identificator
 				 * @note this sets internal class parameter 'current' to found thread
 				 */
-				bool getThread(unsigned long position) const;
+				bool getThread(unsigned long id) const;
 
 				mutable dodoList<__thread__ *> threads;             ///< identificators of threads
 
@@ -307,5 +269,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

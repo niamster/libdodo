@@ -65,68 +65,43 @@ namespace dodo {
 		 * @note for (x;y) == (0;0) it's left upper corner
 		 */
 		class draw {
-		  private:
-
-			/**
-			 * copy constructor
-			 * @note to prevent copying
-			 */
-			draw(draw &im);
-
 		  public:
 
 			/**
-			 * contructor
-			 */
-			draw();
-
-			/**
-			 * contructor
-			 * @param im defines image for drawations
-			 */
-			draw(graphics::image *im);
-
-			/**
-			 * destructor
-			 */
-			~draw();
-
-			/**
-			 * set image for drawations
-			 * @param im defines image for drawations
-			 */
-			void setImage(graphics::image *im);
-
-			/**
 			 * draw circle
+			 * @param image defines image on which perform drawing
 			 * @param center defines x and y position of circle center
 			 * @param radius defines circle radius
 			 * @param fillColor defines circle fill color
 			 * @param borderColor defines circle border color
 			 * @param borderWidth defines the width of the border of the circle
 			 */
-			void circle(const graphics::point &center,
-								unsigned long         radius,
-								const __color__       &fillColor,
-								const __color__       &borderColor,
-								unsigned short        borderWidth = 1);
+			static void circle(graphics::image &image,
+						const graphics::point &center,
+						unsigned long         radius,
+						const __color__       &fillColor,
+						const __color__       &borderColor,
+						unsigned short        borderWidth = 1);
 
 			/**
 			 * draw rectangle
+			 * @param image defines image on which perform drawing
 			 * @param tl defines x and y position of rectangle top left corner
 			 * @param br defines x and y position of rectangle bottom right corner
 			 * @param fillColor defines rectangle fill color
 			 * @param borderColor defines rectangle border color
 			 * @param borderWidth defines the width of the border of the rectangle
 			 */
-			void rectangle(const graphics::point &tl,
-								   const graphics::point &br,
-								   const __color__       &fillColor,
-								   const __color__       &borderColor,
-								   unsigned short        borderWidth = 1);
+			static void rectangle(graphics::image &image,
+						   const graphics::point &tl,
+						   const graphics::point &br,
+						   const __color__       &fillColor,
+						   const __color__       &borderColor,
+						   unsigned short        borderWidth = 1);
 
 			/**
 			 * draw text
+			 * @param image defines image on which perform drawing
 			 * @param position defines x and y position of text top left corner
 			 * @param text defines text to render
 			 * @param font defines font of the text
@@ -136,7 +111,8 @@ namespace dodo {
 			 * @param borderWidth defines the width of the border of the text
 			 * @param angle defines the deflection angle in degrees of the text relatively to horison
 			 */
-			void text(const graphics::point &position,
+			static void text(graphics::image &image,
+						   const graphics::point &position,
 							  const dodoString      &text,
 							  const dodoString      &font,
 							  unsigned short        fontWidth,
@@ -147,11 +123,13 @@ namespace dodo {
 
 			/**
 			 * put image
+			 * @param image defines image on which perform drawing
 			 * @param position defines x and y position of text top left corner
 			 * @param im defines image to render
 			 * @param angle defines the deflection angle in degrees of the image relatively to horison
 			 */
-			void image(const graphics::point &position,
+			static void image(graphics::image &image,
+						   const graphics::point &position,
 							   const graphics::image &im,
 							   double                angle = 0);
 
@@ -161,18 +139,21 @@ namespace dodo {
 			 * @param lineColor defines line color
 			 * @param lineWidth defines the width of the line
 			 */
-			void line(const dodoArray<graphics::point> &points,
+			static void line(graphics::image &image,
+						   const dodoArray<graphics::point> &points,
 							  const __color__                  &lineColor,
 							  unsigned short                   lineWidth = 1);
 
 			/**
 			 * draw dot
+			 * @param image defines image on which perform drawing
 			 * @param position defines coordinate of the point
 			 * @param pointColor defines poiny color
 			 * @param pointWidth defines the width of the point
 			 * @note for point width > 1 point is emulated as a circle, it's possible to get some side-effects
 			 */
-			void point(const graphics::point &position,
+			static void point(graphics::image &image,
+						   const graphics::point &position,
 							   const __color__       &pointColor,
 							   unsigned short        pointWidth = 1);
 
@@ -180,20 +161,19 @@ namespace dodo {
 
 			/**
 			 * draw primitive by description
+			 * @param image defines image on which perform drawing
 			 * @param description defines primitive description
 			 * @param fillColor defines primitive fill color
 			 * @param borderColor defines primitive border color
 			 * @param borderWidth defines the width of the border of the primitive
 			 */
-			void primitive(char            *description,
+			static void primitive(graphics::image &image,
+						   char            *description,
 								   const __color__ &fillColor,
 								   const __color__ &borderColor,
 								   unsigned short  borderWidth);
-
-			graphics::image *im; ///< image to perform drawing
 		};
 	};
 };
 #endif
-
 #endif

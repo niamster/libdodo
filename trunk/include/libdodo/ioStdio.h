@@ -48,15 +48,15 @@ namespace dodo {
 			 * copy constructor
 			 * @note to prevent copying
 			 */
-			stdio(stdio &fd);
+			stdio(stdio &);
 
 		  public:
 
 			/**
 			 * constructor
-			 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+			 * @param protection defines type of IO protection[see channelProtectionEnum]
 			 */
-			stdio(short protection = CHANNEL_PROTECTION_PROCESS);
+			stdio(short protection = channel::PROTECTION_PROCESS);
 
 			/**
 			 * destructor
@@ -77,7 +77,7 @@ namespace dodo {
 		  protected:
 
 			/**
-			 * write to stream - '\0' - terminated string
+			 * write to stream null terminated string
 			 * @param data defines data that will be written
 			 */
 			virtual void _writeStream(const char * const data) const;
@@ -100,5 +100,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

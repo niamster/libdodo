@@ -50,9 +50,9 @@ namespace dodo {
 				/**
 				 * explanations for libdodo defined errors
 				 */
-#define DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR "File or buffer doesn't contain XML document."
-#define DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR    "XML document doesn't have root node."
-#define DATAFORMATXMLPROCESSOREX_NONAME_STR    "Node does not have any name."
+#define DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR "File or buffer doesn't contain XML document"
+#define DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR    "XML document doesn't have root node"
+#define DATAFORMATXMLPROCESSOREX_NONAME_STR    "Node does not have any name"
 
 				/**
 				 * IDs of functions where exception might be thrown
@@ -72,6 +72,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

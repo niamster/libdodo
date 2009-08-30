@@ -47,7 +47,7 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define DATABASESQLITEEX_NOTOPENED_STR      "The database was not opened."
+#define DATABASESQLITEEX_NOTOPENED_STR      "Database not opened"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -64,5 +64,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

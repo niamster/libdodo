@@ -49,13 +49,13 @@ namespace dodo {
 					/**
 					 * explanations for libdodo defined errors
 					 */
-#define PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR "Share not found."
+#define PCSYNCTHREADDATACOLLECTIONEX_NOTFOUND_STR "Item not found"
 
 					/**
 					 * IDs of functions where exception might be thrown
 					 */
 					enum collectionFunctionsID {
-						COLLECTIONEX_DEL,
+						COLLECTIONEX_REMOVE,
 						COLLECTIONEX_SET,
 						COLLECTIONEX_GET,
 					};
@@ -64,6 +64,5 @@ namespace dodo {
 		};
 	};
 };
-
 #endif
 

@@ -37,69 +37,68 @@
 namespace dodo {
 	namespace tools {
 		/**
-		 * @enum filesystemFileTypeEnum defines file type
-		 */
-		enum filesystemFileTypeEnum {
-			FILESYSTEM_FILETYPE_REGULAR_FILE,
-			FILESYSTEM_FILETYPE_LOCAL_SOCKET,
-			FILESYSTEM_FILETYPE_SYMBOLIC_LINK,
-			FILESYSTEM_FILETYPE_BLOCK_DEVICE,
-			FILESYSTEM_FILETYPE_DIRECTORY,
-			FILESYSTEM_FILETYPE_CHARACTER_DEVICE,
-			FILESYSTEM_FILETYPE_FIFO
-		};
-
-		/**
-		 * @enum filePermissionModesEnum defines file permissions
-		 */
-		enum filePermissionModesEnum {
-			FILESYSTEM_PERMISSION_NONE,
-
-			FILESYSTEM_PERMISSION_OWNER_READ_ACCESS = 1 << 1,
-			FILESYSTEM_PERMISSION_GROUP_READ_ACCESS = 1 << 2,
-			FILESYSTEM_PERMISSION_OTHER_READ_ACCESS = 1 << 3,
-
-			FILESYSTEM_PERMISSION_OWNER_WRITE_ACCESS = 1 << 4,
-			FILESYSTEM_PERMISSION_GROUP_WRITE_ACCESS = 1 << 5,
-			FILESYSTEM_PERMISSION_OTHER_WRITE_ACCESS = 1 << 6,
-
-			FILESYSTEM_PERMISSION_OWNER_EXECUTE_ACCESS = 1 << 7,
-			FILESYSTEM_PERMISSION_GROUP_EXECUTE_ACCESS = 1 << 8,
-			FILESYSTEM_PERMISSION_OTHER_EXECUTE_ACCESS = 1 << 9,
-
-			FILESYSTEM_PERMISSION_STICKY_ACCESS = 1 << 10,
-
-			FILESYSTEM_PERMISSION_SUID_ACCESS = 1 << 11,
-			FILESYSTEM_PERMISSION_SGID_ACCESS = 1 << 12,
-
-			FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS = FILESYSTEM_PERMISSION_OWNER_READ_ACCESS | FILESYSTEM_PERMISSION_OWNER_WRITE_ACCESS | FILESYSTEM_PERMISSION_OWNER_EXECUTE_ACCESS,
-			FILESYSTEM_PERMISSION_GROUP_ALL_ACCESS = FILESYSTEM_PERMISSION_GROUP_READ_ACCESS | FILESYSTEM_PERMISSION_GROUP_WRITE_ACCESS | FILESYSTEM_PERMISSION_GROUP_EXECUTE_ACCESS,
-			FILESYSTEM_PERMISSION_OTHER_ALL_ACCESS = FILESYSTEM_PERMISSION_OTHER_READ_ACCESS | FILESYSTEM_PERMISSION_OTHER_WRITE_ACCESS | FILESYSTEM_PERMISSION_OTHER_EXECUTE_ACCESS,
-
-			FILESYSTEM_PERMISSION_ALL_ALL_ACCESS = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS | FILESYSTEM_PERMISSION_GROUP_ALL_ACCESS | FILESYSTEM_PERMISSION_OTHER_ALL_ACCESS,
-		};
-
-		/**
-		 * @struct __fileInfo__
-		 * @brief defines file info
-		 */
-		struct __fileInfo__ {
-			dodoString name;    ///< file name
-			int        perm;    ///< file permissions[see filePermissionModesEnum]
-			int        type;    ///< file type[see filesystemFileTypeEnum]
-			long       size;    ///< file size
-			long       modTime; ///< modyfication time
-			long       accTime; ///< access time
-			int        gid;     ///< group id of the file
-			int        uid;     ///< user id of the file
-		};
-
-		/**
 		 * @class filesystem
 		 * @brief provides disk I/O manipulations
 		 */
 		class filesystem {
 		  public:
+			/**
+			 * @enum fileEnum defines file type
+			 */
+			enum fileEnum {
+				FILE_REGULAR_FILE,
+				FILE_LOCAL_SOCKET,
+				FILE_SYMBOLIC_LINK,
+				FILE_BLOCK_DEVICE,
+				FILE_DIRECTORY,
+				FILE_CHARACTER_DEVICE,
+				FILE_FIFO
+			};
+
+			/**
+			 * @enum permissionEnum defines file permissions
+			 */
+			enum permissionEnum {
+				PERMISSION_NONE,
+
+				PERMISSION_OWNER_READ_ACCESS = 1 << 1,
+				PERMISSION_GROUP_READ_ACCESS = 1 << 2,
+				PERMISSION_OTHER_READ_ACCESS = 1 << 3,
+
+				PERMISSION_OWNER_WRITE_ACCESS = 1 << 4,
+				PERMISSION_GROUP_WRITE_ACCESS = 1 << 5,
+				PERMISSION_OTHER_WRITE_ACCESS = 1 << 6,
+
+				PERMISSION_OWNER_EXECUTE_ACCESS = 1 << 7,
+				PERMISSION_GROUP_EXECUTE_ACCESS = 1 << 8,
+				PERMISSION_OTHER_EXECUTE_ACCESS = 1 << 9,
+
+				PERMISSION_STICKY_ACCESS = 1 << 10,
+
+				PERMISSION_SUID_ACCESS = 1 << 11,
+				PERMISSION_SGID_ACCESS = 1 << 12,
+
+				PERMISSION_OWNER_ALL_ACCESS = PERMISSION_OWNER_READ_ACCESS | PERMISSION_OWNER_WRITE_ACCESS | PERMISSION_OWNER_EXECUTE_ACCESS,
+				PERMISSION_GROUP_ALL_ACCESS = PERMISSION_GROUP_READ_ACCESS | PERMISSION_GROUP_WRITE_ACCESS | PERMISSION_GROUP_EXECUTE_ACCESS,
+				PERMISSION_OTHER_ALL_ACCESS = PERMISSION_OTHER_READ_ACCESS | PERMISSION_OTHER_WRITE_ACCESS | PERMISSION_OTHER_EXECUTE_ACCESS,
+
+				PERMISSION_ALL_ALL_ACCESS = PERMISSION_OWNER_ALL_ACCESS | PERMISSION_GROUP_ALL_ACCESS | PERMISSION_OTHER_ALL_ACCESS,
+			};
+
+			/**
+			 * @struct __file__
+			 * @brief defines file info
+			 */
+			struct __file__ {
+				dodoString name;    ///< file name
+				int        perm;    ///< file permissions[see filePermissionModesEnum]
+				int        type;    ///< file type[see filesystemFileEnum]
+				long       size;    ///< file size
+				long       modTime; ///< modyfication time
+				long       accTime; ///< access time
+				int        gid;     ///< group id of the file
+				int        uid;     ///< user id of the file
+			};
 
 			/**
 			 * copy file/empty dir/...
@@ -159,25 +158,25 @@ namespace dodo {
 			 * @return basename of path string
 			 * @param path defines path string
 			 */
-			static dodoString base(const dodoString &path);
+			static dodoString basename(const dodoString &path);
 
 			/**
 			 * @return dirname of path string
 			 * @param path defines path string
 			 */
-			static dodoString dir(const dodoString &path);
+			static dodoString dirname(const dodoString &path);
 
 			/**
 			 * @return file content
 			 * @param path defines path to file
 			 */
-			static dodoString getFileContents(const dodoString &path);
+			static dodoString fileContents(const dodoString &path);
 
 			/**
 			 * @return file content
 			 * @param path defines path to file
 			 */
-			static dodoStringArray getFileContentsArr(const dodoString &path);
+			static dodoStringArray fileContentsInArray(const dodoString &path);
 
 			/**
 			 * delete file/empty directory/...
@@ -210,7 +209,7 @@ namespace dodo {
 			 * @param permissions defines fifo permissions[see filePermissionModesEnum]
 			 */
 			static void mkfifo(const dodoString &path,
-							   int              permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS);
+							   int              permissions = PERMISSION_OWNER_ALL_ACCESS);
 
 			/**
 			 * make directory recursively
@@ -218,7 +217,7 @@ namespace dodo {
 			 * @param permissions defines directory permissions[see filePermissionModesEnum]
 			 */
 			static void mkdir(const dodoString &path,
-							  int              permissions = FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS);
+							  int              permissions = PERMISSION_OWNER_ALL_ACCESS);
 
 			/**
 			 * delete files, non empty directory
@@ -232,7 +231,7 @@ namespace dodo {
 			 * @return type of file
 			 * @param path defines path to file/directory/...
 			 */
-			static int getFileType(const dodoString &path);
+			static int fileType(const dodoString &path);
 
 			/**
 			 * change permissions
@@ -246,25 +245,25 @@ namespace dodo {
 			 * @return file/directory/... permissions
 			 * @param path defines path to file/directory/...
 			 */
-			static int getPermissions(const dodoString &path);
+			static int permissions(const dodoString &path);
 
 			/**
 			 * @return file size
 			 * @param path indicates path what to describe
 			 */
-			static long getSize(const dodoString &path); ///< in bytes
+			static long size(const dodoString &path); ///< in bytes
 
 			/**
 			 * @return file access time
 			 * @param path defines path to file
 			 */
-			static long getAccTime(const dodoString &path);
+			static long accessTime(const dodoString &path);
 
 			/**
 			 * @return file modification time
 			 * @param path defines path to file
 			 */
-			static long getModTime(const dodoString &path);
+			static long modificationTime(const dodoString &path);
 
 			/**
 			 * get original path of the file
@@ -317,25 +316,25 @@ namespace dodo {
 			 * @return user id of the file/directory/...
 			 * @param path defines path to file/directory/...
 			 */
-			static int getUserOwner(const dodoString &path);
+			static int userOwner(const dodoString &path);
 
 			/**
 			 * @return group id of the file/directory/...
 			 * @param path defines path to file/directory/...
 			 */
-			static int getGroupOwner(const dodoString &path);
+			static int groupOwner(const dodoString &path);
 
 			/**
-			 * @return file info[see __fileInfo__]
+			 * @return file info[see __file__]
 			 * @param path defines path to file
 			 */
-			static __fileInfo__ getFileInfo(const dodoString &path);
+			static __file__ file(const dodoString &path);
 
 			/**
-			 * @return info of files in directory[see __fileInfo__]
+			 * @return info of files in directory[see __file__]
 			 * @param path defines path to file
 			 */
-			static dodoArray<__fileInfo__> getDirInfo(const dodoString &path);
+			static dodoArray<__file__> dir(const dodoString &path);
 
 		  protected:
 
@@ -367,5 +366,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

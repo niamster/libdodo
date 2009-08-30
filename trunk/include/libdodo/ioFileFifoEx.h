@@ -48,8 +48,8 @@ namespace dodo {
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define IOFILEFIFOEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty."
-#define IOFILEFIFOEX_NOTOPENED_STR "Fifo was not opened."
+#define IOFILEFIFOEX_WRONGFILENAME_STR "Wrong filename"
+#define IOFILEFIFOEX_NOTOPENED_STR "Fifo not opened"
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -65,11 +65,10 @@ namespace dodo {
 				FIFOEX__WRITESTREAM,
 				FIFOEX_FLUSH,
 				FIFOEX_BLOCK,
-				FIFOEX_GETINDESCRIPTOR,
-				FIFOEX_GETOUTDESCRIPTOR,
+				FIFOEX_INDESCRIPTOR,
+				FIFOEX_OUTDESCRIPTOR,
 			};
 		};
 	};
 };
-
 #endif

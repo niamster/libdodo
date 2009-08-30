@@ -28,7 +28,7 @@
  */
 
 #ifndef _TOOLSCODE_H_
-#define _TOOLSCODE_H_ 1
+#define _TOOLSCODE_H 1
 
 #include <libdodo/directives.h>
 
@@ -48,33 +48,6 @@ namespace dodo {
 	};
 
 	namespace tools {
-		/**
-		 * @struct __url__
-		 * @brief defines Url parts
-		 */
-		struct __url__ {
-			dodoString protocol;    ///< scheme
-			dodoString host;        ///< host name
-			dodoString path;        ///< path to CGI
-			dodoString request;     ///< CGI request
-			dodoString login;       ///< login
-			dodoString password;    ///< password
-			dodoString port;        ///< port
-		};
-
-#ifdef ZLIB_EXT
-		/**
-		 * @enum codeZlibCompressionStrategyEnum
-		 * @brief defines type of compression for zlib
-		 */
-		enum codeZlibCompressionStrategyEnum {
-			CODE_ZLIB_FILTRED_COMRESSION = 1,
-			CODE_ZLIB_HUFFMAN_COMRESSION,
-			CODE_ZLIB_RLE_COMRESSION,
-			CODE_ZLIB_FIXED_COMRESSION
-		};
-#endif
-
 		/**
 		 * @class code
 		 * @brief provides encode/decode functionality
@@ -101,6 +74,17 @@ namespace dodo {
 
 #ifdef ZLIB_EXT
 			/**
+			 * @enum zlibCompressionStrategyEnum
+			 * @brief defines type of compression for zlib
+			 */
+			enum zlibCompressionStrategyEnum {
+				ZLIB_FILTRED_COMRESSION = 1,
+				ZLIB_HUFFMAN_COMRESSION,
+				ZLIB_RLE_COMRESSION,
+				ZLIB_FIXED_COMRESSION
+			};
+
+			/**
 			 * @return compressed buffer
 			 * @param buffer defines data to compress
 			 * @param level defines compression level[1..9]
@@ -108,7 +92,7 @@ namespace dodo {
 			 */
 			static dodoString zCompress(const dodoString &buffer,
 										unsigned short   level = 6,
-										short            type = CODE_ZLIB_HUFFMAN_COMRESSION);
+										short            type = ZLIB_HUFFMAN_COMRESSION);
 
 			/**
 			 * @return decompressed buffer
@@ -462,7 +446,6 @@ namespace dodo {
 
 				bool               corrupted;                   ///< true if the digest corrupted
 			};
-
 
 			/**
 			 * init SHA-512

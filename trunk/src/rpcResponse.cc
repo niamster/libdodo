@@ -50,12 +50,12 @@ response::~response()
 //-------------------------------------------------------------------
 
 value
-response::getValue(unsigned long position)
+response::value(unsigned long position)
 {
-	if (position >= values.size())
-		throw exception::basic(exception::ERRMODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+	if (position >= rValues.size())
+		throw exception::basic(exception::MODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 
-	return values[position];
+	return rValues[position];
 }
 
 //-------------------------------------------------------------------
@@ -69,48 +69,48 @@ response::isSuccessful()
 //-------------------------------------------------------------------
 
 void
-response::addArgument(const value &argument)
+response::addArgument(const dodo::rpc::value &argument)
 {
 	succ = true;
 
-	values.push_back(argument);
+	rValues.push_back(argument);
 }
 
 //-------------------------------------------------------------------
 
 void
-response::fault(const value &argument)
+response::fault(const dodo::rpc::value &argument)
 {
 	succ = false;
 
-	values.assign(1, argument);
+	rValues.assign(1, argument);
 }
 
 //-------------------------------------------------------------------
 
-value
+dodo::rpc::value
 response::operator[](unsigned long position)
 {
-	if (position >= values.size())
-		throw exception::basic(exception::ERRMODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+	if (position >= rValues.size())
+		throw exception::basic(exception::MODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 
-	return values[position];
+	return rValues[position];
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-response::getValuesCount()
+response::valuesCount()
 {
-	return values.size();
+	return rValues.size();
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<value>
-response::getValues()
+dodoArray<dodo::rpc::value>
+response::values()
 {
-	return values;
+	return rValues;
 }
 
 //-------------------------------------------------------------------
@@ -118,7 +118,7 @@ response::getValues()
 void
 response::clear()
 {
-	values.clear();
+	rValues.clear();
 }
 
 //-------------------------------------------------------------------

@@ -43,7 +43,7 @@ namespace dodo {
 				 * @brief defines shared data
 				 */
 				struct __info__ {
-					unsigned long position; ///< shared data identificator
+					unsigned long id; ///< shared data identificator
 					void          *data;    ///< shared data
 				};
 
@@ -68,34 +68,33 @@ namespace dodo {
 
 					/**
 					 * delete data from collection
-					 * @param position defines shared data identificator
+					 * @param id defines shared data identificator
 					 */
-					virtual void del(unsigned long position) = 0;
+					virtual void remove(unsigned long id) = 0;
 
 					/**
 					 * lock, set data, unlock
-					 * @param position defines shared data identificator
+					 * @param id defines shared data identificator
 					 * @param data defines shared data
 					 */
-					virtual void set(unsigned long position,
+					virtual void set(unsigned long id,
 									 void          *data) = 0;
 
 					/**
 					 * lock, return data, unlock
 					 * @return shared data
-					 * @param position defines shared data identificator
+					 * @param id defines shared data identificator
 					 */
-					virtual const void *get(unsigned long position) = 0;
+					virtual const void *get(unsigned long id) = 0;
 
 					/**
 					 * @return list of shared data in object
 					 */
-					virtual dodoList<unsigned long> getIds() = 0;
+					virtual dodoList<unsigned long> identificators() = 0;
 				};
 			};
 		};
 	};
 };
-
 #endif
 

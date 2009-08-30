@@ -44,42 +44,35 @@ namespace dodo {
 				COLLECTIONEX_ISALREADYRUNNING,
 				COLLECTIONEX_NOTFOUND,
 				COLLECTIONEX_ISDETACHED,
-				COLLECTIONEX_SWEPT,
 			};
 
 			/**
 			 * libdodo defined errors' explanation
 			 */
-#define PCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR    "The thread is currently running. Please wait."
-#define PCTHREADCOLLECTIONEX_NOTFOUND_STR            "Thread not found."
-#define PCTHREADCOLLECTIONEX_ISDETACHED_STR          "Thread is detached. Cannot join."
-#define PCTHREADCOLLECTIONEX_SWEPT_STR               "Limit of execution exceeded. Thread swept."
+#define PCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR    "Thread is currently running"
+#define PCTHREADCOLLECTIONEX_NOTFOUND_STR            "Thread not found"
+#define PCTHREADCOLLECTIONEX_ISDETACHED_STR          "Thread is detached"
 
 			/**
 			 * ID of function where exception was thrown
 			 */
 			enum collectionFunctionsID {
-				COLLECTIONEX_REPLACE,
 				COLLECTIONEX_RUN,
 				COLLECTIONEX_ADDNRUN,
-				COLLECTIONEX_DEL,
+				COLLECTIONEX_REMOVE,
 				COLLECTIONEX_WAIT,
 				COLLECTIONEX_STOP,
 				COLLECTIONEX_ISRUNNING,
 				COLLECTIONEX_CONSTRUCTOR,
 				COLLECTIONEX__ISRUNNING,
-				COLLECTIONEX_SETEXECUTIONLIMIT,
-
+				COLLECTIONEX_SETSTACKSIZE,
 #ifdef DL_EXT
-
-				COLLECTIONEX_GETMODULEINFO,
+				COLLECTIONEX_MODULE,
 				COLLECTIONEX_ADD,
-
 #endif
 			};
 		};
 	};
 };
-
 #endif
 

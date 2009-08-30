@@ -51,5 +51,4 @@
 #include <libdodo/pcSyncThreadSectionEx.h>
 #include <libdodo/pcThreadCollection.h>
 #include <libdodo/pcThreadCollectionEx.h>
-
 #endif

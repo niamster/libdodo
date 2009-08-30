@@ -60,7 +60,7 @@ channel::read() const
 	dodoString a_str;
 
 #ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READ;
+	operType = OPERATION_READ;
 	performPreExec();
 
 	collectedData.buffer.reserve(inSize);
@@ -104,7 +104,7 @@ channel::readStream() const
 	dodoString a_str;
 
 #ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTREAM;
+	operType = OPERATION_READSTREAM;
 	performPreExec();
 #endif
 
@@ -149,18 +149,18 @@ channel::write(const dodoString &a_data) const
 #ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(a_data, 0, outSize);
 
-	operType = IO_OPERATION_WRITE;
+	operType = OPERATION_WRITE;
 	performPreExec();
 
 	try {
-		_write(collectedData.buffer.c_str());
+		_write(collectedData.buffer.data());
 	} catch (...) {
 		collectedData.buffer.clear();
 
 		throw;
 	}
 #else
-	_write(a_data.c_str());
+	_write(a_data.data());
 #endif
 
 #ifndef IO_WO_XEXEC
@@ -180,18 +180,18 @@ channel::writeStream(const dodoString &a_data) const
 #ifndef IO_WO_XEXEC
 	collectedData.buffer = a_data;
 
-	operType = IO_OPERATION_WRITESTREAM;
+	operType = OPERATION_WRITESTREAM;
 	performPreExec();
 
 	try {
-		_writeStream(collectedData.buffer.c_str());
+		_writeStream(collectedData.buffer.data());
 	} catch (...) {
 		collectedData.buffer.clear();
 
 		throw;
 	}
 #else
-	_writeStream(a_data.c_str());
+	_writeStream(a_data.data());
 #endif
 
 #ifndef IO_WO_XEXEC

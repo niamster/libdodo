@@ -40,52 +40,52 @@ namespace dodo {
 	namespace data {
 		namespace base {
 			/**
-			 * @class __xexecDataBaseAccumulatorCollectedData__
-			 * @brief defines data that could be retrieved from the db object
-			 */
-			class __xexecDataBaseAccumulatorCollectedData__
-#ifndef DATABASE_WO_XEXEC
-				: public __xexecCollectedData__
-#endif
-			{
-			  public:
-
-#ifndef DATABASE_WO_XEXEC
-				/**
-				 * constructor
-				 * @param executor defines class that executed hook
-				 * @param execObject defines type of object that executed a hook[see xexecObjectTypeEnum]
-				 */
-				__xexecDataBaseAccumulatorCollectedData__(xexec *executor,
-														  short execObject);
-#endif
-
-				dodoString where;                       ///< `where` for the request(can be used as `as` for `callFunction`)
-				dodoStringArray fields;                 ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
-				dodoArray<dodoStringArray> values;      ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
-				dodoString table;                       ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-				dodoString order;                       ///< `order` for the request
-				dodoString having;                      ///< `having` for the request
-				dodoString group;                       ///< `group` for the request
-				dodoString limit;                       ///< `limit` for the result
-				dodoString offset;                      ///< `offset` for the result
-				dodoStringArray subQueries;             ///< `subquery`
-				dodoStringArray joinTables;             ///< join tables
-				dodoStringArray joinConds;              ///< join conditions
-				dodoArray<int> joinTypes;               ///< join types
-
-				__connectionInfo__ dbInfo;              ///< data info to connect to the server
-
-				int type;                              ///< type of operation
-				int additional;                             ///< additional actions[see accumulatorAddRequestEnum]
-			};
-
-			/**
 			 * @class accumulator
 			 * @brief provides wide abilities for db manipulations
 			 */
 			class accumulator : public connector {
 			  public:
+
+				/**
+				 * @class __collected_data__
+				 * @brief defines data that could be retrieved from the db object
+				 */
+				class __collected_data__
+#ifndef DATABASE_WO_XEXEC
+					: public xexec::__collected_data__
+#endif
+				{
+				  public:
+
+#ifndef DATABASE_WO_XEXEC
+					/**
+					 * constructor
+					 * @param executor defines class that executed hook
+					 * @param execObject defines type of object that executed a hook[see xexecObjectEnum]
+					 */
+					__collected_data__(xexec *executor,
+															  short execObject);
+#endif
+
+					dodoString where;                       ///< `where` for the request(can be used as `as` for `callFunction`)
+					dodoStringArray fields;                 ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
+					dodoArray<dodoStringArray> values;      ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
+					dodoString table;                       ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
+					dodoString order;                       ///< `order` for the request
+					dodoString having;                      ///< `having` for the request
+					dodoString group;                       ///< `group` for the request
+					dodoString limit;                       ///< `limit` for the result
+					dodoString offset;                      ///< `offset` for the result
+					dodoStringArray subQueries;             ///< `subquery`
+					dodoStringArray joinTables;             ///< join tables
+					dodoStringArray joinConds;              ///< join conditions
+					dodoArray<int> joinTypes;               ///< join types
+
+					__connection__ dbInfo;              ///< data info to connect to the server
+
+					int type;                              ///< type of operation
+					int additional;                             ///< additional actions[see accumulator::additionalRequestEnum]
+				};
 
 				/*
 				 * constructor
@@ -103,7 +103,7 @@ namespace dodo {
 				 * @param arguments defines arguments
 				 * @param as defines name of the result row
 				 */
-				virtual void callFunction(const dodoString      &name,
+				virtual void function(const dodoString      &name,
 										  const dodoStringArray &arguments,
 										  const dodoString      &as = __dodostring__);
 
@@ -112,7 +112,7 @@ namespace dodo {
 				 * @param name is procedure name
 				 * @param arguments is array of arguments
 				 */
-				virtual void callProcedure(const dodoString      &name,
+				virtual void procedure(const dodoString      &name,
 										   const dodoStringArray &arguments);
 
 				/**
@@ -228,7 +228,7 @@ namespace dodo {
 				 * append join statement
 				 * @param table defines table to join
 				 * @param condition defines condition for joining
-				 * @param type defines join type[see accumulatorJoinTypeEnum]
+				 * @param type defines join type[see accumulatorJoinEnum]
 				 */
 				virtual void join(const dodoString &table,
 								  int              type,
@@ -237,37 +237,37 @@ namespace dodo {
 				/**
 				 * @enum accumulatorNoneEnum defines empty state of the db object
 				 */
-				enum accumulatorNoneEnum {
-					ACCUMULATOR_NONE
+				enum stateNoneEnum {
+					STATE_NONE
 				};
-
-#define ACCUMULATOR_ADDREQUESTSTATEMENTS 8
 
 				/**
 				 * @enum accumulatorAddRequestEnum defines additional properties for the request
 				 */
-				enum accumulatorAddRequestEnum {
-					ACCUMULATOR_ADDREQUEST_WHERE = 1,
-					ACCUMULATOR_ADDREQUEST_HAVING,
-					ACCUMULATOR_ADDREQUEST_GROUPBY,
-					ACCUMULATOR_ADDREQUEST_ORDERBY,
-					ACCUMULATOR_ADDREQUEST_LIMIT,
-					ACCUMULATOR_ADDREQUEST_OFFSET,
-					ACCUMULATOR_ADDREQUEST_AS,
-					ACCUMULATOR_ADDREQUEST_JOIN,
+				enum additionalRequestEnum {
+					ADDITIONAL_REQUEST_WHERE = 1,
+					ADDITIONAL_REQUEST_HAVING,
+					ADDITIONAL_REQUEST_GROUPBY,
+					ADDITIONAL_REQUEST_ORDERBY,
+					ADDITIONAL_REQUEST_LIMIT,
+					ADDITIONAL_REQUEST_OFFSET,
+					ADDITIONAL_REQUEST_AS,
+					ADDITIONAL_REQUEST_JOIN,
+
+					ADDITIONAL_REQUEST_ENUMSIZE
 				};
 
 				/**
-				 * @enum accumulatorRequestEnum defines type of request
+				 * @enum requestEnum defines type of request
 				 */
-				enum accumulatorRequestEnum {
-					ACCUMULATOR_REQUEST_SELECT = SUBREQUESTSTATEMENTS + 1,
-					ACCUMULATOR_REQUEST_INSERT,
-					ACCUMULATOR_REQUEST_UPDATE,
-					ACCUMULATOR_REQUEST_DELETE,
+				enum requestEnum {
+					REQUEST_SELECT = SUBREQUEST_ENUMSIZE + 1,
+					REQUEST_INSERT,
+					REQUEST_UPDATE,
+					REQUEST_DELETE,
 
-					ACCUMULATOR_REQUEST_CALL_FUNCTION,
-					ACCUMULATOR_REQUEST_CALL_PROCEDURE,
+					REQUEST_FUNCTION,
+					REQUEST_PROCEDURE,
 				};
 
 			  protected:
@@ -279,10 +279,9 @@ namespace dodo {
 
 				bool show;                                                  ///< if true try to get result from the request[select]
 
-				__xexecDataBaseAccumulatorCollectedData__ collectedData;    ///< data collected for xexec
+				__collected_data__ collectedData;    ///< data collected for xexec
 			};
 		};
 	};
 };
-
 #endif

@@ -34,7 +34,7 @@
 
 using namespace dodo::cgi::basic;
 
-server::server(server &cf)
+server::server(server &)
 {
 }
 
@@ -53,11 +53,11 @@ server::~server()
 //-------------------------------------------------------------------
 
 void
-server::serve(serverHandler func)
+server::serve(handler func)
 {
-	exchange cSTD;
+	exchange ex;
 
-	func(cSTD);
+	func(ex);
 }
 
 //-------------------------------------------------------------------

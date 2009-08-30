@@ -34,31 +34,32 @@
 
 namespace dodo {
 	namespace io {
-		/**
-		 * @class eventInfo
-		 * @brief provides interface for event
-		 */
-		class eventInfo {
-			friend class event;
-
-		  protected:
-
+		namespace event {
 			/**
-			 * destructor
+			 * @class event::info
+			 * @brief provides interface for event
 			 */
-			virtual ~eventInfo() = 0;
+			class info {
+				friend class manager;
 
-			/**
-			 * @return descriptor of input stream
-			 */
-			virtual int getInDescriptor() const = 0;
+			  protected:
 
-			/**
-			 * @return descriptor of output stream
-			 */
-			virtual int getOutDescriptor() const = 0;
+				/**
+				 * destructor
+				 */
+				virtual ~info() = 0;
+
+				/**
+				 * @return descriptor of input stream
+				 */
+				virtual int inDescriptor() const = 0;
+
+				/**
+				 * @return descriptor of output stream
+				 */
+				virtual int outDescriptor() const = 0;
+			};
 		};
 	};
 };
-
 #endif

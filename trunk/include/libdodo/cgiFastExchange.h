@@ -59,10 +59,10 @@ namespace dodo {
 				/**
 				 * constructor
 				 * @param request defines CGI request descriptor
-				 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+				 * @param protection defines type of IO protection[see channel::protectionEnum]
 				 */
-				exchange(const __request__ &req,
-						 short             protection = io::CHANNEL_PROTECTION_PROCESS);
+				exchange(const __request__ &request,
+						 short             protection = io::channel::PROTECTION_PROCESS);
 
 				/**
 				 * destructor
@@ -76,21 +76,21 @@ namespace dodo {
 
 				/**
 				 * @return environment variable
-				 * @param data defines name of environment variable
+				 * @param var defines name of environment variable
 				 */
-				virtual char *getenv(const char *data);
+				virtual char *getenv(const char *var);
 
 			  protected:
 
 				/**
 				 * @return descriptor of input stream
 				 */
-				virtual int getInDescriptor() const;
+				virtual int inDescriptor() const;
 
 				/**
 				 * @return descriptor of output stream
 				 */
-				virtual int getOutDescriptor() const;
+				virtual int outDescriptor() const;
 
 				/**
 				 * read
@@ -127,5 +127,4 @@ namespace dodo {
 	};
 };
 #endif
-
 #endif

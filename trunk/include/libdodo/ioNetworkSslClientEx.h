@@ -51,10 +51,10 @@ namespace dodo {
 				/**
 				 * explanations for libdodo defined errors
 				 */
-#define IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection."
-#define IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR "Unable to initialize SSL object."
-#define IONETWORKSSLCLIENTEX_UNKNOWNKEYTYPE_STR "Unknown key type."
-#define IONETWORKSSLCLIENTEX_LONGPATH_STR "Path to socket is too long."
+#define IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection"
+#define IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR "Unable to initialize SSL object"
+#define IONETWORKSSLCLIENTEX_UNKNOWNKEY_STR "Unknown key type"
+#define IONETWORKSSLCLIENTEX_LONGPATH_STR "Path to socket is too long"
 
 				/**
 				 * IDs of functions where exception might be thrown
@@ -71,5 +71,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

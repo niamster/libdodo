@@ -88,7 +88,7 @@ client::setRequestVersion(const dodoString &version)
 //-------------------------------------------------------------------
 
 dodoString
-client::getResponseVersion()
+client::responseVersion()
 {
 	return rpVersion;
 }
@@ -96,7 +96,7 @@ client::getResponseVersion()
 //-------------------------------------------------------------------
 
 long
-client::getResponseId()
+client::responseId()
 {
 	return rpId;
 }

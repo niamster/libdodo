@@ -38,21 +38,19 @@
 namespace dodo {
 	namespace data {
 		namespace base {
-#define JOINTYPESTSTATEMENTS 6
-
 			/**
-			 * @enum joinTypeEnum defines join types
+			 * @enum joinEnum defines join types
 			 */
-			enum joinTypeEnum {
-				JOINTYPE_JOIN,
-				JOINTYPE_LEFTOUTER,
-				JOINTYPE_RIGHTOUTER,
-				JOINTYPE_FULLOUTER,
-				JOINTYPE_INNER,
-				JOINTYPE_CROSS,
-			};
+			enum joinEnum {
+				JOIN_JOIN,
+				JOIN_LEFTOUTER,
+				JOIN_RIGHTOUTER,
+				JOIN_FULLOUTER,
+				JOIN_INNER,
+				JOIN_CROSS,
 
-#define SUBREQUESTSTATEMENTS 4
+				JOIN_ENUMSIZE
+			};
 
 			/**
 			 * @enum subrequestEnum defines type of sub request
@@ -62,6 +60,8 @@ namespace dodo {
 				SUBREQUEST_UNION_ALL,
 				SUBREQUEST_MINUS,
 				SUBREQUEST_INTERSECT,
+
+				SUBREQUEST_ENUMSIZE
 			};
 
 			/**
@@ -87,14 +87,14 @@ namespace dodo {
 			};
 
 			/**
-			 * @struct __connectionInfo__
+			 * @struct __connection__
 			 * @brief defines connection options for the server
 			 */
-			struct __connectionInfo__ {
+			struct __connection__ {
 				/**
 				 * constructor
 				 */
-				__connectionInfo__();
+				__connection__();
 
 				/**
 				 * constructor
@@ -105,7 +105,7 @@ namespace dodo {
 				 * @param path defines path to db or unix socket
 				 * @param port defines port
 				 */
-				__connectionInfo__(const dodoString &db,
+				__connection__(const dodoString &db,
 								   const            dodoString &host,
 								   const            dodoString &user,
 								   const            dodoString &password,
@@ -121,17 +121,6 @@ namespace dodo {
 			};
 
 			/**
-			 * @enum dbOperationTypeEnum defines type of operation for hook
-			 */
-			enum dbOperationTypeEnum {
-				DATABASE_OPERATION_CONNECT,
-				DATABASE_OPERATION_EXEC,
-				DATABASE_OPERATION_DISCONNECT,
-				DATABASE_OPERATION_FETCHROW,
-				DATABASE_OPERATION_FETCHFIELD,
-			};
-
-			/**
 			 * @class connector
 			 * @brief implements an interface to db through sql and database independent interfaces
 			 */
@@ -141,6 +130,17 @@ namespace dodo {
 #endif
 			{
 			  public:
+
+				/**
+				 * @enum operationEnum defines type of operation for xexec
+				 */
+				enum operationEnum {
+					OPERATION_CONNECT,
+					OPERATION_EXEC,
+					OPERATION_DISCONNECT,
+					OPERATION_FETCHROW,
+					OPERATION_FETCHFIELD,
+				};
 
 				/**
 				 * constructor
@@ -156,7 +156,7 @@ namespace dodo {
 				 * connect to the database
 				 * @param dbInfo defines connection information
 				 */
-				virtual void connect(const __connectionInfo__ &dbInfo) = 0;
+				virtual void connect(const __connection__ &dbInfo) = 0;
 
 				/**
 				 * disconnect from the database
@@ -169,7 +169,7 @@ namespace dodo {
 				 * @param arguments defines arguments
 				 * @param as defines name of the result row
 				 */
-				virtual void callFunction(const dodoString      &name,
+				virtual void function(const dodoString      &name,
 										  const dodoStringArray &arguments,
 										  const dodoString      &as = __dodostring__) = 0;
 
@@ -178,7 +178,7 @@ namespace dodo {
 				 * @param name is procedure name
 				 * @param arguments is array of arguments
 				 */
-				virtual void callProcedure(const dodoString      &name,
+				virtual void procedure(const dodoString      &name,
 										   const dodoStringArray &arguments) = 0;
 
 				/**
@@ -293,7 +293,7 @@ namespace dodo {
 				 * append join statement
 				 * @param table defines table to join
 				 * @param condition defines condition for joining
-				 * @param type defines join type[see joinTypeEnum]
+				 * @param type defines join type[see joinEnum]
 				 */
 				virtual void join(const dodoString &table,
 								  int              type,
@@ -302,17 +302,17 @@ namespace dodo {
 				/**
 				 * @return amount of affected rows
 				 */
-				virtual unsigned int affectedRowsCount() const = 0;
+				virtual unsigned int affectedRows() const = 0;
 
 				/**
 				 * @return amount of rows got from the request
 				 */
-				virtual unsigned int rowsCount() const = 0;
+				virtual unsigned int requestedRows() const = 0;
 
 				/**
 				 * @return amount of fields got from the request
 				 */
-				virtual unsigned int fieldsCount() const = 0;
+				virtual unsigned int requestedFields() const = 0;
 
 				/**
 				 * @return rows got from the request
@@ -348,5 +348,4 @@ namespace dodo {
 		};
 	};
 };
-
 #endif

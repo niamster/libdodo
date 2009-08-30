@@ -44,39 +44,7 @@ namespace dodo {
 			};
 
 			namespace ssl {
-				struct __sslConnection__;
-
-				/**
-				 * @class __initialAccept__
-				 * @brief holds info that passes to accept call, and then inits exchange;
-				 */
-				class __initialAccept__ : public network::__initialAccept__ {
-					friend class exchange;
-					friend class client;
-					friend class server;
-
-				  public:
-
-					/**
-					 * constructor
-					 */
-					__initialAccept__();
-
-					/**
-					 * copy constructor
-					 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
-					 */
-					__initialAccept__(__initialAccept__ &init);
-
-					/**
-					 * destructor
-					 */
-					virtual ~__initialAccept__();
-
-				  protected:
-
-					io::ssl::__sslConnection__ *handle;         ///< SSL connection handle
-				};
+				struct __connection__;
 
 				/**
 				 * @class exchange
@@ -93,24 +61,56 @@ namespace dodo {
 					 * copy constructor
 					 * @note to prevent copying
 					 */
-					exchange(exchange &fse);
+					exchange(exchange &);
 
 				  public:
 
 					/**
-					 * constructor
-					 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+					 * @class __init__
+					 * @brief holds info that passes to accept call, and then inits exchange;
 					 */
-					exchange(short protection = CHANNEL_PROTECTION_PROCESS);
+					class __init__ : public network::exchange::__init__ {
+						friend class exchange;
+						friend class client;
+						friend class server;
+
+					  public:
+
+						/**
+						 * constructor
+						 */
+						__init__();
+
+						/**
+						 * copy constructor
+						 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
+						 */
+						__init__(__init__ &);
+
+						/**
+						 * destructor
+						 */
+						virtual ~__init__();
+
+					  protected:
+
+						io::ssl::__connection__ *handle;         ///< SSL connection handle
+					};
+
+					/**
+					 * constructor
+					 * @param protection defines type of IO protection[see channelProtectionEnum]
+					 */
+					exchange(short protection = channel::PROTECTION_PROCESS);
 
 					/**
 					 * constructor
 					 * @param init is initial data[got from the ::accept method]
-					 * @param protection defines type of IO protection[see channelProtectionTypeEnum]
+					 * @param protection defines type of IO protection[see channelProtectionEnum]
 					 * @note the object that has inited the object of current instance can be used for another connections
 					 */
-					exchange(__initialAccept__ &init,
-							 short             protection = CHANNEL_PROTECTION_PROCESS);
+					exchange(__init__ &init,
+							 short             protection = channel::PROTECTION_PROCESS);
 
 					/**
 					 * destructor
@@ -129,7 +129,7 @@ namespace dodo {
 
 				  protected:
 
-					io::ssl::__sslConnection__ *handle; ///< SSL connection handle
+					io::ssl::__connection__ *handle; ///< SSL connection handle
 
 					/**
 					 * close socket connection
@@ -137,7 +137,7 @@ namespace dodo {
 					 * @param ssl defines SSL handle
 					 */
 					void _close(int                        socket,
-										io::ssl::__sslConnection__ *handle);
+										io::ssl::__connection__ *handle);
 
 					/**
 					 * init current instance
@@ -147,20 +147,20 @@ namespace dodo {
 					 * @param blockInherited defines block flag inheritance
 					 */
 					void init(int                        socket,
-									  io::ssl::__sslConnection__ *handle,
+									  io::ssl::__connection__ *handle,
 									  bool                       blocked,
 									  bool                       blockInherited);
 
 					/**
 					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
+					 * @note not more then inSize(including null)
 					 */
 					virtual void _read(char * const data) const;
 
 					/**
-					 * read from stream - '\0' or '\n' - terminated string
+					 * read from stream null or newline terminated string
 					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
+					 * @note not more then inSize(including null)
 					 */
 					virtual unsigned long _readStream(char * const data) const;
 
@@ -174,5 +174,4 @@ namespace dodo {
 	};
 };
 #endif
-
 #endif
