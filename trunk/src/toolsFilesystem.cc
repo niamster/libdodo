@@ -606,6 +606,27 @@ filesystem::fileContentsInArray(const dodoString &path)
 
 //-------------------------------------------------------------------
 
+#ifdef basename
+inline char *original_basename(char *path)
+{
+	return ::basename(path);
+}
+
+#undef basename
+
+dodoString
+filesystem::basename(const dodoString &path)
+{
+	if (path.size() >= MAXPATHLEN)
+		throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_BASENAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
+
+	char temp[MAXPATHLEN];
+
+	strcpy(temp, path.data());
+
+	return original_basename(temp);
+}
+#else
 dodoString
 filesystem::basename(const dodoString &path)
 {
@@ -618,6 +639,7 @@ filesystem::basename(const dodoString &path)
 
 	return ::basename(temp);
 }
+#endif
 
 //-------------------------------------------------------------------
 

@@ -158,6 +158,9 @@ namespace dodo {
 			 * @return basename of path string
 			 * @param path defines path string
 			 */
+#ifdef basename
+#undef basename
+#endif
 			static dodoString basename(const dodoString &path);
 
 			/**
