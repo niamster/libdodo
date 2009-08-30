@@ -15,6 +15,7 @@ cdiff = -q
 hgext.extdiff =
 hgext.graphlog = 
 color =
+hgk=
 
 [extdiff]
 cdiff = colordiff -Npru
