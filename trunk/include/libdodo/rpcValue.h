@@ -151,7 +151,7 @@ namespace dodo {
 			 * @param name defines struct member name
 			 * @param value defines struct member value
 			 */
-			void addStructMember(const dodoString &name,
+			void addStructureMember(const dodoString &name,
 										 const value      &value);
 
 			/**

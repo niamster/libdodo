@@ -228,7 +228,7 @@ value::addArrayElement(const value &nvalue)
 //-------------------------------------------------------------------
 
 void
-value::addStructMember(const dodoString &name,
+value::addStructureMember(const dodoString &name,
 					   const value      &nvalue)
 {
 	if (valueDataType != DATA_STRUCT) {
