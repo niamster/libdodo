@@ -42,6 +42,7 @@ namespace dodo {
 			 */
 			enum managerExR {
 				MANAGEREX_ISALREADYRUNNING,
+				MANAGEREX_ISNOTLAUNCHED,
 				MANAGEREX_NOTFOUND,
 				MANAGEREX_ISDETACHED,
 			};
@@ -50,6 +51,7 @@ namespace dodo {
 			 * libdodo defined errors' explanation
 			 */
 #define PCTHREADMANAGEREX_ISALREADYRUNNING_STR    "Thread is currently running"
+#define PCTHREADMANAGEREX_ISNOTLAUNCHED_STR		"Thread is not launched"
 #define PCTHREADMANAGEREX_NOTFOUND_STR            "Thread not found"
 #define PCTHREADMANAGEREX_ISDETACHED_STR          "Thread is detached"
 

@@ -319,6 +319,9 @@ manager::wait(unsigned long id)
 		if ((*current)->joined)
 			return (*current)->status;
 
+		if (!(*current)->isRunning)
+			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_ISNOTLAUNCHED, PCTHREADMANAGEREX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
+
 		int status = 0;
 
 #ifdef PTHREAD_EXT
@@ -345,6 +348,9 @@ manager::wait()
 	dodoList<__thread__ *>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i) {
 		if ((*i)->joined || (*i)->detached)
+			continue;
+
+		if (!(*current)->isRunning)
 			continue;
 
 #ifdef PTHREAD_EXT

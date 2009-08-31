@@ -42,6 +42,7 @@ namespace dodo {
 			 */
 			enum managerExR {
 				MANAGEREX_ISALREADYRUNNING,
+				MANAGEREX_ISNOTLAUNCHED,
 				MANAGEREX_NOTFOUND,
 			};
 
@@ -49,6 +50,7 @@ namespace dodo {
 			 * explanations for libdodo defined errors
 			 */
 #define PCPROCESSMANAGEREX_ISALREADYRUNNING_STR "Process is currently running"
+#define PCPROCESSMANAGEREX_ISNOTLAUNCHED_STR "Process is not launched"
 #define PCPROCESSMANAGEREX_NOTFOUND_STR         "Process not found"
 
 			/**

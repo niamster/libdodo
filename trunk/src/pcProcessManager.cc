@@ -350,6 +350,9 @@ manager::wait(unsigned long position)
 		if ((*current)->joined)
 			return (*current)->status;
 
+		if (!(*current)->isRunning)
+			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_ISNOTLAUNCHED, PCPROCESSMANAGEREX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
+
 		int status;
 
 		if (waitpid((*current)->pid, &status, 0) == -1)
@@ -377,11 +380,15 @@ manager::wait()
 		if ((*i)->joined)
 			continue;
 
+		if (!(*current)->isRunning)
+			continue;
+
 		if (waitpid((*i)->pid, &status, 0) == -1)
 			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (WIFEXITED(status))
 			(*i)->status = WEXITSTATUS(status);
+
 		(*i)->isRunning = false;
 		(*i)->joined = true;
 	}
