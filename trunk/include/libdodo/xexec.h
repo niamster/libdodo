@@ -78,12 +78,14 @@ namespace dodo {
 		 * @typedef moduleInit
 		 * @brief defines type of init function for library
 		 * @param data defines user data
+		 * @note name in the library must be initXexecModule
 		 */
 		typedef __module__ (*moduleInit)(void *data);
 
 		/**
 		 * @typedef moduleDeinit
 		 * @brief defines type of deinit function for library
+		 * @note name in the library must be deinitXexecModule
 		 */
 		typedef void (*moduleDeinit)();
 #endif

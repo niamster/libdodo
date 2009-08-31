@@ -82,7 +82,7 @@ xexec::~xexec()
 		if (i->handle == NULL)
 			continue;
 
-		deinit = (moduleDeinit)dlsym(i->handle, "moduleDeinit");
+		deinit = (moduleDeinit)dlsym(i->handle, "deinitXexecModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -97,7 +97,7 @@ xexec::~xexec()
 		if (i->handle == NULL)
 			continue;
 
-		deinit = (moduleDeinit)dlsym(i->handle, "moduleDeinit");
+		deinit = (moduleDeinit)dlsym(i->handle, "deinitXexecModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -146,7 +146,7 @@ xexec::removeXExec(int id)
 	if (current->handle != NULL) {
 		moduleDeinit deinit;
 
-		deinit = (moduleDeinit)dlsym(current->handle, "moduleDeinit");
+		deinit = (moduleDeinit)dlsym(current->handle, "deinitXexecModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -225,7 +225,7 @@ xexec::module(const dodoString &module,
 	if (handle == NULL)
 		throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	moduleInit init = (moduleInit)dlsym(handle, "moduleInit");
+	moduleInit init = (moduleInit)dlsym(handle, "initXexecModule");
 	if (init == NULL)
 		throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -261,7 +261,7 @@ xexec::addXExec(const dodoString &module,
 	if (e.handle == NULL)
 		throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	moduleInit init = (moduleInit)dlsym(e.handle, "moduleInit");
+	moduleInit init = (moduleInit)dlsym(e.handle, "initXexecModule");
 	if (init == NULL)
 		throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
