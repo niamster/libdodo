@@ -53,7 +53,7 @@ response::xmlToResponse(dodo::data::format::xml::node &node)
 
 		dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
 		if (arr0.size() > 0) {
-			dodoArray<dodo::data::format::xml::node> &arr1 = arr0[0].nodeChildren["nodeValue"];
+			dodoArray<dodo::data::format::xml::node> &arr1 = arr0[0].nodeChildren["value"];
 			if (arr1.size() > 0)
 				resp.rValues.assign(1, value::xmlToValue(arr1[0]));
 		}
@@ -69,7 +69,7 @@ response::xmlToResponse(dodo::data::format::xml::node &node)
 
 			dodoArray<dodo::data::format::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 			for (; o != p; ++o) {
-				dodoArray<dodo::data::format::xml::node> &arr1 = o->nodeChildren["nodeValue"];
+				dodoArray<dodo::data::format::xml::node> &arr1 = o->nodeChildren["value"];
 				if (arr1.size() > 0)
 					resp.rValues.push_back(value::xmlToValue(arr1[0]));
 			}
@@ -103,7 +103,7 @@ response::responseToXml(const rpc::response &data)
 			param.nodeChildren.clear();
 
 			nodeArr.assign(1, value::valueToXml(*i));
-			param.nodeChildren.insert(make_pair("nodeValue", nodeArr));
+			param.nodeChildren.insert(make_pair("node", nodeArr));
 
 			subNodeArr.push_back(param);
 		}
@@ -118,7 +118,7 @@ response::responseToXml(const rpc::response &data)
 		dodoArray<rpc::value>::const_iterator i = data.rValues.begin();
 		if (i != data.rValues.end()) {
 			nodeArr.assign(1, value::valueToXml(*i));
-			fault.nodeChildren.insert(make_pair("nodeValue", nodeArr));
+			fault.nodeChildren.insert(make_pair("node", nodeArr));
 		}
 
 		nodeArr.assign(1, fault);
