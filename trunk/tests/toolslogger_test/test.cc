@@ -19,37 +19,37 @@ int main(int argc, char **argv)
 	try
 	{
 		file::regular *disk = new file::regular;
-		disk->open("./test.log", io::file::REGULAR_OPENMODE_READ_WRITE_TRUNCATE);
+		disk->open("./test.log", io::file::regular::OPEN_MODE_READ_WRITE_TRUNCATE);
 		disk->append = true;
 
 		stdio *std = new stdio;
 		std->redirectToStderr(true);
 
-		logger::getInstance().add(LOGGER_ERROR, disk);
-		logger::getInstance().add(LOGGER_ERROR, NULL);
-		logger::getInstance().add(LOGGER_ERROR, std);
-		logger::getInstance().add(LOGGER_INFO, std);
-		unsigned long infoDiskId = logger::getInstance().add(LOGGER_INFO, disk);
-		logger::getInstance().add(LOGGER_WARNING, std);
-		logger::getInstance().add(LOGGER_DEBUG, std);
+		logger::instance().add(logger::LOG_LEVEL_ERROR, disk);
+		logger::instance().add(logger::LOG_LEVEL_ERROR, NULL);
+		logger::instance().add(logger::LOG_LEVEL_ERROR, std);
+		logger::instance().add(logger::LOG_LEVEL_INFO, std);
+		unsigned long infoDiskId = logger::instance().add(logger::LOG_LEVEL_INFO, disk);
+		logger::instance().add(logger::LOG_LEVEL_WARNING, std);
+		logger::instance().add(logger::LOG_LEVEL_DEBUG, std);
 
 		///or you can use a link what is more pretty
-		logger &log = logger::getInstance();
-		log.log(LOGGER_INFO, "info message");
-		log.log(LOGGER_ERROR, "error message");
+		logger &log = logger::instance();
+		log.log(logger::LOG_LEVEL_INFO, "info message");
+		log.log(logger::LOG_LEVEL_ERROR, "error message");
 		log.remove(infoDiskId);
-		log.log(LOGGER_INFO, "another info message");
-		log.log(LOGGER_WARNING, "warning message");
-		log.log(LOGGER_DEBUG, "debug message");
+		log.log(logger::LOG_LEVEL_INFO, "another info message");
+		log.log(logger::LOG_LEVEL_WARNING, "warning message");
+		log.log(logger::LOG_LEVEL_DEBUG, "debug message");
 
 		///or you can use your own log
 		logger mylog;
-		mylog.add(LOGGER_INFO, NULL);
-		mylog.log(LOGGER_INFO, "info message from mylog");
+		mylog.add(logger::LOG_LEVEL_INFO, NULL);
+		mylog.log(logger::LOG_LEVEL_INFO, "info message from mylog");
 
 		///and also redirect it to global
 		mylog.forward = true;
-		mylog.log(LOGGER_INFO, "forwarded info message");
+		mylog.log(logger::LOG_LEVEL_INFO, "forwarded info message");
 
 		delete disk;
 		delete std;

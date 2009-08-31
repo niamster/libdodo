@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 		//HTTP.cacheAuthentification = false;
 
 		//HTTP.setProxy("127.0.0.1");
-		//HTTP.setProxy(tools::network::getHostPrimaryIp("localhost"));
+		//HTTP.setProxy(tools::network::hostPrimaryIp("localhost"));
 
 		res =  HTTP.GET("http://google.com");
 		//res =  HTTP.GET("http://libdodo:password@localhost/libdodo/cgi_test/test.cgi?status=digest_auth");
@@ -49,9 +49,9 @@ int main(int argc, char **argv)
 		tools::filesystem::writeToFile("test.dat", res.data);
 
 		cout << res.code << "\n~~\n";
-		cout << res.headers[RESPONSEHEADER_CONTENTTYPE] << "\n~~\n";
+		cout << res.headers[RESPONSE_HEADER_CONTENTTYPE] << "\n~~\n";
 		//cout << res.data << "\n~~\n";
-		cout << res.headers[RESPONSEHEADER_CONTENTLENGTH] << "\n~~\n";
+		cout << res.headers[RESPONSE_HEADER_CONTENTLENGTH] << "\n~~\n";
 		cout << res.data.size() << "\n~~\n";
 
 		cout << "Cookies:\n";
@@ -65,8 +65,8 @@ int main(int argc, char **argv)
 		tools::filesystem::writeToFile("test-https.dat", res.data);
 
 		cout << res.code << "\n~~\n";
-		cout << res.headers[RESPONSEHEADER_CONTENTTYPE] << "\n~~\n";
-		cout << res.headers[RESPONSEHEADER_CONTENTLENGTH] << "\n~~\n";
+		cout << res.headers[RESPONSE_HEADER_CONTENTTYPE] << "\n~~\n";
+		cout << res.headers[RESPONSE_HEADER_CONTENTLENGTH] << "\n~~\n";
 		cout << res.data.size() << "\n~~\n";
 #endif
 	}

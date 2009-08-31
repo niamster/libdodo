@@ -39,12 +39,12 @@ int main(int argc, char **argv)
 		cout << "not matched";
 
 	sample = "string12345string";
-	cout << "\nReplacement: pattern: " << pattern << "\n\ntest string: " << sample << "\n\nreplace with '!!!', '@@'\nResult:\n";
+	cout << "\nReplacement: \npattern: " << pattern << "\n\ntest string: " << sample << "\n\nreplace with '<>', '@@'\nResult:\n";
 
-	dodoStringArray a;
-	a.push_back("!!!");
-	a.push_back("@@");
-	cout << expr.replace(pattern, sample, a) << "\n";
+	dodoStringArray replacements;
+	replacements.push_back("<>");
+	replacements.push_back("@@");
+	cout << expr.replace(pattern, sample, replacements) << "\n";
 
 	return 0;
 }

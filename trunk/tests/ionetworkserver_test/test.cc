@@ -15,49 +15,44 @@ using namespace io::network;
 using namespace std;
 
 void
-process(exchange &fse)
+process(exchange &ex)
 {
 
-	if (fse.isBlocked())
+	if (ex.isBlocked())
 	{
-		cout << "CHILD BLOCKED\n";
+		cout << "Blocked\n";
 		cout.flush();
 	}
 	else
 	{
-		cout << "CHILD UNBLOCKED\n";
+		cout << "Non blocked\n";
 		cout.flush();
 	}
 
-	fse.inSize = 4;
-	fse.setInBufferSize(1);
-	fse.setOutBufferSize(1);
+	ex.inSize = 4;
+	ex.setInBufferSize(1);
+	ex.setOutBufferSize(1);
 
-	fse.outSize = 7;
-	fse.writeStream("session");
+	ex.outSize = 7;
+	ex.writeString("test\n");
 
-	dodoString rec = "";
+	dodoString str = "";
 	try
 	{
-		rec = fse.read();
+		str = ex.read();
 
-		cout << rec << rec.size() << endl;
+		cout << str << ":" << str.size() << endl;
 		cout.flush();
-		if (rec.compare("exit") == 0)
+		if (str.compare("exit") == 0)
 		{
-			fse.close();
+			ex.close();
 
 			exit(0);
 		}
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << "Smth happened!" << (dodoString)ex << endl;
-		cout.flush();
-	}
-	catch (...)
-	{
-		cout << "Smth happened!" << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 		cout.flush();
 	}
 }
@@ -67,29 +62,29 @@ int main(int argc, char **argv)
 	try
 	{
 
-		server sock(CONNECTION_PROTO_FAMILY_IPV4,CONNECTION_TRANSFER_TYPE_STREAM);
-		//server sock(CONNECTION_PROTO_FAMILY_IPV6,CONNECTION_TRANSFER_TYPE_STREAM);
-		//server sock(CONNECTION_PROTO_FAMILY_UNIX_SOCKET,CONNECTION_TRANSFER_TYPE_STREAM);
+		server s(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
+		//server s(connection::PROTOCOL_FAMILY_IPV6, connection::TRANSFER_STREAM);
+		//server s(connection::PROTOCOL_FAMILY_UNIX_SOCKET, connection::TRANSFER_STREAM);
 
-		__peerInfo__ info;
-		__initialAccept__ accepted;
+		exchange::__peer__ info;
+		exchange::__init__ accepted;
 
-		sock.serve("127.0.0.1",7778,3);
-		//sock.serve("::",7777);
-		//sock.serve("./sock",10,true);
+		s.serve("127.0.0.1",7778,3);
+		//s.serve("::",7777);
+		//s.serve("./unix.socket",10,true);
 
-		sock.blockInherited = false;
-		sock.block(false);
+		s.blockInherited = false;
+		s.block(false);
 
-		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
+		s.setLingerOption(exchange::LINGER_OPTION_HARD_CLOSE);
 
 		while(true)
 		{
-			if (sock.accept(accepted, info))
+			if (s.accept(accepted, info))
 			{
-					if (sock.isBlocked())
+					if (s.isBlocked())
 					{
-							cout << "PARENT BLOCKED\n";
+							cout << "Blocked\n";
 							cout.flush();
 					}
 

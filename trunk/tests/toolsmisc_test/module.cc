@@ -15,29 +15,31 @@ using namespace dodo;
 extern "C"
 {
 	void
-	baseHandler(int module,
+	handler(int module,
 				dodo::exception::basic *ex,
 				void *data)
 	{
-		std::cout << "baseModuleHandler: " << ex->baseErrstr << std::endl;
+		std::cout << "module:handler: " << ex->errStr << std::endl;
 		std::cout << ex->message << std::endl;
 	}
 
-	dodo::exception::__basicMod__
-	initBaseExModule(void *data)
+	dodo::exception::basic::__module__
+	initExceptionBasicModule(void *data)
 	{
-		dodo::exception::__basicMod__ module;
+		dodo::exception::basic::__module__ module = {
+			"test",
+			"test module",
+			"handler",
+			{false, }
+		};
 
-		strcpy(module.name, "test");
-		strcpy(module.discription, "test module");
-		strcpy(module.hook, "baseHandler");
-		module.module = exception::ERRMODULE_TOOLSFILESYSTEM;
+		module.modules[exception::MODULE_TOOLSFILESYSTEM] = true;
 
 		return module;
 	}
 
 	void
-	deinitBaseExModule()
+	deinitExceptionBasicModule()
 	{
 		std::cout << "deactivation.";
 	}

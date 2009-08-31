@@ -17,13 +17,13 @@ using namespace data::base;
 
 #ifndef DATABASE_WO_XEXEC
 void
-hook(__xexecCollectedData__ *odata, short int type, void *udata)
+hook(xexec::__collected_data__ *odata, short int type, void *udata)
 {
-	__xexecDataBaseAccumulatorCollectedData__ *sql = (__xexecDataBaseAccumulatorCollectedData__ *)odata;
+	accumulator::__collected_data__ *sql = (accumulator::__collected_data__ *)odata;
 
-	if (sql->operType == DATABASE_OPERATION_EXEC)
+	if (sql->operType == data::base::connector::OPERATION_EXEC)
 	{
-		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->queryCollect() << endl << endl;
+		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->construct() << endl << endl;
 	}
 }
 #endif
@@ -34,64 +34,64 @@ int main(int argc, char **argv)
 #ifdef POSTGRESQL_EXT
 	try
 	{
-		__connectionInfo__ info;
+		__connection__ info;
 		info.db = "test";
 		info.host = "localhost";
 		info.port = 5432;
 		info.user = "postgres";
 
-		postgresql pp(info);
+		postgresql db(info);
 
 #ifndef DATABASE_WO_XEXEC
-		pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
+		db.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
 #endif
 
 		try
 		{
-			pp.exec("DROP TABLE test");
+			db.exec("DROP TABLE test");
 		}
 		catch (...)
 		{
 		}
 
-		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b bytea)");
+		db.exec("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id integer default NULL, i integer default NULL, b bytea)");
 
 		__tuples__ store;
 
-		dodoStringMap arr;
-		arr["date"] = "2005-07-08";
-		arr["operation"] = "mu";
+		dodoStringMap array;
+		array["t0"] = "xyz";
+		array["t1"] = "abc";
 
 		dodoStringArray select;
-		select.push_back("date");
-		select.push_back("operation");
+		select.push_back("t0");
+		select.push_back("t1");
 
 		for (int i = 0; i < 10; i++)
 		{
-			pp.select("test", select, "id<20 or operation='um'");
-			pp.exec();
+			db.select("test", select, "id<20 or t1='abc'");
+			db.exec();
 
-			store = pp.fetch();
+			store = db.fetch();
 
-			pp.insert("test", arr);
-			pp.exec();
+			db.insert("test", array);
+			db.exec();
 
-			arr["operation"] = "um";
-			pp.update("test", arr);
-			pp.exec();
+			array["t1"] = "def";
+			db.update("test", array);
+			db.exec();
 
-			arr["operation"] = "mu";
+			array["t1"] = "abc";
 		}
 
-		pp.disconnect();
-		pp.connect(info);
+		db.disconnect();
+		db.connect(info);
 
-		pp.select("test", select, "operation='um'");
-		pp.exec();
+		db.select("test", select, "t1='def'");
+		db.exec();
 
-		cout << pp.fetch().rows.size() << endl;
+		cout << db.fetch().rows.size() << endl;
 
-		store = pp.fetch();
+		store = db.fetch();
 
 		dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
 		dodoStringArray::iterator m, n;
@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 			m = i->begin();
 			n = i->end();
 			for (; m != n; m++)
-				cout << *m << "\t";
+				cout << "[" << *m << "]\t";
 			cout << endl;
 		}
 

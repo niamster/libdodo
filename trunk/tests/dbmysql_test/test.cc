@@ -17,15 +17,15 @@ using namespace data::base;
 
 #ifndef DATABASE_WO_XEXEC
 void
-hook(__xexecCollectedData__ *odata,
+hook(xexec::__collected_data__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecDataBaseAccumulatorCollectedData__ *sql = (__xexecDataBaseAccumulatorCollectedData__ *)odata;
+	accumulator::__collected_data__ *sql = (accumulator::__collected_data__ *)odata;
 
-	if (sql->operType == DATABASE_OPERATION_EXEC)
+	if (sql->operType == data::base::connector::OPERATION_EXEC)
 	{
-		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->queryCollect() << endl << endl;
+		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->construct() << endl << endl;
 	}
 }
 #endif
@@ -38,116 +38,122 @@ int main(int argc, char **argv)
 #ifdef MYSQL_EXT
 	try
 	{
-		mysql pp(__connectionInfo__("test", "localhost", "root", "password", "", 3306));
+		mysql db(__connection__("test", "localhost", "root", "password", "", 3306));
 
 #ifndef DATABASE_WO_XEXEC
-		pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
+		db.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
 #endif
 
 		try
 		{
-			pp.exec("DROP TABLE test");
-			pp.exec("DROP TABLE test1");
+			db.exec("DROP TABLE test0");
+		}
+		catch (...)
+		{
+		}
+		try
+		{
+			db.exec("DROP TABLE test1");
 		}
 		catch (...)
 		{
 		}
 
-		pp.exec("CREATE TABLE test (id int(11) NOT NULL auto_increment, d int(11), dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
-		pp.exec("CREATE TABLE test1 (id int(11) NOT NULL auto_increment, d int(11), dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
+		db.exec("CREATE TABLE test0 (id int(11) NOT NULL auto_increment, i int(11), t0 text NOT NULL, t1 text NOT NULL, PRIMARY KEY  (id))");
+		db.exec("CREATE TABLE test1 (id int(11) NOT NULL auto_increment, i int(11), t0 text NOT NULL, t1 text NOT NULL, PRIMARY KEY  (id))");
 
-		pp.getFieldsTypes("test");
-		pp.getFieldsTypes("test1");
+		db.requestFieldsTypes("test0");
+		db.requestFieldsTypes("test1");
 
 		dodoStringArray fields;
 		__tuples__ storage;
 
-		pp.select("test");
-		pp.join("test1", JOINTYPE_JOIN, "test.operation = test1.operation");
-		pp.limit(10);
-		pp.exec();
+		db.select("test0");
+		db.join("test1", JOIN_JOIN, "test0.t0 = test1.t0");
+		db.limit(10);
+		db.exec();
 
-		storage = pp.fetch();
+		storage = db.fetch();
 
 		dodoStringArray::iterator i = storage.fields.begin(), j = storage.fields.end();
 		for (; i != j; ++i)
-			cout << *i << "\t";
+			cout << "[" << *i << "]\t";
 		cout << endl;
 
 		dodoStringArray values;
-		values.push_back("20\"05`''-'07-08");
-		values.push_back("mu");
+		values.push_back("a\"bc`''-'de-f");
+		values.push_back("abc");
 
-		dodoStringMap arr;
-		dodoArray<dodoStringMap> assA;
-		arr["dot"] = "20\"05`''-'07-08";
-		arr["operation"] = "m\nu";
-		assA.push_back(arr);
-		arr["dot"] = "20\"05`''-'07-08";
-		arr["operation"] = "n\nu";
-		assA.push_back(arr);
+		dodoStringMap array;
+		dodoArray<dodoStringMap> mapArray;
+		array["t0"] = "a\"b`''c'd-e";
+		array["t1"] = "a\nb";
+		mapArray.push_back(array);
+		array["t0"] = "ab\"c`''-'d-ef";
+		array["t1"] = "a\nbc";
+		mapArray.push_back(array);
 
-		pp.insert("test", assA);
-		pp.exec();
+		db.insert("test0", mapArray);
+		db.exec();
 
-		arr.clear();
+		array.clear();
 
-		pp.disconnect();
-		pp.connect(__connectionInfo__("test", "localhost", "root", "password", "", 3306));
+		db.disconnect();
+		db.connect(__connection__("test", "localhost", "root", "password", "", 3306));
 
-		arr["d"] = "100000";
-		pp.update("test", arr);
-		pp.exec();
+		array["i"] = "100000";
+		db.update("test0", array);
+		db.exec();
 
 		fields.clear();
-		fields.push_back("dot");
-		fields.push_back("operation");
+		fields.push_back("t0");
+		fields.push_back("t1");
 
-		pp.insert("test", values, fields);
-		pp.exec();
+		db.insert("test0", values, fields);
+		db.exec();
 
 #ifndef DATABASE_WO_XEXEC
-		pp.disableXExecs = true;
+		db.disableXExecs = true;
 #endif
 
 		for (int o = 0; o < 100000; o++)
 		{
-			pp.insert("test", values, fields);
-			pp.exec();
+			db.insert("test0", values, fields);
+			db.exec();
 		}
 
 #ifndef DATABASE_WO_XEXEC
-		pp.disableXExecs = false;
+		db.disableXExecs = false;
 #endif
 
-		dodoStringArray uni;
+		dodoStringArray u;
 
-		pp.select("test", dodoStringArray(), "id>1");
-		pp.limit(10);
-		pp.offset(23);
+		db.select("test0", dodoStringArray(), "id>1");
+		db.limit(10);
+		db.offset(23);
 
-		dodoString sub = pp.queryCollect();
-		uni.push_back(sub);
-		uni.push_back(sub);
-		pp.subquery(uni);
-		sub = pp.queryCollect();
+		dodoString subrequest = db.construct();
+		u.push_back(subrequest);
+		u.push_back(subrequest);
+		db.subquery(u);
+		subrequest = db.construct();
 
-		pp.select("test", dodoStringArray(), "id<100");
+		db.select("test0", dodoStringArray(), "id<100");
 
-		uni.clear();
-		uni.push_back(sub);
-		uni.push_back(pp.queryCollect());
-		pp.subquery(uni, SUBREQUEST_UNION_ALL);
+		u.clear();
+		u.push_back(subrequest);
+		u.push_back(db.construct());
+		db.subquery(u, SUBREQUEST_UNION_ALL);
 
-		pp.order("id desc");
-		pp.limit(5);
-		pp.exec();
+		db.order("id desc");
+		db.limit(5);
+		db.exec();
 
-		pp.select("test");
-		pp.limit(10);
-		pp.exec();
+		db.select("test0");
+		db.limit(10);
+		db.exec();
 
-		storage = pp.fetch();
+		storage = db.fetch();
 
 		dodoArray<dodoStringArray>::iterator o(storage.rows.begin()), p(storage.rows.end());
 		dodoStringArray::iterator m, n;
@@ -156,7 +162,7 @@ int main(int argc, char **argv)
 			m = o->begin();
 			n = o->end();
 			for (; m != n; m++)
-				cout << *m << "\t";
+				cout << "[" << *m << "]\t";
 			cout << endl;
 		}
 	}

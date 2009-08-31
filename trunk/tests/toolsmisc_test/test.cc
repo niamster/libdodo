@@ -14,19 +14,18 @@ using namespace std;
 using namespace io;
 
 void
-baseHandler(int module, dodo::exception::basic *ex, void *data)
+handler(int module, dodo::exception::basic *ex, void *data)
 {
-	cout << "baseHandler: " << ex->baseErrstr << endl;
+	cout << "baseHandler: " << ex->errStr << endl;
 }
 
 int main(int argc, char **argv)
 {
 	try
 	{
-		dodo::exception::basic::setErrorHandler(dodo::exception::ERRMODULE_IOFILEREGULAR, &baseHandler, NULL);
+		dodo::exception::basic::setHandler(dodo::exception::MODULE_IOFILEREGULAR, &handler, NULL);
 #ifdef DL_EXT
-		if (!dodo::exception::basic::setErrorHandler("./module", NULL))
-			cout << "WTF";
+		dodo::exception::basic::setHandler("./module", NULL);
 #endif
 
 		try
@@ -40,18 +39,19 @@ int main(int argc, char **argv)
 		try
 		{
 			file::regular f;
-			f.open("some.file", file::REGULAR_OPENMODE_READ_ONLY);
+			f.open("some.file", file::regular::OPEN_MODE_READ_ONLY);
 		}
 		catch(...)
 		{
 		}
 
-		dodoString t = "abcddF";
-		tools::string::replace("cd", "WW", t);
-		cout << t << endl;
+		dodoString string = "abcdef";
+		dodoString original = string;
+		tools::string::replace("cd", "CD", string);
+		cout << "In " << original << " 'cd' replaced with 'CD': " << string << endl;
 
-		dodoString rnd = tools::misc::stringRandom(12);
-		cout << tools::code::MD5Hex(rnd) << endl;
+		dodoString random = tools::misc::stringRandom(12);
+		cout << "Random:" << tools::code::MD5Hex(random) << endl;
 	}
 	catch (dodo::exception::basic ex)
 	{

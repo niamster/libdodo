@@ -19,11 +19,11 @@ using namespace graphics;
 
 #ifndef GRAPHICS_WO_XEXEC
 void
-hook(xexec::__xexecCollectedData__ *odata,
+hook(xexec::__collected_data__ *odata,
 	 short int type,
 	 void *udata)
 {
-	image::__xexecCollectedData__ *imData = (image::__xexecCollectedData__ *)odata;
+	image::__collected_data__ *imData = (image::__collected_data__ *)odata;
 
 	if (imData->operType == image::OPERATION_WRITE)
 	{
@@ -66,15 +66,15 @@ int main(int argc, char **argv)
 		im.writeFile("test.jpg");
 
 #ifndef GRAPHICS_WO_XEXEC
-		im.delXExec(prewrite);
-		im.delXExec(postwrite);
+		im.removeXExec(prewrite);
+		im.removeXExec(postwrite);
 #endif
 
 		dodoString img;
 		im.setEncoder(image::ENCODER_PNG);
 		im.setCompression(image::COMPRESSION_ZIP);
 		im.setQuality(4);
-		im.setType(image::TYPE_GRAYSCALE);
+		im.setColorSpecification(image::COLOR_SPECIFICATION_GRAYSCALE);
 		im.writeMemory(img);
 
 		file::regular io;
@@ -97,12 +97,12 @@ int main(int argc, char **argv)
 		im.readFile("new-1.png");
 		im.setBackgroundColor(color::transparent);
 		draw::circle(im, point(200, 200), 100, color::red, color::green, 5);
-		im.setType(image::TYPE_GRAYSCALE);
+		im.setColorSpecification(image::COLOR_SPECIFICATION_GRAYSCALE);
 		draw::circle(im, point(200, 200), 50, color::blue, color::white, 5);
 		im.setOpacity(65535/2);
-		__color__ mygreen = color::green;
-		mygreen.opacity = 65535/2;
-		draw::circle(im, point(250, 250), 50, mygreen, color::white, 5);
+		__color__ green = color::green;
+		green.opacity = 65535/2;
+		draw::circle(im, point(250, 250), 50, green, color::white, 5);
 		im.writeFile("new-2.png");
 
 		im.create(400, 400);

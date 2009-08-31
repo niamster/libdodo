@@ -17,15 +17,15 @@ using namespace data::base;
 
 #ifndef DATABASE_WO_XEXEC
 void
-hook(__xexecCollectedData__ *odata,
+hook(xexec::__collected_data__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecDataBaseAccumulatorCollectedData__ *sql = (__xexecDataBaseAccumulatorCollectedData__ *)odata;
+	accumulator::__collected_data__ *sql = (accumulator::__collected_data__ *)odata;
 
-	if (sql->operType == DATABASE_OPERATION_EXEC)
+	if (sql->operType == data::base::connector::OPERATION_EXEC)
 	{
-		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->queryCollect() << endl << endl;
+		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->construct() << endl << endl;
 	}
 }
 #endif
@@ -38,65 +38,63 @@ int main(int argc, char **argv)
 	{
 		tools::filesystem::unlink("test.lite", true);
 
-		__connectionInfo__ info;
+		__connection__ info;
 		info.path = "test.lite";
 
-		sqlite pp(info);
+		sqlite db(info);
 
 #ifndef DATABASE_WO_XEXEC
-		pp.addXExec(XEXEC_ACTION_PREEXEC, ::hook, (void *)"id");
+		db.addXExec(xexec::ACTION_PREEXEC, ::hook, (void *)"id");
 #endif
 
 		try
 		{
-			pp.exec("DROP TABLE test");
+			db.exec("DROP TABLE test");
 		}
 		catch (...)
 		{
 		}
 
-		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id int default NULL, d int default NULL, b longblob)");
+		db.exec("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id int default NULL, i int default NULL, b longblob)");
 
-		dodoStringMap arr;
-		arr["date"] = "2005-07-08";
-		arr["operation"] = "mu";
+		dodoStringMap array;
+		array["t0"] = "2005-07-08";
+		array["t1"] = "abc";
 
 		dodoArray<dodoString> select;
-		select.push_back("date");
-		select.push_back("operation");
+		select.push_back("t0");
+		select.push_back("t1");
 
 		for (int i = 0; i < 10; i++)
 		{
-			pp.select("test", select, "`id`<20 or `operation`='um'");
-			pp.exec();
+			db.select("test", select, "`id`<20 or `t1`='abc'");
+			db.exec();
 
-			cout << "Selected: " << pp.rowsCount() << endl;
-			cout << "Selected2: " << pp.fetch().rows.size() << endl;
-			cout << "Selected3: " << pp.fetch().rows.size() << endl;
-			cout << "Fields: " << pp.fieldsCount() << endl;
-			cout << "Fields2: " << pp.fetch().fields.size() << endl;
+			cout << "Selected: \n";
+			cout << "Rows: " << db.requestedRows() << endl;
+			cout << "Fields: " << db.requestedFields() << endl;
 
-			pp.insert("test", arr);
-			pp.exec();
+			db.insert("test", array);
+			db.exec();
 
-			arr["operation"] = "um";
-			pp.update("test", arr);
-			pp.exec();
+			array["t1"] = "def";
+			db.update("test", array);
+			db.exec();
 
-			cout << "Updated: " << pp.affectedRowsCount() << endl;
+			cout << "Updated rows: " << db.affectedRows() << endl;
 
-			arr["operation"] = "mu";
+			array["t1"] = "abc";
 		}
 
-		pp.disconnect();
-		pp.connect(info);
+		db.disconnect();
+		db.connect(info);
 
-		pp.select("test", select, "`id`<20 or `operation`='um'");
-		pp.exec();
+		db.select("test", select, "`id`<20 or `t1`='def'");
+		db.exec();
 
-		cout << pp.fetch().rows.size() << endl;
+		cout << db.fetch().rows.size() << endl;
 
-		__tuples__ store = pp.fetch();
+		__tuples__ store = db.fetch();
 
 		dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
 
@@ -107,7 +105,7 @@ int main(int argc, char **argv)
 			m = i->begin();
 			n = i->end();
 			for (; m != n; m++)
-				cout << *m << "\t";
+				cout << "[" << *m << "]\t";
 			cout << endl;
 		}
 

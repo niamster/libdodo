@@ -25,9 +25,8 @@ int main(int argc, char **argv)
 	{
 
 #ifdef DL_EXT
-
 #ifdef BFD_EXT
-		dodoStringArray arr = library::getSymbols("./module");
+		dodoStringArray arr = library::symbols("./module");
 		dodoStringArray::iterator i = arr.begin(), j = arr.end();
 		for (; i != j; ++i)
 			cout << *i << endl;
@@ -39,8 +38,7 @@ int main(int argc, char **argv)
 
 		((print)sll["print"])("operator[]");
 
-		((print)sll.get("print"))("get");
-
+		((print)sll.function("print"))("get");
 #endif
 
 	}

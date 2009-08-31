@@ -15,38 +15,38 @@ using namespace process;
 
 using namespace std;
 
-pc::sync::process::data::single dg0(0);
-pc::sync::process::data::single dg1;
-pc::sync::process::section sec(0);
-pc::sync::process::data::collection dgC;
+pc::sync::process::data::single data0(0);
+pc::sync::process::data::single data1;
+pc::sync::process::section section(0);
+pc::sync::process::data::collection collection;
 
-unsigned long dgCI;
+unsigned long collectionIdx;
 
-const int shKey = 100;
-const int sKey = 101;
+const int key0 = 100;
+const int key1 = 101;
 
 int
-process(void *ud)
+process0(void *data)
 {
-	cout << "process:" << (char *)ud << endl, cout.flush();
+	cout << "process0:" << (char *)data << endl, cout.flush();
 
 	try
 	{
-		dodo::data::memory::shared shD(shKey);
-		io::memory shM((char *)shD.data(), shD.size(), io::MEMORYFLAGS_EXTERN|io::MEMORYFLAGS_FIXED_LENGTH);
+		dodo::data::memory::shared shared(key0);
+		io::memory shM((char *)shared.data(), shared.size(), io::memory::FLAGS_EXTERN | io::memory::FLAGS_FIXED_LENGTH);
 		cout << "Shared memory: " << endl, cout.flush();
 		cout << "Data: '" << shM << "'" << endl, cout.flush();
 
-		cout << (char *)dgC.get(dgCI), cout.flush();
+		cout << (char *)collection.get(collectionIdx), cout.flush();
 
-		cout << (char *)dg0.acquire(1), cout.flush();
+		cout << (char *)data0.acquire(1), cout.flush();
 		tools::os::microSleep(1000);
-		dg0.release();
+		data0.release();
 
 		cout << endl << shM << ": " << tools::time::now() << endl, cout.flush();
 
-		cout << (char *)dg1.acquire(), cout.flush();
-		dg1.release();
+		cout << (char *)data1.acquire(), cout.flush();
+		data1.release();
 
 		cout << endl << shM << ": " << tools::time::now() << endl, cout.flush();
 	}
@@ -59,32 +59,32 @@ process(void *ud)
 }
 
 int
-processLocked(void *ud)
+process1(void *data)
 {
-	pc::sync::protector pg(&sec);
+	pc::sync::protector pg(&section);
 
-	cout << "processLocked:" << (char *)ud << endl, cout.flush();
+	cout << "process1(protected):" << (char *)data << endl, cout.flush();
 
 	try
 	{
-		dodo::data::memory::shared shD(shKey);
-		unsigned long size = shD.size();
+		dodo::data::memory::shared shared(key0);
+		unsigned long size = shared.size();
 		cout << "Shared data: " << endl, cout.flush();
 		cout << "Size: " << size << endl, cout.flush();
-		char *dt = (char *)shD.map(size);
+		char *dt = (char *)shared.map(size);
 		cout << "Data: " << dt << endl, cout.flush();
 
-		cout << (char *)dgC.get(dgCI), cout.flush();
+		cout << (char *)collection.get(collectionIdx), cout.flush();
 
-		cout << (char *)dg0.acquire(), cout.flush();
-		dg0.release();
+		cout << (char *)data0.acquire(), cout.flush();
+		data0.release();
 
 		cout << endl << (char *)dt << ": " << tools::time::now() << endl, cout.flush();
 
 		tools::os::sleep(1);
 
-		cout << (char *)dg1.acquire(), cout.flush();
-		dg1.release();
+		cout << (char *)data1.acquire(), cout.flush();
+		data1.release();
 
 		cout << endl << (char *)dt << ": " << tools::time::now() << endl, cout.flush();
 	}
@@ -100,41 +100,41 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		dg1.open(sKey);
-		dg1.set((char *)"%test%\n");
+		data1.open(key1);
+		data1.set((char *)"%test%\n");
 
-		dodo::data::memory::shared shD(shKey);
-		char *data = (char *)shD.map(100);
+		dodo::data::memory::shared shared(key0);
+		char *data = (char *)shared.map(100);
 		strcpy(data, "test");
 
-		dgCI = dgC.add((char *)"@test@\n");
-		dg0.set((char *)"!test!\n");
+		collectionIdx = collection.add((char *)"@test@\n");
+		data0.set((char *)"!test!\n");
 
-		collection pr;
+		process::manager manager;
 
 		const int amount = 10;
 
-		int pos[amount];
+		int processes[amount];
 		dodoString ids[amount];
 		for (int i = 0; i < amount; ++i)
 		{
 			ids[i] = tools::string::lToString(i);
 			if (i%2 == 0)
-				pos[i] = pr.add(::process, (void *)ids[i].c_str());
+				processes[i] = manager.add(::process0, (void *)ids[i].c_str(), job::ON_DESTRUCTION_STOP);
 			else
-				pos[i] = pr.add(::processLocked, (void *)ids[i].c_str());
+				processes[i] = manager.add(::process1, (void *)ids[i].c_str(), job::ON_DESTRUCTION_STOP);
 		}
 
 		for (int i = 0; i < amount; ++i)
-			pr.run(pos[i]);
+			manager.run(processes[i]);
 
 		cout << endl << endl << "STARTED" << endl;
 		cout << tools::time::now() << endl;
 		cout.flush();
 
-		pr.wait();
+		manager.wait();
 
-		dg1.close();
+		data1.close();
 	}
 	catch (dodo::exception::basic ex)
 	{
@@ -143,8 +143,8 @@ int main(int argc, char **argv)
 
 	try
 	{
-		dodo::data::memory::shared::remove(shKey);
-		dg1.remove(sKey);
+		dodo::data::memory::shared::remove(key0);
+		data1.remove(key1);
 	}
 	catch (dodo::exception::basic ex)
 	{

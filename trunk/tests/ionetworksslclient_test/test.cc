@@ -11,9 +11,7 @@
 using namespace dodo;
 
 #ifdef OPENSSL_EXT
-
 using namespace io::network::ssl;
-
 #endif
 
 using namespace std;
@@ -23,49 +21,47 @@ int main(int argc, char **argv)
 	try
 	{
 #ifdef OPENSSL_EXT
-
 		dodoString host = "kernel.org";
 
-		cout << tools::network::getHostPrimaryIp(host) << endl;
+		cout << host << ":" << tools::network::hostPrimaryIp(host) << endl;
 
-		client st(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
-		
+		client st(io::network::connection::PROTOCOL_FAMILY_IPV4, io::network::connection::TRANSFER_STREAM);
+
 		io::ssl::__certificates__ certs;
 		certs.ca = "host.pem";
-		
+
 		//certs.cert = "host.cert";
 		//certs.key = "host.key";
 		//certs.keyType = KEYTYPE_PKEY;
-	
+
 		//certs.caPath = "./";
 
 		st.setSertificates(certs);
 
-		exchange exch;
+		exchange ex;
 		dodoString str;
 
-		st.connect(tools::network::getHostPrimaryIp(host), 443, exch);
+		st.connect(tools::network::hostPrimaryIp(host), 443, ex);
 
 		str = "GET / HTTP/1.1\r\n";
-		exch.outSize = str.size();
-		exch.write(str);
+		ex.outSize = str.size();
+		ex.write(str);
 
 		str = "Host: " + host + "\r\n";
-		exch.outSize = str.size();
-		exch.write(str);
+		ex.outSize = str.size();
+		ex.write(str);
 
 		str = "Connection: Close\r\n";
-		exch.outSize = str.size();
-		exch.write(str);
+		ex.outSize = str.size();
+		ex.write(str);
 
 		str = "User-Agent: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n\r\n";
-		exch.outSize = str.size();
-		exch.write(str);
+		ex.outSize = str.size();
+		ex.write(str);
 
-		str = exch.readStream();
+		str = ex.readString();
 
 		cout << str;
-
 #endif
 	}
 	catch (dodo::exception::basic ex)

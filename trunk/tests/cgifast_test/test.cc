@@ -31,21 +31,21 @@ cgif(exchange &fcgi)
 	sh.release();
 
 	exchange *io = cgit;
-	io->writeStream("The headers thould be already printed successfully.<br>");
+	io->writeString("The headers thould be already printed successfully.<br>");
 
 #ifndef FASTCGI_EXT
-	io->writeStream("No fastCGI extension was compiled!<br>");
+	io->writeString("No fastCGI extension was compiled!<br>");
 #endif
 
-	fcgi.writeStream("counter: " + tools::string::iToString(*inc) + "<br>");
+	fcgi.writeString("counter: " + tools::string::iToString(*inc) + "<br>");
 
-	fcgi.writeStream("GET[\"argument\"]: " + cgit.GET["argument"] + "<br>");
-	fcgi.writeStream("POST[\"hidden\"]: " + cgit.POST["hidden"] + "<br>");
-	fcgi.writeStream("POST[\"test\"]: " + cgit.POST["test"] + "<br>");
-	fcgi.writeStream("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
-	fcgi.writeStream("COOKIES[\"test\"]: " + cgit.COOKIES["test"] + "<br>");
-	fcgi.writeStream("FILES[\"file\"].size: " + tools::string::iToString(cgit.FILES["file"].size) + "<br>");
-	fcgi.writeStream("tpl::processor:<br>");
+	fcgi.writeString("GET[\"argument\"]: " + cgit.GET["argument"] + "<br>");
+	fcgi.writeString("POST[\"hidden\"]: " + cgit.POST["hidden"] + "<br>");
+	fcgi.writeString("POST[\"test\"]: " + cgit.POST["test"] + "<br>");
+	fcgi.writeString("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + cgit.ENVIRONMENT[cgi::ENVIRONMENT_QUERYSTRING] + "<br>");
+	fcgi.writeString("COOKIES[\"test\"]: " + cgit.COOKIES["test"] + "<br>");
+	fcgi.writeString("FILES[\"file\"].size: " + tools::string::iToString(cgit.FILES["file"].size) + "<br>");
+	fcgi.writeString("tpl::processor:<br>");
 
 	try
 	{
@@ -76,10 +76,10 @@ cgif(exchange &fcgi)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		fcgi.writeStream(ex.baseErrstr + " " + tools::string::lToString(ex.line));
+		fcgi.writeString(ex.errStr + " " + tools::string::lToString(ex.line));
 	}
 
-	fcgi.writeStream("<br>");
+	fcgi.writeString("<br>");
 
 	inc = (int *)sh.acquire();
 	(*inc)++;

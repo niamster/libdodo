@@ -15,33 +15,33 @@ using cgi::exchange;
 using namespace std;
 
 void
-cgif(exchange &cgiio)
+handler(exchange &ex)
 {
 	using namespace cgi;
 
 	///first type: pass headers and print them immediately
 	//	dodoStringMap head;
-	//	head[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
-	//	server cgit(&cgiio, head, false);
+	//	head[cgi::RESPONSE_HEADER_CONTENTTYPE] = "text/html";
+	//	dialogue d(&ex, head, false);
 
 	///second type: use default headers and do not print them immediately
-	dialogue cgit(cgiio, true);
+	dialogue d(ex, true);
 
-	dodoString user = cgit.getAuthenticationInfo().user;
+	dodoString user = d.authenticationResponse().user;
 
-	if (cgit.GET["status"] == "forbidden")
+	if (d.GET["status"] == "forbidden")
 	{
-		cgit.setResponseStatus(CGI_STATUSCODE_FORBIDDEN);
+		d.setResponseStatus(cgi::STATUS_CODE_FORBIDDEN);
 
-		cgit.printStream("FORBIDDEN");
+		d.printString("FORBIDDEN");
 
 		return ;
 	}
-	else if (cgit.GET["status"] == "notfound")
+	else if (d.GET["status"] == "notfound")
 	{
-		cgit.setResponseStatus(CGI_STATUSCODE_NOTFOUND);
+		d.setResponseStatus(cgi::STATUS_CODE_NOTFOUND);
 
-		cgit.printStream("NOT FOUND");
+		d.printString("NOT FOUND");
 
 		return ;
 	}
@@ -53,75 +53,75 @@ cgif(exchange &cgiio)
 	 * RewriteCond %{HTTP:Authorization}  ^(.*)
 	 * RewriteRule ^(.*)$ $1 [e=HTTP_AUTHORIZATION:%1
 	 */
-	else if (cgit.GET["status"] == "basic_auth")
+	else if (d.GET["status"] == "basic_auth")
 	{
-		if (user.size() == 0 || !cgit.isAuthenticated("libdodo", "password"))
+		if (user.size() == 0 || !d.isAuthenticated("libdodo", "password"))
 		{
-			cgit.requestAuthentication("libdodo", CGI_AUTHTYPE_BASIC);
+			d.requestAuthentication("libdodo", cgi::AUTH_BASIC);
 
 			return ;
 		}
 	}
-	else if (cgit.GET["status"] == "digest_auth")
+	else if (d.GET["status"] == "digest_auth")
 	{
-		if (user.size() == 0 || !cgit.isAuthenticated("libdodo", "password"))
+		if (user.size() == 0 || !d.isAuthenticated("libdodo", "password"))
 		{
-			cgit.requestAuthentication("libdodo", CGI_AUTHTYPE_DIGEST);
+			d.requestAuthentication("libdodo", cgi::AUTH_DIGEST);
 
 			return ;
 		}
 	}
 
-	cgit.HEADERS[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
+	d.HEADERS[cgi::RESPONSE_HEADER_CONTENTTYPE] = "text/html";
 
-	cgit.setCookie(cookie("test", "Ni@m"));
+	d.setCookie(cookie("test", "Ni@m"));
 
-	exchange *io = cgit;
-	io->writeStream("The headers thould be already printed successfully.<br>");
+	exchange *io = d;
+	io->writeString("The headers thould be already printed successfully.<br>");
 
-	cgit.printStream("User: " + user + "<br>");
-	cgit.printStream("GET[\"argument\"]: " + cgit.GET["argument"] + "<br>");
-	cgit.printStream("POST[\"hidden\"]: " + cgit.POST["hidden"] + "<br>");
-	cgit.printStream("POST[\"text\"]: " + cgit.POST["text"] + "<br>");
-	cgit.printStream("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
-	cgit.printStream("COOKIES[\"test\"]: " + cgit.COOKIES["test"] + "<br>");
-	cgit.printStream("FILES[\"file\"].size: " + tools::string::iToString(cgit.FILES["file"].size) + "<br>");
-	cgit.printStream("FILES[\"file\"].mime: " + cgit.FILES["file"].mime + "<br>");
-	cgit.printStream("charset: " + cgit.getCharset() + "<br>");
-	cgit.printStream("tpl::processor:<br>");
+	d.printString("User: " + user + "<br>");
+	d.printString("GET[\"argument\"]: " + d.GET["argument"] + "<br>");
+	d.printString("POST[\"hidden\"]: " + d.POST["hidden"] + "<br>");
+	d.printString("POST[\"text\"]: " + d.POST["text"] + "<br>");
+	d.printString("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + d.ENVIRONMENT[cgi::ENVIRONMENT_QUERYSTRING] + "<br>");
+	d.printString("COOKIES[\"test\"]: " + d.COOKIES["test"] + "<br>");
+	d.printString("FILES[\"file\"].size: " + tools::string::iToString(d.FILES["file"].size) + "<br>");
+	d.printString("FILES[\"file\"].mime: " + d.FILES["file"].mime + "<br>");
+	d.printString("charset: " + d.charset() + "<br>");
+	d.printString("tpl::processor:<br>");
 
 	try
 	{
-		processor cgip;
+		processor p;
 
-		cgip.assign("main", "index.tpl");
-		cgip.assign("test", "test");
-		cgip.assign("show", "show");
-		cgip.assign("one", "one");
+		p.assign("main", "index.tpl");
+		p.assign("test", "test");
+		p.assign("show", "show");
+		p.assign("one", "one");
 
 		dodoStringArray strarr;
 		strarr.push_back("one");
 		strarr.push_back("two");
 		strarr.push_back("three");
-		cgip.assign("strarr", strarr);
+		p.assign("strarr", strarr);
 
 		dodoStringMap strmap;
 		strmap["one"] = "one";
 		strmap["two"] = "two";
 		strmap["three"] = "three";
-		cgip.assign("strmap", strmap);
+		p.assign("strmap", strmap);
 
 		dodoArray<dodoStringMap> strmaparr;
 		strmaparr.push_back(strmap);
 		strmap["one"] = "three";
 		strmaparr.push_back(strmap);
-		cgip.assign("strmaparr", strmaparr);
+		p.assign("strmaparr", strmaparr);
 
-		cgip.processFile("test.tpl", *io);
+		p.processFile("test.tpl", *io);
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cgit.printStream((dodoString)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
+		d.printString((dodoString)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
 	}
 }
 
@@ -129,9 +129,9 @@ int main(int argc, char **argv)
 {
 	using namespace cgi::basic;
 
-	server c;
+	server s;
 
-	c.serve(&cgif);
+	s.serve(&handler);
 
 	return 0;
 }

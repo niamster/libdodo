@@ -28,7 +28,7 @@ job(void *data)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (dodoString)ex << ex.line << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 10;
@@ -40,37 +40,37 @@ int main(int argc, char **argv)
 	{
 		const int amount = 10;
 
-		dodo::pc::job::collection *pr[amount];
+		dodo::pc::job::manager *manager[amount];
 
-		int pos[amount];
+		int jobs[amount];
 		dodoString ids[amount];
 		for (int i = 0; i < amount; ++i)
 		{
 			if (i % 2 == 0)
-				pr[i] = new thread::collection;
+				manager[i] = new thread::manager;
 			else
-				pr[i] = new process::collection;
+				manager[i] = new process::manager;
 
 			ids[i] = tools::string::lToString(i);
-			pos[i] = pr[i]->add(::job, (void *)ids[i].c_str());
+			jobs[i] = manager[i]->add(::job, (void *)ids[i].c_str(), job::ON_DESTRUCTION_STOP);
 		}
 
-		for (int i = 0; i < amount; ++i)
-			pr[i]->run(pos[i]);
-
-		cout << endl << endl << "STARTED" << endl;
+		cout << "Launching jobs" << endl;
 		cout << tools::time::now() << endl;
 		cout.flush();
 
 		for (int i = 0; i < amount; ++i)
-			std::cout << "status: " << pr[i]->wait(pos[i]) << endl;
+			manager[i]->run(jobs[i]);
 
 		for (int i = 0; i < amount; ++i)
-			delete pr[i];
+			cout << "status: " << manager[i]->wait(jobs[i]) << endl;
+
+		for (int i = 0; i < amount; ++i)
+			delete manager[i];
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (dodoString)ex << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;

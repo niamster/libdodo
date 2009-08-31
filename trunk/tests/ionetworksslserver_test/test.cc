@@ -17,59 +17,52 @@ using namespace io::network::ssl;
 
 #ifndef IO_WO_XEXEC
 void
-hook(__xexecCollectedData__ *odata,
+hook(xexec::__collected_data__ *odata,
 	 short int type,
 	 void *udata)
 {
-	using io::__xexecIoChannelCollectedData__;
+	io::channel::__collected_data__ *st = (io::channel::__collected_data__ *)odata;
 
-	__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
-
-	cout << st->buffer << endl;
+	cout << "In hook: " << st->buffer << endl;
 	/* cout << dynamic_cast<exchange *>(st->executor)->isAlive() << endl; */ /* FIXME: issue #61 */
 }
 #endif
 
 void
-process(exchange &fse)
+process(exchange &ex)
 {
 #ifndef IO_WO_XEXEC
-	fse.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
-	fse.addXExec(XEXEC_ACTION_POSTEXEC, ::hook, NULL);
+	ex.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
+	ex.addXExec(xexec::ACTION_POSTEXEC, ::hook, NULL);
 #endif
 
-	fse.inSize = 4;
-	fse.setInBufferSize(1);
-	fse.setOutBufferSize(1);
+	ex.inSize = 4;
+	ex.setInBufferSize(1);
+	ex.setOutBufferSize(1);
 
-	fse.outSize = 7;
-	fse.writeStream("session");
+	ex.outSize = 7;
+	ex.writeString("test\n");
 
-	if (fse.isAlive())
-		fse.writeStream("Alive!");
+	if (ex.isAlive())
+		ex.writeString("Alive");
 
-	dodoString rec = "";
+	dodoString str = "";
 	try
 	{
-		rec = fse.read();
+		str = ex.read();
 
-		cout << rec << rec.size() << endl;
+		cout << str << ":" << str.size() << endl;
 		cout.flush();
-		if (rec.compare("exit") == 0)
+		if (str.compare("exit") == 0)
 		{
-			fse.close();
+			ex.close();
 
 			exit(0);
 		}
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << "Smth happened!" << (dodoString)ex << endl;
-		cout.flush();
-	}
-	catch (...)
-	{
-		cout << "Smth happened!" << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 		cout.flush();
 	}
 }
@@ -80,10 +73,10 @@ int main(int argc, char **argv)
 	try
 	{
 #ifdef OPENSSL_EXT
-		server sock(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
+		server sock(io::network::connection::PROTOCOL_FAMILY_IPV4, io::network::connection::TRANSFER_STREAM);
 
-		io::network::__peerInfo__ info;
-		__initialAccept__ accepted;
+		io::network::connection::__peer__ info;
+		io::network::ssl::exchange::__init__ accepted;
 
 		sock.serve("127.0.0.1", 7778, 3);
 
@@ -99,7 +92,7 @@ int main(int argc, char **argv)
 			{
 				if (sock.isBlocked())
 				{
-					cout << "PARENT BLOCKED\n";
+					cout << "Blocked\n";
 					cout.flush();
 				}
 

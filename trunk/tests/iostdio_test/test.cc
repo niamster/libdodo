@@ -15,16 +15,16 @@ using namespace std;
 
 #ifndef IO_WO_XEXEC
 void
-hook(__xexecCollectedData__ *odata,
+hook(xexec::__collected_data__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
-	if (st->operType == IO_OPERATION_WRITE)
+	io::channel::__collected_data__ *st = (io::channel::__collected_data__ *)odata;
+	if (st->operType == io::channel::OPERATION_WRITE)
 	{
 		stdio *io = dynamic_cast<stdio *>(st->executor);
 		/* io->outSize = 100; */ /* FIXME: issue #61 */
-		/* io->writeStream("\nhook\n"); */
+		/* io->writeString("\nhook\n"); */
 
 		dodoString str = ">" + st->buffer + "<\n";
 
@@ -40,10 +40,10 @@ int main(int argc, char **argv)
 	try
 	{
 		stdio st;
-		cout << st.peerInfo().host << endl;
+		cout << st.peer().host << endl;
 
 #ifndef IO_WO_XEXEC
-		st.addXExec(XEXEC_ACTION_PREEXEC, ::hook, NULL);
+		st.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
 #endif
 
 		st.outSize = sizeof("write");
@@ -65,11 +65,11 @@ int main(int argc, char **argv)
 
 		st.outSize = 4;
 		st.write("1234567890");
-		st.writeStream("\n");
+		st.writeString("\n");
 
 		st.outSize = 40;
-		st.writeStream(o);
-		st.writeStream("\nexiting\n");
+		st.writeString(o);
+		st.writeString("\nexiting\n");
 	}
 	catch (dodo::exception::basic ex)
 	{

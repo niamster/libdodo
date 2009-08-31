@@ -18,13 +18,13 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		cout << filesystem::getFileContents("test.cc");
+		cout << filesystem::fileContents("test.cc");
 		filesystem::copy("test.cc", "test.cc.copy", true);
 
-		cout << tools::code::MD5Hex(filesystem::getFileContents("test.cc")) << endl;
-		cout << tools::code::MD5Hex(filesystem::getFileContents("test.cc.copy")) << endl;
+		cout << tools::code::MD5Hex(filesystem::fileContents("test.cc")) << endl;
+		cout << tools::code::MD5Hex(filesystem::fileContents("test.cc.copy")) << endl;
 
-		dodoStringArray arr = filesystem::getFileContentsArr("test.cc");
+		dodoStringArray arr = filesystem::fileContentsInArray("test.cc");
 		for (unsigned int i = 0; i < arr.size(); i++)
 		{
 			cout << arr[i];
@@ -43,42 +43,42 @@ int main(int argc, char **argv)
 	{
 		filesystem::rm("./test.cc.copy");
 
-		filesystem::mkdir("testDir");
-		filesystem::mkdir("testDir/1/2/3/4");
+		filesystem::mkdir("dir");
+		filesystem::mkdir("dir/1/2/3/4");
 
-		filesystem::rm("DirTest");
-		filesystem::rename("testDir", "DirTest");
+		filesystem::rm("_dir_");
+		filesystem::rename("dir", "_dir_");
 
 		filesystem::symlink("test", "TEST");
 
-		cout << filesystem::getPermissions("Makefile") << endl;
+		cout << filesystem::permissions("Makefile") << endl;
 
-		dodoArray<__fileInfo__> dir = filesystem::getDirInfo("./");
+		dodoArray<filesystem::__file__> dir = filesystem::dir("./");
 		if (dir.size() > 0)
 		{
 			cout << endl << dir.size() << endl;
-			for (dodoArray<__fileInfo__>::iterator i = dir.begin(); i != dir.end(); ++i)
-				cout << i->size << "!" << i->name << endl;
+			for (dodoArray<filesystem::__file__>::iterator i = dir.begin(); i != dir.end(); ++i)
+				cout << i->size << "\t\t-- " << i->name << endl;
 		}
 
 		filesystem::unlink("test.dat");
 
-		file::regular io;
-		io.open("test.dat", file::REGULAR_OPENMODE_READ_WRITE_TRUNCATE);
-		filesystem::chmod("test.dat", FILESYSTEM_PERMISSION_ALL_ALL_ACCESS);
+		file::regular io0;
+		io0.open("test.dat", file::regular::OPEN_MODE_READ_WRITE_TRUNCATE);
+		filesystem::chmod("test.dat", filesystem::PERMISSION_ALL_ALL_ACCESS);
 
-		io.writeStream("!12345890#!!@\n");
-		io.writeStream("!12345890-!!@\n");
-		io.writeStream("!12345890@!!@\n");
-		io.writeStream("!12345890$!!@\n");
+		io0.writeString("!12345890#!!@\n");
+		io0.writeString("!12345890-!!@\n");
+		io0.writeString("!12345890@!!@\n");
+		io0.writeString("!12345890$!!@\n");
 
-		file::regular io2 = io;
-		io.close();
+		file::regular io1 = io0;
+		io0.close();
 
-		io2.pos = 1;
-		io2.outSize = 14;
-		io2.block = true;
-		io2.write("!12345890$!~@\n");
+		io1.pos = 1;
+		io1.outSize = 14;
+		io1.block = true;
+		io1.write("!12345890$!~@\n");
 		/**
 		 * test.dat should contain
 		 !12345890#!!@
@@ -89,14 +89,14 @@ int main(int argc, char **argv)
 
 		dodoString str;
 
-		io2.pos = 2;
-		io2.inSize = 14;
+		io1.pos = 2;
+		io1.inSize = 14;
 
-		str = io2.readStream();
+		str = io1.readString();
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;
 
-		str = io2.read();
+		str = io1.read();
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;
 	}

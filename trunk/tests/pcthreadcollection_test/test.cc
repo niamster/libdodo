@@ -1,7 +1,7 @@
 /**
  * vim indentation settings
  * set tabstop=4
- * set shiftwidth=4
+ * set dataiftwidmanager=4
  */
 
 
@@ -14,23 +14,23 @@ using namespace dodo::pc::sync::thread;
 
 using namespace std;
 
-dodo::pc::sync::thread::data::single sh;
-dodo::pc::sync::thread::data::collection shC;
+dodo::pc::sync::thread::data::single data;
+dodo::pc::sync::thread::data::collection collection;
 
-unsigned long shCI;
+unsigned long collectionIdx;
 
 int
 thread(void *data)
 {
 	try
 	{
-		cout << (char *)shC.get(shCI);
+		cout << (char *)collection.get(collectionIdx);
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 
-		int timeout = *(int *)sh.acquire();
+		int timeout = *(int *)::data.acquire();
 		tools::os::sleep(timeout);
-		sh.release();
+		::data.release();
 
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
@@ -45,14 +45,14 @@ thread(void *data)
 
 int main(int argc, char **argv)
 {
-	shCI = shC.add((char *)"@test@\n");
+	collectionIdx = collection.add((char *)"@test@\n");
 	try
 	{
-		int *shared = new int (1);
+		int *data = new int (1);
 
-		sh.set((void *)shared);
+		::data.set((void *)data);
 
-		collection th;
+		pc::thread::manager manager;
 
 		const int amount = 10;
 
@@ -61,19 +61,19 @@ int main(int argc, char **argv)
 		for (int i = 0; i < amount; ++i)
 		{
 			ids[i] = tools::string::lToString(i);
-			pos[i] = th.add(thread, (void *)ids[i].c_str());
+			pos[i] = manager.add(thread, (void *)ids[i].c_str(), pc::job::ON_DESTRUCTION_STOP);
 		}
 
-		for (int i = 0; i < amount; ++i)
-			th.run(pos[i]);
-
-		cout << endl << endl << "STARTED" << endl;
+		cout << "Launching threads" << endl;
 		cout << tools::time::now() << endl;
 		cout.flush();
 
-		th.wait();
+		for (int i = 0; i < amount; ++i)
+			manager.run(pos[i]);
 
-		delete shared;
+		manager.wait();
+
+		delete data;
 	}
 	catch (dodo::exception::basic ex)
 	{

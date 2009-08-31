@@ -17,17 +17,17 @@ extern "C"
 {
 
 void
-hook(__xexecCollectedData__ *odata,
+hook(xexec::__collected_data__ *odata,
      short int type,
 	 void *udata)
 {
 #ifndef IO_WO_XEXEC
-	if (type == XEXEC_OBJECT_IOSTDIO)
+	if (type == xexec::OBJECT_IOSTDIO)
 	{
 		std::cout << "stdio module ";
 
-		__xexecIoChannelCollectedData__ *st = (__xexecIoChannelCollectedData__ *)odata;
-		if (st->operType == IO_OPERATION_WRITE)
+		channel::__collected_data__ *st = (channel::__collected_data__ *)odata;
+		if (st->operType == channel::OPERATION_WRITE)
 			st->buffer.assign("<" + dodoString(1, st->buffer[0]) + ">\n");
 	}
 	std::cout << "hook\n";
@@ -35,7 +35,7 @@ hook(__xexecCollectedData__ *odata,
 }
 
 void
-empty(__xexecCollectedData__ *odata,
+empty(xexec::__collected_data__ *odata,
       short int type,
 	  void *udata)
 {
@@ -43,14 +43,16 @@ empty(__xexecCollectedData__ *odata,
 	std::cout << "empty hook\n";
 }
 
-__xexecModule__
-xexecModuleInit(void *data)
+xexec::__module__
+initXexecModule(void *data)
 {
-	__xexecModule__ module;
+	xexec::__module__ module;
+
+	std::cout << "activation\n";
 
 	strcpy(module.name, "test");
 	strcpy(module.discription, "test module");
-	module.type = XEXEC_ACTION_PREEXEC;
+	module.type = xexec::ACTION_PREEXEC;
 
 	if (data == NULL)
 		strcpy(module.hook, "empty");
@@ -61,7 +63,7 @@ xexecModuleInit(void *data)
 }
 
 void
-xexecModuleDeinit()
+deinitXexecModule()
 {
 	std::cout << "deactivation\n";
 }

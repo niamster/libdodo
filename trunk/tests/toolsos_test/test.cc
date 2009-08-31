@@ -18,9 +18,9 @@ static bool run = true;
 static int number = 1;
 
 void
-signaler(int, void *, void *)
+handler(int signal, void *, void *)
 {
-	cout << "\nTEST\n";
+	cout << endl << "Signal: " << signal << endl;
 	cout.flush();
 	cought = true;
 	number++;
@@ -35,36 +35,38 @@ exit(int, void *, void *)
 int main(int argc, char **argv)
 {
 
-	cout << os::getPID() << endl;
+	cout << os::PID() << endl;
 
-	os::setSignalHandler(OS_SIGNAL_HANGUP, ::exit);
-	os::setSignalHandler(OS_SIGNAL_INTERRUPT, ::signaler);
+	os::setSignalHandler(os::SIGNAL_HANGUP, ::exit);
+	os::setSignalHandler(os::SIGNAL_INTERRUPT, ::handler);
 
-	if (os::isSignalHandled(OS_SIGNAL_HANGUP))
-		cout << "OS_SIGNAL_HANGUP IS SET ... !\n";
+	if (os::isSignalHandled(os::SIGNAL_HANGUP))
+		cout << "SIGNAL_HANGUP is set" << endl;
 	else
-		cout << "OS_SIGNAL_HANGUP IS NOT SET ... !\n";
+		cout << "SIGNAL_HANGUP is not set" << endl;
 
 	while (run)
 	{
-		cout << "\r" << number;
 		if (cought)
 		{
 			cought = false;
-			cout << "\nOS_SIGNAL_HANGUP =)\n";
+			cout << endl << "SIGNAL_INTERRUPT" << endl;
 			cout.flush();
 
-			os::unsetSignalHandler(OS_SIGNAL_INTERRUPT);
+			os::removeSignalHandler(os::SIGNAL_INTERRUPT);
+
+			cout << endl << "Handler for SIGNAL_INTERRUPT unregistered" << endl;
+			cout.flush();
 		}
 
 	}
 
 	os::setWorkingDir("/");
 
-	cout << os::getWorkingDir() << endl;
+	cout << os::workingDir() << endl;
 
 	{
-		dodoArray<__userInfo__> info = os::getUsers();
+		dodoArray<os::__user__> info = os::users();
 
 		for (unsigned int i(0); i < info.size(); i++)
 			cout << info[i].name << endl;
@@ -73,17 +75,17 @@ int main(int argc, char **argv)
 	cout << endl << endl;
 
 	{
-		dodoArray<__groupInfo__> info = os::getGroups();
+		dodoArray<os::__group__> info = os::groups();
 
 		for (unsigned int i(0); i < info.size(); i++)
 			cout << info[i].name << endl;
 	}
 
-	cout << os::getWorkingDir() << endl;
+	cout << os::workingDir() << endl;
 
 	os::die(tools::string::rTrim("    rTrim    "));
 
-	cout << os::getWorkingDir();
+	cout << os::workingDir();
 
 	return 0;
 }

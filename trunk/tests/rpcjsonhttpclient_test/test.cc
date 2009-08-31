@@ -18,7 +18,7 @@ class httpIO : public io::stream::channel, public io::network::http::client
 {
   public:
 
-	httpIO(const dodoString &url) : io::stream::channel(io::CHANNEL_PROTECTION_NONE),
+	httpIO(const dodoString &url) : io::stream::channel(io::channel::PROTECTION_NONE),
 									io::network::http::client(url),
 									response(NULL)
 	{
@@ -34,10 +34,10 @@ class httpIO : public io::stream::channel, public io::network::http::client
 
 	virtual void _read(char * const data) const
 	{
-		_readStream(data);
+		_readString(data);
 	}
 
-	virtual unsigned long _readStream(char * const data) const
+	virtual unsigned long _readString(char * const data) const
 	{
 		unsigned long size = 0;
 
@@ -66,17 +66,17 @@ class httpIO : public io::stream::channel, public io::network::http::client
 		throw dodoString("Not implemented");
 	}
 
-	virtual void _writeStream(const char * const idata) const
+	virtual void _writeString(const char * const idata) const
 	{
 		data.append(idata);
 	}
 
-	int getOutDescriptor() const
+	int outDescriptor() const
 	{
 		return -1;
 	}
 
-	int getInDescriptor() const
+	int inDescriptor() const
 	{
 		return -1;
 	}
@@ -115,8 +115,8 @@ int main(int argc, char **argv)
 		argument.setBoolean(true);
 		method.addArgument(argument);
 
-		argument.addStructMember("string", dodoString("string"));
-		argument.addStructMember("integer", (long)10);
+		argument.addStructureMember("string", dodoString("string"));
+		argument.addStructureMember("integer", (long)10);
 		method.addArgument(argument);
 
 		argument.addArrayElement(dodoString("string"));
@@ -125,17 +125,10 @@ int main(int argc, char **argv)
 
 		response resp = client.call(method);
 
-		cout << "Amount of values: " << resp.getValues().size() << endl;
-		cout << "Response ID: " << client.getResponseId() << endl;
-		cout << "First value: " << resp.getValue().getString() << endl;
-		cout << "Second value: " << resp.getValue(1).getString() << endl;
-
-		/* resp = client.call(method); */
-
-		/* cout << "Amount of values: " << resp.getValues().size() << endl; */
-		/* cout << "Response ID: " << client.getResponseId() << endl; */
-		/* cout << "First value: " << resp.getValue().getString() << endl; */
-		/* cout << "Second value: " << resp.getValue(1).getString() << endl; */
+		cout << "Amount of values: " << resp.values().size() << endl;
+		cout << "Response ID: " << client.responseId() << endl;
+		cout << "First value: " << resp.value().string() << endl;
+		cout << "Second value: " << resp.value(1).string() << endl;
 	}
 	catch (dodo::exception::basic ex)
 	{

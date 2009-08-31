@@ -25,11 +25,11 @@ threadRead(void *data)
 
 		io::channel *pipe = (io::channel *)data;
 
-		str = pipe->readStream();
+		str = pipe->readString();
 		cout << "%" << str << "%\n";
 		cout.flush();
 
-		str = pipe->readStream();
+		str = pipe->readString();
 		cout << "%" << str << "%\n";
 		cout.flush();
 
@@ -42,7 +42,7 @@ threadRead(void *data)
 	{
 		cout << (dodoString)ex << ex.line << endl;
 	}
-	
+
 	cout << "<-READER\n";
 	cout.flush();
 
@@ -61,12 +61,12 @@ threadWrite(void *data)
 
 		io::channel *pipe = (io::channel *)data;
 
-		pipe->writeStream(tools::time::byFormat("%H:%M:%S", tools::time::now()));
+		pipe->writeString(tools::time::byFormat("%H:%M:%S", tools::time::now()));
 		pipe->flush();
-		
-		str = tools::filesystem::getFileContents("test.cc");
-		
-		pipe->writeStream(tools::string::ulToString(str.size()));
+
+		str = tools::filesystem::fileContents("test.cc");
+
+		pipe->writeString(tools::string::ulToString(str.size()));
 		pipe->flush();
 
 		pipe->outSize = str.size();
@@ -77,7 +77,7 @@ threadWrite(void *data)
 	{
 		cout << (dodoString)ex << ex.line << endl;
 	}
-	
+
 	cout << "<-WRITER\n";
 	cout.flush();
 
@@ -88,19 +88,19 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		collection j;
-		
+		manager threads;
+
 		cout << "\n~~using one pipe for the thread~~\n";
 
 		io::pipe pipe1;
 		pipe1.open();
 
 		///< write first to avoid deadlock due to io::pipe is threadsafe and here one object is used
-		j.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&pipe1));
+		threads.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&pipe1), pc::job::ON_DESTRUCTION_STOP);
 		tools::os::sleep(1);
-		j.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&pipe1));
+		threads.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&pipe1), pc::job::ON_DESTRUCTION_STOP);
 
-		j.wait();
+		threads.wait();
 
 		cout << "\n~~using original cloned pipe for one thread and copy for the second~~\n";
 
@@ -109,23 +109,23 @@ int main(int argc, char **argv)
 		//pipe2.clone(pipe1);
 
 		///< use a copy, so no need to keep an order
-		j.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&pipe1));
-		j.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&pipe2));
-		
-		j.wait();
-		
+		threads.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&pipe1), pc::job::ON_DESTRUCTION_STOP);
+		threads.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&pipe2), pc::job::ON_DESTRUCTION_STOP);
+
+		threads.wait();
+
 		cout << "\n~~using FIFO file, opened to read for one thread and to write for the second~~\n";
 
 		io::file::fifo fifo1;
-		fifo1.open("fifo.file", io::file::FIFO_OPENMODE_READ_OPENNONBLOCK);
+		fifo1.open("fifo.file", io::file::fifo::OPEN_MODE_READ_OPENNONBLOCK);
 		io::file::fifo fifo2;
-		fifo2.open("fifo.file", io::file::FIFO_OPENMODE_WRITE);
+		fifo2.open("fifo.file", io::file::fifo::OPEN_MODE_WRITE);
 
 		///< use a copy, so no need to keep an order
-		j.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&fifo2));
-		j.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&fifo1));
-		
-		j.wait();
+		threads.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&fifo2), pc::job::ON_DESTRUCTION_STOP);
+		threads.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&fifo1), pc::job::ON_DESTRUCTION_STOP);
+
+		threads.wait();
 	}
 	catch (dodo::exception::basic ex)
 	{

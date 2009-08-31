@@ -19,37 +19,36 @@ int main(int argc, char **argv)
 #ifdef LIBXML2_EXT
 	try
 	{
-		processor xmlp;
-		xmlp.icaseNames = true;
+		processor p;
+		p.icaseNames = true;
 
-		__nodeDef__ def("div", "cns");
+		__definition__ def("div", "cns");
 		def.attributes = dodoStringArray(1, "id");
 		def.allChildren = false;
 
-		def.children["span"] = __nodeDef__("span");
+		def.children["span"] = __definition__("span");
 
-		node xnode = xmlp.process(def, io::file::regular("./test.xml", io::file::REGULAR_OPENMODE_READ_ONLY));
-		//node xnode = xmlp.process(io::file::regular("./test.xml", io::file::REGULAR_OPENMODE_READ_ONLY));
+		node xnode = p.process(def, io::file::regular("./test.xml", io::file::regular::OPEN_MODE_READ_ONLY));
+		//node xnode = p.process(io::file::regular("./test.xml", io::file::regular::OPEN_MODE_READ_ONLY));
 
-		cout << xmlp.getInfo().version << endl;
+		cout << p.information().version << endl;
 
 		cout << xnode.attributes["id"] << endl;
 		cout << xnode.name << endl;
-		cout << tools::string::trim(xnode.getValue(), " \n\t\r", 4) << endl;
+		cout << tools::string::trim(xnode.value(), " \n\t\r", 4) << endl;
 
-		dodoStringArray names = xnode.getChildrenNames(true);
+		dodoStringArray names = xnode.childrenNames(true);
 		cout << "Names(" << names.size() << "):" << endl;
 		dodoStringArray::iterator i = names.begin(), j = names.end();
 		for (;i!=j;++i)
 			cout << "\t" << *i << endl;
 
-		dodoArray<node> span = xnode.getChildren("span");
-
+		dodoArray<node> span = xnode.children("span");
 		if (span.size() > 0)
 		{
-			dodoArray<node> subspan = span[0].getChildren("span");
+			dodoArray<node> subspan = span[0].children("span");
 			if (subspan.size() > 0)
-				cout << subspan[0].getValue() << endl;
+				cout << subspan[0].value() << endl;
 
 			cout << span[0].attributes["id"] << endl;
 
@@ -57,12 +56,12 @@ int main(int argc, char **argv)
 				cout << span[1]["id"] << endl;
 		}
 
-		xmlp.clear();
+		p.clear();
 
 		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
 		io::memory buffer;
-		xmlp.make(xmlp.process(io::file::regular("./test.xml", io::file::REGULAR_OPENMODE_READ_ONLY)), "utf-8", "1.0", buffer);
+		p.make(p.process(io::file::regular("./test.xml", io::file::regular::OPEN_MODE_READ_ONLY)), "utf-8", "1.0", buffer);
 		cout  << endl << buffer << endl << endl;
 
 	}

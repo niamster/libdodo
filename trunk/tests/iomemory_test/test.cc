@@ -18,19 +18,19 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		io::memory io;
-		io.block = true;
+		io::memory io0;
+		io0.block = true;
 
-		io.writeStream("!12345890#!!@\n");
-		io.writeStream("!12345890-!!@\n");
-		io.writeStream("!12345890@!!@\n");
-		io.writeStream("!12345890$!!@\n");
+		io0.writeString("!12345890#!!@\n");
+		io0.writeString("!12345890-!!@\n");
+		io0.writeString("!12345890@!!@\n");
+		io0.writeString("!12345890$!!@\n");
 
-		io::memory io2 = io;
+		io::memory io1 = io0;
 
-		io2.pos = 1;
-		io2.outSize = 14;
-		io2.write("!12345890$!~@\n");
+		io1.pos = 1;
+		io1.outSize = 14;
+		io1.write("!12345890$!~@\n");
 
 		/**
 		 * io should contain
@@ -42,22 +42,22 @@ int main(int argc, char **argv)
 
 		dodoString str;
 
-		io2.pos = 2;
-		io2.inSize = 14;
+		io1.inSize = 14;
 
-		str = io2.readStream();
+		io1.pos = 2;
+		str = io1.readString();
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;
 
-		io2.pos = 2;
-		str = io2.read();
+		io1.pos = 2;
+		str = io1.read();
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;
 
-		cout << "io:" << endl;
-		cout << io << endl;
-		cout << "io2:" << endl;
-		cout << io2 << endl;
+		cout << "io0:" << endl;
+		cout << io0 << endl;
+		cout << "io1:" << endl;
+		cout << io1 << endl;
 	}
 	catch (dodo::exception::basic ex)
 	{

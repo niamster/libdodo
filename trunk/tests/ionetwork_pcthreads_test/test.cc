@@ -1,7 +1,7 @@
 /**
  * vim indentation settings
  * set tabstop=4
- * set shiftwidth=4
+ * set shiftwidmanager=4
  */
 
 
@@ -15,75 +15,70 @@ using namespace pc::sync::thread;
 
 using namespace std;
 
-pc::sync::thread::data::single sh;
+pc::sync::thread::data::single data;
 
 int
 process(void *data)
 {
-	exchange *fse = (exchange *)data;
+	exchange *ex = (exchange *)data;
 
 	try
 	{
-		if (fse->isBlocked())
+		if (ex->isBlocked())
 		{
-			cout << "CHILD BLOCKED\n";
+			cout << "Blocked\n";
 			cout.flush();
 		}
 		else
 		{
-			cout << "CHILD UNBLOCKED\n";
+			cout << "Non blocked\n";
 			cout.flush();
 		}
 
-		if (fse->isAlive())
+		if (ex->isAlive())
 		{
-			cout << "IT'S ALIVE!\n";
+			cout << "Alive\n";
 			cout.flush();
 		}
 
-		fse->inSize = 4;
-		fse->setInBufferSize(1);
-		fse->setOutBufferSize(1);
+		ex->inSize = 4;
+		ex->setInBufferSize(1);
+		ex->setOutBufferSize(1);
 
-		fse->outSize = 7;
-		fse->writeStream("test");
+		ex->outSize = 7;
+		ex->writeString("test\n");
 
-		dodoString rec = "";
+		dodoString str = "";
 		try
 		{
-			rec = fse->read();
+			str = ex->read();
 
-			cout << rec << rec.size() << endl;
+			cout << str << ":" << str.size() << endl;
 			cout.flush();
-			if (rec == "exit")
+			if (str == "exit")
 			{
-				bool *exit_st;
-				exit_st = (bool *)sh.acquire();
-				*exit_st = true;
-				sh.release();
+				bool *exit_condition;
+				exit_condition = (bool *)::data.acquire();
+				*exit_condition = true;
+				::data.release();
 			}
 		}
 		catch (dodo::exception::basic ex)
 		{
-			cout << "Smth happened!" << (dodoString)ex << endl;
-			cout.flush();
-		}
-		catch (...)
-		{
-			cout << "Smth happened!" << endl;
+			cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 			cout.flush();
 		}
 
-		fse->close();
+		ex->close();
 
-		if (fse->isAlive())
+		if (ex->isAlive())
 		{
-			cout << "IT'S ALIVE?????\n";
+			cout << "It's alive\n";
 			cout.flush();
 		}
 		else
 		{
-			cout << "CLOSED!\n";
+			cout << "Closed\n";
 			cout.flush();
 		}
 	}
@@ -92,7 +87,7 @@ process(void *data)
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
-	delete fse;
+	delete ex;
 
 	return 0;
 }
@@ -101,47 +96,52 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		server sock(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
+		server s(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
 
-		__peerInfo__ info;
-		__initialAccept__ accepted;
+		connection::__peer__ info;
+		exchange::__init__ accepted;
 
-		sock.serve("127.0.0.1", 7778, 3);
-		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
-		sock.blockInherited = false;
-		sock.block(false);
+		s.serve("127.0.0.1", 7778, 3);
+		s.setLingerOption(connection::LINGER_OPTION_HARD_CLOSE);
+		s.blockInherited = false;
+		s.block(false);
 
-		bool exit_st(false);
+		bool exit_condition(false);
 
-		thread::collection th;
-		vector<int> positions;
+		thread::manager manager;
+		vector<int> threads;
 
-		sh.set((void *)&exit_st);
+		::data.set((void *)&exit_condition);
 
-		while (!exit_st)
+		while (!exit_condition)
 		{
-			th.sweepTrash();
-
-			if (sock.accept(accepted, info))
+			if (s.accept(accepted, info))
 			{
-				if (sock.isBlocked())
+				if (s.isBlocked())
 				{
-					cout << "PARENT BLOCKED\n";
+					cout << "Blocked\n";
 					cout.flush();
 				}
 
 				exchange *ex = new exchange(accepted);
-				positions.push_back(th.add(::process, (void *)ex));
-				th.run(positions.back());
-				th.setExecutionLimit(positions.back(), 1);
+				threads.push_back(manager.add(::process, (void *)ex, pc::job::ON_DESTRUCTION_KEEP_ALIVE));
+				manager.run(threads.back());
 
 				try
 				{
-					if (th.isRunning(1))
-					{
-						cout << "Running!\n";
-						cout.flush();
-					}
+					vector<int>::iterator i = threads.begin(), j = threads.end();
+					for (;i!=j;++i)
+						if (manager.isRunning(*i))
+						{
+							cout << *i << " is running\n";
+							cout.flush();
+						}
+						else
+						{
+							cout << *i << " is finished\n";
+							manager.remove(*i);
+							cout.flush();
+						}
 				}
 				catch (...)
 				{
@@ -149,8 +149,7 @@ int main(int argc, char **argv)
 			}
 		}
 
-		th.wait();
-
+		manager.wait();
 	}
 	catch (dodo::exception::basic ex)
 	{

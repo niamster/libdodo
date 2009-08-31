@@ -19,7 +19,7 @@ class cgiIO : public io::stream::channel
   public:
 
 	cgiIO(cgi::exchange &cf,
-		  dodoMap<short, dodoString> &headers) : io::stream::channel(io::CHANNEL_PROTECTION_NONE),
+		  dodoMap<short, dodoString> &headers) : io::stream::channel(io::channel::PROTECTION_NONE),
 												 provider(cf, headers)
 	{
 	}
@@ -28,10 +28,10 @@ class cgiIO : public io::stream::channel
 
 	virtual void _read(char * const data) const
 	{
-		_readStream(data);
+		_readString(data);
 	}
 
-	virtual unsigned long _readStream(char * const data) const
+	virtual unsigned long _readString(char * const data) const
 	{
 		unsigned int size = provider.content.size();
 
@@ -55,17 +55,17 @@ class cgiIO : public io::stream::channel
 		provider.print(data);
 	}
 
-	virtual void _writeStream(const char * const data) const
+	virtual void _writeString(const char * const data) const
 	{
-		provider.printStream(data);
+		provider.printString(data);
 	}
 
-	int getOutDescriptor() const
+	int outDescriptor() const
 	{
 		return -1;
 	}
 
-	int getInDescriptor() const
+	int inDescriptor() const
 	{
 		return -1;
 	}
@@ -91,10 +91,10 @@ handler(const dodoString &method, const dodoArray<value> &values, const void *id
 int main(int argc, char **argv)
 {
 	dodoMap<short, dodoString> headers;
-	headers[cgi::CGI_ENVIRONMENT_CONTENTTYPE] = "application/json";
+	headers[cgi::ENVIRONMENT_CONTENTTYPE] = "application/json";
 
-	cgi::basic::exchange cgiio;
-	cgiIO provider(cgiio, headers);
+	cgi::basic::exchange io;
+	cgiIO provider(io, headers);
 
 	json::server srv(provider);
 

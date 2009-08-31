@@ -13,21 +13,21 @@ using namespace data::format::json;
 
 using namespace std;
 
-void showJSON(const node &jsN, short level=0)
+void showJSON(const node &n, short level=0)
 {
-	switch (jsN.getType())
+	switch (n.type())
 	{
-		case DATATYPE_STRING:
+		case node::DATA_STRING:
 
-			cout << dodoString(level, '\t') << "[string]: " << jsN.getString() << endl;
+			cout << dodoString(level, '\t') << "[string]: " << n.string() << endl;
 
 			break;
 
-		case DATATYPE_OBJECT:
+		case node::DATA_OBJECT:
 		{
 			cout << dodoString(level, '\t') << "[object]: " << endl;
 			const dodoMap<dodoString, node, dodoMapStringCompare>
-				&objectValue = jsN.getObject();
+				&objectValue = n.object();
 			dodoMap<dodoString, node, dodoMapStringCompare>::const_iterator
 				i = objectValue.begin(),
 				j = objectValue.end();
@@ -40,27 +40,27 @@ void showJSON(const node &jsN, short level=0)
 			break;
 		}
 
-		case DATATYPE_NULL:
+		case node::DATA_NULL:
 
 			cout << dodoString(level, '\t') << "[null]" << endl;
 
 			break;
 
-		case DATATYPE_NUMERIC:
+		case node::DATA_NUMERIC:
 
-			cout << dodoString(level, '\t') << "[numeric]: " << jsN.getNumeric() << endl;
-
-			break;
-
-		case DATATYPE_BOOLEAN:
-
-			cout << dodoString(level, '\t') << "[boolean]: " << (jsN.getBoolean() ? "true" : "false") << endl;
+			cout << dodoString(level, '\t') << "[numeric]: " << n.numeric() << endl;
 
 			break;
 
-		case DATATYPE_ARRAY:
+		case node::DATA_BOOLEAN:
+
+			cout << dodoString(level, '\t') << "[boolean]: " << (n.boolean() ? "true" : "false") << endl;
+
+			break;
+
+		case node::DATA_ARRAY:
 		{
-			const dodoArray<node> &arrayValue = jsN.getArray();
+			const dodoArray<node> &arrayValue = n.array();
 			dodoArray<node>::const_iterator i = arrayValue.begin(), j = arrayValue.end();
 
 			cout << dodoString(level, '\t') << "[array]: " << endl;
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		processor js;
+		processor p;
 
 		node node0, node1, node2;
 
@@ -107,11 +107,11 @@ int main(int argc, char **argv)
 
 		io::memory json;
 
-		js.make(node0, json);
+		p.make(node0, json);
 		cout << json << endl;
 
 		json.pos = 0;
-		node jn = js.process(json);
+		node jn = p.process(json);
 		showJSON(jn);
 
 		dodoStringMap map;
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 		map["one"] = "two";
 
 		json.clear();
-		js.fromMap(map, json);
+		p.fromMap(map, json);
 		cout << endl << json << endl;
 	}
 	catch (dodo::exception::basic ex)

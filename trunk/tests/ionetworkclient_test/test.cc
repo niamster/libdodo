@@ -19,16 +19,16 @@ int main(int argc, char **argv)
 	{
 		try
 		{
-			client st(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
-			exchange exch;
+			client c(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
+			exchange ex;
 			dodoString str;
 
 			try
 			{
-				st.connectFrom("127.0.0.1", "127.0.0.1", 21, exch);
+				c.connectFrom("127.0.0.1", "127.0.0.1", 21, ex);
 
-				str = exch.readStream();
-				cout << "\ngot:\n" << str << "\n";
+				str = ex.readString();
+				cout << "\n" << str << "\n";
 			}
 			catch (dodo::exception::basic ex)
 			{

@@ -17,40 +17,40 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		server sock(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
+		server s(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
 
-		__initialAccept__ accepted;
+		exchange::__init__ accepted;
 
-		sock.serve("127.0.0.1", 7778, 1);
-		sock.setOption(CONNECTION_OPTION_REUSE_ADDRESS, true);
-		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
-		sock.blockInherited = true;
-		sock.block(false);
+		s.serve("127.0.0.1", 7778, 1);
+		s.setOption(connection::OPTION_REUSE_ADDRESS, true);
+		s.setLingerOption(connection::LINGER_OPTION_HARD_CLOSE);
+		s.blockInherited = true;
+		s.block(false);
 
-		io::event nb;
+		io::event::manager manager;
 
 		char trimSym[] = { '\r', '\n' };
 
 		while (true)
 		{
-			if (sock.accept(accepted))
+			if (s.accept(accepted))
 			{
 				exchange ex(accepted);
 
 				if (ex.isBlocked())
-					cout << "is Blocked" << endl;
+					cout << "Blocked" << endl;
 				else
-					cout << "is not Blocked" << endl;
+					cout << "Non blocked" << endl;
 
-				int pos = nb.addChannel(ex);
+				int pos = manager.add(ex);
 
 				dodoString data;
 
 				while (true)
 				{
-					if (nb.isReadable(pos))
+					if (manager.isReadable(pos))
 					{
-						data = ex.readStream();
+						data = ex.readString();
 						cout << "'" << tools::string::trim(data, trimSym, 2) << "'" << endl;
 
 						if (tools::string::trim(data, trimSym, 2) == "exit")

@@ -17,15 +17,15 @@ using namespace std;
 #ifndef DATABASE_WO_XEXEC
 
 void
-hook(__xexecCollectedData__ *odata,
+hook(xexec::__collected_data__ *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecDataBaseAccumulatorCollectedData__ *sql = (__xexecDataBaseAccumulatorCollectedData__ *)odata;
+	accumulator::__collected_data__ *sql = (accumulator::__collected_data__ *)odata;
 
-	if (sql->operType == DATABASE_OPERATION_EXEC)
+	if (sql->operType == data::base::connector::OPERATION_EXEC)
 	{
-		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->queryCollect() << endl << endl;
+		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->construct() << endl << endl;
 	}
 }
 
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-		__connectionInfo__ info;
+		__connection__ info;
 		info.db = "test";
 		if (strcasecmp(argv[1], "postgresql") == 0)
 		{
@@ -61,26 +61,26 @@ int main(int argc, char **argv)
 			info.path = "test.lite";
 		}
 
-		connector *pp;
+		connector *db;
 
 		///parse command line arguments to figure out what db to use
 		if (strcasecmp(argv[1], "postgresql") == 0)
 #ifdef POSTGRESQL_EXT
-			pp = new postgresql(info);
+			db = new postgresql(info);
 #else
 			return 1;
 #endif
 
 		else if (strcasecmp(argv[1], "mysql") == 0)
 #ifdef MYSQL_EXT
-			pp = new mysql(info);
+			db = new mysql(info);
 #else
 			return 1;
 #endif
 
 		else if (strcasecmp(argv[1], "sqlite") == 0)
 #ifdef SQLITE3_EXT
-			pp = new sqlite(info);
+			db = new sqlite(info);
 #else
 			return 1;
 #endif
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 			return 1;
 
 #ifndef DATABASE_WO_XEXEC
-		pp->addXExec(XEXEC_ACTION_PREEXEC, ::hook, (void *)"id");
+		db->addXExec(xexec::ACTION_PREEXEC, ::hook, (void *)"id");
 #endif
 
 		///define session charset
@@ -97,9 +97,9 @@ int main(int argc, char **argv)
 		{
 			#ifdef POSTGRESQL_EXT
 
-				((postgresql *)pp)->setCharset("UTF-8");
+				((postgresql *)db)->setCharset("UTF-8");
 
-				cout << "Encoding: " << ((postgresql *)pp)->getCharset() << endl;
+				cout << "Encoding: " << ((postgresql *)db)->charset() << endl;
 
 			#endif
 		}
@@ -107,16 +107,16 @@ int main(int argc, char **argv)
 		{
 			#ifdef MYSQL_EXT
 
-				((mysql *)pp)->setCharset("UTF-8");
+				((mysql *)db)->setCharset("UTF-8");
 
-				cout << "Encoding: " << ((mysql *)pp)->getCharset() << endl;
+				cout << "Encoding: " << ((mysql *)db)->charset() << endl;
 
 			#endif
 		}
 
 		try
 		{
-			pp->exec("DROP TABLE test");
+			db->exec("DROP TABLE test");
 		}
 		catch (dodo::exception::basic &ex)
 		{
@@ -124,60 +124,60 @@ int main(int argc, char **argv)
 		}
 
 		if (strcasecmp(argv[1], "postgresql") == 0)
-			pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b bytea)");
+			db->exec("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id integer default NULL, i integer default NULL, b bytea)");
 		else
-			pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b longblob)");
+			db->exec("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id integer default NULL, i integer default NULL, b longblob)");
 
 		try
 		{
-			((sql::constructor *)pp)->getFieldsTypes("test");
+			((sql::constructor *)db)->requestFieldsTypes("test");
 		}
 		catch(dodo::exception::basic &ex)
 		{
 			cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 
-			((sql::constructor *)pp)->setFieldType("test", "date", sql::FIELDTYPE_TEXT);
-			((sql::constructor *)pp)->setFieldType("test", "operation", sql::FIELDTYPE_TEXT);
-			((sql::constructor *)pp)->setFieldType("test", "id", sql::FIELDTYPE_NUMERIC);
-			((sql::constructor *)pp)->setFieldType("test", "d", sql::FIELDTYPE_NUMERIC);
-			((sql::constructor *)pp)->setFieldType("test", "b", sql::FIELDTYPE_BINARY);
+			((sql::constructor *)db)->setFieldType("test", "t0", sql::FIELD_TEXT);
+			((sql::constructor *)db)->setFieldType("test", "t1", sql::FIELD_TEXT);
+			((sql::constructor *)db)->setFieldType("test", "id", sql::FIELD_NUMERIC);
+			((sql::constructor *)db)->setFieldType("test", "i", sql::FIELD_NUMERIC);
+			((sql::constructor *)db)->setFieldType("test", "b", sql::FIELD_BINARY);
 		}
 
-		dodoStringMap arr;
-		arr["date"] = "2005-07-08";
-		arr["operation"] = "mu";
-		arr["d"] = "1";
+		dodoStringMap array;
+		array["t0"] = "xyz";
+		array["t1"] = "abc";
+		array["i"] = "1";
 
 		dodoArray<dodoString> select;
-		select.push_back("date");
-		select.push_back("operation");
+		select.push_back("t0");
+		select.push_back("t1");
 		select.push_back("b");
 
 		__tuples__ store;
 
 		for (int i = 0; i < 10; i++)
 		{
-			pp->select("test", select, "id<20 or operation='um'");
-			pp->exec();
+			db->select("test", select, "id<20 or t1='def'");
+			db->exec();
 
-			store = pp->fetch();
+			store = db->fetch();
 
-			pp->insert("test", arr);
-			pp->exec();
+			db->insert("test", array);
+			db->exec();
 
-			arr["d"] = "d+1";
-			arr["operation"] = "um";
-			pp->update("test", arr);
-			pp->exec();
+			array["i"] = "i+1";
+			array["t1"] = "def";
+			db->update("test", array);
+			db->exec();
 
-			arr["operation"] = "mu";
-			arr["d"] = "1";
+			array["t1"] = "abc";
+			array["i"] = "1";
 		}
 
-		pp->select("test", select, "operation='um'");
-		pp->exec();
+		db->select("test", select, "t1='def'");
+		db->exec();
 
-		store = pp->fetch();
+		store = db->fetch();
 
 		cout << store.rows.size() << endl;
 
@@ -188,39 +188,39 @@ int main(int argc, char **argv)
 			m = i->begin();
 			n = i->end();
 			for (; m != n; m++)
-				cout << *m << "\t";
+				cout << "[" << *m << "]\t";
 			cout << endl;
 		}
 
 #ifndef DATABASE_WO_XEXEC
-		pp->disableXExecs = true;
+		db->disableXExecs = true;
 #endif
 
 		tools::filesystem::unlink("test.db");
-		dodoString dt = tools::filesystem::getFileContents("test");
+		dodoString b = tools::filesystem::fileContents("test");
 
-		arr.clear();
+		array.clear();
 
-		arr["b"] = dt;
-		arr["date"] = "2005-07-08";
-		arr["operation"] = "ma";
+		array["b"] = b;
+		array["t0"] = "blob";
+		array["t1"] = "";
 
-		pp->insert("test", arr);
-		pp->exec();
+		db->insert("test", array);
+		db->exec();
 
-		pp->disconnect();
-		pp->connect(info);
+		db->disconnect();
+		db->connect(info);
 
-		pp->select("test", select, "operation='ma'");
-		pp->exec();
+		db->select("test", select, "t0='blob'");
+		db->exec();
 
-		store = pp->fetch();
+		store = db->fetch();
 
 		///put fetched binary data to file
 		if (store.fields.size() == 3 && store.rows.size() > 0)
 			tools::filesystem::writeToFile("test.db", (*store.rows.begin())[2]);
 
-		delete pp;
+		delete db;
 	}
 	catch (dodo::exception::basic ex)
 	{

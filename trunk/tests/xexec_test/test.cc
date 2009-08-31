@@ -17,24 +17,24 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		stdio st;
+		stdio io;
 #ifdef DL_EXT
 #ifndef IO_WO_XEXEC
 		int preExecId, postExecId;
-		cout << stdio::getModuleInfo("./module").name << endl;
+		cout << stdio::module("./module").name << endl;
 
-		st.addXExec("./module", NULL, preExecId, postExecId);
+		io.addXExec("./module", NULL, preExecId, postExecId);
 
-		st.delXExec(preExecId);
+		io.removeXExec(preExecId);
 
-		st.addXExec("./module", NULL, preExecId, postExecId);
-		st.addXExec("./module", NULL, preExecId, postExecId, (void *)"perform");
+		io.addXExec("./module", NULL, preExecId, postExecId);
+		io.addXExec("./module", NULL, preExecId, postExecId, (void *)"perform");
 #endif
 #endif
 
-		st.outSize = sizeof("xexec");
-		st.write("xexec");
-		st.flush();
+		io.outSize = sizeof("xexec");
+		io.write("xexec");
+		io.flush();
 	}
 	catch (dodo::exception::basic ex)
 	{
