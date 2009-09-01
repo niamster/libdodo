@@ -61,6 +61,8 @@ stdio::stdio(stdio &fd) : stream::channel(protection)
 
 stdio::~stdio()
 {
+	in->file = NULL;
+	out->file = NULL;
 }
 
 //-------------------------------------------------------------------
