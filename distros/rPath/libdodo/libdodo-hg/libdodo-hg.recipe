@@ -3,7 +3,7 @@ class LibdodoHg(CPackageRecipe):
 	name = 'libdodo-hg'
 	version = 'dbfefc22321f'
 
-	buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'filesystem', 'info-rmake-chroot:user', 'info-rmake:user', 'tcp_wrappers:devellib']
+	buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'which:runtime', 'tcp_wrappers:devellib']
 
 	def setup(r):
 		r.addArchive('http://hg.libdodo.org/archive/%(version)s.tar.bz2')
