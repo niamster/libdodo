@@ -56,7 +56,6 @@ int main(int argc, char **argv)
 		dodoString o;
 
 		st.blockSize = 33;
-		st.inPipeBuffer = 20;
 
 		o = st.read();
 

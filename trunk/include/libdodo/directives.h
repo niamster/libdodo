@@ -33,8 +33,7 @@
 #include <libdodo/directives.runtime.h>
 
 /**
- * size of key for shm_open and sem_open
- * @note including leading '/'
+ * size of key for shared entities
  */
 #ifdef __FreeBSD__
 #define SH_KEY_SIZE				14
@@ -58,11 +57,6 @@
 #define DEFAULT_FILE_PERM dodo::tools::filesystem::PERMISSION_OWNER_ALL_ACCESS
 
 /**
- * size of buffer for random data for openssl library
- */
-#define OPENSSL_RANDBUFEFSIZE	512
-
-/**
  * size of string that represents numeric value during convertion
  */
 #define NUMERIC_STRING_SIZE		20
@@ -74,10 +68,10 @@
 #define IONETWORKCONNECTION_SOCKET_SEND_TIMEOUT		1000
 
 /**
- * default values of socket buffer for io operations
+ * default size of socket buffer for io operations
  */
-#define IONETWORKCONNECTION_SOCKETBUFFER_INSIZE			 4096
-#define IONETWORKCONNECTION_SOCKETBUFFER_OUTSIZE		 4096
+#define IONETWORKCONNECTION_SOCKETBUFFER_INSIZE		 4096
+#define IONETWORKCONNECTION_SOCKETBUFFER_OUTSIZE	 4096
 
 /**
  * default linger options for network connections
@@ -96,18 +90,6 @@
 #define LINE_MAXLEN				4096
 
 /**
- * default values of stdin/out buffer for io operations(stdio)
- */
-#define IOPIPE_INSIZE			4096
-#define IOPIPE_OUTSIZE			4096
-
-/**
- * default values of stdin/out buffer for io operations(stdio)
- */
-#define IOFILEFIFO_INSIZE		4096
-#define IOFILEFIFO_OUTSIZE		4096
-
-/**
  * max length of the filesystem path
  */
 #define PATH_MAXLEN				 FILENAME_MAX
@@ -118,7 +100,7 @@
 #define DIE_MAXTRIES			5
 
 /**
- * max depth of calls for stack trace
+ * max depth of calls for call trace
  */
 #define CALLSTACK_MAXLEN		128
 #endif

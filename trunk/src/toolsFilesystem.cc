@@ -533,14 +533,14 @@ filesystem::fileContents(const dodoString &path)
 	if (file == NULL)
 		throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	char buffer[IO_INSIZE];
+	char buffer[IO_BLOCKSIZE];
 
-	long iter = st.st_size / IO_INSIZE, rest = st.st_size % IO_INSIZE;
+	long iter = st.st_size / IO_BLOCKSIZE, rest = st.st_size % IO_BLOCKSIZE;
 	dodoString retS = "";
 
 	int i(0);
 	for (; i < iter; ++i) {
-		if (fread(buffer, IO_INSIZE, 1, file) == 0) {
+		if (fread(buffer, IO_BLOCKSIZE, 1, file) == 0) {
 			switch (errno) {
 				case EIO:
 				case EINTR:
@@ -552,7 +552,7 @@ filesystem::fileContents(const dodoString &path)
 			}
 		}
 
-		retS.append(buffer, IO_INSIZE);
+		retS.append(buffer, IO_BLOCKSIZE);
 	}
 	if (rest > 0) {
 		if (fread(buffer, rest, 1, file) == 0) {
@@ -711,7 +711,7 @@ filesystem::copy(const dodoString &from,
 		} else if (::mknod(to.data(), stFrom.st_mode, 0) == 1)
 			throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 	} else {
-		long iter = stFrom.st_size / IO_INSIZE, rest = stFrom.st_size % IO_INSIZE;
+		long iter = stFrom.st_size / IO_BLOCKSIZE, rest = stFrom.st_size % IO_BLOCKSIZE;
 
 		FILE *fromFile = fopen(from.data(), "r");
 		if (fromFile == NULL)
@@ -721,11 +721,11 @@ filesystem::copy(const dodoString &from,
 		if (toFile == NULL)
 			throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 
-		char buffer[IO_INSIZE];
+		char buffer[IO_BLOCKSIZE];
 
 		int i(0);
 		for (; i < iter; ++i) {
-			if (fread(buffer, IO_INSIZE, 1, fromFile) == 0) {
+			if (fread(buffer, IO_BLOCKSIZE, 1, fromFile) == 0) {
 				switch (errno) {
 					case EIO:
 					case EINTR:
@@ -737,7 +737,7 @@ filesystem::copy(const dodoString &from,
 				}
 			}
 
-			if (fwrite(buffer, IO_INSIZE, 1, toFile) == 0) {
+			if (fwrite(buffer, IO_BLOCKSIZE, 1, toFile) == 0) {
 				switch (errno) {
 					case EIO:
 					case EINTR:

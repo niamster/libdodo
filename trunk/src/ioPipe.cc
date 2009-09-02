@@ -50,8 +50,6 @@ using namespace dodo;
 
 io::pipe::pipe(bool  open,
 			   short protection) : stream::channel(protection),
-								   inPipeBuffer(IOPIPE_INSIZE),
-								   outPipeBuffer(IOPIPE_OUTSIZE),
 								   in(new io::__file__),
 								   out(new io::__file__),
 								   blocked(true)
@@ -79,8 +77,6 @@ io::pipe::pipe(bool  open,
 //-------------------------------------------------------------------
 
 io::pipe::pipe(const pipe &fd) : stream::channel(protection),
-								 inPipeBuffer(fd.inPipeBuffer),
-								 outPipeBuffer(fd.outPipeBuffer),
 								 in(new io::__file__),
 								 out(new io::__file__),
 								 blocked(fd.blocked)
@@ -89,7 +85,6 @@ io::pipe::pipe(const pipe &fd) : stream::channel(protection),
 	collectedData.setExecObject(xexec::OBJECT_IOPIPE);
 #endif
 
-	blockSize = fd.blockSize;
 	blockSize = fd.blockSize;
 
 	if (fd.in->file != NULL && fd.out->file != NULL) {
@@ -156,10 +151,7 @@ io::pipe::clone(const pipe &fd)
 		out->file = NULL;
 	}
 
-	inPipeBuffer = fd.inPipeBuffer;
-	outPipeBuffer = fd.outPipeBuffer;
 	blocked = fd.blocked;
-	blockSize = fd.blockSize;
 	blockSize = fd.blockSize;
 
 	if (fd.in->file != NULL && fd.out->file != NULL) {
@@ -302,55 +294,26 @@ io::pipe::_read(char * const a_data) const
 
 	char *data = a_data;
 
-	unsigned long iter = blockSize / inPipeBuffer;
-	unsigned long rest = blockSize % inPipeBuffer;
+	unsigned long batch = blockSize, n;
 
-	unsigned long batch, n;
+	while (batch > 0) {
+		while (true) {
+			if ((n = fread(data, 1, batch, in->file)) == 0) {
+				if (feof(in->file) != 0 || errno == EAGAIN)
+					break;
 
-	for (unsigned long i = 0; i < iter; ++i) {
-		batch = inPipeBuffer;
-		while (batch > 0) {
-			while (true) {
-				if ((n = fread(data, 1, batch, in->file)) == 0) {
-					if (feof(in->file) != 0 || errno == EAGAIN)
-						break;
+				if (errno == EINTR)
+					continue;
 
-					if (errno == EINTR)
-						continue;
-
-					if (ferror(in->file) != 0)
-						throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
+				if (ferror(in->file) != 0)
+					throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
-			batch -= n;
-			data += n;
+			break;
 		}
-	}
 
-	if (rest > 0) {
-		batch = rest;
-		while (batch > 0) {
-			while (true) {
-				if ((n = fread(data, 1, batch, in->file)) == 0) {
-					if (feof(in->file) != 0 || errno == EAGAIN)
-						break;
-
-					if (errno == EINTR)
-						continue;
-
-					if (ferror(in->file) != 0)
-						throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
-			}
-
-			batch -= n;
-			data += n;
-		}
+		batch -= n;
+		data += n;
 	}
 }
 
@@ -364,55 +327,26 @@ io::pipe::_write(const char *const buf) const
 
 	const char *data = buf;
 
-	unsigned long iter = blockSize / outPipeBuffer;
-	unsigned long rest = blockSize % outPipeBuffer;
+	unsigned long batch = blockSize, n;
 
-	unsigned long batch, n;
+	while (batch > 0) {
+		while (true) {
+			if ((n = fwrite(data, 1, batch, out->file)) == 0) {
+				if (errno == EINTR)
+					continue;
 
-	for (unsigned long i = 0; i < iter; ++i) {
-		batch = outPipeBuffer;
-		while (batch > 0) {
-			while (true) {
-				if ((n = fwrite(data, 1, batch, out->file)) == 0) {
-					if (errno == EINTR)
-						continue;
+				if (errno == EAGAIN)
+					break;
 
-					if (errno == EAGAIN)
-						break;
-
-					if (ferror(out->file) != 0)
-						throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
+				if (ferror(out->file) != 0)
+					throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
-			batch -= n;
-			data += n;
+			break;
 		}
-	}
 
-	if (rest > 0) {
-		batch = rest;
-		while (batch > 0) {
-			while (true) {
-				if ((n = fwrite(data, 1, batch, out->file)) == 0) {
-					if (errno == EINTR)
-						continue;
-
-					if (errno == EAGAIN)
-						break;
-
-					if (ferror(out->file) != 0)
-						throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
-			}
-
-			batch -= n;
-			data += n;
-		}
+		batch -= n;
+		data += n;
 	}
 }
 

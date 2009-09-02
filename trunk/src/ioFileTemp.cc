@@ -82,7 +82,6 @@ temp::temp(const temp &fd) : block::channel(protection),
 
 	pos = fd.pos;
 	blockSize = fd.blockSize;
-	blockSize = fd.blockSize;
 
 	if (fd.handle->file != NULL) {
 		int oldDesc, newDesc;
@@ -165,7 +164,6 @@ temp::clone(const temp &fd)
 	pos = fd.pos;
 	block = fd.block;
 	append = fd.append;
-	blockSize = fd.blockSize;
 	blockSize = fd.blockSize;
 
 	if (fd.handle->file != NULL) {

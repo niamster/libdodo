@@ -48,8 +48,6 @@
 using namespace dodo::io::file;
 
 fifo::fifo(short protection) : stream::channel(protection),
-							   inBuffer(IOFILEFIFO_INSIZE),
-							   outBuffer(IOFILEFIFO_OUTSIZE),
 							   handle(new io::__file__),
 							   blocked(true)
 {
@@ -63,8 +61,6 @@ fifo::fifo(short protection) : stream::channel(protection),
 fifo::fifo(const dodoString &path,
 		   short            mode,
 		   short            protection) : stream::channel(protection),
-										  inBuffer(IOFILEFIFO_INSIZE),
-										  outBuffer(IOFILEFIFO_OUTSIZE),
 										  path(path),
 										  mode(mode),
 										  handle(new io::__file__),
@@ -155,8 +151,6 @@ fifo::fifo(const dodoString &path,
 //-------------------------------------------------------------------
 
 fifo::fifo(const fifo &fd) : stream::channel(fd.protection),
-							 inBuffer(fd.inBuffer),
-							 outBuffer(fd.outBuffer),
 							 path(fd.path),
 							 mode(fd.mode),
 							 handle(new __file__),
@@ -166,7 +160,6 @@ fifo::fifo(const fifo &fd) : stream::channel(fd.protection),
 	collectedData.setExecObject(xexec::OBJECT_IOFILEFIFO);
 #endif
 
-	blockSize = fd.blockSize;
 	blockSize = fd.blockSize;
 
 	if (fd.handle->file != NULL) {
@@ -257,12 +250,9 @@ fifo::clone(const fifo &fd)
 		handle->file = NULL;
 	}
 
-	inBuffer = fd.inBuffer;
-	outBuffer = fd.outBuffer;
 	blocked = fd.blocked;
 	path = fd.path;
 	mode = fd.mode;
-	blockSize = fd.blockSize;
 	blockSize = fd.blockSize;
 
 	if (fd.handle->file != NULL) {
@@ -457,55 +447,26 @@ fifo::_read(char * const a_data) const
 
 	char *data = a_data;
 
-	unsigned long iter = blockSize / inBuffer;
-	unsigned long rest = blockSize % inBuffer;
+	unsigned long batch = blockSize, n;
 
-	unsigned long batch, n;
+	while (batch > 0) {
+		while (true) {
+			if ((n = fread(data, 1, batch, handle->file)) == 0) {
+				if (feof(handle->file) != 0 || errno == EAGAIN)
+					break;
 
-	for (unsigned long i = 0; i < iter; ++i) {
-		batch = inBuffer;
-		while (batch > 0) {
-			while (true) {
-				if ((n = fread(data, 1, batch, handle->file)) == 0) {
-					if (feof(handle->file) != 0 || errno == EAGAIN)
-						break;
+				if (errno == EINTR)
+					continue;
 
-					if (errno == EINTR)
-						continue;
-
-					if (ferror(handle->file) != 0)
-						throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
+				if (ferror(handle->file) != 0)
+					throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
-			batch -= n;
-			data += n;
+			break;
 		}
-	}
 
-	if (rest > 0) {
-		batch = rest;
-		while (batch > 0) {
-			while (true) {
-				if ((n = fread(data, 1, batch, handle->file)) == 0) {
-					if (feof(handle->file) != 0 || errno == EAGAIN)
-						break;
-
-					if (errno == EINTR)
-						continue;
-
-					if (ferror(handle->file) != 0)
-						throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
-			}
-
-			batch -= n;
-			data += n;
-		}
+		batch -= n;
+		data += n;
 	}
 }
 
@@ -519,55 +480,26 @@ fifo::_write(const char *const a_data) const
 
 	const char *data = a_data;
 
-	unsigned long iter = blockSize / outBuffer;
-	unsigned long rest = blockSize % outBuffer;
+	unsigned long batch = blockSize, n;
 
-	unsigned long batch, n;
+	while (batch > 0) {
+		while (true) {
+			if ((n = fwrite(data, 1, batch, handle->file)) == 0) {
+				if (errno == EINTR)
+					continue;
 
-	for (unsigned long i = 0; i < iter; ++i) {
-		batch = outBuffer;
-		while (batch > 0) {
-			while (true) {
-				if ((n = fwrite(data, 1, batch, handle->file)) == 0) {
-					if (errno == EINTR)
-						continue;
+				if (errno == EAGAIN)
+					break;
 
-					if (errno == EAGAIN)
-						break;
-
-					if (ferror(handle->file) != 0)
-						throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
+				if (ferror(handle->file) != 0)
+					throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
-			batch -= n;
-			data += n;
+			break;
 		}
-	}
 
-	if (rest > 0) {
-		batch = rest;
-		while (batch > 0) {
-			while (true) {
-				if ((n = fwrite(data, 1, batch, handle->file)) == 0) {
-					if (errno == EINTR)
-						continue;
-
-					if (errno == EAGAIN)
-						break;
-
-					if (ferror(handle->file) != 0)
-						throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
-			}
-
-			batch -= n;
-			data += n;
-		}
+		batch -= n;
+		data += n;
 	}
 }
 

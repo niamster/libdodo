@@ -114,9 +114,6 @@ namespace dodo {
 			 */
 			virtual void block(bool flag);
 
-			int inPipeBuffer;   ///< input buffer
-			int outPipeBuffer;  ///< output buffer
-
 		  protected:
 
 			/**

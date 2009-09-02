@@ -103,7 +103,6 @@ memory::memory(const memory &fd) : block::channel(fd.protection),
 	append = fd.append;
 	pos = fd.pos;
 	blockSize = fd.blockSize;
-	blockSize = fd.blockSize;
 }
 
 //-------------------------------------------------------------------
@@ -183,7 +182,6 @@ memory::clone(const memory &fd)
 	pos = fd.pos;
 	block = fd.block;
 	append = fd.append;
-	blockSize = fd.blockSize;
 	blockSize = fd.blockSize;
 	flags = fd.flags;
 	size = fd.size;

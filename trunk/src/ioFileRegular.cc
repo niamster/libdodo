@@ -147,7 +147,6 @@ regular::regular(const regular &fd) : block::channel(fd.protection),
 	append = fd.append;
 	pos = fd.pos;
 	blockSize = fd.blockSize;
-	blockSize = fd.blockSize;
 
 	if (fd.handle->file !=  NULL) {
 		int oldDesc, newDesc;
@@ -243,7 +242,6 @@ regular::clone(const regular &fd)
 	pos = fd.pos;
 	block = fd.block;
 	append = fd.append;
-	blockSize = fd.blockSize;
 	blockSize = fd.blockSize;
 
 	if (fd.handle->file !=  NULL) {
