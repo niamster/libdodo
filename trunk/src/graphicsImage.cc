@@ -515,7 +515,7 @@ image::writeMemory(dodoString &data)
 
 	GetExceptionInfo((ExceptionInfo *)exInfo);
 
-	unsigned long size = 0;
+	size_t size = 0;
 	unsigned char *imData = ImageToBlob(collectedData.handle->imInfo, collectedData.handle->im, (size_t *)&size, (ExceptionInfo *)exInfo);
 	if (imData == NULL)
 		throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description?((ExceptionInfo *)exInfo)->description:__dodostring__);
