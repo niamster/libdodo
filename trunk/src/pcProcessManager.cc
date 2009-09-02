@@ -380,7 +380,7 @@ manager::wait()
 		if ((*i)->joined)
 			continue;
 
-		if (!(*current)->isRunning)
+		if (!(*i)->isRunning)
 			continue;
 
 		if (waitpid((*i)->pid, &status, 0) == -1)

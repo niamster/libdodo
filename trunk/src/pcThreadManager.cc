@@ -350,7 +350,7 @@ manager::wait()
 		if ((*i)->joined || (*i)->detached)
 			continue;
 
-		if (!(*current)->isRunning)
+		if (!(*i)->isRunning)
 			continue;
 
 #ifdef PTHREAD_EXT
