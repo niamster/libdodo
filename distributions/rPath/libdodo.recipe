@@ -1,7 +1,7 @@
 class LibdodoHg(CPackageRecipe):
 
 	name = 'libdodo-hg'
-	version = 'dbfefc22321f'
+	version = '<version>'
 
 	buildRequires = ['gcc-c++:runtime', 'autoconf:runtime', 'which:runtime', 'tcp_wrappers:devellib']
 
