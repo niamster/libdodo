@@ -138,22 +138,22 @@ namespace dodo {
 
 				/**
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including null)
-				 * if block is true read offset is calculated as pos*inSize otherwise offset it taken pos bytes from the beginning
+				 * @note not more then blockSize(including null)
+				 * if block is true read offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
 				 */
 				virtual void _read(char * const data) const;
 
 				/**
 				 * read from stream null- or newline- terminated string
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including null)
+				 * @note not more then blockSize(including null)
 				 * if block is true read offset is calculated as pos*'# of \n terminated strings' otherwise offset it taken pos bytes from the beginning
 				 */
 				virtual unsigned long _readString(char * const data) const;
 
 				/**
 				 * @param data defines data that will be written
-				 * @note if block is true write offset is calculated as pos*outSize otherwise offset it taken pos bytes from the beginning
+				 * @note if block is true write offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
 				 */
 				virtual void _write(const char * const data) const;
 

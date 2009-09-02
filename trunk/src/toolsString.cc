@@ -162,7 +162,7 @@ string::format(const dodoString &format,
 dodoString
 string::lToString(long number)
 {
-	char temp[SIZEOFNUM];
+	char temp[NUMERIC_STRING_SIZE];
 	sprintf(temp, "%ld", number);
 
 	return temp;
@@ -173,7 +173,7 @@ string::lToString(long number)
 dodoString
 string::ulToString(unsigned long number)
 {
-	char temp[SIZEOFNUM];
+	char temp[NUMERIC_STRING_SIZE];
 	sprintf(temp, "%ld", number);
 
 	return temp;
@@ -184,7 +184,7 @@ string::ulToString(unsigned long number)
 dodoString
 string::iToString(int number)
 {
-	char temp[SIZEOFNUM];
+	char temp[NUMERIC_STRING_SIZE];
 	sprintf(temp, "%d", number);
 
 	return temp;
@@ -195,7 +195,7 @@ string::iToString(int number)
 dodoString
 string::uiToString(unsigned int number)
 {
-	char temp[SIZEOFNUM];
+	char temp[NUMERIC_STRING_SIZE];
 	sprintf(temp, "%u", number);
 
 	return temp;
@@ -206,7 +206,7 @@ string::uiToString(unsigned int number)
 dodoString
 string::sToString(short number)
 {
-	char temp[SIZEOFNUM];
+	char temp[NUMERIC_STRING_SIZE];
 	sprintf(temp, "%hd", number);
 
 	return temp;
@@ -217,7 +217,7 @@ string::sToString(short number)
 dodoString
 string::usToString(unsigned short number)
 {
-	char temp[SIZEOFNUM];
+	char temp[NUMERIC_STRING_SIZE];
 	sprintf(temp, "%hd", number);
 
 	return temp;
@@ -228,7 +228,7 @@ string::usToString(unsigned short number)
 dodoString
 string::fToString(float number)
 {
-	char temp[SIZEOFNUM];
+	char temp[NUMERIC_STRING_SIZE];
 	sprintf(temp, "%f", number);
 
 	return temp;
@@ -239,7 +239,7 @@ string::fToString(float number)
 dodoString
 string::dToString(double number)
 {
-	char temp[SIZEOFNUM];
+	char temp[NUMERIC_STRING_SIZE];
 	sprintf(temp, "%f", number);
 
 	return temp;

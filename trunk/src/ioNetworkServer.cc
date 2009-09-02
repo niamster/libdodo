@@ -95,8 +95,8 @@ server::~server()
 void
 server::restoreOptions()
 {
-	setInBufferSize(inSocketBuffer);
-	setOutBufferSize(outSocketBuffer);
+	setInBufferSize(inSocketBufferSize);
+	setOutBufferSize(outSocketBufferSize);
 
 	setInTimeout(inSocketTimeout);
 	setOutTimeout(outSocketTimeout);

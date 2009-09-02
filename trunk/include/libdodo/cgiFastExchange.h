@@ -95,21 +95,21 @@ namespace dodo {
 				/**
 				 * read
 				 * @param data is filled with read data
-				 * if inSize bigger than buffer size - reads with few iterations
+				 * if blockSize bigger than buffer size - reads with few iterations
 				 */
 				virtual void _read(char * const data) const;
 
 				/**
 				 * read from stream - '\0' or '\n' - terminated string
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
+				 * @note not more then blockSize(including '\0')
 				 */
 				virtual unsigned long _readString(char * const data) const;
 
 				/**
 				 * write
 				 * @param data is data that will be written
-				 * if outSize bigger than buffer size - writes with few iterations
+				 * if blockSize bigger than buffer size - writes with few iterations
 				 */
 				virtual void _write(const char * const data) const;
 

@@ -47,8 +47,7 @@ channel::__collected_data__::__collected_data__(xexec *a_executor,
 
 //-------------------------------------------------------------------
 
-channel::channel(short protection) : inSize(IO_INSIZE),
-									 outSize(IO_OUTSIZE),
+channel::channel(short protection) : blockSize(IO_BLOCKSIZE),
 									 keeper(NULL),
 									 protection(protection)
 #ifndef IO_WO_XEXEC

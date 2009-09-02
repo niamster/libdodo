@@ -81,8 +81,8 @@ temp::temp(const temp &fd) : block::channel(protection),
 #endif
 
 	pos = fd.pos;
-	inSize = fd.inSize;
-	outSize = fd.outSize;
+	blockSize = fd.blockSize;
+	blockSize = fd.blockSize;
 
 	if (fd.handle->file != NULL) {
 		int oldDesc, newDesc;
@@ -165,8 +165,8 @@ temp::clone(const temp &fd)
 	pos = fd.pos;
 	block = fd.block;
 	append = fd.append;
-	inSize = fd.inSize;
-	outSize = fd.outSize;
+	blockSize = fd.blockSize;
+	blockSize = fd.blockSize;
 
 	if (fd.handle->file != NULL) {
 		int oldDesc, newDesc;
@@ -246,13 +246,13 @@ temp::_read(char * const a_data) const
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	unsigned long pos = block ? this->pos * inSize : this->pos;
+	unsigned long pos = block ? this->pos * blockSize : this->pos;
 
-	if (fseek(handle->file, pos * inSize, SEEK_SET) == -1)
+	if (fseek(handle->file, pos * blockSize, SEEK_SET) == -1)
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	while (true) {
-		if (fread(a_data, inSize, 1, handle->file) == 0) {
+		if (fread(a_data, blockSize, 1, handle->file) == 0) {
 			if (feof(handle->file) != 0 || errno == EAGAIN)
 				break;
 
@@ -279,14 +279,14 @@ temp::_write(const char *const a_data) const
 		if (fseek(handle->file, 0, SEEK_END) == -1)
 			throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	} else {
-		unsigned long pos = block ? this->pos * outSize : this->pos;
+		unsigned long pos = block ? this->pos * blockSize : this->pos;
 		if (!overwrite) {
 			if (fseek(handle->file, pos, SEEK_SET) == -1)
 				throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-			char *t_buf = new char[outSize];
+			char *t_buf = new char[blockSize];
 
-			size_t read = fread(t_buf, outSize, 1, handle->file);
+			size_t read = fread(t_buf, blockSize, 1, handle->file);
 
 			delete [] t_buf;
 
@@ -299,7 +299,7 @@ temp::_write(const char *const a_data) const
 	}
 
 	while (true) {
-		if (fwrite(a_data, outSize, 1, handle->file) == 0) {
+		if (fwrite(a_data, blockSize, 1, handle->file) == 0) {
 			if (errno == EINTR)
 				continue;
 
@@ -321,9 +321,9 @@ temp::erase()
 {
 	pc::sync::protector pg(keeper);
 
-	char *empty = new char[outSize];
+	char *empty = new char[blockSize];
 
-	memset(empty, 0, outSize);
+	memset(empty, 0, blockSize);
 
 	bool _overwrite = overwrite;
 	overwrite = true;
@@ -365,7 +365,7 @@ temp::_readString(char * const a_data) const
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX__READSTREAM, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	unsigned long readSize = inSize + 1;
+	unsigned long readSize = blockSize + 1;
 
 	if (block) {
 		if (fseek(handle->file, 0, SEEK_SET) == -1)
@@ -421,15 +421,15 @@ temp::_writeString(const char *const a_data) const
 	if (fseek(handle->file, 0, SEEK_END) == -1)
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	unsigned long _outSize = outSize;
+	unsigned long _blockSize = blockSize;
 
 	unsigned int bufSize = strlen(a_data);
 
-	if (bufSize < _outSize)
-		_outSize = bufSize;
+	if (bufSize < _blockSize)
+		_blockSize = bufSize;
 
 	while (true) {
-		if (fwrite(a_data, _outSize, 1, handle->file) == 0) {
+		if (fwrite(a_data, _blockSize, 1, handle->file) == 0) {
 			if (errno == EINTR)
 				continue;
 

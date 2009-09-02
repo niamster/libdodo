@@ -41,10 +41,10 @@ using namespace dodo::io::network;
 
 connection::connection() : lingerOpts(IONETWORKCONNECTION_SOCKET_LINGER_OPTION),
 						   lingerSeconds(IONETWORKCONNECTION_SOCKET_LINGER_PERIOD),
-						   inSocketTimeout(IONETWORKCONNECTION_SOCKET_RECIEVE_TIMEOUT),
+						   inSocketTimeout(IONETWORKCONNECTION_SOCKET_RECEIVE_TIMEOUT),
 						   outSocketTimeout(IONETWORKCONNECTION_SOCKET_SEND_TIMEOUT),
-						   inSocketBuffer(IONETWORKCONNECTION_SOCKET_INSIZE),
-						   outSocketBuffer(IONETWORKCONNECTION_SOCKET_OUTSIZE),
+						   inSocketBufferSize(IONETWORKCONNECTION_SOCKETBUFFER_INSIZE),
+						   outSocketBufferSize(IONETWORKCONNECTION_SOCKETBUFFER_OUTSIZE),
 						   socket(-1),
 						   blocked(true)
 {
@@ -95,9 +95,9 @@ connection::setInBufferSize(unsigned long bytes)
 	if (socket == -1)
 		throw exception::basic(exception::MODULE_IONETWORKCONNECTION, CONNECTIONEX_SETINBUFFERSIZE, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
-	inSocketBuffer = bytes;
+	inSocketBufferSize = bytes;
 
-	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &inSocketBuffer, sizeof(long)) == 1)
+	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &inSocketBufferSize, sizeof(long)) == 1)
 		throw exception::basic(exception::MODULE_IONETWORKCONNECTION, CONNECTIONEX_SETINBUFFERSIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
@@ -106,7 +106,7 @@ connection::setInBufferSize(unsigned long bytes)
 unsigned long
 connection::inBufferSize() const
 {
-	return inSocketBuffer;
+	return inSocketBufferSize;
 }
 
 //-------------------------------------------------------------------
@@ -117,9 +117,9 @@ connection::setOutBufferSize(unsigned long bytes)
 	if (socket == -1)
 		throw exception::basic(exception::MODULE_IONETWORKCONNECTION, CONNECTIONEX_SETOUTBUFFERSIZE, exception::ERRNO_LIBDODO, CONNECTIONEX_NOSOCKETCREATED, IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
-	outSocketBuffer = bytes;
+	outSocketBufferSize = bytes;
 
-	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBuffer, sizeof(long)) == 1)
+	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBufferSize, sizeof(long)) == 1)
 		throw exception::basic(exception::MODULE_IONETWORKCONNECTION, CONNECTIONEX_SETOUTBUFFERSIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
@@ -128,7 +128,7 @@ connection::setOutBufferSize(unsigned long bytes)
 unsigned long
 connection::outBufferSize() const
 {
-	return outSocketBuffer;
+	return outSocketBufferSize;
 }
 
 //-------------------------------------------------------------------

@@ -426,7 +426,7 @@ basic::basic(int              a_module,
 	syncThreadStack tg;
 
 #ifdef CALLSTACK_EX
-	void *trace[MAXCALLSTACKLEN];
+	void *trace[CALLSTACK_MAXLEN];
 
 	using namespace abi;
 
@@ -438,7 +438,7 @@ basic::basic(int              a_module,
 
 	__call__ call;
 
-	int trace_size = ::backtrace(trace, MAXCALLSTACKLEN);
+	int trace_size = ::backtrace(trace, CALLSTACK_MAXLEN);
 	char **symbols = backtrace_symbols(trace, trace_size);
 
 	for (int i = 0; i < trace_size; ++i) {

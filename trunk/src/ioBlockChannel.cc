@@ -65,10 +65,10 @@ channel::read() const
 	operType = OPERATION_READ;
 	performPreExec();
 
-	collectedData.buffer.reserve(inSize);
+	collectedData.buffer.reserve(blockSize);
 #endif
 
-	a_str.assign(inSize, '\0');
+	a_str.assign(blockSize, '\0');
 
 	try {
 		_read((char *)a_str.data());
@@ -93,7 +93,7 @@ channel::read() const
 #else
 #endif
 
-	pos += inSize;
+	pos += blockSize;
 
 	return a_str;
 }
@@ -112,7 +112,7 @@ channel::readString() const
 	performPreExec();
 #endif
 
-	a_str.assign(inSize, '\0');
+	a_str.assign(blockSize, '\0');
 	unsigned long n = 0;
 
 	try {
@@ -154,7 +154,7 @@ channel::write(const dodoString &a_data) const
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	collectedData.buffer.assign(a_data, 0, outSize);
+	collectedData.buffer.assign(a_data, 0, blockSize);
 
 	operType = OPERATION_WRITE;
 	performPreExec();
@@ -176,7 +176,7 @@ channel::write(const dodoString &a_data) const
 	collectedData.buffer.clear();
 #endif
 
-	pos += outSize;
+	pos += blockSize;
 }
 
 //-------------------------------------------------------------------

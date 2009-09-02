@@ -33,7 +33,7 @@ threadRead(void *data)
 		cout << "%" << str << "%\n";
 		cout.flush();
 
-		pipe->inSize = tools::string::stringToUL(str);
+		pipe->blockSize = tools::string::stringToUL(str);
 		str = pipe->read();
 		cout << "%MD5: " << tools::code::MD5Hex(str) << "%\n";
 		cout.flush();
@@ -69,7 +69,7 @@ threadWrite(void *data)
 		pipe->writeString(tools::string::ulToString(str.size()));
 		pipe->flush();
 
-		pipe->outSize = str.size();
+		pipe->blockSize = str.size();
 		pipe->write(str);
 		pipe->flush();
 	}

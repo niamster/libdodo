@@ -212,8 +212,8 @@ namespace dodo {
 				unsigned long inSocketTimeout;        ///< incomming operation timeout of socket; in microseconds
 				unsigned long outSocketTimeout;       ///< outgoing operation timeout of socket; in microseconds
 
-				unsigned long inSocketBuffer;   ///< incoming buffer size of socket; in bytes
-				unsigned long outSocketBuffer;  ///< outgoing buffer size of socket; in bytes
+				unsigned long inSocketBufferSize;   ///< incoming buffer size of socket; in bytes
+				unsigned long outSocketBufferSize;  ///< outgoing buffer size of socket; in bytes
 
 				int socket;                     ///< socket descriptor
 

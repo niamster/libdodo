@@ -317,10 +317,10 @@ client::GET() const
 			}
 			data.append("\r\n");
 
-			unsigned long outSize = ex->outSize;
-			ex->outSize = data.size();
+			unsigned long blockSize = ex->blockSize;
+			ex->blockSize = data.size();
 			ex->exchange::_write(data.data());
-			ex->outSize = outSize;
+			ex->blockSize = blockSize;
 
 			try {
 				switch (getProxyConnectResponse(ex, response)) {
@@ -394,7 +394,7 @@ client::GET() const
 				if (scheme == SCHEME_HTTP) {
 					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
 					ex->setInBufferSize(512);
-					ex->inSize = 512;
+					ex->blockSize = 512;
 				}
 
 #ifdef OPENSSL_EXT
@@ -404,7 +404,7 @@ client::GET() const
 
 					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
 					ex->setInBufferSize(512);
-					ex->inSize = 512;
+					ex->blockSize = 512;
 				}
 #endif
 
@@ -467,12 +467,12 @@ client::GET() const
 
 	data.append("\r\n\r\n");
 
-	unsigned long outSize = ex->outSize;
+	unsigned long blockSize = ex->blockSize;
 
-	ex->outSize = data.size();
+	ex->blockSize = data.size();
 	ex->write(data);
 
-	ex->outSize = outSize;
+	ex->blockSize = blockSize;
 
 	try {
 		switch (getContent(ex, response)) {
@@ -762,10 +762,10 @@ client::POST(const dodoString &rdata,
 			}
 			data.append("\r\n");
 
-			unsigned long outSize = ex->outSize;
-			ex->outSize = data.size();
+			unsigned long blockSize = ex->blockSize;
+			ex->blockSize = data.size();
 			ex->exchange::_write(data.data());
-			ex->outSize = outSize;
+			ex->blockSize = blockSize;
 
 			try {
 				switch (getProxyConnectResponse(ex, response)) {
@@ -839,7 +839,7 @@ client::POST(const dodoString &rdata,
 				if (scheme == SCHEME_HTTP) {
 					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
 					ex->setInBufferSize(512);
-					ex->inSize = 512;
+					ex->blockSize = 512;
 				}
 
 #ifdef OPENSSL_EXT
@@ -849,7 +849,7 @@ client::POST(const dodoString &rdata,
 
 					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
 					ex->setInBufferSize(512);
-					ex->inSize = 512;
+					ex->blockSize = 512;
 				}
 #endif
 
@@ -916,15 +916,15 @@ client::POST(const dodoString &rdata,
 	data.append(type);
 	data.append("\r\n\r\n");
 
-	unsigned long outSize = ex->outSize;
+	unsigned long blockSize = ex->blockSize;
 
-	ex->outSize = data.size();
+	ex->blockSize = data.size();
 	ex->write(data);
 
-	ex->outSize = rdata.size();
+	ex->blockSize = rdata.size();
 	ex->write(rdata);
 
-	ex->outSize = outSize;
+	ex->blockSize = blockSize;
 
 	try {
 		switch (getContent(ex, response)) {
@@ -1136,7 +1136,7 @@ client::getProxyConnectResponse(exchange *ex,
 
 	char data[512];
 	ex->setInBufferSize(512);
-	ex->inSize = 512;
+	ex->blockSize = 512;
 
 	while (true) {
 		try {
@@ -1221,7 +1221,7 @@ client::getContent(exchange *ex,
 			if (chunked) {
 				if (chunkSize > 0) {
 					if (chunkSize > data.size()) {
-						ex->inSize = chunkSize - data.size();
+						ex->blockSize = chunkSize - data.size();
 						data.append(ex->read());
 					}
 
@@ -1232,7 +1232,7 @@ client::getContent(exchange *ex,
 				}
 
 				if (data.size() == 0) {
-					ex->inSize = 512;
+					ex->blockSize = 512;
 					data = ex->readString();
 
 					if (data.size() == 0)
@@ -1269,7 +1269,7 @@ client::getContent(exchange *ex,
 					if (chunkSize == 0)
 						break;
 				} else {
-					ex->inSize = 512;
+					ex->blockSize = 512;
 					data.append(ex->readString());
 				}
 			} else {
@@ -1348,7 +1348,7 @@ client::getContent(exchange *ex,
 
 							contentSize = tools::string::stringToUL(response.headers[RESPONSE_HEADER_CONTENTLENGTH]);
 
-							ex->inSize = 16384;
+							ex->blockSize = 16384;
 						}
 
 						ex->setInBufferSize(16384);

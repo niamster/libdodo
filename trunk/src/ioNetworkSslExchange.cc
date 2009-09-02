@@ -183,8 +183,8 @@ exchange::init(int                        a_socket,
 	socket = a_socket;
 	handle->handle = a_handle->handle;
 
-	setInBufferSize(inSocketBuffer);
-	setOutBufferSize(outSocketBuffer);
+	setInBufferSize(inSocketBufferSize);
+	setOutBufferSize(outSocketBufferSize);
 
 	setInTimeout(inSocketTimeout);
 	setOutTimeout(outSocketTimeout);
@@ -235,8 +235,8 @@ exchange::_write(const char * const a_data) const
 	if (socket == -1)
 		throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	unsigned long iter = outSize / outSocketBuffer;
-	unsigned long rest = outSize % outSocketBuffer;
+	unsigned long iter = blockSize / outSocketBufferSize;
+	unsigned long rest = blockSize % outSocketBufferSize;
 
 	const char *data = a_data;
 
@@ -244,7 +244,7 @@ exchange::_write(const char * const a_data) const
 
 	for (unsigned long i = 0; i < iter; ++i) {
 		while (true) {
-			if ((n = SSL_write(handle->handle, data, outSocketBuffer)) <= 0) {
+			if ((n = SSL_write(handle->handle, data, outSocketBufferSize)) <= 0) {
 				switch (SSL_get_error(handle->handle, n)) {
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
@@ -269,7 +269,7 @@ exchange::_write(const char * const a_data) const
 			break;
 		}
 
-		data += outSocketBuffer;
+		data += outSocketBufferSize;
 	}
 
 	if (rest > 0) {
@@ -309,8 +309,8 @@ exchange::_read(char * const a_data) const
 	if (socket == -1)
 		throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	long iter = inSize / inSocketBuffer;
-	long rest = inSize % inSocketBuffer;
+	long iter = blockSize / inSocketBufferSize;
+	long rest = blockSize % inSocketBufferSize;
 
 	char *data = a_data;
 
@@ -318,7 +318,7 @@ exchange::_read(char * const a_data) const
 
 	for (long i = 0; i < iter; ++i) {
 		while (true) {
-			if ((n = SSL_read(handle->handle, data, inSocketBuffer)) <= 0) {
+			if ((n = SSL_read(handle->handle, data, inSocketBufferSize)) <= 0) {
 				switch (SSL_get_error(handle->handle, n)) {
 					case SSL_ERROR_WANT_READ:
 					case SSL_ERROR_WANT_WRITE:
@@ -343,7 +343,7 @@ exchange::_read(char * const a_data) const
 			break;
 		}
 
-		data += inSocketBuffer;
+		data += inSocketBufferSize;
 	}
 
 	if (rest > 0) {
@@ -389,7 +389,7 @@ exchange::_readString(char * const data) const
 	long n;
 
 	while (true) {
-		if ((n = SSL_read(handle->handle, data, inSize)) <= 0) {
+		if ((n = SSL_read(handle->handle, data, blockSize)) <= 0) {
 			switch (SSL_get_error(handle->handle, n)) {
 				case SSL_ERROR_WANT_READ:
 				case SSL_ERROR_WANT_WRITE:

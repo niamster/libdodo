@@ -44,19 +44,19 @@ int main(int argc, char **argv)
 		st.connect(tools::network::hostPrimaryIp(host), 443, ex);
 
 		str = "GET / HTTP/1.1\r\n";
-		ex.outSize = str.size();
+		ex.blockSize = str.size();
 		ex.write(str);
 
 		str = "Host: " + host + "\r\n";
-		ex.outSize = str.size();
+		ex.blockSize = str.size();
 		ex.write(str);
 
 		str = "Connection: Close\r\n";
-		ex.outSize = str.size();
+		ex.blockSize = str.size();
 		ex.write(str);
 
 		str = "User-Agent: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n\r\n";
-		ex.outSize = str.size();
+		ex.blockSize = str.size();
 		ex.write(str);
 
 		str = ex.readString();

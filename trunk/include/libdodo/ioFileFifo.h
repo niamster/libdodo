@@ -148,14 +148,14 @@ namespace dodo {
 
 				/**
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including null)
+				 * @note not more then blockSize(including null)
 				 */
 				virtual void _read(char * const data) const;
 
 				/**
 				 * read from stream null- or newline- terminated string
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including null)
+				 * @note not more then blockSize(including null)
 				 */
 				virtual unsigned long _readString(char * const data) const;
 

@@ -122,27 +122,27 @@ namespace dodo {
 
 			/**
 			 * @return read data
-			 * @note not more then inSize
+			 * @note not more then blockSize
 			 */
 			virtual dodoString read() const = 0;
 
 			/**
 			 * @param data defines data that will be written
-			 * @note not more then outSize
+			 * @note not more then blockSize
 			 */
 			virtual void write(const dodoString &data) const = 0;
 
 			/**
 			 * read from stream null- or newline- terminated string
 			 * @return read data
-			 * @note not more then inSize
+			 * @note not more then blockSize
 			 */
 			virtual dodoString readString() const = 0;
 
 			/**
 			 * write to stream null- terminated string
 			 * @param data defines data that will be written
-			 * @note not more then outSize
+			 * @note not more then blockSize
 			 */
 			virtual void writeString(const dodoString &data) const = 0;
 
@@ -151,34 +151,33 @@ namespace dodo {
 			 */
 			virtual void flush() const = 0;
 
-			mutable unsigned long inSize;   ///< size of data block for read* operations
-			mutable unsigned long outSize;  ///< size of data block for write* operations
+			mutable unsigned long blockSize;   ///< size of data block for read/write operations
 
 		  protected:
 
 			/**
 			 * @param data defines buffer that will be filled
-			 * @note not more then inSize(including null)
+			 * @note not more then blockSize(including null)
 			 */
 			virtual void _read(char * const data) const = 0;
 
 			/**
 			 * read from stream null- or newline- terminated string
 			 * @param data defines buffer that will be filled
-			 * @note not more then inSize(including null)
+			 * @note not more then blockSize(including null)
 			 */
 			virtual unsigned long _readString(char * const data) const = 0;
 
 			/**
 			 * @param data defines data that will be written
-			 * @note not more then outSize(including null)
+			 * @note not more then blockSize(including null)
 			 */
 			virtual void _write(const char * const data) const = 0;
 
 			/**
 			 * write to stream null- terminated string
 			 * @param data defines data that will be written
-			 * @note not more then outSize(including null)
+			 * @note not more then blockSize(including null)
 			 */
 			virtual void _writeString(const char * const data) const = 0;
 

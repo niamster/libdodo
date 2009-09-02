@@ -47,12 +47,12 @@ class httpIO : public io::stream::channel, public io::network::http::client
 			size = response->data.size();
 			if (size != 0)
 			{
-				if (size > inSize)
-					size = inSize;
+				if (size > blockSize)
+					size = blockSize;
 
 				memcpy(data, response->data.data(), size);
-				if (size < inSize)
-					memset(data+size, 0x0, inSize - size);
+				if (size < blockSize)
+					memset(data+size, 0x0, blockSize - size);
 			}
 
 			delete response;

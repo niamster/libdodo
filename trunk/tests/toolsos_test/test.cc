@@ -35,7 +35,7 @@ exit(int, void *, void *)
 int main(int argc, char **argv)
 {
 
-	cout << os::PID() << endl;
+	cout << "PID: " << os::PID() << endl;
 
 	os::setSignalHandler(os::SIGNAL_HANGUP, ::exit);
 	os::setSignalHandler(os::SIGNAL_INTERRUPT, ::handler);
@@ -44,6 +44,7 @@ int main(int argc, char **argv)
 		cout << "SIGNAL_HANGUP is set" << endl;
 	else
 		cout << "SIGNAL_HANGUP is not set" << endl;
+	cout << "Send SIGNAL_HANGUP to stop the loop" << endl;
 
 	while (run)
 	{
@@ -83,7 +84,7 @@ int main(int argc, char **argv)
 
 	cout << os::workingDir() << endl;
 
-	os::die(tools::string::rTrim("    rTrim    "));
+	os::die("DIE message\n");
 
 	cout << os::workingDir();
 

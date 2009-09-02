@@ -146,8 +146,8 @@ regular::regular(const regular &fd) : block::channel(fd.protection),
 	block = fd.block;
 	append = fd.append;
 	pos = fd.pos;
-	inSize = fd.inSize;
-	outSize = fd.outSize;
+	blockSize = fd.blockSize;
+	blockSize = fd.blockSize;
 
 	if (fd.handle->file !=  NULL) {
 		int oldDesc, newDesc;
@@ -243,8 +243,8 @@ regular::clone(const regular &fd)
 	pos = fd.pos;
 	block = fd.block;
 	append = fd.append;
-	inSize = fd.inSize;
-	outSize = fd.outSize;
+	blockSize = fd.blockSize;
+	blockSize = fd.blockSize;
 
 	if (fd.handle->file !=  NULL) {
 		int oldDesc, newDesc;
@@ -380,13 +380,13 @@ regular::_read(char * const a_data) const
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	unsigned long pos = block ? this->pos * inSize : this->pos;
+	unsigned long pos = block ? this->pos * blockSize : this->pos;
 
 	if (fseek(handle->file, pos, SEEK_SET) == -1)
 		throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	while (true) {
-		if (fread(a_data, inSize, 1, handle->file) == 0) {
+		if (fread(a_data, blockSize, 1, handle->file) == 0) {
 			if (feof(handle->file) != 0 || errno == EAGAIN)
 				break;
 
@@ -413,14 +413,14 @@ regular::_write(const char *const a_data) const
 		if (fseek(handle->file, 0, SEEK_END) == -1)
 			throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	} else {
-		unsigned long pos = block ? this->pos * outSize : this->pos;
+		unsigned long pos = block ? this->pos * blockSize : this->pos;
 
 		if (fseek(handle->file, pos, SEEK_SET) == -1)
 			throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	while (true) {
-		if (fwrite(a_data, outSize, 1, handle->file) == 0) {
+		if (fwrite(a_data, blockSize, 1, handle->file) == 0) {
 			if (errno == EINTR)
 				continue;
 
@@ -442,9 +442,9 @@ regular::erase()
 {
 	pc::sync::protector pg(keeper);
 
-	char *empty = new char[outSize];
+	char *empty = new char[blockSize];
 
-	memset(empty, 0, outSize);
+	memset(empty, 0, blockSize);
 	try {
 		_write(empty);
 	} catch (...) {
@@ -478,7 +478,7 @@ regular::_readString(char * const a_data) const
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READSTREAM, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	unsigned long readSize = inSize + 1;
+	unsigned long readSize = blockSize + 1;
 
 	if (block) {
 		if (fseek(handle->file, 0, SEEK_SET) == -1)
@@ -536,13 +536,13 @@ regular::_writeString(const char *const a_data) const
 
 	unsigned int bufSize = strlen(a_data);
 
-	unsigned long _outSize = outSize;
+	unsigned long _blockSize = blockSize;
 
-	if (bufSize < _outSize)
-		_outSize = bufSize;
+	if (bufSize < _blockSize)
+		_blockSize = bufSize;
 
 	while (true) {
-		if (fwrite(a_data, _outSize, 1, handle->file) == 0) {
+		if (fwrite(a_data, _blockSize, 1, handle->file) == 0) {
 			if (errno == EINTR)
 				continue;
 

@@ -1040,19 +1040,19 @@ code::makeUrl(const __url__ &url)
 {
 	dodoString stringUrl;
 
-	unsigned long loginSize = url.login.size();
+	unsigned long logblockSize = url.login.size();
 
 	if (url.protocol.size() > 0) {
 		stringUrl.append(url.protocol);
 		stringUrl.append("://" );
 	}
-	if (loginSize > 0)
+	if (logblockSize > 0)
 		stringUrl.append(url.login);
 	if (url.password.size() > 0) {
 		stringUrl.append(":");
 		stringUrl.append(url.password);
 	}
-	if (loginSize > 0)
+	if (logblockSize > 0)
 		stringUrl.append("@");
 	stringUrl.append(url.host);
 	if (url.port.size() > 0) {

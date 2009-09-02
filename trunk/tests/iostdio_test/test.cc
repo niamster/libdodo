@@ -23,12 +23,12 @@ hook(xexec::__collected_data__ *odata,
 	if (st->operType == io::channel::OPERATION_WRITE)
 	{
 		stdio *io = dynamic_cast<stdio *>(st->executor);
-		/* io->outSize = 100; */ /* FIXME: issue #61 */
+		/* io->blockSize = 100; */ /* FIXME: issue #61 */
 		/* io->writeString("\nhook\n"); */
 
 		dodoString str = ">" + st->buffer + "<\n";
 
-		io->outSize = str.size();
+		io->blockSize = str.size();
 		st->buffer.assign(str);
 	}
 }
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 		st.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
 #endif
 
-		st.outSize = sizeof("write");
+		st.blockSize = sizeof("write");
 		st.write("write");
 		st.flush();
 
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 #endif
 		dodoString o;
 
-		st.inSize = 33;
+		st.blockSize = 33;
 		st.inPipeBuffer = 20;
 
 		o = st.read();
@@ -63,11 +63,11 @@ int main(int argc, char **argv)
 		cout << o.size() << "\n";
 		cout << o << "\n";
 
-		st.outSize = 4;
+		st.blockSize = 4;
 		st.write("1234567890");
 		st.writeString("\n");
 
-		st.outSize = 40;
+		st.blockSize = 40;
 		st.writeString(o);
 		st.writeString("\nexiting\n");
 	}

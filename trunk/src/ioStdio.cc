@@ -108,19 +108,19 @@ stdio::isRedirectedToStderr()
 void
 stdio::_writeString(const char * const data) const
 {
-	unsigned long _outSize = outSize;
+	unsigned long _blockSize = blockSize;
 
 	try {
 		unsigned int bufSize = strlen(data);
 
-		if (bufSize < outSize)
-			outSize = bufSize;
+		if (bufSize < blockSize)
+			blockSize = bufSize;
 
 		_write(data);
 
-		outSize = _outSize;
+		blockSize = _blockSize;
 	} catch (...) {
-		outSize = _outSize;
+		blockSize = _blockSize;
 
 		throw;
 	}

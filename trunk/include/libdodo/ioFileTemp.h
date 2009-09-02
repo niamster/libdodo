@@ -45,8 +45,8 @@ namespace dodo {
 			 * @brief provides I/O manipulations with temporary file
 			 * @note  if block is false then read/write position is amount of bytes from the beginning, if true then:
 			 * writeString, writeString write only to the end of the file(append)
-			 * write offset for write, write is calculated as pos*outSize
-			 * read offset for read, read is calculated as pos*inSize
+			 * write offset for write, write is calculated as pos*blockSize
+			 * read offset for read, read is calculated as pos*blockSize
 			 * read offset for readString, readString is calculated as pos*'# of \n terminated strings'
 			 */
 			class temp : virtual public block::channel {
@@ -127,22 +127,22 @@ namespace dodo {
 
 				/**
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including null)
-				 * if block is true read offset is calculated as pos*inSize otherwise offset it taken pos bytes from the beginning
+				 * @note not more then blockSize(including null)
+				 * if block is true read offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
 				 */
 				virtual void _read(char * const data) const;
 
 				/**
 				 * read from stream null- or newline- terminated string
 				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including null)
+				 * @note not more then blockSize(including null)
 				 * if block is true read offset is calculated as pos*'# of \n terminated strings' otherwise offset it taken pos bytes from the beginning
 				 */
 				virtual unsigned long _readString(char * const data) const;
 
 				/**
 				 * @param data defines data that will be written
-				 * @note if block is true write offset is calculated as pos*outSize otherwise offset it taken pos bytes from the beginning
+				 * @note if block is true write offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
 				 */
 				virtual void _write(const char * const data) const;
 

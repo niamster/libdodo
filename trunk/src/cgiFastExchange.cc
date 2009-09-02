@@ -107,7 +107,7 @@ exchange::outDescriptor() const
 void
 exchange::_read(char * const a_data) const
 {
-	FCGX_GetStr(a_data, inSize, request->request->in);
+	FCGX_GetStr(a_data, blockSize, request->request->in);
 }
 
 //-------------------------------------------------------------------
@@ -115,7 +115,7 @@ exchange::_read(char * const a_data) const
 void
 exchange::_write(const char *const buf) const
 {
-	if (FCGX_PutStr(buf, outSize, request->request->out) == -1)
+	if (FCGX_PutStr(buf, blockSize, request->request->out) == -1)
 		throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 }
 
@@ -124,19 +124,19 @@ exchange::_write(const char *const buf) const
 void
 exchange::_writeString(const char * const data) const
 {
-	unsigned long _outSize = outSize;
+	unsigned long _blockSize = blockSize;
 
 	try {
 		unsigned int bufSize = strlen(data);
 
-		if (bufSize < outSize)
-			outSize = bufSize;
+		if (bufSize < blockSize)
+			blockSize = bufSize;
 
 		_write(data);
 
-		outSize = _outSize;
+		blockSize = _blockSize;
 	} catch (...) {
-		outSize = _outSize;
+		blockSize = _blockSize;
 
 		throw;
 	}
@@ -147,11 +147,11 @@ exchange::_writeString(const char * const data) const
 unsigned long
 exchange::_readString(char * const data) const
 {
-	unsigned long _inSize = inSize++;
+	unsigned long _blockSize = blockSize++;
 
 	_read(data);
 
-	inSize = _inSize;
+	blockSize = _blockSize;
 
 	return strlen(data);
 }

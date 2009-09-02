@@ -195,9 +195,9 @@ os::syncThreadStack::~syncThreadStack()
 dodoString
 os::workingDir()
 {
-	char wd[MAXPATHLEN];
+	char wd[PATH_MAXLEN];
 
-	if (getcwd(wd, MAXPATHLEN) == NULL)
+	if (getcwd(wd, PATH_MAXLEN) == NULL)
 		throw exception::basic(exception::MODULE_TOOLSOS, OSEX_WORKINGDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return wd;
@@ -645,7 +645,11 @@ void
 os::die(const dodoString &message,
 		int              status)
 {
-	fwrite(message.data(), message.size(), 1, stderr);
+	unsigned short tries = DIE_MAXTRIES;
+
+	while (tries-- > 0)
+		if (fwrite(message.data(), message.size(), 1, stderr) == 1)
+			break;
 	fflush(stderr);
 
 	kill(0, SIGTERM);

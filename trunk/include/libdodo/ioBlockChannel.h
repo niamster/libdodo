@@ -43,8 +43,8 @@ namespace dodo {
 			 * @brief implements an interface for I/O operations on block sources
 			 * @note if block is false then read/write position is amount of bytes from the beginning,
 			 * if block is true then:
-			 *	offset for write is calculated as pos*outSize
-			 *	offset for read is calculated as pos*inSize
+			 *	offset for write is calculated as pos*blockSize
+			 *	offset for read is calculated as pos*blockSize
 			 *	offset for readString is calculated as pos*(amount of null- or newline- terminated strings)
 			 *	offset for writeString is calculated as pos*(amount of null- or newline- terminated strings)
 			 */
@@ -64,27 +64,27 @@ namespace dodo {
 
 				/**
 				 * @return read data
-				 * @note not more then inSize
+				 * @note not more then blockSize
 				 */
 				virtual dodoString read() const;
 
 				/**
 				 * @param data defines data that will be written
-				 * @note not more then outSize
+				 * @note not more then blockSize
 				 */
 				virtual void write(const dodoString &data) const;
 
 				/**
 				 * read from stream null- or newline- terminated string
 				 * @return read data
-				 * @note not more then inSize
+				 * @note not more then blockSize
 				 */
 				virtual dodoString readString() const;
 
 				/**
 				 * write to stream null- terminated string
 				 * @param data defines data that will be written
-				 * @note not more then outSize
+				 * @note not more then blockSize
 				 */
 				virtual void writeString(const dodoString &data) const;
 

@@ -95,8 +95,8 @@ client::~client()
 void
 client::restoreOptions()
 {
-	setInBufferSize(inSocketBuffer);
-	setOutBufferSize(outSocketBuffer);
+	setInBufferSize(inSocketBufferSize);
+	setOutBufferSize(outSocketBufferSize);
 
 	setInTimeout(inSocketTimeout);
 	setOutTimeout(outSocketTimeout);

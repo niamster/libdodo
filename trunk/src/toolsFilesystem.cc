@@ -504,14 +504,14 @@ filesystem::followSymlink(const dodoString &path)
 	if (::lstat(path.data(), &st) == -1)
 		throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FOLLOWSYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	char buffer[MAXPATHLEN + 1];
+	char buffer[PATH_MAXLEN + 1];
 
 	if (!S_ISLNK(st.st_mode))
 		throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 
 	int count = 0;
 
-	if ((count = ::readlink(path.data(), buffer, MAXPATHLEN)) == -1)
+	if ((count = ::readlink(path.data(), buffer, PATH_MAXLEN)) == -1)
 		throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FOLLOWSYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return buffer;
@@ -592,10 +592,10 @@ filesystem::fileContentsInArray(const dodoString &path)
 	if (file == NULL)
 		throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTSARR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	char buffer[PATH_MAXLINELEN];
+	char buffer[LINE_MAXLEN];
 	dodoStringArray arr;
 
-	while (fgets(buffer, PATH_MAXLINELEN, file) != NULL)
+	while (fgets(buffer, LINE_MAXLEN, file) != NULL)
 		arr.push_back(buffer);
 
 	if (fclose(file) != 0)
@@ -617,10 +617,10 @@ inline char *original_basename(char *path)
 dodoString
 filesystem::basename(const dodoString &path)
 {
-	if (path.size() >= MAXPATHLEN)
+	if (path.size() >= PATH_MAXLEN)
 		throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_BASENAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
 
-	char temp[MAXPATHLEN];
+	char temp[PATH_MAXLEN];
 
 	strcpy(temp, path.data());
 
@@ -630,10 +630,10 @@ filesystem::basename(const dodoString &path)
 dodoString
 filesystem::basename(const dodoString &path)
 {
-	if (path.size() >= MAXPATHLEN)
+	if (path.size() >= PATH_MAXLEN)
 		throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_BASENAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
 
-	char temp[MAXPATHLEN];
+	char temp[PATH_MAXLEN];
 
 	strcpy(temp, path.data());
 
@@ -646,10 +646,10 @@ filesystem::basename(const dodoString &path)
 dodoString
 filesystem::dirname(const dodoString &path)
 {
-	if (path.size() >= MAXPATHLEN)
+	if (path.size() >= PATH_MAXLEN)
 		throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_DIRNAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
 
-	char temp[MAXPATHLEN];
+	char temp[PATH_MAXLEN];
 
 	strcpy(temp, path.data());
 
@@ -666,7 +666,7 @@ filesystem::copy(const dodoString &from,
 	dodoString to = a_to;
 
 	{
-		char temp[MAXPATHLEN];
+		char temp[PATH_MAXLEN];
 
 		strcpy(temp, to.data());
 		char *bname = ::basename(temp);
@@ -698,10 +698,10 @@ filesystem::copy(const dodoString &from,
 			if (::mkdir(to.data(), stFrom.st_mode) == 1)
 				throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 		} else if (S_ISLNK(stFrom.st_mode)) {
-			char buffer[MAXPATHLEN];
+			char buffer[PATH_MAXLEN];
 			int count = 0;
 
-			if ((count = ::readlink(from.data(), buffer, MAXPATHLEN)) == -1)
+			if ((count = ::readlink(from.data(), buffer, PATH_MAXLEN)) == -1)
 				throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 
 			buffer[count] = '\0';
@@ -793,7 +793,7 @@ filesystem::copyDir(const dodoString &from,
 	dodoString to = a_to;
 
 	{
-		char temp[MAXPATHLEN];
+		char temp[PATH_MAXLEN];
 
 		strcpy(temp, to.data());
 		char *bname = ::basename(temp);

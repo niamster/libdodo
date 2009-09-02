@@ -36,11 +36,11 @@ process(exchange &ex)
 	ex.addXExec(xexec::ACTION_POSTEXEC, ::hook, NULL);
 #endif
 
-	ex.inSize = 4;
+	ex.blockSize = 4;
 	ex.setInBufferSize(1);
 	ex.setOutBufferSize(1);
 
-	ex.outSize = 7;
+	ex.blockSize = 7;
 	ex.writeString("test\n");
 
 	if (ex.isAlive())

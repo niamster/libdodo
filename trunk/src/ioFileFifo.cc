@@ -48,8 +48,8 @@
 using namespace dodo::io::file;
 
 fifo::fifo(short protection) : stream::channel(protection),
-							   inBuffer(IOPIPE_INSIZE),
-							   outBuffer(IOPIPE_OUTSIZE),
+							   inBuffer(IOFILEFIFO_INSIZE),
+							   outBuffer(IOFILEFIFO_OUTSIZE),
 							   handle(new io::__file__),
 							   blocked(true)
 {
@@ -63,8 +63,8 @@ fifo::fifo(short protection) : stream::channel(protection),
 fifo::fifo(const dodoString &path,
 		   short            mode,
 		   short            protection) : stream::channel(protection),
-										  inBuffer(IOPIPE_INSIZE),
-										  outBuffer(IOPIPE_OUTSIZE),
+										  inBuffer(IOFILEFIFO_INSIZE),
+										  outBuffer(IOFILEFIFO_OUTSIZE),
 										  path(path),
 										  mode(mode),
 										  handle(new io::__file__),
@@ -166,8 +166,8 @@ fifo::fifo(const fifo &fd) : stream::channel(fd.protection),
 	collectedData.setExecObject(xexec::OBJECT_IOFILEFIFO);
 #endif
 
-	inSize = fd.inSize;
-	outSize = fd.outSize;
+	blockSize = fd.blockSize;
+	blockSize = fd.blockSize;
 
 	if (fd.handle->file != NULL) {
 		int oldDesc, newDesc;
@@ -262,8 +262,8 @@ fifo::clone(const fifo &fd)
 	blocked = fd.blocked;
 	path = fd.path;
 	mode = fd.mode;
-	inSize = fd.inSize;
-	outSize = fd.outSize;
+	blockSize = fd.blockSize;
+	blockSize = fd.blockSize;
 
 	if (fd.handle->file != NULL) {
 		int oldDesc, newDesc;
@@ -457,8 +457,8 @@ fifo::_read(char * const a_data) const
 
 	char *data = a_data;
 
-	unsigned long iter = inSize / inBuffer;
-	unsigned long rest = inSize % inBuffer;
+	unsigned long iter = blockSize / inBuffer;
+	unsigned long rest = blockSize % inBuffer;
 
 	unsigned long batch, n;
 
@@ -519,8 +519,8 @@ fifo::_write(const char *const a_data) const
 
 	const char *data = a_data;
 
-	unsigned long iter = outSize / outBuffer;
-	unsigned long rest = outSize % outBuffer;
+	unsigned long iter = blockSize / outBuffer;
+	unsigned long rest = blockSize % outBuffer;
 
 	unsigned long batch, n;
 
@@ -593,7 +593,7 @@ fifo::_readString(char * const a_data) const
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READSTREAM, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-	unsigned long readSize = inSize + 1;
+	unsigned long readSize = blockSize + 1;
 
 	memset(a_data, '\0', readSize);
 
@@ -620,13 +620,13 @@ fifo::_readString(char * const a_data) const
 void
 fifo::_writeString(const char *const a_data) const
 {
-	unsigned long _outSize = outSize;
+	unsigned long _blockSize = blockSize;
 
 	try {
 		unsigned int bufSize = strlen(a_data);
 
-		if (bufSize < outSize)
-			outSize = bufSize;
+		if (bufSize < blockSize)
+			blockSize = bufSize;
 
 		_write(a_data);
 
@@ -645,9 +645,9 @@ fifo::_writeString(const char *const a_data) const
 			break;
 		}
 
-		outSize = _outSize;
+		blockSize = _blockSize;
 	} catch (...) {
-		outSize = _outSize;
+		blockSize = _blockSize;
 
 		throw;
 	}

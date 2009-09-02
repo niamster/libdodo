@@ -89,8 +89,8 @@ io::pipe::pipe(const pipe &fd) : stream::channel(protection),
 	collectedData.setExecObject(xexec::OBJECT_IOPIPE);
 #endif
 
-	inSize = fd.inSize;
-	outSize = fd.outSize;
+	blockSize = fd.blockSize;
+	blockSize = fd.blockSize;
 
 	if (fd.in->file != NULL && fd.out->file != NULL) {
 		int oldDesc, newDesc;
@@ -159,8 +159,8 @@ io::pipe::clone(const pipe &fd)
 	inPipeBuffer = fd.inPipeBuffer;
 	outPipeBuffer = fd.outPipeBuffer;
 	blocked = fd.blocked;
-	inSize = fd.inSize;
-	outSize = fd.outSize;
+	blockSize = fd.blockSize;
+	blockSize = fd.blockSize;
 
 	if (fd.in->file != NULL && fd.out->file != NULL) {
 		int oldDesc, newDesc;
@@ -302,8 +302,8 @@ io::pipe::_read(char * const a_data) const
 
 	char *data = a_data;
 
-	unsigned long iter = inSize / inPipeBuffer;
-	unsigned long rest = inSize % inPipeBuffer;
+	unsigned long iter = blockSize / inPipeBuffer;
+	unsigned long rest = blockSize % inPipeBuffer;
 
 	unsigned long batch, n;
 
@@ -364,8 +364,8 @@ io::pipe::_write(const char *const buf) const
 
 	const char *data = buf;
 
-	unsigned long iter = outSize / outPipeBuffer;
-	unsigned long rest = outSize % outPipeBuffer;
+	unsigned long iter = blockSize / outPipeBuffer;
+	unsigned long rest = blockSize % outPipeBuffer;
 
 	unsigned long batch, n;
 
@@ -559,7 +559,7 @@ io::pipe::_readString(char * const a_data) const
 	if (in->file == NULL)
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	unsigned long readSize = inSize + 1;
+	unsigned long readSize = blockSize + 1;
 
 	memset(a_data, '\0', readSize);
 
@@ -589,13 +589,13 @@ io::pipe::_writeString(const char * const data) const
 	if (out->file == NULL)
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	unsigned long _outSize = outSize;
+	unsigned long _blockSize = blockSize;
 
 	try {
 		unsigned int bufSize = strlen(data);
 
-		if (bufSize < outSize)
-			outSize = bufSize;
+		if (bufSize < blockSize)
+			blockSize = bufSize;
 
 		_write(data);
 
@@ -614,9 +614,9 @@ io::pipe::_writeString(const char * const data) const
 			break;
 		}
 
-		outSize = _outSize;
+		blockSize = _blockSize;
 	} catch (...) {
-		outSize = _outSize;
+		blockSize = _blockSize;
 
 		throw;
 	}

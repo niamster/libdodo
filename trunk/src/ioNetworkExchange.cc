@@ -142,8 +142,8 @@ exchange::init(int  a_socket,
 	blocked = a_blocked;
 	socket = a_socket;
 
-	setInBufferSize(inSocketBuffer);
-	setOutBufferSize(outSocketBuffer);
+	setInBufferSize(inSocketBufferSize);
+	setOutBufferSize(outSocketBufferSize);
 
 	setInTimeout(inSocketTimeout);
 	setOutTimeout(outSocketTimeout);
@@ -192,15 +192,15 @@ exchange::_write(const char * const a_data) const
 	if (socket == -1)
 		throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	unsigned long iter = outSize / outSocketBuffer;
-	unsigned long rest = outSize % outSocketBuffer;
+	unsigned long iter = blockSize / outSocketBufferSize;
+	unsigned long rest = blockSize % outSocketBufferSize;
 
 	const char *data = a_data;
 
 	long batch, n;
 
 	for (unsigned long i = 0; i < iter; ++i) {
-		batch = outSocketBuffer;
+		batch = outSocketBufferSize;
 		while (batch > 0) {
 			while (true) {
 				if ((n = ::send(socket, data, batch, 0)) == -1) {
@@ -252,15 +252,15 @@ exchange::_read(char * const a_data) const
 	if (socket == -1)
 		throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-	unsigned long iter = inSize / inSocketBuffer;
-	unsigned long rest = inSize % inSocketBuffer;
+	unsigned long iter = blockSize / inSocketBufferSize;
+	unsigned long rest = blockSize % inSocketBufferSize;
 
 	char *data = a_data;
 
 	long batch, n;
 
 	for (unsigned long i = 0; i < iter; ++i) {
-		batch = inSocketBuffer;
+		batch = inSocketBufferSize;
 		while (batch > 0) {
 			while (true) {
 				if ((n = ::recv(socket, data, batch, 0)) == -1) {
@@ -315,19 +315,19 @@ exchange::_read(char * const a_data) const
 void
 exchange::_writeString(const char * const data) const
 {
-	unsigned long _outSize = outSize;
+	unsigned long _blockSize = blockSize;
 
 	try {
 		unsigned int bufSize = strlen(data) + 1;
 
-		if (bufSize < outSize)
-			outSize = bufSize;
+		if (bufSize < blockSize)
+			blockSize = bufSize;
 
 		_write(data);
 
-		outSize = _outSize;
+		blockSize = _blockSize;
 	} catch (...) {
-		outSize = _outSize;
+		blockSize = _blockSize;
 
 		throw;
 	}
@@ -344,7 +344,7 @@ exchange::_readString(char * const data) const
 	long n = 0;
 
 	while (true) {
-		if ((n = ::recv(socket, data, inSize, 0)) == -1) {
+		if ((n = ::recv(socket, data, blockSize, 0)) == -1) {
 			if (errno == EINTR)
 				continue;
 
