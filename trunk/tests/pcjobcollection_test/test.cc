@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 				manager[i] = new process::manager;
 
 			ids[i] = tools::string::lToString(i);
-			jobs[i] = manager[i]->add(::job, (void *)ids[i].c_str(), job::ON_DESTRUCTION_STOP);
+			jobs[i] = manager[i]->add(::job, (void *)ids[i].c_str(), pc::job::ON_DESTRUCTION_STOP);
 		}
 
 		cout << "Launching jobs" << endl;

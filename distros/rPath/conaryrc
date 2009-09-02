@@ -1,0 +1,8 @@
+contact <contact>
+name <name>
+user * <login> <password>
+
+[libdodo]
+installLabelPath libdodo.rpath.org@rpl:devel conary.rpath.com@rpl:devel conary.rpath.com@rpl:d contrib.rpath.org@rpl:devel
+buildLabel libdodo.rpath.org@rpl:devel
+repositoryMap libdodo.rpath.org https://www.rpath.org/repos/libdodo/

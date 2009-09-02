@@ -1,7 +1,0 @@
-contact <contact>
-name <name>
-user * <login> <password>
-
-[libdodo]
-installLabelPath libdodo.rpath.org@rpl:devel conary.rpath.com@rpl:devel conary.rpath.com@rpl:1 contrib.rpath.org@rpl:1
-buildLabel libdodo.rpath.org@rpl:devel

@@ -120,7 +120,7 @@ value::valueToJson(const rpc::value &data)
 
 		case dodo::rpc::value::DATA_NUMERIC:
 			node.valueDataType = dodo::data::format::json::node::DATA_NUMERIC;
-			node.numericValue = data.numericValue;
+			node.numericValue = (long)data.numericValue;
 
 			break;
 

@@ -356,7 +356,7 @@ value::numeric()
 	if (valueDataType != DATA_NUMERIC)
 		throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_NUMERIC, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
-	return numericValue;
+	return (long)numericValue;
 }
 
 //-------------------------------------------------------------------
