@@ -49,21 +49,21 @@
 namespace dodo {
 	namespace graphics {
 		/**
-		 * @class __image___init__
+		 * @class __image_init__
 		 * @brief initializes image evironment
 		 */
-		class __image___init__ {
+		class __image_init__ {
 		  public:
 
 			/**
 			 * contructor
 			 */
-			__image___init__();
+			__image_init__();
 
 			/**
 			 * destructor
 			 */
-			~__image___init__();
+			~__image_init__();
 
 		  private:
 
@@ -88,7 +88,7 @@ namespace dodo {
 										 const char          *description);
 		};
 
-		__image___init__ __image___init_object__;
+		__image_init__ __image_init_object__;
 	};
 };
 
@@ -115,7 +115,7 @@ image::__collected_data__::~__collected_data__()
 
 //-------------------------------------------------------------------
 
-__image___init__::__image___init__()
+__image_init__::__image_init__()
 {
 	if (IsMagickInstantiated() == MagickFalse) {
 #ifndef IMAGEMAGICK_PRE_63
@@ -132,7 +132,7 @@ __image___init__::__image___init__()
 
 //-------------------------------------------------------------------
 
-__image___init__::~__image___init__()
+__image_init__::~__image_init__()
 {
 	if (IsMagickInstantiated() == MagickTrue) {
 #ifndef IMAGEMAGICK_PRE_63
@@ -146,7 +146,7 @@ __image___init__::~__image___init__()
 //-------------------------------------------------------------------
 
 void
-__image___init__::imWarningHandler(const ExceptionType et,
+__image_init__::imWarningHandler(const ExceptionType et,
 								   const char          *reason,
 								   const char          *description)
 {
@@ -155,11 +155,11 @@ __image___init__::imWarningHandler(const ExceptionType et,
 //-------------------------------------------------------------------
 
 void
-__image___init__::imErrorHandler(const ExceptionType et,
+__image_init__::imErrorHandler(const ExceptionType et,
 								 const char          *reason,
 								 const char          *description)
 {
-	throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason, __LINE__, __FILE__, description);
+	throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason?reason:__dodostring__, __LINE__, __FILE__, description?description:__dodostring__);
 }
 
 //-------------------------------------------------------------------
