@@ -1350,8 +1350,6 @@ code::binToHex(const dodoString &string)
 }
 
 //-------------------------------------------------------------------
-#include <iostream>
-using namespace std;
 
 void
 code::SHA1Init(__SHA1_256Context__ *context)
