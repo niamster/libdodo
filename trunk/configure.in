@@ -62,10 +62,10 @@ function add_ldflags_libdir()
 ##
 
 AC_SUBST(TAGS)
-TAGS=$(which etags)
+TAGS=$(which etags 2>/dev/null)
 if test -z "$TAGS" -o ! -x "$TAGS"
 then
-	TAGS=$(which ctags)
+	TAGS=$(which ctags 2>/dev/null)
 	if test -z "$TAGS" -o ! -x "$TAGS"
 	then
 		AC_MSG_WARN(No application was found for generating tags)

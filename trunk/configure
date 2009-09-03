@@ -5324,10 +5324,10 @@ function add_ldflags_libdir()
 ##
 
 
-TAGS=$(which etags)
+TAGS=$(which etags 2>/dev/null)
 if test -z "$TAGS" -o ! -x "$TAGS"
 then
-	TAGS=$(which ctags)
+	TAGS=$(which ctags 2>/dev/null)
 	if test -z "$TAGS" -o ! -x "$TAGS"
 	then
 		{ $as_echo "$as_me:$LINENO: WARNING: No application was found for generating tags" >&5
