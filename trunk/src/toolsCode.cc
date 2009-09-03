@@ -1350,6 +1350,8 @@ code::binToHex(const dodoString &string)
 }
 
 //-------------------------------------------------------------------
+#include <iostream>
+using namespace std;
 
 void
 code::SHA1Init(__SHA1_256Context__ *context)
@@ -1357,7 +1359,7 @@ code::SHA1Init(__SHA1_256Context__ *context)
 	context->length = 0;
 	context->messageBlockIndex = 0;
 
-		/* Initial Hash Values: FIPS-180-2 section 5.3.1 */
+	/* Initial Hash Values: FIPS-180-2 section 5.3.1 */
 	context->intermediateHash[0] = 0x67452301;
 	context->intermediateHash[1] = 0xEFCDAB89;
 	context->intermediateHash[2] = 0x98BADCFE;
@@ -1411,8 +1413,9 @@ code::SHA1PadMessage(__SHA1_256Context__ *context,
 			context->messageBlock[context->messageBlockIndex++] = 0;
 
 		SHA1ProcessMessageBlock(context);
-	} else
+	} else {
 		context->messageBlock[context->messageBlockIndex++] = padByte;
+	}
 
 	while (context->messageBlockIndex < 56)
 		context->messageBlock[context->messageBlockIndex++] = 0;
@@ -1434,21 +1437,21 @@ code::SHA1PadMessage(__SHA1_256Context__ *context,
 void
 code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 {
-		/* Constants defined in FIPS-180-2, section 4.2.1 */
+	/* Constants defined in FIPS-180-2, section 4.2.1 */
 	const static unsigned long K[4] = {
 		0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xCA62C1D6
 	};
 
 	int t;
-	unsigned long temp;
-	unsigned long W[80];
-	unsigned long A, B, C, D, E;
+	unsigned int temp;
+	unsigned int W[80];
+	unsigned int A, B, C, D, E;
 
 	for (t = 0; t < 16; ++t) {
-		W[t]  = (unsigned long)context->messageBlock[t * 4] << 24;
-		W[t] |= (unsigned long)context->messageBlock[t * 4 + 1] << 16;
-		W[t] |= (unsigned long)context->messageBlock[t * 4 + 2] << 8;
-		W[t] |= (unsigned long)context->messageBlock[t * 4 + 3];
+		W[t]  = (unsigned int)context->messageBlock[t * 4] << 24;
+		W[t] |= (unsigned int)context->messageBlock[t * 4 + 1] << 16;
+		W[t] |= (unsigned int)context->messageBlock[t * 4 + 2] << 8;
+		W[t] |= (unsigned int)context->messageBlock[t * 4 + 3];
 	}
 
 	for (t = 16; t < 80; ++t)
@@ -1635,18 +1638,18 @@ code::SHA256ProcessMessageBlock(__SHA1_256Context__ *context)
 	};
 
 	int t, t4;
-	unsigned long temp1, temp2;
-	unsigned long W[64];
-	unsigned long A, B, C, D, E, F, G, H;
+	unsigned int temp1, temp2;
+	unsigned int W[64];
+	unsigned int A, B, C, D, E, F, G, H;
 
 	/*
 	 * Initialize the first 16 words in the array W
 	 */
 	for (t = t4 = 0; t < 16; t++, t4 += 4) {
-		W[t] = ((unsigned long)context->messageBlock[t4] << 24) |
-			   ((unsigned long)context->messageBlock[t4 + 1] << 16) |
-			   ((unsigned long)context->messageBlock[t4 + 2] << 8) |
-			   ((unsigned long)context->messageBlock[t4 + 3]);
+		W[t] = ((unsigned int)context->messageBlock[t4] << 24) |
+			   ((unsigned int)context->messageBlock[t4 + 1] << 16) |
+			   ((unsigned int)context->messageBlock[t4 + 2] << 8) |
+			   ((unsigned int)context->messageBlock[t4 + 3]);
 	}
 
 	for (t = 16; t < 64; t++)
