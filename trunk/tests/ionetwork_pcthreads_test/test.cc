@@ -41,7 +41,6 @@ process(void *data)
 			cout.flush();
 		}
 
-		ex->blockSize = 4;
 		ex->setInBufferSize(1);
 		ex->setOutBufferSize(1);
 
@@ -51,6 +50,7 @@ process(void *data)
 		dodoString str = "";
 		try
 		{
+			ex->blockSize = 4;
 			str = ex->read();
 
 			cout << str << ":" << str.size() << endl;

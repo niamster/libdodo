@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
 		str = ex.readString();
 
-		cout << str;
+		cout << str << endl;
 #endif
 	}
 	catch (dodo::exception::basic ex)

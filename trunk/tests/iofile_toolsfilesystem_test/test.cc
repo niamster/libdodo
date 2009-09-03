@@ -90,8 +90,6 @@ int main(int argc, char **argv)
 		dodoString str;
 
 		io1.pos = 2;
-		io1.blockSize = 14;
-
 		str = io1.readString();
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;

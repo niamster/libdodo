@@ -36,7 +36,6 @@ process(exchange &ex)
 	ex.addXExec(xexec::ACTION_POSTEXEC, ::hook, NULL);
 #endif
 
-	ex.blockSize = 4;
 	ex.setInBufferSize(1);
 	ex.setOutBufferSize(1);
 
@@ -49,6 +48,7 @@ process(exchange &ex)
 	dodoString str = "";
 	try
 	{
+		ex.blockSize = 4;
 		str = ex.read();
 
 		cout << str << ":" << str.size() << endl;
