@@ -59,9 +59,10 @@ int main(int argc, char **argv)
 		ex.blockSize = str.size();
 		ex.write(str);
 
+		ex.blockSize = 4096;
 		str = ex.readString();
 
-		cout << str << endl;
+		cout << tools::misc::split(str, "\r\n\r\n")[0] << endl;
 #endif
 	}
 	catch (dodo::exception::basic ex)
