@@ -81,7 +81,7 @@ fi
 AC_SUBST(OBJECTS)
 OBJECTS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/o} "; done)
 AC_SUBST(DEPS)
-DEPS=$(for i in src/*cc; do i=${i#src/}; echo -n "<${i/%cc/d}> "; done)
+DEPS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/d} "; done)
 
 AC_SUBST(TESTS)
 TESTS=$(for i in tests/*; do test -d $i && echo -n "${i#tests/} "; done)
