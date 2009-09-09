@@ -4,7 +4,7 @@ AC_PREREQ(2.60)
 # project identity
 ##
 
-AC_INIT(libdodo, 0.11.0, issues.libdodo.org)
+AC_INIT(libdodo, 0.0.0, issues.libdodo.org)
 
 OS=$(uname)
 
@@ -12,9 +12,11 @@ AC_SUBST(SO_VERSION)
 
 case "$OS" in
 	FreeBSD)
+		TARGET_MAKEFILE=Makefile.freebsd.make.in
 		SO_VERSION=${PACKAGE_VERSION#*.}; SO_VERSION=${SO_VERSION%.*}
 		;;
 	Linux)
+		TARGET_MAKEFILE=Makefile.gmake.in
 		SO_VERSION=${PACKAGE_VERSION}
 		;;
 esac
@@ -62,10 +64,10 @@ function add_ldflags_libdir()
 ##
 
 AC_SUBST(TAGS)
-TAGS=$(which etags)
+TAGS=$(which etags 2>/dev/null)
 if test -z "$TAGS" -o ! -x "$TAGS"
 then
-	TAGS=$(which ctags)
+	TAGS=$(which ctags 2>/dev/null)
 	if test -z "$TAGS" -o ! -x "$TAGS"
 	then
 		AC_MSG_WARN(No application was found for generating tags)
@@ -442,18 +444,23 @@ else
 	RESULT="$RESULT\nPosix regex\t\t\t\t\t\t\tenabled"
 fi
 
-AC_ARG_ENABLE(dl,
-	AS_HELP_STRING([--enable-dl], [enable dynamic loading]),
-		[DL="$enableval"], [DL="no"])
-if test "$DL" = "yes"
+AC_ARG_WITH([dl],
+	AS_HELP_STRING([--with-dl@<:@=DIR@:>@], [use dynamic loading]),
+		[MOD_DL_DIR="$withval"], [MOD_DL="no"])
+if test "$MOD_DL" != "no" -a "$MOD_DL_DIR" != "no"
 then
-	echo -n -e "#define DL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
+	if test "$MOD_DL_DIR" = "yes"
+	then
+		MOD_DL_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_DL_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_DL_DIR/lib"
 
 	AC_ARG_ENABLE(fast-dynamic-loading,
 		AS_HELP_STRING([--disable-fast-dynamic-loading], [do not unload library to produce better performance]),
-			[DL_FAST="$enableval"], [DL_FAST="yes"])
+			[MOD_DL_FAST="$enableval"], [MOD_DL_FAST="yes"])
 
-	if test "$DL_FAST" = "yes" -a "$OS" = "Linux"
+	if test "$MOD_DL_FAST" = "yes" -a "$OS" = "Linux"
 	then
 		echo -n -e "#define DL_FAST 1\n\n" >> include/libdodo/directives.runtime.h
 
@@ -461,6 +468,10 @@ then
 	else
 		RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tdisabled"
 	fi
+
+	AC_CHECK_LIB([dl], [dlopen], [LDFLAGS="$LDFLAGS -ldl"], [])
+	AC_CHECK_HEADER([dlfcn.h], [], [AC_MSG_ERROR(dlfcn.h header was not found)])
+	echo -n -e "#define DL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	RESULT="$RESULT\nDynamic linking\t\t\t\t\t\t\tenabled"
 else
@@ -634,7 +645,7 @@ then
 	fi
 	if test "$VERY_OLD_IMAGEMAGICK_LIB" != "yes"
 	then
-		AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))	
+		AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))
 	else
 		AC_CHECK_HEADER([magick/ImageMagick.h], [], AC_MSG_ERROR(Magick header was not found))
 	fi
@@ -757,77 +768,70 @@ AC_CHECK_HEADERS([net/if.h],
 	[AC_MSG_ERROR(header was not found)],
 	[[
 	 #ifdef HAVE_SYS_SOCKET_H
-	 #include <sys/socket.h> 
+	 #include <sys/socket.h>
 	 #endif
 	]])
 
 AC_CHECK_HEADER([execinfo.h], [CALLSTACK_EX="yes"], [CALLSTACK_EX="no"])
-if test "$CALLSTACK_EX" = "yes"
+if test "$CALLSTACK_EX" = "yes" -a "$MOD_DL" != "no"
 then
 	AC_LANG_PUSH(C++)
 	AC_CHECK_HEADER([cxxabi.h], [], AC_MSG_ERROR(cxxabi.h header was not found))
 	AC_LANG_POP()
 
 	echo -n -e "#define CALLSTACK_EX 1\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\ncallstack\t\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\ncallstack\t\t\t\t\t\t\tdisabled"
 fi
 
-if test "$CALLSTACK_EX" = "yes" -o "$DL" = "yes"
-then
-	AC_CHECK_HEADER([dlfcn.h], [], [AC_MSG_ERROR(dlfcn.h header was not found)])
-	AC_ARG_ENABLE([dl-lib],
-		AS_HELP_STRING([--disable-dl-lib], [disable dl as lib]),
-			[MOD_DL_LIB="$enableval"], [MOD_DL_LIB="yes"])
-	if test "$MOD_DL_LIB" = "yes"
-	then
-		AC_CHECK_LIB([dl], [dlopen], [], AC_MSG_ERROR(dl lib was not found))
-		LDFLAGS="$LDFLAGS -ldl"
-	fi
-fi
 
 echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
 
 ##
 
-AC_CONFIG_FILES([Makefile
-				bin/dodo-config
-				tests/Makefile
-				tests/image_test/Makefile
-				tests/cgifast_test/Makefile
-				tests/cgi_test/Makefile
-				tests/dbmysql_test/Makefile
-				tests/dbpostgresql_test/Makefile
-				tests/dbsqlite_test/Makefile
-				tests/db_test/Makefile
-				tests/iononblocked_ionetwork_test/Makefile
-				tests/iononblocked_ionetworkssl_test/Makefile
-				tests/iostdio_test/Makefile
-				tests/iofile_toolsfilesystem_test/Makefile
-				tests/iomemory_test/Makefile
-				tests/iopipe_iofilefifo_pcthreadcollection_test/Makefile
-				tests/ionetwork_pcthreads_test/Makefile
-				tests/ionetworkclient_test/Makefile
-				tests/ionetworkserver_test/Makefile
-				tests/ionetworksslserver_test/Makefile
-				tests/ionetworksslclient_test/Makefile
-				tests/ionetworkhttp_test/Makefile
-				tests/pcthreadcollection_test/Makefile
-				tests/pcprocesscollection_test/Makefile
-				tests/pcjobcollection_test/Makefile
-				tests/toolsnetwork_test/Makefile
-				tests/toolsos_test/Makefile
-				tests/toolstime_test/Makefile
-				tests/toolsmisc_test/Makefile
-				tests/toolscode_test/Makefile
-				tests/toolslogger_test/Makefile
-				tests/toolslibrary_test/Makefile
-				tests/toolsregexp_test/Makefile
-				tests/xexec_test/Makefile
-				tests/rpcxmlhttpclient_test/Makefile
-				tests/rpcxmlcgiserver_test/Makefile
-				tests/rpcjsonhttpclient_test/Makefile
-				tests/rpcjsoncgiserver_test/Makefile
-				tests/dataformatjson_test/Makefile
-				tests/dataformatxml_test/Makefile])
+AC_CONFIG_FILES([Makefile:$TARGET_MAKEFILE])
+
+AC_CONFIG_FILES([bin/dodo-config
+	tests/Makefile
+	tests/image_test/Makefile
+	tests/cgifast_test/Makefile
+	tests/cgi_test/Makefile
+	tests/dbmysql_test/Makefile
+	tests/dbpostgresql_test/Makefile
+	tests/dbsqlite_test/Makefile
+	tests/db_test/Makefile
+	tests/iononblocked_ionetwork_test/Makefile
+	tests/iononblocked_ionetworkssl_test/Makefile
+	tests/iostdio_test/Makefile
+	tests/iofile_toolsfilesystem_test/Makefile
+	tests/iomemory_test/Makefile
+	tests/iopipe_iofilefifo_pcthreadcollection_test/Makefile
+	tests/ionetwork_pcthreads_test/Makefile
+	tests/ionetworkclient_test/Makefile
+	tests/ionetworkserver_test/Makefile
+	tests/ionetworksslserver_test/Makefile
+	tests/ionetworksslclient_test/Makefile
+	tests/ionetworkhttp_test/Makefile
+	tests/pcthreadcollection_test/Makefile
+	tests/pcprocesscollection_test/Makefile
+	tests/pcjobcollection_test/Makefile
+	tests/toolsnetwork_test/Makefile
+	tests/toolsos_test/Makefile
+	tests/toolstime_test/Makefile
+	tests/toolsmisc_test/Makefile
+	tests/toolscode_test/Makefile
+	tests/toolslogger_test/Makefile
+	tests/toolslibrary_test/Makefile
+	tests/toolsregexp_test/Makefile
+	tests/xexec_test/Makefile
+	tests/rpcxmlhttpclient_test/Makefile
+	tests/rpcxmlcgiserver_test/Makefile
+	tests/rpcjsonhttpclient_test/Makefile
+	tests/rpcjsoncgiserver_test/Makefile
+	tests/dataformatjson_test/Makefile
+	tests/dataformatxml_test/Makefile])
 
 AC_OUTPUT
 

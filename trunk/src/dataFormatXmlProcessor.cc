@@ -130,7 +130,7 @@ const dodoString processor::statements[] = {
 	" ",
 	"xmlns:",
 	"=\"",
-	"\" ",
+	"\"",
 	"/>\r\n",
 	">",
 	"<![CDATA[",
@@ -719,22 +719,23 @@ processor::make(const node        &xnode,
 		io.writeString(statements[STATEMENT_COLON]);
 	}
 	io.writeString(xnode.name);
-	io.writeString(statements[STATEMENT_SPACE]);
 
 	if (!xnode.nsDef.prefix.empty()) {
+		io.writeString(statements[STATEMENT_SPACE]);
 		io.writeString(statements[STATEMENT_XMLNS]);
 		io.writeString(xnode.nsDef.prefix);
 		io.writeString(statements[STATEMENT_EQUALDQUOTE]);
 		io.writeString(xnode.nsDef.href);
-		io.writeString(statements[STATEMENT_DQUOTESPACE]);
+		io.writeString(statements[STATEMENT_DQUOTE]);
 	}
 
 	dodoMap<dodoString, dodoString, dodoMapStringCompare>::const_iterator i = xnode.attributes.begin(), j = xnode.attributes.end();
 	for (; i != j; ++i) {
+		io.writeString(statements[STATEMENT_SPACE]);
 		io.writeString(i->first);
 		io.writeString(statements[STATEMENT_EQUALDQUOTE]);
 		io.writeString(i->second);
-		io.writeString(statements[STATEMENT_DQUOTESPACE]);
+		io.writeString(statements[STATEMENT_DQUOTE]);
 	}
 
 	if (xnode.nodeValue.empty() && xnode.nodeChildren.empty()) {

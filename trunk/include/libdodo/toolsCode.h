@@ -341,7 +341,7 @@ namespace dodo {
 			 * @brief defines states for SHA-1 and SHA-256 computations
 			 */
 			struct __SHA1_256Context__ {
-				unsigned long      intermediateHash[8];     ///< message digest [5 for SHA-1 and 8 for SHA-251]
+				unsigned int      intermediateHash[8];     ///< message digest [5 for SHA-1 and 8 for SHA-251]
 
 				unsigned long long length;                  ///< message length in bits
 

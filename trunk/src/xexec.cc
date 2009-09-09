@@ -152,7 +152,7 @@ xexec::removeXExec(int id)
 
 #ifndef DL_FAST
 		if (dlclose(current->handle) != 0)
-			throw exception::basic(exception::MODULE_XEXEC, XEXECEX_REMOVE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_XEXEC, XEXECEX_REMOVEXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 	}
 #endif
