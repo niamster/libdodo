@@ -65,21 +65,7 @@
 			WTF?
 		<(fi)>
 
-		<(
-			if
-			! `false`
-		)>
-			!false
-		<(fi)>
-
 		<(if!false)>!false<(fi)>
-
-		<(if ! 'false' )>
-			!'false'
-		<(fi)>
-		<(if ! "false" )>
-			! "false"
-		<(fi)>
 	<(fi)>
 
 	<(for $i in $strarr)>

@@ -13,11 +13,6 @@
 <pre>
 	<(* test template *)>
 
-	<(assign a = 1)>
-	<(assign b = 2)>
-
-	<(assign b = $a)>
-
 	<(> <( not )> parsed area <)>
 
 	<(print "test=", $test)>
@@ -61,21 +56,7 @@
 			WTF?
 		<(fi)>
 
-		<(
-			if
-			! `false`
-		)>
-			!false
-		<(fi)>
-
 		<(if!false)>!false<(fi)>
-
-		<(if ! 'false' )>
-			!'false'
-		<(fi)>
-		<(if ! "false" )>
-			! "false"
-		<(fi)>
 	<(fi)>
 
 	<(for $i in $strarr)>
