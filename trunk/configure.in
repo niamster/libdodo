@@ -290,10 +290,10 @@ then
 	fi
 	case "$OS" in
 		FreeBSD)
-			BFD_SO=$(ldconfig -r | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
+			BFD_SO=$(/sbin/ldconfig -r | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
 			;;
 		Linux)
-			BFD_SO=$(ldconfig -p | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
+			BFD_SO=$(/sbin/ldconfig -p | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
 			;;
 	esac
 	CPPFLAGS="$CPPFLAGS -I$MOD_BFD_DIR/include"
