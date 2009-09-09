@@ -18,68 +18,68 @@ using dodo::pc::sync::thread::data::single;
 single sh;
 
 void
-cgif(exchange &fcgi)
+handler(exchange &ex)
 {
 	using namespace cgi;
 
-	dialogue cgit(fcgi, true);
+	dialogue d(ex, true);
 
-	cgit.setCookie(cookie("test", "Ni@m"));
+	d.setCookie(cookie("test", "Ni@m"));
 
 	///increment counter in shared memory
 	int *inc = (int *)sh.acquire();
 	sh.release();
 
-	exchange *io = cgit;
+	exchange *io = d;
 	io->writeString("The headers thould be already printed successfully.<br>");
 
 #ifndef FASTCGI_EXT
 	io->writeString("No fastCGI extension was compiled!<br>");
 #endif
 
-	fcgi.writeString("counter: " + tools::string::iToString(*inc) + "<br>");
+	ex.writeString("counter: " + tools::string::iToString(*inc) + "<br>");
 
-	fcgi.writeString("GET[\"argument\"]: " + cgit.GET["argument"] + "<br>");
-	fcgi.writeString("POST[\"hidden\"]: " + cgit.POST["hidden"] + "<br>");
-	fcgi.writeString("POST[\"test\"]: " + cgit.POST["test"] + "<br>");
-	fcgi.writeString("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + cgit.ENVIRONMENT[cgi::ENVIRONMENT_QUERYSTRING] + "<br>");
-	fcgi.writeString("COOKIES[\"test\"]: " + cgit.COOKIES["test"] + "<br>");
-	fcgi.writeString("FILES[\"file\"].size: " + tools::string::iToString(cgit.FILES["file"].size) + "<br>");
-	fcgi.writeString("tpl::processor:<br>");
+	ex.writeString("GET[\"argument\"]: " + d.GET["argument"] + "<br>");
+	ex.writeString("POST[\"hidden\"]: " + d.POST["hidden"] + "<br>");
+	ex.writeString("POST[\"test\"]: " + d.POST["test"] + "<br>");
+	ex.writeString("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + d.ENVIRONMENT[cgi::ENVIRONMENT_QUERYSTRING] + "<br>");
+	ex.writeString("COOKIES[\"test\"]: " + d.COOKIES["test"] + "<br>");
+	ex.writeString("FILES[\"file\"].size: " + tools::string::iToString(d.FILES["file"].size) + "<br>");
+	ex.writeString("tpl::processor:<br>");
 
 	try
 	{
-		processor cgip;
+		processor p;
 
-		cgip.assign("test", "hoho");
-		cgip.assign("one", "one");
+		p.assign("test", "test");
+		p.assign("one", "one");
 
 		dodoStringArray strarr;
 		strarr.push_back("one");
 		strarr.push_back("two");
 		strarr.push_back("three");
-		cgip.assign("strarr", strarr);
+		p.assign("strarr", strarr);
 
 		dodoStringMap strmap;
 		strmap["one"] = "one";
 		strmap["two"] = "two";
 		strmap["three"] = "three";
-		cgip.assign("strmap", strmap);
+		p.assign("strmap", strmap);
 
 		dodoArray<dodoStringMap> strmaparr;
 		strmaparr.push_back(strmap);
 		strmap["one"] = "three";
 		strmaparr.push_back(strmap);
-		cgip.assign("strmaparr", strmaparr);
+		p.assign("strmaparr", strmaparr);
 
-		cgip.processFile("test.tpl", *io);
+		p.processFile("test.tpl", *io);
 	}
 	catch (dodo::exception::basic ex)
 	{
-		fcgi.writeString(ex.errStr + " " + tools::string::lToString(ex.line));
+		ex.writeString(ex.errStr + " " + tools::string::lToString(ex.line));
 	}
 
-	fcgi.writeString("<br>");
+	ex.writeString("<br>");
 
 	inc = (int *)sh.acquire();
 	(*inc)++;
@@ -107,8 +107,7 @@ int main(int argc, char **argv)
 		using namespace cgi::basic;
 		server c;
 #endif
-\
-		c.serve(&cgif);
+		c.serve(&handler);
 
 		delete shared;
 	}

@@ -1,10 +1,4 @@
-menu.tpl
-
-test recursion includes
-<(>
-	<(include index.tpl)>
-	<(include test.tpl)>
-<)>
+<(* test recursion includes *)>
 
 <(include index.tpl)>
 <(include test.tpl)>

@@ -1,18 +1,8 @@
-index.tpl
-
-<(>
+<(if $main)>
 	<(include $main)>
-
-	<(print "a=", $a, " b=", $b)>
-
-	<(if $a!=$b)>
-		a != b
-	<(else)>
-		a == b
-	<(fi)>
-<)>
-
-<(include $main)>
+<(else)>
+	<(include "index.tpl")>
+<(fi)>
 
 <(print "a=", $a, " b=", $b)>
 

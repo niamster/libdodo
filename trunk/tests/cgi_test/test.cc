@@ -74,7 +74,7 @@ handler(exchange &ex)
 
 	d.HEADERS[cgi::RESPONSE_HEADER_CONTENTTYPE] = "text/html";
 
-	d.setCookie(cookie("test", "Ni@m"));
+	d.setCookie(cookie("test", "cookie"));
 
 	exchange *io = d;
 	io->writeString("The headers thould be already printed successfully.<br>");
