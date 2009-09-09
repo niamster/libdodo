@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 #endif
 #endif
 
-		io.blockSize = sizeof("xexec");
+		io.blockSize = sizeof("xexec") - 1;
 		io.write("xexec");
 		io.flush();
 	}
