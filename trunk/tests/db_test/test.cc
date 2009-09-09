@@ -222,7 +222,7 @@ int main(int argc, char **argv)
 
 		delete db;
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 	}

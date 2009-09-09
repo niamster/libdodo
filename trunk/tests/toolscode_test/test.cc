@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 		cout << "Size of bziped Makefile" << tools::code::bzCompress(tools::filesystem::fileContents("Makefile"), 9).size() << endl;
 #endif
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

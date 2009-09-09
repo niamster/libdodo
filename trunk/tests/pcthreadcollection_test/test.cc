@@ -35,7 +35,7 @@ thread(void *data)
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << ex.line << endl;
 	}
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
 		delete data;
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << endl;
 	}

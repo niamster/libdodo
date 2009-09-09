@@ -74,9 +74,9 @@ handler(exchange &ex)
 
 		p.processFile("test.tpl", *io);
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
-		ex.writeString(ex.errStr + " " + tools::string::lToString(ex.line));
+		d.printString(ex.errStr + " " + tools::string::lToString(ex.line));
 	}
 
 	ex.writeString("<br>");

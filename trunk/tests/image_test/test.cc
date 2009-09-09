@@ -34,7 +34,7 @@ hook(xexec::__collected_data__ *odata,
 			image *img = dynamic_cast<image *>(imData->executor);
 			transform::rotate(*img, transform::ROTATE_DIRECTION_ANGLE_180);
 		}
-		catch (dodo::exception::basic ex)
+		catch (dodo::exception::basic &ex)
 		{
 			cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 		}
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
 		im.writeFile("new-5.png");
 #endif
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 		cout << "First value: " << resp.value().string() << endl;
 		cout << "Second value: " << resp.value(1).string() << endl;
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

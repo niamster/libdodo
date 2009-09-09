@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 		dodoString random = tools::misc::stringRandom(12);
 		cout << "Random:" << tools::code::MD5Hex(random) << endl;
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

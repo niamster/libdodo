@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 		cout << tools::misc::split(str, "\r\n\r\n")[0] << endl;
 #endif
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

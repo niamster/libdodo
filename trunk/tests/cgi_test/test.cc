@@ -119,7 +119,7 @@ handler(exchange &ex)
 
 		p.processFile("test.tpl", *io);
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		d.printString((dodoString)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
 	}

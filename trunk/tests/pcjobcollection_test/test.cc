@@ -26,7 +26,7 @@ job(void *data)
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 		for (int i = 0; i < amount; ++i)
 			delete manager[i];
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

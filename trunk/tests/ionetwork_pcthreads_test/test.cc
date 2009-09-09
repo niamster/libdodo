@@ -63,7 +63,7 @@ process(void *data)
 				::data.release();
 			}
 		}
-		catch (dodo::exception::basic ex)
+		catch (dodo::exception::basic &ex)
 		{
 			cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 			cout.flush();
@@ -82,7 +82,7 @@ process(void *data)
 			cout.flush();
 		}
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 
 		manager.wait();
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

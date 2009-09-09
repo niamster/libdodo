@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 			cout << arr[i];
 		}
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 		cout << "\nSize: " << str.size() << endl;
 		cout << "~~" << str << "~~" << endl << endl;
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

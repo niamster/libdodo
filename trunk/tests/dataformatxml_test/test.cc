@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 		cout  << endl << buffer << endl << endl;
 
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.line << endl;
 	}

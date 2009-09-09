@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 		}
 
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" << ex.file << "\t" << ex.line << endl;
 	}

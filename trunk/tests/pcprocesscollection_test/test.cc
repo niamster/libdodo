@@ -50,7 +50,7 @@ process0(void *data)
 
 		cout << endl << shM << ": " << tools::time::now() << endl, cout.flush();
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << ex.line << endl, cout.flush();
 	}
@@ -88,7 +88,7 @@ process1(void *data)
 
 		cout << endl << (char *)dt << ": " << tools::time::now() << endl, cout.flush();
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << ex.line << endl, cout.flush();
 	}
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
 
 		data1.close();
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
 	}
@@ -146,7 +146,7 @@ int main(int argc, char **argv)
 		dodo::data::memory::shared::remove(key0);
 		data1.remove(key1);
 	}
-	catch (dodo::exception::basic ex)
+	catch (dodo::exception::basic &ex)
 	{
 		cout << (dodoString)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
 	}
