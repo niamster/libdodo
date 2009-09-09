@@ -1,0 +1,84 @@
+prefix:=@prefix@
+datarootdir:=@datarootdir@
+exec_prefix:=@exec_prefix@
+mandir:=@mandir@
+libdir:=@libdir@
+bindir:=@bindir@
+includedir:=@includedir@
+
+CXX:=@CXX@
+INSTALL:=@INSTALL@
+LN_S:=@LN_S@
+
+TAGS:=@TAGS@
+
+CPPFLAGS+=-I./include @CPPFLAGS@
+LDFLAGS+=-L./ @LDFLAGS@
+CFLAGS+=@CFLAGS@ @DEFS@
+
+###########################################################
+
+OBJECTS:=@OBJECTS@
+
+###########################################################
+
+VPATH:=src
+
+all: @PACKAGE_NAME@
+dodo: all
+build: all
+
+@PACKAGE_NAME@: $(OBJECTS)
+	@echo "-- Linking dodo"
+	@$(CXX) $(LDFLAGS) -shared -Wl,-soname,$@.so.@SO_VERSION@ -o $@.so.@SO_VERSION@ $(OBJECTS)
+	@rm -f $@.so
+	@$(LN_S) @PACKAGE_NAME@.so.@SO_VERSION@ $@.so
+
+	@echo ""
+	@echo ""
+	@echo "Now you can run 'make install'."
+
+.cc.o: include/libdodo/directives.runtime.h
+	@echo "-- Compiling: $<"
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) -fPIC -c $<
+
+install: @PACKAGE_NAME@
+	@echo "" > install_manifest.txt
+
+	@${INSTALL} -m 755 -d ${DESTDIR}$(libdir)
+	@${INSTALL} -m 755 @PACKAGE_NAME@.so.@SO_VERSION@ ${DESTDIR}$(libdir)/
+	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@SO_VERSION@"
+	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@SO_VERSION@ >> install_manifest.txt
+	@${INSTALL} -m 755 @PACKAGE_NAME@.so ${DESTDIR}$(libdir)/
+	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so"
+	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so >> install_manifest.txt
+
+	@${INSTALL} -m 755 -d ${DESTDIR}$(includedir)/libdodo
+	@for inc in include/libdodo/*;\
+	do\
+		echo "-- Installing: ${DESTDIR}$(includedir)/libdodo/$${inc#include/libdodo/}";\
+		echo ${DESTDIR}$(includedir)/libdodo/$${inc#include/libdodo/} >> install_manifest.txt;\
+		${INSTALL} -m 755 $$inc ${DESTDIR}$(includedir)/libdodo/;\
+	done
+
+	@${INSTALL} -m 755 -d ${DESTDIR}$(bindir)
+	@${INSTALL} -m 755 bin/dodo-config ${DESTDIR}$(bindir)/
+	@echo "-- Installing: ${DESTDIR}$(bindir)/dodo-config"
+	@echo ${DESTDIR}$(bindir)/dodo-config >> install_manifest.txt
+
+	@echo ""
+	@echo ""
+	@echo "Use libdodo with pleasure"
+	@echo ""
+	@echo ""
+
+tags:
+	@if test -n "${TAGS}" -a -x "${TAGS}";\
+	then\
+		${TAGS} include/libdodo/*.h src/*.cc src/*.inline;\
+	else\
+		echo "No application was found for generating tags";\
+	fi
+
+clean:
+	@rm -rf *.o *.so* *.a* *.d
