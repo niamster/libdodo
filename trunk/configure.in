@@ -444,18 +444,23 @@ else
 	RESULT="$RESULT\nPosix regex\t\t\t\t\t\t\tenabled"
 fi
 
-AC_ARG_ENABLE(dl,
-	AS_HELP_STRING([--enable-dl], [enable dynamic loading]),
-		[DL="$enableval"], [DL="no"])
-if test "$DL" = "yes"
+AC_ARG_WITH([dl],
+	AS_HELP_STRING([--with-dl@<:@=DIR@:>@], [use dynamic loading]),
+		[MOD_DL_DIR="$withval"], [MOD_DL="no"])
+if test "$MOD_DL" != "no" -a "$MOD_DL_DIR" != "no"
 then
-	echo -n -e "#define DL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
+	if test "$MOD_DL_DIR" = "yes"
+	then
+		MOD_DL_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_DL_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_DL_DIR/lib"
 
 	AC_ARG_ENABLE(fast-dynamic-loading,
 		AS_HELP_STRING([--disable-fast-dynamic-loading], [do not unload library to produce better performance]),
-			[DL_FAST="$enableval"], [DL_FAST="yes"])
-
-	if test "$DL_FAST" = "yes" -a "$OS" = "Linux"
+			[MOD_DL_FAST="$enableval"], [MOD_DL_FAST="yes"])
+	
+	if test "$MOD_DL_FAST" = "yes" -a "$OS" = "Linux"
 	then
 		echo -n -e "#define DL_FAST 1\n\n" >> include/libdodo/directives.runtime.h
 
@@ -463,6 +468,9 @@ then
 	else
 		RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tdisabled"
 	fi
+	
+	AC_CHECK_LIB([dl], [dlopen], [LDFLAGS="$LDFLAGS -ldl"], [])
+	echo -n -e "#define DL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	RESULT="$RESULT\nDynamic linking\t\t\t\t\t\t\tenabled"
 else
@@ -773,17 +781,9 @@ then
 	echo -n -e "#define CALLSTACK_EX 1\n\n" >> include/libdodo/directives.runtime.h
 fi
 
-if test "$CALLSTACK_EX" = "yes" -o "$DL" = "yes"
+if test "$CALLSTACK_EX" = "yes" -o "$MOD_DL" != "no"
 then
 	AC_CHECK_HEADER([dlfcn.h], [], [AC_MSG_ERROR(dlfcn.h header was not found)])
-	AC_ARG_ENABLE([dl-lib],
-		AS_HELP_STRING([--disable-dl-lib], [disable dl as lib]),
-			[MOD_DL_LIB="$enableval"], [MOD_DL_LIB="yes"])
-	if test "$MOD_DL_LIB" = "yes"
-	then
-		AC_CHECK_LIB([dl], [dlopen], [], AC_MSG_ERROR(dl lib was not found))
-		LDFLAGS="$LDFLAGS -ldl"
-	fi
 fi
 
 echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h

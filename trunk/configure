@@ -1270,14 +1270,12 @@ Optional Features:
   --disable-io-xexec      compile io:: w/o xexec support
   --disable-database-xexec
                           compile data::base:: w/o xexec support
-  --enable-dl             enable dynamic loading
   --disable-fast-dynamic-loading
                           do not unload library to produce better performance
   --enable-zlib-lib       enable zlib as lib
   --enable-iconv-lib      enable iconv as lib
   --disable-graphics-xexec
                           compile graphics w/o xexec support
-  --disable-dl-lib        disable dl as lib
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1292,6 +1290,7 @@ Optional Packages:
   --with-mysql[=DIR]      use mysql
   --with-fast-cgi[=DIR]   use fast CGI
   --with-pcre[=DIR]       use pcre
+  --with-dl[=DIR]         use dynamic loading
   --with-libxml2[=DIR]    use libxml2
   --with-threading-lib[=lib]
                           specify threading library(supported: pthread),
@@ -7439,26 +7438,32 @@ fi
 	RESULT="$RESULT\nPosix regex\t\t\t\t\t\t\tenabled"
 fi
 
-# Check whether --enable-dl was given.
-if test "${enable_dl+set}" = set; then
-  enableval=$enable_dl; DL="$enableval"
+
+# Check whether --with-dl was given.
+if test "${with_dl+set}" = set; then
+  withval=$with_dl; MOD_DL_DIR="$withval"
 else
-  DL="no"
+  MOD_DL="no"
 fi
 
-if test "$DL" = "yes"
+if test "$MOD_DL" != "no" -a "$MOD_DL_DIR" != "no"
 then
-	echo -n -e "#define DL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
+	if test "$MOD_DL_DIR" = "yes"
+	then
+		MOD_DL_DIR=/usr
+	fi
+	CPPFLAGS="$CPPFLAGS -I$MOD_DL_DIR/include"
+	LDFLAGS="$LDFLAGS -L$MOD_DL_DIR/lib"
 
 	# Check whether --enable-fast-dynamic-loading was given.
 if test "${enable_fast_dynamic_loading+set}" = set; then
-  enableval=$enable_fast_dynamic_loading; DL_FAST="$enableval"
+  enableval=$enable_fast_dynamic_loading; MOD_DL_FAST="$enableval"
 else
-  DL_FAST="yes"
+  MOD_DL_FAST="yes"
 fi
 
 
-	if test "$DL_FAST" = "yes" -a "$OS" = "Linux"
+	if test "$MOD_DL_FAST" = "yes" -a "$OS" = "Linux"
 	then
 		echo -n -e "#define DL_FAST 1\n\n" >> include/libdodo/directives.runtime.h
 
@@ -7466,6 +7471,73 @@ fi
 	else
 		RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tdisabled"
 	fi
+
+	{ echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
+if test "${ac_cv_lib_dl_dlopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldl  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char dlopen ();
+int
+main ()
+{
+return dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_dl_dlopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_dl_dlopen=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
+echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6; }
+if test $ac_cv_lib_dl_dlopen = yes; then
+  LDFLAGS="$LDFLAGS -ldl"
+fi
+
+	echo -n -e "#define DL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
 
 	RESULT="$RESULT\nDynamic linking\t\t\t\t\t\t\tenabled"
 else
@@ -10292,7 +10364,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 	echo -n -e "#define CALLSTACK_EX 1\n\n" >> include/libdodo/directives.runtime.h
 fi
 
-if test "$CALLSTACK_EX" = "yes" -o "$DL" = "yes"
+if test "$CALLSTACK_EX" = "yes" -o "$MOD_DL" != "no"
 then
 	if test "${ac_cv_header_dlfcn_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for dlfcn.h" >&5
@@ -10433,92 +10505,6 @@ echo "$as_me: error: dlfcn.h header was not found" >&2;}
 fi
 
 
-	# Check whether --enable-dl-lib was given.
-if test "${enable_dl_lib+set}" = set; then
-  enableval=$enable_dl_lib; MOD_DL_LIB="$enableval"
-else
-  MOD_DL_LIB="yes"
-fi
-
-	if test "$MOD_DL_LIB" = "yes"
-	then
-
-{ echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
-echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
-if test "${ac_cv_lib_dl_dlopen+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ldl  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char dlopen ();
-int
-main ()
-{
-return dlopen ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_dl_dlopen=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_dl_dlopen=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
-echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6; }
-if test $ac_cv_lib_dl_dlopen = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBDL 1
-_ACEOF
-
-  LIBS="-ldl $LIBS"
-
-else
-  { { echo "$as_me:$LINENO: error: dl lib was not found" >&5
-echo "$as_me: error: dl lib was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-		LDFLAGS="$LDFLAGS -ldl"
-	fi
 fi
 
 echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
