@@ -52,24 +52,24 @@ install: @PACKAGE_NAME@
 	@echo "" > install_manifest.txt
 
 	@${INSTALL} -m 755 -d ${DESTDIR}$(libdir)
-	@${INSTALL} -m 755 @PACKAGE_NAME@.so.@SO_VERSION@ ${DESTDIR}$(libdir)/
 	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@SO_VERSION@"
+	@${INSTALL} -m 755 @PACKAGE_NAME@.so.@SO_VERSION@ ${DESTDIR}$(libdir)/
 	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@SO_VERSION@ >> install_manifest.txt
-	@${INSTALL} -m 755 @PACKAGE_NAME@.so ${DESTDIR}$(libdir)/
 	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so"
+	@${LN_S} ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@SO_VERSION@ ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so
 	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so >> install_manifest.txt
 
 	@${INSTALL} -m 755 -d ${DESTDIR}$(includedir)/libdodo
 	@for inc in include/libdodo/*;\
 	do\
 		echo "-- Installing: ${DESTDIR}$(includedir)/libdodo/$${inc#include/libdodo/}";\
-		echo ${DESTDIR}$(includedir)/libdodo/$${inc#include/libdodo/} >> install_manifest.txt;\
 		${INSTALL} -m 755 $$inc ${DESTDIR}$(includedir)/libdodo/;\
+		echo ${DESTDIR}$(includedir)/libdodo/$${inc#include/libdodo/} >> install_manifest.txt;\
 	done
 
+	@echo "-- Installing: ${DESTDIR}$(bindir)/dodo-config"
 	@${INSTALL} -m 755 -d ${DESTDIR}$(bindir)
 	@${INSTALL} -m 755 bin/dodo-config ${DESTDIR}$(bindir)/
-	@echo "-- Installing: ${DESTDIR}$(bindir)/dodo-config"
 	@echo ${DESTDIR}$(bindir)/dodo-config >> install_manifest.txt
 
 	@echo ""
