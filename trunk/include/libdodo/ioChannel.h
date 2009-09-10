@@ -81,7 +81,7 @@ namespace dodo {
 		  public:
 
 			/**
-			 * @enum io::channel::protectionEnum defines type of protection for io objects
+			 * @enum protectionEnum defines type of protection for io objects
 			 * in IO interaction in parallel environment
 			 */
 			enum protectionEnum {

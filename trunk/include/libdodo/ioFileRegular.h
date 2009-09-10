@@ -59,7 +59,7 @@ namespace dodo {
 #endif
 
 			/**
-			 * @enum file::regular::openModeEnum defines modes to open file
+			 * @enum openModeEnum defines modes to open file
 			 */
 			enum openModeEnum {
 				OPEN_MODE_READ_ONLY,             ///< reading from the file

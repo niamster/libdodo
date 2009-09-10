@@ -60,7 +60,7 @@ namespace dodo {
 #endif
 
 				/**
-				 * @enum file::fifo::openModeEnum defines modes to open file
+				 * @enum openModeEnum defines modes to open file
 				 */
 				enum openModeEnum {
 					OPEN_MODE_READ,                 ///< normaly blocks until some other process opens the same FIFO for writing
