@@ -1,10 +1,10 @@
 <(if $main)>
 	<(include $main)>
 <(else)>
-	<(include "index.tpl")>
+	<(include index.tpl)>
 <(fi)>
 
-<(print "a=", $a, " b=", $b)>
+<(print a=, $a,  b=, $b)>
 
 <(if $a!=$b)>
 	a != b

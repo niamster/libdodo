@@ -1,156 +1,253 @@
-syntax:
+= libdodo template processor =
 
-<(	open bracket
-)>	close bracket
+Template processor supports simple but yet enough powerful language.
 
-<(*	open bracket for comment
-*)>	close bracket for comment
+It supports includes, variables, conditional statements, loops, namespaces, etc.
 
-<(>	open bracket for non-parsing area
-<)>	close bracket for non-parsing area
+The primary goal of the template processor is to separate application code from its presentation.
 
-variables:
-	variables begin with $
-	example:
-		1. $var
-		2. $1var
+== syntax ==
 
-	processor supports 4 types of variables:
-		1. string
-		2. array
-		3. hash
-		4. array of hashes
+=== template language blocks ===
+Each part of template that the processor will parse is enclosed into special open and close statements.
+Text outside the template blocks is not being parsed and is being sent to the output without any modifications.
+Text in statements block is always treated as text if it is not a variable.
+ * Processing block
 
-	variable is iterative with `for` loop
-	variable member can be accessed directly with `.` operator
-	example:
-		1. the first symbol of the string: $strVar.0
-		2. the second element of the array: $arrVar.1
-		3. the first symbol of the second element of the array: $arrVar.1.0
-		4. the element named "one" of the hash: $hashVar.one
-		5. the element named "one" of the second element in the array of the hashes: $hashArrVar.1.one
+   Processor assumes that some language statement is enclosed in this block
 
-	variable can be used as a key to the member. it must be wrapped with '{}'
-	example:
-		1. element named "one" of the second element in array of hashes(variable 'varOne' has value "one"): $hashArrVar.1.{$varOne}
-		2. element named "one" of the second element in array of hashes(array 'hashVar' has member "one" which value is "one"): $hashArrVar.1.{$hashVar.one}
+   <( - open statement
 
-	pairs of (", ', `) are removed from the statement: "$var" == '$var' == $var == `$var`
+   )> - close statement
 
-namespace:
-	processor uses namespaces, variables have scope of visibility
-	example:
-		variable defined before the loop is avalaible after the loop with the statement it has before:
-		<(for $b in $arr2)>
-			<(for $b in $b)> <(* HERE : `$b in $b` and it's OK! *)>
-				|<(print $b)>
-			<(rof)>
-			|<(print $b.one)>
-		<(rof)>
+   For example:
 
-blocks:
-	include:
-		include external template file into current and process
-		example:
-			<(include $template)>
+   <(for $c in $array)> <(print $c)> <(rof)>
 
-			<(include template.tpl)>
+ * Non-parsed block
 
-	if:
-		`if` statement allows to use conditional blocks
-		`fi` closes `if` block
-		`else` block is processed when `if` statement is false
-		`if` statement allows `==`,`!`,`!=` for strings and `==`, `!=`, `!`, `<=`,`>=`,`<`,`>` for numeric
-		`!` inverts statement value
-		`if` statement is false when the statement is false(for 2 arguments) or for one when the argument is 'false' or empty
-		example:
-			<(if $a == $b )>
-				that's OK 1
-			<(fi)>
+   Processor does not parse the block enclosed with these statements and sends to the output as-is
 
-			<(if $b )>
-				that's OK 2
-			<(fi)>
+   <(> - beginning of the non-parsing area
 
-			<(if ! $a )>
-				that's OK 3
-			<(else)>
-				smth else ...
-			<(fi)>
+   <)> - end of the non-parsing area
 
-	for:
-		`for` statement allows to iterate through array/string
-		`rof` closes `for` block
-		`=>` operator is used to get pairs 'key=>value'
-		in `for` statement `continue` and `break` blocks can be used
-		`break` block may have a strength - how many loops[in deep] to break => <(break 2)> => breaks 2 loop blocks; if not specified - 1 by default
-		`break` and `continue` blocks outside the loop blocks do nothing
+   For example:
 
-		example:
-			//c++ code:
-			dodo::data::tpl::processor tp;
+   <(>
+	<(print a=, $a,  b=, $b)>
 
-			dodoStringArray arr;
-			arr.push_back("one");
-			arr.push_back("two");
-			arr.push_back("three");
-			tp.assign("arr",arr);
+	<(if $a!=$b)>
+		a != b
+	<(else)>
+		a == b
+	<(fi)>
+   <)>
 
-			dodoStringMap arr1;
-			arr1["one"] = "one";
-			arr1["two"] = "two";
-			arr1["three"] = "three";
-			tp.assign("arr1",arr1);
 
-			dodoArray<dodoStringMap> arr2;
-			arr2.push_back(arr1);
-			arr1["one"] = "three";
-			arr2.push_back(arr1);
-			tp.assign("arr2",arr2);
+ * Comment block
 
-			//template
-			<(for $b in $arr)>
-				<div class="test"><(print $b)></div>
-			<(rof)>
+   Comment block is thrown out from the processor output
 
-			<(for $c in $arr2.1)>
-				|<(print $c)>
-			<(rof)>
+   <(* - beginning of the comment
 
-			<(for $c in $arr1)>
-				|<(print $c)>
-			<(rof)>
+   *)> - end of the comment
 
-			<(for $b in $arr2)>
-				<(for $b in $b)> <(* HERE : `$b in $b` and it's OK! *)>
-					|<(print $b)>
-				<(rof)>
-				|<(print $b.one)>
-			<(rof)>
+   For example:
 
-			<(for $b in $arr2)>
-				<(for $b => $c in $b)>
-					<(print $b)> -> <(print $c)>
-				<(rof)>
-			<(rof)>
+   <(* comment here *)>
 
-			<(for $b in $arr)>
-				<(if $b==2 )>
-					<(continue)>
-				<(fi)>
-				<(print !!!)>
-				<(if $b==4 )>
-					<(break)>
-				<(fi)>
-				<(print @@@)>
-			<(rof)>
 
-	print:
-		print variable value
-		values can me combined with ','
-		example:
-			<(print {$arr2.{0}.{$one}} )>
+=== variables ===
+Names of the variables begin with '$' sign.
 
-			<(print $arr2.1.{$arr1.{$one}} )>
+For example:
 
-			<(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
+$var
+$1var
+
+
+Variable is resolved only within the processor statement and if it is not enclosed with any quotes. Text in the quotes is not being interpolated and variables are not being resolved in it.
+
+Processor supports 4 types of variables:
+ 1. string
+ 2. array
+ 3. hash
+ 4. array of hashes
+
+Variable is iterative with 'for' loop and variable member can be accessed directly with '.' operator.
+
+For example:
+ 1. first symbol of string:
+
+    $string.0
+
+ 2. second element in array:
+
+    $array.1
+
+ 3. first symbol of second element in array:
+
+    $array.1.0
+
+ 4. element named 'one' of hash:
+
+    $hash.one
+
+ 5. element named 'one' of second element in array of hashes:
+
+    $hashArray.1.one
+
+
+Variable can be used as a key to the member. In this case it must be enclosed in '{}' brackets.
+For example:
+ 1. element named 'one' of second element in array of hashes(variable 'variable' has value 'one'):
+
+    $hashArray.1.{$variable}
+
+ 2. element named 'one' of second element in array of hashes(array 'hash' has member 'one' which value is 'one'):
+
+    $hashArray.1.{$hash.one}
+
+
+=== namespaces ===
+Variables have scope of visibility in the statement block.
+
+For example:
+
+<(for $b in $arr2)>
+	<(for $b in $b)>
+		<(print $b)>
+	<(rof)>
+<(rof)>
+
+
+<(assign a = test1)>
+
+<(if true )>
+	<(assign a = test2)>
+	<(print a= ', $a,' (must be equal to 'test2'))>
+<(fi)>
+<(print a= ', $a,' (must be equal to 'test1'))>
+
+
+=== statements ===
+
+==== ns ====
+'ns' statement explicitly defines namespace scope.
+
+For example:
+
+<(assign a = test1)>
+<(ns)>
+	<(ns)>
+		<(assign a = in namespace)>
+		<(print a= ', $a,' (must be equal to 'in namespace'))>
+	<(sn)>
+	<(print a= ', $a,' (must be equal to 'test1'))>
+<(sn)>
+
+
+==== include ====
+'include' statement allows to load template from external file.
+
+Included template file is processed and the contents of the processed template is inserted at the point of inclusion.
+
+'include' takes string or variable as an argument. Path to template is relative to defined in tpl::processor object instance.
+
+For example:
+
+<(include $template)>
+
+<(include template.tpl)>
+
+
+==== if ====
+'if' is a conditional statement that allows or discards processing of the template block.
+
+'else' statement defines template block that is processed if conditional statement in 'if' is 'false'.
+
+'if' allows to use only one comparison per block. There is no logical 'OR' or 'AND'.
+
+Conditional statement for 'if' allows using '==', '!' and '!=' to compare strings, and '==', '!=', '!', '<=', '>=', '<', '>' to compare numeric values.
+
+Unary operator '!' turns statement into 'false' if statement is an empty string or zero for numeric or string that is equal to 'false'.
+
+For example:
+
+<(if $a == $b)>
+	$a equal to $b
+<(fi)>
+
+<(if $b)>
+	$b is not 'false', not empty string nor zero
+<(fi)>
+
+<(if ! $a)>
+	<(if $a == false)>
+		$a is 'false'
+	<(else)>
+		<(if $a == 0)>
+			$a is zero
+		<(else)>
+			$a is an empty string
+		<(fi)>
+	<(fi)>
+<(else)>
+	smth else ...
+<(fi)>
+
+
+==== for ====
+'for' statement is used to iterate over string, array of objects or hash.
+
+Template processor understands two kinds of 'for' statements:
+ * Iterate obtaining values of elements:
+
+   <(for $value in $array)><(rof)>
+
+ * Iterate obtaining pairs of (key, value)
+
+   For hash 'key' is a hash key, otherwise it is an index of element in array or string.
+
+   <(for $key => $value in $hash)><(rof)>
+
+
+'break' statement inside 'for' block stops the current loop. If numeric value is specified for 'break' statement, amount of loops specified as 'break' argument would be stopped upwards.
+
+'continue' statement inside 'for' block starts new iteration of the loop.
+
+Special variable '$dodo.iterator' stands as a counter for current loop.
+
+For example:
+
+<(for $value in $array)>
+    <(if $dodo.iterator > 10)>
+        <(break)>
+    <(fi)>
+<(rof)>
+
+
+
+<(for $key => $value in $hash)>
+    <(for $value in $value)>
+        <(if $value == needle)>
+            <(break 2)>
+        <(fi)>
+    <(rof)>
+<(rof)>
+
+
+==== print ====
+
+'print' statement pushes variable value to the output.
+
+'print' accepts more than one argument. 'print' arguments should be delimited with coma.
+
+For example:
+
+<(print $array.{0}.{$key} )>
+
+<(print $array.1.{$hash.{$key}} )>
+
+<(print $array.{0}.{$key}, and , $array.1.{$hash.{$key}})>

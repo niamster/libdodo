@@ -15,7 +15,7 @@
 
 	<(> <( not )> parsed area <)>
 
-	<(print "test=", $test)>
+	<(print test=, $test)>
 
 	<(if $test!=test )>
 		$test != 'test'
@@ -95,20 +95,20 @@
 				<(print $i)> - <(print $j)>
 
 				<(assign a = test3)>
-				<(print "$a= '", $a,"' (must be equal to 'test3')")>
+				<(print a= ', $a,' (must be equal to 'test3'))>
 			<(rof)>
 			-------
 		<(rof)>
-		<(print "$a= '", $a,"' (must be equal to 'test2')")>
+		<(print a= ', $a,' (must be equal to 'test2'))>
 	<(fi)>
-	<(print "$a= '", $a,"' (must be equal to 'test1')")>
+	<(print a= ', $a,' (must be equal to 'test1'))>
 
 	<(ns)>
 			<(ns)>
 				<(assign a = in namespace)>
-				<(print "$a= '", $a,"' (must be equal to 'in namespace')")>
+				<(print a= ', $a,' (must be equal to 'in namespace'))>
 			<(sn)>
-		<(print "$a= '", $a,"' (must be equal to 'test1')")>
+		<(print a= ', $a,' (must be equal to 'test1'))>
 	<(sn)>
 
 	<(print string literal)>
@@ -118,6 +118,6 @@
 	<(print $strmap.one )>
 	<(print $strmaparr.0.one )>
 	<(print $strmaparr.1.one )>
-	<(print $strmaparr.1.{$strmap.{$one}} , -- , {$strmaparr.{0}.{$one}})>
-	<(print $dodo.version, " ", $dodo)>
+	<(print $strmaparr.1.{$strmap.{$one}} , --, {$strmaparr.{0}.{$one}})>
+	<(print $dodo.version,  :, $dodo)>
 </pre>
