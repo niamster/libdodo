@@ -26,42 +26,42 @@
 
 	<(print test=, $test)>
 
-	<(if $test!=test )>
+	<(if $test!=test)>
 		$test != 'test'
 	<(else)>
 		$test == 'test'
 	<(fi)>
 
-	<(if $test )>
+	<(if $test)>
 		$test
-		<(if $test==test )>
+		<(if $test==test)>
 			$test == 'test'
 		<(fi)>
-		<(if $test!=test )>
+		<(if $test!=test)>
 			$test != 'test'
 		<(fi)>
 
-		<(if $test )>
+		<(if $test)>
 			test
-			<(if $test==test )>
+			<(if $test==test)>
 				$test == 'test'
 			<(else)>
 				$test != 'test'
 			<(fi)>
 		<(else)>
-			<(if $test!=test )>
+			<(if $test!=test)>
 				$test != 'test'
 			<(fi)>
-			<(if false )>
+			<(if false)>
 				WTF?
 			<(fi)>
 		<(fi)>
 
-		<(if 3>2 )>
+		<(if 3>2)>
 			3>2
 		<(fi)>
 
-		<(if 3<2 )>
+		<(if 3<2)>
 			WTF?
 		<(fi)>
 
@@ -93,7 +93,7 @@
 
 	<(assign a = test1)>
 
-	<(if true )>
+	<(if true)>
 		<(assign a = test2)>
 
 		<(for $i in $strmaparr)>
@@ -121,12 +121,12 @@
 	<(sn)>
 
 	<(print string literal)>
-	<(print {$strmaparr.{0}.{$one}} )>
-	<(print $strmaparr.1.{$strmap.{$one}} )>
-	<(print $strarr.0.0 )>
-	<(print $strmap.one )>
-	<(print $strmaparr.0.one )>
-	<(print $strmaparr.1.one )>
-	<(print $strmaparr.1.{$strmap.{$one}} , -- , {$strmaparr.{0}.{$one}})>
-	<(print $dodo.version, :, $dodo)>
+	<(print {$strmaparr.{0}.{$one}})>
+	<(print $strmaparr.1.{$strmap.{$one}})>
+	<(print $strarr.0.0)>
+	<(print $strmap.one)>
+	<(print $strmaparr.0.one)>
+	<(print $strmaparr.1.one)>
+	<(print $strmaparr.1.{$strmap.{$one}}, " -- ", {$strmaparr.{0}.{$one}})>
+	<(print $dodo.version, " : ", $dodo)>
 </pre>

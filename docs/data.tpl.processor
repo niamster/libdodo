@@ -11,7 +11,10 @@ The primary goal of the template processor is to separate application code from 
 === template language blocks ===
 Each part of template that the processor will parse is enclosed into special open and close statements.
 Text outside the template blocks is not being parsed and is being sent to the output without any modifications.
-Text in statements block is always treated as text if it is not a variable.
+Text in statements block is always treated as text if it is not a variable. 
+Spaces are trimmed out in the beginning and in the end of the text block. 
+If text area is enclosed with quotes or double quotes the quotes are being removed from the output and text inside is being pushed to the output without any further modifications. 
+
  * Processing block
 
    Processor assumes that some language statement is enclosed in this block
@@ -124,7 +127,7 @@ For example:
 
 <(assign a = test1)>
 
-<(if true )>
+<(if true)>
 	<(assign a = test2)>
 	<(print a= ', $a,' (must be equal to 'test2'))>
 <(fi)>
@@ -246,8 +249,8 @@ For example:
 
 For example:
 
-<(print $array.{0}.{$key} )>
+<(print $array.{0}.{$key})>
 
-<(print $array.1.{$hash.{$key}} )>
+<(print $array.1.{$hash.{$key}})>
 
-<(print $array.{0}.{$key}, and , $array.1.{$hash.{$key}})>
+<(print $array.{0}.{$key}, "and ", $array.1.{$hash.{$key}})>
