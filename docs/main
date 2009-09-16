@@ -1,58 +1,90 @@
-libdodo was started on Thu Apr 30 2005
+libdodo consists of several subsystems:
 
-Brief overview of libdodo's modules
+ * cgi
+   provides instrumentation for CGI interface
+   * basic
+     basic CGI support
+   * fast
+     Fast-CGI support
+   * exchange
+     CGI-independent abstraction for interaction between application and web-server
+     CGI and Fast-CGI defines interface-specific options
+   * server
+     CGI-independent abstraction of CGI server interface
+     CGI and Fast-CGI defines interface-specific options
+ * data
+   provides interfaces for data access and manipulation
+   * base
+     with help of accumulator and connector interfaces forms SQL-independent data base abstraction for relativistic databases
+     currently mysql, postresql and sqlite databases are supported
+   * format
+     defines data format abstraction
+     currently XML and JSON data formats are supported
+   * memory
+     forms shared memory interface between OS processes 
+   * tpl
+     implements template processor interface
+ * exception
+   interface for handling application exceptions
+ * graphics
+   image, draw and tranform form image manipulation interface
+ * io
+   * event
+     I/O event interface, normally used with conjunction of non-blocked Input/Output
+     descriptor and manager interfaces serves for this purpose
+   * channel
+     basic interface Input/Output interface
+     branches out into block and stream interfaces to handle block and stream I/O accordingly 
+   * file
+     representative of block interface to handle file based I/O
+     divided into regular, fifo and temp interfaces defined to handle read and write from and to regular files, fifos and temporary files
+   * memory
+     abstraction of memory region as a block device
+     useful in areas where channel is required but memory as a storage is preferable
+   * network
+     network interaction subsystem that is divided into client, server and exchange interface that stand for client- and server- side connection and stream interface to exchange data accordingly. Generic network and unix socket connections supported. SSL encryption of transferred data is supported in both cases. 
+   * pipe
+     simple inter-process communication stream interface for data exchange
+ * pc
+   stands for parallel computation
+   * sync
+     handles synchronization mechanisms between asynchronous events such as threads or processes
+     * data
+       * single provides access synchronization for single data entry
+       * collection provides access synchronization for collection of entries
+     * section
+       provides access synchronization for program flow
+   * job
+     this subsystem provides manager interface as an abstraction of asynchronous program flow management
+     process::manager and thread::manager are helper interfaces for handling processes and threads management accordingly
+ * rpc
+   provides interface for remote procedure calls
+   client interface serves for client-side connection and server is for handling server-side 
+   value, method and response represents RPC value, client request and server response accordingly
+   XML and JSON RPC protocols supported
+ * tools
+   contains various helper functions
+   * code
+     provides data encoding, compression, etc.
+   * filesystem
+     contains filesystem related routines
+   * library
+     helper functions to work with dynamically and statically libraries
+   * logger
+     provides logging facilities
+   * misc
+     defines miscellaneous routines not included in other sections
+   * network
+     generic network functions
+   * os
+     provides interface for interaction with OS such signal handling, getting information about environment, etc.
+   * regexp
+     regexp matching and replacement interface
+     currently pcre and posix regexp libraries could be used as backends
+   * string
+     various functions to work with strings
+ * xexec
+   provides hooks injection into various libdodo subsytems
+   with help of xexec it is possible to define pre-exec and post-exec actions
 
-exception::
-	error handling through exception mechanism
-
-cgi::
-	HTTP server side subsystem
-	serving incoming requests
-	providing outgoing response
-
-	fast::
-		support for fast-cgi
-
-io:: 
-	input/output interaction subsystem
-	support for: files(regular, temp, fifo), network(unix, bsd sockets, client/server interaction, tcp/udp protocols, SSL protocol, high-level HTTP(S) protocol), stdin/stdout, pipes
-
-data::
-	base::
-		database interaction subsystem
-		SQL-independent interface for communication with databases
-		support for: MySQL, PostreSQL, SQLite
-
-	tpl::processor
-		template processor
-		process template using specific syntax to produce output content
-	
-	xml::
-		XML subsystem(parse, produce)
-
-	json::
-		json subsystem(parse, produce)
-
-	memody::shared
-			access to shared data storage
-
-tools::
-	regexp[POSIX/PCRE[compile-time]], operation system, time, string, filesystem, network, en/decoding, library manipulations, logging ...
-
-graphics:
-	image manipulation subsystem
-
-xexec:
-	system of pre/post exec operations for the libdodo modules
-
-pc::
-	parallel computation subsystem
-	job execution control(processes, threads), race condition control(for processes, threads), synchronization
-
-rpc::
-	rpc client/server subsystem
-	support for: cgi-server, http-client
-	support for: xml-rpc, json-rpc
-
-All libdodo methods throw exceptions on errors
-
+Most of the interfaces are thread- or process- safe by default. To avoid unneeded overhead it's possible to chose the protection in objects constructors or turn it off completely.
