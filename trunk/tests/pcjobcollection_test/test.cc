@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::pc;
+using namespace dodo::pc::job;
 
 using namespace std;
 

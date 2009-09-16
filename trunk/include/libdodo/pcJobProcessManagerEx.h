@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcProcessManagerEx.h
+ *            pcJobProcessManagerEx.h
  *
  *  Tue Feb 27 08:42:14 2007
  *  Copyright  2007  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCPROCESSMANAGEREX_H_
-#define _PCPROCESSMANAGEREX_H_ 1
+#ifndef _PCJOBPROCESSMANAGEREX_H_
+#define _PCJOBPROCESSMANAGEREX_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -36,38 +36,40 @@
 
 namespace dodo {
 	namespace pc {
-		namespace process {
-			/**
-			 * libdodo defined errors
-			 */
-			enum managerExR {
-				MANAGEREX_ISALREADYRUNNING,
-				MANAGEREX_ISNOTLAUNCHED,
-				MANAGEREX_NOTFOUND,
-			};
+		namespace job {
+			namespace process {
+				/**
+				 * libdodo defined errors
+				 */
+				enum managerExR {
+					MANAGEREX_ISALREADYRUNNING,
+					MANAGEREX_ISNOTLAUNCHED,
+					MANAGEREX_NOTFOUND,
+				};
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
-#define PCPROCESSMANAGEREX_ISALREADYRUNNING_STR "Process is currently running"
-#define PCPROCESSMANAGEREX_ISNOTLAUNCHED_STR "Process is not launched"
-#define PCPROCESSMANAGEREX_NOTFOUND_STR         "Process not found"
+				/**
+				 * explanations for libdodo defined errors
+				 */
+#define PCJOBPROCESSMANAGEREX_ISALREADYRUNNING_STR "Process is currently running"
+#define PCJOBPROCESSMANAGEREX_ISNOTLAUNCHED_STR "Process is not launched"
+#define PCJOBPROCESSMANAGEREX_NOTFOUND_STR         "Process not found"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum managerFunctionsID {
-				MANAGEREX__ISRUNNING,
-				MANAGEREX_ADDNRUN,
-				MANAGEREX_RUN,
-				MANAGEREX_REMOVE,
-				MANAGEREX_STOP,
-				MANAGEREX_WAIT,
-				MANAGEREX_ISRUNNING,
+				/**
+				 * IDs of functions where exception might be thrown
+				 */
+				enum managerFunctionsID {
+					MANAGEREX__ISRUNNING,
+					MANAGEREX_ADDNRUN,
+					MANAGEREX_RUN,
+					MANAGEREX_REMOVE,
+					MANAGEREX_STOP,
+					MANAGEREX_WAIT,
+					MANAGEREX_ISRUNNING,
 #ifdef DL_EXT
-				MANAGEREX_MODULE,
-				MANAGEREX_ADD,
+					MANAGEREX_MODULE,
+					MANAGEREX_ADD,
 #endif
+				};
 			};
 		};
 	};

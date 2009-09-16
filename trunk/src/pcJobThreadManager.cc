@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcThreadManager.cc
+ *            pcJobThreadManager.cc
  *
  *  Wed Nov 30 22:02:16 2005
  *  Copyright  2005  Ni@m
@@ -39,54 +39,56 @@
 #include <errno.h>
 #include <string.h>
 
-#include <libdodo/pcThreadManager.h>
+#include <libdodo/pcJobThreadManager.h>
 #include <libdodo/pcJobManager.h>
 #include <libdodo/toolsOs.h>
-#include <libdodo/pcThreadManagerEx.h>
+#include <libdodo/pcJobThreadManagerEx.h>
 #include <libdodo/types.h>
 
 namespace dodo {
 	namespace pc {
-		namespace thread {
-			/**
-			 * @struct __thread__
-			 * @brief defines process information
-			 */
-			struct __thread__ {
+		namespace job {
+			namespace thread {
 				/**
-				 * contructor
+				 * @struct __thread__
+				 * @brief defines process information
 				 */
-				__thread__();
+				struct __thread__ {
+					/**
+					 * contructor
+					 */
+					__thread__();
 
 #ifdef PTHREAD_EXT
-				pthread_t     thread;           ///< thread descriptor
+					pthread_t     thread;           ///< thread descriptor
 
-				/**
-				 * @return thread exit status
-				 * @param data defines user data
-				 */
-				static void   *routine(void *data);
+					/**
+					 * @return thread exit status
+					 * @param data defines user data
+					 */
+					static void   *routine(void *data);
 #endif
 
-				void          *data;            ///< thread data
-				bool          isRunning;        ///< true if thread is running
-				bool          joined;           ///< true if the thread was joined
-				int           status;           ///< thread exit status
-				bool          detached;         ///< true if thread is detached
-				unsigned long id;         ///< identificator
-				job::routine  func;             ///< function to execute
-				int           stackSize;        ///< size of stack for thread[in bytes]
-				short         action;           ///< action on object destruction[@see job::onDestructionEnum]
+					void          *data;            ///< thread data
+					bool          isRunning;        ///< true if thread is running
+					bool          joined;           ///< true if the thread was joined
+					int           status;           ///< thread exit status
+					bool          detached;         ///< true if thread is detached
+					unsigned long id;         ///< identificator
+					job::routine  func;             ///< function to execute
+					int           stackSize;        ///< size of stack for thread[in bytes]
+					short         action;           ///< action on object destruction[@see job::onDestructionEnum]
 
 #ifdef DL_EXT
-				void          *handle;          ///< handle to library
+					void          *handle;          ///< handle to library
 #endif
+				};
 			};
 		};
 	};
 };
 
-using namespace dodo::pc::thread;
+using namespace dodo::pc::job::thread;
 
 __thread__::__thread__() :
 #ifdef PTHREAD_EXT
@@ -242,12 +244,12 @@ manager::remove(unsigned long id,
 	if (getThread(id)) {
 		if (_isRunning(current)) {
 			if (!force)
-				throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCTHREADMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCJOBTHREADMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else {
 #ifdef PTHREAD_EXT
 				errno = pthread_cancel((*current)->thread);
 				if (errno != 0)
-					throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 			}
@@ -263,7 +265,7 @@ manager::remove(unsigned long id,
 
 #ifndef DL_FAST
 			if (dlclose((*current)->handle) != 0)
-				throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_REMOVE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_REMOVE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 		}
@@ -273,7 +275,7 @@ manager::remove(unsigned long id,
 
 		threads.erase(current);
 	} else
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -284,7 +286,7 @@ manager::run(unsigned long id,
 {
 	if (getThread(id)) {
 		if (_isRunning(current) && !force)
-			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCTHREADMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCJOBTHREADMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
 		if ((*current)->detached)
@@ -294,17 +296,17 @@ manager::run(unsigned long id,
 
 		errno = pthread_attr_setstacksize(&attr, (*current)->stackSize);
 		if (errno != 0)
-			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		errno = pthread_create(&((*current)->thread), &attr, __thread__::routine, *current);
 		if (errno != 0)
-			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 
 		(*current)->isRunning = true;
 	} else
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -314,20 +316,20 @@ manager::wait(unsigned long id)
 {
 	if (getThread(id)) {
 		if ((*current)->detached)
-			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_ISDETACHED, PCTHREADMANAGEREX_ISDETACHED_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_ISDETACHED, PCJOBTHREADMANAGEREX_ISDETACHED_STR, __LINE__, __FILE__);
 
 		if ((*current)->joined)
 			return (*current)->status;
 
 		if (!(*current)->isRunning)
-			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_ISNOTLAUNCHED, PCTHREADMANAGEREX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_ISNOTLAUNCHED, PCJOBTHREADMANAGEREX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
 
 		int status = 0;
 
 #ifdef PTHREAD_EXT
 		errno = pthread_join((*current)->thread, NULL);
 		if (errno != 0)
-			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		status = (*current)->status;
 #endif
@@ -337,7 +339,7 @@ manager::wait(unsigned long id)
 
 		return status;
 	} else
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -356,7 +358,7 @@ manager::wait()
 #ifdef PTHREAD_EXT
 		errno = pthread_join((*i)->thread, NULL);
 		if (errno != 0)
-			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 
@@ -374,13 +376,13 @@ manager::stop(unsigned long id)
 #ifdef PTHREAD_EXT
 		errno = pthread_cancel((*current)->thread);
 		if (errno != 0)
-			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 
 		(*current)->isRunning = false;
 	} else
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -396,7 +398,7 @@ manager::stop()
 #ifdef PTHREAD_EXT
 		errno = pthread_cancel((*i)->thread);
 		if (errno != 0)
-			throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 
@@ -412,7 +414,7 @@ manager::isRunning(unsigned long id) const
 	if (getThread(id))
 		return _isRunning(current);
 	else
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -432,7 +434,7 @@ manager::_isRunning(dodoList<__thread__ *>::iterator &id) const
 			return false;
 		}
 
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 #endif
 
@@ -448,7 +450,7 @@ manager::setStackSize(unsigned long id,
 	if (getThread(id))
 		(*current)->stackSize = size;
 	else
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_SETSTACKSIZE, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_SETSTACKSIZE, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBTHREADMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -479,17 +481,17 @@ manager::module(const dodoString &module,
 	void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initModule init = (initModule)dlsym(handle, "initPcThreadModule");
 	if (init == NULL)
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__module__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 
@@ -514,17 +516,17 @@ manager::add(const dodoString &module,
 	thread->handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (thread->handle == NULL)
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initModule init = (initModule)dlsym(thread->handle, "initPcThreadModule");
 	if (init == NULL)
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__module__ temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(thread->handle, temp.hook);
 	if (in == NULL)
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	thread->detached = temp.detached;
 	thread->stackSize = temp.stackSize;
@@ -609,11 +611,11 @@ manager::addNRun(job::routine  func,
 
 	errno = pthread_attr_setstacksize(&attr, thread->stackSize);
 	if (errno != 0)
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	errno = pthread_create(&ti->thread, &attr, __thread__::routine, ti);
 	if (errno != 0)
-		throw exception::basic(exception::MODULE_PCTHREADMANAGER, MANAGEREX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBTHREADMANAGER, MANAGEREX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 

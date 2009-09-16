@@ -31,8 +31,10 @@
 #define _PC_H_ 1
 
 #include <libdodo/pcJobManager.h>
-#include <libdodo/pcProcessManager.h>
-#include <libdodo/pcProcessManagerEx.h>
+#include <libdodo/pcJobProcessManager.h>
+#include <libdodo/pcJobProcessManagerEx.h>
+#include <libdodo/pcJobThreadManager.h>
+#include <libdodo/pcJobThreadManagerEx.h>
 #include <libdodo/pcSyncDataCollection.h>
 #include <libdodo/pcSyncDataSingle.h>
 #include <libdodo/pcSyncProcessDataCollection.h>
@@ -49,6 +51,4 @@
 #include <libdodo/pcSyncThreadDataSingleEx.h>
 #include <libdodo/pcSyncThreadSection.h>
 #include <libdodo/pcSyncThreadSectionEx.h>
-#include <libdodo/pcThreadManager.h>
-#include <libdodo/pcThreadManagerEx.h>
 #endif

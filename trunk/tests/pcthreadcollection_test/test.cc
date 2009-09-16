@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::pc::thread;
+using namespace dodo::pc::job::thread;
 using namespace dodo::pc::sync::thread;
 
 using namespace std;
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
 		::data.set((void *)data);
 
-		pc::thread::manager manager;
+		manager manager;
 
 		const int amount = 10;
 

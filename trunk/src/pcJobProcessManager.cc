@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcProcessManager.cc
+ *            pcJobProcessManager.cc
  *
  *  Tue Feb 27 08:47:16 2007
  *  Copyright  2007  Ni@m
@@ -44,39 +44,41 @@
 
 namespace dodo {
 	namespace pc {
-		namespace process {
-			/**
-			 * @struct __process__
-			 * @brief defines process information
-			 */
-			struct __process__ {
+		namespace job {
+			namespace process {
 				/**
-				 * constuctor
+				 * @struct __process__
+				 * @brief defines process information
 				 */
-				__process__();
+				struct __process__ {
+					/**
+					 * constuctor
+					 */
+					__process__();
 
-				pid_t         pid;              ///< process pid
-				void          *data;            ///< process data
-				bool          isRunning;        ///< true if the process is running
-				bool          joined;           ///< true if the process was joined
-				int           status;           ///< process exit status
-				unsigned long position;         ///< identificator
-				job::routine  func;             ///< function to execute
-				short         action;           ///< action on object destruction[@see job::onDestructionEnum]
+					pid_t         pid;              ///< process pid
+					void          *data;            ///< process data
+					bool          isRunning;        ///< true if the process is running
+					bool          joined;           ///< true if the process was joined
+					int           status;           ///< process exit status
+					unsigned long position;         ///< identificator
+					job::routine  func;             ///< function to execute
+					short         action;           ///< action on object destruction[@see job::onDestructionEnum]
 #ifdef DL_EXT
-				void          *handle;          ///< handle to library
+					void          *handle;          ///< handle to library
 #endif
+				};
 			};
 		};
 	};
 };
 
-#include <libdodo/pcProcessManager.h>
+#include <libdodo/pcJobProcessManager.h>
 #include <libdodo/types.h>
 #include <libdodo/pcJobManager.h>
-#include <libdodo/pcProcessManagerEx.h>
+#include <libdodo/pcJobProcessManagerEx.h>
 
-using namespace dodo::pc::process;
+using namespace dodo::pc::job::process;
 
 __process__::__process__() : isRunning(false),
 							 joined(false),
@@ -134,7 +136,7 @@ manager::~manager()
 
 #ifdef DL_EXT
 		if ((*i)->handle != NULL) {
-			deinit = (deinitModule)dlsym((*i)->handle, "deinitPcProcessModule");
+			deinit = (deinitModule)dlsym((*i)->handle, "deinitPcJobProcessManagerModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -197,7 +199,7 @@ manager::addNRun(job::routine  func,
 		_exit(func(data));
 	else {
 		if (pid == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_ADDNRUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			process->pid = pid;
 	}
@@ -216,9 +218,9 @@ manager::remove(unsigned long position,
 	if (getProcess(position)) {
 		if (_isRunning(current)) {
 			if (!force)
-				throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCPROCESSMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCJOBPROCESSMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else if (kill((*current)->pid, 2) == -1)
-				throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		}
 
@@ -226,13 +228,13 @@ manager::remove(unsigned long position,
 		if ((*current)->handle != NULL) {
 			deinitModule deinit;
 
-			deinit = (deinitModule)dlsym((*current)->handle, "deinitPcProcessModule");
+			deinit = (deinitModule)dlsym((*current)->handle, "deinitPcJobProcessManagerModule");
 			if (deinit != NULL)
 				deinit();
 
 #ifndef DL_FAST
 			if (dlclose((*current)->handle) != 0)
-				throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 		}
@@ -242,7 +244,7 @@ manager::remove(unsigned long position,
 
 		processes.erase(current);
 	} else
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_REMOVE, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -278,7 +280,7 @@ manager::_isRunning(dodoList<__process__ *>::iterator &position) const
 			return false;
 		}
 
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX__ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	return true;
@@ -292,7 +294,7 @@ manager::run(unsigned long position,
 {
 	if (getProcess(position)) {
 		if (_isRunning(current) && !force)
-			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCPROCESSMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_ISALREADYRUNNING, PCJOBPROCESSMANAGEREX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 		pid_t pid = fork();
 
@@ -300,14 +302,14 @@ manager::run(unsigned long position,
 			_exit((*current)->func((*current)->data));
 		else {
 			if (pid == -1)
-				throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			else
 				(*current)->pid = pid;
 		}
 
 		(*current)->isRunning = true;
 	} else
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -317,11 +319,11 @@ manager::stop(unsigned long position)
 {
 	if (getProcess(position)) {
 		if (kill((*current)->pid, 9) == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		(*current)->isRunning = false;
 	} else
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -335,7 +337,7 @@ manager::stop()
 			continue;
 
 		if (kill((*i)->pid, 9) == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		(*i)->isRunning = false;
 	}
@@ -351,12 +353,12 @@ manager::wait(unsigned long position)
 			return (*current)->status;
 
 		if (!(*current)->isRunning)
-			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_ISNOTLAUNCHED, PCPROCESSMANAGEREX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_ISNOTLAUNCHED, PCJOBPROCESSMANAGEREX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
 
 		int status;
 
 		if (waitpid((*current)->pid, &status, 0) == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (WIFEXITED(status))
 			(*current)->status = WEXITSTATUS(status);
@@ -365,7 +367,7 @@ manager::wait(unsigned long position)
 
 		return (*current)->status;
 	} else
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -384,7 +386,7 @@ manager::wait()
 			continue;
 
 		if (waitpid((*i)->pid, &status, 0) == -1)
-			throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (WIFEXITED(status))
 			(*i)->status = WEXITSTATUS(status);
@@ -402,7 +404,7 @@ manager::isRunning(unsigned long position) const
 	if (getProcess(position))
 		return _isRunning(current);
 	else
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCJOBPROCESSMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -433,17 +435,17 @@ manager::module(const dodoString &module,
 	void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initModule init = (initModule)dlsym(handle, "initPcProcessModule");
+	initModule init = (initModule)dlsym(handle, "initPcJobProcessManagerModule");
 	if (init == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__module__ mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 
@@ -468,17 +470,17 @@ manager::add(const dodoString &module,
 	process->handle = dlopen(module.data(), RTLD_LAZY);
 #endif
 	if (process->handle == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initModule init = (initModule)dlsym(process->handle, "initPcProcessModule");
+	initModule init = (initModule)dlsym(process->handle, "initPcJobProcessManagerModule");
 	if (init == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__module__ temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(process->handle, temp.hook);
 	if (in == NULL)
-		throw exception::basic(exception::MODULE_PCPROCESSMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::MODULE_PCJOBPROCESSMANAGER, MANAGEREX_ADD, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	process->action = temp.action;
 	process->func = in;

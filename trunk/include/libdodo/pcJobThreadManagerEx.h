@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcThreadManagerEx.h
+ *            pcJobThreadManagerEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCTHREADMANAGEREX_H_
-#define _PCTHREADMANAGEREX_H_ 1
+#ifndef _PCJOBTHREADMANAGEREX_H_
+#define _PCJOBTHREADMANAGEREX_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -36,42 +36,44 @@
 
 namespace dodo {
 	namespace pc {
-		namespace thread {
-			/**
-			 * libdodo defined errors
-			 */
-			enum managerExR {
-				MANAGEREX_ISALREADYRUNNING,
-				MANAGEREX_ISNOTLAUNCHED,
-				MANAGEREX_NOTFOUND,
-				MANAGEREX_ISDETACHED,
-			};
+		namespace job {
+			namespace thread {
+				/**
+				 * libdodo defined errors
+				 */
+				enum managerExR {
+					MANAGEREX_ISALREADYRUNNING,
+					MANAGEREX_ISNOTLAUNCHED,
+					MANAGEREX_NOTFOUND,
+					MANAGEREX_ISDETACHED,
+				};
 
-			/**
-			 * libdodo defined errors' explanation
-			 */
-#define PCTHREADMANAGEREX_ISALREADYRUNNING_STR    "Thread is currently running"
-#define PCTHREADMANAGEREX_ISNOTLAUNCHED_STR		"Thread is not launched"
-#define PCTHREADMANAGEREX_NOTFOUND_STR            "Thread not found"
-#define PCTHREADMANAGEREX_ISDETACHED_STR          "Thread is detached"
+				/**
+				 * libdodo defined errors' explanation
+				 */
+#define PCJOBTHREADMANAGEREX_ISALREADYRUNNING_STR    "Thread is currently running"
+#define PCJOBTHREADMANAGEREX_ISNOTLAUNCHED_STR		"Thread is not launched"
+#define PCJOBTHREADMANAGEREX_NOTFOUND_STR            "Thread not found"
+#define PCJOBTHREADMANAGEREX_ISDETACHED_STR          "Thread is detached"
 
-			/**
-			 * ID of function where exception was thrown
-			 */
-			enum managerFunctionsID {
-				MANAGEREX_RUN,
-				MANAGEREX_ADDNRUN,
-				MANAGEREX_REMOVE,
-				MANAGEREX_WAIT,
-				MANAGEREX_STOP,
-				MANAGEREX_ISRUNNING,
-				MANAGEREX_CONSTRUCTOR,
-				MANAGEREX__ISRUNNING,
-				MANAGEREX_SETSTACKSIZE,
+				/**
+				 * ID of function where exception was thrown
+				 */
+				enum managerFunctionsID {
+					MANAGEREX_RUN,
+					MANAGEREX_ADDNRUN,
+					MANAGEREX_REMOVE,
+					MANAGEREX_WAIT,
+					MANAGEREX_STOP,
+					MANAGEREX_ISRUNNING,
+					MANAGEREX_CONSTRUCTOR,
+					MANAGEREX__ISRUNNING,
+					MANAGEREX_SETSTACKSIZE,
 #ifdef DL_EXT
-				MANAGEREX_MODULE,
-				MANAGEREX_ADD,
+					MANAGEREX_MODULE,
+					MANAGEREX_ADD,
 #endif
+				};
 			};
 		};
 	};

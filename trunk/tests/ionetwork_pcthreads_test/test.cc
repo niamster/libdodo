@@ -10,7 +10,7 @@
 
 using namespace dodo;
 using namespace io::network;
-using namespace dodo::pc;
+using namespace dodo::pc::job;
 using namespace pc::sync::thread;
 
 using namespace std;

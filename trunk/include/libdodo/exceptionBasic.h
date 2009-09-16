@@ -96,8 +96,8 @@ namespace dodo {
 			MODULE_IONETWORKSSLEXCHANGE,
 			MODULE_IONETWORKHTTP,
 			MODULE_IOEVENTMANAGER,
-			MODULE_PCPROCESSMANAGER,
-			MODULE_PCTHREADMANAGER,
+			MODULE_PCJOBPROCESSMANAGER,
+			MODULE_PCJOBTHREADMANAGER,
 			MODULE_PCSYNCTHREADDATASINGLE,
 			MODULE_PCSYNCPROCESSDATASINGLE,
 			MODULE_PCSYNCTHREADDATACOLLECTION,
@@ -150,7 +150,7 @@ namespace dodo {
 #ifdef DL_EXT
 			/**
 			 * @struct __module__
-			 * @brief is returned from initExceptionBasicModule in the library
+			 * @brief is returned from initModule in the library
 			 */
 			struct __module__ {
 				char  name[64];         ///< name of the library
