@@ -1,90 +1,59 @@
-libdodo consists of several subsystems:
+= libdodo architecture =
 
- * cgi
-   provides instrumentation for CGI interface
-   * basic
-     basic CGI support
-   * fast
-     Fast-CGI support
-   * exchange
-     CGI-independent abstraction for interaction between application and web-server
-     CGI and Fast-CGI defines interface-specific options
-   * server
-     CGI-independent abstraction of CGI server interface
-     CGI and Fast-CGI defines interface-specific options
- * data
-   provides interfaces for data access and manipulation
-   * base
-     with help of accumulator and connector interfaces forms SQL-independent data base abstraction for relativistic databases
-     currently mysql, postresql and sqlite databases are supported
-   * format
-     defines data format abstraction
-     currently XML and JSON data formats are supported
-   * memory
-     forms shared memory interface between OS processes 
-   * tpl
-     implements template processor interface
- * exception
-   interface for handling application exceptions
- * graphics
-   image, draw and tranform form image manipulation interface
- * io
-   * event
-     I/O event interface, normally used with conjunction of non-blocked Input/Output
-     descriptor and manager interfaces serves for this purpose
-   * channel
-     basic interface Input/Output interface
+Brief overview of libdodo subsystems:
+
+ * cgi interface provides instrumentation for CGI
+   basic and fast interfaces implement generic CGI and Fast-CGI support accordingly
+   * dialogue defines CGI-independent abstraction for interaction between application and web-server with help of exchange interface
+   CGI and Fast-CGI define interface-specific exchange interfaces
+   * server provides CGI-independent abstraction of CGI server interface
+   CGI and Fast-CGI define interface-specific server interfaces
+ * data describes interfaces for data access and manipulation
+   * base forms SQL-independent data base abstraction for relativistic databases with help of accumulator and connector interfaces
+     currently mysql, postresql and sqlite databases supported
+   * format defines data format abstraction
+     currently XML and JSON data formats supported
+   * memory interface forms interface for shared memory between OS processes 
+   * tpl implements [wiki:LibdodoTplProcessor libdodo template processor] interface
+ * exception defines interfaces for handling application exceptions
+ * graphics forms image manipulation interface with help of image, draw and transform interfaces
+ * io provides Input/Output interfaces
+   * event provides I/O event interface
+     descriptor and manager interfaces available for this purpose
+     normally used with conjunction of non-blocked Input/Output
+   * channel is basic Input/Output interface
      branches out into block and stream interfaces to handle block and stream I/O accordingly 
-   * file
-     representative of block interface to handle file based I/O
-     divided into regular, fifo and temp interfaces defined to handle read and write from and to regular files, fifos and temporary files
-   * memory
-     abstraction of memory region as a block device
-     useful in areas where channel is required but memory as a storage is preferable
-   * network
-     network interaction subsystem that is divided into client, server and exchange interface that stand for client- and server- side connection and stream interface to exchange data accordingly. Generic network and unix socket connections supported. SSL encryption of transferred data is supported in both cases. 
-   * pipe
-     simple inter-process communication stream interface for data exchange
- * pc
-   stands for parallel computation
-   * sync
-     handles synchronization mechanisms between asynchronous events such as threads or processes
-     * data
-       * single provides access synchronization for single data entry
-       * collection provides access synchronization for collection of entries
-     * section
-       provides access synchronization for program flow
-   * job
-     this subsystem provides manager interface as an abstraction of asynchronous program flow management
+   * file is a representative of block interface to handle file based I/O
+     divided into regular, fifo and temp interfaces to handle read and write from and to regular files, fifos and temporary files
+   * memory implements abstraction of memory region as a block device
+     useful in areas where channel interface is required but memory as a storage is preferable
+   * network is a network interaction subsystem that is divided into client, server and exchange interface that stand for client- and server- side connection and stream interface to exchange data accordingly.
+     Generic network and unix socket connections supported. SSL encryption of transferred data is supported in both cases. 
+   * pipe provides simple inter-process communication stream interface for data exchange
+ * pc stands for parallel computation and defines needed tools for this purpose
+   * sync handles synchronization mechanisms between asynchronous events such as threads or processes
+     * data provides access synchronization interface
+       * single interface provides access synchronization for single data entry
+       * collection interface provides access synchronization for collection of entries
+     * section provides access synchronization interface for program flow
+   * job subsystem provides manager interface as an abstraction of asynchronous program flow management
      process::manager and thread::manager are helper interfaces for handling processes and threads management accordingly
- * rpc
-   provides interface for remote procedure calls
+ * rpc provides interface for remote procedure calls
    client interface serves for client-side connection and server is for handling server-side 
    value, method and response represents RPC value, client request and server response accordingly
    XML and JSON RPC protocols supported
- * tools
-   contains various helper functions
-   * code
-     provides data encoding, compression, etc.
-   * filesystem
-     contains filesystem related routines
-   * library
-     helper functions to work with dynamically and statically libraries
-   * logger
-     provides logging facilities
-   * misc
-     defines miscellaneous routines not included in other sections
-   * network
-     generic network functions
-   * os
-     provides interface for interaction with OS such signal handling, getting information about environment, etc.
-   * regexp
-     regexp matching and replacement interface
+ * tools subsystem contains various helper functions
+   * code interface provides data encoding, compression, etc. routines
+   * filesystem contains filesystem related routines
+   * library provides helper functions to work with dynamically and statically linked libraries
+   * logger implements logging facilities
+   * misc provides miscellaneous routines not included in other sections
+   * network contains network functions
+   * os provides interface for interaction with OS such signal handling, getting environment information, etc.
+   * regexp is a regular expression matching and replacement interface
      currently pcre and posix regexp libraries could be used as backends
-   * string
-     various functions to work with strings
- * xexec
-   provides hooks injection into various libdodo subsytems
+   * string defines various functions to work with strings
+ * xexec provides hooks injection into various libdodo subsystems mechanism
    with help of xexec it is possible to define pre-exec and post-exec actions
 
 Most of the interfaces are thread- or process- safe by default. To avoid unneeded overhead it's possible to chose the protection in objects constructors or turn it off completely.
