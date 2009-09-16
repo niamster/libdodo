@@ -769,7 +769,7 @@ processor::_assign(unsigned long    start,
 	if (temp.size() == 0)
 		throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
-	dodoString varName = trim(temp[0]);
+	dodoString varName = trim(tools::string::trim(temp[0], " \t\r\n", 4));
 	if (varName.size() == 0)
 		throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
@@ -850,7 +850,7 @@ processor::_for(const dodoString &buffer,
 	if (p == dodoString::npos)
 		throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__FOR, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGFORSTATEMENT, DATATPLPROCESSOREX_WRONGFORSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
-	dodoString targetVar = getVarName(dodoString(statement.data() + p + 2), start, path);
+	dodoString targetVar = getVarName(tools::string::trim(dodoString(statement.data() + p + 2), " \t\r\n", 4), start, path);
 	dodoString forSpace = dodoString(buffer.data() + start, u - start);
 
 	u = buffer.find(statements[STATEMENT_CLOSE_ST], u) + 2;
@@ -1294,7 +1294,7 @@ processor::getVarName(const dodoString &a_varName,
 					  unsigned long    start,
 					  const dodoString &path)
 {
-	dodoString varName = trim(a_varName), tempVar;
+	dodoString varName = a_varName, tempVar;
 
 	unsigned long u, b, m(0), ob, cb, i, c;
 
@@ -1324,7 +1324,7 @@ processor::getVarName(const dodoString &a_varName,
 				break;
 		}
 
-		tempVar = trim(dodoString(varName.data() + u + 1, b - 1 - u));
+		tempVar = trim(tools::string::trim(dodoString(varName.data() + u + 1, b - 1 - u), " \t\r\n", 4));
 		if (tempVar[0] == '$')
 			tempVar = getVar(tempVar, start, path);
 
@@ -1343,12 +1343,13 @@ processor::getVar(const dodoString &a_varName,
 				  unsigned long    start,
 				  const dodoString &path)
 {
-	dodoString varName = getVarName(a_varName, start, path);
+	dodoString varName = tools::string::trim(a_varName, " \t\r\n", 4);
 
 	if (varName[0] != '$')
-		return varName;
-	else
-		varName.erase(0, 1);
+		return trim(varName);
+
+	varName.erase(0, 1);
+	varName = getVarName(varName, start, path);
 
 	dodoStringArray temp = tools::misc::split(varName, statements[STATEMENT_DOT]);
 
@@ -1488,21 +1489,14 @@ processor::getVar(const dodoString &a_varName,
 dodoString
 processor::trim(const dodoString &statement)
 {
-	dodoString temp = tools::string::trim(statement, " \t\r\n", 4);
+	unsigned long i(statement.size() - 1);
 
-	unsigned long i(temp.size() - 1);
+	if (statement[0] == '\"' && statement[i] == '\"')
+		return dodoString(statement.data() + 1, statement.size() - 2);
+	else if (statement[0] == '\'' && statement[i] == '\'')
+		return dodoString(statement.data() + 1, statement.size() - 2);
 
-	if (temp[0] == '\"' && temp[i] == '\"')
-		temp = dodoString(temp.data() + 1, temp.size() - 2);
-	else {
-		if (temp[0] == '\'' && temp[i] == '\'')
-			temp = dodoString(temp.data() + 1, temp.size() - 2);
-		else if (temp[0] == '`' && temp[i] == '`')
-			temp = dodoString(temp.data() + 1, temp.size() - 2);
-
-	}
-
-	return temp;
+	return statement;
 }
 
 //-------------------------------------------------------------------
