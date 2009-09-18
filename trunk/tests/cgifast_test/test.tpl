@@ -112,7 +112,7 @@
 	<(sn)>
 
 	<(print string literal)>
-	<(print {$strmaparr.{0}.{$one}})>
+	<(print $strmaparr.{0}.{$one})>
 	<(print $strmaparr.1.{$strmap.{$one}})>
 	<(print $strarr.0.0)>
 	<(print $strmap.one)>

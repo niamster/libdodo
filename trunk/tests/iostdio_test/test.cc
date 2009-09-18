@@ -23,10 +23,11 @@ hook(xexec::__collected_data__ *odata,
 	if (st->operType == io::channel::OPERATION_WRITE)
 	{
 		stdio *io = dynamic_cast<stdio *>(st->executor);
-		/* io->blockSize = 100; */ /* FIXME: issue #61 */
-		/* io->writeString("\nhook\n"); */
+		dodoString buffer = st->buffer;
+		io->blockSize = 100;
+		io->writeString("\nhook\n");
 
-		dodoString str = ">" + st->buffer + "<\n";
+		dodoString str = ">" + buffer + "<\n";
 
 		io->blockSize = str.size();
 		st->buffer.assign(str);

@@ -66,6 +66,8 @@ process1(void *data)
 
 	try
 	{
+		pc::sync::protector pg(&section); /* section could be acquired recursively by current process */
+
 		dodo::data::memory::shared shared(key0);
 		unsigned long size = shared.size();
 		cout << "Shared data: " << endl, cout.flush();

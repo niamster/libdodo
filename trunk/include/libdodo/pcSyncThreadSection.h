@@ -67,6 +67,8 @@ namespace dodo {
 
 					/**
 					 * lock critical section
+					 * @note same thread can acquire section recursively
+					 * in this case the same number of releases reqired before another thread can aquire the section
 					 */
 					virtual void acquire();
 

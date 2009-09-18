@@ -62,7 +62,7 @@ section::section() : lock(new __lock__)
 		throw exception::basic(exception::MODULE_PCSYNCTHREADSECTION, SECTIONEX_SECTION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 	if (errno != 0) {
 		delete lock;
 

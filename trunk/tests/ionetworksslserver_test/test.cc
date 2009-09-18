@@ -24,7 +24,7 @@ hook(xexec::__collected_data__ *odata,
 	io::channel::__collected_data__ *st = (io::channel::__collected_data__ *)odata;
 
 	cout << "In hook: " << st->buffer << endl;
-	/* cout << dynamic_cast<exchange *>(st->executor)->isAlive() << endl; */ /* FIXME: issue #61 */
+	cout << (dynamic_cast<exchange *>(st->executor)->isAlive()?"Alive":"Dead") << endl;
 }
 #endif
 
