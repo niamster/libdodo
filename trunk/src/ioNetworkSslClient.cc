@@ -354,8 +354,7 @@ client::connect(const dodoString &host,
 				network::exchange         &ex)
 {
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CONNECT;
-	performPreExec();
+	performPreExec(OPERATION_CONNECT);
 #endif
 
 	initSsl();
@@ -402,7 +401,7 @@ client::connect(const dodoString &host,
 	handle->handle = NULL;
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CONNECT);
 #endif
 }
 
@@ -415,8 +414,7 @@ client::connectFrom(const dodoString &local,
 					network::exchange         &ex)
 {
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CONNECTFROM;
-	performPreExec();
+	performPreExec(OPERATION_CONNECTFROM);
 #endif
 
 	initSsl();
@@ -481,7 +479,7 @@ client::connectFrom(const dodoString &local,
 	handle->handle = NULL;
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CONNECTFROM);
 #endif
 }
 
@@ -492,8 +490,7 @@ client::connect(const dodoString &path,
 				network::exchange         &ex)
 {
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CONNECT;
-	performPreExec();
+	performPreExec(OPERATION_CONNECT);
 #endif
 
 	initSsl();
@@ -527,7 +524,7 @@ client::connect(const dodoString &path,
 	handle->handle = NULL;
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CONNECT);
 #endif
 }
 

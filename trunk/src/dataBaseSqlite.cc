@@ -120,8 +120,7 @@ sqlite::connect(const __connection__ &info)
 	collectedData.dbInfo = info;
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_CONNECT;
-	performPreExec();
+	performPreExec(OPERATION_CONNECT);
 #endif
 
 	if (handle->handle != NULL) {
@@ -143,7 +142,7 @@ sqlite::connect(const __connection__ &info)
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CONNECT);
 #endif
 }
 
@@ -154,8 +153,7 @@ sqlite::disconnect()
 {
 	if (handle->handle != NULL) {
 #ifndef DATABASE_WO_XEXEC
-		operType = OPERATION_DISCONNECT;
-		performPreExec();
+		performPreExec(OPERATION_DISCONNECT);
 #endif
 
 		if (!empty) {
@@ -167,7 +165,7 @@ sqlite::disconnect()
 			throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_DISCONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-		performPostExec();
+		performPostExec(OPERATION_DISCONNECT);
 #endif
 
 		handle->handle = NULL;
@@ -183,8 +181,7 @@ sqlite::fetchRows() const
 		throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_FETCHROW;
-	performPreExec();
+	performPreExec(OPERATION_FETCHROWS);
 #endif
 
 	dodoArray<dodoStringArray> rows;
@@ -271,7 +268,7 @@ sqlite::fetchRows() const
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_FETCHROWS);
 #endif
 
 	return rows;
@@ -286,8 +283,7 @@ sqlite::fetchFields() const
 		throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_FETCHFIELD;
-	performPreExec();
+	performPreExec(OPERATION_FETCHFIELDS);
 #endif
 
 	dodoStringArray fields;
@@ -305,7 +301,7 @@ sqlite::fetchFields() const
 		fields.push_back(sqlite3_column_name(handle->result, i));
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_FETCHFIELDS);
 #endif
 
 	return fields;
@@ -584,8 +580,7 @@ sqlite::exec(const dodoString &query,
 		throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_EXEC;
-	performPreExec();
+	performPreExec(OPERATION_EXEC);
 #endif
 
 	if (query.size() == 0)
@@ -624,7 +619,7 @@ sqlite::exec(const dodoString &query,
 			throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_EXEC);
 #endif
 
 	cleanCollected();

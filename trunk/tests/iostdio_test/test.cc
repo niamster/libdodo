@@ -16,11 +16,12 @@ using namespace std;
 #ifndef IO_WO_XEXEC
 void
 hook(xexec::__collected_data__ *odata,
-	 short int type,
+	 short type,
+	 short operation,
 	 void *udata)
 {
 	io::channel::__collected_data__ *st = (io::channel::__collected_data__ *)odata;
-	if (st->operType == io::channel::OPERATION_WRITE)
+	if (operation == io::channel::OPERATION_WRITE)
 	{
 		stdio *io = dynamic_cast<stdio *>(st->executor);
 		dodoString buffer = st->buffer;

@@ -292,8 +292,7 @@ fifo::close()
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CLOSE;
-	performPreExec();
+	performPreExec(OPERATION_CLOSE);
 #endif
 
 	if (handle->file != NULL) {
@@ -304,7 +303,7 @@ fifo::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CLOSE);
 #endif
 }
 
@@ -317,8 +316,7 @@ fifo::open(const dodoString &a_path,
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_OPEN;
-	performPreExec();
+	performPreExec(OPERATION_OPEN);
 #endif
 
 	path = a_path;
@@ -389,7 +387,7 @@ fifo::open(const dodoString &a_path,
 		throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_OPEN);
 #endif
 }
 

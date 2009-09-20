@@ -18,7 +18,8 @@ extern "C"
 
 void
 hook(xexec::__collected_data__ *odata,
-     short int type,
+     short type,
+	 short operation,
 	 void *udata)
 {
 #ifndef IO_WO_XEXEC
@@ -27,7 +28,7 @@ hook(xexec::__collected_data__ *odata,
 		std::cout << "stdio module ";
 
 		channel::__collected_data__ *st = (channel::__collected_data__ *)odata;
-		if (st->operType == channel::OPERATION_WRITE)
+		if (operation == channel::OPERATION_WRITE)
 			st->buffer.assign("<" + dodoString(1, st->buffer[0]) + ">\n");
 	}
 	std::cout << "hook\n";

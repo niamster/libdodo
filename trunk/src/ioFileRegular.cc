@@ -282,8 +282,7 @@ regular::close()
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CLOSE;
-	performPreExec();
+	performPreExec(OPERATION_CLOSE);
 #endif
 
 	if (handle->file !=  NULL) {
@@ -294,7 +293,7 @@ regular::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CLOSE);
 #endif
 }
 
@@ -307,8 +306,7 @@ regular::open(const dodoString &a_path,
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_OPEN;
-	performPreExec();
+	performPreExec(OPERATION_OPEN);
 #endif
 
 	path = a_path;
@@ -366,7 +364,7 @@ regular::open(const dodoString &a_path,
 		tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_OPEN);
 #endif
 }
 

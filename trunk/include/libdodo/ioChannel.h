@@ -95,9 +95,9 @@ namespace dodo {
 			 */
 			enum operationEnum {
 				OPERATION_READ,
-				OPERATION_READSTREAM,
+				OPERATION_READSTRING,
 				OPERATION_WRITE,
-				OPERATION_WRITESTREAM,
+				OPERATION_WRITESTRING,
 			};
 
 #ifndef IO_WO_XEXEC

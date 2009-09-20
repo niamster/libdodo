@@ -217,8 +217,7 @@ io::pipe::close()
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CLOSE;
-	performPreExec();
+	performPreExec(OPERATION_CLOSE);
 #endif
 
 	if (in->file != NULL) {
@@ -236,7 +235,7 @@ io::pipe::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CLOSE);
 #endif
 }
 
@@ -248,8 +247,7 @@ io::pipe::open()
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_OPEN;
-	performPreExec();
+	performPreExec(OPERATION_OPEN);
 #endif
 
 	if (in->file != NULL) {
@@ -280,7 +278,7 @@ io::pipe::open()
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_OPEN);
 #endif
 }
 

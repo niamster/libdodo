@@ -179,8 +179,7 @@ client::connect(const dodoString &host,
 				exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CONNECT;
-	performPreExec();
+	performPreExec(OPERATION_CONNECT);
 #endif
 
 	makeSocket();
@@ -222,7 +221,7 @@ client::connect(const dodoString &host,
 	socket = -1;
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CONNECT);
 #endif
 }
 
@@ -235,8 +234,7 @@ client::connectFrom(const dodoString &local,
 					exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CONNECTFROM;
-	performPreExec();
+	performPreExec(OPERATION_CONNECTFROM);
 #endif
 
 	makeSocket();
@@ -296,7 +294,7 @@ client::connectFrom(const dodoString &local,
 	socket = -1;
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CONNECTFROM);
 #endif
 }
 
@@ -307,8 +305,7 @@ client::connect(const dodoString &path,
 				exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CONNECT;
-	performPreExec();
+	performPreExec(OPERATION_CONNECT);
 #endif
 
 	makeSocket();
@@ -337,7 +334,7 @@ client::connect(const dodoString &path,
 	socket = -1;
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CONNECT);
 #endif
 }
 

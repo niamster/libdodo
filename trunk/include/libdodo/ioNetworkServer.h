@@ -73,6 +73,7 @@ namespace dodo {
 				 * @enum operationEnum defines type of operation for hook
 				 */
 				enum operationEnum {
+					OPERATION_SERVE,
 					OPERATION_BINDNLISTEN,
 					OPERATION_ACCEPT,
 				};

@@ -20,12 +20,13 @@ using namespace graphics;
 #ifndef GRAPHICS_WO_XEXEC
 void
 hook(xexec::__collected_data__ *odata,
-	 short int type,
+	 short type,
+	 short operation,
 	 void *udata)
 {
 	image::__collected_data__ *imData = (image::__collected_data__ *)odata;
 
-	if (imData->operType == image::OPERATION_WRITE)
+	if (operation == image::OPERATION_WRITE)
 	{
 		try
 		{

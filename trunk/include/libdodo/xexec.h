@@ -116,13 +116,6 @@ namespace dodo {
 		};
 
 		/**
-		 * @enum operationEnum defines default operation type
-		 */
-		enum operationEnum {
-			OPERATION_NONE,
-		};
-
-		/**
 		 * @enum actionEnum defines what type of exec[pre/post] will be used for module
 		 */
 		enum actionEnum {
@@ -150,19 +143,18 @@ namespace dodo {
 			 */
 			void setExecObject(short execObject);
 
-			int &operType;      ///< xexec operation
-
 			xexec *executor;    ///< class that executed hook
 		};
 
 		/**
 		 * @typedef hook
 		 * @brief defines function that will be called as hook
+		 * @param operation defines what operation initiated the hook
 		 * @param odata defines object data
 		 * @param object defines type of object that called hook, @see xexec::objectEnum
 		 * @param udata defines user data
 		 */
-		typedef void (*hook)(__collected_data__ *odata, short object, void *udata);
+		typedef void (*hook)(__collected_data__ *odata, short object, short operation, void *udata);
 
 		/*
 		 * constructor
@@ -231,15 +223,15 @@ namespace dodo {
 
 		/**
 		 * perform preExec hooks
+		 * @param operation defines what operation initiated the hook
 		 */
-		void performPreExec() const;
+		void performPreExec(short operation) const;
 
 		/**
 		 * perform preExec hooks
+		 * @param operation defines what operation initiated the hook
 		 */
-		void performPostExec() const;
-
-		mutable int operType;                           ///< operation type set by main action
+		void performPostExec(short operation) const;
 
 	  private:
 
@@ -278,8 +270,10 @@ namespace dodo {
 		/**
 		 * perform enabled hooks
 		 * @param list defines list of hooks
+		 * @param operation defines what operation initiated the hook
 		 */
-		void performXExec(dodoList<__item__> &list) const;
+		void performXExec(dodoList<__item__> &list,
+						  short operation) const;
 
 		mutable dodoList<__item__> preExec;      ///< preExec hooks
 		mutable dodoList<__item__> postExec;     ///< postExec hooks

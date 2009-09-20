@@ -146,8 +146,7 @@ exchange::close()
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CLOSE;
-	performPreExec();
+	performPreExec(OPERATION_CLOSE);
 #endif
 
 	if (socket != -1) {
@@ -158,7 +157,7 @@ exchange::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CLOSE);
 #endif
 }
 

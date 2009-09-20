@@ -159,8 +159,7 @@ mysql::connect(const __connection__ &info)
 	collectedData.dbInfo = info;
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_CONNECT;
-	performPreExec();
+	performPreExec(OPERATION_CONNECT);
 #endif
 
 	if (handle->handle != NULL) {
@@ -195,7 +194,7 @@ mysql::connect(const __connection__ &info)
 #endif
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CONNECT);
 #endif
 }
 
@@ -206,8 +205,7 @@ mysql::disconnect()
 {
 	if (handle->handle != NULL) {
 #ifndef DATABASE_WO_XEXEC
-		operType = OPERATION_DISCONNECT;
-		performPreExec();
+		performPreExec(OPERATION_DISCONNECT);
 #endif
 
 		if (!empty) {
@@ -218,7 +216,7 @@ mysql::disconnect()
 		mysql_close(handle->handle);
 
 #ifndef DATABASE_WO_XEXEC
-		performPostExec();
+		performPostExec(OPERATION_DISCONNECT);
 #endif
 
 		handle->handle = NULL;
@@ -234,8 +232,7 @@ mysql::fetchRows() const
 		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_FETCHROW;
-	performPreExec();
+	performPreExec(OPERATION_FETCHROWS);
 #endif
 
 	dodoArray<dodoStringArray> rows;
@@ -277,7 +274,7 @@ mysql::fetchRows() const
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_FETCHROWS);
 #endif
 
 	return rows;
@@ -292,8 +289,7 @@ mysql::fetchFields() const
 		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_FETCHFIELD;
-	performPreExec();
+	performPreExec(OPERATION_FETCHFIELDS);
 #endif
 
 	dodoStringArray fields;
@@ -314,7 +310,7 @@ mysql::fetchFields() const
 		fields.push_back(mysqlFields[i].name);
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_FETCHFIELDS);
 #endif
 
 	return fields;
@@ -456,8 +452,7 @@ mysql::exec(const dodoString &query,
 		throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_EXEC;
-	performPreExec();
+	performPreExec(OPERATION_EXEC);
 #endif
 
 	if (query.size() == 0)
@@ -491,7 +486,7 @@ mysql::exec(const dodoString &query,
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_EXEC);
 #endif
 
 	cleanCollected();

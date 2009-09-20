@@ -17,11 +17,14 @@ using namespace data::base;
 
 #ifndef DATABASE_WO_XEXEC
 void
-hook(xexec::__collected_data__ *odata, short int type, void *udata)
+hook(xexec::__collected_data__ *odata, 
+	short type, 
+	short operation,
+	void *udata)
 {
 	accumulator::__collected_data__ *sql = (accumulator::__collected_data__ *)odata;
 
-	if (sql->operType == data::base::connector::OPERATION_EXEC)
+	if (operation == data::base::connector::OPERATION_EXEC)
 	{
 		cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->construct() << endl << endl;
 	}

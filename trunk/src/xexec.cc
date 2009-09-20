@@ -40,8 +40,7 @@
 using namespace dodo;
 
 xexec::__collected_data__::__collected_data__(xexec *executor,
-											   short execObject) : operType(executor->operType),
-																   executor(executor)
+											   short execObject) : executor(executor)
 {
 	executor->execObjectData = this;
 	executor->execObject = execObject;
@@ -63,7 +62,6 @@ xexec::xexec(const xexec &exec)
 
 xexec::xexec() : safeXExecs(true),
 				 disableXExecs(false),
-				 operType(OPERATION_NONE),
 				 execs(0),
 				 execObject(xexec::OBJECT_XEXEC),
 				 execObjectData(NULL)
@@ -176,23 +174,24 @@ xexec::addXExec(short type,
 //-------------------------------------------------------------------
 
 void
-xexec::performPreExec() const
+xexec::performPreExec(short operation) const
 {
-	performXExec(preExec);
+	performXExec(preExec, operation);
 }
 
 //-------------------------------------------------------------------
 
 void
-xexec::performPostExec() const
+xexec::performPostExec(short operation) const
 {
-	performXExec(postExec);
+	performXExec(postExec, operation);
 }
 
 //-------------------------------------------------------------------
 
 void
-xexec::performXExec(dodoList<__item__> &list) const
+xexec::performXExec(dodoList<__item__> &list,
+					short operation) const
 {
 	if (disableXExecs)
 		return;
@@ -203,7 +202,7 @@ xexec::performXExec(dodoList<__item__> &list) const
 		if (safeXExecs)
 			disableXExecs = true;
 
-		i->func(execObjectData, execObject, i->data);
+		i->func(execObjectData, execObject, operation, i->data);
 
 		if (safeXExecs)
 			disableXExecs = false;

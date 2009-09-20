@@ -192,8 +192,7 @@ temp::close()
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_CLOSE;
-	performPreExec();
+	performPreExec(OPERATION_CLOSE);
 #endif
 
 	if (handle->file != NULL) {
@@ -204,7 +203,7 @@ temp::close()
 	}
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CLOSE);
 #endif
 }
 
@@ -216,8 +215,7 @@ temp::open()
 	pc::sync::protector pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_OPEN;
-	performPreExec();
+	performPreExec(OPERATION_OPEN);
 #endif
 
 	if (handle->file != NULL) {
@@ -232,7 +230,7 @@ temp::open()
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_OPEN);
 #endif
 }
 

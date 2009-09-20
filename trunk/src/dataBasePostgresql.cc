@@ -176,8 +176,7 @@ postgresql::connect(const __connection__ &info)
 	collectedData.dbInfo = info;
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_CONNECT;
-	performPreExec();
+	performPreExec(OPERATION_CONNECT);
 #endif
 
 	if (handle->handle != NULL) {
@@ -209,7 +208,7 @@ postgresql::connect(const __connection__ &info)
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_CONNECT);
 #endif
 }
 
@@ -220,8 +219,7 @@ postgresql::disconnect()
 {
 	if (handle->handle != NULL) {
 #ifndef DATABASE_WO_XEXEC
-		operType = OPERATION_DISCONNECT;
-		performPreExec();
+		performPreExec(OPERATION_DISCONNECT);
 #endif
 
 		if (!empty) {
@@ -232,7 +230,7 @@ postgresql::disconnect()
 		PQfinish(handle->handle);
 
 #ifndef DATABASE_WO_XEXEC
-		performPostExec();
+		performPostExec(OPERATION_DISCONNECT);
 #endif
 
 		handle->handle = NULL;
@@ -248,8 +246,7 @@ postgresql::fetchRows() const
 		throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_FETCHROW;
-	performPreExec();
+	performPreExec(OPERATION_FETCHROWS);
 #endif
 
 	dodoArray<dodoStringArray> rows;
@@ -285,7 +282,7 @@ postgresql::fetchRows() const
 	}
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_FETCHROWS);
 #endif
 
 	return rows;
@@ -300,8 +297,7 @@ postgresql::fetchFields() const
 		throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_FETCHFIELD;
-	performPreExec();
+	performPreExec(OPERATION_FETCHFIELDS);
 #endif
 
 	dodoStringArray fields;
@@ -319,7 +315,7 @@ postgresql::fetchFields() const
 		fields.push_back(PQfname(handle->result, i));
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_FETCHFIELDS);
 #endif
 
 	return fields;
@@ -477,8 +473,7 @@ postgresql::exec(const dodoString &query,
 		throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-	operType = OPERATION_EXEC;
-	performPreExec();
+	performPreExec(OPERATION_EXEC);
 #endif
 
 	int status;
@@ -531,7 +526,7 @@ postgresql::exec(const dodoString &query,
 	empty = false;
 
 #ifndef DATABASE_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_EXEC);
 #endif
 
 	cleanCollected();

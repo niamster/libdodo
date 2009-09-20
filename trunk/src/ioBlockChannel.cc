@@ -62,8 +62,7 @@ channel::read() const
 	dodoString a_str;
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_READ;
-	performPreExec();
+	performPreExec(OPERATION_READ);
 
 	collectedData.buffer.reserve(blockSize);
 #endif
@@ -85,7 +84,7 @@ channel::read() const
 #ifndef IO_WO_XEXEC
 	collectedData.buffer = a_str;
 
-	performPostExec();
+	performPostExec(OPERATION_READ);
 
 	a_str = collectedData.buffer;
 
@@ -108,8 +107,7 @@ channel::readString() const
 	dodoString a_str;
 
 #ifndef IO_WO_XEXEC
-	operType = OPERATION_READSTREAM;
-	performPreExec();
+	performPreExec(OPERATION_READSTRING);
 #endif
 
 	a_str.assign(blockSize, '\0');
@@ -130,7 +128,7 @@ channel::readString() const
 	else
 		collectedData.buffer.clear();
 
-	performPostExec();
+	performPostExec(OPERATION_READSTRING);
 
 	a_str = collectedData.buffer;
 
@@ -138,7 +136,6 @@ channel::readString() const
 #else
 	if (n == 0)
 		a_str.clear();
-
 #endif
 
 	pos += n;
@@ -156,8 +153,7 @@ channel::write(const dodoString &a_data) const
 #ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(a_data, 0, blockSize);
 
-	operType = OPERATION_WRITE;
-	performPreExec();
+	performPreExec(OPERATION_WRITE);
 
 	try {
 		_write(collectedData.buffer.data());
@@ -171,7 +167,7 @@ channel::write(const dodoString &a_data) const
 #endif
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_WRITE);
 
 	collectedData.buffer.clear();
 #endif
@@ -189,8 +185,7 @@ channel::writeString(const dodoString &a_data) const
 #ifndef IO_WO_XEXEC
 	collectedData.buffer = a_data;
 
-	operType = OPERATION_WRITESTREAM;
-	performPreExec();
+	performPreExec(OPERATION_WRITESTRING);
 
 	try {
 		_writeString(collectedData.buffer.data());
@@ -208,7 +203,7 @@ channel::writeString(const dodoString &a_data) const
 #endif
 
 #ifndef IO_WO_XEXEC
-	performPostExec();
+	performPostExec(OPERATION_WRITESTRING);
 
 	collectedData.buffer.clear();
 #endif
