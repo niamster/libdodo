@@ -530,12 +530,7 @@ regular::_writeString(const char *const a_data) const
 	if (fseek(handle->file, 0, SEEK_END) == -1)
 		throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	unsigned int bufSize = strlen(a_data);
-
-	unsigned long _blockSize = blockSize;
-
-	if (bufSize < _blockSize)
-		_blockSize = bufSize;
+	unsigned long _blockSize = strnlen(a_data, blockSize);
 
 	while (true) {
 		if (fwrite(a_data, _blockSize, 1, handle->file) == 0) {

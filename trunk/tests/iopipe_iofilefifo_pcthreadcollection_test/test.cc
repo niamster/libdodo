@@ -61,7 +61,7 @@ threadWrite(void *data)
 
 		io::channel *pipe = (io::channel *)data;
 
-		pipe->writeString(tools::time::byFormat("%H:%M:%S", tools::time::now()));
+		pipe->writeString(tools::time::byFormat("%H:%M:%S", tools::time::now()) + "\n");
 		pipe->flush();
 
 		str = tools::filesystem::fileContents("test.cc");
@@ -103,6 +103,7 @@ int main(int argc, char **argv)
 		threads.wait();
 
 		cout << "\n~~using original cloned pipe for one thread and copy for the second~~\n";
+		pipe1.blockSize = 4096;
 
 		io::pipe pipe2 = pipe1;
 		//or clone

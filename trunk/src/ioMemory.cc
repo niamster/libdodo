@@ -327,11 +327,7 @@ memory::_writeString(const char *const a_data) const
 	if (flags & FLAGS_FIXED_LENGTH)
 		throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITESTREAM, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
 
-	unsigned long _blockSize = blockSize;
-	unsigned int bufSize = strlen(a_data);
-
-	if (bufSize < _blockSize)
-		_blockSize = bufSize;
+	unsigned long _blockSize = strnlen(a_data, blockSize);
 
 	char *newData = new char[size + _blockSize + 1];
 	memcpy(newData, data, size);

@@ -111,10 +111,7 @@ stdio::_writeString(const char * const data) const
 	unsigned long _blockSize = blockSize;
 
 	try {
-		unsigned int bufSize = strlen(data);
-
-		if (bufSize < blockSize)
-			blockSize = bufSize;
+		blockSize = strnlen(data, blockSize);
 
 		_write(data);
 

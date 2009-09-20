@@ -317,10 +317,7 @@ exchange::_writeString(const char * const data) const
 	unsigned long _blockSize = blockSize;
 
 	try {
-		unsigned int bufSize = strlen(data) + 1;
-
-		if (bufSize < blockSize)
-			blockSize = bufSize;
+		blockSize = strnlen(data, blockSize) + 1;
 
 		_write(data);
 

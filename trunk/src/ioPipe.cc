@@ -524,26 +524,25 @@ io::pipe::_writeString(const char * const data) const
 	unsigned long _blockSize = blockSize;
 
 	try {
-		unsigned int bufSize = strlen(data);
-
-		if (bufSize < blockSize)
-			blockSize = bufSize;
+		blockSize = strnlen(data, blockSize);
 
 		_write(data);
 
-		while (true) {
-			if (fputc('\n', out->file) == EOF) {
-				if (errno == EINTR)
-					continue;
+		if (data[blockSize - 1] != '\n') {
+			while (true) {
+				if (fputc('\n', out->file) == EOF) {
+					if (errno == EINTR)
+						continue;
 
-				if (errno == EAGAIN)
-					break;
+					if (errno == EAGAIN)
+						break;
 
-				if (ferror(out->file) != 0)
-					throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					if (ferror(out->file) != 0)
+						throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
+
+				break;
 			}
-
-			break;
 		}
 
 		blockSize = _blockSize;
