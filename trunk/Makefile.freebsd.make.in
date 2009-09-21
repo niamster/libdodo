@@ -9,6 +9,7 @@ includedir:=@includedir@
 CXX:=@CXX@
 INSTALL:=@INSTALL@
 LN_S:=@LN_S@
+AR:=@AR@
 
 TAGS:=@TAGS@
 
@@ -33,6 +34,7 @@ build: all
 	@$(CXX) $(LDFLAGS) -shared -Wl,-soname,$@.so.@SO_VERSION@ -o $@.so.@SO_VERSION@ $(OBJECTS)
 	@rm -f $@.so
 	@$(LN_S) @PACKAGE_NAME@.so.@SO_VERSION@ $@.so
+	@$(AR) rcs $@.a $(OBJECTS)
 
 	@echo ""
 	@echo ""
@@ -52,6 +54,9 @@ install: @PACKAGE_NAME@
 	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so"
 	@${LN_S} ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so.@SO_VERSION@ ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so
 	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.so >> install_manifest.txt
+	@echo "-- Installing: ${DESTDIR}$(libdir)/@PACKAGE_NAME@.a"
+	@${INSTALL} -m 755 @PACKAGE_NAME@.a ${DESTDIR}$(libdir)/
+	@echo ${DESTDIR}$(libdir)/@PACKAGE_NAME@.a >> install_manifest.txt
 
 	@${INSTALL} -m 755 -d ${DESTDIR}$(includedir)/libdodo
 	@for inc in include/libdodo/*;\

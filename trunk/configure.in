@@ -43,21 +43,11 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 
-##
-# functions
-##
+AC_CHECK_PROG(AR, ar, ar)
+if test "$AR" != "ar"; then
+  AC_MSG_ERROR(["ar not found"])
+fi
 
-function add_ldflags_libdir()
-{
-	for i in $*
-	do
-		case $i in
-			-L*)
-				LDFLAGS="$LDFLAGS $i"
-				;;
-		esac
-	done
-}
 
 ##
 # checking dependencies/build options
@@ -248,7 +238,7 @@ then
 		MOD_OPENSSL_DIR=/usr
 	fi
 	CPPFLAGS="$CPPFLAGS -I$MOD_OPENSSL_DIR/include"
-	LDFLAGS="$LDFLAGS -L$MOD_OPENSSL_DIR/lib -lssl"
+	LDFLAGS="$LDFLAGS -L$MOD_OPENSSL_DIR/lib -lssl -lcrypto"
 	AC_CHECK_LIB([ssl], [SSL_library_init], [], AC_MSG_ERROR(openssl lib was not found))
 	AC_CHECK_HEADER([openssl/ssl.h], [], AC_MSG_ERROR(openssl header was not found))
 	echo -n -e "#define OPENSSL_EXT 1\n\n" >> include/libdodo/directives.runtime.h
@@ -314,7 +304,7 @@ if test "$MOD_POSTGRESQL" != "no" -a "$MOD_POSTGRESQL_DIR" != "no"
 then
 	if test "$MOD_POSTGRESQL_DIR" = "yes"
 	then
-		if test "$(pg_config 2>/dev/null)" != ""
+		if test "$(pg_config --version 2>/dev/null)" != ""
 		then
 			CPPFLAGS="$CPPFLAGS -I$(pg_config --includedir)"
 			LDFLAGS="$LDFLAGS -L$(pg_config --libdir) -lpq"
@@ -356,11 +346,10 @@ if test "$MOD_MYSQL" != "no" -a "$MOD_MYSQL_DIR" != "no"
 then
 	if test "$MOD_MYSQL_DIR" = "yes"
 	then
-		if test "$(mysql_config 2>/dev/null)" != ""
+		if test "$(mysql_config --version 2>/dev/null)" != ""
 		then
 			CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
-			add_ldflags_libdir $(mysql_config --libs)
-			LDFLAGS="$LDFLAGS -lmysqlclient"
+			LDFLAGS="$LDFLAGS $(mysql_config --libs)"
 		else
 			MOD_MYSQL_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
@@ -427,8 +416,7 @@ then
 	if test "$MOD_PCRE_DIR" = "yes"
 	then
 		CPPFLAGS="$CPPFLAGS $(pcre-config --cflags)"
-		add_ldflags_libdir $(pcre-config --libs)
-		LDFLAGS="$LDFLAGS -lpcre"
+		LDFLAGS="$LDFLAGS $(pcre-config --libs)"
 	else
 		MOD_PCRE_DIR=/usr
 		CPPFLAGS="$CPPFLAGS -I$MOD_PCRE_DIR/include"
@@ -485,11 +473,10 @@ if test "$MOD_LIBXML2" != "no" -a "$MOD_LIBXML2_DIR" != "no"
 then
 	if test "$MOD_LIBXML2_DIR" = "yes"
 	then
-		if test "$(xml2-config 2>/dev/null)" != ""
+		if test "$(xml2-config --version 2>/dev/null)" != ""
 		then
 			CPPFLAGS="$CPPFLAGS $(xml2-config --cflags)"
-			add_ldflags_libdir $(xml2-config --libs)
-			LDFLAGS="$LDFLAGS -lxml2"
+			LDFLAGS="$LDFLAGS $(xml2-config --libs)"
 		else
 			MOD_LIBXML2_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
@@ -610,13 +597,14 @@ AC_ARG_WITH([imagemagick],
 		[MOD_IMAGEMAGICK_DIR="$withval"], [MOD_IMAGEMAGICK="no"])
 if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
 then
+	MAGICK_CONFIG="no"
 	if test "$MOD_IMAGEMAGICK_DIR" = "yes"
 	then
-		if test "$(Magick-config 2>/dev/null)" != ""
+		if test "$(Magick-config --version 2>/dev/null)" != ""
 		then
+			MAGICK_CONFIG="yes"
 			CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
-			add_ldflags_libdir $(Magick-config --ldflags)
-			LDFLAGS="$LDFLAGS"
+			LDFLAGS="$LDFLAGS $(Magick-config --libs)"
 		else
 			MOD_IMAGEMAGICK_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include -I$MOD_IMAGEMAGICK_DIR/include/ImageMagick"
@@ -638,10 +626,15 @@ then
 			echo -n -e "#define IMAGEMAGICK_PRE_63 1\n\n" >> include/libdodo/directives.runtime.h
 		fi
 
-		LDFLAGS="$LDFLAGS -lMagick"
+		if test "$MAGICK_CONFIG" == "no"
+		then
+			LDFLAGS="$LDFLAGS -lMagick"
+		fi
 	else
-		LDFLAGS="$LDFLAGS -lMagickCore"
-
+		if test "$MAGICK_CONFIG" == "no"
+		then
+			LDFLAGS="$LDFLAGS -lMagickCore"
+		fi
 	fi
 	if test "$VERY_OLD_IMAGEMAGICK_LIB" != "yes"
 	then

@@ -12,13 +12,14 @@ Usage: dodo-config [OPTION]
 
 Known values for OPTION are:
 
-  --prefix		print libdodo prefix
-  --exec-prefix	print libdodo exec prefix
-  --libs		print library linking information
-  --cflags		print pre-processor and compiler flags
-  --modules		module support enabled
-  --help		display this help and exit
-  --version		output version information
+  --prefix      print libdodo prefix
+  --exec-prefix print libdodo exec prefix
+  --libs        print library linking information
+  --cflags      print pre-processor and compiler flags
+  --ldflags     print linker flags
+  --modules     module support enabled
+  --help        display this help and exit
+  --version     output version information
 EOF
 
     exit $1
@@ -58,7 +59,7 @@ while test $# -gt 0; do
 			;;
 
 		--libs)
-				echo -L$libdir -ldodo
+			echo -L$libdir -ldodo @LDFLAGS@
 			;;
 
 		*)
