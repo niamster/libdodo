@@ -25,7 +25,7 @@ handler(exchange &ex)
 	//	dialogue d(&ex, head, false);
 
 	///second type: use default headers and do not print them immediately
-	dialogue d(ex, true);
+	dialogue d(ex, POST_SIZE_LIMIT, true);
 
 	dodoString user = d.authenticationResponse().user;
 

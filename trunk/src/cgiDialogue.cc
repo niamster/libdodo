@@ -161,6 +161,7 @@ dialogue::dialogue(dialogue &ct) : io(ct.io)
 //-------------------------------------------------------------------
 
 dialogue::dialogue(exchange   &a_cf,
+				   unsigned long postSize,
 				   bool       a_autocleanFiles,
 				   bool       a_postFilesInMem,
 				   dodoString a_postFilesTmpDir) : returnCode(STATUS_CODE_OK),
@@ -182,7 +183,7 @@ dialogue::dialogue(exchange   &a_cf,
 
 	detectMethod();
 
-	makeContent();
+	makeContent(postSize);
 	makePost();
 
 	makeKeyValue(COOKIES, ENVIRONMENT[ENVIRONMENT_HTTPCOOKIE], "; ");
@@ -193,6 +194,7 @@ dialogue::dialogue(exchange   &a_cf,
 
 dialogue::dialogue(exchange &a_cf,
 				   dodoMap<short, dodoString> &headers,
+				   unsigned long postSize,
 				   bool a_autocleanFiles,
 				   bool a_postFilesInMem,
 				   dodoString a_postFilesTmpDir) : returnCode(STATUS_CODE_OK),
@@ -215,7 +217,7 @@ dialogue::dialogue(exchange &a_cf,
 
 	detectMethod();
 
-	makeContent();
+	makeContent(postSize);
 	makePost();
 
 	makeKeyValue(COOKIES, ENVIRONMENT[ENVIRONMENT_HTTPCOOKIE], "; ");
@@ -234,8 +236,7 @@ dialogue::~dialogue()
 
 //-------------------------------------------------------------------
 
-dialogue::operator exchange
-*()
+dialogue::operator exchange *()
 {
 	printHeaders();
 
@@ -325,40 +326,26 @@ dialogue::makeAuth()
 
 				if (tools::string::iequal(challengePart, "realm"))
 					authInfo.realm = tools::string::trim(tuple[1], '"');
-				else {
-					if (tools::string::iequal(challengePart, "nonce"))
-						authInfo.nonce = tools::string::trim(tuple[1], '"');
-					else {
-						if (tools::string::iequal(challengePart, "opaque"))
-							authInfo.opaque = tools::string::trim(tuple[1], '"');
-						else {
-							if (tools::string::iequal(challengePart, "username"))
-								authInfo.user = tools::string::trim(tuple[1], '"');
-							else {
-								if (tools::string::iequal(challengePart, "uri"))
-									authInfo.uri = tools::string::trim(tuple[1], '"');
-								else {
-									if (tools::string::iequal(challengePart, "qop"))
-										authInfo.qop = tools::string::trim(tuple[1], '"');
-									else {
-										if (tools::string::iequal(challengePart, "nc"))
-											authInfo.nonceCount = tools::string::trim(tuple[1], '"');
-										else {
-											if (tools::string::iequal(challengePart, "cnonce"))
-												authInfo.cnonce = tools::string::trim(tuple[1], '"');
-											else if (tools::string::iequal(challengePart, "response"))
-												authInfo.response = tools::string::trim(tuple[1], '"');
-
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+				else if (tools::string::iequal(challengePart, "nonce"))
+					authInfo.nonce = tools::string::trim(tuple[1], '"');
+				else if (tools::string::iequal(challengePart, "opaque"))
+					authInfo.opaque = tools::string::trim(tuple[1], '"');
+				else if (tools::string::iequal(challengePart, "username"))
+					authInfo.user = tools::string::trim(tuple[1], '"');
+				else if (tools::string::iequal(challengePart, "uri"))
+					authInfo.uri = tools::string::trim(tuple[1], '"');
+				else if (tools::string::iequal(challengePart, "qop"))
+					authInfo.qop = tools::string::trim(tuple[1], '"');
+				else if (tools::string::iequal(challengePart, "nc"))
+					authInfo.nonceCount = tools::string::trim(tuple[1], '"');
+				else if (tools::string::iequal(challengePart, "cnonce"))
+					authInfo.cnonce = tools::string::trim(tuple[1], '"');
+				else if (tools::string::iequal(challengePart, "response"))
+					authInfo.response = tools::string::trim(tuple[1], '"');
 			}
-		} else
+		} else {
 			authInfo.type = AUTH_NONE;
+		}
 	}
 }
 
@@ -372,14 +359,13 @@ dialogue::requestAuthentication(const dodoString &realm,
 
 	if (type == AUTH_BASIC)
 		HEADERS.insert(make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
-	else if (type == AUTH_DIGEST) {
+	else if (type == AUTH_DIGEST)
 		HEADERS.insert(make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") +
 								 realm +
 								 "\", qop=\"auth\", nonce=\"" +
 								 tools::code::MD5Hex(tools::misc::stringRandom(16)) +
 								 "\", opaque=\"" +
 								 tools::code::MD5Hex(tools::misc::stringRandom(16)) + "\""));
-	}
 }
 
 //-------------------------------------------------------------------
@@ -402,8 +388,7 @@ dialogue::isAuthenticated(const dodoString &user,
 {
 	if (authInfo.type == AUTH_BASIC)
 		return (tools::string::equal(user, authInfo.user) && tools::string::equal(password, authInfo.password));
-	else {
-		if (authInfo.type == AUTH_DIGEST) {
+	else if (authInfo.type == AUTH_DIGEST) {
 			unsigned char HA[16];
 			tools::code::__MD5Context__ context;
 
@@ -442,8 +427,8 @@ dialogue::isAuthenticated(const dodoString &user,
 			tools::code::MD5Final(HA, &context);
 
 			return (tools::string::equal(tools::code::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
-		} else
-			return false;
+	} else {
+		return false;
 	}
 }
 
@@ -465,12 +450,10 @@ dialogue::detectMethod()
 {
 	if (tools::string::iequal(ENVIRONMENT[ENVIRONMENT_REQUESTMETHOD], "GET"))
 		requestMethod = REQUEST_METHOD_GET;
-	else {
-		if (tools::string::iequal(ENVIRONMENT[ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[ENVIRONMENT_REQUESTMETHOD].empty())
-			requestMethod = REQUEST_METHOD_POST;
-		else
-			requestMethod = REQUEST_METHOD_GET_POST;
-	}
+	else if (tools::string::iequal(ENVIRONMENT[ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[ENVIRONMENT_REQUESTMETHOD].empty())
+		requestMethod = REQUEST_METHOD_POST;
+	else
+		requestMethod = REQUEST_METHOD_GET_POST;
 }
 
 //-------------------------------------------------------------------
@@ -550,9 +533,9 @@ dialogue::makeEnv()
 void
 dialogue::initHeaders(dodoMap<short, dodoString> &headers)
 {
-	if (headers.size() > 0)
+	if (headers.size() > 0) {
 		HEADERS.insert(headers.begin(), headers.end());
-	else {
+	} else {
 		HEADERS.insert(make_pair(RESPONSE_HEADER_CONTENTTYPE, dodoString("text/html")));
 		HEADERS.insert(make_pair(RESPONSE_HEADER_XPOWEREDBY, dodoString(PACKAGE_NAME "/" PACKAGE_VERSION)));
 	}
@@ -609,13 +592,16 @@ dialogue::printHeaders() const
 //-------------------------------------------------------------------
 
 void
-dialogue::makeContent()
+dialogue::makeContent(unsigned long postSize)
 {
 	unsigned long blockSize = tools::string::stringToUL(ENVIRONMENT[ENVIRONMENT_CONTENTLENGTH]);
 	unsigned long blockSizeOrig;
 
 	if (blockSize <= 0)
 		return ;
+
+	if (blockSize > postSize)
+		blockSize = postSize;
 
 	blockSizeOrig = io.blockSize;
 	io.blockSize = blockSize;
@@ -707,9 +693,9 @@ dialogue::makePost()
 
 							file.size = i->size() - temp1 - 2;
 
-							if (postFilesInMem)
+							if (postFilesInMem) {
 								file.data.assign(i->data() + temp1, file.size);
-							else {
+							} else {
 								file.error = FILE_ERROR_NONE;
 
 								ptr = new char[pathLength];
@@ -757,9 +743,9 @@ dialogue::makePost()
 									}
 								} else {
 									if (fwrite(i->data() + temp1, file.size, 1, fp) == 0) {
-										if (errno == ENOMEM)
+										if (errno == ENOMEM) {
 											file.error = FILE_ERROR_NO_SPACE;
-										else {
+										} else {
 											if (fclose(fp) != 0)
 												throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 

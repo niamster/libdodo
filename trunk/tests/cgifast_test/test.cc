@@ -22,7 +22,7 @@ handler(exchange &ex)
 {
 	using namespace cgi;
 
-	dialogue d(ex, true);
+	dialogue d(ex, POST_SIZE_LIMIT, true);
 
 	d.setCookie(cookie("test", "Ni@m"));
 

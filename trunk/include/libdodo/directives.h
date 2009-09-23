@@ -103,4 +103,9 @@
  * max depth of calls for call trace
  */
 #define CALLSTACK_MAXLEN		128
+
+/**
+ * Limit of the size of the 'multipart/form-data' CGI POST request
+ */
+#define POST_SIZE_LIMIT			8388608
 #endif

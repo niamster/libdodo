@@ -67,12 +67,14 @@ namespace dodo {
 			/**
 			 * constructor
 			 * @param io defines I/O interface
+			 * @param postSize defines of the limit of the 'multipart/form-data' CGI POST request for processing
 			 * @param autocleanFiles defines whether to clean POST files in destructor
 			 * @param filesInMem defines place of POST files[disk or memory]
 			 * @param tmpDir defines directory for POST files if on they are saved on the disk
 			 * @note header won't be printed until print/printString/desctructor is called
 			 */
 			dialogue(exchange   &io,
+					 unsigned long postSize = POST_SIZE_LIMIT,
 					 bool       autocleanFiles = true,
 					 bool       filesInMem = true,
 					 dodoString tmpDir = "/tmp/");
@@ -81,6 +83,7 @@ namespace dodo {
 			 * constructor
 			 * @param io defines I/O interface
 			 * @param headers defines response headers
+			 * @param postSize defines of the limit of the 'multipart/form-data' CGI POST request for processing
 			 * @param autocleanFiles defines whether to clean POST files in destructor
 			 * @param filesInMem defines place of POST files[disk or memory]
 			 * @param tmpDir defines directory for POST files if on they are saved on the disk
@@ -88,6 +91,7 @@ namespace dodo {
 			 */
 			dialogue(exchange &io,
 					 dodoMap<short, dodoString> &headers,
+					 unsigned long postSize = POST_SIZE_LIMIT,
 					 bool autocleanFiles = true,
 					 bool filesInMem = true,
 					 dodoString tmpDir = "/tmp/");
@@ -214,8 +218,9 @@ namespace dodo {
 
 			/**
 			 * get contents of stdin for the POST request
+			 * @param postSize defines of the limit of the 'multipart/form-data' CGI POST request for processing
 			 */
-			void makeContent();
+			void makeContent(unsigned long postSize);
 
 			/**
 			 * get environment variables
