@@ -1,0 +1,46 @@
+/***************************************************************************
+ *			  strnlen.h
+ *
+ *	Wed Sep 30 23:52:48 2009
+ *	Copyright  2009	 Ni@m
+ *	niam.niam@gmail.com
+ ****************************************************************************/
+
+/*
+ *	This program is free software; you can redistribute it and/or modify
+ *	it under the terms of the GNU Lesser General Public License version 2.1 as published by
+ *	the Free Software Foundation;
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Library General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Lesser General Public License
+ *	along with this program; if not, write to the Free Software
+ *	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+/**
+ * vim indentation settings
+ * set tabstop=4
+ * set shiftwidth=4
+ */
+
+#include <libdodo/directives.h>
+
+#ifdef NO_STRNLEN
+#include <sys/types.h>
+
+size_t strnlen(const char *s, size_t maxlen)
+{
+	if (!s)
+		return 0;
+
+	register size_t len = 0;
+	for (; s[len] != '\0' && len < maxlen; ++len)
+		;
+
+	return len;
+}
+#endif

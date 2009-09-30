@@ -103,4 +103,11 @@
  * Limit of the size of the 'multipart/form-data' CGI POST request
  */
 #define POST_SIZE_LIMIT			8388608
+
+#ifdef NO_STRNLEN
+#include <sys/types.h>
+
+size_t strnlen(const char *s, size_t maxlen);
+#endif
+
 #endif

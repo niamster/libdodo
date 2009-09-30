@@ -765,6 +765,11 @@ AC_CHECK_HEADERS([net/if.h],
 	 #endif
 	]])
 
+AC_LANG_PUSH(C++)
+AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <string.h>]], [[strnlen("test", 4);]]), [],
+	[echo -n -e "#define NO_STRNLEN 1\n\n" >> include/libdodo/directives.runtime.h])
+AC_LANG_POP()
+
 echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
 
 ##
