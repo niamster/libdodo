@@ -32,9 +32,7 @@
 #ifdef DL_EXT
 #include <dlfcn.h>
 #endif
-#ifdef CALLSTACK_EX
-#include <dlfcn.h>
-#include <execinfo.h>
+#ifdef __GNUC__
 #include <cxxabi.h>
 #endif
 #ifdef PTHREAD_EXT
@@ -44,6 +42,8 @@
 #include <stdio.h>
 
 #include <libdodo/exceptionBasic.h>
+
+#define CALLSTACK_MAXLEN 64
 
 using namespace dodo::exception;
 
@@ -425,45 +425,364 @@ basic::basic(int              a_module,
 {
 	syncThreadStack tg;
 
-#ifdef CALLSTACK_EX
-	void *trace[CALLSTACK_MAXLEN];
-
+#ifdef __GNUC__
 	using namespace abi;
-
-	Dl_info dlinfo;
-
-	int status;
-	const char *symname;
-	char *demangled;
 
 	__call__ call;
 
-	int trace_size = ::backtrace(trace, CALLSTACK_MAXLEN);
-	char **symbols = backtrace_symbols(trace, trace_size);
-
-	for (int i = 0; i < trace_size; ++i) {
-		if (dladdr(trace[i], &dlinfo) == 0)
-			continue;
-
-		symname = dlinfo.dli_sname;
-
-		demangled = __cxa_demangle(symname, NULL, 0, &status);
-		if (status == 0 && demangled != NULL)
-			symname = demangled;
-
-		call.address = trace[i];
-		call.symbol = (symname != NULL) ? symname : "undefined";
-		call.object = (dlinfo.dli_fname != NULL) ? dlinfo.dli_fname : "undefined";
-
-		callStack.push_back(call);
-
-		if (demangled)
-			free(demangled);
-	}
-
-	free(symbols);
+#ifdef DL_EXT
+	Dl_info dlinfo;
+	const char *symname;
+	char *demangled;
+	int status;
 #endif
 
+	for (int i=0;i<CALLSTACK_MAXLEN;++i) {
+		switch (i) {
+			case 0:
+				if(!__builtin_frame_address(0))
+					goto handle;
+				call.address = __builtin_return_address(0);
+				break;
+			case 1:
+				if(!__builtin_frame_address(1))
+					goto handle;
+				call.address = __builtin_return_address(1);
+				break;
+			case 2:
+				if(!__builtin_frame_address(2))
+					goto handle;
+				call.address = __builtin_return_address(2);
+				break;
+			case 3:
+				if(!__builtin_frame_address(3))
+					goto handle;
+				call.address = __builtin_return_address(3);
+				break;
+			case 4:
+				if(!__builtin_frame_address(4))
+					goto handle;
+				call.address = __builtin_return_address(4);
+				break;
+			case 5:
+				if(!__builtin_frame_address(5))
+					goto handle;
+				call.address = __builtin_return_address(5);
+				break;
+			case 6:
+				if(!__builtin_frame_address(6))
+					goto handle;
+				call.address = __builtin_return_address(6);
+				break;
+			case 7:
+				if(!__builtin_frame_address(7))
+					goto handle;
+				call.address = __builtin_return_address(7);
+				break;
+			case 8:
+				if(!__builtin_frame_address(8))
+					goto handle;
+				call.address = __builtin_return_address(8);
+				break;
+			case 9:
+				if(!__builtin_frame_address(9))
+					goto handle;
+				call.address = __builtin_return_address(9);
+				break;
+			case 10:
+				if(!__builtin_frame_address(10))
+					goto handle;
+				call.address = __builtin_return_address(10);
+				break;
+			case 11:
+				if(!__builtin_frame_address(11))
+					goto handle;
+				call.address = __builtin_return_address(11);
+				break;
+			case 12:
+				if(!__builtin_frame_address(12))
+					goto handle;
+				call.address = __builtin_return_address(12);
+				break;
+			case 13:
+				if(!__builtin_frame_address(13))
+					goto handle;
+				call.address = __builtin_return_address(13);
+				break;
+			case 14:
+				if(!__builtin_frame_address(14))
+					goto handle;
+				call.address = __builtin_return_address(14);
+				break;
+			case 15:
+				if(!__builtin_frame_address(15))
+					goto handle;
+				call.address = __builtin_return_address(15);
+				break;
+			case 16:
+				if(!__builtin_frame_address(16))
+					goto handle;
+				call.address = __builtin_return_address(16);
+				break;
+			case 17:
+				if(!__builtin_frame_address(17))
+					goto handle;
+				call.address = __builtin_return_address(17);
+				break;
+			case 18:
+				if(!__builtin_frame_address(18))
+					goto handle;
+				call.address = __builtin_return_address(18);
+				break;
+			case 19:
+				if(!__builtin_frame_address(19))
+					goto handle;
+				call.address = __builtin_return_address(19);
+				break;
+			case 20:
+				if(!__builtin_frame_address(20))
+					goto handle;
+				call.address = __builtin_return_address(20);
+				break;
+			case 21:
+				if(!__builtin_frame_address(21))
+					goto handle;
+				call.address = __builtin_return_address(21);
+				break;
+			case 22:
+				if(!__builtin_frame_address(22))
+					goto handle;
+				call.address = __builtin_return_address(22);
+				break;
+			case 23:
+				if(!__builtin_frame_address(23))
+					goto handle;
+				call.address = __builtin_return_address(23);
+				break;
+			case 24:
+				if(!__builtin_frame_address(24))
+					goto handle;
+				call.address = __builtin_return_address(24);
+				break;
+			case 25:
+				if(!__builtin_frame_address(25))
+					goto handle;
+				call.address = __builtin_return_address(25);
+				break;
+			case 26:
+				if(!__builtin_frame_address(26))
+					goto handle;
+				call.address = __builtin_return_address(26);
+				break;
+			case 27:
+				if(!__builtin_frame_address(27))
+					goto handle;
+				call.address = __builtin_return_address(27);
+				break;
+			case 28:
+				if(!__builtin_frame_address(28))
+					goto handle;
+				call.address = __builtin_return_address(28);
+				break;
+			case 29:
+				if(!__builtin_frame_address(29))
+					goto handle;
+				call.address = __builtin_return_address(29);
+				break;
+			case 30:
+				if(!__builtin_frame_address(30))
+					goto handle;
+				call.address = __builtin_return_address(30);
+				break;
+			case 31:
+				if(!__builtin_frame_address(31))
+					goto handle;
+				call.address = __builtin_return_address(31);
+				break;
+			case 32:
+				if(!__builtin_frame_address(32))
+					goto handle;
+				call.address = __builtin_return_address(32);
+				break;
+			case 33:
+				if(!__builtin_frame_address(33))
+					goto handle;
+				call.address = __builtin_return_address(33);
+				break;
+			case 34:
+				if(!__builtin_frame_address(34))
+					goto handle;
+				call.address = __builtin_return_address(34);
+				break;
+			case 35:
+				if(!__builtin_frame_address(35))
+					goto handle;
+				call.address = __builtin_return_address(35);
+				break;
+			case 36:
+				if(!__builtin_frame_address(36))
+					goto handle;
+				call.address = __builtin_return_address(36);
+				break;
+			case 37:
+				if(!__builtin_frame_address(37))
+					goto handle;
+				call.address = __builtin_return_address(37);
+				break;
+			case 38:
+				if(!__builtin_frame_address(38))
+					goto handle;
+				call.address = __builtin_return_address(38);
+				break;
+			case 39:
+				if(!__builtin_frame_address(39))
+					goto handle;
+				call.address = __builtin_return_address(39);
+				break;
+			case 40:
+				if(!__builtin_frame_address(40))
+					goto handle;
+				call.address = __builtin_return_address(40);
+				break;
+			case 41:
+				if(!__builtin_frame_address(41))
+					goto handle;
+				call.address = __builtin_return_address(41);
+				break;
+			case 42:
+				if(!__builtin_frame_address(42))
+					goto handle;
+				call.address = __builtin_return_address(42);
+				break;
+			case 43:
+				if(!__builtin_frame_address(43))
+					goto handle;
+				call.address = __builtin_return_address(43);
+				break;
+			case 44:
+				if(!__builtin_frame_address(44))
+					goto handle;
+				call.address = __builtin_return_address(44);
+				break;
+			case 45:
+				if(!__builtin_frame_address(45))
+					goto handle;
+				call.address = __builtin_return_address(45);
+				break;
+			case 46:
+				if(!__builtin_frame_address(46))
+					goto handle;
+				call.address = __builtin_return_address(46);
+				break;
+			case 47:
+				if(!__builtin_frame_address(47))
+					goto handle;
+				call.address = __builtin_return_address(47);
+				break;
+			case 48:
+				if(!__builtin_frame_address(48))
+					goto handle;
+				call.address = __builtin_return_address(48);
+				break;
+			case 49:
+				if(!__builtin_frame_address(49))
+					goto handle;
+				call.address = __builtin_return_address(49);
+				break;
+			case 50:
+				if(!__builtin_frame_address(50))
+					goto handle;
+				call.address = __builtin_return_address(50);
+				break;
+			case 51:
+				if(!__builtin_frame_address(51))
+					goto handle;
+				call.address = __builtin_return_address(51);
+				break;
+			case 52:
+				if(!__builtin_frame_address(52))
+					goto handle;
+				call.address = __builtin_return_address(52);
+				break;
+			case 53:
+				if(!__builtin_frame_address(53))
+					goto handle;
+				call.address = __builtin_return_address(53);
+				break;
+			case 54:
+				if(!__builtin_frame_address(54))
+					goto handle;
+				call.address = __builtin_return_address(54);
+				break;
+			case 55:
+				if(!__builtin_frame_address(55))
+					goto handle;
+				call.address = __builtin_return_address(55);
+				break;
+			case 56:
+				if(!__builtin_frame_address(56))
+					goto handle;
+				call.address = __builtin_return_address(56);
+				break;
+			case 57:
+				if(!__builtin_frame_address(57))
+					goto handle;
+				call.address = __builtin_return_address(57);
+				break;
+			case 58:
+				if(!__builtin_frame_address(58))
+					goto handle;
+				call.address = __builtin_return_address(58);
+				break;
+			case 59:
+				if(!__builtin_frame_address(59))
+					goto handle;
+				call.address = __builtin_return_address(59);
+				break;
+			case 60:
+				if(!__builtin_frame_address(60))
+					goto handle;
+				call.address = __builtin_return_address(60);
+				break;
+			case 61:
+				if(!__builtin_frame_address(61))
+					goto handle;
+				call.address = __builtin_return_address(61);
+				break;
+			case 62:
+				if(!__builtin_frame_address(62))
+					goto handle;
+				call.address = __builtin_return_address(62);
+				break;
+			case 63:
+				if(!__builtin_frame_address(63))
+					goto handle;
+				call.address = __builtin_return_address(63);
+				break;
+		}
+
+#ifdef DL_EXT
+		if (dladdr(call.address, &dlinfo) != 0) {
+			symname = dlinfo.dli_sname;
+
+			demangled = __cxa_demangle(symname, NULL, 0, &status);
+			if (status == 0 && demangled != NULL)
+				symname = demangled;
+
+			call.symbol = (symname != NULL) ? symname : "undefined";
+			call.object = (dlinfo.dli_fname != NULL) ? dlinfo.dli_fname : "undefined";
+
+
+			if (demangled)
+				free(demangled);
+		}
+#endif
+
+		callStack.push_back(call);
+	}
+
+  handle:
+#endif
 	instance();
 
 	++instances;
@@ -504,7 +823,6 @@ basic::~basic() throw ()
 
 //-------------------------------------------------------------------
 
-#ifdef CALLSTACK_EX
 dodoString
 basic::backtrace()
 {
@@ -520,7 +838,6 @@ basic::backtrace()
 
 	return stack;
 }
-#endif
 
 //-------------------------------------------------------------------
 

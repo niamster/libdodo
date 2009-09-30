@@ -765,21 +765,6 @@ AC_CHECK_HEADERS([net/if.h],
 	 #endif
 	]])
 
-AC_CHECK_HEADER([execinfo.h], [CALLSTACK_EX="yes"], [CALLSTACK_EX="no"])
-if test "$CALLSTACK_EX" = "yes" -a "$MOD_DL" != "no"
-then
-	AC_LANG_PUSH(C++)
-	AC_CHECK_HEADER([cxxabi.h], [], AC_MSG_ERROR(cxxabi.h header was not found))
-	AC_LANG_POP()
-
-	echo -n -e "#define CALLSTACK_EX 1\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\ncallstack\t\t\t\t\t\t\tenabled"
-else
-	RESULT="$RESULT\ncallstack\t\t\t\t\t\t\tdisabled"
-fi
-
-
 echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
 
 ##

@@ -118,7 +118,6 @@ namespace dodo {
 			MODULE_ENUMSIZE
 		};
 
-#ifdef CALLSTACK_EX
 		/**
 		 * @struct __call__
 		 * @brief describes function call in call stack
@@ -128,7 +127,6 @@ namespace dodo {
 			dodoString symbol;      ///< name of the call
 			void       *address;    ///< address of the call
 		};
-#endif
 
 		/**
 		 * @class basic
@@ -219,12 +217,10 @@ namespace dodo {
 			 */
 			virtual const char *what() const throw ();
 
-#ifdef CALLSTACK_EX
 			/**
 			 * @return call stack to the exception point
 			 */
 			virtual dodoString backtrace();
-#endif
 
 			int source;                      ///< module where exception has been thrown
 			int function;                         ///< function where exception has been thrown, @see *Ex.h headers for IDs
@@ -235,9 +231,7 @@ namespace dodo {
 			dodoString file;                    ///< file where exception has been thrown
 			dodoString message;                 ///< custom message that might clarify the exception
 
-#ifdef CALLSTACK_EX
 			dodoArray<__call__> callStack;      ///< call stack of the raised exception
-#endif
 
 			/**
 			 * set handler for exceptions for specific module

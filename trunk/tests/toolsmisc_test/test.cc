@@ -16,7 +16,7 @@ using namespace io;
 void
 handler(int module, dodo::exception::basic *ex, void *data)
 {
-	cout << "baseHandler: " << ex->errStr << endl;
+	cout << "baseHandler: " << (dodoString)*ex << endl << ex->backtrace() << endl;
 }
 
 int main(int argc, char **argv)
