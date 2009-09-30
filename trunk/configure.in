@@ -184,9 +184,18 @@ fi
 AC_CHECK_LIB([rt], [shm_open], [], AC_MSG_ERROR(rt lib was not found))
 LDFLAGS="$LDFLAGS -lrt"
 
+case "$OS" in
+	FreeBSD)
+		DEFAULT_IPC=XSI
+		;;
+	Linux)
+		DEFAULT_IPC=POSIX
+		;;
+esac
+
 AC_ARG_WITH([ipc],
 	[AS_HELP_STRING([--with-ipc@<:@=ipc implementation@:>@], [use IPC implementation(supported: POSIX, XSI), POSIX by default])],
- 		[MOD_IPC_IMPL="$withval"], [MOD_IPC_IMPL="POSIX"])
+ 		[MOD_IPC_IMPL="$withval"], [MOD_IPC_IMPL=$DEFAULT_IPC])
 case "$MOD_IPC_IMPL" in
 	POSIX)
 		echo -n -e "#define POSIX_SEMAPHORES 1\n\n" >> include/libdodo/directives.runtime.h

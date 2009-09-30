@@ -5449,12 +5449,21 @@ fi
 
 LDFLAGS="$LDFLAGS -lrt"
 
+case "$OS" in
+	FreeBSD)
+		DEFAULT_IPC=XSI
+		;;
+	Linux)
+		DEFAULT_IPC=POSIX
+		;;
+esac
+
 
 # Check whether --with-ipc was given.
 if test "${with_ipc+set}" = set; then
   withval=$with_ipc; MOD_IPC_IMPL="$withval"
 else
-  MOD_IPC_IMPL="POSIX"
+  MOD_IPC_IMPL=$DEFAULT_IPC
 fi
 
 case "$MOD_IPC_IMPL" in
