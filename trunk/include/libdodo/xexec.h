@@ -65,7 +65,7 @@ namespace dodo {
 #ifdef DL_EXT
 		/**
 		 * @struct __module__
-		 * @brief is returned from moduleInit in the library
+		 * @brief is returned from initModule in the library
 		 */
 		struct __module__ {
 			char  name[64];         ///< name of the library
@@ -75,19 +75,19 @@ namespace dodo {
 		};
 
 		/**
-		 * @typedef moduleInit
+		 * @typedef initModule
 		 * @brief defines type of init function for library
 		 * @param data defines user data
 		 * @note name in the library must be initXexecModule
 		 */
-		typedef __module__ (*moduleInit)(void *data);
+		typedef __module__ (*initModule)(void *data);
 
 		/**
-		 * @typedef moduleDeinit
+		 * @typedef deinitModule
 		 * @brief defines type of deinit function for library
 		 * @note name in the library must be deinitXexecModule
 		 */
-		typedef void (*moduleDeinit)();
+		typedef void (*deinitModule)();
 #endif
 
 		/**

@@ -73,14 +73,14 @@ xexec::xexec() : safeXExecs(true),
 xexec::~xexec()
 {
 #ifdef DL_EXT
-	moduleDeinit deinit;
+	deinitModule deinit;
 
 	dodoList<__item__>::iterator i(preExec.begin()), j(preExec.end());
 	for (; i != j; ++i) {
 		if (i->handle == NULL)
 			continue;
 
-		deinit = (moduleDeinit)dlsym(i->handle, "deinitXexecModule");
+		deinit = (deinitModule)dlsym(i->handle, "deinitXexecModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -95,7 +95,7 @@ xexec::~xexec()
 		if (i->handle == NULL)
 			continue;
 
-		deinit = (moduleDeinit)dlsym(i->handle, "deinitXexecModule");
+		deinit = (deinitModule)dlsym(i->handle, "deinitXexecModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -142,9 +142,9 @@ xexec::removeXExec(int id)
 
 #ifdef DL_EXT
 	if (current->handle != NULL) {
-		moduleDeinit deinit;
+		deinitModule deinit;
 
-		deinit = (moduleDeinit)dlsym(current->handle, "deinitXexecModule");
+		deinit = (deinitModule)dlsym(current->handle, "deinitXexecModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -224,7 +224,7 @@ xexec::module(const dodoString &module,
 	if (handle == NULL)
 		throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	moduleInit init = (moduleInit)dlsym(handle, "initXexecModule");
+	initModule init = (initModule)dlsym(handle, "initXexecModule");
 	if (init == NULL)
 		throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -260,7 +260,7 @@ xexec::addXExec(const dodoString &module,
 	if (e.handle == NULL)
 		throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	moduleInit init = (moduleInit)dlsym(e.handle, "initXexecModule");
+	initModule init = (initModule)dlsym(e.handle, "initXexecModule");
 	if (init == NULL)
 		throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -283,6 +283,12 @@ xexec::addXExec(const dodoString &module,
 		postExec.push_back(e);
 		postExecId = e.id;
 	}
+
+	deinitModule deinit = (deinitModule)dlsym(e.handle, "deinitXexecModule");
+	if (deinit == NULL)
+		throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+
+	deinit();
 }
 
 #endif
