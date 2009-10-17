@@ -101,14 +101,12 @@ bool basic::handlerMap[] = {
 	false,
 	false,
 	false,
-	false,
 	false
 };
 
 //-------------------------------------------------------------------
 
 basic::handler basic::handlers[] = {
-	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -213,7 +211,6 @@ void *basic::handlerData[] = {
 	NULL,
 	NULL,
 	NULL,
-	NULL,
 	NULL
 };
 
@@ -269,14 +266,12 @@ bool basic::handlesOpened[] = {
 	false,
 	false,
 	false,
-	false,
 	false
 };
 
 //-------------------------------------------------------------------
 
 void *basic::handles[] = {
-	NULL,
 	NULL,
 	NULL,
 	NULL,

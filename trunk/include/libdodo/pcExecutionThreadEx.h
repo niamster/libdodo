@@ -1,8 +1,8 @@
 /***************************************************************************
- *            pcJobProcessManagerEx.h
+ *            pcExecutionThreadEx.h
  *
- *  Tue Feb 27 2007
- *  Copyright  2007  Ni@m
+ *  Wed Oct 07 2009
+ *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCJOBPROCESSMANAGEREX_H_
-#define _PCJOBPROCESSMANAGEREX_H_ 1
+#ifndef _PCEXECUTIONTHREADEX_H_
+#define _PCEXECUTIONTHREADEX_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -36,40 +36,35 @@
 
 namespace dodo {
 	namespace pc {
-		namespace job {
-			namespace process {
-				/**
-				 * libdodo defined errors
-				 */
-				enum managerExR {
-					MANAGEREX_ISALREADYRUNNING,
-					MANAGEREX_ISNOTLAUNCHED,
-					MANAGEREX_NOTFOUND,
-				};
+		namespace execution {
+			/**
+			 * libdodo defined errors
+			 */
+			enum threadExR {
+				THREADEX_ISALREADYRUNNING,
+				THREADEX_ISNOTLAUNCHED,
+				THREADEX_ISDETACHED,
+			};
 
-				/**
-				 * explanations for libdodo defined errors
-				 */
-#define PCJOBPROCESSMANAGEREX_ISALREADYRUNNING_STR "Process is currently running"
-#define PCJOBPROCESSMANAGEREX_ISNOTLAUNCHED_STR "Process is not launched"
-#define PCJOBPROCESSMANAGEREX_NOTFOUND_STR         "Process not found"
+			/**
+			 * libdodo defined errors explanation
+			 */
+#define PCEXECUTIONTHREADEX_ISALREADYRUNNING_STR    "Thread is currently running"
+#define PCEXECUTIONTHREADEX_ISNOTLAUNCHED_STR		"Thread is not launched"
+#define PCEXECUTIONTHREADEX_ISDETACHED_STR          "Thread is detached"
 
-				/**
-				 * IDs of functions where exception might be thrown
-				 */
-				enum managerFunctionsID {
-					MANAGEREX__ISRUNNING,
-					MANAGEREX_ADDNRUN,
-					MANAGEREX_RUN,
-					MANAGEREX_REMOVE,
-					MANAGEREX_STOP,
-					MANAGEREX_WAIT,
-					MANAGEREX_ISRUNNING,
+			/**
+			 * ID of function where exception was thrown
+			 */
+			enum threadFunctionsID {
+				THREADEX_RUN,
+				THREADEX_WAIT,
+				THREADEX_STOP,
+				THREADEX_ISRUNNING,
+				THREADEX_CONSTRUCTOR,
 #ifdef DL_EXT
-					MANAGEREX_MODULE,
-					MANAGEREX_ADD,
+				THREADEX_MODULE,
 #endif
-				};
 			};
 		};
 	};

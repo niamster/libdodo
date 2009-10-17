@@ -30,11 +30,12 @@
 #ifndef _PC_H_
 #define _PC_H_ 1
 
-#include <libdodo/pcJobManager.h>
-#include <libdodo/pcJobProcessManager.h>
-#include <libdodo/pcJobProcessManagerEx.h>
-#include <libdodo/pcJobThreadManager.h>
-#include <libdodo/pcJobThreadManagerEx.h>
+#include <libdodo/pcExecutionJob.h>
+#include <libdodo/pcExecutionThread.h>
+#include <libdodo/pcExecutionThreadEx.h>
+#include <libdodo/pcExecutionProcess.h>
+#include <libdodo/pcExecutionProcessEx.h>
+#include <libdodo/pcExecutionManager.h>
 #include <libdodo/pcSyncDataCollection.h>
 #include <libdodo/pcSyncDataSingle.h>
 #include <libdodo/pcSyncProcessDataCollection.h>

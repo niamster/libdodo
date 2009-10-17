@@ -5,6 +5,7 @@ syntax:glob
 .cproject
 .settings
 *.so*
+*.a
 *.cgi
 *.fcgi
 *.log
@@ -13,6 +14,7 @@ syntax:glob
 *.jpg
 *.png
 *.swp
+*.d
 test
 module
 directives.runtime.h

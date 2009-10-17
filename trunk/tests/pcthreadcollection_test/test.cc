@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::pc::job::thread;
+using namespace dodo::pc;
 using namespace dodo::pc::sync::thread;
 
 using namespace std;
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
 		::data.set((void *)data);
 
-		manager manager;
+		execution::manager<execution::thread> manager;
 
 		const int amount = 10;
 
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 		for (int i = 0; i < amount; ++i)
 		{
 			ids[i] = tools::string::lToString(i);
-			pos[i] = manager.add(thread, (void *)ids[i].c_str(), pc::job::ON_DESTRUCTION_STOP);
+			pos[i] = manager.add(execution::thread(thread, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
 		}
 
 		cout << "Launching threads" << endl;

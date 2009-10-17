@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::pc::job::thread;
+using namespace dodo::pc::execution;
 
 using namespace std;
 
@@ -40,7 +40,7 @@ threadRead(void *data)
 	}
 	catch (dodo::exception::basic &ex)
 	{
-		cout << (dodoString)ex << ex.line << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	cout << "<-READER\n";
@@ -75,7 +75,7 @@ threadWrite(void *data)
 	}
 	catch (dodo::exception::basic &ex)
 	{
-		cout << (dodoString)ex << ex.line << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	cout << "<-WRITER\n";
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		manager threads;
+		manager<thread> threads;
 
 		cout << "\n~~using one pipe for the thread~~\n";
 
@@ -96,9 +96,13 @@ int main(int argc, char **argv)
 		pipe1.open();
 
 		///< write first to avoid deadlock due to io::pipe is threadsafe and here one object is used
-		threads.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&pipe1), pc::job::ON_DESTRUCTION_STOP);
+		threads.run(threads.add(thread(&threadWrite,
+								(void *)dynamic_cast<io::channel *>(&pipe1),
+								ON_DESTRUCTION_STOP)));
 		tools::os::sleep(1);
-		threads.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&pipe1), pc::job::ON_DESTRUCTION_STOP);
+		threads.run(threads.add(thread(&threadRead,
+									   (void *)dynamic_cast<io::channel *>(&pipe1),
+									   ON_DESTRUCTION_STOP)));
 
 		threads.wait();
 
@@ -110,8 +114,12 @@ int main(int argc, char **argv)
 		//pipe2.clone(pipe1);
 
 		///< use a copy, so no need to keep an order
-		threads.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&pipe1), pc::job::ON_DESTRUCTION_STOP);
-		threads.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&pipe2), pc::job::ON_DESTRUCTION_STOP);
+		threads.run(threads.add(thread(&threadRead,
+									   (void *)dynamic_cast<io::channel *>(&pipe1),
+									   ON_DESTRUCTION_STOP)));
+		threads.run(threads.add(thread(&threadWrite,
+									   (void *)dynamic_cast<io::channel *>(&pipe2),
+									   ON_DESTRUCTION_STOP)));
 
 		threads.wait();
 
@@ -122,15 +130,18 @@ int main(int argc, char **argv)
 		io::file::fifo fifo2;
 		fifo2.open("fifo.file", io::file::fifo::OPEN_MODE_WRITE);
 
-		///< use a copy, so no need to keep an order
-		threads.addNRun(&threadWrite, (void *)dynamic_cast<io::channel *>(&fifo2), pc::job::ON_DESTRUCTION_STOP);
-		threads.addNRun(&threadRead, (void *)dynamic_cast<io::channel *>(&fifo1), pc::job::ON_DESTRUCTION_STOP);
+		threads.run(threads.add(thread(&threadWrite,
+									   (void *)dynamic_cast<io::channel *>(&fifo2),
+									   ON_DESTRUCTION_STOP)));
+		threads.run(threads.add(thread(&threadRead,
+									   (void *)dynamic_cast<io::channel *>(&fifo1),
+									   ON_DESTRUCTION_STOP)));
 
 		threads.wait();
 	}
 	catch (dodo::exception::basic &ex)
 	{
-		cout << (dodoString)ex << ex.line << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;

@@ -10,7 +10,7 @@
 #include <string.h>
 
 using namespace dodo;
-using namespace dodo::pc::job::process;
+using namespace dodo::pc;
 
 using namespace std;
 
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 		collectionIdx = collection.add((char *)"@test@\n");
 		data0.set((char *)"!test!\n");
 
-		manager manager;
+		execution::manager<execution::process> manager;
 
 		const int amount = 10;
 
@@ -121,9 +121,9 @@ int main(int argc, char **argv)
 		{
 			ids[i] = tools::string::lToString(i);
 			if (i%2 == 0)
-				processes[i] = manager.add(::process0, (void *)ids[i].c_str(), pc::job::ON_DESTRUCTION_STOP);
+				processes[i] = manager.add(execution::process(::process0, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
 			else
-				processes[i] = manager.add(::process1, (void *)ids[i].c_str(), pc::job::ON_DESTRUCTION_STOP);
+				processes[i] = manager.add(execution::process(::process1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
 		}
 
 		for (int i = 0; i < amount; ++i)

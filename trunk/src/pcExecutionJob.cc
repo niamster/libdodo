@@ -1,8 +1,8 @@
 /***************************************************************************
- *            pcJobManager.cc
+ *            pcExecutionJob.cc
  *
- *  Sun Oct  30 2007
- *  Copyright  2007  Ni@m
+ *  Wed Oct 07 2009
+ *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -29,11 +29,25 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/pcJobManager.h>
+#include <libdodo/pcExecutionJob.h>
 
-using namespace dodo::pc::job;
+using namespace dodo::pc::execution;
 
-manager::~manager()
+job::job() : cloned(false)
+{
+}
+
+//-------------------------------------------------------------------
+
+job::job(const job &j)
+{
+	j.cloned = true;
+}
+
+//-------------------------------------------------------------------
+
+
+job::~job()
 {
 }
 

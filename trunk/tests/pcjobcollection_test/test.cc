@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::pc::job;
+using namespace dodo::pc;
 
 using namespace std;
 
@@ -40,19 +40,16 @@ int main(int argc, char **argv)
 	{
 		const int amount = 10;
 
-		dodo::pc::job::manager *manager[amount];
+		execution::job *jobs[amount];
 
-		int jobs[amount];
 		dodoString ids[amount];
 		for (int i = 0; i < amount; ++i)
 		{
-			if (i % 2 == 0)
-				manager[i] = new thread::manager;
-			else
-				manager[i] = new process::manager;
-
 			ids[i] = tools::string::lToString(i);
-			jobs[i] = manager[i]->add(::job, (void *)ids[i].c_str(), pc::job::ON_DESTRUCTION_STOP);
+			if (i % 2 == 0)
+				jobs[i] = new execution::thread(::job, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP);
+			else
+				jobs[i] = new execution::process(::job, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP);
 		}
 
 		cout << "Launching jobs" << endl;
@@ -60,13 +57,13 @@ int main(int argc, char **argv)
 		cout.flush();
 
 		for (int i = 0; i < amount; ++i)
-			manager[i]->run(jobs[i]);
+			jobs[i]->run();
 
 		for (int i = 0; i < amount; ++i)
-			cout << "status: " << manager[i]->wait(jobs[i]) << endl;
+			cout << "status: " << jobs[i]->wait() << endl;
 
 		for (int i = 0; i < amount; ++i)
-			delete manager[i];
+			delete jobs[i];
 	}
 	catch (dodo::exception::basic &ex)
 	{

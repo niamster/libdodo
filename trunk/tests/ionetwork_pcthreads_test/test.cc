@@ -10,7 +10,7 @@
 
 using namespace dodo;
 using namespace io::network;
-using namespace dodo::pc::job;
+using namespace dodo::pc::execution;
 using namespace pc::sync::thread;
 
 using namespace std;
@@ -108,8 +108,7 @@ int main(int argc, char **argv)
 
 		bool exit_condition(false);
 
-		thread::manager manager;
-		vector<int> threads;
+		manager<thread> manager;
 
 		::data.set((void *)&exit_condition);
 
@@ -124,12 +123,14 @@ int main(int argc, char **argv)
 				}
 
 				exchange *ex = new exchange(accepted);
-				threads.push_back(manager.add(::process, (void *)ex, pc::job::ON_DESTRUCTION_KEEP_ALIVE));
-				manager.run(threads.back());
+				thread t(::process, (void *)ex, pc::execution::ON_DESTRUCTION_KEEP_ALIVE);
+				t.run();
+				manager.add(t);
 
 				try
 				{
-					vector<int>::iterator i = threads.begin(), j = threads.end();
+					dodoList<unsigned long> threads = manager.jobs();
+					dodoList<unsigned long>::iterator i = threads.begin(), j = threads.end();
 					for (;i!=j;++i)
 						if (manager.isRunning(*i))
 						{
