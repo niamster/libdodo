@@ -30,6 +30,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/pcExecutionManager.h>
+#include <libdodo/pcExecutionManagerEx.h>
 #include <libdodo/types.h>
 #include <libdodo/pcSyncSection.h>
 #include <libdodo/pcSyncThreadSection.h>
@@ -93,7 +94,7 @@ dodo::pc::execution::manager<T>::run(unsigned long id)
 	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
 	if (job == handles.end())
-		throw;
+		throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
 	job->second.run();
 }
@@ -109,7 +110,7 @@ dodo::pc::execution::manager<T>::stop(unsigned long id)
 	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
 	if (job == handles.end())
-		throw;
+		throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
 	job->second.stop();
 }
@@ -139,7 +140,7 @@ dodo::pc::execution::manager<T>::wait(unsigned long id)
 	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
 	if (job == handles.end())
-		throw;
+		throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
 	return job->second.wait();
 }
@@ -169,7 +170,7 @@ dodo::pc::execution::manager<T>::isRunning(unsigned long id) const
 	typename dodoMap<unsigned long, T>::const_iterator job = handles.find(id);
 
 	if (job == handles.end())
-		throw;
+		throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
 	return job->second.isRunning();
 }
