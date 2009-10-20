@@ -99,12 +99,8 @@ namespace dodo {
 			MODULE_PCEXECUTIONMANAGER,
 			MODULE_PCEXECUTIONPROCESS,
 			MODULE_PCEXECUTIONTHREAD,
-			MODULE_PCSYNCTHREADDATASINGLE,
-			MODULE_PCSYNCPROCESSDATASINGLE,
-			MODULE_PCSYNCTHREADDATACOLLECTION,
-			MODULE_PCSYNCPROCESSDATACOLLECTION,
-			MODULE_PCSYNCTHREADSECTION,
-			MODULE_PCSYNCPROCESSSECTION,
+			MODULE_PCSYNCTHREAD,
+			MODULE_PCSYNCPROCESS,
 			MODULE_GRAPHICSIMAGE,
 			MODULE_GRAPHICSTRANSFORM,
 			MODULE_GRAPHICSDRAW,
@@ -299,59 +295,30 @@ namespace dodo {
 			static bool handlesOpened[MODULE_ENUMSIZE];    ///< map of the opened libraries
 #endif
 
-			/**
-			 * @class syncThreadSection
-			 * @brief performs atomic locks using mutexes
-			 */
-			class syncThreadSection {
+			class sync {
 			  public:
 
 				/**
-				 * consructor
+				 * @class stack
+				 * @brief provides thread safe behaviour
+				 * @note locked in constructor and unlocked in destructor
+				 * @note no exceptions thrown
 				 */
-				syncThreadSection();
+				class stack {
+				  public:
 
-				/**
-				 * destructor
-				 */
-				virtual ~syncThreadSection();
+					/**
+					 * contructor
+					 */
+					stack();
 
-				/**
-				 * lock critical section
-				 */
-				virtual void acquire();
+					/**
+					 * destructor
+					 */
+					virtual ~stack();
 
-				/**
-				 * unlock critical section
-				 */
-				virtual void release();
-
-			  protected:
-
-#ifdef PTHREAD_EXT
-				static pthread_mutex_t keeper;  ///< mutex
-#endif
-			};
-
-			static syncThreadSection keeper;    ///< lock
-
-			/**
-			 * @class syncThreadStack
-			 * @brief provides thread safe behaviour
-			 * @note it locks in constructor and unlocks in destructor
-			 */
-			class syncThreadStack {
-			  public:
-
-				/**
-				 * contructor
-				 */
-				syncThreadStack();
-
-				/**
-				 * destructor
-				 */
-				virtual ~syncThreadStack();
+					void *keeper; ///< section locker
+				};
 			};
 
 			static unsigned long instances;

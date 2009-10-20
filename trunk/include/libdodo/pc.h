@@ -36,20 +36,11 @@
 #include <libdodo/pcExecutionProcess.h>
 #include <libdodo/pcExecutionProcessEx.h>
 #include <libdodo/pcExecutionManager.h>
-#include <libdodo/pcSyncDataCollection.h>
-#include <libdodo/pcSyncDataSingle.h>
-#include <libdodo/pcSyncProcessDataCollection.h>
-#include <libdodo/pcSyncProcessDataCollectionEx.h>
-#include <libdodo/pcSyncProcessDataSingle.h>
-#include <libdodo/pcSyncProcessDataSingleEx.h>
-#include <libdodo/pcSyncProcessSection.h>
-#include <libdodo/pcSyncProcessSectionEx.h>
+#include <libdodo/pcSyncDataObject.h>
+#include <libdodo/pcSyncProcess.h>
+#include <libdodo/pcSyncProcessEx.h>
+#include <libdodo/pcSyncThread.h>
+#include <libdodo/pcSyncThreadEx.h>
 #include <libdodo/pcSyncProtector.h>
-#include <libdodo/pcSyncSection.h>
-#include <libdodo/pcSyncThreadDataCollection.h>
-#include <libdodo/pcSyncThreadDataCollectionEx.h>
-#include <libdodo/pcSyncThreadDataSingle.h>
-#include <libdodo/pcSyncThreadDataSingleEx.h>
-#include <libdodo/pcSyncThreadSection.h>
-#include <libdodo/pcSyncThreadSectionEx.h>
+#include <libdodo/pcSyncStack.h>
 #endif

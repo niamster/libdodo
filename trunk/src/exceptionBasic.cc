@@ -97,20 +97,12 @@ bool basic::handlerMap[] = {
 	false,
 	false,
 	false,
-	false,
-	false,
-	false,
-	false,
 	false
 };
 
 //-------------------------------------------------------------------
 
 basic::handler basic::handlers[] = {
-	NULL,
-	NULL,
-	NULL,
-	NULL,
 	NULL,
 	NULL,
 	NULL,
@@ -207,10 +199,6 @@ void *basic::handlerData[] = {
 	NULL,
 	NULL,
 	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
 	NULL
 };
 
@@ -218,10 +206,6 @@ void *basic::handlerData[] = {
 
 #ifdef DL_EXT
 bool basic::handlesOpened[] = {
-	false,
-	false,
-	false,
-	false,
 	false,
 	false,
 	false,
@@ -317,80 +301,42 @@ void *basic::handles[] = {
 	NULL,
 	NULL,
 	NULL,
-	NULL,
-	NULL,
-	NULL,
-	NULL,
 	NULL
 };
 #endif
 
 //-------------------------------------------------------------------
 
-#ifdef PTHREAD_EXT
-pthread_mutex_t basic::syncThreadSection::keeper;
-#endif
-
-//-------------------------------------------------------------------
-
-basic::syncThreadSection basic::keeper;
-
-//-------------------------------------------------------------------
-
-basic::syncThreadSection::syncThreadSection()
+basic::sync::stack::stack()
 {
 #ifdef PTHREAD_EXT
-	pthread_mutexattr_t attr;
-	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+	static pthread_mutex_t mutex;
+	static unsigned char mutex_init = 0;
+	if (!mutex_init) {
+		pthread_mutexattr_t attr;
+		pthread_mutexattr_init(&attr);
+		pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
 
-	pthread_mutex_init(&keeper, &attr);
+		pthread_mutex_init(&mutex, &attr);
 
-	pthread_mutexattr_destroy(&attr);
-#endif
-}
+		pthread_mutexattr_destroy(&attr);
 
-//-------------------------------------------------------------------
+		mutex_init = 1;
+	}
 
-basic::syncThreadSection::~syncThreadSection()
-{
-#ifdef PTHREAD_EXT
-	pthread_mutex_destroy(&keeper);
+	keeper = &mutex;
+
+	pthread_mutex_lock((pthread_mutex_t *)keeper);
 #endif
 }
 
 //-------------------------------------------------------------------
 
-void
-basic::syncThreadSection::acquire()
+basic::sync::stack::~stack()
 {
 #ifdef PTHREAD_EXT
-	pthread_mutex_lock(&keeper);
+	pthread_mutex_unlock((pthread_mutex_t *)keeper);
 #endif
-}
-
-//-------------------------------------------------------------------
-
-void
-basic::syncThreadSection::release()
-{
-#ifdef PTHREAD_EXT
-	pthread_mutex_unlock(&keeper);
-#endif
-}
-
-//-------------------------------------------------------------------
-
-basic::syncThreadStack::syncThreadStack()
-{
-	keeper.acquire();
-}
-
-//-------------------------------------------------------------------
-
-basic::syncThreadStack::~syncThreadStack()
-{
-	keeper.release();
 }
 
 //-------------------------------------------------------------------
@@ -418,7 +364,7 @@ basic::basic(int              a_module,
 													 file(a_file),
 													 message(a_message)
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 #ifdef __GNUC__
 	using namespace abi;
@@ -790,7 +736,7 @@ basic::basic(int              a_module,
 
 basic::~basic() throw ()
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 	--instances;
 
@@ -839,7 +785,7 @@ basic::backtrace()
 basic::operator const dodoString
 & ()
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 	return errStr;
 }
@@ -849,7 +795,7 @@ basic::operator const dodoString
 const char *
 basic::what() const throw ()
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 	return errStr.data();
 }
@@ -861,7 +807,7 @@ basic::setHandler(moduleEnum module,
 					   handler    handler,
 					   void            *data)
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 	instance();
 
@@ -893,7 +839,7 @@ void
 basic::setHandler(handler handler,
 						void         *data)
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 	instance();
 
@@ -928,7 +874,7 @@ basic::setHandler(handler handler,
 void
 basic::removeHandler(moduleEnum module)
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 #ifdef DL_EXT
 	if (handlesOpened[module]) {
@@ -957,7 +903,7 @@ basic::removeHandler(moduleEnum module)
 void
 basic::removeHandlers()
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 #ifdef DL_EXT
 	deinitModule deinit;
@@ -993,7 +939,7 @@ basic::setHandler(const dodoString &path,
 					   void             *data,
 					   void             *toInit)
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 	instance();
 
@@ -1051,7 +997,7 @@ basic::__module__
 basic::module(const dodoString &module,
 					 void             *toInit)
 {
-	syncThreadStack tg;
+	sync::stack tg;
 
 #ifdef DL_FAST
 	void *handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);

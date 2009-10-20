@@ -36,7 +36,7 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioBlockChannel.h>
 #include <libdodo/ioMemoryEx.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncStack.h>
 
 using namespace dodo::io;
 
@@ -177,7 +177,7 @@ memory::operator const char *()
 void
 memory::clone(const memory &fd)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	pos = fd.pos;
 	block = fd.block;
@@ -250,7 +250,7 @@ memory::_write(const char *const a_data) const
 void
 memory::erase()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	unsigned long pos = block ? this->pos * blockSize : this->pos;
 

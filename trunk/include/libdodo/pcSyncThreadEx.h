@@ -1,8 +1,8 @@
 /***************************************************************************
- *            pcSyncThreadSection.h
+ *            pcSyncThreadEx.h
  *
- *  Mon Jul 09 2007
- *  Copyright  2007  Ni@m
+ *  Wed Oct 5 2005
+ *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,60 +27,35 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCSYNCTHREADSECTION_H_
-#define _PCSYNCTHREADSECTION_H_ 1
+#ifndef _PCSYNCTHREADEX_H_
+#define _PCSYNCTHREADEX_H_ 1
 
 #include <libdodo/directives.h>
 
-#include <libdodo/pcSyncSection.h>
+#include <libdodo/exceptionBasic.h>
 
 namespace dodo {
 	namespace pc {
 		namespace sync {
-			namespace thread {
-				struct __lock__;
+			/**
+			 * libdodo defined errors
+			 */
+			enum threadExR {
+				THREADEX_CANNOTLOCK
+			};
 
-				/**
-				 * @class section
-				 * @brief performs atomic locks using mutexes
-				 */
-				class section : public sync::section {
-				  private:
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define PCSYNCTHREADEX_CANNOTLOCK_STR      "Item is currently locked, timeout exhousted"
 
-					/**
-					 * copy constructor
-					 * @note to prevent copying
-					 */
-					section(section &);
-
-				  public:
-
-					/**
-					 * consructor
-					 */
-					section();
-
-					/**
-					 * destructor
-					 */
-					virtual ~section();
-
-					/**
-					 * lock critical section
-					 * @note same thread can acquire section recursively
-					 * in this case the same number of releases reqired before another thread can aquire the section
-					 */
-					virtual void acquire();
-
-					/**
-					 * unlock critical section
-					 */
-					virtual void release();
-
-				  protected:
-
-					__lock__ *lock; ///< lock
-				};
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum threadFunctionsID {
+				THREADEX_ACQUIRE,
+				THREADEX_RELEASE,
+				THREADEX_CONSTRUCTOR,
 			};
 		};
 	};

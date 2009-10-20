@@ -44,7 +44,7 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioStreamChannel.h>
 #include <libdodo/ioNetworkConnection.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncStack.h>
 
 using namespace dodo;
 
@@ -135,7 +135,7 @@ io::pipe::~pipe()
 void
 io::pipe::clone(const pipe &fd)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (in->file != NULL) {
 		if (fclose(in->file) != 0)
@@ -188,7 +188,7 @@ io::pipe::clone(const pipe &fd)
 int
 io::pipe::inDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (in->file == NULL)
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -201,7 +201,7 @@ io::pipe::inDescriptor() const
 int
 io::pipe::outDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (out->file == NULL)
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -214,7 +214,7 @@ io::pipe::outDescriptor() const
 void
 io::pipe::close()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	performPreExec(OPERATION_CLOSE);
@@ -244,7 +244,7 @@ io::pipe::close()
 void
 io::pipe::open()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	performPreExec(OPERATION_OPEN);
@@ -353,7 +353,7 @@ io::pipe::_write(const char *const buf) const
 void
 io::pipe::flush() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (out->file == NULL)
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -367,7 +367,7 @@ io::pipe::flush() const
 io::network::exchange::__peer__
 io::pipe::peer()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (in->file == NULL)
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -427,7 +427,7 @@ io::pipe::peer()
 bool
 io::pipe::isBlocked()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	return blocked;
 }
@@ -437,7 +437,7 @@ io::pipe::isBlocked()
 void
 io::pipe::block(bool flag)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (in->file == NULL && out->file == NULL)
 		throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);

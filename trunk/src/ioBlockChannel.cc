@@ -35,7 +35,7 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncStack.h>
 
 using namespace dodo::io::block;
 
@@ -57,7 +57,7 @@ channel::~channel()
 dodoString
 channel::read() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	dodoString a_str;
 
@@ -102,7 +102,7 @@ channel::read() const
 dodoString
 channel::readString() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	dodoString a_str;
 
@@ -148,7 +148,7 @@ channel::readString() const
 void
 channel::write(const dodoString &a_data) const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(a_data, 0, blockSize);
@@ -180,7 +180,7 @@ channel::write(const dodoString &a_data) const
 void
 channel::writeString(const dodoString &a_data) const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	collectedData.buffer = a_data;

@@ -43,7 +43,7 @@
 #include <libdodo/ioFileFifoEx.h>
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncStack.h>
 
 using namespace dodo::io::file;
 
@@ -215,7 +215,7 @@ fifo::~fifo()
 int
 fifo::inDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
@@ -228,7 +228,7 @@ fifo::inDescriptor() const
 int
 fifo::outDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
@@ -241,7 +241,7 @@ fifo::outDescriptor() const
 void
 fifo::clone(const fifo &fd)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file != NULL) {
 		if (fclose(handle->file) != 0)
@@ -289,7 +289,7 @@ fifo::clone(const fifo &fd)
 void
 fifo::close()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	performPreExec(OPERATION_CLOSE);
@@ -313,7 +313,7 @@ void
 fifo::open(const dodoString &a_path,
 		   short            a_mode)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	performPreExec(OPERATION_OPEN);
@@ -396,7 +396,7 @@ fifo::open(const dodoString &a_path,
 bool
 fifo::isBlocked()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	return blocked;
 }
@@ -406,7 +406,7 @@ fifo::isBlocked()
 void
 fifo::block(bool flag)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX_BLOCK, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -506,7 +506,7 @@ fifo::_write(const char *const a_data) const
 void
 fifo::flush() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX_FLUSH, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);

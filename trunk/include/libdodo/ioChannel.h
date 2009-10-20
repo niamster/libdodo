@@ -39,7 +39,7 @@
 namespace dodo {
 	namespace pc {
 		namespace sync {
-			class section;
+			class protector;
 		};
 	};
 
@@ -181,7 +181,7 @@ namespace dodo {
 			 */
 			virtual void _writeString(const char * const data) const = 0;
 
-			pc::sync::section *keeper;                                  ///< section locker
+			pc::sync::protector *keeper;                                  ///< section locker
 			short protection;                                           ///< type of IO protection, @see io::channel::protectionEnum
 
 #ifndef IO_WO_XEXEC

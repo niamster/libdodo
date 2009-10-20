@@ -6,7 +6,7 @@ CFLAGS+=@CFLAGS@ @DEFS@
 all: test module
 
 test: test.cc
-	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $< -o $@
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $< -ldodo $(LDFLAGS) -o $@
 
 module: module.cc
 	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -Wall -shared -ldodo -fPIC $< -o $@ 

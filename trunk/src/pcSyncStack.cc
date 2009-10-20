@@ -1,8 +1,8 @@
 /***************************************************************************
- *            pcSyncThreadLock.inline
+ *            pcSyncStack.cc
  *
- *  Tue Mar 24 2009
- *  Copyright  2009  Ni@m
+ *  Sat Oct 20 2007
+ *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -29,24 +29,28 @@
 
 #include <libdodo/directives.h>
 
-#ifdef PTHREAD_EXT
-#include <pthread.h>
-#endif
+#include <libdodo/pcSyncStack.h>
+#include <libdodo/pcSyncProtector.h>
+#include <libdodo/exceptionBasic.h>
 
-namespace dodo {
-	namespace pc {
-		namespace sync {
-			namespace thread {
-				/**
-				 * @struct __lock__
-				 * @brief defines thread mutex
-				 */
-				struct __lock__ {
-#ifdef PTHREAD_EXT
-					pthread_mutex_t keeper;  ///< lock
-#endif
-				};
-			};
-		};
-	};
-};
+using namespace dodo::pc::sync;
+
+stack::stack(protector *keeper) : keeper(keeper)
+{
+	if (keeper != NULL)
+		keeper->acquire(0);
+}
+
+//-------------------------------------------------------------------
+
+stack::~stack()
+{
+	try {
+		if (keeper != NULL)
+			keeper->release();
+	} catch (exception::basic &ex) {
+	}
+}
+
+//-------------------------------------------------------------------
+

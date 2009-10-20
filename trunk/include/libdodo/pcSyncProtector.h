@@ -1,7 +1,7 @@
 /***************************************************************************
  *            pcSyncProtector.h
  *
- *  Sat Oct 20 2007
+ *  Mon Oct 22 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -35,31 +35,32 @@
 namespace dodo {
 	namespace pc {
 		namespace sync {
-			class section;
-
 			/**
 			 * @class protector
-			 * @brief provides thread/process safe behaviour
-			 * @note it locks in constructor and unlocks in destructor
+			 * @brief provides shared data management functionality
 			 */
 			class protector {
 			  public:
 
 				/**
-				 * contructor
-				 */
-				protector(section *parent);
-
-				/**
 				 * destructor
 				 */
-				virtual ~protector();
+				virtual ~protector() = 0;
 
-			  protected:
+				/**
+				 * lock
+				 * @param timeout defines wait timeout for unlock in microseconds
+				 * @note if timeout is 0 it will wait infinitely
+				 */
+				virtual void acquire(unsigned long timeout) = 0;
 
-				section *keeper; ///< lock
+				/**
+				 * unlock
+				 */
+				virtual void release() = 0;
 			};
 		};
 	};
 };
 #endif
+

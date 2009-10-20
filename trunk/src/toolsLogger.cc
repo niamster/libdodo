@@ -35,8 +35,8 @@
 
 #include <libdodo/ioChannel.h>
 #include <libdodo/toolsTime.h>
-#include <libdodo/pcSyncProcessSection.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncProcess.h>
+#include <libdodo/pcSyncStack.h>
 #include <libdodo/types.h>
 
 using namespace dodo::tools;
@@ -72,7 +72,7 @@ const int logger::syslogLevels[] = {
 logger::logger() : forward(false),
 				   timeFormat(" %d/%m/%Y.%H-%M-%S: "),
 				   handlersNum(0),
-				   keeper(new pc::sync::process::section(0))
+				   keeper(new pc::sync::process(0))
 {
 }
 
@@ -89,7 +89,7 @@ unsigned long
 logger::add(short       level,
 			io::channel *handler)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	__log_map__ lm;
 
@@ -107,7 +107,7 @@ logger::add(short       level,
 void
 logger::remove(unsigned long position)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	dodoList<__log_map__>::iterator i(handlers.begin()), j(handlers.end());
 	for (; i != j; ++i) {
@@ -125,7 +125,7 @@ void
 logger::log(short            level,
 			const dodoString &msg)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (level < 0 && level >= LOG_LEVEL_ENUMSIZE)
 		return;

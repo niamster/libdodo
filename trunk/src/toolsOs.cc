@@ -48,8 +48,8 @@
 #include <dlfcn.h>
 #endif
 
-#include "pcSyncThreadLock.inline"
-
+#include <libdodo/pcSyncThread.h>
+#include <libdodo/pcSyncStack.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsOsEx.h>
 #include <libdodo/types.h>
@@ -107,88 +107,7 @@ bool os::handlesOpenedSig[] = {
 
 //-------------------------------------------------------------------
 
-dodo::pc::sync::thread::__lock__ os::syncThreadSection::keeper;
-
-//-------------------------------------------------------------------
-
-os::syncThreadSection os::keeper;
-
-//-------------------------------------------------------------------
-
-os::syncThreadSection::syncThreadSection()
-{
-#ifdef PTHREAD_EXT
-	pthread_mutexattr_t attr;
-	errno = pthread_mutexattr_init(&attr);
-	if (errno != 0)
-		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
-	if (errno != 0)
-		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	errno = pthread_mutex_init(&keeper.keeper, &attr);
-	if (errno != 0)
-		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	errno = pthread_mutexattr_destroy(&attr);
-	if (errno != 0)
-		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-#endif
-}
-
-//-------------------------------------------------------------------
-
-os::syncThreadSection::~syncThreadSection()
-{
-#ifdef PTHREAD_EXT
-	pthread_mutex_destroy(&keeper.keeper);
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-os::syncThreadSection::acquire()
-{
-#ifdef PTHREAD_EXT
-	errno = pthread_mutex_lock(&keeper.keeper);
-	if (errno != 0 && errno != EDEADLK)
-		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-os::syncThreadSection::release()
-{
-#ifdef PTHREAD_EXT
-	errno = pthread_mutex_unlock(&keeper.keeper);
-	if (errno != 0)
-		throw exception::basic(exception::MODULE_TOOLSOSSYNCTHREADSECTION, SYNCTHREADSECTION_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-#endif
-}
-
-//-------------------------------------------------------------------
-
-os::syncThreadStack::syncThreadStack()
-{
-	keeper.acquire();
-}
-
-//-------------------------------------------------------------------
-
-os::syncThreadStack::~syncThreadStack()
-{
-	try {
-		keeper.release();
-	} catch (...) {
-	}
-}
+dodo::pc::sync::thread os::keeper;
 
 //-------------------------------------------------------------------
 
@@ -815,7 +734,7 @@ os::setSignalHandler(long          signal,
 					 signalHandler handler,
 					 int           blockSignals)
 {
-	syncThreadStack tg;
+	pc::sync::stack tg(&keeper);
 
 #ifdef DL_EXT
 	deinitSignalModule deinit;
@@ -855,7 +774,7 @@ os::setMicroTimer(unsigned long timeout,
 				  signalHandler handler,
 				  int           blockSignals)
 {
-	syncThreadStack tg;
+	pc::sync::stack tg(&keeper);
 
 #ifdef DL_EXT
 	deinitSignalModule deinit;
@@ -911,7 +830,7 @@ os::setTimer(long          timeout,
 			 signalHandler handler,
 			 int           blockSignals)
 {
-	syncThreadStack tg;
+	pc::sync::stack tg(&keeper);
 
 #ifdef DL_EXT
 	deinitSignalModule deinit;
@@ -983,7 +902,7 @@ os::sendSignal(int  pid,
 void
 os::removeSignalHandler(long signal)
 {
-	syncThreadStack tg;
+	pc::sync::stack tg(&keeper);
 
 #ifdef DL_EXT
 	deinitSignalModule deinit;
@@ -1046,7 +965,7 @@ void
 os::setSignalHandler(const dodoString &path,
 					 void             *toInit)
 {
-	syncThreadStack tg;
+	pc::sync::stack tg(&keeper);
 
 #ifdef DL_FAST
 	void *handle = dlopen(path.data(), RTLD_LAZY | RTLD_NODELETE);

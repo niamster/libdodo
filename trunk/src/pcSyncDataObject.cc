@@ -1,7 +1,7 @@
 /***************************************************************************
- *            pcSyncSection.cc
+ *            pcSyncDataObject.cc
  *
- *  Sat Oct 20 2007
+ *  Sun Jul 22 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -29,13 +29,58 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/pcSyncSection.h>
+#include <libdodo/pcSyncDataObject.h>
+#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncStack.h>
+#include <libdodo/types.h>
 
-using namespace dodo::pc::sync;
+using namespace dodo::pc::sync::data;
 
-section::~section()
+object::object(protector &lock) : data(NULL),
+								  lock(lock)
 {
 }
 
 //-------------------------------------------------------------------
 
+object::~object()
+{
+}
+
+//-------------------------------------------------------------------
+
+void
+object::set(void *a_data)
+{
+	sync::stack g(&lock);
+
+	data = a_data;
+}
+//-------------------------------------------------------------------
+
+const void *
+object::get()
+{
+	sync::stack g(&lock);
+
+	return data;
+}
+
+//-------------------------------------------------------------------
+
+void *
+object::acquire(unsigned long timeout)
+{
+	lock.acquire(timeout);
+	return data;
+}
+
+//-------------------------------------------------------------------
+
+void
+object::release()
+{
+	lock.release();
+}
+
+//-------------------------------------------------------------------

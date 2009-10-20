@@ -6,7 +6,7 @@ CFLAGS+=@CFLAGS@ @DEFS@
 all: test
 
 test: test.cc
-	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $< -o $@
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $< -ldodo $(LDFLAGS) -o $@
 
 clean:
 	@rm -fr test my.png test.jpg

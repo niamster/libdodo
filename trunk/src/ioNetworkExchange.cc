@@ -40,7 +40,7 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioNetworkExchangeEx.h>
 #include <libdodo/types.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncStack.h>
 
 using namespace dodo::io::network;
 
@@ -106,7 +106,7 @@ exchange::~exchange()
 void
 exchange::close()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	performPreExec(OPERATION_CLOSE);
@@ -130,7 +130,7 @@ exchange::init(int  a_socket,
 			   bool a_blocked,
 			   bool blockInherited)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (socket != -1) {
 		_close(socket);
@@ -163,7 +163,7 @@ exchange::init(int  a_socket,
 bool
 exchange::isAlive()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (socket == -1)
 		return false;
@@ -368,7 +368,7 @@ exchange::flush() const
 int
 exchange::inDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	return socket;
 }
@@ -378,7 +378,7 @@ exchange::inDescriptor() const
 int
 exchange::outDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	return socket;
 }

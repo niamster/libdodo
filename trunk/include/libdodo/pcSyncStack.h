@@ -1,7 +1,7 @@
 /***************************************************************************
- *            pcSyncThreadSectionEx.h
+ *            pcSyncStack.h
  *
- *  Mon Jul 09 2007
+ *  Sat Oct 20 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,25 +27,37 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCSYNCTHREADSECTIONEX_H_
-#define _PCSYNCTHREADSECTIONEX_H_ 1
+#ifndef _PCSYNCSTACK_H_
+#define _PCSYNCSTACK_H_ 1
 
 #include <libdodo/directives.h>
-
-#include <libdodo/exceptionBasic.h>
 
 namespace dodo {
 	namespace pc {
 		namespace sync {
-			namespace thread {
+			class protector;
+
+			/**
+			 * @class stack
+			 * @brief provides thread/process safe behaviour
+			 * @note locked in constructor and unlocked in destructor
+			 */
+			class stack {
+			  public:
+
 				/**
-				 * IDs of functions where exception might be thrown
+				 * contructor
 				 */
-				enum sectionFunctionsID {
-					SECTIONEX_LOCK,
-					SECTIONEX_UNLOCK,
-					SECTIONEX_SECTION,
-				};
+				stack(protector *);
+
+				/**
+				 * destructor
+				 */
+				virtual ~stack();
+
+			  protected:
+
+				protector *keeper; ///< lock
 			};
 		};
 	};

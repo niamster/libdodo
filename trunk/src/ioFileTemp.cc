@@ -42,7 +42,7 @@
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioBlockChannel.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncStack.h>
 
 using namespace dodo::io::file;
 
@@ -125,7 +125,7 @@ temp::~temp()
 int
 temp::inDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -138,7 +138,7 @@ temp::inDescriptor() const
 int
 temp::outDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -151,7 +151,7 @@ temp::outDescriptor() const
 void
 temp::clone(const temp &fd)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file != NULL) {
 		if (fclose(handle->file) != 0)
@@ -189,7 +189,7 @@ temp::clone(const temp &fd)
 void
 temp::close()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	performPreExec(OPERATION_CLOSE);
@@ -212,7 +212,7 @@ temp::close()
 void
 temp::open()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	performPreExec(OPERATION_OPEN);
@@ -315,7 +315,7 @@ temp::_write(const char *const a_data) const
 void
 temp::erase()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	char *empty = new char[blockSize];
 
@@ -344,7 +344,7 @@ temp::erase()
 void
 temp::flush() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_FLUSH, exception::ERRNO_LIBDODO, TEMPEX_NOTOPENED, IOFILETEMPEX_NOTOPENED_STR, __LINE__, __FILE__);

@@ -1,8 +1,8 @@
 /***************************************************************************
- *            pcSyncProcessSectionEx.h
+ *            pcSyncThread.h
  *
- *  Sat Oct 20 2007
- *  Copyright  2007  Ni@m
+ *  Tue Nov 29 2005
+ *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,42 +27,60 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCSYNCPROCESSSECTIONEX_H_
-#define _PCSYNCPROCESSSECTIONEX_H_ 1
+#ifndef _PCSYNCTHREAD_H_
+#define _PCSYNCTHREAD_H_ 1
 
 #include <libdodo/directives.h>
 
-#include <libdodo/exceptionBasic.h>
+#include <libdodo/pcSyncProtector.h>
 
 namespace dodo {
 	namespace pc {
 		namespace sync {
-			namespace process {
-				/**
-				 * libdodo defined errors
-				 */
-				enum sectionExR {
-					SECTIONEX_NOTOPENED,
-				};
+			/**
+			 * @class thread
+			 * @brief provides lock mechanism for threads
+			 */
+			class thread : public sync::protector {
+			  private:
 
 				/**
-				 * explanations for libdodo defined errors
+				 * copy constructor
+				 * @note to prevent copying
 				 */
-#define PCSYNCPROCESSSECTIONEX_NOTOPENED_STR      "Semaphore not opened"
+				thread(thread &);
+
+			  public:
 
 				/**
-				 * IDs of functions where exception might be thrown
+				 * constructor
 				 */
-				enum sectionFunctionsID {
-					SECTIONEX_ACQUIRE,
-					SECTIONEX_RELEASE,
-					SECTIONEX_REMOVE,
-					SECTIONEX_SECTION,
-					SECTIONEX_OPEN,
-					SECTIONEX_CLOSE,
-				};
+				thread();
+
+				/**
+				 * destructor
+				 */
+				virtual ~thread();
+
+				/**
+				 * lock
+				 * @param timeout defines wait timeout for unlock in microseconds
+				 * @note if timeout is 0 it will wait infinitely
+				 */
+				virtual void acquire(unsigned long timeout = 0);
+
+				/**
+				 * unlock
+				 */
+				virtual void release();
+
+			  protected:
+
+				struct __lock__;
+				__lock__ *lock;         ///< lock
 			};
 		};
 	};
 };
 #endif
+

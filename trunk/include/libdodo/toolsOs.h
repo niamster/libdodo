@@ -33,19 +33,12 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
+#include <libdodo/pcSyncThread.h>
 
 namespace dodo {
 	namespace pc {
 		namespace sync {
-			namespace thread {
-				struct __lock__;
-			};
-		};
-
-		namespace job {
-			namespace thread {
-				class manager;
-			};
+			class protector;
 		};
 	};
 
@@ -55,8 +48,6 @@ namespace dodo {
 		 * @brief provides os operations
 		 */
 		class os {
-			friend class pc::job::thread::manager;
-
 		  public:
 
 			/**
@@ -526,58 +517,8 @@ namespace dodo {
 			static void *handlesSig[SIGNAL_ENUMSIZE];        ///< handles to modules
 			static bool handlesOpenedSig[SIGNAL_ENUMSIZE];   ///< map of opened modules
 #endif
-			/**
-			 * @class syncThreadSection
-			 * @brief performs atomic locks using mutexes
-			 */
-			class syncThreadSection {
-			  public:
 
-				/**
-				 * consructor
-				 */
-				syncThreadSection();
-
-				/**
-				 * destructor
-				 */
-				virtual ~syncThreadSection();
-
-				/**
-				 * lock critical section
-				 */
-				virtual void acquire();
-
-				/**
-				 * unlock critical section
-				 */
-				virtual void release();
-
-			  protected:
-
-				static pc::sync::thread::__lock__ keeper;   ///< mutex
-			};
-
-			static syncThreadSection keeper;                ///< lock
-
-			/**
-			 * @class syncThreadStack
-			 * @brief provides thread safe behaviour
-			 * @note it locks in constructor and unlocks in destructor
-			 */
-			class syncThreadStack {
-			  public:
-
-				/**
-				 * contructor
-				 */
-				syncThreadStack();
-
-				/**
-				 * destructor
-				 */
-				virtual ~syncThreadStack();
-			};
+			static pc::sync::thread keeper;                     ///< section locker
 		};
 	};
 };

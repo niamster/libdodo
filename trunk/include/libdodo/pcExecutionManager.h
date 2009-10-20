@@ -33,7 +33,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/pcSyncSection.h>
+#include <libdodo/pcSyncStack.h>
 
 namespace dodo {
 	namespace pc {
@@ -123,7 +123,7 @@ namespace dodo {
 
 				unsigned long counter; ///< job id counter
 
-				sync::section *keeper; ///< section locker
+				sync::protector *keeper; ///< section locker
 			};
 		};
 	};

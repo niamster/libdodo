@@ -41,7 +41,7 @@ namespace dodo {
 
 	namespace pc {
 		namespace sync {
-			class section;
+			class protector;
 		};
 	};
 
@@ -134,7 +134,7 @@ namespace dodo {
 			static const dodoString levels[LOG_LEVEL_ENUMSIZE];      ///< log levels statements
 			static const int syslogLevels[LOG_LEVEL_ENUMSIZE];       ///< syslog log levels
 
-			pc::sync::section *keeper;                          ///< section locker
+			pc::sync::protector *keeper;                          ///< section locker
 		};
 	};
 };

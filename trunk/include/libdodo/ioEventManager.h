@@ -37,7 +37,7 @@
 namespace dodo {
 	namespace pc {
 		namespace sync {
-			class section;
+			class protector;
 		};
 	};
 
@@ -135,7 +135,7 @@ namespace dodo {
 
 				int descs;                                      ///< descriptors counter
 
-				pc::sync::section *keeper;                      ///< section locker
+				pc::sync::protector *keeper;                      ///< section locker
 			};
 		};
 	};

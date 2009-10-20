@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcSyncDataSingle.h
+ *            pcSyncDataObject.h
  *
  *  Mon Oct 22 2007
  *  Copyright  2007  Ni@m
@@ -27,50 +27,66 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCSYNCDATASINGLE_H_
-#define _PCSYNCDATASINGLE_H_ 1
+#ifndef _PCSYNCDATAOBJECT_H_
+#define _PCSYNCDATAOBJECT_H_ 1
 
 #include <libdodo/directives.h>
 
 namespace dodo {
 	namespace pc {
 		namespace sync {
+			class protector;
+
 			namespace data {
 				/**
-				 * @class single
+				 * @class object
 				 * @brief provides shared data management functionality
 				 */
-				class single {
+				class object {
 				  public:
+
+					/**
+					 * constructor
+					 * @param lock defines syncing primitive for the object
+					 */
+					object(protector &lock);
 
 					/**
 					 * destructor
 					 */
-					virtual ~single() = 0;
+					virtual ~object();
 
 					/**
 					 * set shared data
 					 * @param data defines shared data
 					 */
-					virtual void set(void *data) = 0;
+					virtual void set(void *data);
 
 					/**
-					 * set shared data to NULL
+					 * get shared data
+					 * @return shared data
+					 * @note shared data is not locked after the function returns
 					 */
-					virtual void remove() = 0;
+					virtual const void *get();
 
 					/**
 					 * lock and return shared data
 					 * @return shared data
-					 * @param microseconds defines wait timeout for unlock
-					 * @note if microseconds is 0 it will wait infinitely
+					 * @param timeout defines wait timeout for unlock in microseconds
+					 * @note if timeout is 0 it will wait infinitely
 					 */
-					virtual void *acquire(unsigned long microseconds) = 0;
+					virtual void *acquire(unsigned long timeout = 0);
 
 					/**
 					 * unlock shared data
 					 */
-					virtual void release() = 0;
+					virtual void release();
+
+				  protected:
+
+					void *data; ///< object data
+
+					protector &lock; ///< object lock
 				};
 			};
 		};

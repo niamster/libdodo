@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcSyncDataSingle.cc
+ *            pcSyncProcessEx.h
  *
  *  Sun Jul 22 2007
  *  Copyright  2007  Ni@m
@@ -27,14 +27,40 @@
  * set shiftwidth=4
  */
 
+#ifndef _PCSYNCPROCESSEX_H_
+#define _PCSYNCPROCESSEX_H_ 1
+
 #include <libdodo/directives.h>
 
-#include <libdodo/pcSyncDataSingle.h>
+#include <libdodo/exceptionBasic.h>
 
-using namespace dodo::pc::sync::data;
+namespace dodo {
+	namespace pc {
+		namespace sync {
+			/**
+			 * libdodo defined errors
+			 */
+			enum processExR {
+				PROCESSEX_CANNOTLOCK,
+			};
 
-single::~single()
-{
-}
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define PCSYNCPROCESSEX_CANNOTLOCK_STR      "Item is currently locked, timeout exhousted"
 
-//-------------------------------------------------------------------
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum processFunctionsID {
+				PROCESSEX_ACQUIRE,
+				PROCESSEX_RELEASE,
+				PROCESSEX_CONSTRUCTOR,
+				PROCESSEX_REMOVE,
+				PROCESSEX_ACQUIRED,
+			};
+		};
+	};
+};
+#endif
+

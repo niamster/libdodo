@@ -13,9 +13,10 @@ using namespace std;
 using namespace dodo;
 using namespace data::tpl;
 using cgi::exchange;
-using dodo::pc::sync::thread::data::single;
+using namespace pc;
 
-single sh;
+sync::thread protector;
+sync::data::object object(protector);
 
 void
 handler(exchange &ex)
@@ -27,8 +28,8 @@ handler(exchange &ex)
 	d.setCookie(cookie("test", "Ni@m"));
 
 	///increment counter in shared memory
-	int *inc = (int *)sh.acquire();
-	sh.release();
+	int *inc = (int *)object.acquire();
+	object.release();
 
 	exchange *io = d;
 	io->writeString("The headers thould be already printed successfully.<br>");
@@ -81,9 +82,9 @@ handler(exchange &ex)
 
 	ex.writeString("<br>");
 
-	inc = (int *)sh.acquire();
+	inc = (int *)object.acquire();
 	(*inc)++;
-	sh.release();
+	object.release();
 }
 
 int main(int argc, char **argv)
@@ -92,7 +93,7 @@ int main(int argc, char **argv)
 	try
 	{
 		int *shared = new int(1);
-		sh.set((void *)shared);
+		object.set((void *)shared);
 
 #ifdef FASTCGI_EXT
 		using namespace cgi::fast;

@@ -41,7 +41,7 @@
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioFileRegularEx.h>
 #include <libdodo/types.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncStack.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioBlockChannel.h>
 
@@ -202,7 +202,7 @@ regular::~regular()
 int
 regular::inDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_INDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
@@ -215,7 +215,7 @@ regular::inDescriptor() const
 int
 regular::outDescriptor() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
@@ -228,7 +228,7 @@ regular::outDescriptor() const
 void
 regular::clone(const regular &fd)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file !=  NULL) {
 		if (fclose(handle->file) != 0)
@@ -279,7 +279,7 @@ regular::clone(const regular &fd)
 void
 regular::close()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	performPreExec(OPERATION_CLOSE);
@@ -303,7 +303,7 @@ void
 regular::open(const dodoString &a_path,
 			  short            a_mode)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
 	performPreExec(OPERATION_OPEN);
@@ -436,7 +436,7 @@ regular::_write(const char *const a_data) const
 void
 regular::erase()
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	char *empty = new char[blockSize];
 
@@ -457,7 +457,7 @@ regular::erase()
 void
 regular::flush() const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	if (handle->file == NULL)
 		throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);

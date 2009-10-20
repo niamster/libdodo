@@ -38,16 +38,16 @@
 #include <libdodo/types.h>
 #include <libdodo/cgiFastServerEx.h>
 #include <libdodo/cgiFastExchange.h>
-#include <libdodo/pcSyncThreadSection.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncThread.h>
+#include <libdodo/pcSyncStack.h>
 
 using namespace dodo::cgi::fast;
 
-dodo::pc::sync::thread::section server::acceptLock;
+dodo::pc::sync::thread server::accept;
 
 //-------------------------------------------------------------------
 
-dodo::pc::sync::thread::section server::requestLock;
+dodo::pc::sync::thread server::request;
 
 //-------------------------------------------------------------------
 
@@ -88,10 +88,11 @@ server::~server()
 //-------------------------------------------------------------------
 
 void *
-server::fastCGIThread(void *data)
+server::thread(void *data)
 {
 	FCGX_Request req;
 	__request__ request = &req;
+
 	FCGX_InitRequest(request.request, 0, 0);
 
 	exchange cfSTD(request);
@@ -103,7 +104,7 @@ server::fastCGIThread(void *data)
 
 	while (true) {
 		if (limit != 0) {
-			pc::sync::protector rp(&requestLock);
+			pc::sync::stack p(&server::request);
 
 			++requests;
 
@@ -111,9 +112,9 @@ server::fastCGIThread(void *data)
 				break;
 		}
 
-		acceptLock.acquire();
+		accept.acquire();
 		res = FCGX_Accept_r(request.request);
-		acceptLock.release();
+		accept.release();
 
 		if (res == -1)
 			throw exception::basic(exception::MODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
@@ -142,7 +143,7 @@ server::serve(cgi::server::handler func)
 		unsigned int i = 0;
 
 		for (; i < threadsNum; ++i)
-			pthread_create(&id[i], NULL, fastCGIThread, &limit);
+			pthread_create(&id[i], NULL, server::thread, &limit);
 
 		for (i = 0; i < threadsNum; ++i)
 			pthread_join(id[i], NULL);

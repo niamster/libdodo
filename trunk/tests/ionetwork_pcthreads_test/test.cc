@@ -10,12 +10,12 @@
 
 using namespace dodo;
 using namespace io::network;
-using namespace dodo::pc::execution;
-using namespace pc::sync::thread;
+using namespace pc;
 
 using namespace std;
 
-pc::sync::thread::data::single data;
+sync::thread protector;
+sync::data::object data(protector);
 
 int
 process(void *data)
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 
 		bool exit_condition(false);
 
-		manager<thread> manager;
+		execution::manager<execution::thread> manager;
 
 		::data.set((void *)&exit_condition);
 
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 				}
 
 				exchange *ex = new exchange(accepted);
-				thread t(::process, (void *)ex, pc::execution::ON_DESTRUCTION_KEEP_ALIVE);
+				execution::thread t(::process, (void *)ex, execution::ON_DESTRUCTION_KEEP_ALIVE);
 				t.run();
 				manager.add(t);
 

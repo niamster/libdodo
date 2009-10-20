@@ -32,13 +32,12 @@
 #include <libdodo/pcExecutionManager.h>
 #include <libdodo/pcExecutionManagerEx.h>
 #include <libdodo/types.h>
-#include <libdodo/pcSyncSection.h>
-#include <libdodo/pcSyncThreadSection.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncThread.h>
+#include <libdodo/pcSyncStack.h>
 
 template <typename T>
 dodo::pc::execution::manager<T>::manager() : counter(0),
-											 keeper(new pc::sync::thread::section)
+											 keeper(new pc::sync::thread)
 {
 }
 
@@ -56,7 +55,7 @@ template <typename T>
 unsigned long
 dodo::pc::execution::manager<T>::add(const T &job)
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	handles.insert(make_pair(counter, job));
 
@@ -70,7 +69,7 @@ void
 dodo::pc::execution::manager<T>::remove(unsigned long id,
 				   bool          terminate)
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
@@ -89,7 +88,7 @@ template <typename T>
 void
 dodo::pc::execution::manager<T>::run(unsigned long id)
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
@@ -105,7 +104,7 @@ template <typename T>
 void
 dodo::pc::execution::manager<T>::stop(unsigned long id)
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
@@ -121,7 +120,7 @@ template <typename T>
 void
 dodo::pc::execution::manager<T>::stop()
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	typename dodoMap<unsigned long, T>::iterator i = handles.begin(), j = handles.end();
 
@@ -135,7 +134,7 @@ template <typename T>
 int
 dodo::pc::execution::manager<T>::wait(unsigned long id)
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
@@ -151,7 +150,7 @@ template <typename T>
 void
 dodo::pc::execution::manager<T>::wait()
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	typename dodoMap<unsigned long, T>::iterator i = handles.begin(), j = handles.end();
 
@@ -165,7 +164,7 @@ template <typename T>
 bool
 dodo::pc::execution::manager<T>::isRunning(unsigned long id) const
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	typename dodoMap<unsigned long, T>::const_iterator job = handles.find(id);
 
@@ -181,7 +180,7 @@ template <typename T>
 unsigned long
 dodo::pc::execution::manager<T>::running() const
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	unsigned long jobs;
 
@@ -200,7 +199,7 @@ template <typename T>
 dodoList<unsigned long>
 dodo::pc::execution::manager<T>::jobs()
 {
-	pc::sync::protector tg(keeper);
+	pc::sync::stack tg(keeper);
 
 	dodoList<unsigned long> jobs;
 

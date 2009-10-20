@@ -32,9 +32,9 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
-#include <libdodo/pcSyncProcessSection.h>
-#include <libdodo/pcSyncThreadSection.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncProcess.h>
+#include <libdodo/pcSyncThread.h>
+#include <libdodo/pcSyncStack.h>
 
 using namespace dodo::io;
 
@@ -56,9 +56,9 @@ channel::channel(short protection) : blockSize(IO_BLOCKSIZE),
 #endif
 {
 	if (protection == channel::PROTECTION_THREAD)
-		keeper = new pc::sync::thread::section;
+		keeper = new pc::sync::thread;
 	else if (protection == channel::PROTECTION_PROCESS)
-		keeper = new pc::sync::process::section(0);
+		keeper = new pc::sync::process(0);
 }
 
 //-------------------------------------------------------------------

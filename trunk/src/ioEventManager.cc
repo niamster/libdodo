@@ -38,8 +38,8 @@
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/ioEventDescriptor.h>
-#include <libdodo/pcSyncProcessSection.h>
-#include <libdodo/pcSyncProtector.h>
+#include <libdodo/pcSyncProcess.h>
+#include <libdodo/pcSyncStack.h>
 
 using namespace dodo::io::event;
 
@@ -50,7 +50,7 @@ manager::manager(manager &rt)
 //-------------------------------------------------------------------
 
 manager::manager() : descs(0),
-				 keeper(new pc::sync::process::section(0))
+				 keeper(new pc::sync::process(0))
 {
 }
 
@@ -66,7 +66,7 @@ manager::~manager()
 int
 manager::add(const descriptor &fl)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	__descriptors__ tempD;
 
@@ -85,7 +85,7 @@ dodoArray<bool>
 manager::isReadable(const dodoArray<int> &pos,
 				  int                  timeout) const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	int count = -1;
 
@@ -152,7 +152,7 @@ dodoArray<bool>
 manager::isWritable(const dodoArray<int> &pos,
 				  int                  timeout) const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	int count = -1;
 
@@ -219,7 +219,7 @@ bool
 manager::isReadable(int pos,
 				  int timeout) const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	pollfd fd;
 
@@ -253,7 +253,7 @@ manager::isReadable(int pos,
 void
 manager::remove(int pos)
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	dodoArray<__descriptors__>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i) {
@@ -271,7 +271,7 @@ bool
 manager::isWritable(int pos,
 				  int timeout) const
 {
-	pc::sync::protector pg(keeper);
+	pc::sync::stack pg(keeper);
 
 	pollfd fd;
 

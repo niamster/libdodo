@@ -1,7 +1,7 @@
 /***************************************************************************
  *            pcSyncProtector.cc
  *
- *  Sat Oct 20 2007
+ *  Sun Jul 22 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -31,27 +31,10 @@
 
 #include <libdodo/pcSyncProtector.h>
 
-#include <libdodo/pcSyncSection.h>
-#include <libdodo/exceptionBasic.h>
-
 using namespace dodo::pc::sync;
-
-protector::protector(section *keeper) : keeper(keeper)
-{
-	if (keeper != NULL)
-		keeper->acquire();
-}
-
-//-------------------------------------------------------------------
 
 protector::~protector()
 {
-	try {
-		if (keeper != NULL)
-			keeper->release();
-	} catch (exception::basic &ex) {
-	}
 }
 
 //-------------------------------------------------------------------
-

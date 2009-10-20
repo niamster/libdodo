@@ -10,21 +10,17 @@
 
 using namespace dodo;
 using namespace dodo::pc;
-using namespace dodo::pc::sync::thread;
 
 using namespace std;
 
-dodo::pc::sync::thread::data::single data;
-dodo::pc::sync::thread::data::collection collection;
-
-unsigned long collectionIdx;
+sync::thread protector;
+sync::data::object data(protector);
 
 int
 thread(void *data)
 {
 	try
 	{
-		cout << (char *)collection.get(collectionIdx);
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 
@@ -45,10 +41,9 @@ thread(void *data)
 
 int main(int argc, char **argv)
 {
-	collectionIdx = collection.add((char *)"@test@\n");
 	try
 	{
-		int *data = new int (1);
+		int *data = new int(1);
 
 		::data.set((void *)data);
 

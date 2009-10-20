@@ -4,7 +4,7 @@ LDFLAGS+=-L../.. @LDFLAGS@
 CFLAGS+=@CFLAGS@ @DEFS@
 
 test: test.cc
-	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -ldodo $< -o $@ 
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $< -ldodo $(LDFLAGS) -o $@ 
 
 clean:
 	@rm -rf test test.1 test.2 test.lite

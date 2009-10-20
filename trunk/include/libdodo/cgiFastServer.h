@@ -33,7 +33,7 @@
 #include <libdodo/directives.h>
 
 #ifdef FASTCGI_EXT
-#include <libdodo/pcSyncThreadSection.h>
+#include <libdodo/pcSyncThread.h>
 
 #include <libdodo/cgiServer.h>
 #include <libdodo/types.h>
@@ -91,13 +91,13 @@ namespace dodo {
 				unsigned int threadsNum;                        ///< amount of threads
 
 				/**
-				 * thread that holds one queue of CGI requests
-				 * @param data defines the data that will be passed to the thread
+				 * thread that processes one queue of CGI requests
+				 * @param data defines the data passed to the thread
 				 */
-				static void *fastCGIThread(void *data);
+				static void *thread(void *data);
 
-				static pc::sync::thread::section acceptLock;    ///< accept mutex
-				static pc::sync::thread::section requestLock;   ///< request mutex
+				static pc::sync::thread accept;    ///< accept lock
+				static pc::sync::thread request;   ///< request lock
 
 				static handler handler;                   ///< function to be called on new request
 
