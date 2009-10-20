@@ -107,7 +107,7 @@ process::process(routine func,
 process::process(const dodoString &module,
 				void             *data,
 				void             *toInit)
-try	: job(),
+try : job(),
 		  handle(NULL) {
 	handle = new __process__;
 
