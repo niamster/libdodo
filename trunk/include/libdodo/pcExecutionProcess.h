@@ -110,6 +110,7 @@ namespace dodo {
                     char  name[64];         ///< name of module
                     char  discription[256]; ///< discription of module
                     char  hook[64];         ///< name of function in module that will be a hook
+                    char  cookie[32];        ///< cookie that would be passed to deinitModule
                     short action;           ///< action on object destruction, @see onDestructionEnum
                 };
 
@@ -125,8 +126,9 @@ namespace dodo {
                  * @typedef deinitModule
                  * @brief defines type of deinit function for library
                  * @note name in the library must be deinitPcExecutionProcessModule
+                 * @param cookie defines cookie data returned from initModule
                  */
-                typedef void (*deinitModule)();
+                typedef void (*deinitModule)(char cookie[32]);
 
                 /**
                  * @return info about library

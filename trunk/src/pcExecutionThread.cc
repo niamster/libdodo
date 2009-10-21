@@ -54,10 +54,17 @@ namespace dodo {
 #ifdef PTHREAD_EXT
                     thread(0),
 #endif
-                               executed(false),
-                               joined(false),
-                               status(0)
+                    executed(false),
+                    joined(false),
+                    status(0)
+#ifdef DL_EXT
+                    ,
+                    handle(NULL)
+#endif
                 {
+#ifdef DL_EXT
+                    memset(cookie, 0x0, 32);
+#endif
                 }
 
 #ifdef PTHREAD_EXT
@@ -80,6 +87,7 @@ namespace dodo {
                 short          action;              ///< action on object destruction[@see onDestructionEnum]
 #ifdef DL_EXT
                 void           *handle;             ///< handle to library
+                char            cookie[32];         ///< cookie that would be passed to deinitModule
 #endif
             };
         };
@@ -203,6 +211,7 @@ try : job(),
         handle->detached = m.detached;
         handle->action = m.action;
         handle->func = f;
+        memcpy(handle->cookie, m.cookie, 32);
     } catch (...) {
         if (handle) {
             if (handle->handle)
@@ -264,7 +273,7 @@ thread::~thread()
         if (handle->handle != NULL) {
             deinit = (deinitModule)dlsym(handle->handle, "deinitPcExecutionThreadModule");
             if (deinit != NULL)
-                deinit();
+                deinit(handle->cookie);
 
 #ifndef DL_FAST
             dlclose(handle->handle);
@@ -385,7 +394,7 @@ thread::module(const dodoString &module,
 
     deinitModule deinit = (deinitModule)dlsym(handle, "deinitPcExecutionThreadModule");
     if (deinit != NULL)
-        deinit();
+        deinit(mod.cookie);
 
 #ifndef DL_FAST
     if (dlclose(handle) != 0)

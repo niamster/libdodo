@@ -54,7 +54,14 @@ namespace dodo {
                 __process__() : executed(false),
                                 joined(false),
                                 status(0)
+#ifdef DL_EXT
+                              ,
+                                handle(NULL)
+#endif
                 {
+#ifdef DL_EXT
+                    memset(cookie, 0x0, 32);
+#endif
                 }
 
                 pid_t           pid;                ///< process pid
@@ -66,6 +73,7 @@ namespace dodo {
                 short           action;             ///< action on object destruction[@see onDestructionEnum]
 #ifdef DL_EXT
                 void            *handle;            ///< handle to library
+                char            cookie[32];         ///< cookie that would be passed to deinitModule
 #endif
             };
         };
@@ -134,6 +142,7 @@ try : job(),
 
         handle->action = m.action;
         handle->func = f;
+        memcpy(handle->cookie, m.cookie, 32);
     } catch (...) {
         if (handle) {
             if (handle->handle)
@@ -178,7 +187,7 @@ process::~process()
         if (handle->handle != NULL) {
             deinit = (deinitModule)dlsym(handle->handle, "deinitPcExecutionProcessModule");
             if (deinit != NULL)
-                deinit();
+                deinit(handle->cookie);
 
 #ifndef DL_FAST
             dlclose(handle->handle);
@@ -291,7 +300,7 @@ process::module(const dodoString &module,
 
     deinitModule deinit = (deinitModule)dlsym(handle, "deinitPcExecutionProcessModule");
     if (deinit != NULL)
-        deinit();
+        deinit(mod.cookie);
 
 #ifndef DL_FAST
     if (dlclose(handle) != 0)

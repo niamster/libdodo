@@ -31,6 +31,7 @@
 
 #ifdef DL_EXT
 #include <dlfcn.h>
+#include <string.h>
 #endif
 
 #include <libdodo/xexec.h>
@@ -82,7 +83,7 @@ xexec::~xexec()
 
         deinit = (deinitModule)dlsym(i->handle, "deinitXexecModule");
         if (deinit != NULL)
-            deinit();
+            deinit(i->cookie);
 
 #ifndef DL_FAST
         dlclose(i->handle);
@@ -97,7 +98,7 @@ xexec::~xexec()
 
         deinit = (deinitModule)dlsym(i->handle, "deinitXexecModule");
         if (deinit != NULL)
-            deinit();
+            deinit(i->cookie);
 
 #ifndef DL_FAST
         dlclose(i->handle);
@@ -146,7 +147,7 @@ xexec::removeXExec(int id)
 
         deinit = (deinitModule)dlsym(current->handle, "deinitXexecModule");
         if (deinit != NULL)
-            deinit();
+            deinit(current->cookie);
 
 #ifndef DL_FAST
         if (dlclose(current->handle) != 0)
@@ -230,6 +231,10 @@ xexec::module(const dodoString &module,
 
     __module__ mod = init(initData);
 
+    deinitModule deinit = (deinitModule)dlsym(handle, "deinitXexecModule");
+    if (deinit != NULL)
+        deinit(mod.cookie);
+
 #ifndef DL_FAST
     if (dlclose(handle) != 0)
         throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
@@ -264,31 +269,26 @@ xexec::addXExec(const dodoString &module,
     if (init == NULL)
         throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-    __module__ info = init(initData);
+    __module__ mod = init(initData);
 
-    hook in = (hook)dlsym(e.handle, info.hook);
+    hook in = (hook)dlsym(e.handle, mod.hook);
     if (in == NULL)
         throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     e.func = in;
+    memcpy(e.cookie, mod.cookie, 32);
 
-    if (info.type & ACTION_PREEXEC) {
+    if (mod.type & ACTION_PREEXEC) {
         e.id = ++execs;
         preExec.push_back(e);
         preExecId = e.id;
     }
 
-    if (info.type & ACTION_POSTEXEC) {
+    if (mod.type & ACTION_POSTEXEC) {
         e.id = ++execs;
         postExec.push_back(e);
         postExecId = e.id;
     }
-
-    deinitModule deinit = (deinitModule)dlsym(e.handle, "deinitXexecModule");
-    if (deinit == NULL)
-        throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-
-    deinit();
 }
 
 #endif

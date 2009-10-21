@@ -44,12 +44,19 @@ empty(xexec::__collected_data__ *odata,
 xexec::__module__
 initXexecModule(void *data)
 {
-    xexec::__module__ module;
+    xexec::__module__ module = {
+        {'\0', },
+        {'\0', },
+        {'\0', },
+        {'\0', },
+        0
+    };
 
     std::cout << "activation\n";
 
     strcpy(module.name, "test");
     strcpy(module.discription, "test module");
+    strcpy(module.cookie, "test cookie");
     module.type = xexec::ACTION_PREEXEC;
 
     if (data == NULL)
@@ -61,9 +68,9 @@ initXexecModule(void *data)
 }
 
 void
-deinitXexecModule()
+deinitXexecModule(char cookie[32])
 {
-    std::cout << "deactivation\n";
+    std::cout << "deactivation(cookie = " << cookie << ")\n";
 }
 };
 #endif

@@ -71,6 +71,7 @@ namespace dodo {
             char  name[64];         ///< name of the library
             char  discription[256]; ///< discription of the library
             char  hook[64];         ///< name of function in the library that will be used as hook
+            char  cookie[32];       ///< cookie that would be passed to deinitModule
             short type;             ///< type of hook, @see xexec::actionEnum, could me grouped with OR
         };
 
@@ -85,9 +86,10 @@ namespace dodo {
         /**
          * @typedef deinitModule
          * @brief defines type of deinit function for library
+         * @param cookie defines cookie data returned from initModule
          * @note name in the library must be deinitXexecModule
          */
-        typedef void (*deinitModule)();
+        typedef void (*deinitModule)(char cookie[32]);
 #endif
 
         /**
@@ -245,6 +247,7 @@ namespace dodo {
             int  id;                                    ///< object identificator
 #ifdef DL_EXT
             void *handle;                               ///< handle to library
+            char cookie[32];                            ///< cookie that would be passed to deinitModule
 #endif
         };
 

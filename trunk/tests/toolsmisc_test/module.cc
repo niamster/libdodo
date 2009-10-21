@@ -30,6 +30,7 @@ initExceptionBasicModule(void *data)
         "test",
         "test module",
         "handler",
+        "cookie",
         { false, }
     };
 
@@ -39,9 +40,9 @@ initExceptionBasicModule(void *data)
 }
 
 void
-deinitExceptionBasicModule()
+deinitExceptionBasicModule(char cookie[32])
 {
-    std::cout << "deactivation.";
+    std::cout << "deactivation(cookie = " << cookie << ")\n";
 }
 };
 #endif
