@@ -1076,6 +1076,10 @@ basic::module(const dodoString &module,
 
     __module__ mod = init(toInit);
 
+	deinitModule deinit = (deinitModule)dlsym(handle, "deinitExceptionBasicModule");
+	if (deinit != NULL)
+		deinit();
+
 #ifndef DL_FAST
     if (dlclose(handle) != 0)
         return mod;
