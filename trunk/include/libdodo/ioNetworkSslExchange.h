@@ -37,141 +37,141 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			namespace http {
-				class client;
-			};
+    namespace io {
+        namespace network {
+            namespace http {
+                class client;
+            };
 
-			namespace ssl {
-				struct __connection__;
+            namespace ssl {
+                struct __connection__;
 
-				/**
-				 * @class exchange
-				 * @brief provides SSL communication interface[send/receive data]
-				 */
-				class exchange : public network::exchange {
-					friend class server;
-					friend class client;
-					friend class network::http::client;
+                /**
+                 * @class exchange
+                 * @brief provides SSL communication interface[send/receive data]
+                 */
+                class exchange : public network::exchange {
+                    friend class server;
+                    friend class client;
+                    friend class network::http::client;
 
-				  private:
+                  private:
 
-					/**
-					 * copy constructor
-					 * @note to prevent copying
-					 */
-					exchange(exchange &);
+                    /**
+                     * copy constructor
+                     * @note to prevent copying
+                     */
+                    exchange(exchange &);
 
-				  public:
+                  public:
 
-					/**
-					 * @class __init__
-					 * @brief holds info that passes to accept call, and then inits exchange;
-					 */
-					class __init__ : public network::exchange::__init__ {
-						friend class exchange;
-						friend class client;
-						friend class server;
+                    /**
+                     * @class __init__
+                     * @brief holds info that passes to accept call, and then inits exchange;
+                     */
+                    class __init__ : public network::exchange::__init__ {
+                        friend class exchange;
+                        friend class client;
+                        friend class server;
 
-					  public:
+                      public:
 
-						/**
-						 * constructor
-						 */
-						__init__();
+                        /**
+                         * constructor
+                         */
+                        __init__();
 
-						/**
-						 * copy constructor
-						 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
-						 */
-						__init__(__init__ &);
+                        /**
+                         * copy constructor
+                         * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
+                         */
+                        __init__(__init__ &);
 
-						/**
-						 * destructor
-						 */
-						virtual ~__init__();
+                        /**
+                         * destructor
+                         */
+                        virtual ~__init__();
 
-					  protected:
+                      protected:
 
-						io::ssl::__connection__ *handle;         ///< SSL connection handle
-					};
+                        io::ssl::__connection__ *handle;         ///< SSL connection handle
+                    };
 
-					/**
-					 * constructor
-					 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-					 */
-					exchange(short protection = channel::PROTECTION_PROCESS);
+                    /**
+                     * constructor
+                     * @param protection defines type of IO protection, @see io::channel::protectionEnum
+                     */
+                    exchange(short protection = channel::PROTECTION_PROCESS);
 
-					/**
-					 * constructor
-					 * @param init is initial data[got from the ::accept method]
-					 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-					 * @note the object that has inited the object of current instance can be used for another connections
-					 */
-					exchange(__init__ &init,
-							 short             protection = channel::PROTECTION_PROCESS);
+                    /**
+                     * constructor
+                     * @param init is initial data[got from the ::accept method]
+                     * @param protection defines type of IO protection, @see io::channel::protectionEnum
+                     * @note the object that has inited the object of current instance can be used for another connections
+                     */
+                    exchange(__init__ &init,
+                             short    protection = channel::PROTECTION_PROCESS);
 
-					/**
-					 * destructor
-					 */
-					virtual ~exchange();
+                    /**
+                     * destructor
+                     */
+                    virtual ~exchange();
 
-					/**
-					 * @return true if connection is alive
-					 */
-					virtual bool isAlive();
+                    /**
+                     * @return true if connection is alive
+                     */
+                    virtual bool isAlive();
 
-					/**
-					 * close connection
-					 */
-					virtual void close();
+                    /**
+                     * close connection
+                     */
+                    virtual void close();
 
-				  protected:
+                  protected:
 
-					io::ssl::__connection__ *handle; ///< SSL connection handle
+                    io::ssl::__connection__ *handle; ///< SSL connection handle
 
-					/**
-					 * close socket connection
-					 * @param socket defines socket descriptor
-					 * @param handle defines SSL handle
-					 */
-					void _close(int                        socket,
-										io::ssl::__connection__ *handle);
+                    /**
+                     * close socket connection
+                     * @param socket defines socket descriptor
+                     * @param handle defines SSL handle
+                     */
+                    void _close(int                     socket,
+                                io::ssl::__connection__ *handle);
 
-					/**
-					 * init current instance
-					 * @param socket defines socket
-					 * @param handle defines SSL handle
-					 * @param blocked defines the connection block status
-					 * @param blockInherited defines block flag inheritance
-					 */
-					void init(int                        socket,
-									  io::ssl::__connection__ *handle,
-									  bool                       blocked,
-									  bool                       blockInherited);
+                    /**
+                     * init current instance
+                     * @param socket defines socket
+                     * @param handle defines SSL handle
+                     * @param blocked defines the connection block status
+                     * @param blockInherited defines block flag inheritance
+                     */
+                    void init(int                     socket,
+                              io::ssl::__connection__ *handle,
+                              bool                    blocked,
+                              bool                    blockInherited);
 
-					/**
-					 * @param data defines buffer that will be filled
-					 * @note not more then blockSize(including null)
-					 */
-					virtual void _read(char * const data) const;
+                    /**
+                     * @param data defines buffer that will be filled
+                     * @note not more then blockSize(including null)
+                     */
+                    virtual void _read(char * const data) const;
 
-					/**
-					 * read from stream null or newline terminated string
-					 * @param data defines buffer that will be filled
-					 * @note not more then blockSize(including null)
-					 */
-					virtual unsigned long _readString(char * const data) const;
+                    /**
+                     * read from stream null or newline terminated string
+                     * @param data defines buffer that will be filled
+                     * @note not more then blockSize(including null)
+                     */
+                    virtual unsigned long _readString(char * const data) const;
 
-					/**
-					 * @param data defines data that will be written
-					 */
-					virtual void _write(const char * const data) const;
-				};
-			};
-		};
-	};
+                    /**
+                     * @param data defines data that will be written
+                     */
+                    virtual void _write(const char * const data) const;
+                };
+            };
+        };
+    };
 };
 #endif
 #endif

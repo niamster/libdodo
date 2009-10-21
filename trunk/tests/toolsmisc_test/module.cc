@@ -14,34 +14,34 @@ using namespace dodo;
 #ifdef DL_EXT
 extern "C"
 {
-	void
-	handler(int module,
-				dodo::exception::basic *ex,
-				void *data)
-	{
-		std::cout << "module:handler: " << ex->errStr << std::endl;
-		std::cout << ex->message << std::endl;
-	}
+void
+handler(int                    module,
+        dodo::exception::basic *ex,
+        void                   *data)
+{
+    std::cout << "module:handler: " << ex->errStr << std::endl;
+    std::cout << ex->message << std::endl;
+}
 
-	dodo::exception::basic::__module__
-	initExceptionBasicModule(void *data)
-	{
-		dodo::exception::basic::__module__ module = {
-			"test",
-			"test module",
-			"handler",
-			{false, }
-		};
+dodo::exception::basic::__module__
+initExceptionBasicModule(void *data)
+{
+    dodo::exception::basic::__module__ module = {
+        "test",
+        "test module",
+        "handler",
+        { false, }
+    };
 
-		module.modules[exception::MODULE_TOOLSFILESYSTEM] = true;
+    module.modules[exception::MODULE_TOOLSFILESYSTEM] = true;
 
-		return module;
-	}
+    return module;
+}
 
-	void
-	deinitExceptionBasicModule()
-	{
-		std::cout << "deactivation.";
-	}
+void
+deinitExceptionBasicModule()
+{
+    std::cout << "deactivation.";
+}
 };
 #endif

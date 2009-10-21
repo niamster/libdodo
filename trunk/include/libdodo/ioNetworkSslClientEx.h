@@ -35,40 +35,40 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			namespace ssl {
-				/**
-				 * libdodo defined errors
-				 */
-				enum clientExR {
-					CLIENTEX_UNABLETOINITCONTEXT,
-					CLIENTEX_UNABLETOINITSSL,
-					CLIENTEX_UNKNOWNKEYTYPE,
-					CLIENTEX_LONGPATH,
-				};
+    namespace io {
+        namespace network {
+            namespace ssl {
+                /**
+                 * libdodo defined errors
+                 */
+                enum clientExR {
+                    CLIENTEX_UNABLETOINITCONTEXT,
+                    CLIENTEX_UNABLETOINITSSL,
+                    CLIENTEX_UNKNOWNKEYTYPE,
+                    CLIENTEX_LONGPATH,
+                };
 
-				/**
-				 * explanations for libdodo defined errors
-				 */
+                /**
+                 * explanations for libdodo defined errors
+                 */
 #define IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection"
 #define IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR "Unable to initialize SSL object"
 #define IONETWORKSSLCLIENTEX_UNKNOWNKEY_STR "Unknown key type"
 #define IONETWORKSSLCLIENTEX_LONGPATH_STR "Path to socket is too long"
 
-				/**
-				 * IDs of functions where exception might be thrown
-				 */
-				enum clientFunctionsID {
-					CLIENTEX_INITSSL,
-					CLIENTEX_CONNECTSSL,
-					CLIENTEX_CONNECT,
-					CLIENTEX_CONNECTFROM,
-					CLIENTEX_SETSERTIFICATES,
-					CLIENTEX_REMOVESERTIFICATES,
-				};
-			};
-		};
-	};
+                /**
+                 * IDs of functions where exception might be thrown
+                 */
+                enum clientFunctionsID {
+                    CLIENTEX_INITSSL,
+                    CLIENTEX_CONNECTSSL,
+                    CLIENTEX_CONNECT,
+                    CLIENTEX_CONNECTFROM,
+                    CLIENTEX_SETSERTIFICATES,
+                    CLIENTEX_REMOVESERTIFICATES,
+                };
+            };
+        };
+    };
 };
 #endif

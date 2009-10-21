@@ -35,124 +35,124 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace tools {
-		struct __regexp__;
+    namespace tools {
+        struct __regexp__;
 
-		/**
-		 * @class regexp
-		 * @brief provides REGEXP support
-		 * @note PCRE is much faster
-		 * both POSIX and PCRE don't support binary patterns
-		 * POSIX doesn't support binary match sting
-		 */
-		class regexp {
-		  private:
+        /**
+         * @class regexp
+         * @brief provides REGEXP support
+         * @note PCRE is much faster
+         * both POSIX and PCRE don't support binary patterns
+         * POSIX doesn't support binary match sting
+         */
+        class regexp {
+          private:
 
-			/**
-			 * copy constructor
-			 * @note to prevent copying
-			 */
-			regexp(regexp &rt);
+            /**
+             * copy constructor
+             * @note to prevent copying
+             */
+            regexp(regexp &rt);
 
-		  public:
+          public:
 
-			/**
-			 * constructor
-			 */
-			regexp();
+            /**
+             * constructor
+             */
+            regexp();
 
-			/**
-			 * constructor
-			 * @param pattern defines regex pattern
-			 */
-			regexp(const dodoString &pattern);
+            /**
+             * constructor
+             * @param pattern defines regex pattern
+             */
+            regexp(const dodoString &pattern);
 
-			/**
-			 * destructor
-			 */
-			virtual ~regexp();
+            /**
+             * destructor
+             */
+            virtual ~regexp();
 
-			/**
-			 * @return true if matched pattern
-			 * @param pattern defines regex pattern
-			 * @param sample defines a match string
-			 * @param pockets defines array that will be filled with matched substrings in '()'
-			 * @note first in pocket is a first match
-			 */
-			virtual bool match(const dodoString &pattern,
-							   const dodoString &sample,
-							   dodoStringArray  &pockets = __dodostringarray__);
+            /**
+             * @return true if matched pattern
+             * @param pattern defines regex pattern
+             * @param sample defines a match string
+             * @param pockets defines array that will be filled with matched substrings in '()'
+             * @note first in pocket is a first match
+             */
+            virtual bool match(const dodoString &pattern,
+                               const dodoString &sample,
+                               dodoStringArray  &pockets = __dodostringarray__);
 
-			/**
-			 * match with pattern previously given for match/compile method
-			 * @return true if matched pattern
-			 * @param sample defines a match string
-			 * @param pockets defines array that will be filled with matched substrings in '()'
-			 * @note first in pocket is a first match
-			 */
-			virtual bool match(const dodoString &sample,
-							   dodoStringArray  &pockets = __dodostringarray__);
+            /**
+             * match with pattern previously given for match/compile method
+             * @return true if matched pattern
+             * @param sample defines a match string
+             * @param pockets defines array that will be filled with matched substrings in '()'
+             * @note first in pocket is a first match
+             */
+            virtual bool match(const dodoString &sample,
+                               dodoStringArray  &pockets = __dodostringarray__);
 
-			/**
-			 * replace substrings in match string
-			 * @return string with replaced substrings
-			 * @param pattern defines regex pattern
-			 * @param sample defines a match string
-			 * @param replacements defines array that will be filled with matched substrings in '()'
-			 * @note if pattern is not matched - the sample will be returned
-			 */
-			virtual dodoString replace(const dodoString      &pattern,
-									   const dodoString      &sample,
-									   const dodoStringArray &replacements);
+            /**
+             * replace substrings in match string
+             * @return string with replaced substrings
+             * @param pattern defines regex pattern
+             * @param sample defines a match string
+             * @param replacements defines array that will be filled with matched substrings in '()'
+             * @note if pattern is not matched - the sample will be returned
+             */
+            virtual dodoString replace(const dodoString      &pattern,
+                                       const dodoString      &sample,
+                                       const dodoStringArray &replacements);
 
-			/**
-			 * replace substrings in match string with pattern previously given for match/compile method
-			 * @return string with replaced substrings
-			 * @param sample defines a match string
-			 * @param replacements defines array that will be filled with matched substrings in '()'
-			 * @note if pattern is not matched - the sample will be returned
-			 */
-			virtual dodoString replace(const dodoString      &sample,
-									   const dodoStringArray &replacements);
+            /**
+             * replace substrings in match string with pattern previously given for match/compile method
+             * @return string with replaced substrings
+             * @param sample defines a match string
+             * @param replacements defines array that will be filled with matched substrings in '()'
+             * @note if pattern is not matched - the sample will be returned
+             */
+            virtual dodoString replace(const dodoString      &sample,
+                                       const dodoStringArray &replacements);
 
-			/**
-			 * compile pattern
-			 * @param pattern defines regex pattern
-			 */
-			virtual void compile(const dodoString &pattern);
+            /**
+             * compile pattern
+             * @param pattern defines regex pattern
+             */
+            virtual void compile(const dodoString &pattern);
 
-			bool extended;                          ///< if true use extended regext support[true by default]
+            bool extended;                              ///< if true use extended regext support[true by default]
 
-			bool icase;                             ///< if true ignore case[false by default]
+            bool icase;                                 ///< if true ignore case[false by default]
 
-			bool greedy;                            ///< if true REGEXPs are greedy[true by default]
+            bool greedy;                                ///< if true REGEXPs are greedy[true by default]
 
-			bool multiline;                         ///< if true match strings are treated as multiline[false by default]
+            bool multiline;                             ///< if true match strings are treated as multiline[false by default]
 
-		  protected:
+          protected:
 
-			/**
-			 * @struct __regex_match__
-			 * @brief defines begin and end of matched substring
-			 */
-			struct __regex_match__ {
-				int begin;
-				int end;
-			};
+            /**
+             * @struct __regex_match__
+             * @brief defines begin and end of matched substring
+             */
+            struct __regex_match__ {
+                int begin;
+                int end;
+            };
 
-			/**
-			 * generate list of boundaries matched in match string by pattern
-			 * @return true if match string has matched substrings
-			 * @param sample defines a match string
-			 */
-			virtual bool boundMatch(const dodoString &sample);
+            /**
+             * generate list of boundaries matched in match string by pattern
+             * @return true if match string has matched substrings
+             * @param sample defines a match string
+             */
+            virtual bool boundMatch(const dodoString &sample);
 
-		  private:
+          private:
 
-			__regexp__ *regex;                      ///< regexp handle
+            __regexp__ *regex;                          ///< regexp handle
 
-			dodoArray<__regex_match__> boundaries;   ///< list of boundaries matched in match string by pattern
-		};
-	};
+            dodoArray<__regex_match__> boundaries;      ///< list of boundaries matched in match string by pattern
+        };
+    };
 };
 #endif

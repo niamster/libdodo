@@ -36,61 +36,61 @@
 #include <libdodo/rpcClient.h>
 
 namespace dodo {
-	namespace io {
-		class channel;
-	};
+    namespace io {
+        class channel;
+    };
 
-	namespace rpc {
-		class method;
-		class response;
+    namespace rpc {
+        class method;
+        class response;
 
-		namespace xml {
-			/**
-			 * @class client
-			 * @brief defines client-side XML-RPC instrument
-			 */
-			class client : virtual public rpc::client {
-			  public:
+        namespace xml {
+            /**
+             * @class client
+             * @brief defines client-side XML-RPC instrument
+             */
+            class client : virtual public rpc::client {
+              public:
 
-				/**
-				 * constructor
-				 * @param io defines input/output sources
-				 */
-				client(const io::channel &io);
+                /**
+                 * constructor
+                 * @param io defines input/output sources
+                 */
+                client(const io::channel &io);
 
-				/**
-				 * destructor
-				 */
-				virtual ~client();
+                /**
+                 * destructor
+                 */
+                virtual ~client();
 
-				/**
-				 * @param encoding defines request encoding
-				 */
-				void setRequestEncoding(const dodoString &encoding);
+                /**
+                 * @param encoding defines request encoding
+                 */
+                void setRequestEncoding(const dodoString &encoding);
 
-				/**
-				 * @return response encoding
-				 */
-				dodoString responseEncoding();
+                /**
+                 * @return response encoding
+                 */
+                dodoString responseEncoding();
 
-			  protected:
+              protected:
 
-				/**
-				 * process RPC call
-				 * @param meth defines RPC method representation
-				 */
-				virtual void processCallRequest(const rpc::method &meth);
+                /**
+                 * process RPC call
+                 * @param meth defines RPC method representation
+                 */
+                virtual void processCallRequest(const rpc::method &meth);
 
-				/**
-				 * process RPC call
-				 * @return RPC response represantation
-				 */
-				virtual rpc::response processCallResult();
+                /**
+                 * process RPC call
+                 * @return RPC response represantation
+                 */
+                virtual rpc::response processCallResult();
 
-				dodoString rpEncoding;  ///< encoding of the messages['UTF-8' by default]
-				dodoString rqEncoding;  ///< encoding of the messages['UTF-8' by default]
-			};
-		};
-	};
+                dodoString rpEncoding;  ///< encoding of the messages['UTF-8' by default]
+                dodoString rqEncoding;  ///< encoding of the messages['UTF-8' by default]
+            };
+        };
+    };
 };
 #endif

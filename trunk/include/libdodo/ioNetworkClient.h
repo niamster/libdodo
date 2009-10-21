@@ -37,130 +37,129 @@
 #include <libdodo/xexec.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			namespace ssl {
-				class client;
-			};
+    namespace io {
+        namespace network {
+            namespace ssl {
+                class client;
+            };
 
-			class exchange;
+            class exchange;
 
-			/**
-			 * @class client
-			 * @brief provides network connection interface
-			 */
-			class client : public connection
+            /**
+             * @class client
+             * @brief provides network connection interface
+             */
+            class client : public connection
 #ifndef IO_WO_XEXEC
-						   ,
-						   public xexec
+                           ,
+                           public xexec
 #endif
-			{
-				friend class exchange;
-				friend class ssl::client;
+            {
+                friend class exchange;
+                friend class ssl::client;
 
-			  private:
+              private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				client(client &);
+                /**
+                 * copy constructor
+                 * @note to prevent copying
+                 */
+                client(client &);
 
-			  public:
+              public:
 
-
-				/**
-				 * @enum operationEnum defines type of operation for xexec
-				 */
-				enum operationEnum {
-					OPERATION_CONNECT,
-					OPERATION_CONNECTFROM,
-				};
-
-#ifndef IO_WO_XEXEC
-				/**
-				 * @class __collected_data__
-				 * @brief defines data that could be retrieved from class
-				 */
-				class __collected_data__ : public xexec::__collected_data__ {
-				  public:
-
-					/**
-					 * constructor
-					 * @param executor defines class that executed hook
-					 * @param execObject defines type of object that executed a hook, @see xexec::bjectEnum
-					 */
-					__collected_data__(xexec *executor, short execObject);
-				};
-#endif
-
-				/**
-				 * constructor
-				 * @param family defines family of the socket, @see connection::protocolFamilyEnum
-				 * @param type defines type of the socket, @see connection::transferEnum
-				 */
-				client(short family,
-					   short type);
-
-				/**
-				 * destructor
-				 */
-				virtual ~client();
-
-				/**
-				 * connect from specific address
-				 * @param local defines ip address to bind
-				 * @param host defines ip address of host to connect
-				 * @param port defines port of host to connect
-				 * @param exchange defines an oject that will perform I/O operations
-				 */
-				virtual void connectFrom(const dodoString &local,
-										 const dodoString &host,
-										 int              port,
-										 exchange         &exchange);
-
-				/**
-				 * connect
-				 * @param host defines ip address of host to connect
-				 * @param port defines port of host to connect
-				 * @param exchange defines an oject that will perform I/O operations
-				 */
-				virtual void connect(const dodoString &host,
-									 int              port,
-									 exchange         &exchange);
-
-				/**
-				 * connect
-				 * @param path defines path to unix socket
-				 * @param exchange defines an oject that will perform I/O operations
-				 */
-				virtual void connect(const dodoString &path,
-									 exchange         &exchange);
-
-				bool blockInherited;                                    ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
-
-			  protected:
-
-				short family;                                           ///< socket family
-				short type;                                             ///< socket type
-
-				/**
-				 * restore options on connect/bind
-				 */
-				void restoreOptions();
-
-				/**
-				 * create socket
-				 */
-				virtual void makeSocket();
-
-				dodoString unixSock;                                    ///< path to unix socket
+                /**
+                 * @enum operationEnum defines type of operation for xexec
+                 */
+                enum operationEnum {
+                    OPERATION_CONNECT,
+                    OPERATION_CONNECTFROM,
+                };
 
 #ifndef IO_WO_XEXEC
-				__collected_data__ collectedData;    ///< data collected for xexec
+                /**
+                 * @class __collected_data__
+                 * @brief defines data that could be retrieved from class
+                 */
+                class __collected_data__ : public xexec::__collected_data__ {
+                  public:
+
+                    /**
+                     * constructor
+                     * @param executor defines class that executed hook
+                     * @param execObject defines type of object that executed a hook, @see xexec::bjectEnum
+                     */
+                    __collected_data__(xexec *executor, short execObject);
+                };
 #endif
-			};
-		};
-	};
+
+                /**
+                 * constructor
+                 * @param family defines family of the socket, @see connection::protocolFamilyEnum
+                 * @param type defines type of the socket, @see connection::transferEnum
+                 */
+                client(short family,
+                       short type);
+
+                /**
+                 * destructor
+                 */
+                virtual ~client();
+
+                /**
+                 * connect from specific address
+                 * @param local defines ip address to bind
+                 * @param host defines ip address of host to connect
+                 * @param port defines port of host to connect
+                 * @param exchange defines an oject that will perform I/O operations
+                 */
+                virtual void connectFrom(const dodoString &local,
+                                         const dodoString &host,
+                                         int              port,
+                                         exchange         &exchange);
+
+                /**
+                 * connect
+                 * @param host defines ip address of host to connect
+                 * @param port defines port of host to connect
+                 * @param exchange defines an oject that will perform I/O operations
+                 */
+                virtual void connect(const dodoString &host,
+                                     int              port,
+                                     exchange         &exchange);
+
+                /**
+                 * connect
+                 * @param path defines path to unix socket
+                 * @param exchange defines an oject that will perform I/O operations
+                 */
+                virtual void connect(const dodoString &path,
+                                     exchange         &exchange);
+
+                bool blockInherited;                                    ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
+
+              protected:
+
+                short family;                                           ///< socket family
+                short type;                                             ///< socket type
+
+                /**
+                 * restore options on connect/bind
+                 */
+                void restoreOptions();
+
+                /**
+                 * create socket
+                 */
+                virtual void makeSocket();
+
+                dodoString unixSock;                                    ///< path to unix socket
+
+#ifndef IO_WO_XEXEC
+                __collected_data__ collectedData;                       ///< data collected for xexec
+#endif
+            };
+        };
+    };
 };
 #endif

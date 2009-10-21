@@ -33,64 +33,64 @@
 #include <openssl/ssl.h>
 
 namespace dodo {
-	namespace io {
-		namespace ssl {
-			/**
-			 * @struct __connection__
-			 * @brief defines internal handlers for SSL
-			 */
-			struct __connection__ {
-				/**
-				 * constructor
-				 */
-				__connection__() : handle(NULL)
-				{
-				}
+    namespace io {
+        namespace ssl {
+            /**
+             * @struct __connection__
+             * @brief defines internal handlers for SSL
+             */
+            struct __connection__ {
+                /**
+                 * constructor
+                 */
+                __connection__() : handle(NULL)
+                {
+                }
 
-				SSL *handle;        ///< SSL connection handle
-			};
+                SSL *handle;        ///< SSL connection handle
+            };
 
-			/**
-			 * @struct __context__
-			 * @brief defines internal context for SSL
-			 */
-			struct __context__ {
-				/**
-				 * constructor
-				 */
-				__context__() : ctx(NULL)
-				{
-				}
+            /**
+             * @struct __context__
+             * @brief defines internal context for SSL
+             */
+            struct __context__ {
+                /**
+                 * constructor
+                 */
+                __context__() : ctx(NULL)
+                {
+                }
 
-				SSL_CTX *ctx;       ///< SSL context
-			};
+                SSL_CTX *ctx;       ///< SSL context
+            };
 
-			/**
-			 * @class __openssl___init__
-			 * @brief initializes openssl evironment
-			 */
-			class __openssl___init__ {
-			  public:
+            /**
+             * @class __openssl___init__
+             * @brief initializes openssl evironment
+             */
+            class __openssl___init__ {
+              public:
 
-				/**
-				 * contructor
-				 */
-				__openssl___init__();
+                /**
+                 * contructor
+                 */
+                __openssl___init__();
 
-				/**
-				 * destructor
-				 */
-				~__openssl___init__();
+                /**
+                 * destructor
+                 */
+                ~__openssl___init__();
 
-				/**
-				 * add entropy for randomness
-				 */
-				void addEntropy();
-			};
+                /**
+                 * add entropy for randomness
+                 */
+                void addEntropy();
+            };
 
-			extern __openssl___init__ __openssl___init_object__;
-		};
-	};
+            extern __openssl___init__ __openssl___init_object__;
+        };
+    };
 };
 #endif
 

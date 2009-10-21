@@ -39,108 +39,108 @@
 #include <string>
 
 namespace dodo {
-	/**
-	 * @def addFlag
-	 * @brief add bit flag to the statement
-	 */
+    /**
+     * @def addFlag
+     * @brief add bit flag to the statement
+     */
 #define addFlag(statement, flag)       (statement) |= (flag)
 
-	/**
-	 * @def removeFlag
-	 * @brief remove bit flag from the statement
-	 */
+    /**
+     * @def removeFlag
+     * @brief remove bit flag from the statement
+     */
 #define removeFlag(statement, flag)    (statement) &= (~(flag))
 
-	/**
-	 * @def isSetFlag
-	 * @brief return true if bit flag is set
-	 */
+    /**
+     * @def isSetFlag
+     * @brief return true if bit flag is set
+     */
 #define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
 
 #define dodoString std::string
 
-	/**
-	 * @struct __url__
-	 * @brief defines URL parts
-	 */
-	struct __url__ {
-		dodoString protocol;    ///< scheme
-		dodoString host;        ///< host name
-		dodoString path;        ///< path to CGI
-		dodoString request;     ///< CGI request
-		dodoString login;       ///< login
-		dodoString password;    ///< password
-		dodoString port;        ///< port
-	};
+    /**
+     * @struct __url__
+     * @brief defines URL parts
+     */
+    struct __url__ {
+        dodoString protocol;    ///< scheme
+        dodoString host;        ///< host name
+        dodoString path;        ///< path to CGI
+        dodoString request;     ///< CGI request
+        dodoString login;       ///< login
+        dodoString password;    ///< password
+        dodoString port;        ///< port
+    };
 
-	/**
-	 * @class dodoMapStringCompare
-	 * @brief defines compare functor
-	 */
-	class dodoMapStringCompare {
-	  public:
+    /**
+     * @class dodoMapStringCompare
+     * @brief defines compare functor
+     */
+    class dodoMapStringCompare {
+      public:
 
-		/**
-		 * compares strings
-		 * @param first defines first string to compare
-		 * @param second defines second string to compare
-		 */
-		bool operator()(const dodoString &first,
-						const dodoString &second);
+        /**
+         * compares strings
+         * @param first defines first string to compare
+         * @param second defines second string to compare
+         */
+        bool operator()(const dodoString &first,
+                        const dodoString &second);
 
-		/**
-		 * compares strings
-		 * @param first defines first string to compare
-		 * @param second defines second string to compare
-		 */
-		bool operator()(const dodoString &first,
-						const dodoString &second) const;
-	};
+        /**
+         * compares strings
+         * @param first defines first string to compare
+         * @param second defines second string to compare
+         */
+        bool operator()(const dodoString &first,
+                        const dodoString &second) const;
+    };
 
-	/**
-	 * @class dodoMapStringCompare
-	 * @brief defines compare functor
-	 */
-	class dodoMapICaseStringCompare {
-	  public:
+    /**
+     * @class dodoMapStringCompare
+     * @brief defines compare functor
+     */
+    class dodoMapICaseStringCompare {
+      public:
 
-		/**
-		 * compares strings
-		 * @param first defines first string to compare
-		 * @param second defines second string to compare
-		 */
-		bool operator()(const dodoString &first,
-						const dodoString &second);
+        /**
+         * compares strings
+         * @param first defines first string to compare
+         * @param second defines second string to compare
+         */
+        bool operator()(const dodoString &first,
+                        const dodoString &second);
 
-		/**
-		 * compares strings
-		 * @param first defines first string to compare
-		 * @param second defines second string to compare
-		 */
-		bool operator()(const dodoString &first,
-						const dodoString &second) const;
-	};
+        /**
+         * compares strings
+         * @param first defines first string to compare
+         * @param second defines second string to compare
+         */
+        bool operator()(const dodoString &first,
+                        const dodoString &second) const;
+    };
 
-	/**
-	 * @class singleton
-	 * @brief defines singleton base class for derived class
-	 * @note not threadsafe
-	 */
-	template<typename T>
-	class singleton {
-	  public:
+    /**
+     * @class singleton
+     * @brief defines singleton base class for derived class
+     * @note not threadsafe
+     */
+    template<typename T>
+    class singleton {
+      public:
 
-		/**
-		 * @return logger instance which can be used globally
-		 */
-		static T &
-		instance()
-		{
-			static T t;
+        /**
+         * @return logger instance which can be used globally
+         */
+        static T &
+        instance()
+        {
+            static T t;
 
-			return t;
-		}
-	};
+            return t;
+        }
+    };
 
 #define dodoMap std::map
 
@@ -150,29 +150,29 @@ namespace dodo {
 #define dodoArray    std::vector
 #endif
 
-	typedef dodoArray<dodoString> dodoStringArray;                                          ///< array of strings
+    typedef dodoArray<dodoString> dodoStringArray;                                          ///< array of strings
 
 #define dodoList std::list
 
-	typedef dodoList<dodoString> dodoStringList;                                            ///< array of strings
+    typedef dodoList<dodoString> dodoStringList;                                            ///< array of strings
 
-	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;            ///< hash of strings
-	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;  ///< hash of strings[case insensitive]
+    typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;            ///< hash of strings
+    typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;  ///< hash of strings[case insensitive]
 
-	typedef dodoArray<dodoStringMap> dodoStringMapArray;                                    ///< array of hashes of string
+    typedef dodoArray<dodoStringMap> dodoStringMapArray;                                    ///< array of hashes of string
 
-	/**
-	 * predifined constants
-	 */
+    /**
+     * predifined constants
+     */
 
-	extern dodoString __dodostring__;
+    extern dodoString __dodostring__;
 
-	extern dodoStringArray __dodostringarray__;
+    extern dodoStringArray __dodostringarray__;
 
-	extern dodoStringMap __dodostringmap__;
+    extern dodoStringMap __dodostringmap__;
 
-	extern dodoArray<dodoStringArray> __dodostringarrayarray__;
+    extern dodoArray<dodoStringArray> __dodostringarrayarray__;
 
-	extern dodoStringMapArray __dodostringmaparray__;
+    extern dodoStringMapArray __dodostringmaparray__;
 };
 #endif

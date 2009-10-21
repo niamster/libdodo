@@ -38,17 +38,17 @@
 using namespace dodo::cgi::basic;
 
 exchange::exchange(exchange &e) : io::stream::channel(e.protection),
-								   dodo::cgi::exchange(e.protection)
+                                  dodo::cgi::exchange(e.protection)
 {
 }
 
 //-------------------------------------------------------------------
 
-exchange::exchange(short protection) : 	io::stream::channel(protection),
-										dodo::cgi::exchange(protection)
+exchange::exchange(short protection) :  io::stream::channel(protection),
+                                        dodo::cgi::exchange(protection)
 {
 #ifndef IO_WO_XEXEC
-	collectedData.setExecObject(xexec::OBJECT_CGIBASICEXCHANGE);
+    collectedData.setExecObject(xexec::OBJECT_CGIBASICEXCHANGE);
 #endif
 }
 
@@ -63,7 +63,7 @@ exchange::~exchange()
 char *
 exchange::getenv(const char *buf)
 {
-	return ::getenv(buf);
+    return ::getenv(buf);
 }
 
 //-------------------------------------------------------------------

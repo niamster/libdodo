@@ -37,7 +37,7 @@
 
 template <typename T>
 dodo::pc::execution::manager<T>::manager() : counter(0),
-											 keeper(new pc::sync::thread)
+                                             keeper(new pc::sync::thread)
 {
 }
 
@@ -46,169 +46,179 @@ dodo::pc::execution::manager<T>::manager() : counter(0),
 template <typename T>
 dodo::pc::execution::manager<T>::~manager()
 {
-	delete keeper;
+    delete keeper;
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 unsigned long
-dodo::pc::execution::manager<T>::add(const T &job)
+dodo::pc::execution::manager<T
+                             >::add(const T &job)
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	handles.insert(make_pair(counter, job));
+    handles.insert(make_pair(counter, job));
 
-	return counter++;
+    return counter++;
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 void
-dodo::pc::execution::manager<T>::remove(unsigned long id,
-				   bool          terminate)
+dodo::pc::execution::manager<T
+                             >::remove(unsigned long id,
+                                       bool          terminate)
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
+    typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
-	if (job == handles.end())
-		return;
+    if (job == handles.end())
+        return;
 
-	if (terminate && job->second.isRunning())
-		job->second.stop();
+    if (terminate && job->second.isRunning())
+        job->second.stop();
 
-	handles.erase(job);
+    handles.erase(job);
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 void
-dodo::pc::execution::manager<T>::run(unsigned long id)
+dodo::pc::execution::manager<T
+                             >::run(unsigned long id)
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
+    typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
-	if (job == handles.end())
-		throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+    if (job == handles.end())
+        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
-	job->second.run();
+    job->second.run();
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 void
-dodo::pc::execution::manager<T>::stop(unsigned long id)
+dodo::pc::execution::manager<T
+                             >::stop(unsigned long id)
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
+    typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
-	if (job == handles.end())
-		throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+    if (job == handles.end())
+        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
-	job->second.stop();
+    job->second.stop();
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 void
-dodo::pc::execution::manager<T>::stop()
+dodo::pc::execution::manager<T
+                             >::stop()
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	typename dodoMap<unsigned long, T>::iterator i = handles.begin(), j = handles.end();
+    typename dodoMap<unsigned long, T>::iterator i = handles.begin(), j = handles.end();
 
-	for (;i!=j;++i)
-		i->second.stop();
+    for (; i != j; ++i)
+        i->second.stop();
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 int
-dodo::pc::execution::manager<T>::wait(unsigned long id)
+dodo::pc::execution::manager<T
+                             >::wait(unsigned long id)
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
+    typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
 
-	if (job == handles.end())
-		throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+    if (job == handles.end())
+        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
-	return job->second.wait();
+    return job->second.wait();
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 void
-dodo::pc::execution::manager<T>::wait()
+dodo::pc::execution::manager<T
+                             >::wait()
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	typename dodoMap<unsigned long, T>::iterator i = handles.begin(), j = handles.end();
+    typename dodoMap<unsigned long, T>::iterator i = handles.begin(), j = handles.end();
 
-	for (;i!=j;++i)
-		i->second.wait();
+    for (; i != j; ++i)
+        i->second.wait();
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 bool
-dodo::pc::execution::manager<T>::isRunning(unsigned long id) const
+dodo::pc::execution::manager<T
+                             >::isRunning(unsigned long id) const
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	typename dodoMap<unsigned long, T>::const_iterator job = handles.find(id);
+    typename dodoMap<unsigned long, T>::const_iterator job = handles.find(id);
 
-	if (job == handles.end())
-		throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+    if (job == handles.end())
+        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
-	return job->second.isRunning();
+    return job->second.isRunning();
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 unsigned long
-dodo::pc::execution::manager<T>::running() const
+dodo::pc::execution::manager<T
+                             >::running() const
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	unsigned long jobs;
+    unsigned long jobs;
 
-	typename dodoMap<unsigned long, T>::const_iterator i = handles.begin(), j = handles.end();
+    typename dodoMap<unsigned long, T>::const_iterator i = handles.begin(), j = handles.end();
 
-	for (;i!=j;++i)
-		if (i->second.isRunning())
-			++jobs;
+    for (; i != j; ++i)
+        if (i->second.isRunning())
+            ++jobs;
 
-	return jobs;
+    return jobs;
 }
 
 //-------------------------------------------------------------------
 
 template <typename T>
 dodoList<unsigned long>
-dodo::pc::execution::manager<T>::jobs()
+dodo::pc::execution::manager<T
+                             >::jobs()
 {
-	pc::sync::stack tg(keeper);
+    pc::sync::stack tg(keeper);
 
-	dodoList<unsigned long> jobs;
+    dodoList<unsigned long> jobs;
 
-	typename dodoMap<unsigned long, T>::const_iterator i = handles.begin(), j = handles.end();
+    typename dodoMap<unsigned long, T>::const_iterator i = handles.begin(), j = handles.end();
 
-	for (;i!=j;++i)
-		jobs.push_back(i->first);
+    for (; i != j; ++i)
+        jobs.push_back(i->first);
 
-	return jobs;
+    return jobs;
 }
 
 //-------------------------------------------------------------------

@@ -35,65 +35,65 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace rpc {
-		class value;
+    namespace rpc {
+        class value;
 
-		namespace xml {
-			class method;
-			class server;
-		};
+        namespace xml {
+            class method;
+            class server;
+        };
 
-		namespace json {
-			class method;
-			class server;
-		};
+        namespace json {
+            class method;
+            class server;
+        };
 
-		/**
-		 * @class method
-		 * @brief defines RPC method reprasentation
-		 */
-		class method {
-			friend class client;
-			friend class server;
-			friend class xml::method;
-			friend class xml::server;
-			friend class json::method;
-			friend class json::server;
+        /**
+         * @class method
+         * @brief defines RPC method reprasentation
+         */
+        class method {
+            friend class client;
+            friend class server;
+            friend class xml::method;
+            friend class xml::server;
+            friend class json::method;
+            friend class json::server;
 
-		  public:
+          public:
 
-			/**
-			 * constructor
-			 */
-			method();
+            /**
+             * constructor
+             */
+            method();
 
-			/**
-			 * destructor
-			 */
-			~method();
+            /**
+             * destructor
+             */
+            ~method();
 
-			/**
-			 * set method name
-			 * @param name defines method name
-			 */
-			void setName(const dodoString &name);
+            /**
+             * set method name
+             * @param name defines method name
+             */
+            void setName(const dodoString &name);
 
-			/**
-			 * clear arguments information
-			 */
-			void clear();
+            /**
+             * clear arguments information
+             */
+            void clear();
 
-			/**
-			 * add argument
-			 * @param argument defines method argument
-			 */
-			void addArgument(const value &argument);
+            /**
+             * add argument
+             * @param argument defines method argument
+             */
+            void addArgument(const value &argument);
 
-		  private:
+          private:
 
-			dodoArray<value> arguments; ///< method arguments
-			dodoString name;            ///< method name
-		};
-	};
+            dodoArray<value> arguments; ///< method arguments
+            dodoString name;            ///< method name
+        };
+    };
 };
 #endif

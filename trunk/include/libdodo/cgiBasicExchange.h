@@ -37,43 +37,43 @@
 #include <libdodo/ioStdio.h>
 
 namespace dodo {
-	namespace cgi {
-		namespace basic {
-			/**
-			 * @class exchange
-			 * @brief provides interface to CGI I/O functionality
-			 */
-			class exchange : virtual public cgi::exchange,
-							 virtual public io::stdio {
-			  private:
+    namespace cgi {
+        namespace basic {
+            /**
+             * @class exchange
+             * @brief provides interface to CGI I/O functionality
+             */
+            class exchange : virtual public cgi::exchange,
+                             virtual public io::stdio {
+              private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				exchange(exchange &);
+                /**
+                 * copy constructor
+                 * @note to prevent copying
+                 */
+                exchange(exchange &);
 
-			  public:
+              public:
 
-				/**
-				 * constructor
-				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-				 */
-				exchange(short protection = io::channel::PROTECTION_PROCESS);
+                /**
+                 * constructor
+                 * @param protection defines type of IO protection, @see io::channel::protectionEnum
+                 */
+                exchange(short protection = io::channel::PROTECTION_PROCESS);
 
-				/**
-				 * destructor
-				 */
-				virtual ~exchange();
+                /**
+                 * destructor
+                 */
+                virtual ~exchange();
 
-				/**
-				 * @return environment variable
-				 * @param data defines name of environment variable
-				 */
-				virtual char *getenv(const char *data);
-			};
-		};
-	};
+                /**
+                 * @return environment variable
+                 * @param data defines name of environment variable
+                 */
+                virtual char *getenv(const char *data);
+            };
+        };
+    };
 };
 #endif
 

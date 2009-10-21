@@ -37,132 +37,132 @@
 #include <libdodo/dataBaseSqlConstructor.h>
 
 namespace dodo {
-	namespace data {
-		namespace base {
-			struct __sqlite__;
+    namespace data {
+        namespace base {
+            struct __sqlite__;
 
-			/**
-			 * @class sqlite
-			 * @brief provides an interface to sqlite db
-			 */
-			class sqlite : public sql::constructor {
-			  private:
+            /**
+             * @class sqlite
+             * @brief provides an interface to sqlite db
+             */
+            class sqlite : public sql::constructor {
+              private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				sqlite(sqlite &);
+                /**
+                 * copy constructor
+                 * @note to prevent copying
+                 */
+                sqlite(sqlite &);
 
-			  public:
+              public:
 
-				/**
-				 * constructor
-				 */
-				sqlite();
+                /**
+                 * constructor
+                 */
+                sqlite();
 
-				/**
-				 * constructor
-				 * @param dbInfo defines information for connection to db
-				 */
-				sqlite(const __connection__ &dbInfo);
+                /**
+                 * constructor
+                 * @param dbInfo defines information for connection to db
+                 */
+                sqlite(const __connection__ &dbInfo);
 
-				/**
-				 * destructor
-				 */
-				virtual ~sqlite();
+                /**
+                 * destructor
+                 */
+                virtual ~sqlite();
 
-				/**
-				 * connect to the database
-				 * @param dbInfo defines information for connection to db
-				 */
-				virtual void connect(const __connection__ &dbInfo);
+                /**
+                 * connect to the database
+                 * @param dbInfo defines information for connection to db
+                 */
+                virtual void connect(const __connection__ &dbInfo);
 
-				/**
-				 * disconnect from the database
-				 */
-				virtual void disconnect();
+                /**
+                 * disconnect from the database
+                 */
+                virtual void disconnect();
 
-				/**
-				 * automaticaly detect fields types
-				 * @param table defines table for which rules will be applied
-				 */
-				virtual void requestFieldsTypes(const dodoString &table);
+                /**
+                 * automaticaly detect fields types
+                 * @param table defines table for which rules will be applied
+                 */
+                virtual void requestFieldsTypes(const dodoString &table);
 
-				/**
-				 * @return amount of affected rows from the evaluated request
-				 */
-				virtual unsigned int affectedRows() const;
+                /**
+                 * @return amount of affected rows from the evaluated request
+                 */
+                virtual unsigned int affectedRows() const;
 
-				/**
-				 * @return amount of received rows from the evaluated request
-				 */
-				virtual unsigned int requestedRows() const;
+                /**
+                 * @return amount of received rows from the evaluated request
+                 */
+                virtual unsigned int requestedRows() const;
 
-				/**
-				 * @return amount of received fields from the evaluated request
-				 */
-				virtual unsigned int requestedFields() const;
+                /**
+                 * @return amount of received fields from the evaluated request
+                 */
+                virtual unsigned int requestedFields() const;
 
-				/**
-				 * @return received rows from the evaluated request
-				 */
-				virtual dodoArray<dodoStringArray> fetchRows() const;
+                /**
+                 * @return received rows from the evaluated request
+                 */
+                virtual dodoArray<dodoStringArray> fetchRows() const;
 
-				/**
-				 * @return received fields from the evaluated request
-				 */
-				virtual dodoStringArray fetchFields() const;
+                /**
+                 * @return received fields from the evaluated request
+                 */
+                virtual dodoStringArray fetchFields() const;
 
-				/**
-				 * @return structure received rows and fields from the evaluated request
-				 */
-				virtual __tuples__ fetch() const;
+                /**
+                 * @return structure received rows and fields from the evaluated request
+                 */
+                virtual __tuples__ fetch() const;
 
-				/**
-				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
-				 */
-				virtual dodoStringMapArray fetchFieldsToRows() const;
+                /**
+                 * @return received rows and fields from the evaluated request using hash `key`=>`value`
+                 */
+                virtual dodoStringMapArray fetchFieldsToRows() const;
 
-				/**
-				 * execute request
-				 * @param query defines query; you may define it if you don't use db methods like select, update
-				 * @param result defines type of result; if true query return the result
-				 */
-				virtual void exec(const dodoString &query = __dodostring__,
-								  bool             result = false);
+                /**
+                 * execute request
+                 * @param query defines query; you may define it if you don't use db methods like select, update
+                 * @param result defines type of result; if true query return the result
+                 */
+                virtual void exec(const dodoString &query = __dodostring__,
+                                  bool             result = false);
 
-			  protected:
+              protected:
 
-				/**
-				 * construct `insert` statement
-				 */
-				virtual void insertCollect();
+                /**
+                 * construct `insert` statement
+                 */
+                virtual void insertCollect();
 
-				/**
-				 * construct `update` statement
-				 */
-				virtual void updateCollect();
+                /**
+                 * construct `update` statement
+                 */
+                virtual void updateCollect();
 
-				/**
-				 * @struct __blob__
-				 * @brief defines blob value
-				 */
-				struct __blob__ {
-					unsigned int     reference;     ///< reference in request
-					const dodoString *value;        ///< pointer to blob value
-				};
+                /**
+                 * @struct __blob__
+                 * @brief defines blob value
+                 */
+                struct __blob__ {
+                    unsigned int     reference;     ///< reference in request
+                    const dodoString *value;        ///< pointer to blob value
+                };
 
-				dodoList<__blob__> blobs;           ///< references to blob data
+                dodoList<__blob__> blobs;           ///< references to blob data
 
-			  private:
+              private:
 
-				__sqlite__ *handle;                 ///< DB handle
+                __sqlite__ *handle;                 ///< DB handle
 
-				bool empty;                         ///< true if liteStmt is empty
-			};
-		};
-	};
+                bool empty;                         ///< true if liteStmt is empty
+            };
+        };
+    };
 };
 #endif
 #endif

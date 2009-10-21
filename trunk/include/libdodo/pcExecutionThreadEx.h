@@ -35,39 +35,39 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace pc {
-		namespace execution {
-			/**
-			 * libdodo defined errors
-			 */
-			enum threadExR {
-				THREADEX_ISALREADYRUNNING,
-				THREADEX_ISNOTLAUNCHED,
-				THREADEX_ISDETACHED,
-			};
+    namespace pc {
+        namespace execution {
+            /**
+             * libdodo defined errors
+             */
+            enum threadExR {
+                THREADEX_ISALREADYRUNNING,
+                THREADEX_ISNOTLAUNCHED,
+                THREADEX_ISDETACHED,
+            };
 
-			/**
-			 * libdodo defined errors explanation
-			 */
+            /**
+             * libdodo defined errors explanation
+             */
 #define PCEXECUTIONTHREADEX_ISALREADYRUNNING_STR    "Thread is currently running"
-#define PCEXECUTIONTHREADEX_ISNOTLAUNCHED_STR		"Thread is not launched"
+#define PCEXECUTIONTHREADEX_ISNOTLAUNCHED_STR       "Thread is not launched"
 #define PCEXECUTIONTHREADEX_ISDETACHED_STR          "Thread is detached"
 
-			/**
-			 * ID of function where exception was thrown
-			 */
-			enum threadFunctionsID {
-				THREADEX_RUN,
-				THREADEX_WAIT,
-				THREADEX_STOP,
-				THREADEX_ISRUNNING,
-				THREADEX_CONSTRUCTOR,
+            /**
+             * ID of function where exception was thrown
+             */
+            enum threadFunctionsID {
+                THREADEX_RUN,
+                THREADEX_WAIT,
+                THREADEX_STOP,
+                THREADEX_ISRUNNING,
+                THREADEX_CONSTRUCTOR,
 #ifdef DL_EXT
-				THREADEX_MODULE,
+                THREADEX_MODULE,
 #endif
-			};
-		};
-	};
+            };
+        };
+    };
 };
 #endif
 

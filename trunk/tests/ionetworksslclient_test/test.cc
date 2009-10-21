@@ -16,59 +16,58 @@ using namespace io::network::ssl;
 
 using namespace std;
 
-int main(int argc, char **argv)
+int
+main(int  argc,
+     char **argv)
 {
-	try
-	{
+    try {
 #ifdef OPENSSL_EXT
-		dodoString host = "kernel.org";
+        dodoString host = "kernel.org";
 
-		cout << host << ":" << tools::network::hostPrimaryIp(host) << endl;
+        cout << host << ":" << tools::network::hostPrimaryIp(host) << endl;
 
-		client st(io::network::connection::PROTOCOL_FAMILY_IPV4, io::network::connection::TRANSFER_STREAM);
+        client st(io::network::connection::PROTOCOL_FAMILY_IPV4, io::network::connection::TRANSFER_STREAM);
 
-		io::ssl::__certificates__ certs;
-		certs.ca = "host.pem";
+        io::ssl::__certificates__ certs;
+        certs.ca = "host.pem";
 
-		//certs.cert = "host.cert";
-		//certs.key = "host.key";
-		//certs.keyType = KEYTYPE_PKEY;
+        //certs.cert = "host.cert";
+        //certs.key = "host.key";
+        //certs.keyType = KEYTYPE_PKEY;
 
-		//certs.caPath = "./";
+        //certs.caPath = "./";
 
-		st.setSertificates(certs);
+        st.setSertificates(certs);
 
-		exchange ex;
-		dodoString str;
+        exchange ex;
+        dodoString str;
 
-		st.connect(tools::network::hostPrimaryIp(host), 443, ex);
+        st.connect(tools::network::hostPrimaryIp(host), 443, ex);
 
-		str = "GET / HTTP/1.1\r\n";
-		ex.blockSize = str.size();
-		ex.write(str);
+        str = "GET / HTTP/1.1\r\n";
+        ex.blockSize = str.size();
+        ex.write(str);
 
-		str = "Host: " + host + "\r\n";
-		ex.blockSize = str.size();
-		ex.write(str);
+        str = "Host: " + host + "\r\n";
+        ex.blockSize = str.size();
+        ex.write(str);
 
-		str = "Connection: Close\r\n";
-		ex.blockSize = str.size();
-		ex.write(str);
+        str = "Connection: Close\r\n";
+        ex.blockSize = str.size();
+        ex.write(str);
 
-		str = "User-Agent: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n\r\n";
-		ex.blockSize = str.size();
-		ex.write(str);
+        str = "User-Agent: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n\r\n";
+        ex.blockSize = str.size();
+        ex.write(str);
 
-		ex.blockSize = 4096;
-		str = ex.readString();
+        ex.blockSize = 4096;
+        str = ex.readString();
 
-		cout << tools::misc::split(str, "\r\n\r\n")[0] << endl;
+        cout << tools::misc::split(str, "\r\n\r\n")[0] << endl;
 #endif
-	}
-	catch (dodo::exception::basic &ex)
-	{
-		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
-	}
+    } catch (dodo::exception::basic &ex)   {
+        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    }
 
-	return 0;
+    return 0;
 }

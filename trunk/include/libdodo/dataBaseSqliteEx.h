@@ -35,33 +35,33 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace data {
-		namespace base {
-			/**
-			 * libdodo defined errors
-			 */
-			enum sqliteExR {
-				SQLITEEX_NOTOPENED,
-			};
+    namespace data {
+        namespace base {
+            /**
+             * libdodo defined errors
+             */
+            enum sqliteExR {
+                SQLITEEX_NOTOPENED,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define DATABASESQLITEEX_NOTOPENED_STR      "Database not opened"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum sqliteFunctionsID {
-				SQLITEEX_DISCONNECT,
-				SQLITEEX_CONNECT,
-				SQLITEEX_EXEC,
-				SQLITEEX_SQLITE,
-				SQLITEEX_FETCHROWS,
-				SQLITEEX_FETCHFIELDSTOROWS,
-				SQLITEEX_GETFIELDSTYPES,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum sqliteFunctionsID {
+                SQLITEEX_DISCONNECT,
+                SQLITEEX_CONNECT,
+                SQLITEEX_EXEC,
+                SQLITEEX_SQLITE,
+                SQLITEEX_FETCHROWS,
+                SQLITEEX_FETCHFIELDSTOROWS,
+                SQLITEEX_GETFIELDSTYPES,
+            };
+        };
+    };
 };
 #endif

@@ -43,19 +43,19 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace pc {
-		namespace sync {
-			/**
-			 * @struct thread::__lock__
-			 * @brief defines thread mutex
-			 */
-			struct thread::__lock__ {
+    namespace pc {
+        namespace sync {
+            /**
+             * @struct thread::__lock__
+             * @brief defines thread mutex
+             */
+            struct thread::__lock__ {
 #ifdef PTHREAD_EXT
-				pthread_mutex_t keeper;  ///< lock
+                pthread_mutex_t keeper;  ///< lock
 #endif
-			};
-		};
-	};
+            };
+        };
+    };
 };
 
 using namespace dodo::pc::sync;
@@ -69,34 +69,34 @@ thread::thread(thread &)
 thread::thread() : lock(new thread::__lock__)
 {
 #ifdef PTHREAD_EXT
-	pthread_mutexattr_t attr;
-	errno = pthread_mutexattr_init(&attr);
-	if (errno != 0) {
-		delete lock;
+    pthread_mutexattr_t attr;
+    errno = pthread_mutexattr_init(&attr);
+    if (errno != 0) {
+        delete lock;
 
-		throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
+        throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    }
 
-	errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-	if (errno != 0) {
-		delete lock;
+    errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+    if (errno != 0) {
+        delete lock;
 
-		throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
+        throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    }
 
-	errno = pthread_mutex_init(&lock->keeper, &attr);
-	if (errno != 0) {
-		delete lock;
+    errno = pthread_mutex_init(&lock->keeper, &attr);
+    if (errno != 0) {
+        delete lock;
 
-		throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
+        throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    }
 
-	errno = pthread_mutexattr_destroy(&attr);
-	if (errno != 0) {
-		delete lock;
+    errno = pthread_mutexattr_destroy(&attr);
+    if (errno != 0) {
+        delete lock;
 
-		throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
+        throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    }
 #endif
 }
 
@@ -105,13 +105,13 @@ thread::thread() : lock(new thread::__lock__)
 thread::~thread()
 {
 #ifdef PTHREAD_EXT
-	if (pthread_mutex_trylock(&lock->keeper) == 0)
-		pthread_mutex_unlock(&lock->keeper);
+    if (pthread_mutex_trylock(&lock->keeper) == 0)
+        pthread_mutex_unlock(&lock->keeper);
 
-	pthread_mutex_destroy(&lock->keeper);
+    pthread_mutex_destroy(&lock->keeper);
 #endif
 
-	delete lock;
+    delete lock;
 }
 
 //-------------------------------------------------------------------
@@ -120,32 +120,32 @@ void
 thread::acquire(unsigned long microseconds)
 {
 #ifdef PTHREAD_EXT
-	if (microseconds == 0) {
-		errno = pthread_mutex_lock(&lock->keeper);
-		if (errno != 0)
-			throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	} else {
-		bool locked = true;
-		unsigned long slept = 0;
+    if (microseconds == 0) {
+        errno = pthread_mutex_lock(&lock->keeper);
+        if (errno != 0)
+            throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    } else {
+        bool locked = true;
+        unsigned long slept = 0;
 
-		while (locked) {
-			errno = pthread_mutex_trylock(&lock->keeper);
-			if (errno != 0) {
-				if (errno != EBUSY)
-					throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        while (locked) {
+            errno = pthread_mutex_trylock(&lock->keeper);
+            if (errno != 0) {
+                if (errno != EBUSY)
+                    throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-				if (usleep(1) == -1)
-					throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                if (usleep(1) == -1)
+                    throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-				slept += 1;
+                slept += 1;
 
-				if (slept > microseconds)
-					throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, THREADEX_CANNOTLOCK, PCSYNCTHREADEX_CANNOTLOCK_STR, __LINE__, __FILE__);
-			} else {
-				locked = false;
-			}
-		}
-	}
+                if (slept > microseconds)
+                    throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, THREADEX_CANNOTLOCK, PCSYNCTHREADEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+            } else {
+                locked = false;
+            }
+        }
+    }
 #endif
 }
 
@@ -155,9 +155,9 @@ void
 thread::release()
 {
 #ifdef PTHREAD_EXT
-	errno = pthread_mutex_unlock(&lock->keeper);
-	if (errno != 0)
-		throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    errno = pthread_mutex_unlock(&lock->keeper);
+    if (errno != 0)
+        throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_RELEASE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 #endif
 }
 

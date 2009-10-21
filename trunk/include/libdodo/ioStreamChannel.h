@@ -36,53 +36,53 @@
 #include <libdodo/ioChannel.h>
 
 namespace dodo {
-	namespace io {
-		namespace stream {
-			/**
-			 * @class channel
-			 * @brief implements an interface for I/O operations on stream sources
-			 */
-			class channel : public io::channel {
-			  public:
+    namespace io {
+        namespace stream {
+            /**
+             * @class channel
+             * @brief implements an interface for I/O operations on stream sources
+             */
+            class channel : public io::channel {
+              public:
 
-				/**
-				 * constructor
-				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-				 */
-				channel(short protection);
+                /**
+                 * constructor
+                 * @param protection defines type of IO protection, @see io::channel::protectionEnum
+                 */
+                channel(short protection);
 
-				/**
-				 * destructor
-				 */
-				virtual ~channel();
+                /**
+                 * destructor
+                 */
+                virtual ~channel();
 
-				/**
-				 * @return read data
-				 * @note not more then blockSize
-				 */
-				virtual dodoString read() const;
+                /**
+                 * @return read data
+                 * @note not more then blockSize
+                 */
+                virtual dodoString read() const;
 
-				/**
-				 * @param data defines data that will be written
-				 * @note not more then blockSize
-				 */
-				virtual void write(const dodoString &data) const;
+                /**
+                 * @param data defines data that will be written
+                 * @note not more then blockSize
+                 */
+                virtual void write(const dodoString &data) const;
 
-				/**
-				 * read from stream null or newline terminated string
-				 * @return read data
-				 * @note not more then blockSize
-				 */
-				virtual dodoString readString() const;
+                /**
+                 * read from stream null or newline terminated string
+                 * @return read data
+                 * @note not more then blockSize
+                 */
+                virtual dodoString readString() const;
 
-				/**
-				 * write to stream null terminated string
-				 * @param data defines data that will be written
-				 * @note not more then blockSize
-				 */
-				virtual void writeString(const dodoString &data) const;
-			};
-		};
-	};
+                /**
+                 * write to stream null terminated string
+                 * @param data defines data that will be written
+                 * @note not more then blockSize
+                 */
+                virtual void writeString(const dodoString &data) const;
+            };
+        };
+    };
 };
 #endif

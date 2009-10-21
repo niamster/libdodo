@@ -35,33 +35,33 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace rpc {
-		/**
-		 * libdodo defined errors
-		 */
-		enum valueExR {
-			VALUEEX_WRONGTYPEREQUESTED,
-			VALUEEX_ARRAYOUTOFRANGE,
-		};
+    namespace rpc {
+        /**
+         * libdodo defined errors
+         */
+        enum valueExR {
+            VALUEEX_WRONGTYPEREQUESTED,
+            VALUEEX_ARRAYOUTOFRANGE,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define RPCVALUEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested"
 #define RPCVALUEEX_ARRAYOUTOFRANGE_STR    "Array key is out of range"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum valueFunctionsID {
-			VALUEEX_BROPERATORSTRING,
-			VALUEEX_BROPERATORNUMERIC,
-			VALUEEX_STRING,
-			VALUEEX_BOOLEAN,
-			VALUEEX_NUMERIC,
-			VALUEEX_ARRAY,
-			VALUEEX_STRUCT,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum valueFunctionsID {
+            VALUEEX_BROPERATORSTRING,
+            VALUEEX_BROPERATORNUMERIC,
+            VALUEEX_STRING,
+            VALUEEX_BOOLEAN,
+            VALUEEX_NUMERIC,
+            VALUEEX_ARRAY,
+            VALUEEX_STRUCT,
+        };
+    };
 };
 #endif

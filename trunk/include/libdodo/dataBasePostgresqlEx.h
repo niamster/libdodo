@@ -35,31 +35,31 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace data {
-		namespace base {
-			/**
-			 * libdodo defined errors
-			 */
-			enum postgresqlExR {
-				POSTGRESQLEX_NOTOPENED,
-			};
+    namespace data {
+        namespace base {
+            /**
+             * libdodo defined errors
+             */
+            enum postgresqlExR {
+                POSTGRESQLEX_NOTOPENED,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define DATABASEPOSTGRESQLEX_NOTOPENED_STR      "Database not opened"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum postgresqlFunctionsID {
-				POSTGRESQLEX_CONNECT,
-				POSTGRESQLEX_EXEC,
-				POSTGRESQLEX_POSTGRESQL,
-				POSTGRESQLEX_SETCHARSET,
-				POSTGRESQLEX_GETFIELDSTYPES,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum postgresqlFunctionsID {
+                POSTGRESQLEX_CONNECT,
+                POSTGRESQLEX_EXEC,
+                POSTGRESQLEX_POSTGRESQL,
+                POSTGRESQLEX_SETCHARSET,
+                POSTGRESQLEX_GETFIELDSTYPES,
+            };
+        };
+    };
 };
 #endif

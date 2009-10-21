@@ -35,41 +35,41 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			namespace http {
-				/**
-				 * libdodo defined errors
-				 */
-				enum clientExR {
-					CLIENTEX_CANNOTCONNECT,
-					CLIENTEX_NOTAUTHORIZED,
-					CLIENTEX_UNKNOWNWWWAUTHTYPE,
-					CLIENTEX_UNKNOWNPROXYAUTHTYPE,
-					CLIENTEX_UNSUPPORTEDSURICHEME,
-				};
+    namespace io {
+        namespace network {
+            namespace http {
+                /**
+                 * libdodo defined errors
+                 */
+                enum clientExR {
+                    CLIENTEX_CANNOTCONNECT,
+                    CLIENTEX_NOTAUTHORIZED,
+                    CLIENTEX_UNKNOWNWWWAUTHTYPE,
+                    CLIENTEX_UNKNOWNPROXYAUTHTYPE,
+                    CLIENTEX_UNSUPPORTEDSURICHEME,
+                };
 
-				/**
-				 * explanations for libdodo defined errors
-				 */
+                /**
+                 * explanations for libdodo defined errors
+                 */
 #define IONETWORKHTTPCLIENTEX_CANNOTCONNECT_STR        "Can't connect to the host(s)"
 #define IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR        "Aythorization required"
 #define IONETWORKHTTPCLIENTEX_UNKNOWNWWWAUTH_STR   "Unknown HTTP authentication type"
 #define IONETWORKHTTPCLIENTEX_UNKNOWNPROXYAUTH_STR "Unknown proxy authentication type"
 #define IONETWORKHTTPCLIENTEX_UNSUPPORTEDSURICHEME_STR "Unsupported URI scheme"
 
-				/**
-				 * IDs of functions where exception might be thrown
-				 */
-				enum clientFunctionsID {
-					CLIENTEX_POST,
-					CLIENTEX_GET,
-					CLIENTEX_GETCONTENT,
-					CLIENTEX_SETURL,
-					CLIENTEX_GETPROXYCONNECTRESPONSE,
-				};
-			};
-		};
-	};
+                /**
+                 * IDs of functions where exception might be thrown
+                 */
+                enum clientFunctionsID {
+                    CLIENTEX_POST,
+                    CLIENTEX_GET,
+                    CLIENTEX_GETCONTENT,
+                    CLIENTEX_SETURL,
+                    CLIENTEX_GETPROXYCONNECTRESPONSE,
+                };
+            };
+        };
+    };
 };
 #endif

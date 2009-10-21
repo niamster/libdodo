@@ -14,100 +14,107 @@ using namespace rpc;
 
 using namespace std;
 
-class cgiIO : public io::stream::channel
-{
+class cgiIO : public io::stream::channel {
   public:
 
-	cgiIO(cgi::exchange &cf,
-		  dodoMap<short, dodoString> &headers) : io::stream::channel(io::channel::PROTECTION_NONE),
-												 provider(cf, headers)
-	{
-	}
+    cgiIO(cgi::exchange &cf,
+          dodoMap<short, dodoString> &headers) : io::stream::channel(io::channel::PROTECTION_NONE),
+                                                 provider(cf, headers)
+    {
+    }
 
   protected:
 
-	virtual void _read(char * const data) const
-	{
-		_readString(data);
-	}
+    virtual void
+    _read(char * const data) const
+    {
+        _readString(data);
+    }
 
-	virtual unsigned long _readString(char * const data) const
-	{
-		unsigned int size = provider.content.size();
+    virtual unsigned long
+    _readString(char * const data) const
+    {
+        unsigned int size = provider.content.size();
 
-		if (size != 0)
-		{
-			if (size > blockSize)
-				size = blockSize;
+        if (size != 0) {
+            if (size > blockSize)
+                size = blockSize;
 
-			memcpy(data, provider.content.data(), size);
-			if (size < blockSize)
-				memset(data+size, 0x0, blockSize - size);
-		}
+            memcpy(data, provider.content.data(), size);
+            if (size < blockSize)
+                memset(data + size, 0x0, blockSize - size);
+        }
 
-		provider.content.clear();
+        provider.content.clear();
 
-		return size;
-	}
+        return size;
+    }
 
-	virtual void _write(const char * const data) const
-	{
-		provider.print(data);
-	}
+    virtual void
+    _write(const char * const data) const
+    {
+        provider.print(data);
+    }
 
-	virtual void _writeString(const char * const data) const
-	{
-		provider.printString(data);
-	}
+    virtual void
+    _writeString(const char * const data) const
+    {
+        provider.printString(data);
+    }
 
-	int outDescriptor() const
-	{
-		return -1;
-	}
+    int
+    outDescriptor() const
+    {
+        return -1;
+    }
 
-	int inDescriptor() const
-	{
-		return -1;
-	}
+    int
+    inDescriptor() const
+    {
+        return -1;
+    }
 
-	void flush() const
-	{
-	}
+    void
+    flush() const
+    {
+    }
 
-	mutable cgi::dialogue provider;
+    mutable cgi::dialogue provider;
 };
 
 response
-handler(const dodoString &method, const dodoArray<value> &values, const void *idata, void *odata)
+handler(const dodoString       &method,
+        const dodoArray<value> &values,
+        const void             *idata,
+        void                   *odata)
 {
-	response resp;
+    response resp;
 
-	resp.addArgument(dodoString("Got method: ") + method + "\n");
-	resp.addArgument(dodoString("Amount of values: ") + tools::string::ulToString(values.size()) + "\n");
+    resp.addArgument(dodoString("Got method: ") + method + "\n");
+    resp.addArgument(dodoString("Amount of values: ") + tools::string::ulToString(values.size()) + "\n");
 
-	return resp;
+    return resp;
 }
 
-int main(int argc, char **argv)
+int
+main(int  argc,
+     char **argv)
 {
-	dodoMap<short, dodoString> headers;
-	headers[cgi::ENVIRONMENT_CONTENTTYPE] = "application/json";
+    dodoMap<short, dodoString> headers;
+    headers[cgi::ENVIRONMENT_CONTENTTYPE] = "application/json";
 
-	cgi::basic::exchange io;
-	cgiIO provider(io, headers);
+    cgi::basic::exchange io;
+    cgiIO provider(io, headers);
 
-	json::server srv(provider);
+    json::server srv(provider);
 
-	try
-	{
-		srv.setHandler("callTest", ::handler);
+    try {
+        srv.setHandler("callTest", ::handler);
 
-		srv.serve();
-	}
-	catch (dodo::exception::basic &ex)
-	{
-		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
-	}
+        srv.serve();
+    } catch (dodo::exception::basic &ex)   {
+        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    }
 
-	return 0;
+    return 0;
 }

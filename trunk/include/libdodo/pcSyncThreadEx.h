@@ -35,29 +35,29 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace pc {
-		namespace sync {
-			/**
-			 * libdodo defined errors
-			 */
-			enum threadExR {
-				THREADEX_CANNOTLOCK
-			};
+    namespace pc {
+        namespace sync {
+            /**
+             * libdodo defined errors
+             */
+            enum threadExR {
+                THREADEX_CANNOTLOCK
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define PCSYNCTHREADEX_CANNOTLOCK_STR      "Item is currently locked, timeout exhousted"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum threadFunctionsID {
-				THREADEX_ACQUIRE,
-				THREADEX_RELEASE,
-				THREADEX_CONSTRUCTOR,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum threadFunctionsID {
+                THREADEX_ACQUIRE,
+                THREADEX_RELEASE,
+                THREADEX_CONSTRUCTOR,
+            };
+        };
+    };
 };
 #endif

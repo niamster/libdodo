@@ -41,11 +41,11 @@
 #include <libdodo/ioSsl.h>
 
 namespace dodo {
-	namespace io {
-		namespace ssl {
-			__openssl___init__ __openssl___init_object__;
-		};
-	};
+    namespace io {
+        namespace ssl {
+            __openssl___init__ __openssl___init_object__;
+        };
+    };
 };
 
 //-------------------------------------------------------------------
@@ -60,38 +60,38 @@ __certificates__::__certificates__() : keyType(-1)
 
 __openssl___init__::__openssl___init__()
 {
-	SSL_load_error_strings();
-	SSL_library_init();
+    SSL_load_error_strings();
+    SSL_library_init();
 
-	struct stat randstat;
+    struct stat randstat;
 
-	if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1) {
-		char buf[4];
-		struct timeval tv;
+    if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1) {
+        char buf[4];
+        struct timeval tv;
 
-		for (int i = 0; i < 10000; ++i) {
-			if (RAND_status() == 1)
-				break;
+        for (int i = 0; i < 10000; ++i) {
+            if (RAND_status() == 1)
+                break;
 
-			gettimeofday(&tv, NULL);
+            gettimeofday(&tv, NULL);
 
-			buf[0] = tv.tv_usec & 0xF;
-			buf[2] = (tv.tv_usec & 0xF0) >> 4;
-			buf[3] = (tv.tv_usec & 0xF00) >> 8;
-			buf[1] = (tv.tv_usec & 0xF000) >> 12;
+            buf[0] = tv.tv_usec & 0xF;
+            buf[2] = (tv.tv_usec & 0xF0) >> 4;
+            buf[3] = (tv.tv_usec & 0xF00) >> 8;
+            buf[1] = (tv.tv_usec & 0xF000) >> 12;
 
-			RAND_add(buf, sizeof(buf), 0.1);
-		}
-	}
+            RAND_add(buf, sizeof(buf), 0.1);
+        }
+    }
 }
 
 //-------------------------------------------------------------------
 
 __openssl___init__::~__openssl___init__()
 {
-	ERR_free_strings();
+    ERR_free_strings();
 
-	RAND_cleanup();
+    RAND_cleanup();
 }
 
 //-------------------------------------------------------------------
@@ -99,26 +99,26 @@ __openssl___init__::~__openssl___init__()
 void
 __openssl___init__::addEntropy()
 {
-	struct stat randstat;
+    struct stat randstat;
 
-	if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1) {
-		char buf[4];
-		struct timeval tv;
+    if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1) {
+        char buf[4];
+        struct timeval tv;
 
-		for (int i = 0; i < 10000; ++i) {
-			if (RAND_status() == 1)
-				break;
+        for (int i = 0; i < 10000; ++i) {
+            if (RAND_status() == 1)
+                break;
 
-			gettimeofday(&tv, NULL);
+            gettimeofday(&tv, NULL);
 
-			buf[0] = tv.tv_usec & 0xF;
-			buf[2] = (tv.tv_usec & 0xF0) >> 4;
-			buf[3] = (tv.tv_usec & 0xF00) >> 8;
-			buf[1] = (tv.tv_usec & 0xF000) >> 12;
+            buf[0] = tv.tv_usec & 0xF;
+            buf[2] = (tv.tv_usec & 0xF0) >> 4;
+            buf[3] = (tv.tv_usec & 0xF00) >> 8;
+            buf[1] = (tv.tv_usec & 0xF000) >> 12;
 
-			RAND_add(buf, sizeof(buf), 0.1);
-		}
-	}
+            RAND_add(buf, sizeof(buf), 0.1);
+        }
+    }
 }
 
 //-------------------------------------------------------------------

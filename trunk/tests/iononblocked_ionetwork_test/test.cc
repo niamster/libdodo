@@ -13,58 +13,54 @@ using namespace io::network;
 
 using namespace std;
 
-int main(int argc, char **argv)
+int
+main(int  argc,
+     char **argv)
 {
-	try
-	{
-		server s(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
+    try {
+        server s(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
 
-		exchange::__init__ accepted;
+        exchange::__init__ accepted;
 
-		s.serve("127.0.0.1", 7778, 1);
-		s.setOption(connection::OPTION_REUSE_ADDRESS, true);
-		s.setLingerOption(connection::LINGER_OPTION_HARD_CLOSE);
-		s.blockInherited = true;
-		s.block(false);
+        s.serve("127.0.0.1", 7778, 1);
+        s.setOption(connection::OPTION_REUSE_ADDRESS, true);
+        s.setLingerOption(connection::LINGER_OPTION_HARD_CLOSE);
+        s.blockInherited = true;
+        s.block(false);
 
-		io::event::manager manager;
+        io::event::manager manager;
 
-		char trimSym[] = { '\r', '\n' };
+        char trimSym[] = {
+            '\r', '\n'
+        };
 
-		while (true)
-		{
-			if (s.accept(accepted))
-			{
-				exchange ex(accepted);
+        while (true) {
+            if (s.accept(accepted)) {
+                exchange ex(accepted);
 
-				if (ex.isBlocked())
-					cout << "Blocked" << endl;
-				else
-					cout << "Non blocked" << endl;
+                if (ex.isBlocked())
+                    cout << "Blocked" << endl;
+                else
+                    cout << "Non blocked" << endl;
 
-				int pos = manager.add(ex);
+                int pos = manager.add(ex);
 
-				dodoString data;
+                dodoString data;
 
-				while (true)
-				{
-					if (manager.isReadable(pos))
-					{
-						data = ex.readString();
-						cout << "'" << tools::string::trim(data, trimSym, 2) << "'" << endl;
+                while (true) {
+                    if (manager.isReadable(pos)) {
+                        data = ex.readString();
+                        cout << "'" << tools::string::trim(data, trimSym, 2) << "'" << endl;
 
-						if (tools::string::trim(data, trimSym, 2) == "exit")
-							tools::os::die(data);
-					}
-				}
-			}
-		}
+                        if (tools::string::trim(data, trimSym, 2) == "exit")
+                            tools::os::die(data);
+                    }
+                }
+            }
+        }
+    } catch (dodo::exception::basic &ex)   {
+        cout << (dodoString)ex << "\t" << ex.file << "\t" << ex.line << endl;
+    }
 
-	}
-	catch (dodo::exception::basic &ex)
-	{
-		cout << (dodoString)ex << "\t" << ex.file << "\t" << ex.line << endl;
-	}
-
-	return 0;
+    return 0;
 }

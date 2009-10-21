@@ -35,107 +35,107 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace io {
-		class channel;
-	};
+    namespace io {
+        class channel;
+    };
 
-	namespace pc {
-		namespace sync {
-			class protector;
-		};
-	};
+    namespace pc {
+        namespace sync {
+            class protector;
+        };
+    };
 
-	namespace tools {
-		/**
-		 * @class logger
-		 * @brief provides logging function
-		 */
-		class logger : public singleton<logger>{
-		  public:
+    namespace tools {
+        /**
+         * @class logger
+         * @brief provides logging function
+         */
+        class logger : public singleton<logger>{
+          public:
 
-			/**
-			 * @enum logLevelEnum defines log levels
-			 */
-			enum logLevelEnum {
-				LOG_LEVEL_INFO = 0,
-				LOG_LEVEL_NOTICE,
-				LOG_LEVEL_DEBUG,
-				LOG_LEVEL_WARNING,
-				LOG_LEVEL_ERROR,
-				LOG_LEVEL_ALERT,
-				LOG_LEVEL_CRITICAL,
-				LOG_LEVEL_EMERGENCY,
-				LOG_LEVEL_USER,
+            /**
+             * @enum logLevelEnum defines log levels
+             */
+            enum logLevelEnum {
+                LOG_LEVEL_INFO = 0,
+                LOG_LEVEL_NOTICE,
+                LOG_LEVEL_DEBUG,
+                LOG_LEVEL_WARNING,
+                LOG_LEVEL_ERROR,
+                LOG_LEVEL_ALERT,
+                LOG_LEVEL_CRITICAL,
+                LOG_LEVEL_EMERGENCY,
+                LOG_LEVEL_USER,
 
-				LOG_LEVEL_ENUMSIZE
-			};
+                LOG_LEVEL_ENUMSIZE
+            };
 
-			/**
-			 * constructor
-			 */
-			logger();
+            /**
+             * constructor
+             */
+            logger();
 
-			/**
-			 * destructor
-			 */
-			virtual ~logger();
+            /**
+             * destructor
+             */
+            virtual ~logger();
 
-			/**
-			 * register log handler
-			 * @return log handler identificator
-			 * @param level defines log level, @see logger::logLevelEnum
-			 * @param handler defines log handler
-			 * @note if handler is NULL logger will pass message to the syslog
-			 */
-			virtual unsigned long add(short       level,
-									  io::channel *handler);
+            /**
+             * register log handler
+             * @return log handler identificator
+             * @param level defines log level, @see logger::logLevelEnum
+             * @param handler defines log handler
+             * @note if handler is NULL logger will pass message to the syslog
+             */
+            virtual unsigned long add(short       level,
+                                      io::channel *handler);
 
-			/**
-			 * unregister log handler
-			 * @param position defines log handler identificator
-			 */
-			virtual void remove(unsigned long position);
+            /**
+             * unregister log handler
+             * @param position defines log handler identificator
+             */
+            virtual void remove(unsigned long position);
 
-			/**
-			 * log message
-			 * @param level defines log level, @see logger::logLevelEnum
-			 * @param msg defines log message
-			 */
-			virtual void log(short            level,
-							 const dodoString &msg);
+            /**
+             * log message
+             * @param level defines log level, @see logger::logLevelEnum
+             * @param msg defines log message
+             */
+            virtual void log(short            level,
+                             const dodoString &msg);
 
-			/**
-			 * set date/time format for log messages
-			 * @param format defines date/time format, @see tools::time
-			 * @note date/time format is not used for syslog
-			 */
-			virtual void setTimeFormat(const dodoString &format);
+            /**
+             * set date/time format for log messages
+             * @param format defines date/time format, @see tools::time
+             * @note date/time format is not used for syslog
+             */
+            virtual void setTimeFormat(const dodoString &format);
 
-			bool forward;                                       ///< forward message to global log instance[false by default]
+            bool forward;                                               ///< forward message to global log instance[false by default]
 
-		  private:
+          private:
 
-			dodoString timeFormat;                              ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
+            dodoString timeFormat;                                      ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
 
-			/**
-			 * @struct __log_map__
-			 * @brief defines map between log level and log handler
-			 */
-			struct __log_map__ {
-				short       level;                              ///< log level, @see logger::logLevelEnum
-				io::channel *handler;                           ///< log handler
-				unsigned long position;                           ///< log handler identificator
-			};
+            /**
+             * @struct __log_map__
+             * @brief defines map between log level and log handler
+             */
+            struct __log_map__ {
+                short         level;                                    ///< log level, @see logger::logLevelEnum
+                io::channel   *handler;                                 ///< log handler
+                unsigned long position;                                 ///< log handler identificator
+            };
 
-			dodoList<__log_map__> handlers;                      ///< list of log maps
+            dodoList<__log_map__> handlers;                             ///< list of log maps
 
-			unsigned long handlersNum;                          ///< number of registered handlers
+            unsigned long handlersNum;                                  ///< number of registered handlers
 
-			static const dodoString levels[LOG_LEVEL_ENUMSIZE];      ///< log levels statements
-			static const int syslogLevels[LOG_LEVEL_ENUMSIZE];       ///< syslog log levels
+            static const dodoString levels[LOG_LEVEL_ENUMSIZE];         ///< log levels statements
+            static const int syslogLevels[LOG_LEVEL_ENUMSIZE];          ///< syslog log levels
 
-			pc::sync::protector *keeper;                          ///< section locker
-		};
-	};
+            pc::sync::protector *keeper;                                ///< section locker
+        };
+    };
 };
 #endif

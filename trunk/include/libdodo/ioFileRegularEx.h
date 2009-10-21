@@ -35,41 +35,41 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace file {
-			/**
-			 * libdodo defined errors
-			 */
-			enum regularExR {
-				REGULAREX_WRONGFILENAME,
-				REGULAREX_FILEISSHORTERTHANGIVENPOSITION,
-				REGULAREX_NOTOPENED
-			};
+    namespace io {
+        namespace file {
+            /**
+             * libdodo defined errors
+             */
+            enum regularExR {
+                REGULAREX_WRONGFILENAME,
+                REGULAREX_FILEISSHORTERTHANGIVENPOSITION,
+                REGULAREX_NOTOPENED
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define IOFILEREGULAREX_WRONGFILENAME_STR                  "Wrong filename"
 #define IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR "Access data out of bounds"
 #define IOFILEREGULAREX_NOTOPENED_STR                       "File not opened"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum regularFunctionsID {
-				REGULAREX_REGULAR,
-				REGULAREX_CLOSE,
-				REGULAREX_CLONE,
-				REGULAREX_OPEN,
-				REGULAREX__READ,
-				REGULAREX__WRITE,
-				REGULAREX__READSTREAM,
-				REGULAREX__WRITESTREAM,
-				REGULAREX_FLUSH,
-				REGULAREX_INDESCRIPTOR,
-				REGULAREX_OUTDESCRIPTOR,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum regularFunctionsID {
+                REGULAREX_REGULAR,
+                REGULAREX_CLOSE,
+                REGULAREX_CLONE,
+                REGULAREX_OPEN,
+                REGULAREX__READ,
+                REGULAREX__WRITE,
+                REGULAREX__READSTREAM,
+                REGULAREX__WRITESTREAM,
+                REGULAREX_FLUSH,
+                REGULAREX_INDESCRIPTOR,
+                REGULAREX_OUTDESCRIPTOR,
+            };
+        };
+    };
 };
 #endif

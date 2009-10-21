@@ -33,64 +33,64 @@
 #include <libdodo/directives.h>
 
 namespace dodo {
-	namespace pc {
-		namespace sync {
-			class protector;
+    namespace pc {
+        namespace sync {
+            class protector;
 
-			namespace data {
-				/**
-				 * @class object
-				 * @brief provides shared data management functionality
-				 */
-				class object {
-				  public:
+            namespace data {
+                /**
+                 * @class object
+                 * @brief provides shared data management functionality
+                 */
+                class object {
+                  public:
 
-					/**
-					 * constructor
-					 * @param lock defines syncing primitive for the object
-					 */
-					object(protector &lock);
+                    /**
+                     * constructor
+                     * @param lock defines syncing primitive for the object
+                     */
+                    object(protector &lock);
 
-					/**
-					 * destructor
-					 */
-					virtual ~object();
+                    /**
+                     * destructor
+                     */
+                    virtual ~object();
 
-					/**
-					 * set shared data
-					 * @param data defines shared data
-					 */
-					virtual void set(void *data);
+                    /**
+                     * set shared data
+                     * @param data defines shared data
+                     */
+                    virtual void set(void *data);
 
-					/**
-					 * get shared data
-					 * @return shared data
-					 * @note shared data is not locked after the function returns
-					 */
-					virtual const void *get();
+                    /**
+                     * get shared data
+                     * @return shared data
+                     * @note shared data is not locked after the function returns
+                     */
+                    virtual const void *get();
 
-					/**
-					 * lock and return shared data
-					 * @return shared data
-					 * @param timeout defines wait timeout for unlock in microseconds
-					 * @note if timeout is 0 it will wait infinitely
-					 */
-					virtual void *acquire(unsigned long timeout = 0);
+                    /**
+                     * lock and return shared data
+                     * @return shared data
+                     * @param timeout defines wait timeout for unlock in microseconds
+                     * @note if timeout is 0 it will wait infinitely
+                     */
+                    virtual void *acquire(unsigned long timeout = 0);
 
-					/**
-					 * unlock shared data
-					 */
-					virtual void release();
+                    /**
+                     * unlock shared data
+                     */
+                    virtual void release();
 
-				  protected:
+                  protected:
 
-					void *data; ///< object data
+                    void *data;         ///< object data
 
-					protector &lock; ///< object lock
-				};
-			};
-		};
-	};
+                    protector &lock;    ///< object lock
+                };
+            };
+        };
+    };
 };
 #endif
 

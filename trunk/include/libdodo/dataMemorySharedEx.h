@@ -35,22 +35,22 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace data {
-		namespace memory {
-			/**
-			 * ID of function where exception was thrown
-			 */
-			enum sharedFunctionsID {
-				SHAREDEX_MAP,
-				SHAREDEX_UNMAP,
-				SHAREDEX_SIZE,
-				SHAREDEX_SHARED,
-				SHAREDEX_REMOVE,
-				SHAREDEX_OPEN,
-				SHAREDEX_CLOSE,
-			};
-		};
-	};
+    namespace data {
+        namespace memory {
+            /**
+             * ID of function where exception was thrown
+             */
+            enum sharedFunctionsID {
+                SHAREDEX_MAP,
+                SHAREDEX_UNMAP,
+                SHAREDEX_SIZE,
+                SHAREDEX_SHARED,
+                SHAREDEX_REMOVE,
+                SHAREDEX_OPEN,
+                SHAREDEX_CLOSE,
+            };
+        };
+    };
 };
 #endif
 

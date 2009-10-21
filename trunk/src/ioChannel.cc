@@ -40,7 +40,7 @@ using namespace dodo::io;
 
 #ifndef IO_WO_XEXEC
 channel::__collected_data__::__collected_data__(xexec *a_executor,
-											   short execObject) : xexec::__collected_data__(a_executor, execObject)
+                                                short execObject) : xexec::__collected_data__(a_executor, execObject)
 {
 }
 #endif
@@ -48,24 +48,24 @@ channel::__collected_data__::__collected_data__(xexec *a_executor,
 //-------------------------------------------------------------------
 
 channel::channel(short protection) : blockSize(IO_BLOCKSIZE),
-									 keeper(NULL),
-									 protection(protection)
+                                     keeper(NULL),
+                                     protection(protection)
 #ifndef IO_WO_XEXEC
-									 ,
-									 collectedData(this, xexec::OBJECT_XEXEC)
+                                     ,
+                                     collectedData(this, xexec::OBJECT_XEXEC)
 #endif
 {
-	if (protection == channel::PROTECTION_THREAD)
-		keeper = new pc::sync::thread;
-	else if (protection == channel::PROTECTION_PROCESS)
-		keeper = new pc::sync::process(0);
+    if (protection == channel::PROTECTION_THREAD)
+        keeper = new pc::sync::thread;
+    else if (protection == channel::PROTECTION_PROCESS)
+        keeper = new pc::sync::process(0);
 }
 
 //-------------------------------------------------------------------
 
 channel::~channel()
 {
-	delete keeper;
+    delete keeper;
 }
 
 //-------------------------------------------------------------------

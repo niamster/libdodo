@@ -36,86 +36,86 @@
 #include <libdodo/rpcValue.h>
 
 namespace dodo {
-	namespace rpc {
-		namespace xml {
-			class response;
-		};
+    namespace rpc {
+        namespace xml {
+            class response;
+        };
 
-		namespace json {
-			class response;
-		};
+        namespace json {
+            class response;
+        };
 
-		/**
-		 * @class response
-		 * @brief defines RPC response reprasentation
-		 */
-		class response {
-			friend class client;
-			friend class server;
-			friend class xml::response;
-			friend class json::response;
+        /**
+         * @class response
+         * @brief defines RPC response reprasentation
+         */
+        class response {
+            friend class client;
+            friend class server;
+            friend class xml::response;
+            friend class json::response;
 
-		  public:
+          public:
 
-			/**
-			 * constructor
-			 */
-			response();
+            /**
+             * constructor
+             */
+            response();
 
-			/**
-			 * destructor
-			 */
-			~response();
+            /**
+             * destructor
+             */
+            ~response();
 
-			/**
-			 * @return response value
-			 * @param index defines index of returned value
-			 */
-			rpc::value value(unsigned long index = 0);
+            /**
+             * @return response value
+             * @param index defines index of returned value
+             */
+            rpc::value value(unsigned long index = 0);
 
-			/**
-			 * @return response values
-			 */
-			dodoArray<rpc::value> values();
+            /**
+             * @return response values
+             */
+            dodoArray<rpc::value> values();
 
-			/**
-			 * @return response values count
-			 */
-			unsigned long valuesCount();
+            /**
+             * @return response values count
+             */
+            unsigned long valuesCount();
 
-			/**
-			 * @return true if request was successful
-			 */
-			bool isSuccessful();
+            /**
+             * @return true if request was successful
+             */
+            bool isSuccessful();
 
-			/**
-			 * set argument for fault response
-			 * @param argument defines response argument
-			 */
-			void fault(const rpc::value &argument);
+            /**
+             * set argument for fault response
+             * @param argument defines response argument
+             */
+            void fault(const rpc::value &argument);
 
-			/**
-			 * add argument for successful response
-			 * @param argument defines response argument
-			 */
-			void addArgument(const rpc::value &argument);
+            /**
+             * add argument for successful response
+             * @param argument defines response argument
+             */
+            void addArgument(const rpc::value &argument);
 
-			/**
-			 * @return value for type casting
-			 * @param index defines index of returned value
-			 */
-			rpc::value operator[](unsigned long index);
+            /**
+             * @return value for type casting
+             * @param index defines index of returned value
+             */
+            rpc::value operator[](unsigned long index);
 
-			/**
-			 * clear arguments information
-			 */
-			void clear();
+            /**
+             * clear arguments information
+             */
+            void clear();
 
-		  private:
+          private:
 
-			dodoArray<rpc::value> rValues;    ///< response values
-			bool succ;                  ///< true if server returned non-fail response
-		};
-	};
+            dodoArray<rpc::value> rValues;      ///< response values
+            bool succ;                          ///< true if server returned non-fail response
+        };
+    };
 };
 #endif

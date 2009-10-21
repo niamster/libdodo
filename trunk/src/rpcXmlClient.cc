@@ -42,7 +42,7 @@
 using namespace dodo::rpc::xml;
 
 client::client(const io::channel &io) : rpc::client(io),
-										rqEncoding("UTF-8")
+                                        rqEncoding("UTF-8")
 {
 }
 
@@ -57,7 +57,7 @@ client::~client()
 void
 client::setRequestEncoding(const dodoString &a_encoding)
 {
-	rqEncoding = a_encoding;
+    rqEncoding = a_encoding;
 }
 
 //-------------------------------------------------------------------
@@ -65,7 +65,7 @@ client::setRequestEncoding(const dodoString &a_encoding)
 dodoString
 client::responseEncoding()
 {
-	return rpEncoding;
+    return rpEncoding;
 }
 
 //-------------------------------------------------------------------
@@ -73,11 +73,11 @@ client::responseEncoding()
 void
 client::processCallRequest(const rpc::method &meth)
 {
-	dodo::data::format::xml::processor xmlValue;
+    dodo::data::format::xml::processor xmlValue;
 
-	xmlValue.make(method::methodToXml(meth), rqEncoding, "1.0", io);
+    xmlValue.make(method::methodToXml(meth), rqEncoding, "1.0", io);
 
-	io.flush();
+    io.flush();
 }
 
 //-------------------------------------------------------------------
@@ -85,17 +85,17 @@ client::processCallRequest(const rpc::method &meth)
 dodo::rpc::response
 client::processCallResult()
 {
-	dodo::data::format::xml::processor xmlValue;
+    dodo::data::format::xml::processor xmlValue;
 
-	dodo::data::format::xml::__definition__ xmlMethodResponse;
-	xmlMethodResponse.name = "methodResponse";
-	xmlMethodResponse.allChildren = true;
+    dodo::data::format::xml::__definition__ xmlMethodResponse;
+    xmlMethodResponse.name = "methodResponse";
+    xmlMethodResponse.allChildren = true;
 
-	dodo::data::format::xml::node node = xmlValue.process(xmlMethodResponse, io);
+    dodo::data::format::xml::node node = xmlValue.process(xmlMethodResponse, io);
 
-	rpEncoding = xmlValue.information().encoding;
+    rpEncoding = xmlValue.information().encoding;
 
-	return response::xmlToResponse(node);
+    return response::xmlToResponse(node);
 }
 
 //-------------------------------------------------------------------

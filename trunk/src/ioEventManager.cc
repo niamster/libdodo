@@ -50,7 +50,7 @@ manager::manager(manager &rt)
 //-------------------------------------------------------------------
 
 manager::manager() : descs(0),
-				 keeper(new pc::sync::process(0))
+                     keeper(new pc::sync::process(0))
 {
 }
 
@@ -58,7 +58,7 @@ manager::manager() : descs(0),
 
 manager::~manager()
 {
-	delete keeper;
+    delete keeper;
 }
 
 //-------------------------------------------------------------------
@@ -66,186 +66,186 @@ manager::~manager()
 int
 manager::add(const descriptor &fl)
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	__descriptors__ tempD;
+    __descriptors__ tempD;
 
-	tempD.position = ++descs;
-	tempD.in = fl.inDescriptor();
-	tempD.out = fl.outDescriptor();
+    tempD.position = ++descs;
+    tempD.in = fl.inDescriptor();
+    tempD.out = fl.outDescriptor();
 
-	desc.push_back(tempD);
+    desc.push_back(tempD);
 
-	return tempD.position;
+    return tempD.position;
 }
 
 //-------------------------------------------------------------------
 
 dodoArray<bool>
 manager::isReadable(const dodoArray<int> &pos,
-				  int                  timeout) const
+                    int                  timeout) const
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	int count = -1;
+    int count = -1;
 
-	pollfd *fds = new pollfd[pos.size()];
+    pollfd *fds = new pollfd[pos.size()];
 
-	dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i) {
-		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
-		for (; m != n; ++m) {
-			if (i->position == *m) {
-				++count;
+    dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
+    for (; i != j; ++i) {
+        dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
+        for (; m != n; ++m) {
+            if (i->position == *m) {
+                ++count;
 
-				fds[count].fd = i->in;
-				fds[count].events = POLLIN | POLLPRI;
-			}
-		}
-	}
+                fds[count].fd = i->in;
+                fds[count].events = POLLIN | POLLPRI;
+            }
+        }
+    }
 
-	++count;
+    ++count;
 
-	dodoArray<bool> tempRB;
+    dodoArray<bool> tempRB;
 
-	if (count > 0) {
-		int res = poll(fds, count, timeout);
+    if (count > 0) {
+        int res = poll(fds, count, timeout);
 
-		if (res > 0) {
-			for (int i = 0; i < count; ++i) {
-				if (isSetFlag(fds[i].revents, POLLIN) || isSetFlag(fds[i].revents, POLLPRI))
-					tempRB.push_back(true);
-				else
-					tempRB.push_back(false);
-			}
+        if (res > 0) {
+            for (int i = 0; i < count; ++i) {
+                if (isSetFlag(fds[i].revents, POLLIN) || isSetFlag(fds[i].revents, POLLPRI))
+                    tempRB.push_back(true);
+                else
+                    tempRB.push_back(false);
+            }
 
-			delete [] fds;
+            delete [] fds;
 
-			return tempRB;
-		} else {
-			if (res == 0) {
-				for (int i = 0; i < count; ++i)
-					tempRB.push_back(false);
+            return tempRB;
+        } else {
+            if (res == 0) {
+                for (int i = 0; i < count; ++i)
+                    tempRB.push_back(false);
 
-				delete [] fds;
+                delete [] fds;
 
-				return tempRB;
-			} else {
-				delete [] fds;
+                return tempRB;
+            } else {
+                delete [] fds;
 
-				throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
-		}
-	}
+                throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            }
+        }
+    }
 
-	delete [] fds;
+    delete [] fds;
 
-	for (int i = 0; i < count; ++i)
-		tempRB.push_back(false);
+    for (int i = 0; i < count; ++i)
+        tempRB.push_back(false);
 
-	return tempRB;
+    return tempRB;
 }
 
 //-------------------------------------------------------------------
 
 dodoArray<bool>
 manager::isWritable(const dodoArray<int> &pos,
-				  int                  timeout) const
+                    int                  timeout) const
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	int count = -1;
+    int count = -1;
 
-	pollfd *fds = new pollfd[pos.size()];
+    pollfd *fds = new pollfd[pos.size()];
 
-	dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i) {
-		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
-		for (; m != n; ++m) {
-			if (i->position == *m) {
-				++count;
+    dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
+    for (; i != j; ++i) {
+        dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
+        for (; m != n; ++m) {
+            if (i->position == *m) {
+                ++count;
 
-				fds[count].fd = i->out;
-				fds[count].events = POLLOUT;
-			}
-		}
-	}
+                fds[count].fd = i->out;
+                fds[count].events = POLLOUT;
+            }
+        }
+    }
 
-	++count;
+    ++count;
 
-	dodoArray<bool> tempRB;
+    dodoArray<bool> tempRB;
 
-	if (count > 0) {
-		int res = poll(fds, count, timeout);
+    if (count > 0) {
+        int res = poll(fds, count, timeout);
 
-		if (res > 0) {
-			for (int i = 0; i < count; ++i) {
-				if (isSetFlag(fds[i].revents, POLLOUT))
-					tempRB.push_back(true);
-				else
-					tempRB.push_back(false);
-			}
+        if (res > 0) {
+            for (int i = 0; i < count; ++i) {
+                if (isSetFlag(fds[i].revents, POLLOUT))
+                    tempRB.push_back(true);
+                else
+                    tempRB.push_back(false);
+            }
 
-			delete [] fds;
+            delete [] fds;
 
-			return tempRB;
-		} else {
-			if (res == 0) {
-				delete [] fds;
+            return tempRB;
+        } else {
+            if (res == 0) {
+                delete [] fds;
 
-				for (int i = 0; i < count; ++i)
-					tempRB.push_back(false);
+                for (int i = 0; i < count; ++i)
+                    tempRB.push_back(false);
 
-				return tempRB;
-			} else {
-				delete [] fds;
+                return tempRB;
+            } else {
+                delete [] fds;
 
-				throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
-		}
-	}
+                throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            }
+        }
+    }
 
-	delete [] fds;
+    delete [] fds;
 
-	for (int i = 0; i < count; ++i)
-		tempRB.push_back(false);
+    for (int i = 0; i < count; ++i)
+        tempRB.push_back(false);
 
-	return tempRB;
+    return tempRB;
 }
 
 //-------------------------------------------------------------------
 
 bool
 manager::isReadable(int pos,
-				  int timeout) const
+                    int timeout) const
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	pollfd fd;
+    pollfd fd;
 
-	dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i) {
-		if (i->position == pos) {
-			fd.fd = i->in;
-			fd.events = POLLIN | POLLPRI;
+    dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
+    for (; i != j; ++i) {
+        if (i->position == pos) {
+            fd.fd = i->in;
+            fd.events = POLLIN | POLLPRI;
 
-			int res = poll(&fd, 1, timeout);
+            int res = poll(&fd, 1, timeout);
 
-			if (res > 0) {
-				if (isSetFlag(fd.revents, POLLIN) || isSetFlag(fd.revents, POLLPRI))
-					return true;
-				else
-					return false;
-			} else {
-				if (res == 0)
-					return false;
-				else
-					throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
-		}
-	}
+            if (res > 0) {
+                if (isSetFlag(fd.revents, POLLIN) || isSetFlag(fd.revents, POLLPRI))
+                    return true;
+                else
+                    return false;
+            } else {
+                if (res == 0)
+                    return false;
+                else
+                    throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            }
+        }
+    }
 
-	return false;
+    return false;
 }
 
 //-------------------------------------------------------------------
@@ -253,51 +253,51 @@ manager::isReadable(int pos,
 void
 manager::remove(int pos)
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	dodoArray<__descriptors__>::iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i) {
-		if (i->position == pos) {
-			desc.erase(i);
+    dodoArray<__descriptors__>::iterator i(desc.begin()), j(desc.end());
+    for (; i != j; ++i) {
+        if (i->position == pos) {
+            desc.erase(i);
 
-			break;
-		}
-	}
+            break;
+        }
+    }
 }
 
 //-------------------------------------------------------------------
 
 bool
 manager::isWritable(int pos,
-				  int timeout) const
+                    int timeout) const
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	pollfd fd;
+    pollfd fd;
 
-	dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
-	for (; i != j; ++i) {
-		if (i->position == pos) {
-			fd.fd = i->out;
-			fd.events = POLLOUT;
+    dodoArray<__descriptors__>::const_iterator i(desc.begin()), j(desc.end());
+    for (; i != j; ++i) {
+        if (i->position == pos) {
+            fd.fd = i->out;
+            fd.events = POLLOUT;
 
-			int res = poll(&fd, 1, timeout);
+            int res = poll(&fd, 1, timeout);
 
-			if (res > 0) {
-				if (isSetFlag(fd.revents, POLLOUT))
-					return true;
-				else
-					return false;
-			} else {
-				if (res == 0)
-					return false;
-				else
-					throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
-		}
-	}
+            if (res > 0) {
+                if (isSetFlag(fd.revents, POLLOUT))
+                    return true;
+                else
+                    return false;
+            } else {
+                if (res == 0)
+                    return false;
+                else
+                    throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            }
+        }
+    }
 
-	return false;
+    return false;
 }
 
 //-------------------------------------------------------------------

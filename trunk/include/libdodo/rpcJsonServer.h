@@ -36,86 +36,86 @@
 #include <libdodo/rpcServer.h>
 
 namespace dodo {
-	namespace io {
-		class channel;
-	};
+    namespace io {
+        class channel;
+    };
 
-	namespace rpc {
-		class method;
-		class response;
+    namespace rpc {
+        class method;
+        class response;
 
-		namespace json {
-			/**
-			 * @struct __additional__
-			 * @brief defines response/request additional data
-			 */
-			struct __additional__ {
-				/**
-				 * constructor
-				 * @param version defines response/request version
-				 * @param id defines response/request ID
-				 */
-				__additional__(dodoString &version, long &id);
+        namespace json {
+            /**
+             * @struct __additional__
+             * @brief defines response/request additional data
+             */
+            struct __additional__ {
+                /**
+                 * constructor
+                 * @param version defines response/request version
+                 * @param id defines response/request ID
+                 */
+                __additional__(dodoString &version, long &id);
 
-				dodoString &version;    ///< response/request version
-				long       &id;         ///< response/request ID
-			};
+                dodoString &version;    ///< response/request version
+                long       &id;         ///< response/request ID
+            };
 
-			/**
-			 * @class server
-			 * @brief defines server-side JSON-RPC instrument
-			 */
-			class server : virtual public rpc::server {
-			  public:
+            /**
+             * @class server
+             * @brief defines server-side JSON-RPC instrument
+             */
+            class server : virtual public rpc::server {
+              public:
 
-				/**
-				 * constructor
-				 * @param io defines input/output sources
-				 */
-				server(io::channel &io);
+                /**
+                 * constructor
+                 * @param io defines input/output sources
+                 */
+                server(io::channel &io);
 
-				/**
-				 * destructor
-				 */
-				virtual ~server();
+                /**
+                 * destructor
+                 */
+                virtual ~server();
 
-				/**
-				 * set version of JSON-RPC response
-				 * @param version defines version of JSON-RPC response
-				 */
-				virtual void setResponseVersion(const dodoString &version);
+                /**
+                 * set version of JSON-RPC response
+                 * @param version defines version of JSON-RPC response
+                 */
+                virtual void setResponseVersion(const dodoString &version);
 
-				/**
-				 * serve rpc call
-				 * @note processes only one call
-				 * should be called again to process next
-				 * default values of odata for handler are set by setResponseVersion method and request ID
-				 */
-				virtual void serve();
+                /**
+                 * serve rpc call
+                 * @note processes only one call
+                 * should be called again to process next
+                 * default values of odata for handler are set by setResponseVersion method and request ID
+                 */
+                virtual void serve();
 
-			  protected:
+              protected:
 
-				/**
-				 * process RPC call
-				 * @return RPC method represantation
-				 */
-				virtual rpc::method processCallRequest();
+                /**
+                 * process RPC call
+                 * @return RPC method represantation
+                 */
+                virtual rpc::method processCallRequest();
 
-				/**
-				 * process RPC call
-				 * @return RPC response
-				 * @param response defines RPC response representation
-				 */
-				virtual void processCallResult(const rpc::response &response);
+                /**
+                 * process RPC call
+                 * @return RPC response
+                 * @param response defines RPC response representation
+                 */
+                virtual void processCallResult(const rpc::response &response);
 
-				dodoString rqVersion;   ///< request version
-				dodoString rpVersion;   ///< response version['1.1' by default]
+                dodoString rqVersion;   ///< request version
+                dodoString rpVersion;   ///< response version['1.1' by default]
 
-				long rqId;              ///< request ID
-				long rpId;              ///< response ID
-			};
-		};
-	};
+                long rqId;              ///< request ID
+                long rpId;              ///< response ID
+            };
+        };
+    };
 };
 #endif
 

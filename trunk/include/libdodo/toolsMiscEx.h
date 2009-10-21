@@ -35,28 +35,28 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace tools {
-		/**
-		 * libdodo defined errors
-		 */
-		enum miscExR {
-			MISCEX_WRONGSTRENGTH,
-			MISCEX_EMPTYARRAY,
-		};
+    namespace tools {
+        /**
+         * libdodo defined errors
+         */
+        enum miscExR {
+            MISCEX_WRONGSTRENGTH,
+            MISCEX_EMPTYARRAY,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define TOOLSMISCEX_WRONGSTRENGTH_STR  "Wrong strength argument"
 #define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum miscFunctionsID {
-			MISCEX_RANDOM,
-			MISCEX_JOIN,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum miscFunctionsID {
+            MISCEX_RANDOM,
+            MISCEX_JOIN,
+        };
+    };
 };
 #endif

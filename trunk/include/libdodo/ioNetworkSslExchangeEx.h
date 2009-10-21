@@ -35,32 +35,32 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			namespace ssl {
-				/**
-				 * libdodo defined errors
-				 */
-				enum exchangeExR {
-					EXCHANGEEX_NOCONNECTION,
-				};
+    namespace io {
+        namespace network {
+            namespace ssl {
+                /**
+                 * libdodo defined errors
+                 */
+                enum exchangeExR {
+                    EXCHANGEEX_NOCONNECTION,
+                };
 
-				/**
-				 * explanations for libdodo defined errors
-				 */
+                /**
+                 * explanations for libdodo defined errors
+                 */
 #define IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR "No connection"
 
-				/**
-				 * IDs of functions where exception might be thrown
-				 */
-				enum exchangeFunctionsID {
-					EXCHANGEEX__WRITE,
-					EXCHANGEEX__READ,
-					EXCHANGEEX__READSTREAM,
-					EXCHANGEEX__CLOSE,
-				};
-			};
-		};
-	};
+                /**
+                 * IDs of functions where exception might be thrown
+                 */
+                enum exchangeFunctionsID {
+                    EXCHANGEEX__WRITE,
+                    EXCHANGEEX__READ,
+                    EXCHANGEEX__READSTREAM,
+                    EXCHANGEEX__CLOSE,
+                };
+            };
+        };
+    };
 };
 #endif

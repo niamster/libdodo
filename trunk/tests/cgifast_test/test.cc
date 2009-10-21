@@ -21,101 +21,95 @@ sync::data::object object(protector);
 void
 handler(exchange &ex)
 {
-	using namespace cgi;
+    using namespace cgi;
 
-	dialogue d(ex, POST_SIZE_LIMIT, true);
+    dialogue d(ex, POST_SIZE_LIMIT, true);
 
-	d.setCookie(cookie("test", "Ni@m"));
+    d.setCookie(cookie("test", "Ni@m"));
 
-	///increment counter in shared memory
-	int *inc = (int *)object.acquire();
-	object.release();
+        ///increment counter in shared memory
+    int *inc = (int *)object.acquire();
+    object.release();
 
-	exchange *io = d;
-	io->writeString("The headers thould be already printed successfully.<br>");
+    exchange *io = d;
+    io->writeString("The headers thould be already printed successfully.<br>");
 
 #ifndef FASTCGI_EXT
-	io->writeString("No fastCGI extension was compiled!<br>");
+    io->writeString("No fastCGI extension was compiled!<br>");
 #endif
 
-	ex.writeString("counter: " + tools::string::iToString(*inc) + "<br>");
+    ex.writeString("counter: " + tools::string::iToString(*inc) + "<br>");
 
-	ex.writeString("GET[\"argument\"]: " + d.GET["argument"] + "<br>");
-	ex.writeString("POST[\"hidden\"]: " + d.POST["hidden"] + "<br>");
-	ex.writeString("POST[\"test\"]: " + d.POST["test"] + "<br>");
-	ex.writeString("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + d.ENVIRONMENT[cgi::ENVIRONMENT_QUERYSTRING] + "<br>");
-	ex.writeString("COOKIES[\"test\"]: " + d.COOKIES["test"] + "<br>");
-	ex.writeString("FILES[\"file\"].size: " + tools::string::iToString(d.FILES["file"].size) + "<br>");
-	ex.writeString("tpl::processor:<br>");
+    ex.writeString("GET[\"argument\"]: " + d.GET["argument"] + "<br>");
+    ex.writeString("POST[\"hidden\"]: " + d.POST["hidden"] + "<br>");
+    ex.writeString("POST[\"test\"]: " + d.POST["test"] + "<br>");
+    ex.writeString("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + d.ENVIRONMENT[cgi::ENVIRONMENT_QUERYSTRING] + "<br>");
+    ex.writeString("COOKIES[\"test\"]: " + d.COOKIES["test"] + "<br>");
+    ex.writeString("FILES[\"file\"].size: " + tools::string::iToString(d.FILES["file"].size) + "<br>");
+    ex.writeString("tpl::processor:<br>");
 
-	try
-	{
-		processor p;
+    try {
+        processor p;
 
-		p.assign("test", "test");
-		p.assign("one", "one");
+        p.assign("test", "test");
+        p.assign("one", "one");
 
-		dodoStringArray strarr;
-		strarr.push_back("one");
-		strarr.push_back("two");
-		strarr.push_back("three");
-		p.assign("strarr", strarr);
+        dodoStringArray strarr;
+        strarr.push_back("one");
+        strarr.push_back("two");
+        strarr.push_back("three");
+        p.assign("strarr", strarr);
 
-		dodoStringMap strmap;
-		strmap["one"] = "one";
-		strmap["two"] = "two";
-		strmap["three"] = "three";
-		p.assign("strmap", strmap);
+        dodoStringMap strmap;
+        strmap["one"] = "one";
+        strmap["two"] = "two";
+        strmap["three"] = "three";
+        p.assign("strmap", strmap);
 
-		dodoArray<dodoStringMap> strmaparr;
-		strmaparr.push_back(strmap);
-		strmap["one"] = "three";
-		strmaparr.push_back(strmap);
-		p.assign("strmaparr", strmaparr);
+        dodoArray<dodoStringMap> strmaparr;
+        strmaparr.push_back(strmap);
+        strmap["one"] = "three";
+        strmaparr.push_back(strmap);
+        p.assign("strmaparr", strmaparr);
 
-		p.processFile("test.tpl", *io);
-	}
-	catch (dodo::exception::basic &ex)
-	{
-		d.printString(ex.errStr + " " + tools::string::lToString(ex.line));
-	}
+        p.processFile("test.tpl", *io);
+    } catch (dodo::exception::basic &ex)   {
+        d.printString(ex.errStr + " " + tools::string::lToString(ex.line));
+    }
 
-	ex.writeString("<br>");
+    ex.writeString("<br>");
 
-	inc = (int *)object.acquire();
-	(*inc)++;
-	object.release();
+    inc = (int *)object.acquire();
+    (*inc)++;
+    object.release();
 }
 
-int main(int argc, char **argv)
+int
+main(int  argc,
+     char **argv)
 {
-
-	try
-	{
-		int *shared = new int(1);
-		object.set((void *)shared);
+    try {
+        int *shared = new int(1);
+        object.set((void *)shared);
 
 #ifdef FASTCGI_EXT
-		using namespace cgi::fast;
+        using namespace cgi::fast;
 
-		server c(5,false);
-		if (!c.isFastCgi())
-		{
-			cout << "Not a fastCGI.";
-			return 1;
-		}
+        server c(5, false);
+        if (!c.isFastCgi()) {
+            cout << "Not a fastCGI.";
+            return 1;
+        }
 #else
-		using namespace cgi::basic;
-		server c;
+        using namespace cgi::basic;
+        server c;
 #endif
-		c.serve(&handler);
+        c.serve(&handler);
 
-		delete shared;
-	}
-	catch (dodo::exception::basic &ex)
-	{
-		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
-	}
+        delete shared;
+    } catch (dodo::exception::basic &ex)   {
+        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    }
 
-	return 0;
+    return 0;
 }

@@ -35,58 +35,58 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace tools {
-		/**
-		 * libdodo defined errors
-		 */
-		enum toolsFilesystemExR {
-			FILESYSTEMEX_WRONGFILENAME,
-			FILESYSTEMEX_DESTINATIONEXISTS,
-			FILESYSTEMEX_NOTADIR,
-			FILESYSTEMEX_TOOLONGPATH
-		};
+    namespace tools {
+        /**
+         * libdodo defined errors
+         */
+        enum toolsFilesystemExR {
+            FILESYSTEMEX_WRONGFILENAME,
+            FILESYSTEMEX_DESTINATIONEXISTS,
+            FILESYSTEMEX_NOTADIR,
+            FILESYSTEMEX_TOOLONGPATH
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define TOOLSFILESYSTEMEX_WRONGFILENAME_STR     "Wrong filename"
 #define TOOLSFILESYSTEMEX_DESTINATIONEXISTS_STR "Destination file/dir/etc. exists"
 #define TOOLSFILESYSTEMEX_NOTADIR_STR           "There is not a dir with given path"
 #define TOOLSFILESYSTEMEX_TOOLONGPATH_STR       "Path is too long"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum filesystemFunctionsID {
-			FILESYSTEMEX_UNLINK,
-			FILESYSTEMEX_RENAME,
-			FILESYSTEMEX_LINK,
-			FILESYSTEMEX_SYMLINK,
-			FILESYSTEMEX_CHOWN,
-			FILESYSTEMEX_CHGRP,
-			FILESYSTEMEX_USEROWNER,
-			FILESYSTEMEX_GROUPOWNER,
-			FILESYSTEMEX_TOUCH,
-			FILESYSTEMEX_MKDIR,
-			FILESYSTEMEX_MKFIFO,
-			FILESYSTEMEX_CHMOD,
-			FILESYSTEMEX_RM,
-			FILESYSTEMEX_PERMISSIONS,
-			FILESYSTEMEX_FILETYPE,
-			FILESYSTEMEX_SIZE,
-			FILESYSTEMEX_ACCTIME,
-			FILESYSTEMEX_MODTIME,
-			FILESYSTEMEX_FILEINFO,
-			FILESYSTEMEX_DIRINFO,
-			FILESYSTEMEX_FOLLOWSYMLINK,
-			FILESYSTEMEX_FILECONTENTS,
-			FILESYSTEMEX_FILECONTENTSARR,
-			FILESYSTEMEX_COPY,
-			FILESYSTEMEX_COPYDIR,
-			FILESYSTEMEX__WRITETOFILE,
-			FILESYSTEMEX_DIRNAME,
-			FILESYSTEMEX_BASENAME,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum filesystemFunctionsID {
+            FILESYSTEMEX_UNLINK,
+            FILESYSTEMEX_RENAME,
+            FILESYSTEMEX_LINK,
+            FILESYSTEMEX_SYMLINK,
+            FILESYSTEMEX_CHOWN,
+            FILESYSTEMEX_CHGRP,
+            FILESYSTEMEX_USEROWNER,
+            FILESYSTEMEX_GROUPOWNER,
+            FILESYSTEMEX_TOUCH,
+            FILESYSTEMEX_MKDIR,
+            FILESYSTEMEX_MKFIFO,
+            FILESYSTEMEX_CHMOD,
+            FILESYSTEMEX_RM,
+            FILESYSTEMEX_PERMISSIONS,
+            FILESYSTEMEX_FILETYPE,
+            FILESYSTEMEX_SIZE,
+            FILESYSTEMEX_ACCTIME,
+            FILESYSTEMEX_MODTIME,
+            FILESYSTEMEX_FILEINFO,
+            FILESYSTEMEX_DIRINFO,
+            FILESYSTEMEX_FOLLOWSYMLINK,
+            FILESYSTEMEX_FILECONTENTS,
+            FILESYSTEMEX_FILECONTENTSARR,
+            FILESYSTEMEX_COPY,
+            FILESYSTEMEX_COPYDIR,
+            FILESYSTEMEX__WRITETOFILE,
+            FILESYSTEMEX_DIRNAME,
+            FILESYSTEMEX_BASENAME,
+        };
+    };
 };
 #endif

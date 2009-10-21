@@ -35,109 +35,109 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace pc {
-		namespace sync {
-			class protector;
-		};
-	};
+    namespace pc {
+        namespace sync {
+            class protector;
+        };
+    };
 
-	namespace io {
-		namespace event {
-			class descriptor;
+    namespace io {
+        namespace event {
+            class descriptor;
 
-			/**
-			 * @class manager
-			 * @brief provides information if in/output stream is readable/writable
-			 */
-			class manager {
-			  private:
+            /**
+             * @class manager
+             * @brief provides information if in/output stream is readable/writable
+             */
+            class manager {
+              private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				manager(manager &);
+                /**
+                 * copy constructor
+                 * @note to prevent copying
+                 */
+                manager(manager &);
 
-			  public:
+              public:
 
-				/**
-				 * constructor
-				 */
-				manager();
+                /**
+                 * constructor
+                 */
+                manager();
 
-				/**
-				 * destructor
-				 */
-				~manager();
+                /**
+                 * destructor
+                 */
+                ~manager();
 
-				/**
-				 * @return identificator of channel pair
-				 * @param fl defines a stream[file, stdio, exchange, ...]
-				 */
-				int add(const descriptor &fl);
+                /**
+                 * @return identificator of channel pair
+                 * @param fl defines a stream[file, stdio, exchange, ...]
+                 */
+                int add(const descriptor &fl);
 
-				/**
-				 * delete channel pair from watchers
-				 * @param pos defines identificator of stream pair
-				 */
-				void remove(int pos);
+                /**
+                 * delete channel pair from watchers
+                 * @param pos defines identificator of stream pair
+                 */
+                void remove(int pos);
 
-				/**
-				 * @return true if channel is readable
-				 * @param pos defines identificator of stream pair
-				 * @param timeout defines amount of time to wait for result[in milliseconds]
-				 * @note if timeout is negative - infinit timeout
-				 */
-				bool isReadable(int pos,
-								int timeout = 100) const;
+                /**
+                 * @return true if channel is readable
+                 * @param pos defines identificator of stream pair
+                 * @param timeout defines amount of time to wait for result[in milliseconds]
+                 * @note if timeout is negative - infinit timeout
+                 */
+                bool isReadable(int pos,
+                                int timeout = 100) const;
 
-				/**
-				 * @return collection of boolean values[value is true if channel is readable]
-				 * @param pos defines collection of identificators of stream pairs
-				 * @param timeout defines amount of time to wait for result[in milliseconds]
-				 * @note if timeout is negative - infinit timeout
-				 */
-				dodoArray<bool> isReadable(const dodoArray<int> &pos,
-										   int                  timeout = 100) const;
+                /**
+                 * @return collection of boolean values[value is true if channel is readable]
+                 * @param pos defines collection of identificators of stream pairs
+                 * @param timeout defines amount of time to wait for result[in milliseconds]
+                 * @note if timeout is negative - infinit timeout
+                 */
+                dodoArray<bool> isReadable(const dodoArray<int> &pos,
+                                           int                  timeout = 100) const;
 
-				/**
-				 * @return true if channel is writable
-				 * @param pos defines identificator of stream pair
-				 * @param timeout defines amount of time to wait for result[in milliseconds]
-				 * @note if timeout is negative - infinit timeout
-				 */
-				bool isWritable(int pos,
-								int timeout = 100) const;
+                /**
+                 * @return true if channel is writable
+                 * @param pos defines identificator of stream pair
+                 * @param timeout defines amount of time to wait for result[in milliseconds]
+                 * @note if timeout is negative - infinit timeout
+                 */
+                bool isWritable(int pos,
+                                int timeout = 100) const;
 
-				/**
-				 * @return collection of boolean values[value is true if channel is writable]
-				 * @param pos defines collection of identificators of stream pairs
-				 * @param timeout defines amount of time to wait for result[in milliseconds]
-				 * @note if timeout is negative - infinit timeout
-				 */
-				dodoArray<bool> isWritable(const dodoArray<int> &pos,
-										   int                  timeout = 100) const;
+                /**
+                 * @return collection of boolean values[value is true if channel is writable]
+                 * @param pos defines collection of identificators of stream pairs
+                 * @param timeout defines amount of time to wait for result[in milliseconds]
+                 * @note if timeout is negative - infinit timeout
+                 */
+                dodoArray<bool> isWritable(const dodoArray<int> &pos,
+                                           int                  timeout = 100) const;
 
-			  protected:
+              protected:
 
-				/**
-				 * @struct __descriptors__
-				 * @brief defines input and output descriptors of the io::* classes
-				 */
-				struct __descriptors__ {
-					int position;                               ///< identificator of the pair
+                /**
+                 * @struct __descriptors__
+                 * @brief defines input and output descriptors of the io::* classes
+                 */
+                struct __descriptors__ {
+                    int position;                                   ///< identificator of the pair
 
-					int in;                                     ///< input stream
-					int out;                                    ///< output stream
-				};
+                    int in;                                         ///< input stream
+                    int out;                                        ///< output stream
+                };
 
-				dodoArray<__descriptors__> desc;      ///< stream pairs
+                dodoArray<__descriptors__> desc;                    ///< stream pairs
 
-				int descs;                                      ///< descriptors counter
+                int descs;                                          ///< descriptors counter
 
-				pc::sync::protector *keeper;                      ///< section locker
-			};
-		};
-	};
+                pc::sync::protector *keeper;                        ///< section locker
+            };
+        };
+    };
 };
 #endif

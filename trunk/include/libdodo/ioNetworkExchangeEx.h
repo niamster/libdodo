@@ -35,29 +35,29 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			/**
-			 * libdodo defined errors
-			 */
-			enum exchangeExR {
-				EXCHANGEEX_NOCONNECTION,
-			};
+    namespace io {
+        namespace network {
+            /**
+             * libdodo defined errors
+             */
+            enum exchangeExR {
+                EXCHANGEEX_NOCONNECTION,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define IONETWORKEXCHANGEEX_NOCONNECTION_STR "No connection"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum exchangeFunctionsID {
-				EXCHANGEEX__WRITE,
-				EXCHANGEEX__READ,
-				EXCHANGEEX__READSTREAM,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum exchangeFunctionsID {
+                EXCHANGEEX__WRITE,
+                EXCHANGEEX__READ,
+                EXCHANGEEX__READSTREAM,
+            };
+        };
+    };
 };
 #endif

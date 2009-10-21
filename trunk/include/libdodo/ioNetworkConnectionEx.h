@@ -35,36 +35,36 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			/**
-			 * libdodo defined errors
-			 */
-			enum connectionExR {
-				CONNECTIONEX_NOSOCKETCREATED,
-				CONNECTIONEX_WRONGPARAMETER,
-			};
+    namespace io {
+        namespace network {
+            /**
+             * libdodo defined errors
+             */
+            enum connectionExR {
+                CONNECTIONEX_NOSOCKETCREATED,
+                CONNECTIONEX_WRONGPARAMETER,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR "No socket was created"
 #define IONETWORKCONNECTIONEX_WRONGPARAMETER_STR  "Wrong paramather passed to function"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum connectionFunctionsID {
-				CONNECTIONEX_SETINBUFFERSIZE,
-				CONNECTIONEX_SETOUTBUFFERSIZE,
-				CONNECTIONEX_SETINTIMEOUT,
-				CONNECTIONEX_SETOUTTIMEOUT,
-				CONNECTIONEX_SETSOCKOPT,
-				CONNECTIONEX_SETLINGERSOCKOPT,
-				CONNECTIONEX_BLOCK,
-				CONNECTIONEX__CLOSE,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum connectionFunctionsID {
+                CONNECTIONEX_SETINBUFFERSIZE,
+                CONNECTIONEX_SETOUTBUFFERSIZE,
+                CONNECTIONEX_SETINTIMEOUT,
+                CONNECTIONEX_SETOUTTIMEOUT,
+                CONNECTIONEX_SETSOCKOPT,
+                CONNECTIONEX_SETLINGERSOCKOPT,
+                CONNECTIONEX_BLOCK,
+                CONNECTIONEX__CLOSE,
+            };
+        };
+    };
 };
 #endif

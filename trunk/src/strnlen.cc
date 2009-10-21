@@ -32,15 +32,17 @@
 #ifdef NO_STRNLEN
 #include <sys/types.h>
 
-size_t strnlen(const char *s, size_t maxlen)
+size_t
+strnlen(const char *s,
+        size_t     maxlen)
 {
-	if (!s)
-		return 0;
+    if (!s)
+        return 0;
 
-	register size_t len = 0;
-	for (; s[len] != '\0' && len < maxlen; ++len)
-		;
+    register size_t len = 0;
+    for (; s[len] != '\0' && len < maxlen; ++len)
+        ;
 
-	return len;
+    return len;
 }
 #endif

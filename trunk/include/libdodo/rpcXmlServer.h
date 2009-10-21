@@ -36,78 +36,78 @@
 #include <libdodo/rpcServer.h>
 
 namespace dodo {
-	namespace io {
-		class channel;
-	};
+    namespace io {
+        class channel;
+    };
 
-	namespace rpc {
-		class method;
-		class response;
+    namespace rpc {
+        class method;
+        class response;
 
-		namespace xml {
-			/**
-			 * @struct __additional__
-			 * @brief defines response/request additional data
-			 */
-			struct __additional__ {
-				/**
-				 * constructor
-				 * @param encoding defines response/request encoding
-				 */
-				__additional__(dodoString &encoding);
+        namespace xml {
+            /**
+             * @struct __additional__
+             * @brief defines response/request additional data
+             */
+            struct __additional__ {
+                /**
+                 * constructor
+                 * @param encoding defines response/request encoding
+                 */
+                __additional__(dodoString &encoding);
 
-				dodoString &encoding; ///< response/request encoding
-			};
+                dodoString &encoding; ///< response/request encoding
+            };
 
-			/**
-			 * @class server
-			 * @brief defines server-side XML-RPC instrument
-			 */
-			class server : virtual public rpc::server {
-			  public:
+            /**
+             * @class server
+             * @brief defines server-side XML-RPC instrument
+             */
+            class server : virtual public rpc::server {
+              public:
 
-				/**
-				 * constructor
-				 * @param io defines input/output sources
-				 */
-				server(io::channel &io);
+                /**
+                 * constructor
+                 * @param io defines input/output sources
+                 */
+                server(io::channel &io);
 
-				/**
-				 * destructor
-				 */
-				virtual ~server();
+                /**
+                 * destructor
+                 */
+                virtual ~server();
 
-				/**
-				 * @param encoding defines response encoding
-				 */
-				void setResponseEncoding(const dodoString &encoding);
+                /**
+                 * @param encoding defines response encoding
+                 */
+                void setResponseEncoding(const dodoString &encoding);
 
-				/**
-				 * serve rpc call
-				 * @note processes only one call
-				 * should be called again to process next
-				 * default values of odata for handler are set by setResponseEncoding method
-				 */
-				virtual void serve();
+                /**
+                 * serve rpc call
+                 * @note processes only one call
+                 * should be called again to process next
+                 * default values of odata for handler are set by setResponseEncoding method
+                 */
+                virtual void serve();
 
-			  protected:
+              protected:
 
-				/**
-				 * process RPC call
-				 * @return RPC method represantation
-				 */
-				virtual rpc::method processCallRequest();
+                /**
+                 * process RPC call
+                 * @return RPC method represantation
+                 */
+                virtual rpc::method processCallRequest();
 
-				/**
-				 * process RPC call
-				 * @param response defines RPC response representation
-				 */
-				virtual void processCallResult(const rpc::response &response);
+                /**
+                 * process RPC call
+                 * @param response defines RPC response representation
+                 */
+                virtual void processCallResult(const rpc::response &response);
 
-				dodoString rpEncoding;  ///< encoding of the messages['UTF-8' by default]
-				dodoString rqEncoding;  ///< encoding of the messages['UTF-8' by default]
-			};
-		};
-	};
+                dodoString rpEncoding;  ///< encoding of the messages['UTF-8' by default]
+                dodoString rqEncoding;  ///< encoding of the messages['UTF-8' by default]
+            };
+        };
+    };
 };
 #endif

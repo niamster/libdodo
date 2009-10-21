@@ -35,27 +35,27 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace rpc {
-		namespace json {
-			/**
-			 * libdodo defined errors
-			 */
-			enum responseExR {
-				RESPONSEEX_ROOTNOTANOBJECT,
-			};
+    namespace rpc {
+        namespace json {
+            /**
+             * libdodo defined errors
+             */
+            enum responseExR {
+                RESPONSEEX_ROOTNOTANOBJECT,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR "Root node is not an object"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum responseFunctionsID {
-				RESPONSEEX_JSONTORESPONSE,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum responseFunctionsID {
+                RESPONSEEX_JSONTORESPONSE,
+            };
+        };
+    };
 };
 #endif

@@ -37,157 +37,157 @@
 #include <libdodo/ioEventDescriptor.h>
 
 namespace dodo {
-	namespace pc {
-		namespace sync {
-			class protector;
-		};
-	};
+    namespace pc {
+        namespace sync {
+            class protector;
+        };
+    };
 
-	namespace io {
-		namespace block {
-			class channel;
-		};
+    namespace io {
+        namespace block {
+            class channel;
+        };
 
-		namespace stream {
-			class channel;
-		};
+        namespace stream {
+            class channel;
+        };
 
-		/**
-		 * @class channel
-		 * @brief implements an interface for I/O operations
-		 */
-		class channel : virtual public event::descriptor
+        /**
+         * @class channel
+         * @brief implements an interface for I/O operations
+         */
+        class channel : virtual public event::descriptor
 #ifndef IO_WO_XEXEC
-						,
-						public xexec
+                        ,
+                        public xexec
 #endif
-		{
-			friend class block::channel;
-			friend class stream::channel;
+        {
+            friend class block::channel;
+            friend class stream::channel;
 
-		  private:
+          private:
 
-			/**
-			 * constructor
-			 * @param protection defines type of IO protection, @see channel::io::channel::protectionEnum
-			 */
-			channel(short protection);
+            /**
+             * constructor
+             * @param protection defines type of IO protection, @see channel::io::channel::protectionEnum
+             */
+            channel(short protection);
 
-			/**
-			 * destructor
-			 */
-			virtual ~channel();
+            /**
+             * destructor
+             */
+            virtual ~channel();
 
-		  public:
+          public:
 
-			/**
-			 * @enum protectionEnum defines type of protection for io objects
-			 * in IO interaction in parallel environment
-			 */
-			enum protectionEnum {
-				PROTECTION_NONE,
-				PROTECTION_THREAD,
-				PROTECTION_PROCESS
-			};
+            /**
+             * @enum protectionEnum defines type of protection for io objects
+             * in IO interaction in parallel environment
+             */
+            enum protectionEnum {
+                PROTECTION_NONE,
+                PROTECTION_THREAD,
+                PROTECTION_PROCESS
+            };
 
-			/**
-			 * @enum operationEnum describes type of operation for xexec
-			 */
-			enum operationEnum {
-				OPERATION_READ,
-				OPERATION_READSTRING,
-				OPERATION_WRITE,
-				OPERATION_WRITESTRING,
-			};
-
-#ifndef IO_WO_XEXEC
-			/**
-			 * @class __collected_data__
-			 * @brief defines data that could be retrieved from io::channel(to modificate)
-			 */
-			class __collected_data__ : public xexec::__collected_data__ {
-			  public:
-
-				/**
-				 * constructor
-				 * @param executor defines class that executed hook
-				 * @param execObject defines type of object that executed a hook, @see xexec::objectEnum
-				 */
-				__collected_data__(xexec *executor,
-									   short execObject);
-
-				dodoString buffer; ///< data buffer
-			};
-#endif
-
-			/**
-			 * @return read data
-			 * @note not more then blockSize
-			 */
-			virtual dodoString read() const = 0;
-
-			/**
-			 * @param data defines data that will be written
-			 * @note not more then blockSize
-			 */
-			virtual void write(const dodoString &data) const = 0;
-
-			/**
-			 * read from stream null- or newline- terminated string
-			 * @return read data
-			 * @note not more then blockSize
-			 */
-			virtual dodoString readString() const = 0;
-
-			/**
-			 * write to stream null- terminated string
-			 * @param data defines data that will be written
-			 * @note not more then blockSize
-			 */
-			virtual void writeString(const dodoString &data) const = 0;
-
-			/**
-			 * flush output
-			 */
-			virtual void flush() const = 0;
-
-			mutable unsigned long blockSize;   ///< size of data block for read/write operations
-
-		  protected:
-
-			/**
-			 * @param data defines buffer that will be filled
-			 * @note not more then blockSize(including null)
-			 */
-			virtual void _read(char * const data) const = 0;
-
-			/**
-			 * read from stream null- or newline- terminated string
-			 * @param data defines buffer that will be filled
-			 * @note not more then blockSize(including null)
-			 */
-			virtual unsigned long _readString(char * const data) const = 0;
-
-			/**
-			 * @param data defines data that will be written
-			 * @note not more then blockSize(including null)
-			 */
-			virtual void _write(const char * const data) const = 0;
-
-			/**
-			 * write to stream null- terminated string
-			 * @param data defines data that will be written
-			 * @note not more then blockSize(including null)
-			 */
-			virtual void _writeString(const char * const data) const = 0;
-
-			pc::sync::protector *keeper;                                  ///< section locker
-			short protection;                                           ///< type of IO protection, @see io::channel::protectionEnum
+            /**
+             * @enum operationEnum describes type of operation for xexec
+             */
+            enum operationEnum {
+                OPERATION_READ,
+                OPERATION_READSTRING,
+                OPERATION_WRITE,
+                OPERATION_WRITESTRING,
+            };
 
 #ifndef IO_WO_XEXEC
-			mutable __collected_data__ collectedData;      ///< data collected for xexec
+            /**
+             * @class __collected_data__
+             * @brief defines data that could be retrieved from io::channel(to modificate)
+             */
+            class __collected_data__ : public xexec::__collected_data__ {
+              public:
+
+                /**
+                 * constructor
+                 * @param executor defines class that executed hook
+                 * @param execObject defines type of object that executed a hook, @see xexec::objectEnum
+                 */
+                __collected_data__(xexec *executor,
+                                   short execObject);
+
+                dodoString buffer; ///< data buffer
+            };
 #endif
-		};
-	};
+
+            /**
+             * @return read data
+             * @note not more then blockSize
+             */
+            virtual dodoString read() const = 0;
+
+            /**
+             * @param data defines data that will be written
+             * @note not more then blockSize
+             */
+            virtual void write(const dodoString &data) const = 0;
+
+            /**
+             * read from stream null- or newline- terminated string
+             * @return read data
+             * @note not more then blockSize
+             */
+            virtual dodoString readString() const = 0;
+
+            /**
+             * write to stream null- terminated string
+             * @param data defines data that will be written
+             * @note not more then blockSize
+             */
+            virtual void writeString(const dodoString &data) const = 0;
+
+            /**
+             * flush output
+             */
+            virtual void flush() const = 0;
+
+            mutable unsigned long blockSize;   ///< size of data block for read/write operations
+
+          protected:
+
+            /**
+             * @param data defines buffer that will be filled
+             * @note not more then blockSize(including null)
+             */
+            virtual void _read(char * const data) const = 0;
+
+            /**
+             * read from stream null- or newline- terminated string
+             * @param data defines buffer that will be filled
+             * @note not more then blockSize(including null)
+             */
+            virtual unsigned long _readString(char * const data) const = 0;
+
+            /**
+             * @param data defines data that will be written
+             * @note not more then blockSize(including null)
+             */
+            virtual void _write(const char * const data) const = 0;
+
+            /**
+             * write to stream null- terminated string
+             * @param data defines data that will be written
+             * @note not more then blockSize(including null)
+             */
+            virtual void _writeString(const char * const data) const = 0;
+
+            pc::sync::protector *keeper;                                    ///< section locker
+            short protection;                                               ///< type of IO protection, @see io::channel::protectionEnum
+
+#ifndef IO_WO_XEXEC
+            mutable __collected_data__ collectedData;                       ///< data collected for xexec
+#endif
+        };
+    };
 };
 #endif

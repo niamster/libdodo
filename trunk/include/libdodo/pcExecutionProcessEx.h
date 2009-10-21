@@ -35,37 +35,37 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace pc {
-		namespace execution {
-			/**
-			 * libdodo defined errors
-			 */
-			enum processExR {
-				PROCESSEX_ISALREADYRUNNING,
-				PROCESSEX_ISNOTLAUNCHED,
-			};
+    namespace pc {
+        namespace execution {
+            /**
+             * libdodo defined errors
+             */
+            enum processExR {
+                PROCESSEX_ISALREADYRUNNING,
+                PROCESSEX_ISNOTLAUNCHED,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define PCEXECUTIONPROCESSEX_ISALREADYRUNNING_STR "Process is currently running"
 #define PCEXECUTIONPROCESSEX_ISNOTLAUNCHED_STR "Process is not launched"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum processFunctionsID {
-				PROCESSEX_ISRUNNING,
-				PROCESSEX_RUN,
-				PROCESSEX_STOP,
-				PROCESSEX_WAIT,
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum processFunctionsID {
+                PROCESSEX_ISRUNNING,
+                PROCESSEX_RUN,
+                PROCESSEX_STOP,
+                PROCESSEX_WAIT,
 #ifdef DL_EXT
-				PROCESSEX_MODULE,
-				PROCESSEX_CONSTRUCTOR,
+                PROCESSEX_MODULE,
+                PROCESSEX_CONSTRUCTOR,
 #endif
-			};
-		};
-	};
+            };
+        };
+    };
 };
 #endif
 

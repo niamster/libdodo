@@ -35,41 +35,41 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace file {
-			/**
-			 * libdodo defined errors
-			 */
-			enum tempExR {
-				TEMPEX_CANNOTOVEWRITE,
-				TEMPEX_FILEISSHORTERTHANGIVENPOSITION,
-				TEMPEX_NOTOPENED
-			};
+    namespace io {
+        namespace file {
+            /**
+             * libdodo defined errors
+             */
+            enum tempExR {
+                TEMPEX_CANNOTOVEWRITE,
+                TEMPEX_FILEISSHORTERTHANGIVENPOSITION,
+                TEMPEX_NOTOPENED
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define IOFILETEMPEX_CANNOTOVEWRITE_STR                 "Overwriting is not permitted"
 #define IOFILETEMPEX_FILEISSHORTERTHANGIVENPOSITION_STR "Access data out of bounds"
 #define IOFILETEMPEX_NOTOPENED_STR "File not opened"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum tempFunctionsID {
-				TEMPEX_TEMP,
-				TEMPEX_CLOSE,
-				TEMPEX_CLONE,
-				TEMPEX_OPEN,
-				TEMPEX__READ,
-				TEMPEX__WRITE,
-				TEMPEX__READSTREAM,
-				TEMPEX__WRITESTREAM,
-				TEMPEX_FLUSH,
-				TEMPEX_INDESCRIPTOR,
-				TEMPEX_OUTDESCRIPTOR,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum tempFunctionsID {
+                TEMPEX_TEMP,
+                TEMPEX_CLOSE,
+                TEMPEX_CLONE,
+                TEMPEX_OPEN,
+                TEMPEX__READ,
+                TEMPEX__WRITE,
+                TEMPEX__READSTREAM,
+                TEMPEX__WRITESTREAM,
+                TEMPEX_FLUSH,
+                TEMPEX_INDESCRIPTOR,
+                TEMPEX_OUTDESCRIPTOR,
+            };
+        };
+    };
 };
 #endif

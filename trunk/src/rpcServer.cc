@@ -40,7 +40,7 @@
 using namespace dodo::rpc;
 
 server::server(io::channel &io) : defaultHandler(&rpcDefaultHandler),
-								  io(io)
+                                  io(io)
 {
 }
 
@@ -54,14 +54,14 @@ server::~server()
 
 response
 server::rpcDefaultHandler(const dodoString       &method,
-						  const dodoArray<value> &arguments,
-						  const void             *idata,
-						  void                   *odata)
+                          const dodoArray<value> &arguments,
+                          const void             *idata,
+                          void                   *odata)
 {
-	response response;
-	response.fault(dodoString("rpcDefaultHandler"));
+    response response;
+    response.fault(dodoString("rpcDefaultHandler"));
 
-	return response;
+    return response;
 }
 
 //-------------------------------------------------------------------
@@ -69,16 +69,16 @@ server::rpcDefaultHandler(const dodoString       &method,
 void
 server::setDefault(handler handler)
 {
-	defaultHandler = handler;
+    defaultHandler = handler;
 }
 
 //-------------------------------------------------------------------
 
 void
 server::setHandler(const dodoString &method,
-				   handler          handler)
+                   handler          handler)
 {
-	handlers.insert(make_pair(method, handler));
+    handlers.insert(make_pair(method, handler));
 }
 
 //-------------------------------------------------------------------
@@ -86,7 +86,7 @@ server::setHandler(const dodoString &method,
 void
 server::removeHandler(const dodoString &method)
 {
-	handlers.erase(method);
+    handlers.erase(method);
 }
 
 //-------------------------------------------------------------------
@@ -94,26 +94,26 @@ server::removeHandler(const dodoString &method)
 void
 server::serve()
 {
-	try {
-		method meth = processCallRequest();
+    try {
+        method meth = processCallRequest();
 
-		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
+        dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
-		if (handler == handlers.end())
-			processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL));
-		else
-			processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL));
-	} catch (exception::basic &ex) {
-		response response;
-		response.fault(ex.errStr);
+        if (handler == handlers.end())
+            processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL));
+        else
+            processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL));
+    } catch (exception::basic &ex) {
+        response response;
+        response.fault(ex.errStr);
 
-		processCallResult(response);
-	} catch (...) {
-		response response;
-		response.fault(dodoString("An unknown error."));
+        processCallResult(response);
+    } catch (...) {
+        response response;
+        response.fault(dodoString("An unknown error."));
 
-		processCallResult(response);
-	}
+        processCallResult(response);
+    }
 }
 
 //-------------------------------------------------------------------

@@ -35,40 +35,40 @@
 #include <libdodo/cgiServer.h>
 
 namespace dodo {
-	namespace cgi {
-		namespace basic {
-			/**
-			 * @class server
-			 * @brief provides basic CGI server functionality
-			 */
-			class server : public cgi::server {
-			  private:
+    namespace cgi {
+        namespace basic {
+            /**
+             * @class server
+             * @brief provides basic CGI server functionality
+             */
+            class server : public cgi::server {
+              private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				server(server &);
+                /**
+                 * copy constructor
+                 * @note to prevent copying
+                 */
+                server(server &);
 
-			  public:
+              public:
 
-				/**
-				 * constructor
-				 */
-				server();
+                /**
+                 * constructor
+                 */
+                server();
 
-				/**
-				 * destructor
-				 */
-				virtual ~server();
+                /**
+                 * destructor
+                 */
+                virtual ~server();
 
-				/**
-				 * listen for incoming requests
-				 * @param handler defines request handler
-				 */
-				virtual void serve(handler handler);
-			};
-		};
-	};
+                /**
+                 * listen for incoming requests
+                 * @param handler defines request handler
+                 */
+                virtual void serve(handler handler);
+            };
+        };
+    };
 };
 #endif

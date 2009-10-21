@@ -34,55 +34,55 @@
 
 #ifdef IMAGEMAGICK_EXT
 namespace dodo {
-	namespace graphics {
-		class image;
+    namespace graphics {
+        class image;
 
-		/**
-		 * @class transform
-		 * @brief provides simple image transformations
-		 */
-		class transform {
-		  public:
+        /**
+         * @class transform
+         * @brief provides simple image transformations
+         */
+        class transform {
+          public:
 
-			/**
-			 * @enum rotateDirectionAngleEnum defines rotation options
-			 */
-			enum rotateDirectionAngleEnum {
-				ROTATE_DIRECTION_ANGLE_90CW = -90,
-				ROTATE_DIRECTION_ANGLE_90CCW = 90,
-				ROTATE_DIRECTION_ANGLE_180 = 180,
-				ROTATE_DIRECTION_ANGLE_270CW = -270,
-				ROTATE_DIRECTION_ANGLE_270CCW = 270,
-			};
+            /**
+             * @enum rotateDirectionAngleEnum defines rotation options
+             */
+            enum rotateDirectionAngleEnum {
+                ROTATE_DIRECTION_ANGLE_90CW = -90,
+                ROTATE_DIRECTION_ANGLE_90CCW = 90,
+                ROTATE_DIRECTION_ANGLE_180 = 180,
+                ROTATE_DIRECTION_ANGLE_270CW = -270,
+                ROTATE_DIRECTION_ANGLE_270CCW = 270,
+            };
 
-			/**
-			 * scale transform
-			 * @param image defines image on which perform transformation
-			 * @param width defines width of the transform
-			 * @param height defines height of the transform
-			 */
-			static void scale(image &image,
-							  unsigned long width,
-							   unsigned long height);
+            /**
+             * scale transform
+             * @param image defines image on which perform transformation
+             * @param width defines width of the transform
+             * @param height defines height of the transform
+             */
+            static void scale(image         &image,
+                              unsigned long width,
+                              unsigned long height);
 
-			/**
-			 * scale transform
-			 * @param image defines image on which perform transformation
-			 * @param size defines size of the transform
-			 * @note scales transform by reducing size of the greater side saving proportions
-			 */
-			static void scale(image &image,
-							  unsigned long size);
+            /**
+             * scale transform
+             * @param image defines image on which perform transformation
+             * @param size defines size of the transform
+             * @note scales transform by reducing size of the greater side saving proportions
+             */
+            static void scale(image         &image,
+                              unsigned long size);
 
-			/**
-			 * rotate transform
-			 * @param image defines image on which perform transformation
-			 * @param angle defines rotation degree, @see also transform::rotateDirectionAngleEnum
-			 */
-			static void rotate(image &image,
-							  double angle);
-		};
-	};
+            /**
+             * rotate transform
+             * @param image defines image on which perform transformation
+             * @param angle defines rotation degree, @see also transform::rotateDirectionAngleEnum
+             */
+            static void rotate(image  &image,
+                               double angle);
+        };
+    };
 };
 #endif
 #endif

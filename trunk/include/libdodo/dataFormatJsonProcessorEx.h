@@ -35,35 +35,35 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace data {
-		namespace format {
-			namespace json {
-				/**
-				 * libdodo defined errors
-				 */
-				enum processorExR {
-					PROCESSOREX_MALFORMEDJSONNUMERIC,
-					PROCESSOREX_MALFORMEDJSONNULL,
-					PROCESSOREX_MALFORMEDJSONBOOLEAN,
-				};
+    namespace data {
+        namespace format {
+            namespace json {
+                /**
+                 * libdodo defined errors
+                 */
+                enum processorExR {
+                    PROCESSOREX_MALFORMEDJSONNUMERIC,
+                    PROCESSOREX_MALFORMEDJSONNULL,
+                    PROCESSOREX_MALFORMEDJSONBOOLEAN,
+                };
 
-				/**
-				 * explanations for libdodo defined errors
-				 */
+                /**
+                 * explanations for libdodo defined errors
+                 */
 #define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric"
 #define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONNULL_STR    "Malformed json object: null"
 #define DATAFORMATJSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean"
 
-				/**
-				 * IDs of functions where exception might be thrown
-				 */
-				enum processorFunctionsID {
-					PROCESSOREX_PROCESSBOOLEAN,
-					PROCESSOREX_PROCESSNULL,
-					PROCESSOREX_PROCESSNUMERIC,
-				};
-			};
-		};
-	};
+                /**
+                 * IDs of functions where exception might be thrown
+                 */
+                enum processorFunctionsID {
+                    PROCESSOREX_PROCESSBOOLEAN,
+                    PROCESSOREX_PROCESSNULL,
+                    PROCESSOREX_PROCESSNUMERIC,
+                };
+            };
+        };
+    };
 };
 #endif

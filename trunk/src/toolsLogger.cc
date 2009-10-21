@@ -42,37 +42,37 @@
 using namespace dodo::tools;
 
 const dodoString logger::levels[] = {
-	"INFO",
-	"NOTICE",
-	"DEBUG",
-	"WARNING",
-	"ERROR",
-	"ALERT",
-	"CRITICAL",
-	"EMERGENCY",
-	"USER"
+    "INFO",
+    "NOTICE",
+    "DEBUG",
+    "WARNING",
+    "ERROR",
+    "ALERT",
+    "CRITICAL",
+    "EMERGENCY",
+    "USER"
 };
 
 //-------------------------------------------------------------------
 
 const int logger::syslogLevels[] = {
-	LOG_EMERG,
-	LOG_ALERT,
-	LOG_CRIT,
-	LOG_ERR,
-	LOG_WARNING,
-	LOG_NOTICE,
-	LOG_INFO,
-	LOG_DEBUG,
-	LOG_USER
+    LOG_EMERG,
+    LOG_ALERT,
+    LOG_CRIT,
+    LOG_ERR,
+    LOG_WARNING,
+    LOG_NOTICE,
+    LOG_INFO,
+    LOG_DEBUG,
+    LOG_USER
 };
 
 //-------------------------------------------------------------------
 
 logger::logger() : forward(false),
-				   timeFormat(" %d/%m/%Y.%H-%M-%S: "),
-				   handlersNum(0),
-				   keeper(new pc::sync::process(0))
+                   timeFormat(" %d/%m/%Y.%H-%M-%S: "),
+                   handlersNum(0),
+                   keeper(new pc::sync::process(0))
 {
 }
 
@@ -80,26 +80,26 @@ logger::logger() : forward(false),
 
 logger::~logger()
 {
-	delete keeper;
+    delete keeper;
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
 logger::add(short       level,
-			io::channel *handler)
+            io::channel *handler)
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	__log_map__ lm;
+    __log_map__ lm;
 
-	lm.handler = handler;
-	lm.level = level;
-	lm.position = ++handlersNum;
+    lm.handler = handler;
+    lm.level = level;
+    lm.position = ++handlersNum;
 
-	handlers.push_back(lm);
+    handlers.push_back(lm);
 
-	return handlersNum;
+    return handlersNum;
 }
 
 //-------------------------------------------------------------------
@@ -107,53 +107,53 @@ logger::add(short       level,
 void
 logger::remove(unsigned long position)
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	dodoList<__log_map__>::iterator i(handlers.begin()), j(handlers.end());
-	for (; i != j; ++i) {
-		if (i->position == position) {
-			handlers.erase(i);
+    dodoList<__log_map__>::iterator i(handlers.begin()), j(handlers.end());
+    for (; i != j; ++i) {
+        if (i->position == position) {
+            handlers.erase(i);
 
-			break;
-		}
-	}
+            break;
+        }
+    }
 }
 
 //-------------------------------------------------------------------
 
 void
 logger::log(short            level,
-			const dodoString &msg)
+            const dodoString &msg)
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	if (level < 0 && level >= LOG_LEVEL_ENUMSIZE)
-		return;
+    if (level < 0 && level >= LOG_LEVEL_ENUMSIZE)
+        return;
 
-	dodoList<__log_map__>::iterator i(handlers.begin()), j(handlers.end());
-	for (; i != j; ++i) {
-		if (i->level == level) {
-			if (i->handler != NULL) {
-				i->handler->writeString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
-				i->handler->flush();
-			} else
-				syslog(syslogLevels[level], "%s", msg.data());
-		}
-	}
+    dodoList<__log_map__>::iterator i(handlers.begin()), j(handlers.end());
+    for (; i != j; ++i) {
+        if (i->level == level) {
+            if (i->handler != NULL) {
+                i->handler->writeString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
+                i->handler->flush();
+            } else
+                syslog(syslogLevels[level], "%s", msg.data());
+        }
+    }
 
-	if (forward) {
-		i = instance().handlers.begin();
-		j = instance().handlers.end();
-		for (; i != j; ++i) {
-			if (i->level == level) {
-				if (i->handler != NULL) {
-					i->handler->writeString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
-					i->handler->flush();
-				} else
-					syslog(syslogLevels[level], "%s", msg.data());
-			}
-		}
-	}
+    if (forward) {
+        i = instance().handlers.begin();
+        j = instance().handlers.end();
+        for (; i != j; ++i) {
+            if (i->level == level) {
+                if (i->handler != NULL) {
+                    i->handler->writeString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
+                    i->handler->flush();
+                } else
+                    syslog(syslogLevels[level], "%s", msg.data());
+            }
+        }
+    }
 }
 
 //-------------------------------------------------------------------
@@ -161,7 +161,7 @@ logger::log(short            level,
 void
 logger::setTimeFormat(const dodoString &format)
 {
-	timeFormat = " " + format + ": ";
+    timeFormat = " " + format + ": ";
 }
 
 //-------------------------------------------------------------------

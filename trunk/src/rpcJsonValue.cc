@@ -39,63 +39,63 @@ using namespace dodo::rpc::json;
 dodo::rpc::value
 value::jsonToValue(const dodo::data::format::json::node &node)
 {
-	rpc::value val;
+    rpc::value val;
 
-	switch (node.valueDataType) {
-		case dodo::data::format::json::node::DATA_STRING:
-			val.valueDataType = dodo::rpc::value::DATA_STRING;
-			val.stringValue = new dodoString(*node.stringValue);
+    switch (node.valueDataType) {
+        case dodo::data::format::json::node::DATA_STRING:
+            val.valueDataType = dodo::rpc::value::DATA_STRING;
+            val.stringValue = new dodoString(*node.stringValue);
 
-			break;
+            break;
 
-		case dodo::data::format::json::node::DATA_OBJECT:
-		{
-			val.valueDataType = dodo::rpc::value::DATA_STRUCT;
-			val.structValue = new dodoMap<dodoString, rpc::value, dodoMapStringCompare>;
+        case dodo::data::format::json::node::DATA_OBJECT:
+        {
+            val.valueDataType = dodo::rpc::value::DATA_STRUCT;
+            val.structValue = new dodoMap<dodoString, rpc::value, dodoMapStringCompare>;
 
-			dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>::iterator
-			i = node.objectValue->begin(),
-			j = node.objectValue->end();
-			for (; i != j; ++i)
-				val.structValue->insert(make_pair(i->first, jsonToValue(i->second)));
+            dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>::iterator
+            i = node.objectValue->begin(),
+            j = node.objectValue->end();
+            for (; i != j; ++i)
+                val.structValue->insert(make_pair(i->first, jsonToValue(i->second)));
 
-			break;
-		}
+            break;
+        }
 
-		case dodo::data::format::json::node::DATA_ARRAY:
-		{
-			val.valueDataType = dodo::rpc::value::DATA_ARRAY;
-			val.arrayValue = new dodoArray<rpc::value>;
+        case dodo::data::format::json::node::DATA_ARRAY:
+        {
+            val.valueDataType = dodo::rpc::value::DATA_ARRAY;
+            val.arrayValue = new dodoArray<rpc::value>;
 
-			dodoArray<dodo::data::format::json::node>::const_iterator
-			i = node.arrayValue->begin(),
-			j = node.arrayValue->end();
-			for (; i != j; ++i)
-				val.arrayValue->push_back(jsonToValue(*i));
+            dodoArray<dodo::data::format::json::node>::const_iterator
+            i = node.arrayValue->begin(),
+            j = node.arrayValue->end();
+            for (; i != j; ++i)
+                val.arrayValue->push_back(jsonToValue(*i));
 
-			break;
-		}
+            break;
+        }
 
-		case dodo::data::format::json::node::DATA_BOOLEAN:
-			val.valueDataType = dodo::rpc::value::DATA_BOOLEAN;
-			val.booleanValue = node.booleanValue;
+        case dodo::data::format::json::node::DATA_BOOLEAN:
+            val.valueDataType = dodo::rpc::value::DATA_BOOLEAN;
+            val.booleanValue = node.booleanValue;
 
-			break;
+            break;
 
-		case dodo::data::format::json::node::DATA_NUMERIC:
-			val.valueDataType = dodo::rpc::value::DATA_NUMERIC;
-			val.numericValue = node.numericValue;
+        case dodo::data::format::json::node::DATA_NUMERIC:
+            val.valueDataType = dodo::rpc::value::DATA_NUMERIC;
+            val.numericValue = node.numericValue;
 
-			break;
+            break;
 
-		case dodo::data::format::json::node::DATA_NULL:
-			val.valueDataType = dodo::rpc::value::DATA_BOOLEAN;
-			val.booleanValue = false;
+        case dodo::data::format::json::node::DATA_NULL:
+            val.valueDataType = dodo::rpc::value::DATA_BOOLEAN;
+            val.booleanValue = false;
 
-			break;
-	}
+            break;
+    }
 
-	return val;
+    return val;
 }
 
 //-------------------------------------------------------------------
@@ -103,57 +103,57 @@ value::jsonToValue(const dodo::data::format::json::node &node)
 dodo::data::format::json::node
 value::valueToJson(const rpc::value &data)
 {
-	dodo::data::format::json::node node;
+    dodo::data::format::json::node node;
 
-	switch (data.valueDataType) {
-		case dodo::rpc::value::DATA_STRING:
-			node.valueDataType = dodo::data::format::json::node::DATA_STRING;
-			node.stringValue = new dodoString(*data.stringValue);
+    switch (data.valueDataType) {
+        case dodo::rpc::value::DATA_STRING:
+            node.valueDataType = dodo::data::format::json::node::DATA_STRING;
+            node.stringValue = new dodoString(*data.stringValue);
 
-			break;
+            break;
 
-		case dodo::rpc::value::DATA_BOOLEAN:
-			node.valueDataType = dodo::data::format::json::node::DATA_BOOLEAN;
-			node.booleanValue = data.booleanValue;
+        case dodo::rpc::value::DATA_BOOLEAN:
+            node.valueDataType = dodo::data::format::json::node::DATA_BOOLEAN;
+            node.booleanValue = data.booleanValue;
 
-			break;
+            break;
 
-		case dodo::rpc::value::DATA_NUMERIC:
-			node.valueDataType = dodo::data::format::json::node::DATA_NUMERIC;
-			node.numericValue = (long)data.numericValue;
+        case dodo::rpc::value::DATA_NUMERIC:
+            node.valueDataType = dodo::data::format::json::node::DATA_NUMERIC;
+            node.numericValue = (long)data.numericValue;
 
-			break;
+            break;
 
-		case dodo::rpc::value::DATA_ARRAY:
-		{
-			node.valueDataType = dodo::data::format::json::node::DATA_ARRAY;
-			node.arrayValue = new dodoArray<dodo::data::format::json::node>;
+        case dodo::rpc::value::DATA_ARRAY:
+        {
+            node.valueDataType = dodo::data::format::json::node::DATA_ARRAY;
+            node.arrayValue = new dodoArray<dodo::data::format::json::node>;
 
-			dodoArray<rpc::value>::const_iterator
-			i = data.arrayValue->begin(),
-			j = data.arrayValue->end();
-			for (; i != j; ++i)
-				node.arrayValue->push_back(valueToJson(*i));
+            dodoArray<rpc::value>::const_iterator
+            i = data.arrayValue->begin(),
+            j = data.arrayValue->end();
+            for (; i != j; ++i)
+                node.arrayValue->push_back(valueToJson(*i));
 
-			break;
-		}
+            break;
+        }
 
-		case dodo::rpc::value::DATA_STRUCT:
-		{
-			node.valueDataType = dodo::data::format::json::node::DATA_OBJECT;
-			node.objectValue = new dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>;
+        case dodo::rpc::value::DATA_STRUCT:
+        {
+            node.valueDataType = dodo::data::format::json::node::DATA_OBJECT;
+            node.objectValue = new dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>;
 
-			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator
-			i = data.structValue->begin(),
-			j = data.structValue->end();
-			for (; i != j; ++i)
-				node.objectValue->insert(make_pair(i->first, valueToJson(i->second)));
+            dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator
+            i = data.structValue->begin(),
+            j = data.structValue->end();
+            for (; i != j; ++i)
+                node.objectValue->insert(make_pair(i->first, valueToJson(i->second)));
 
-			break;
-		}
-	}
+            break;
+        }
+    }
 
-	return node;
+    return node;
 }
 
 //-------------------------------------------------------------------

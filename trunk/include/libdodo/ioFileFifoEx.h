@@ -35,40 +35,40 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace file {
-			/**
-			 * libdodo defined errors
-			 */
-			enum fifoExR {
-				FIFOEX_WRONGFILENAME,
-				FIFOEX_NOTOPENED
-			};
+    namespace io {
+        namespace file {
+            /**
+             * libdodo defined errors
+             */
+            enum fifoExR {
+                FIFOEX_WRONGFILENAME,
+                FIFOEX_NOTOPENED
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define IOFILEFIFOEX_WRONGFILENAME_STR "Wrong filename"
 #define IOFILEFIFOEX_NOTOPENED_STR "Fifo not opened"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum fifoFunctionsID {
-				FIFOEX_FIFO,
-				FIFOEX_CLOSE,
-				FIFOEX_CLONE,
-				FIFOEX_OPEN,
-				FIFOEX__READ,
-				FIFOEX__WRITE,
-				FIFOEX__READSTREAM,
-				FIFOEX__WRITESTREAM,
-				FIFOEX_FLUSH,
-				FIFOEX_BLOCK,
-				FIFOEX_INDESCRIPTOR,
-				FIFOEX_OUTDESCRIPTOR,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum fifoFunctionsID {
+                FIFOEX_FIFO,
+                FIFOEX_CLOSE,
+                FIFOEX_CLONE,
+                FIFOEX_OPEN,
+                FIFOEX__READ,
+                FIFOEX__WRITE,
+                FIFOEX__READSTREAM,
+                FIFOEX__WRITESTREAM,
+                FIFOEX_FLUSH,
+                FIFOEX_BLOCK,
+                FIFOEX_INDESCRIPTOR,
+                FIFOEX_OUTDESCRIPTOR,
+            };
+        };
+    };
 };
 #endif

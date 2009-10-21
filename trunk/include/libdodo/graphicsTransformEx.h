@@ -35,26 +35,26 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace graphics {
-		/**
-		 * libdodo defined errors
-		 */
-		enum transformExR {
-			TRANSFORMEX_EMPTYIMAGE,
-		};
+    namespace graphics {
+        /**
+         * libdodo defined errors
+         */
+        enum transformExR {
+            TRANSFORMEX_EMPTYIMAGE,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define GRAPHICSTRANSFORMEX_EMPTYIMAGE_STR "Image is empty"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum transformFunctionsID {
-			TRANSFORMEX_SCALE,
-			TRANSFORMEX_ROTATE,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum transformFunctionsID {
+            TRANSFORMEX_SCALE,
+            TRANSFORMEX_ROTATE,
+        };
+    };
 };
 #endif

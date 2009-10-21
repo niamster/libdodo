@@ -35,30 +35,30 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace pc {
-		namespace execution {
-			/**
-			 * libdodo defined errors
-			 */
-			enum managerExR {
-				MANAGEREX_NOTFOUND,
-			};
+    namespace pc {
+        namespace execution {
+            /**
+             * libdodo defined errors
+             */
+            enum managerExR {
+                MANAGEREX_NOTFOUND,
+            };
 
-			/**
-			 * libdodo defined errors explanation
-			 */
+            /**
+             * libdodo defined errors explanation
+             */
 #define PCEXECUTIONMANAGEREX_NOTFOUND_STR    "Job was not found"
-			/**
-			 * ID of function where exception was thrown
-			 */
-			enum managerFunctionsID {
-				MANAGEREX_RUN,
-				MANAGEREX_WAIT,
-				MANAGEREX_STOP,
-				MANAGEREX_ISRUNNING,
-			};
-		};
-	};
+            /**
+             * ID of function where exception was thrown
+             */
+            enum managerFunctionsID {
+                MANAGEREX_RUN,
+                MANAGEREX_WAIT,
+                MANAGEREX_STOP,
+                MANAGEREX_ISRUNNING,
+            };
+        };
+    };
 };
 #endif
 

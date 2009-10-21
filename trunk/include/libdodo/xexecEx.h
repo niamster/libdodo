@@ -35,27 +35,27 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	/**
-	 * libdodo defined errors
-	 */
-	enum xexecExR {
-		XEXECEX_WRONGTYPE,
-	};
+    /**
+     * libdodo defined errors
+     */
+    enum xexecExR {
+        XEXECEX_WRONGTYPE,
+    };
 
-	/**
-	 * explanations for libdodo defined errors
-	 */
+    /**
+     * explanations for libdodo defined errors
+     */
 #define XEXECEX_WRONGTYPE_STR "Wrong xExec type"
 
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum xexecFunctionsID {
-		XEXECEX_ADDXEXEC,
+    /**
+     * IDs of functions where exception might be thrown
+     */
+    enum xexecFunctionsID {
+        XEXECEX_ADDXEXEC,
 #ifdef DL_EXT
-		XEXECEX_MODULE,
-		XEXECEX_REMOVEXEXEC,
+        XEXECEX_MODULE,
+        XEXECEX_REMOVEXEXEC,
 #endif
-	};
+    };
 };
 #endif

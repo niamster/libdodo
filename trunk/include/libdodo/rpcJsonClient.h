@@ -36,70 +36,70 @@
 #include <libdodo/rpcClient.h>
 
 namespace dodo {
-	namespace io {
-		class channel;
-	};
+    namespace io {
+        class channel;
+    };
 
-	namespace rpc {
-		class method;
-		class response;
+    namespace rpc {
+        class method;
+        class response;
 
-		namespace json {
-			/**
-			 * @class client
-			 * @brief defines client-side JSON-RPC instrument
-			 */
-			class client : virtual public rpc::client {
-			  public:
+        namespace json {
+            /**
+             * @class client
+             * @brief defines client-side JSON-RPC instrument
+             */
+            class client : virtual public rpc::client {
+              public:
 
-				/**
-				 * constructor
-				 * @param io defines input/output sources
-				 */
-				client(const io::channel &io);
+                /**
+                 * constructor
+                 * @param io defines input/output sources
+                 */
+                client(const io::channel &io);
 
-				/**
-				 * destructor
-				 */
-				virtual ~client();
+                /**
+                 * destructor
+                 */
+                virtual ~client();
 
-				/**
-				 * set version of JSON-RPC request
-				 * @param version defines version of JSON-RPC request
-				 */
-				virtual void setRequestVersion(const dodoString &version);
+                /**
+                 * set version of JSON-RPC request
+                 * @param version defines version of JSON-RPC request
+                 */
+                virtual void setRequestVersion(const dodoString &version);
 
-				/**
-				 * @return version of JSON-RPC response
-				 */
-				virtual dodoString responseVersion();
+                /**
+                 * @return version of JSON-RPC response
+                 */
+                virtual dodoString responseVersion();
 
-				/**
-				 * @return ID of JSON-RPC response
-				 */
-				virtual long responseId();
+                /**
+                 * @return ID of JSON-RPC response
+                 */
+                virtual long responseId();
 
-			  protected:
+              protected:
 
-				/**
-				 * process RPC call
-				 * @param meth defines RPC method representation
-				 */
-				virtual void processCallRequest(const rpc::method &meth);
+                /**
+                 * process RPC call
+                 * @param meth defines RPC method representation
+                 */
+                virtual void processCallRequest(const rpc::method &meth);
 
-				/**
-				 * process RPC call
-				 * @return RPC response represantation
-				 */
-				virtual rpc::response processCallResult();
+                /**
+                 * process RPC call
+                 * @return RPC response represantation
+                 */
+                virtual rpc::response processCallResult();
 
-				dodoString rqVersion;   ///< request version['1.1' by default]
-				dodoString rpVersion;   ///< response version
+                dodoString rqVersion;   ///< request version['1.1' by default]
+                dodoString rpVersion;   ///< response version
 
-				long rqId;              ///< request ID
-				long rpId;              ///< response ID
-			};
-		};
-	};
+                long rqId;              ///< request ID
+                long rpId;              ///< response ID
+            };
+        };
+    };
 };
 #endif

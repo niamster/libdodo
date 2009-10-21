@@ -35,45 +35,45 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace data {
-		namespace format {
-			namespace json {
-				class node;
-			};
-		};
-	};
+    namespace data {
+        namespace format {
+            namespace json {
+                class node;
+            };
+        };
+    };
 
-	namespace rpc {
-		class response;
-		namespace json {
-			/**
-			 * @class response
-			 * @brief defines RPC response in JSON representation
-			 */
-			class response {
-			  public:
+    namespace rpc {
+        class response;
+        namespace json {
+            /**
+             * @class response
+             * @brief defines RPC response in JSON representation
+             */
+            class response {
+              public:
 
-				/**
-				 * @return response parsed from JSON node
-				 * @param node defines JSON node
-				 * @param version defines version of JSON-RPC response
-				 * @param id defines ID of JSON-RPC response
-				 */
-				static rpc::response jsonToResponse(dodo::data::format::json::node &node,
-													dodoString                     &version,
-													long                           &id);
+                /**
+                 * @return response parsed from JSON node
+                 * @param node defines JSON node
+                 * @param version defines version of JSON-RPC response
+                 * @param id defines ID of JSON-RPC response
+                 */
+                static rpc::response jsonToResponse(dodo::data::format::json::node &node,
+                                                    dodoString                     &version,
+                                                    long                           &id);
 
-				/**
-				 * @return JSON node parsed from response
-				 * @param data defines response structure
-				 * @param version defines version of JSON-RPC request
-				 * @param id defines ID of JSON-RPC request
-				 */
-				static dodo::data::format::json::node responseToJson(const rpc::response &data,
-																	 const dodoString    &version,
-																	 long                id);
-			};
-		};
-	};
+                /**
+                 * @return JSON node parsed from response
+                 * @param data defines response structure
+                 * @param version defines version of JSON-RPC request
+                 * @param id defines ID of JSON-RPC request
+                 */
+                static dodo::data::format::json::node responseToJson(const rpc::response &data,
+                                                                     const dodoString    &version,
+                                                                     long                id);
+            };
+        };
+    };
 };
 #endif

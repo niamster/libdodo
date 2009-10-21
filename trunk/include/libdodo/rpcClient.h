@@ -35,54 +35,54 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace io {
-		class channel;
-	};
+    namespace io {
+        class channel;
+    };
 
-	namespace rpc {
-		class response;
-		class method;
+    namespace rpc {
+        class response;
+        class method;
 
-		/**
-		 * @class client
-		 * @brief defines client-side RPC instrument
-		 */
-		class client {
-		  public:
+        /**
+         * @class client
+         * @brief defines client-side RPC instrument
+         */
+        class client {
+          public:
 
-			/**
-			 * constructor
-			 * @param io defines input/output sources
-			 */
-			client(const io::channel &io);
+            /**
+             * constructor
+             * @param io defines input/output sources
+             */
+            client(const io::channel &io);
 
-			/**
-			 * destructor
-			 */
-			virtual ~client();
+            /**
+             * destructor
+             */
+            virtual ~client();
 
-			/**
-			 * @return rpc response result
-			 * @param method defines rpc method call
-			 */
-			virtual response call(const method &method);
+            /**
+             * @return rpc response result
+             * @param method defines rpc method call
+             */
+            virtual response call(const method &method);
 
-		  protected:
+          protected:
 
-			/**
-			 * process RPC call
-			 * @param method defines RPC method representation
-			 */
-			virtual void processCallRequest(const method &method) = 0;
+            /**
+             * process RPC call
+             * @param method defines RPC method representation
+             */
+            virtual void processCallRequest(const method &method) = 0;
 
-			/**
-			 * process RPC call
-			 * @return RPC response represantation
-			 */
-			virtual response processCallResult() = 0;
+            /**
+             * process RPC call
+             * @return RPC response represantation
+             */
+            virtual response processCallResult() = 0;
 
-			const io::channel &io; ///< I/O handler
-		};
-	};
+            const io::channel &io; ///< I/O handler
+        };
+    };
 };
 #endif

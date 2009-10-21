@@ -35,23 +35,23 @@
 using namespace dodo::cgi;
 
 file::file() : size(0),
-			   error(FILE_ERROR_NONE)
+               error(FILE_ERROR_NONE)
 {
 }
 
 //-------------------------------------------------------------------
 
 cookie::cookie(const dodoString &name,
-			   const dodoString &value,
-			   const dodoString &expires,
-			   const dodoString &path,
-			   const dodoString &domain,
-			   bool             secure) : name(name),
-											value(value),
-											expires(expires),
-											path(path),
-											domain(domain),
-											secure(secure)
+               const dodoString &value,
+               const dodoString &expires,
+               const dodoString &path,
+               const dodoString &domain,
+               bool             secure) : name(name),
+                                          value(value),
+                                          expires(expires),
+                                          path(path),
+                                          domain(domain),
+                                          secure(secure)
 {
 }
 

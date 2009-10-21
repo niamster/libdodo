@@ -35,30 +35,30 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace cgi {
-		namespace fast {
-			/**
-			 * libdodo defined errors
-			 */
-			enum serverExR {
-				SERVEREX_ACCEPTFAILED,
-				SERVEREX_ISCGI,
-			};
+    namespace cgi {
+        namespace fast {
+            /**
+             * libdodo defined errors
+             */
+            enum serverExR {
+                SERVEREX_ACCEPTFAILED,
+                SERVEREX_ISCGI,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define CGIFASTSERVEREX_ACCEPTFAILED_STR "Accept call failed"
 #define CGIFASTSERVEREX_ISCGI_STR        "Called as a CGI"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum serverFunctionsID {
-				SERVEREX_LISTEN,
-				SERVEREX_STACKTHREAD,
-			};
-		}
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum serverFunctionsID {
+                SERVEREX_LISTEN,
+                SERVEREX_STACKTHREAD,
+            };
+        }
+    };
 };
 #endif

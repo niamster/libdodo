@@ -33,35 +33,35 @@
 #include <libdodo/directives.h>
 
 namespace dodo {
-	namespace cgi {
-		class exchange;
+    namespace cgi {
+        class exchange;
 
-		/**
-		 * @class server
-		 * @brief provides CGI server functionality
-		 */
-		class server {
-		  public:
+        /**
+         * @class server
+         * @brief provides CGI server functionality
+         */
+        class server {
+          public:
 
-			/**
-			 * @typedef handler
-			 * @brief defines type of function that will be called on new cgi request
-			 * @param e defines cgi::exchange object for I/O
-			 */
-			typedef void (*handler)(exchange &e);
+            /**
+             * @typedef handler
+             * @brief defines type of function that will be called on new cgi request
+             * @param e defines cgi::exchange object for I/O
+             */
+            typedef void (*handler)(exchange &e);
 
 
-			/**
-			 * destructor
-			 */
-			virtual ~server() = 0;
+            /**
+             * destructor
+             */
+            virtual ~server() = 0;
 
-			/**
-			 * listen for incoming requests
-			 * @param handler define request handler
-			 */
-			virtual void serve(handler handler) = 0;
-		};
-	};
+            /**
+             * listen for incoming requests
+             * @param handler define request handler
+             */
+            virtual void serve(handler handler) = 0;
+        };
+    };
 };
 #endif

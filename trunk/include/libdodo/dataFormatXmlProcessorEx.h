@@ -35,42 +35,42 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace data {
-		namespace format {
-			namespace xml {
-				/**
-				 * libdodo defined errors
-				 */
-				enum processorExR {
-					PROCESSOREX_EMPTYDOCUMENT,
-					PROCESSOREX_NOROOTNODE,
-					PROCESSOREX_NONAME,
-				};
+    namespace data {
+        namespace format {
+            namespace xml {
+                /**
+                 * libdodo defined errors
+                 */
+                enum processorExR {
+                    PROCESSOREX_EMPTYDOCUMENT,
+                    PROCESSOREX_NOROOTNODE,
+                    PROCESSOREX_NONAME,
+                };
 
-				/**
-				 * explanations for libdodo defined errors
-				 */
+                /**
+                 * explanations for libdodo defined errors
+                 */
 #define DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR "File or buffer doesn't contain XML document"
 #define DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR    "XML document doesn't have root node"
 #define DATAFORMATXMLPROCESSOREX_NONAME_STR    "Node does not have any name"
 
-				/**
-				 * IDs of functions where exception might be thrown
-				 */
-				enum processorFunctionsID {
-					PROCESSOREX_PARSEFILE,
-					PROCESSOREX_PARSE,
-					PROCESSOREX_ERRHANDLER,
-					PROCESSOREX_GETBUFFERINFO,
-					PROCESSOREX_PARSEBUFFER,
-					PROCESSOREX_GETFILEINFO,
-					PROCESSOREX_PARSEBUFFERINT,
-					PROCESSOREX_PARSEFILEINT,
-					PROCESSOREX_MAKE,
-				};
-			};
-		};
-	};
+                /**
+                 * IDs of functions where exception might be thrown
+                 */
+                enum processorFunctionsID {
+                    PROCESSOREX_PARSEFILE,
+                    PROCESSOREX_PARSE,
+                    PROCESSOREX_ERRHANDLER,
+                    PROCESSOREX_GETBUFFERINFO,
+                    PROCESSOREX_PARSEBUFFER,
+                    PROCESSOREX_GETFILEINFO,
+                    PROCESSOREX_PARSEBUFFERINT,
+                    PROCESSOREX_PARSEFILEINT,
+                    PROCESSOREX_MAKE,
+                };
+            };
+        };
+    };
 };
 #endif
 

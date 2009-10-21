@@ -35,29 +35,29 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace rpc {
-		namespace json {
-			/**
-			 * libdodo defined errors
-			 */
-			enum methodExR {
-				METHODEX_ROOTNOTANOBJECT,
-				METHODEX_PARAMSNOTANARRAY,
-			};
+    namespace rpc {
+        namespace json {
+            /**
+             * libdodo defined errors
+             */
+            enum methodExR {
+                METHODEX_ROOTNOTANOBJECT,
+                METHODEX_PARAMSNOTANARRAY,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define RPCJSONMETHODEX_ROOTNOTANOBJECT_STR "Root node is not an object"
 #define RPCJSONMETHODEX_PARAMSNOTANARRAY_STR "Parameters are not an array"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum methodFunctionsID {
-				METHODEX_JSONTOMETHOD,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum methodFunctionsID {
+                METHODEX_JSONTOMETHOD,
+            };
+        };
+    };
 };
 #endif

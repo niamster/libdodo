@@ -37,19 +37,19 @@ using namespace dodo::pc::sync;
 
 stack::stack(protector *keeper) : keeper(keeper)
 {
-	if (keeper != NULL)
-		keeper->acquire(0);
+    if (keeper != NULL)
+        keeper->acquire(0);
 }
 
 //-------------------------------------------------------------------
 
 stack::~stack()
 {
-	try {
-		if (keeper != NULL)
-			keeper->release();
-	} catch (exception::basic &ex) {
-	}
+    try {
+        if (keeper != NULL)
+            keeper->release();
+    } catch (exception::basic &ex) {
+    }
 }
 
 //-------------------------------------------------------------------

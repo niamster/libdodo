@@ -52,9 +52,9 @@ client::~client()
 response
 client::call(const method &method)
 {
-	processCallRequest(method);
+    processCallRequest(method);
 
-	return processCallResult();
+    return processCallResult();
 }
 
 //-------------------------------------------------------------------

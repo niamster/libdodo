@@ -36,68 +36,68 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace tools {
-		/**
-		 * @class library
-		 * @brief provides handling object from static and dynamic libraries
-		 */
-		class library {
-		  public:
+    namespace tools {
+        /**
+         * @class library
+         * @brief provides handling object from static and dynamic libraries
+         */
+        class library {
+          public:
 
-			/**
-			 * consructor
-			 */
-			library();
+            /**
+             * consructor
+             */
+            library();
 
-			/**
-			 * consructor
-			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 */
-			library(const dodoString &path);
+            /**
+             * consructor
+             * @param path defines path to the library[if not in ldconfig db] or library name
+             */
+            library(const dodoString &path);
 
-			/**
-			 * destructor
-			 */
-			virtual ~library();
+            /**
+             * destructor
+             */
+            virtual ~library();
 
-			/**
-			 * open library
-			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 */
-			virtual void open(const dodoString &path);
+            /**
+             * open library
+             * @param path defines path to the library[if not in ldconfig db] or library name
+             */
+            virtual void open(const dodoString &path);
 
-			/**
-			 * close library
-			 * @note function exported from the library will be inaccessible
-			 */
-			virtual void close();
+            /**
+             * close library
+             * @note function exported from the library will be inaccessible
+             */
+            virtual void close();
 
-			/**
-			 * get function from the library
-			 * @param name defines function name
-			 */
-			virtual void *function(const dodoString &name);
+            /**
+             * get function from the library
+             * @param name defines function name
+             */
+            virtual void *function(const dodoString &name);
 
-			/**
-			 * get function from the library
-			 * @param name defines function name
-			 */
-			virtual void *operator[](const dodoString &name);
+            /**
+             * get function from the library
+             * @param name defines function name
+             */
+            virtual void *operator[](const dodoString &name);
 
 #ifdef BFD_EXT
-			/**
-			 * get symbols from the library
-			 * @return symbols of the library
-			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 */
-			static dodoStringArray symbols(const dodoString &path);
+            /**
+             * get symbols from the library
+             * @return symbols of the library
+             * @param path defines path to the library[if not in ldconfig db] or library name
+             */
+            static dodoStringArray symbols(const dodoString &path);
 #endif
 
-		  protected:
+          protected:
 
-			void *handle; ///< handle to library
-		};
-	};
+            void *handle; ///< handle to library
+        };
+    };
 };
 #endif
 #endif

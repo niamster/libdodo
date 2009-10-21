@@ -35,38 +35,38 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace data {
-		namespace format {
-			namespace xml {
-				class node;
-			};
-		};
-	};
+    namespace data {
+        namespace format {
+            namespace xml {
+                class node;
+            };
+        };
+    };
 
-	namespace rpc {
-		class response;
+    namespace rpc {
+        class response;
 
-		namespace xml {
-			/**
-			 * @class response
-			 * @brief defines RPC response in XML representation
-			 */
-			class response {
-			  public:
+        namespace xml {
+            /**
+             * @class response
+             * @brief defines RPC response in XML representation
+             */
+            class response {
+              public:
 
-				/**
-				 * @return response parsed from XML node
-				 * @param node defines XML node
-				 */
-				static rpc::response xmlToResponse(dodo::data::format::xml::node &node);
+                /**
+                 * @return response parsed from XML node
+                 * @param node defines XML node
+                 */
+                static rpc::response xmlToResponse(dodo::data::format::xml::node &node);
 
-				/**
-				 * @return XML node parsed from response
-				 * @param data defines response structure
-				 */
-				static dodo::data::format::xml::node responseToXml(const rpc::response &data);
-			};
-		};
-	};
+                /**
+                 * @return XML node parsed from response
+                 * @param data defines response structure
+                 */
+                static dodo::data::format::xml::node responseToXml(const rpc::response &data);
+            };
+        };
+    };
 };
 #endif

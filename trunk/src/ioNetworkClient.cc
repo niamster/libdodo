@@ -52,7 +52,7 @@ using namespace dodo::io::network;
 
 #ifndef IO_WO_XEXEC
 client::__collected_data__::__collected_data__(xexec *executor,
-																	  short execObject) : xexec::__collected_data__(executor, execObject)
+                                               short execObject) : xexec::__collected_data__(executor, execObject)
 {
 }
 #endif
@@ -61,7 +61,7 @@ client::__collected_data__::__collected_data__(xexec *executor,
 
 client::client(client &fs)
 #ifndef IO_WO_XEXEC
-	: collectedData(this, xexec::OBJECT_IONETWORKCLIENT)
+    : collectedData(this, xexec::OBJECT_IONETWORKCLIENT)
 #endif
 {
 }
@@ -69,12 +69,12 @@ client::client(client &fs)
 //-------------------------------------------------------------------
 
 client::client(short a_family,
-			   short a_type) : blockInherited(false),
-							   family(a_family),
-							   type(a_type)
+               short a_type) : blockInherited(false),
+                               family(a_family),
+                               type(a_type)
 #ifndef IO_WO_XEXEC
-							   ,
-							   collectedData(this, xexec::OBJECT_IONETWORKCLIENT)
+                               ,
+                               collectedData(this, xexec::OBJECT_IONETWORKCLIENT)
 #endif
 {
 }
@@ -83,11 +83,11 @@ client::client(short a_family,
 
 client::~client()
 {
-	if (socket != -1) {
-		::shutdown(socket, SHUT_RDWR);
+    if (socket != -1) {
+        ::shutdown(socket, SHUT_RDWR);
 
-		::close(socket);
-	}
+        ::close(socket);
+    }
 }
 
 //-------------------------------------------------------------------
@@ -95,15 +95,15 @@ client::~client()
 void
 client::restoreOptions()
 {
-	setInBufferSize(inSocketBufferSize);
-	setOutBufferSize(outSocketBufferSize);
+    setInBufferSize(inSocketBufferSize);
+    setOutBufferSize(outSocketBufferSize);
 
-	setInTimeout(inSocketTimeout);
-	setOutTimeout(outSocketTimeout);
+    setInTimeout(inSocketTimeout);
+    setOutTimeout(outSocketTimeout);
 
-	setLingerOption(lingerOpts, lingerSeconds);
+    setLingerOption(lingerOpts, lingerSeconds);
 
-	block(blocked);
+    block(blocked);
 }
 
 //-------------------------------------------------------------------
@@ -111,117 +111,117 @@ client::restoreOptions()
 void
 client::makeSocket()
 {
-	if (socket != -1) {
-		::shutdown(socket, SHUT_RDWR);
+    if (socket != -1) {
+        ::shutdown(socket, SHUT_RDWR);
 
-		if (::close(socket) == -1)
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        if (::close(socket) == -1)
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		socket = -1;
-	}
+        socket = -1;
+    }
 
-	int real_domain(PF_INET), real_type(SOCK_STREAM);
+    int real_domain(PF_INET), real_type(SOCK_STREAM);
 
-	switch (family) {
-		case PROTOCOL_FAMILY_IPV4:
+    switch (family) {
+        case PROTOCOL_FAMILY_IPV4:
 
-			real_domain = PF_INET;
+            real_domain = PF_INET;
 
-			break;
+            break;
 
-		case PROTOCOL_FAMILY_IPV6:
+        case PROTOCOL_FAMILY_IPV6:
 
-			real_domain = PF_INET6;
+            real_domain = PF_INET6;
 
-			break;
+            break;
 
-		case PROTOCOL_FAMILY_UNIX_SOCKET:
+        case PROTOCOL_FAMILY_UNIX_SOCKET:
 
-			real_domain = PF_UNIX;
+            real_domain = PF_UNIX;
 
-			break;
+            break;
 
-		default:
+        default:
 
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
-	}
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+    }
 
-	switch (type) {
-		case TRANSFER_STREAM:
+    switch (type) {
+        case TRANSFER_STREAM:
 
-			real_type = SOCK_STREAM;
+            real_type = SOCK_STREAM;
 
-			break;
+            break;
 
-		case TRANSFER_DATAGRAM:
+        case TRANSFER_DATAGRAM:
 
-			real_type = SOCK_DGRAM;
+            real_type = SOCK_DGRAM;
 
-			break;
+            break;
 
-		default:
+        default:
 
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
-	}
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+    }
 
-	socket = ::socket(real_domain, real_type, 0);
-	if (socket == -1)
-		throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    socket = ::socket(real_domain, real_type, 0);
+    if (socket == -1)
+        throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	restoreOptions();
+    restoreOptions();
 }
 
 //-------------------------------------------------------------------
 
 void
 client::connect(const dodoString &host,
-				int              port,
-				exchange         &exchange)
+                int              port,
+                exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
-	performPreExec(OPERATION_CONNECT);
+    performPreExec(OPERATION_CONNECT);
 #endif
 
-	makeSocket();
+    makeSocket();
 
-	if (family == PROTOCOL_FAMILY_IPV6) {
-		struct sockaddr_in6 sa;
-		sa.sin6_family = AF_INET6;
-		sa.sin6_port = htons(port);
-		sa.sin6_flowinfo = 0;
-		sa.sin6_scope_id = 0;
-		inet_pton(AF_INET6, host.data(), &sa.sin6_addr);
+    if (family == PROTOCOL_FAMILY_IPV6) {
+        struct sockaddr_in6 sa;
+        sa.sin6_family = AF_INET6;
+        sa.sin6_port = htons(port);
+        sa.sin6_flowinfo = 0;
+        sa.sin6_scope_id = 0;
+        inet_pton(AF_INET6, host.data(), &sa.sin6_addr);
 
-		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
-			if (::close(socket) == -1)
-				throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
+            if (::close(socket) == -1)
+                throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-			socket = -1;
+            socket = -1;
 
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-	} else {
-		struct sockaddr_in sa;
-		sa.sin_family = AF_INET;
-		sa.sin_port = htons(port);
-		inet_aton(host.data(), &sa.sin_addr);
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        }
+    } else {
+        struct sockaddr_in sa;
+        sa.sin_family = AF_INET;
+        sa.sin_port = htons(port);
+        inet_aton(host.data(), &sa.sin_addr);
 
-		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
-			if (::close(socket) == -1)
-				throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
+            if (::close(socket) == -1)
+                throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-			socket = -1;
+            socket = -1;
 
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-	}
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        }
+    }
 
-	exchange.init(socket, blocked, blockInherited);
+    exchange.init(socket, blocked, blockInherited);
 
-	socket = -1;
+    socket = -1;
 
 #ifndef IO_WO_XEXEC
-	performPostExec(OPERATION_CONNECT);
+    performPostExec(OPERATION_CONNECT);
 #endif
 }
 
@@ -229,72 +229,72 @@ client::connect(const dodoString &host,
 
 void
 client::connectFrom(const dodoString &local,
-					const dodoString &host,
-					int              port,
-					exchange         &exchange)
+                    const dodoString &host,
+                    int              port,
+                    exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
-	performPreExec(OPERATION_CONNECTFROM);
+    performPreExec(OPERATION_CONNECTFROM);
 #endif
 
-	makeSocket();
+    makeSocket();
 
-	int sockFlag(1);
-	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-		throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    int sockFlag(1);
+    if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
+        throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << OPTION_REUSE_ADDRESS);
+    addFlag(socketOpts, 1 << OPTION_REUSE_ADDRESS);
 
-	if (family == PROTOCOL_FAMILY_IPV6) {
-		struct sockaddr_in6 sa;
-		sa.sin6_family = AF_INET6;
-		sa.sin6_flowinfo = 0;
-		sa.sin6_scope_id = 0;
-		sa.sin6_port = htons(0);
-		inet_pton(AF_INET6, local.data(), &sa.sin6_addr);
+    if (family == PROTOCOL_FAMILY_IPV6) {
+        struct sockaddr_in6 sa;
+        sa.sin6_family = AF_INET6;
+        sa.sin6_flowinfo = 0;
+        sa.sin6_scope_id = 0;
+        sa.sin6_port = htons(0);
+        inet_pton(AF_INET6, local.data(), &sa.sin6_addr);
 
-		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		sa.sin6_port = htons(port);
-		inet_pton(AF_INET6, host.data(), &sa.sin6_addr);
+        sa.sin6_port = htons(port);
+        inet_pton(AF_INET6, host.data(), &sa.sin6_addr);
 
-		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
-			if (::close(socket) == -1)
-				throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
+            if (::close(socket) == -1)
+                throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-			socket = -1;
+            socket = -1;
 
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-	} else {
-		struct sockaddr_in sa;
-		sa.sin_family = AF_INET;
-		sa.sin_port = htons(0);
-		inet_aton(local.data(), &sa.sin_addr);
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        }
+    } else {
+        struct sockaddr_in sa;
+        sa.sin_family = AF_INET;
+        sa.sin_port = htons(0);
+        inet_aton(local.data(), &sa.sin_addr);
 
-		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		sa.sin_port = htons(port);
-		inet_aton(host.data(), &sa.sin_addr);
+        sa.sin_port = htons(port);
+        inet_aton(host.data(), &sa.sin_addr);
 
-		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
-			if (::close(socket) == -1)
-				throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
+            if (::close(socket) == -1)
+                throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-			socket = -1;
+            socket = -1;
 
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-	}
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        }
+    }
 
-	exchange.init(socket, blocked, blockInherited);
+    exchange.init(socket, blocked, blockInherited);
 
-	socket = -1;
+    socket = -1;
 
 #ifndef IO_WO_XEXEC
-	performPostExec(OPERATION_CONNECTFROM);
+    performPostExec(OPERATION_CONNECTFROM);
 #endif
 }
 
@@ -302,39 +302,39 @@ client::connectFrom(const dodoString &local,
 
 void
 client::connect(const dodoString &path,
-				exchange         &exchange)
+                exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC
-	performPreExec(OPERATION_CONNECT);
+    performPreExec(OPERATION_CONNECT);
 #endif
 
-	makeSocket();
+    makeSocket();
 
-	struct sockaddr_un sa;
+    struct sockaddr_un sa;
 
-	unsigned long size = path.size();
+    unsigned long size = path.size();
 
-	if (size >= 108)
-		throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_LIBDODO, CLIENTEX_LONGPATH, IONETWORKCLIENTEX_LONGPATH_STR, __LINE__, __FILE__);
+    if (size >= 108)
+        throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_LIBDODO, CLIENTEX_LONGPATH, IONETWORKCLIENTEX_LONGPATH_STR, __LINE__, __FILE__);
 
-	strncpy(sa.sun_path, path.data(), size);
-	sa.sun_family = AF_UNIX;
+    strncpy(sa.sun_path, path.data(), size);
+    sa.sun_family = AF_UNIX;
 
-	if (::connect(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1) {
-		if (::close(socket) == -1)
-			throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    if (::connect(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1) {
+        if (::close(socket) == -1)
+            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		socket = -1;
+        socket = -1;
 
-		throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
+        throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    }
 
-	exchange.init(socket, blocked, blockInherited);
+    exchange.init(socket, blocked, blockInherited);
 
-	socket = -1;
+    socket = -1;
 
 #ifndef IO_WO_XEXEC
-	performPostExec(OPERATION_CONNECT);
+    performPostExec(OPERATION_CONNECT);
 #endif
 }
 

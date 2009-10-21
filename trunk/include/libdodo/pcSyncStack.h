@@ -33,33 +33,33 @@
 #include <libdodo/directives.h>
 
 namespace dodo {
-	namespace pc {
-		namespace sync {
-			class protector;
+    namespace pc {
+        namespace sync {
+            class protector;
 
-			/**
-			 * @class stack
-			 * @brief provides thread/process safe behaviour
-			 * @note locked in constructor and unlocked in destructor
-			 */
-			class stack {
-			  public:
+            /**
+             * @class stack
+             * @brief provides thread/process safe behaviour
+             * @note locked in constructor and unlocked in destructor
+             */
+            class stack {
+              public:
 
-				/**
-				 * contructor
-				 */
-				stack(protector *);
+                /**
+                 * contructor
+                 */
+                stack(protector *);
 
-				/**
-				 * destructor
-				 */
-				virtual ~stack();
+                /**
+                 * destructor
+                 */
+                virtual ~stack();
 
-			  protected:
+              protected:
 
-				protector *keeper; ///< lock
-			};
-		};
-	};
+                protector *keeper; ///< lock
+            };
+        };
+    };
 };
 #endif

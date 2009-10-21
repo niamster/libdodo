@@ -35,42 +35,42 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace data {
-		namespace format {
-			namespace xml {
-				class node;
-			};
-		};
-	};
+    namespace data {
+        namespace format {
+            namespace xml {
+                class node;
+            };
+        };
+    };
 
-	namespace rpc {
-		class value;
+    namespace rpc {
+        class value;
 
-		namespace xml {
-			/**
-			 * @class value
-			 * @brief defines RPC value in XML representation
-			 */
-			class value {
-			  public:
+        namespace xml {
+            /**
+             * @class value
+             * @brief defines RPC value in XML representation
+             */
+            class value {
+              public:
 
-				/**
-				 * @return value parsed from XML node
-				 * @param node defines XML node
-				 */
-				static rpc::value xmlToValue(dodo::data::format::xml::node &node);
+                /**
+                 * @return value parsed from XML node
+                 * @param node defines XML node
+                 */
+                static rpc::value xmlToValue(dodo::data::format::xml::node &node);
 
-				/**
-				 * @return XML node from value
-				 * @param data defines value structure
-				 */
-				static dodo::data::format::xml::node valueToXml(const rpc::value &data);
+                /**
+                 * @return XML node from value
+                 * @param data defines value structure
+                 */
+                static dodo::data::format::xml::node valueToXml(const rpc::value &data);
 
-			  protected:
+              protected:
 
-				static const char trimSymbols[2]; ///< symbols to trim in the end and in the begining of the XML node value
-			};
-		};
-	};
+                static const char trimSymbols[2]; ///< symbols to trim in the end and in the begining of the XML node value
+            };
+        };
+    };
 };
 #endif

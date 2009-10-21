@@ -35,24 +35,24 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			namespace ssl {
-				/**
-				 * libdodo defined errors
-				 */
-				enum serverExR {
-					SERVEREX_WRONGPARAMETER,
-					SERVEREX_WRONGFILENAME,
-					SERVEREX_UNABLETOINITCONTEXT,
-					SERVEREX_UNABLETOINITSSL,
-					SERVEREX_UNKNOWNKEYTYPE,
-					SERVEREX_LONGPATH,
-				};
+    namespace io {
+        namespace network {
+            namespace ssl {
+                /**
+                 * libdodo defined errors
+                 */
+                enum serverExR {
+                    SERVEREX_WRONGPARAMETER,
+                    SERVEREX_WRONGFILENAME,
+                    SERVEREX_UNABLETOINITCONTEXT,
+                    SERVEREX_UNABLETOINITSSL,
+                    SERVEREX_UNKNOWNKEYTYPE,
+                    SERVEREX_LONGPATH,
+                };
 
-				/**
-				 * explanations for libdodo defined errors
-				 */
+                /**
+                 * explanations for libdodo defined errors
+                 */
 #define IONETWORKSSLSERVEREX_WRONGPARAMETER_STR "Wrong paramather passed to function"
 #define IONETWORKSSLSERVEREX_WRONGFILENAME_STR  "Wrong filename"
 #define IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection"
@@ -60,19 +60,19 @@ namespace dodo {
 #define IONETWORKSSLSERVEREX_UNKNOWNKEY_STR "Unknown key type"
 #define IONETWORKSSLSERVEREX_LONGPATH_STR "Path to socket is too long"
 
-				/**
-				 * IDs of functions where exception might be thrown
-				 */
-				enum serverFunctionsID {
-					SERVEREX_INITSSL,
-					SERVEREX_ACCEPTSSL,
-					SERVEREX_BINDNLISTEN,
-					SERVEREX_ACCEPT,
-					SERVEREX_SETSERTIFICATES,
-					SERVEREX_REMOVESERTIFICATES,
-				};
-			};
-		};
-	};
+                /**
+                 * IDs of functions where exception might be thrown
+                 */
+                enum serverFunctionsID {
+                    SERVEREX_INITSSL,
+                    SERVEREX_ACCEPTSSL,
+                    SERVEREX_BINDNLISTEN,
+                    SERVEREX_ACCEPT,
+                    SERVEREX_SETSERTIFICATES,
+                    SERVEREX_REMOVESERTIFICATES,
+                };
+            };
+        };
+    };
 };
 #endif

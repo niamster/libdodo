@@ -35,41 +35,41 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace graphics {
-		/**
-		 * libdodo defined errors
-		 */
-		enum imageExR {
-			IMAGEEX_IMERROR,
-			IMAGEEX_BADINFO,
-			IMAGEEX_EMPTYIMAGE,
-			IMAGEEX_LONGPATH,
-			IMAGEEX_CANNOTSETCOLORSPECIFICATION,
-		};
+    namespace graphics {
+        /**
+         * libdodo defined errors
+         */
+        enum imageExR {
+            IMAGEEX_IMERROR,
+            IMAGEEX_BADINFO,
+            IMAGEEX_EMPTYIMAGE,
+            IMAGEEX_LONGPATH,
+            IMAGEEX_CANNOTSETCOLORSPECIFICATION,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define GRAPHICSIMAGEEX_BADINFO_STR "Bad information for image"
 #define GRAPHICSIMAGEEX_EMPTYIMAGE_STR "Image is empty"
 #define GRAPHICSIMAGEEX_LONGPATH_STR "Path to image is too long"
 #define GRAPHICSIMAGEEX_CANNOTSETCOLORSPECIFICATION_STR "Can not set image type"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum imageFunctionsID {
-			IMAGEEX_IMERRORHANDLER,
-			IMAGEEX_READ,
-			IMAGEEX_CREATE,
-			IMAGEEX_WRITE,
-			IMAGEEX_SETENCODER,
-			IMAGEEX_SETTYPE,
-			IMAGEEX_SETALPHA,
-			IMAGEEX_REMOVEALPHA,
-			IMAGEEX_SETOPACITY,
-			IMAGEEX_SETBACKGROUNDCOLOR,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum imageFunctionsID {
+            IMAGEEX_IMERRORHANDLER,
+            IMAGEEX_READ,
+            IMAGEEX_CREATE,
+            IMAGEEX_WRITE,
+            IMAGEEX_SETENCODER,
+            IMAGEEX_SETTYPE,
+            IMAGEEX_SETALPHA,
+            IMAGEEX_REMOVEALPHA,
+            IMAGEEX_SETOPACITY,
+            IMAGEEX_SETBACKGROUNDCOLOR,
+        };
+    };
 };
 #endif

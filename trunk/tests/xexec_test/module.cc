@@ -15,59 +15,55 @@ using namespace io;
 #ifdef DL_EXT
 extern "C"
 {
-
 void
 hook(xexec::__collected_data__ *odata,
-     short type,
-	 short operation,
-	 void *udata)
+     short                     type,
+     short                     operation,
+     void                      *udata)
 {
 #ifndef IO_WO_XEXEC
-	if (type == xexec::OBJECT_IOSTDIO)
-	{
-		std::cout << "stdio module ";
+    if (type == xexec::OBJECT_IOSTDIO) {
+        std::cout << "stdio module ";
 
-		channel::__collected_data__ *st = (channel::__collected_data__ *)odata;
-		if (operation == channel::OPERATION_WRITE)
-			st->buffer.assign("<" + dodoString(1, st->buffer[0]) + ">\n");
-	}
-	std::cout << "hook\n";
+        channel::__collected_data__ *st = (channel::__collected_data__ *)odata;
+        if (operation == channel::OPERATION_WRITE)
+            st->buffer.assign("<" + dodoString(1, st->buffer[0]) + ">\n");
+    }
+    std::cout << "hook\n";
 #endif
 }
 
 void
 empty(xexec::__collected_data__ *odata,
-      short int type,
-	  void *udata)
+      short int                 type,
+      void                      *udata)
 {
-
-	std::cout << "empty hook\n";
+    std::cout << "empty hook\n";
 }
 
 xexec::__module__
 initXexecModule(void *data)
 {
-	xexec::__module__ module;
+    xexec::__module__ module;
 
-	std::cout << "activation\n";
+    std::cout << "activation\n";
 
-	strcpy(module.name, "test");
-	strcpy(module.discription, "test module");
-	module.type = xexec::ACTION_PREEXEC;
+    strcpy(module.name, "test");
+    strcpy(module.discription, "test module");
+    module.type = xexec::ACTION_PREEXEC;
 
-	if (data == NULL)
-		strcpy(module.hook, "empty");
-	else
-		strcpy(module.hook, "hook");
+    if (data == NULL)
+        strcpy(module.hook, "empty");
+    else
+        strcpy(module.hook, "hook");
 
-	return module;
+    return module;
 }
 
 void
 deinitXexecModule()
 {
-	std::cout << "deactivation\n";
+    std::cout << "deactivation\n";
 }
-
 };
 #endif

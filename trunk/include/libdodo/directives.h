@@ -36,20 +36,20 @@
  * size of key for shared entities
  */
 #ifdef __FreeBSD__
-#define SH_KEY_SIZE				14
+#define SH_KEY_SIZE             14
 #else
-#define SH_KEY_SIZE				32
+#define SH_KEY_SIZE             32
 #endif
 
 /**
  * size of block for zLib de/compression
  */
-#define ZLIB_CHUNK				100
+#define ZLIB_CHUNK              100
 
 /**
  * size of block for bzip2 de/compression
  */
-#define BZIP_CHUNK				100
+#define BZIP_CHUNK              100
 
 /**
  * file permissions for newly created file
@@ -59,55 +59,56 @@
 /**
  * size of string that represents numeric value during convertion
  */
-#define NUMERIC_STRING_SIZE		20
+#define NUMERIC_STRING_SIZE     20
 
 /**
  * default socket timeouts for io operations
  */
-#define IONETWORKCONNECTION_SOCKET_RECEIVE_TIMEOUT	1000
-#define IONETWORKCONNECTION_SOCKET_SEND_TIMEOUT		1000
+#define IONETWORKCONNECTION_SOCKET_RECEIVE_TIMEOUT  1000
+#define IONETWORKCONNECTION_SOCKET_SEND_TIMEOUT     1000
 
 /**
  * default size of socket buffer for io operations
  */
-#define IONETWORKCONNECTION_SOCKETBUFFER_INSIZE		 4096
-#define IONETWORKCONNECTION_SOCKETBUFFER_OUTSIZE	 4096
+#define IONETWORKCONNECTION_SOCKETBUFFER_INSIZE      4096
+#define IONETWORKCONNECTION_SOCKETBUFFER_OUTSIZE     4096
 
 /**
  * default linger options for network connections
  */
-#define IONETWORKCONNECTION_SOCKET_LINGER_PERIOD	 1
-#define IONETWORKCONNECTION_SOCKET_LINGER_OPTION	 LINGER_OPTION_WAIT_CLOSE
+#define IONETWORKCONNECTION_SOCKET_LINGER_PERIOD     1
+#define IONETWORKCONNECTION_SOCKET_LINGER_OPTION     LINGER_OPTION_WAIT_CLOSE
 
 /**
  * default value of block size for io::channel operations
  */
-#define IO_BLOCKSIZE			4096
+#define IO_BLOCKSIZE            4096
 
 /**
  * max line length to read from file in tools::filesystem
  */
-#define LINE_MAXLEN				4096
+#define LINE_MAXLEN             4096
 
 /**
  * max length of the filesystem path
  */
-#define PATH_MAXLEN				 FILENAME_MAX
+#define PATH_MAXLEN              FILENAME_MAX
 
 /**
  * max tries to print die message in tools:os::die
  */
-#define DIE_MAXTRIES			5
+#define DIE_MAXTRIES            5
 
 /**
  * Limit of the size of the 'multipart/form-data' CGI POST request
  */
-#define POST_SIZE_LIMIT			8388608
+#define POST_SIZE_LIMIT         8388608
 
 #ifdef NO_STRNLEN
 #include <sys/types.h>
 
-size_t strnlen(const char *s, size_t maxlen);
+size_t strnlen(const char *s,
+               size_t     maxlen);
 #endif
 
 #endif

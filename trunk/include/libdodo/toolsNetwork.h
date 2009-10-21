@@ -35,134 +35,134 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace tools {
-		/**
-		 * @class network
-		 * @brief provides information about network environment
-		 */
-		class network {
-		  public:
+    namespace tools {
+        /**
+         * @class network
+         * @brief provides information about network environment
+         */
+        class network {
+          public:
 
-			/**
-			 * @struct __interface__
-			 * @brief defines interface information
-			 */
-			struct __interface__ {
-				dodoString address;         ///< ip address of the interface
-				dodoString broadcast;       ///< broadcast address of the interface
-				dodoString netmask;         ///< netmask of the interface
-				dodoString hwaddr;          ///< harware address of the interface(MAC)
-				bool       up;              ///< true if interface is up
-				bool       loop;            ///< true if interface is a loopback
-			};
+            /**
+             * @struct __interface__
+             * @brief defines interface information
+             */
+            struct __interface__ {
+                dodoString address;         ///< ip address of the interface
+                dodoString broadcast;       ///< broadcast address of the interface
+                dodoString netmask;         ///< netmask of the interface
+                dodoString hwaddr;          ///< harware address of the interface(MAC)
+                bool       up;              ///< true if interface is up
+                bool       loop;            ///< true if interface is a loopback
+            };
 
-			/**
-			 * @struct __host__
-			 * @brief defines information about host
-			 */
-			struct __host__ {
-				dodoString      name;       ///< original name of the host
-				dodoStringArray aliases;    ///< aliases of the host
-				dodoStringArray addresses;  ///< addresses of the host
-			};
+            /**
+             * @struct __host__
+             * @brief defines information about host
+             */
+            struct __host__ {
+                dodoString      name;       ///< original name of the host
+                dodoStringArray aliases;    ///< aliases of the host
+                dodoStringArray addresses;  ///< addresses of the host
+            };
 
-			/**
-			 * @struct __service__
-			 * @brief defines info about service
-			 */
-			struct __service__ {
-				dodoString      name;       ///< original name of the service
-				dodoStringArray aliases;    ///< aliases of the service
-				int             port;       ///< port of the service
-			};
+            /**
+             * @struct __service__
+             * @brief defines info about service
+             */
+            struct __service__ {
+                dodoString      name;       ///< original name of the service
+                dodoStringArray aliases;    ///< aliases of the service
+                int             port;       ///< port of the service
+            };
 
-			/**
-			 * @return a list of interfaces
-			 */
-			static dodoStringArray interfacesNames();
+            /**
+             * @return a list of interfaces
+             */
+            static dodoStringArray interfacesNames();
 
-			/**
-			 * @return information about the interface
-			 * @param interface defines a name of the interface
-			 */
-			static __interface__ interface(const dodoString &interface);
+            /**
+             * @return information about the interface
+             * @param interface defines a name of the interface
+             */
+            static __interface__ interface(const dodoString &interface);
 
-			/**
-			 * @return information about the given host
-			 * @param host defines a name of the host
-			 */
-			static __host__ host(const dodoString &host);
+            /**
+             * @return information about the given host
+             * @param host defines a name of the host
+             */
+            static __host__ host(const dodoString &host);
 
-			/**
-			 * @return primary host ip
-			 * @param host defines a name of the host
-			 */
-			static dodoString hostPrimaryIp(const dodoString &host);
+            /**
+             * @return primary host ip
+             * @param host defines a name of the host
+             */
+            static dodoString hostPrimaryIp(const dodoString &host);
 
-			/**
-			 * @return name of the local host
-			 */
-			static dodoString localName();
+            /**
+             * @return name of the local host
+             */
+            static dodoString localName();
 
-			/**
-			 * set local host name
-			 * @param host defines name of the host
-			 */
-			static void setLocalName(const dodoString &host);
+            /**
+             * set local host name
+             * @param host defines name of the host
+             */
+            static void setLocalName(const dodoString &host);
 
-			/**
-			 * @return information about the service
-			 * @param service defices name of the service
-			 * @param protocol defines protocol of the service(tcp, udp ..)
-			 */
-			static __service__ service(const dodoString &service,
-												  const dodoString &protocol);
+            /**
+             * @return information about the service
+             * @param service defices name of the service
+             * @param protocol defines protocol of the service(tcp, udp ..)
+             */
+            static __service__ service(const dodoString &service,
+                                       const dodoString &protocol);
 
-			/**
-			 * @return information about the service
-			 * @param port defices port of the service
-			 * @param protocol defines protocol of the service(tcp, udp ..)
-			 */
-			static __service__ service(int              port,
-												  const dodoString &protocol);
+            /**
+             * @return information about the service
+             * @param port defices port of the service
+             * @param protocol defines protocol of the service(tcp, udp ..)
+             */
+            static __service__ service(int              port,
+                                       const dodoString &protocol);
 
-			/**
-			 * send mail using sendmail external program
-			 * @param to defines mail address[possible multiply separated with coma]
-			 * @param subject defines a subject of the letter;for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`
-			 * @param message defines a message to send
-			 * @param headers defines extra headers
-			 * @param path defines path to sendmail
-			 */
-			static void mail(const dodoString &to,
-							 const dodoString &subject,
-							 const dodoString &message,
-							 const dodoString &headers = __dodostring__,
-							 const dodoString &path = "/usr/sbin/sendmail");
+            /**
+             * send mail using sendmail external program
+             * @param to defines mail address[possible multiply separated with coma]
+             * @param subject defines a subject of the letter;for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`
+             * @param message defines a message to send
+             * @param headers defines extra headers
+             * @param path defines path to sendmail
+             */
+            static void mail(const dodoString &to,
+                             const dodoString &subject,
+                             const dodoString &message,
+                             const dodoString &headers = __dodostring__,
+                             const dodoString &path = "/usr/sbin/sendmail");
 
-			/**
-			 * send mail
-			 * @param host defines host of smtp server(ip)
-			 * @param port defines port of smtp server
-			 * @param to defines mail address where to send[possible multiply separated with coma]
-			 * @param from defines mail address of sender
-			 * @param subject defines a subject of the letter;for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`
-			 * @param message defines a message to send
-			 * @param login defines a login for auth
-			 * @param pass defines a password for auth
-			 * @param headers defines extra headers[each must ends with CR NR]
-			 * @note if login is emty no auth is performed
-			 */
-			static void mail(const dodoString &host,
-							 int              port,
-							 const dodoString &to,
-							 const dodoString &from,
-							 const dodoString &subject,
-							 const dodoString &message,
-							 const dodoString &login = __dodostring__,
-							 const dodoString &pass = __dodostring__,
-							 const dodoString &headers = __dodostring__);
-		};
-	};
+            /**
+             * send mail
+             * @param host defines host of smtp server(ip)
+             * @param port defines port of smtp server
+             * @param to defines mail address where to send[possible multiply separated with coma]
+             * @param from defines mail address of sender
+             * @param subject defines a subject of the letter;for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`
+             * @param message defines a message to send
+             * @param login defines a login for auth
+             * @param pass defines a password for auth
+             * @param headers defines extra headers[each must ends with CR NR]
+             * @note if login is emty no auth is performed
+             */
+            static void mail(const dodoString &host,
+                             int              port,
+                             const dodoString &to,
+                             const dodoString &from,
+                             const dodoString &subject,
+                             const dodoString &message,
+                             const dodoString &login = __dodostring__,
+                             const dodoString &pass = __dodostring__,
+                             const dodoString &headers = __dodostring__);
+        };
+    };
 };
 #endif

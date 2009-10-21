@@ -34,27 +34,27 @@
 #include <unistd.h>
 
 namespace dodo {
-	namespace cgi {
-		namespace fast {
-			/**
-			 * @struct __request__
-			 * @brief defines fast CGI request interface
-			 */
-			struct __request__ {
-				/**
-				 * constructor
-				 */
-				__request__() : request(NULL)
-				{
-				}
+    namespace cgi {
+        namespace fast {
+            /**
+             * @struct __request__
+             * @brief defines fast CGI request interface
+             */
+            struct __request__ {
+                /**
+                 * constructor
+                 */
+                __request__() : request(NULL)
+                {
+                }
 
-				__request__(FCGX_Request *request) : request(request)
-				{
-				}
+                __request__(FCGX_Request *request) : request(request)
+                {
+                }
 
-				FCGX_Request *request; ///< fast-CGI request handler
-			};
-		};
-	};
+                FCGX_Request *request; ///< fast-CGI request handler
+            };
+        };
+    };
 };
 #endif

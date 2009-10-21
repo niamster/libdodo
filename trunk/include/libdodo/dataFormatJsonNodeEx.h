@@ -35,39 +35,39 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace data {
-		namespace format {
-			namespace json {
-				/**
-				 * libdodo defined errors
-				 */
-				enum nodeExR {
-					NODEEX_WRONGTYPEREQUESTED,
-					NODEEX_ARRAYOUTOFRANGE,
-					NODEEX_MALFORMEDJSON,
-				};
+    namespace data {
+        namespace format {
+            namespace json {
+                /**
+                 * libdodo defined errors
+                 */
+                enum nodeExR {
+                    NODEEX_WRONGTYPEREQUESTED,
+                    NODEEX_ARRAYOUTOFRANGE,
+                    NODEEX_MALFORMEDJSON,
+                };
 
-				/**
-				 * explanations for libdodo defined errors
-				 */
+                /**
+                 * explanations for libdodo defined errors
+                 */
 #define DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested"
 #define DATAFORMATJSONNODEEX_ARRAYOUTOFRANGE_STR    "Array key is out of range"
 #define DATAFORMATJSONNODEEX_MALFORMEDJSON_STR      "Malformed json object"
 
-				/**
-				 * IDs of functions where exception might be thrown
-				 */
-				enum nodeFunctionsID {
-					NODEEX_BROPERATORSTRING,
-					NODEEX_BROPERATORNUMERIC,
-					NODEEX_GETSTRING,
-					NODEEX_GETBOOLEAN,
-					NODEEX_GETNUMERIC,
-					NODEEX_GETARRAY,
-					NODEEX_GETOBJECT,
-				};
-			};
-		};
-	};
+                /**
+                 * IDs of functions where exception might be thrown
+                 */
+                enum nodeFunctionsID {
+                    NODEEX_BROPERATORSTRING,
+                    NODEEX_BROPERATORNUMERIC,
+                    NODEEX_GETSTRING,
+                    NODEEX_GETBOOLEAN,
+                    NODEEX_GETNUMERIC,
+                    NODEEX_GETARRAY,
+                    NODEEX_GETOBJECT,
+                };
+            };
+        };
+    };
 };
 #endif

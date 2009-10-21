@@ -41,14 +41,14 @@
 using namespace dodo::io;
 
 stdio::stdio(short protection) : stream::channel(protection),
-								 pipe(false, protection)
+                                 pipe(false, protection)
 {
 #ifndef IO_WO_XEXEC
-	collectedData.setExecObject(xexec::OBJECT_IOSTDIO);
+    collectedData.setExecObject(xexec::OBJECT_IOSTDIO);
 #endif
 
-	in->file = stdin;
-	out->file = stdout;
+    in->file = stdin;
+    out->file = stdout;
 }
 
 //-------------------------------------------------------------------
@@ -61,8 +61,8 @@ stdio::stdio(stdio &fd) : stream::channel(protection)
 
 stdio::~stdio()
 {
-	in->file = NULL;
-	out->file = NULL;
+    in->file = NULL;
+    out->file = NULL;
 }
 
 //-------------------------------------------------------------------
@@ -84,15 +84,15 @@ stdio::close()
 void
 stdio::redirectToStderr(bool toStderr)
 {
-	if (err == toStderr)
-		return;
+    if (err == toStderr)
+        return;
 
-	err = toStderr;
+    err = toStderr;
 
-	if (err)
-		out->file = stderr;
-	else
-		out->file = stdout;
+    if (err)
+        out->file = stderr;
+    else
+        out->file = stdout;
 }
 
 //-------------------------------------------------------------------
@@ -100,7 +100,7 @@ stdio::redirectToStderr(bool toStderr)
 bool
 stdio::isRedirectedToStderr()
 {
-	return err;
+    return err;
 }
 
 //-------------------------------------------------------------------
@@ -108,19 +108,19 @@ stdio::isRedirectedToStderr()
 void
 stdio::_writeString(const char * const data) const
 {
-	unsigned long _blockSize = blockSize;
+    unsigned long _blockSize = blockSize;
 
-	try {
-		blockSize = strnlen(data, blockSize);
+    try {
+        blockSize = strnlen(data, blockSize);
 
-		_write(data);
+        _write(data);
 
-		blockSize = _blockSize;
-	} catch (...) {
-		blockSize = _blockSize;
+        blockSize = _blockSize;
+    } catch (...) {
+        blockSize = _blockSize;
 
-		throw;
-	}
+        throw;
+    }
 }
 
 //-------------------------------------------------------------------

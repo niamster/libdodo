@@ -37,24 +37,24 @@
 #endif
 
 namespace dodo {
-	namespace graphics {
-		/**
-		 * @struct __image__
-		 * @brief defines internal handlers for image processing library
-		 */
-		struct __image__ {
-			/**
-			 * contructor
-			 */
-			__image__() : im(NULL),
-						  imInfo(NULL)
-			{
-			}
+    namespace graphics {
+        /**
+         * @struct __image__
+         * @brief defines internal handlers for image processing library
+         */
+        struct __image__ {
+            /**
+             * contructor
+             */
+            __image__() : im(NULL),
+                          imInfo(NULL)
+            {
+            }
 
-			Image         *im;      ///< image handler
-			ImageInfo     *imInfo;  ///< image info handler
-		};
-	};
+            Image         *im;      ///< image handler
+            ImageInfo     *imInfo;  ///< image info handler
+        };
+    };
 };
 #endif
 

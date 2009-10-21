@@ -36,102 +36,102 @@
 #include <libdodo/rpcValue.h>
 
 namespace dodo {
-	namespace io {
-		class channel;
-	};
+    namespace io {
+        class channel;
+    };
 
-	namespace rpc {
-		class response;
-		class method;
+    namespace rpc {
+        class response;
+        class method;
 
-		/**
-		 * @typedef handler
-		 * @brief defines type of rpc method handler
-		 * @param method defines method name
-		 * @param arguments defines arguments of the method
-		 * @param idata defines additional incoming data
-		 * @param odata defines additional outgoing data
-		 */
-		typedef response (*handler)(const dodoString &method, const dodoArray<value> &arguments, const void *idata, void *odata);
+        /**
+         * @typedef handler
+         * @brief defines type of rpc method handler
+         * @param method defines method name
+         * @param arguments defines arguments of the method
+         * @param idata defines additional incoming data
+         * @param odata defines additional outgoing data
+         */
+        typedef response (*handler)(const dodoString &method, const dodoArray<value> &arguments, const void *idata, void *odata);
 
-		/**
-		 * @class server
-		 * @brief defines server-side RPC instrument
-		 */
-		class server {
-		  public:
+        /**
+         * @class server
+         * @brief defines server-side RPC instrument
+         */
+        class server {
+          public:
 
-			/**
-			 * constructor
-			 * @param io defines input/output sources
-			 */
-			server(io::channel &io);
+            /**
+             * constructor
+             * @param io defines input/output sources
+             */
+            server(io::channel &io);
 
-			/**
-			 * destructor
-			 */
-			virtual ~server();
+            /**
+             * destructor
+             */
+            virtual ~server();
 
-			/**
-			 * set handler for method
-			 * @param method defines name of rpc method
-			 * @param handler defines function that will process rpc call
-			 */
-			void setHandler(const dodoString &method,
-									handler          handler);
+            /**
+             * set handler for method
+             * @param method defines name of rpc method
+             * @param handler defines function that will process rpc call
+             */
+            void setHandler(const dodoString &method,
+                            handler          handler);
 
-			/**
-			 * remove handler for method
-			 * @param method defines name of rpc method
-			 */
-			void removeHandler(const dodoString &method);
+            /**
+             * remove handler for method
+             * @param method defines name of rpc method
+             */
+            void removeHandler(const dodoString &method);
 
-			/**
-			 * set function that will process unregistered calls
-			 * @param handler defines function that will process rpc call
-			 */
-			void setDefault(handler handler);
+            /**
+             * set function that will process unregistered calls
+             * @param handler defines function that will process rpc call
+             */
+            void setDefault(handler handler);
 
-			/**
-			 * serve rpc call
-			 * @note processes only one call
-			 * should be called again to process next
-			 * values of idata and odata for handler are NULL
-			 */
-			virtual void serve();
+            /**
+             * serve rpc call
+             * @note processes only one call
+             * should be called again to process next
+             * values of idata and odata for handler are NULL
+             */
+            virtual void serve();
 
-		  protected:
+          protected:
 
-			/**
-			 * process RPC call
-			 * @return RPC method represantation
-			 */
-			virtual method processCallRequest() = 0;
+            /**
+             * process RPC call
+             * @return RPC method represantation
+             */
+            virtual method processCallRequest() = 0;
 
-			/**
-			 * process RPC call
-			 * @param response defines RPC response representation
-			 */
-			virtual void processCallResult(const response &response) = 0;
+            /**
+             * process RPC call
+             * @param response defines RPC response representation
+             */
+            virtual void processCallResult(const response &response) = 0;
 
-			/**
-			 * default rpc handler
-			 * @param method defines function that will process rpc call
-			 * @param arguments defines method arguments
-			 * @param idata defines additional incoming data
-			 * @param odata defines additional outgoing data
-			 */
-			static response rpcDefaultHandler(const dodoString       &method,
-											  const dodoArray<value> &arguments,
-											  const void             *idata,
-											  void                   *odata);
+            /**
+             * default rpc handler
+             * @param method defines function that will process rpc call
+             * @param arguments defines method arguments
+             * @param idata defines additional incoming data
+             * @param odata defines additional outgoing data
+             */
+            static response rpcDefaultHandler(const dodoString       &method,
+                                              const dodoArray<value> &arguments,
+                                              const void             *idata,
+                                              void                   *odata);
 
-			dodoMap<dodoString, handler, dodoMapStringCompare> handlers;    ///< method handlers
-			handler defaultHandler;                                         ///< default handler
+            dodoMap<dodoString, handler, dodoMapStringCompare> handlers;    ///< method handlers
+            handler defaultHandler;                                         ///< default handler
 
-			io::channel &io;                                                ///< I/O handler
-		};
-	};
+            io::channel &io;                                                ///< I/O handler
+        };
+    };
 };
 #endif
 

@@ -35,30 +35,30 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace graphics {
-		/**
-		 * libdodo defined errors
-		 */
-		enum drawExR {
-			DRAWEX_EMPTYIMAGE,
-			DRAWEX_CANNOTDRAWPRIMITIVE
-		};
+    namespace graphics {
+        /**
+         * libdodo defined errors
+         */
+        enum drawExR {
+            DRAWEX_EMPTYIMAGE,
+            DRAWEX_CANNOTDRAWPRIMITIVE
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define GRAPHICSDRAWEX_EMPTYIMAGE_STR "Image is empty"
 #define GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR "Can not draw a primitive"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum drawFunctionsID {
-			DRAWEX_PRIMITIVE,
-			DRAWEX_POINT,
-			DRAWEX_TEXT,
-			DRAWEX_IMAGE,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum drawFunctionsID {
+            DRAWEX_PRIMITIVE,
+            DRAWEX_POINT,
+            DRAWEX_TEXT,
+            DRAWEX_IMAGE,
+        };
+    };
 };
 #endif

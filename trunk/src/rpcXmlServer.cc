@@ -50,7 +50,7 @@ __additional__::__additional__(dodoString &encoding) : encoding(encoding)
 //-------------------------------------------------------------------
 
 server::server(io::channel &io) : rpc::server(io),
-								  rpEncoding("UTF-8")
+                                  rpEncoding("UTF-8")
 {
 }
 
@@ -65,7 +65,7 @@ server::~server()
 void
 server::setResponseEncoding(const dodoString &a_encoding)
 {
-	rpEncoding = a_encoding;
+    rpEncoding = a_encoding;
 }
 
 //-------------------------------------------------------------------
@@ -73,17 +73,17 @@ server::setResponseEncoding(const dodoString &a_encoding)
 dodo::rpc::method
 server::processCallRequest()
 {
-	dodo::data::format::xml::processor xmlValue;
+    dodo::data::format::xml::processor xmlValue;
 
-	dodo::data::format::xml::__definition__ xmlMethodCall;
-	xmlMethodCall.name = "methodCall";
-	xmlMethodCall.allChildren = true;
+    dodo::data::format::xml::__definition__ xmlMethodCall;
+    xmlMethodCall.name = "methodCall";
+    xmlMethodCall.allChildren = true;
 
-	dodo::data::format::xml::node node = xmlValue.process(xmlMethodCall, io);
+    dodo::data::format::xml::node node = xmlValue.process(xmlMethodCall, io);
 
-	rqEncoding = xmlValue.information().encoding;
+    rqEncoding = xmlValue.information().encoding;
 
-	return method::xmlToMethod(node);
+    return method::xmlToMethod(node);
 }
 
 //-------------------------------------------------------------------
@@ -91,11 +91,11 @@ server::processCallRequest()
 void
 server::processCallResult(const rpc::response &resp)
 {
-	dodo::data::format::xml::processor xmlValue;
+    dodo::data::format::xml::processor xmlValue;
 
-	xmlValue.make(response::responseToXml(resp), rpEncoding, "1.0", io);
+    xmlValue.make(response::responseToXml(resp), rpEncoding, "1.0", io);
 
-	io.flush();
+    io.flush();
 }
 
 //-------------------------------------------------------------------
@@ -103,34 +103,34 @@ server::processCallResult(const rpc::response &resp)
 void
 server::serve()
 {
-	try {
-		rpc::method meth = processCallRequest();
+    try {
+        rpc::method meth = processCallRequest();
 
-		dodoString encoding = rpEncoding;
+        dodoString encoding = rpEncoding;
 
-		__additional__ idata(rqEncoding);
+        __additional__ idata(rqEncoding);
 
-		__additional__ odata(rpEncoding);
+        __additional__ odata(rpEncoding);
 
-		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
+        dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
-		if (handler == handlers.end())
-			processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
-		else
-			processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
+        if (handler == handlers.end())
+            processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
+        else
+            processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
 
-		rpEncoding = encoding;
-	} catch (exception::basic &ex) {
-		rpc::response response;
-		response.fault(ex.errStr);
+        rpEncoding = encoding;
+    } catch (exception::basic &ex) {
+        rpc::response response;
+        response.fault(ex.errStr);
 
-		processCallResult(response);
-	} catch (...) {
-		rpc::response response;
-		response.fault(dodoString("An unknown error."));
+        processCallResult(response);
+    } catch (...) {
+        rpc::response response;
+        response.fault(dodoString("An unknown error."));
 
-		processCallResult(response);
-	}
+        processCallResult(response);
+    }
 }
 
 //-------------------------------------------------------------------

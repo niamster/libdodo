@@ -35,46 +35,46 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace data {
-		namespace format {
-			namespace json {
-				class node;
-			};
-		};
-	};
+    namespace data {
+        namespace format {
+            namespace json {
+                class node;
+            };
+        };
+    };
 
-	namespace rpc {
-		class method;
+    namespace rpc {
+        class method;
 
-		namespace json {
-			/**
-			 * @class method
-			 * @brief defines RPC method in JSON representation
-			 */
-			class method {
-			  public:
+        namespace json {
+            /**
+             * @class method
+             * @brief defines RPC method in JSON representation
+             */
+            class method {
+              public:
 
-				/**
-				 * @return method parsed from JSON node
-				 * @param node defines JSON node
-				 * @param version defines version of JSON-RPC response
-				 * @param id defines ID of JSON-RPC response
-				 */
-				static rpc::method jsonToMethod(dodo::data::format::json::node &node,
-												dodoString                     &version,
-												long                           &id);
+                /**
+                 * @return method parsed from JSON node
+                 * @param node defines JSON node
+                 * @param version defines version of JSON-RPC response
+                 * @param id defines ID of JSON-RPC response
+                 */
+                static rpc::method jsonToMethod(dodo::data::format::json::node &node,
+                                                dodoString                     &version,
+                                                long                           &id);
 
-				/**
-				 * @return JSON node parsed from method
-				 * @param data defines method structure
-				 * @param version defines version of JSON-RPC request
-				 * @param id defines ID of JSON-RPC request
-				 */
-				static dodo::data::format::json::node methodToJson(const rpc::method &data,
-																   const dodoString  &version,
-																   long              id);
-			};
-		};
-	};
+                /**
+                 * @return JSON node parsed from method
+                 * @param data defines method structure
+                 * @param version defines version of JSON-RPC request
+                 * @param id defines ID of JSON-RPC request
+                 */
+                static dodo::data::format::json::node methodToJson(const rpc::method &data,
+                                                                   const dodoString  &version,
+                                                                   long              id);
+            };
+        };
+    };
 };
 #endif

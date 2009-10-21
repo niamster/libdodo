@@ -35,121 +35,121 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace rpc {
-		namespace xml {
-			class value;
-			class method;
-			class response;
-		};
-	};
+    namespace rpc {
+        namespace xml {
+            class value;
+            class method;
+            class response;
+        };
+    };
 
-	namespace data {
-		namespace format {
-			namespace xml {
-				class processor;
+    namespace data {
+        namespace format {
+            namespace xml {
+                class processor;
 
-				/**
-				 * @class node
-				 * @brief defines xml tree
-				 * @note children is a map of vectors of xml nodes where map key is node name and vector contains nodes with name given in key
-				 */
-				class node {
-					friend class processor;
-					friend class rpc::xml::value;
-					friend class rpc::xml::method;
-					friend class rpc::xml::response;
+                /**
+                 * @class node
+                 * @brief defines xml tree
+                 * @note children is a map of vectors of xml nodes where map key is node name and vector contains nodes with name given in key
+                 */
+                class node {
+                    friend class processor;
+                    friend class rpc::xml::value;
+                    friend class rpc::xml::method;
+                    friend class rpc::xml::response;
 
-				  public:
+                  public:
 
-					/**
-					 * @struct __namespace__
-					 * @brief defines node namespace
-					 */
-					struct __namespace__ {
-						dodoString prefix;  ///< prefix for the namespace
-						dodoString href;    ///< URL for the namespace
-					};
+                    /**
+                     * @struct __namespace__
+                     * @brief defines node namespace
+                     */
+                    struct __namespace__ {
+                        dodoString prefix;  ///< prefix for the namespace
+                        dodoString href;    ///< URL for the namespace
+                    };
 
-					/**
-					 * constructor
-					 */
-					node();
+                    /**
+                     * constructor
+                     */
+                    node();
 
-					/**
-					 * constructor
-					 * @param name defines name of the node
-					 * @param attributes defines node attributes
-					 * @param value devines node value
-					 * @param ns defines node namespace
-					 */
-					node(const dodoString    &name,
-						 const dodoStringMap &attributes,
-						 const dodoString    &value,
-						 const dodoString    &ns = __dodostring__);
+                    /**
+                     * constructor
+                     * @param name defines name of the node
+                     * @param attributes defines node attributes
+                     * @param value devines node value
+                     * @param ns defines node namespace
+                     */
+                    node(const dodoString    &name,
+                         const dodoStringMap &attributes,
+                         const dodoString    &value,
+                         const dodoString    &ns = __dodostring__);
 
-					/**
-					 * add child to the node
-					 * @param child defines child to be appended
-					 */
-					void addChild(const node &child);
+                    /**
+                     * add child to the node
+                     * @param child defines child to be appended
+                     */
+                    void addChild(const node &child);
 
-					/**
-					 * set children of the node
-					 * @param children defines children to be set
-					 */
-					void setChildren(const dodoArray<node> &children);
+                    /**
+                     * set children of the node
+                     * @param children defines children to be set
+                     */
+                    void setChildren(const dodoArray<node> &children);
 
-					/**
-					 * @return children of the node
-					 * @param name defines name of child nodes to get
-					 * @param recursive defines if walk through all children in deep
-					 */
-					dodoArray<node> children(const dodoString &name,
-														bool             recursive = false);
+                    /**
+                     * @return children of the node
+                     * @param name defines name of child nodes to get
+                     * @param recursive defines if walk through all children in deep
+                     */
+                    dodoArray<node> children(const dodoString &name,
+                                             bool             recursive = false);
 
-					/**
-					 * @return names of children nodes
-					 * @param recursive defines if walk through all children in deep
-					 */
-					dodoStringArray childrenNames(bool recursive = false);
+                    /**
+                     * @return names of children nodes
+                     * @param recursive defines if walk through all children in deep
+                     */
+                    dodoStringArray childrenNames(bool recursive = false);
 
-					/**
-					 * @return attribute value
-					 * @param name defines attribute name
-					 */
-					dodoString operator[](const dodoString &name);
+                    /**
+                     * @return attribute value
+                     * @param name defines attribute name
+                     */
+                    dodoString operator[](const dodoString &name);
 
-					/**
-					 * set value of the node
-					 * @param value defines value to be set
-					 * @param CDATA defines if value is CDATA
-					 */
-					void setValue(const dodoString &value,
-										  bool             CDATA = false);
+                    /**
+                     * set value of the node
+                     * @param value defines value to be set
+                     * @param CDATA defines if value is CDATA
+                     */
+                    void setValue(const dodoString &value,
+                                  bool             CDATA = false);
 
-					/**
-					 * @return value of the node
-					 */
-					dodoString value();
+                    /**
+                     * @return value of the node
+                     */
+                    dodoString value();
 
-					dodoStringMap attributes;                                                   ///< attributes
+                    dodoStringMap attributes;                                                       ///< attributes
 
-					dodoString name;                                                            ///< name of the node [[tag]]
+                    dodoString name;                                                                ///< name of the node [[tag]]
 
-					__namespace__ ns;                                                       ///< namespace of the node
-					__namespace__ nsDef;                                                    ///< namespace definition of the node
+                    __namespace__ ns;                                                               ///< namespace of the node
+                    __namespace__ nsDef;                                                            ///< namespace definition of the node
 
-				  protected:
+                  protected:
 
-					dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> nodeChildren;        ///< children
+                    dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> nodeChildren;        ///< children
 
-					dodoString nodeValue;                                                           ///< value of the node
+                    dodoString nodeValue;                                                           ///< value of the node
 
-					bool CDATA;                                                                 ///< true if node contains CDATA
-				};
-			};
-		};
-	};
+                    bool CDATA;                                                                     ///< true if node contains CDATA
+                };
+            };
+        };
+    };
 };
 #endif
 

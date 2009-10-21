@@ -44,17 +44,17 @@
 using namespace dodo::rpc::json;
 
 __additional__::__additional__(dodoString &version,
-									   long       &id) : version(version),
-														 id(id)
+                               long       &id) : version(version),
+                                                 id(id)
 {
 }
 
 //-------------------------------------------------------------------
 
 server::server(io::channel &io) : rpc::server(io),
-								  rpVersion("1.1"),
-								  rqId(0),
-								  rpId(0)
+                                  rpVersion("1.1"),
+                                  rqId(0),
+                                  rpId(0)
 {
 }
 
@@ -69,11 +69,11 @@ server::~server()
 dodo::rpc::method
 server::processCallRequest()
 {
-	dodo::data::format::json::processor jsonValue;
+    dodo::data::format::json::processor jsonValue;
 
-	dodo::data::format::json::node node = jsonValue.process(io);
+    dodo::data::format::json::node node = jsonValue.process(io);
 
-	return method::jsonToMethod(node, rqVersion, rqId);
+    return method::jsonToMethod(node, rqVersion, rqId);
 }
 
 //-------------------------------------------------------------------
@@ -81,11 +81,11 @@ server::processCallRequest()
 void
 server::processCallResult(const rpc::response &resp)
 {
-	dodo::data::format::json::processor jsonValue;
+    dodo::data::format::json::processor jsonValue;
 
-	jsonValue.make(response::responseToJson(resp, rpVersion, rpId), io);
+    jsonValue.make(response::responseToJson(resp, rpVersion, rpId), io);
 
-	io.flush();
+    io.flush();
 }
 
 //-------------------------------------------------------------------
@@ -93,7 +93,7 @@ server::processCallResult(const rpc::response &resp)
 void
 server::setResponseVersion(const dodoString &version)
 {
-	rpVersion = version;
+    rpVersion = version;
 }
 
 //-------------------------------------------------------------------
@@ -101,39 +101,39 @@ server::setResponseVersion(const dodoString &version)
 void
 server::serve()
 {
-	try {
-		rpc::method meth = processCallRequest();
+    try {
+        rpc::method meth = processCallRequest();
 
-		dodoString version = rqVersion;
+        dodoString version = rqVersion;
 
-		__additional__ idata(rqVersion, rqId);
+        __additional__ idata(rqVersion, rqId);
 
-		rpId = rqId;
-		__additional__ odata(rpVersion, rpId);
+        rpId = rqId;
+        __additional__ odata(rpVersion, rpId);
 
-		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
+        dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
-		if (handler == handlers.end())
-			processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
-		else
-			processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
+        if (handler == handlers.end())
+            processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
+        else
+            processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
 
-		rpVersion = version;
-	} catch (exception::basic &ex) {
-		rpc::response response;
-		response.fault(ex.errStr);
+        rpVersion = version;
+    } catch (exception::basic &ex) {
+        rpc::response response;
+        response.fault(ex.errStr);
 
-		rpId = rqId;
+        rpId = rqId;
 
-		processCallResult(response);
-	} catch (...) {
-		rpc::response response;
-		response.fault(dodoString("An unknown error."));
+        processCallResult(response);
+    } catch (...) {
+        rpc::response response;
+        response.fault(dodoString("An unknown error."));
 
-		rpId = rqId;
+        rpId = rqId;
 
-		processCallResult(response);
-	}
+        processCallResult(response);
+    }
 }
 
 //-------------------------------------------------------------------

@@ -52,13 +52,13 @@ library::library() : handle(NULL)
 library::library(const dodoString &path)
 {
 #ifdef DL_FAST
-	handle = dlopen(path.data(), RTLD_LAZY | RTLD_NODELETE);
+    handle = dlopen(path.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	handle = dlopen(path.data(), RTLD_LAZY);
+    handle = dlopen(path.data(), RTLD_LAZY);
 #endif
 
-	if (handle == NULL)
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_LIBRARY, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    if (handle == NULL)
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_LIBRARY, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -66,8 +66,8 @@ library::library(const dodoString &path)
 library::~library()
 {
 #ifndef DL_FAST
-	if (handle != NULL)
-		dlclose(handle);
+    if (handle != NULL)
+        dlclose(handle);
 
 #endif
 }
@@ -78,20 +78,20 @@ void
 library::open(const dodoString &path)
 {
 #ifndef DL_FAST
-	if (handle != NULL)
-		if (dlclose(handle) != 0)
-			throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    if (handle != NULL)
+        if (dlclose(handle) != 0)
+            throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 
 #ifdef DL_FAST
-	handle = dlopen(path.data(), RTLD_LAZY | RTLD_NODELETE);
+    handle = dlopen(path.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-	handle = dlopen(path.data(), RTLD_LAZY);
+    handle = dlopen(path.data(), RTLD_LAZY);
 #endif
 
-	if (handle == NULL)
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    if (handle == NULL)
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -100,9 +100,9 @@ void
 library::close()
 {
 #ifndef DL_FAST
-	if (handle != NULL)
-		if (dlclose(handle) != 0)
-			throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_CLOSE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    if (handle != NULL)
+        if (dlclose(handle) != 0)
+            throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_CLOSE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 }
 
@@ -111,14 +111,14 @@ library::close()
 void *
 library::function(const dodoString &name)
 {
-	if (handle == NULL)
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_FUNCTION, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
+    if (handle == NULL)
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_FUNCTION, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	void *func = dlsym(handle, name.data());
-	if (func == NULL)
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_FUNCTION, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    void *func = dlsym(handle, name.data());
+    if (func == NULL)
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_FUNCTION, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	return func;
+    return func;
 }
 
 //-------------------------------------------------------------------
@@ -126,14 +126,14 @@ library::function(const dodoString &name)
 void *
 library::operator[](const dodoString &name)
 {
-	if (handle == NULL)
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
+    if (handle == NULL)
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-	void *func = dlsym(handle, name.data());
-	if (func == NULL)
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    void *func = dlsym(handle, name.data());
+    if (func == NULL)
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	return func;
+    return func;
 }
 
 //-------------------------------------------------------------------
@@ -142,49 +142,49 @@ library::operator[](const dodoString &name)
 dodo::dodoStringArray
 library::symbols(const dodoString &path)
 {
-	bfd_init();
+    bfd_init();
 
-	bfd *lib = bfd_openr(path.data(), NULL);
-	if (lib == NULL) {
-		bfd_error_type err = bfd_get_error();
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-	}
+    bfd *lib = bfd_openr(path.data(), NULL);
+    if (lib == NULL) {
+        bfd_error_type err = bfd_get_error();
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+    }
 
-	if (bfd_check_format(lib, bfd_object) == FALSE) {
-		bfd_error_type err = bfd_get_error();
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-	}
+    if (bfd_check_format(lib, bfd_object) == FALSE) {
+        bfd_error_type err = bfd_get_error();
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+    }
 
-	long storageSize = bfd_get_symtab_upper_bound(lib);
+    long storageSize = bfd_get_symtab_upper_bound(lib);
 
-	if (storageSize < 0) {
-		bfd_error_type err = bfd_get_error();
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-	}
+    if (storageSize < 0) {
+        bfd_error_type err = bfd_get_error();
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+    }
 
-	if (storageSize == 0)
-		return dodoStringArray();
+    if (storageSize == 0)
+        return dodoStringArray();
 
-	asymbol **symbolTable = (asymbol **)malloc(storageSize);
+    asymbol **symbolTable = (asymbol **)malloc(storageSize);
 
-	long numberOfSymbols = bfd_canonicalize_symtab(lib, symbolTable);
+    long numberOfSymbols = bfd_canonicalize_symtab(lib, symbolTable);
 
-	if (numberOfSymbols < 0) {
-		bfd_error_type err = bfd_get_error();
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-	}
+    if (numberOfSymbols < 0) {
+        bfd_error_type err = bfd_get_error();
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+    }
 
-	dodoStringArray arr;
-	for (long i = 0; i < numberOfSymbols; ++i)
-		if (isSetFlag(symbolTable[i]->flags, BSF_FUNCTION) && isSetFlag(symbolTable[i]->flags, BSF_GLOBAL))
-			arr.push_back(symbolTable[i]->name);
+    dodoStringArray arr;
+    for (long i = 0; i < numberOfSymbols; ++i)
+        if (isSetFlag(symbolTable[i]->flags, BSF_FUNCTION) && isSetFlag(symbolTable[i]->flags, BSF_GLOBAL))
+            arr.push_back(symbolTable[i]->name);
 
-	if (bfd_close(lib) == FALSE) {
-		bfd_error_type err = bfd_get_error();
-		throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-	}
+    if (bfd_close(lib) == FALSE) {
+        bfd_error_type err = bfd_get_error();
+        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+    }
 
-	return arr;
+    return arr;
 }
 #endif
 #endif

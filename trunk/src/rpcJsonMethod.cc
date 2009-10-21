@@ -41,82 +41,82 @@ using namespace dodo::rpc::json;
 
 dodo::rpc::method
 method::jsonToMethod(dodo::data::format::json::node &node,
-					 dodoString                     &version,
-					 long                           &id)
+                     dodoString                     &version,
+                     long                           &id)
 {
-	if (node.valueDataType != dodo::data::format::json::node::DATA_OBJECT)
-		throw exception::basic(exception::MODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
+    if (node.valueDataType != dodo::data::format::json::node::DATA_OBJECT)
+        throw exception::basic(exception::MODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
 
-	rpc::method meth;
+    rpc::method meth;
 
-	meth.name = (*node.objectValue)["method"].string();
-	version = (*node.objectValue)["version"].string();
-	id = (*node.objectValue)["id"].numeric();
+    meth.name = (*node.objectValue)["method"].string();
+    version = (*node.objectValue)["version"].string();
+    id = (*node.objectValue)["id"].numeric();
 
-	dodo::data::format::json::node &params = (*node.objectValue)["params"];
+    dodo::data::format::json::node &params = (*node.objectValue)["params"];
 
-	if (params.valueDataType != dodo::data::format::json::node::DATA_ARRAY &&
-		params.valueDataType != dodo::data::format::json::node::DATA_OBJECT)
-		throw exception::basic(exception::MODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_PARAMSNOTANARRAY, RPCJSONMETHODEX_PARAMSNOTANARRAY_STR, __LINE__, __FILE__);
+    if (params.valueDataType != dodo::data::format::json::node::DATA_ARRAY &&
+        params.valueDataType != dodo::data::format::json::node::DATA_OBJECT)
+        throw exception::basic(exception::MODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_PARAMSNOTANARRAY, RPCJSONMETHODEX_PARAMSNOTANARRAY_STR, __LINE__, __FILE__);
 
-	if (params.valueDataType == dodo::data::format::json::node::DATA_ARRAY) {
-		dodoArray<dodo::data::format::json::node>::iterator
-		i = params.arrayValue->begin(),
-		j = params.arrayValue->end();
-		for (; i != j; ++i)
-			meth.arguments.push_back(value::jsonToValue(*i));
-	} else
-		meth.arguments.push_back(value::jsonToValue(params));
+    if (params.valueDataType == dodo::data::format::json::node::DATA_ARRAY) {
+        dodoArray<dodo::data::format::json::node>::iterator
+        i = params.arrayValue->begin(),
+        j = params.arrayValue->end();
+        for (; i != j; ++i)
+            meth.arguments.push_back(value::jsonToValue(*i));
+    } else
+        meth.arguments.push_back(value::jsonToValue(params));
 
-	return meth;
+    return meth;
 }
 
 //-------------------------------------------------------------------
 
 dodo::data::format::json::node
 method::methodToJson(const rpc::method &data,
-					 const dodoString  &version,
-					 long              id)
+                     const dodoString  &version,
+                     long              id)
 {
-	dodo::data::format::json::node meth;
-	dodo::data::format::json::node node;
+    dodo::data::format::json::node meth;
+    dodo::data::format::json::node node;
 
-	meth.valueDataType = dodo::data::format::json::node::DATA_OBJECT;
-	meth.objectValue = new dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>;
+    meth.valueDataType = dodo::data::format::json::node::DATA_OBJECT;
+    meth.objectValue = new dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>;
 
-	node.valueDataType = dodo::data::format::json::node::DATA_STRING;
+    node.valueDataType = dodo::data::format::json::node::DATA_STRING;
 
-	node.stringValue = new dodoString(data.name);
-	meth.objectValue->insert(make_pair(dodoString("method"), node));
-	delete node.stringValue;
+    node.stringValue = new dodoString(data.name);
+    meth.objectValue->insert(make_pair(dodoString("method"), node));
+    delete node.stringValue;
 
-	node.stringValue = new dodoString(version);
-	meth.objectValue->insert(make_pair(dodoString("version"), node));
-	delete node.stringValue;
+    node.stringValue = new dodoString(version);
+    meth.objectValue->insert(make_pair(dodoString("version"), node));
+    delete node.stringValue;
 
-	node.valueDataType = dodo::data::format::json::node::DATA_NUMERIC;
-	node.numericValue = id;
-	meth.objectValue->insert(make_pair(dodoString("id"), node));
+    node.valueDataType = dodo::data::format::json::node::DATA_NUMERIC;
+    node.numericValue = id;
+    meth.objectValue->insert(make_pair(dodoString("id"), node));
 
-	dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
-	if (i != j) {
-		if (data.arguments.size() == 1 && i->valueDataType == dodo::rpc::value::DATA_STRUCT)
-			meth.objectValue->insert(make_pair(dodoString("params"), value::valueToJson(*i)));
-		else {
-			node.valueDataType = dodo::data::format::json::node::DATA_ARRAY;
-			node.arrayValue = new dodoArray<dodo::data::format::json::node>;
+    dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
+    if (i != j) {
+        if (data.arguments.size() == 1 && i->valueDataType == dodo::rpc::value::DATA_STRUCT)
+            meth.objectValue->insert(make_pair(dodoString("params"), value::valueToJson(*i)));
+        else {
+            node.valueDataType = dodo::data::format::json::node::DATA_ARRAY;
+            node.arrayValue = new dodoArray<dodo::data::format::json::node>;
 
-			for (; i != j; ++i)
-				node.arrayValue->push_back(value::valueToJson(*i));
+            for (; i != j; ++i)
+                node.arrayValue->push_back(value::valueToJson(*i));
 
-			meth.objectValue->insert(make_pair(dodoString("params"), node));
+            meth.objectValue->insert(make_pair(dodoString("params"), node));
 
-			delete node.arrayValue;
-			node.valueDataType = dodo::data::format::json::node::DATA_NULL;
-		}
-	}
+            delete node.arrayValue;
+            node.valueDataType = dodo::data::format::json::node::DATA_NULL;
+        }
+    }
 
-	return meth;
+    return meth;
 }
 
 //-------------------------------------------------------------------

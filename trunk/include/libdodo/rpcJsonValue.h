@@ -35,38 +35,38 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace data {
-		namespace format {
-			namespace json {
-				class node;
-			};
-		};
-	};
+    namespace data {
+        namespace format {
+            namespace json {
+                class node;
+            };
+        };
+    };
 
-	namespace rpc {
-		class value;
+    namespace rpc {
+        class value;
 
-		namespace json {
-			/**
-			 * @class value
-			 * @brief defines RPC value in JSON representation
-			 */
-			class value {
-			  public:
+        namespace json {
+            /**
+             * @class value
+             * @brief defines RPC value in JSON representation
+             */
+            class value {
+              public:
 
-				/**
-				 * @return value parsed from JSON node
-				 * @param node defines JSON node
-				 */
-				static rpc::value jsonToValue(const dodo::data::format::json::node &node);
+                /**
+                 * @return value parsed from JSON node
+                 * @param node defines JSON node
+                 */
+                static rpc::value jsonToValue(const dodo::data::format::json::node &node);
 
-				/**
-				 * @return JSON node from value
-				 * @param data defines value structure
-				 */
-				static dodo::data::format::json::node valueToJson(const rpc::value &data);
-			};
-		};
-	};
+                /**
+                 * @return JSON node from value
+                 * @param data defines value structure
+                 */
+                static dodo::data::format::json::node valueToJson(const rpc::value &data);
+            };
+        };
+    };
 };
 #endif

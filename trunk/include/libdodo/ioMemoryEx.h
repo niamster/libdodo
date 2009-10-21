@@ -35,39 +35,39 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		/**
-		 * libdodo defined errors
-		 */
-		enum memoryExR {
-			MEMORYEX_CANTBEUSEDWITHIOEVENT,
-			MEMORYEX_OUTOFBOUNDS,
-			MEMORYEX_APPENDTOFIXED,
-			MEMORYEX_EXTENDFIXED,
-			MEMORYEX_WRONGFLAGS,
-		};
+    namespace io {
+        /**
+         * libdodo defined errors
+         */
+        enum memoryExR {
+            MEMORYEX_CANTBEUSEDWITHIOEVENT,
+            MEMORYEX_OUTOFBOUNDS,
+            MEMORYEX_APPENDTOFIXED,
+            MEMORYEX_EXTENDFIXED,
+            MEMORYEX_WRONGFLAGS,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR        "io::memory can not be used with io::event"
 #define IOMEMORYEX_OUTOFBOUNDS_STR                  "Access data out of bounds"
 #define IOMEMORYEX_APPENDTOFIXED_STR                "Append to fixed-size region"
 #define IOMEMORYEX_EXTENDFIXED_STR                  "Extend fixed-size region"
 #define IOMEMORYEX_WRONGFLAGS_STR                   "Wrong flags set"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum memoryFunctionsID {
-			MEMORYEX__READ,
-			MEMORYEX__WRITE,
-			MEMORYEX__WRITESTREAM,
-			MEMORYEX_ERASE,
-			MEMORYEX_INDESCRIPTOR,
-			MEMORYEX_OUTDESCRIPTOR,
-			MEMORYEX_MEMORY
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum memoryFunctionsID {
+            MEMORYEX__READ,
+            MEMORYEX__WRITE,
+            MEMORYEX__WRITESTREAM,
+            MEMORYEX_ERASE,
+            MEMORYEX_INDESCRIPTOR,
+            MEMORYEX_OUTDESCRIPTOR,
+            MEMORYEX_MEMORY
+        };
+    };
 };
 #endif

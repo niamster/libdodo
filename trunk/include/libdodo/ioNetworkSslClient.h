@@ -37,115 +37,115 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			namespace http {
-				class client;
-			};
-		};
+    namespace io {
+        namespace network {
+            namespace http {
+                class client;
+            };
+        };
 
-		namespace ssl {
-			struct __connection__;
-			struct __context__;
-			struct __certificates__;
-		};
+        namespace ssl {
+            struct __connection__;
+            struct __context__;
+            struct __certificates__;
+        };
 
-		namespace network {
-			namespace ssl {
-				class exchange;
+        namespace network {
+            namespace ssl {
+                class exchange;
 
-				/**
-				 * @class client
-				 * @brief provides network SSL connection interface
-				 */
-				class client : public network::client {
-					friend class exchange;
-					friend class network::http::client;
+                /**
+                 * @class client
+                 * @brief provides network SSL connection interface
+                 */
+                class client : public network::client {
+                    friend class exchange;
+                    friend class network::http::client;
 
-				  private:
+                  private:
 
-					/**
-					 * copy constructor
-					 * @note to prevent copying
-					 */
-					client(client &);
+                    /**
+                     * copy constructor
+                     * @note to prevent copying
+                     */
+                    client(client &);
 
-				  public:
+                  public:
 
-					/**
-					 * constructor
-					 * @param family defines family of the socket, @see connection::protocolFamilyEnum
-					 * @param type defines type of the socket, @see connection::transferEnum
-					 */
-					client(short family,
-						   short type);
+                    /**
+                     * constructor
+                     * @param family defines family of the socket, @see connection::protocolFamilyEnum
+                     * @param type defines type of the socket, @see connection::transferEnum
+                     */
+                    client(short family,
+                           short type);
 
-					/**
-					 * destructor
-					 */
-					virtual ~client();
+                    /**
+                     * destructor
+                     */
+                    virtual ~client();
 
-					/**
-					 * set certificates information
-					 * @param certs defines certificates information
-					 */
-					void setSertificates(const io::ssl::__certificates__ &certs);
+                    /**
+                     * set certificates information
+                     * @param certs defines certificates information
+                     */
+                    void setSertificates(const io::ssl::__certificates__ &certs);
 
-					/**
-					 * remove certificates information
-					 */
-					void removeSertificates();
+                    /**
+                     * remove certificates information
+                     */
+                    void removeSertificates();
 
-					/**
-					 * connect from specific address
-					 * @param local defines ip address to bind
-					 * @param host defines ip address of host to connect
-					 * @param port defines port of host to connect
-					 * @param exchange defines an oject that will perform I/O operations
-					 */
-					virtual void connectFrom(const dodoString &local,
-											 const dodoString &host,
-											 int              port,
-											 network::exchange         &exchange);
+                    /**
+                     * connect from specific address
+                     * @param local defines ip address to bind
+                     * @param host defines ip address of host to connect
+                     * @param port defines port of host to connect
+                     * @param exchange defines an oject that will perform I/O operations
+                     */
+                    virtual void connectFrom(const dodoString  &local,
+                                             const dodoString  &host,
+                                             int               port,
+                                             network::exchange &exchange);
 
-					/**
-					 * connect
-					 * @param host defines ip address of host to connect
-					 * @param port defines port of host to connect
-					 * @param exchange defines an oject that will perform I/O operations
-					 */
-					virtual void connect(const dodoString &host,
-										 int              port,
-										 network::exchange         &exchange);
+                    /**
+                     * connect
+                     * @param host defines ip address of host to connect
+                     * @param port defines port of host to connect
+                     * @param exchange defines an oject that will perform I/O operations
+                     */
+                    virtual void connect(const dodoString  &host,
+                                         int               port,
+                                         network::exchange &exchange);
 
-					/**
-					 * connect
-					 * @param path defines path to unix socket
-					 * @param exchange defines an oject that will perform I/O operations
-					 */
-					virtual void connect(const dodoString &path,
-										 network::exchange         &exchange);
+                    /**
+                     * connect
+                     * @param path defines path to unix socket
+                     * @param exchange defines an oject that will perform I/O operations
+                     */
+                    virtual void connect(const dodoString  &path,
+                                         network::exchange &exchange);
 
-				  protected:
+                  protected:
 
-					/**
-					 * initialize SSL objects
-					 */
-					void initSsl();
+                    /**
+                     * initialize SSL objects
+                     */
+                    void initSsl();
 
-					/**
-					 * establish SSL connection
-					 */
-					void connectSsl();
+                    /**
+                     * establish SSL connection
+                     */
+                    void connectSsl();
 
-					io::ssl::__connection__ *handle; ///< ssl connection handle
-					io::ssl::__context__ *ctx;       ///< ssl connection context
+                    io::ssl::__connection__ *handle;    ///< ssl connection handle
+                    io::ssl::__context__ *ctx;          ///< ssl connection context
 
-					bool sslConnected;                  ///< true if SSL connection established
-				};
-			};
-		};
-	};
+                    bool sslConnected;                  ///< true if SSL connection established
+                };
+            };
+        };
+    };
 };
 #endif
 #endif

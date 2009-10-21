@@ -16,69 +16,65 @@ using namespace io::network::ssl;
 
 using namespace std;
 
-int main(int argc, char **argv)
+int
+main(int  argc,
+     char **argv)
 {
-	try
-	{
+    try {
 #ifdef OPENSSL_EXT
-		server s(io::network::connection::PROTOCOL_FAMILY_IPV4, io::network::connection::TRANSFER_STREAM);
+        server s(io::network::connection::PROTOCOL_FAMILY_IPV4, io::network::connection::TRANSFER_STREAM);
 
-		exchange::__init__ accepted;
+        exchange::__init__ accepted;
 
-		s.serve("127.0.0.1", 7778, 1);
-		s.setOption(io::network::connection::OPTION_REUSE_ADDRESS, true);
-		s.setLingerOption(io::network::connection::LINGER_OPTION_HARD_CLOSE);
-		s.blockInherited = true;
-		s.block(false);
+        s.serve("127.0.0.1", 7778, 1);
+        s.setOption(io::network::connection::OPTION_REUSE_ADDRESS, true);
+        s.setLingerOption(io::network::connection::LINGER_OPTION_HARD_CLOSE);
+        s.blockInherited = true;
+        s.block(false);
 
-		io::ssl::__certificates__ certs;
-		certs.ca = "host.pem";
-		certs.cipher = "RC4-MD5";
+        io::ssl::__certificates__ certs;
+        certs.ca = "host.pem";
+        certs.cipher = "RC4-MD5";
 
-		s.setSertificates(certs);
+        s.setSertificates(certs);
 
-		io::event::manager manager;
+        io::event::manager manager;
 
-		char trimSym[] = { '\r', '\n' };
+        char trimSym[] = {
+            '\r', '\n'
+        };
 
-		while (true)
-		{
-			if (s.accept(accepted))
-			{
-				exchange ex(accepted);
+        while (true) {
+            if (s.accept(accepted)) {
+                exchange ex(accepted);
 
-				if (ex.isBlocked())
-					cout << "Blocked" << endl;
-				else
-					cout << "Non blocked" << endl;
+                if (ex.isBlocked())
+                    cout << "Blocked" << endl;
+                else
+                    cout << "Non blocked" << endl;
 
-				int pos = manager.add(ex);
+                int pos = manager.add(ex);
 
-				dodoString data;
+                dodoString data;
 
-				while (true)
-				{
-					if (manager.isReadable(pos))
-					{
-						data = ex.readString();
-						cout << data << endl;
+                while (true) {
+                    if (manager.isReadable(pos)) {
+                        data = ex.readString();
+                        cout << data << endl;
 
-						if (tools::string::trim(data, trimSym, 2) == "exit")
-						{
-							ex.close();
+                        if (tools::string::trim(data, trimSym, 2) == "exit") {
+                            ex.close();
 
-							tools::os::die(data);
-						}
-					}
-				}
-			}
-		}
+                            tools::os::die(data);
+                        }
+                    }
+                }
+            }
+        }
 #endif
-	}
-	catch (dodo::exception::basic &ex)
-	{
-		cout << (dodoString)ex << "\t" << ex.file << "\t" << ex.line << endl;
-	}
+    } catch (dodo::exception::basic &ex)   {
+        cout << (dodoString)ex << "\t" << ex.file << "\t" << ex.line << endl;
+    }
 
-	return 0;
+    return 0;
 }

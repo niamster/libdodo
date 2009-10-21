@@ -35,52 +35,52 @@
 #include <libdodo/pcSyncProtector.h>
 
 namespace dodo {
-	namespace pc {
-		namespace sync {
-			/**
-			 * @class thread
-			 * @brief provides lock mechanism for threads
-			 */
-			class thread : public sync::protector {
-			  private:
+    namespace pc {
+        namespace sync {
+            /**
+             * @class thread
+             * @brief provides lock mechanism for threads
+             */
+            class thread : public sync::protector {
+              private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				thread(thread &);
+                /**
+                 * copy constructor
+                 * @note to prevent copying
+                 */
+                thread(thread &);
 
-			  public:
+              public:
 
-				/**
-				 * constructor
-				 */
-				thread();
+                /**
+                 * constructor
+                 */
+                thread();
 
-				/**
-				 * destructor
-				 */
-				virtual ~thread();
+                /**
+                 * destructor
+                 */
+                virtual ~thread();
 
-				/**
-				 * lock
-				 * @param timeout defines wait timeout for unlock in microseconds
-				 * @note if timeout is 0 it will wait infinitely
-				 */
-				virtual void acquire(unsigned long timeout = 0);
+                /**
+                 * lock
+                 * @param timeout defines wait timeout for unlock in microseconds
+                 * @note if timeout is 0 it will wait infinitely
+                 */
+                virtual void acquire(unsigned long timeout = 0);
 
-				/**
-				 * unlock
-				 */
-				virtual void release();
+                /**
+                 * unlock
+                 */
+                virtual void release();
 
-			  protected:
+              protected:
 
-				struct __lock__;
-				__lock__ *lock;         ///< lock
-			};
-		};
-	};
+                struct __lock__;
+                __lock__ *lock;         ///< lock
+            };
+        };
+    };
 };
 #endif
 

@@ -54,42 +54,42 @@ channel::~channel()
 dodoString
 channel::read() const
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	dodoString a_str;
+    dodoString a_str;
 
 #ifndef IO_WO_XEXEC
-	performPreExec(OPERATION_READ);
+    performPreExec(OPERATION_READ);
 
-	collectedData.buffer.reserve(blockSize);
+    collectedData.buffer.reserve(blockSize);
 #endif
 
-	a_str.assign(blockSize, '\0');
+    a_str.assign(blockSize, '\0');
 
-	try {
-		_read((char *)a_str.data());
-	} catch (...) {
-		a_str.clear();
+    try {
+        _read((char *)a_str.data());
+    } catch (...) {
+        a_str.clear();
 
 #ifndef IO_WO_XEXEC
-		collectedData.buffer.clear();
+        collectedData.buffer.clear();
 #endif
 
-		throw;
-	}
+        throw;
+    }
 
 #ifndef IO_WO_XEXEC
-	collectedData.buffer = a_str;
+    collectedData.buffer = a_str;
 
-	performPostExec(OPERATION_READ);
+    performPostExec(OPERATION_READ);
 
-	a_str = collectedData.buffer;
+    a_str = collectedData.buffer;
 
-	collectedData.buffer.clear();
+    collectedData.buffer.clear();
 #else
 #endif
 
-	return a_str;
+    return a_str;
 }
 
 //-------------------------------------------------------------------
@@ -97,43 +97,43 @@ channel::read() const
 dodoString
 channel::readString() const
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
-	dodoString a_str;
+    dodoString a_str;
 
 #ifndef IO_WO_XEXEC
-	performPreExec(OPERATION_READSTRING);
+    performPreExec(OPERATION_READSTRING);
 #endif
 
-	a_str.assign(blockSize, '\0');
-	unsigned long n = 0;
+    a_str.assign(blockSize, '\0');
+    unsigned long n = 0;
 
-	try {
-		n = _readString((char *)a_str.data());
-		a_str.resize(n);
-	} catch (...) {
-		a_str.clear();
+    try {
+        n = _readString((char *)a_str.data());
+        a_str.resize(n);
+    } catch (...) {
+        a_str.clear();
 
-		throw;
-	}
+        throw;
+    }
 
 #ifndef IO_WO_XEXEC
-	if (n > 0)
-		collectedData.buffer = a_str;
-	else
-		collectedData.buffer.clear();
+    if (n > 0)
+        collectedData.buffer = a_str;
+    else
+        collectedData.buffer.clear();
 
-	performPostExec(OPERATION_READSTRING);
+    performPostExec(OPERATION_READSTRING);
 
-	a_str = collectedData.buffer;
+    a_str = collectedData.buffer;
 
-	collectedData.buffer.clear();
+    collectedData.buffer.clear();
 #else
-	if (n == 0)
-		a_str.clear();
+    if (n == 0)
+        a_str.clear();
 #endif
 
-	return a_str;
+    return a_str;
 }
 
 //-------------------------------------------------------------------
@@ -141,28 +141,28 @@ channel::readString() const
 void
 channel::write(const dodoString &a_data) const
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	collectedData.buffer.assign(a_data, 0, blockSize);
+    collectedData.buffer.assign(a_data, 0, blockSize);
 
-	performPreExec(OPERATION_WRITE);
+    performPreExec(OPERATION_WRITE);
 
-	try {
-		_write(collectedData.buffer.data());
-	} catch (...) {
-		collectedData.buffer.clear();
+    try {
+        _write(collectedData.buffer.data());
+    } catch (...) {
+        collectedData.buffer.clear();
 
-		throw;
-	}
+        throw;
+    }
 #else
-	_write(a_data.data());
+    _write(a_data.data());
 #endif
 
 #ifndef IO_WO_XEXEC
-	performPostExec(OPERATION_WRITE);
+    performPostExec(OPERATION_WRITE);
 
-	collectedData.buffer.clear();
+    collectedData.buffer.clear();
 #endif
 }
 
@@ -171,28 +171,28 @@ channel::write(const dodoString &a_data) const
 void
 channel::writeString(const dodoString &a_data) const
 {
-	pc::sync::stack pg(keeper);
+    pc::sync::stack pg(keeper);
 
 #ifndef IO_WO_XEXEC
-	collectedData.buffer = a_data;
+    collectedData.buffer = a_data;
 
-	performPreExec(OPERATION_WRITESTRING);
+    performPreExec(OPERATION_WRITESTRING);
 
-	try {
-		_writeString(collectedData.buffer.data());
-	} catch (...) {
-		collectedData.buffer.clear();
+    try {
+        _writeString(collectedData.buffer.data());
+    } catch (...) {
+        collectedData.buffer.clear();
 
-		throw;
-	}
+        throw;
+    }
 #else
-	_writeString(a_data.data());
+    _writeString(a_data.data());
 #endif
 
 #ifndef IO_WO_XEXEC
-	performPostExec(OPERATION_WRITESTRING);
+    performPostExec(OPERATION_WRITESTRING);
 
-	collectedData.buffer.clear();
+    collectedData.buffer.clear();
 #endif
 }
 

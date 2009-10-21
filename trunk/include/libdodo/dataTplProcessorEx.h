@@ -35,23 +35,23 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace data {
-		namespace tpl {
-			/**
-			 * libdodo defined errors
-			 */
-			enum processorExR {
-				PROCESSOREX_WRONGFORSTATEMENT,
-				PROCESSOREX_WRONGVARSTATEMENT,
-				PROCESSOREX_DODOISRESERVEDVARNAME,
-				PROCESSOREX_WRONGASSIGNSTATEMENT,
-				PROCESSOREX_WRONGBLOCK,
-				PROCESSOREX_NOTCLOSEDBRACKET,
-			};
+    namespace data {
+        namespace tpl {
+            /**
+             * libdodo defined errors
+             */
+            enum processorExR {
+                PROCESSOREX_WRONGFORSTATEMENT,
+                PROCESSOREX_WRONGVARSTATEMENT,
+                PROCESSOREX_DODOISRESERVEDVARNAME,
+                PROCESSOREX_WRONGASSIGNSTATEMENT,
+                PROCESSOREX_WRONGBLOCK,
+                PROCESSOREX_NOTCLOSEDBRACKET,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define DATATPLPROCESSOREX_WRONGFORSTATEMENT_STR     "Wrong `for` statement"
 #define DATATPLPROCESSOREX_WRONGVARSTATEMENT_STR     "In variable statement `}` wasn't closed"
 #define DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR "dodo.* are reserved variable names"
@@ -59,19 +59,19 @@ namespace dodo {
 #define DATATPLPROCESSOREX_WRONGBLOCK_STR            "Wrong block construction"
 #define DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR "Bracket was opened(closed) but not closed(opened)"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum processorFunctionsID {
-				PROCESSOREX__PREPROCESSSTRING,
-				PROCESSOREX_BLOCKEND,
-				PROCESSOREX__FOR,
-				PROCESSOREX_GETVAR,
-				PROCESSOREX_GETVARNAME,
-				PROCESSOREX_ASSIGN,
-				PROCESSOREX__ASSIGN,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum processorFunctionsID {
+                PROCESSOREX__PREPROCESSSTRING,
+                PROCESSOREX_BLOCKEND,
+                PROCESSOREX__FOR,
+                PROCESSOREX_GETVAR,
+                PROCESSOREX_GETVARNAME,
+                PROCESSOREX_ASSIGN,
+                PROCESSOREX__ASSIGN,
+            };
+        };
+    };
 };
 #endif

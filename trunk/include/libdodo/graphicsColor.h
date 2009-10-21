@@ -34,33 +34,33 @@
 
 #ifdef IMAGEMAGICK_EXT
 namespace dodo {
-	namespace graphics {
-		/**
-		 * @struct __color__
-		 * @brief defines color of the primitive
-		 */
-		struct __color__ {
-			unsigned short red;     ///< in range [0; 65535]
-			unsigned short green;   ///< in range [0; 65535]
-			unsigned short blue;    ///< in range [0; 65535]
-			unsigned short opacity; ///< 0 is fully opaque and 65535 is fully transparent
-		};
+    namespace graphics {
+        /**
+         * @struct __color__
+         * @brief defines color of the primitive
+         */
+        struct __color__ {
+            unsigned short red;     ///< in range [0; 65535]
+            unsigned short green;   ///< in range [0; 65535]
+            unsigned short blue;    ///< in range [0; 65535]
+            unsigned short opacity; ///< 0 is fully opaque and 65535 is fully transparent
+        };
 
-		/**
-		 * @class color
-		 * @brief defines default colors
-		 */
-		class color {
-		  public:
+        /**
+         * @class color
+         * @brief defines default colors
+         */
+        class color {
+          public:
 
-			static __color__ red;
-			static __color__ green;
-			static __color__ blue;
-			static __color__ white;
-			static __color__ black;
-			static __color__ transparent;
-		};
-	};
+            static __color__ red;
+            static __color__ green;
+            static __color__ blue;
+            static __color__ white;
+            static __color__ black;
+            static __color__ transparent;
+        };
+    };
 };
 #endif
 #endif

@@ -36,64 +36,64 @@
 #include <libdodo/ioChannel.h>
 
 namespace dodo {
-	namespace io {
-		namespace block {
-			/**
-			 * @class channel
-			 * @brief implements an interface for I/O operations on block sources
-			 * @note if block is false then read/write position is amount of bytes from the beginning,
-			 * if block is true then:
-			 *	offset for write is calculated as pos*blockSize
-			 *	offset for read is calculated as pos*blockSize
-			 *	offset for readString is calculated as pos*(amount of null- or newline- terminated strings)
-			 *	offset for writeString is calculated as pos*(amount of null- or newline- terminated strings)
-			 */
-			class channel : public io::channel {
-			  public:
+    namespace io {
+        namespace block {
+            /**
+             * @class channel
+             * @brief implements an interface for I/O operations on block sources
+             * @note if block is false then read/write position is amount of bytes from the beginning,
+             * if block is true then:
+             *	offset for write is calculated as pos*blockSize
+             *	offset for read is calculated as pos*blockSize
+             *	offset for readString is calculated as pos*(amount of null- or newline- terminated strings)
+             *	offset for writeString is calculated as pos*(amount of null- or newline- terminated strings)
+             */
+            class channel : public io::channel {
+              public:
 
-				/**
-				 * constructor
-				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-				 */
-				channel(short protection);
+                /**
+                 * constructor
+                 * @param protection defines type of IO protection, @see io::channel::protectionEnum
+                 */
+                channel(short protection);
 
-				/**
-				 * destructor
-				 */
-				virtual ~channel();
+                /**
+                 * destructor
+                 */
+                virtual ~channel();
 
-				/**
-				 * @return read data
-				 * @note not more then blockSize
-				 */
-				virtual dodoString read() const;
+                /**
+                 * @return read data
+                 * @note not more then blockSize
+                 */
+                virtual dodoString read() const;
 
-				/**
-				 * @param data defines data that will be written
-				 * @note not more then blockSize
-				 */
-				virtual void write(const dodoString &data) const;
+                /**
+                 * @param data defines data that will be written
+                 * @note not more then blockSize
+                 */
+                virtual void write(const dodoString &data) const;
 
-				/**
-				 * read from stream null- or newline- terminated string
-				 * @return read data
-				 * @note not more then blockSize
-				 */
-				virtual dodoString readString() const;
+                /**
+                 * read from stream null- or newline- terminated string
+                 * @return read data
+                 * @note not more then blockSize
+                 */
+                virtual dodoString readString() const;
 
-				/**
-				 * write to stream null- terminated string
-				 * @param data defines data that will be written
-				 * @note not more then blockSize
-				 */
-				virtual void writeString(const dodoString &data) const;
+                /**
+                 * write to stream null- terminated string
+                 * @param data defines data that will be written
+                 * @note not more then blockSize
+                 */
+                virtual void writeString(const dodoString &data) const;
 
-				mutable unsigned long pos;  ///< read/write/erase position; incremented on read/write/erase[0 by default]
+                mutable unsigned long pos;  ///< read/write/erase position; incremented on read/write/erase[0 by default]
 
-				bool block;                 ///< use block I/O[false by default]
-				bool append;                ///< append to the end[false by default]
-			};
-		};
-	};
+                bool block;                 ///< use block I/O[false by default]
+                bool append;                ///< append to the end[false by default]
+            };
+        };
+    };
 };
 #endif

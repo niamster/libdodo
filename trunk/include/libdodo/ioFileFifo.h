@@ -37,147 +37,147 @@
 #include <libdodo/ioStreamChannel.h>
 
 namespace dodo {
-	namespace io {
-		struct __file__;
+    namespace io {
+        struct __file__;
 
-		namespace file {
-			/**
-			 * @class fifo
-			 * @brief provides I/O manipulations with fifo files
-			 * @note writeString* put extra newline- to the end of the string, so no need to add it manually
-			 */
-			class fifo : virtual public stream::channel {
-			  public:
+        namespace file {
+            /**
+             * @class fifo
+             * @brief provides I/O manipulations with fifo files
+             * @note writeString* put extra newline- to the end of the string, so no need to add it manually
+             */
+            class fifo : virtual public stream::channel {
+              public:
 
 #ifndef IO_WO_XEXEC
-				/**
-				 * @enum operationEnum defines type of operation for xexec
-				 */
-				enum operationEnum {
-					OPERATION_OPEN = 128,
-					OPERATION_CLOSE
-				};
+                /**
+                 * @enum operationEnum defines type of operation for xexec
+                 */
+                enum operationEnum {
+                    OPERATION_OPEN = 128,
+                    OPERATION_CLOSE
+                };
 #endif
 
-				/**
-				 * @enum openModeEnum defines modes to open file
-				 */
-				enum openModeEnum {
-					OPEN_MODE_READ,                 ///< normaly blocks until some other process opens the same FIFO for writing
-					OPEN_MODE_READ_OPENNONBLOCK,    ///< normaly does't block until some other process opens the same FIFO for writing, further I/O is in blocked mode
-					OPEN_MODE_WRITE,                ///< normaly blocks until some other process opens the same FIFO for reading
-				};
+                /**
+                 * @enum openModeEnum defines modes to open file
+                 */
+                enum openModeEnum {
+                    OPEN_MODE_READ,                 ///< normaly blocks until some other process opens the same FIFO for writing
+                    OPEN_MODE_READ_OPENNONBLOCK,    ///< normaly does't block until some other process opens the same FIFO for writing, further I/O is in blocked mode
+                    OPEN_MODE_WRITE,                ///< normaly blocks until some other process opens the same FIFO for reading
+                };
 
-				/**
-				 * constructor
-				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-				 */
-				fifo(short protection = channel::PROTECTION_PROCESS);
+                /**
+                 * constructor
+                 * @param protection defines type of IO protection, @see io::channel::protectionEnum
+                 */
+                fifo(short protection = channel::PROTECTION_PROCESS);
 
-				/**
-				 * constructor
-				 * @param path defines path to the file
-				 * @param mode defines mode to open file, @see file::fifo::openModeEnum
-				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-				 */
-				fifo(const dodoString &path,
-					 short            mode,
-					 short            protection = channel::PROTECTION_PROCESS);
+                /**
+                 * constructor
+                 * @param path defines path to the file
+                 * @param mode defines mode to open file, @see file::fifo::openModeEnum
+                 * @param protection defines type of IO protection, @see io::channel::protectionEnum
+                 */
+                fifo(const dodoString &path,
+                     short            mode,
+                     short            protection = channel::PROTECTION_PROCESS);
 
-				/**
-				 * copy constructor
-				 * @note xexec object is not copied
-				 */
-				fifo(const fifo &fd);
+                /**
+                 * copy constructor
+                 * @note xexec object is not copied
+                 */
+                fifo(const fifo &fd);
 
-				/**
-				 * destructor
-				 */
-				virtual ~fifo();
+                /**
+                 * destructor
+                 */
+                virtual ~fifo();
 
-				/**
-				 * clone file object
-				 * @param fd defines object to clone
-				 * @note xexec object is not copied
-				 */
-				void clone(const fifo &fd);
+                /**
+                 * clone file object
+                 * @param fd defines object to clone
+                 * @note xexec object is not copied
+                 */
+                void clone(const fifo &fd);
 
-				/**
-				 * open file
-				 * @param path defines path to the file
-				 * @param mode defines mode to open file, @see file::fifo::openModeEnum
-				 */
-				virtual void open(const dodoString &path,
-								  short            mode);
+                /**
+                 * open file
+                 * @param path defines path to the file
+                 * @param mode defines mode to open file, @see file::fifo::openModeEnum
+                 */
+                virtual void open(const dodoString &path,
+                                  short            mode);
 
-				/**
-				 * close file
-				 */
-				virtual void close();
+                /**
+                 * close file
+                 */
+                virtual void close();
 
-				/**
-				 * flush output
-				 */
-				virtual void flush() const;
+                /**
+                 * flush output
+                 */
+                virtual void flush() const;
 
-				/**
-				 * @return true if stream is blocked
-				 */
-				virtual bool isBlocked();
+                /**
+                 * @return true if stream is blocked
+                 */
+                virtual bool isBlocked();
 
-				/**
-				 * blocks/unblocks stream
-				 * @param flag indicates whether to block or unblock stream
-				 */
-				virtual void block(bool flag);
+                /**
+                 * blocks/unblocks stream
+                 * @param flag indicates whether to block or unblock stream
+                 */
+                virtual void block(bool flag);
 
-			  protected:
+              protected:
 
-				/**
-				 * @return descriptor of the input stream
-				 */
-				virtual int inDescriptor() const;
+                /**
+                 * @return descriptor of the input stream
+                 */
+                virtual int inDescriptor() const;
 
-				/**
-				 * @return descriptor of the output stream
-				 */
-				virtual int outDescriptor() const;
+                /**
+                 * @return descriptor of the output stream
+                 */
+                virtual int outDescriptor() const;
 
-				/**
-				 * @param data defines buffer that will be filled
-				 * @note not more then blockSize(including null)
-				 */
-				virtual void _read(char * const data) const;
+                /**
+                 * @param data defines buffer that will be filled
+                 * @note not more then blockSize(including null)
+                 */
+                virtual void _read(char * const data) const;
 
-				/**
-				 * read from stream null- or newline- terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then blockSize(including null)
-				 */
-				virtual unsigned long _readString(char * const data) const;
+                /**
+                 * read from stream null- or newline- terminated string
+                 * @param data defines buffer that will be filled
+                 * @note not more then blockSize(including null)
+                 */
+                virtual unsigned long _readString(char * const data) const;
 
-				/**
-				 * @param data defines data that will be written
-				 */
-				virtual void _write(const char * const data) const;
+                /**
+                 * @param data defines data that will be written
+                 */
+                virtual void _write(const char * const data) const;
 
-				/**
-				 * write to stream null- terminated string
-				 * @param data defines data that will be written
-				 * @note puts extra newline- to the end of the string
-				 */
-				virtual void _writeString(const char * const data) const;
+                /**
+                 * write to stream null- terminated string
+                 * @param data defines data that will be written
+                 * @note puts extra newline- to the end of the string
+                 */
+                virtual void _writeString(const char * const data) const;
 
-			  private:
+              private:
 
-				dodoString path;        ///< file path
-				short mode;             ///< file open mode, @see file::fifo::openModeEnum
+                dodoString path;        ///< file path
+                short mode;             ///< file open mode, @see file::fifo::openModeEnum
 
-				__file__ *handle;       ///< file handle
+                __file__ *handle;       ///< file handle
 
-				bool blocked;           ///< true if stream is blocked
-			};
-		};
-	};
+                bool blocked;           ///< true if stream is blocked
+            };
+        };
+    };
 };
 #endif

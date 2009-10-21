@@ -32,20 +32,20 @@
 #include <stdio.h>
 
 namespace dodo {
-	namespace io {
-		/**
-		 * @struct __file__
-		 * @brief defines file handle
-		 */
-		struct __file__ {
-			/**
-			 * constructor
-			 */
-			__file__() : file(NULL)
-			{
-			}
+    namespace io {
+        /**
+         * @struct __file__
+         * @brief defines file handle
+         */
+        struct __file__ {
+            /**
+             * constructor
+             */
+            __file__() : file(NULL)
+            {
+            }
 
-			FILE *file;
-		};
-	};
+            FILE *file;
+        };
+    };
 };

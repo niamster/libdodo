@@ -37,7 +37,7 @@
 using namespace dodo::pc::sync::data;
 
 object::object(protector &lock) : data(NULL),
-								  lock(lock)
+                                  lock(lock)
 {
 }
 
@@ -52,18 +52,18 @@ object::~object()
 void
 object::set(void *a_data)
 {
-	sync::stack g(&lock);
+    sync::stack g(&lock);
 
-	data = a_data;
+    data = a_data;
 }
 //-------------------------------------------------------------------
 
 const void *
 object::get()
 {
-	sync::stack g(&lock);
+    sync::stack g(&lock);
 
-	return data;
+    return data;
 }
 
 //-------------------------------------------------------------------
@@ -71,8 +71,8 @@ object::get()
 void *
 object::acquire(unsigned long timeout)
 {
-	lock.acquire(timeout);
-	return data;
+    lock.acquire(timeout);
+    return data;
 }
 
 //-------------------------------------------------------------------
@@ -80,7 +80,7 @@ object::acquire(unsigned long timeout)
 void
 object::release()
 {
-	lock.release();
+    lock.release();
 }
 
 //-------------------------------------------------------------------

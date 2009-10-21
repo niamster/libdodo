@@ -37,94 +37,94 @@
 #include <libdodo/cgiExchange.h>
 
 namespace dodo {
-	namespace cgi {
-		namespace fast {
-			struct __request__;
+    namespace cgi {
+        namespace fast {
+            struct __request__;
 
-			/**
-			 * @class exchange
-			 * @brief provides interface to fast CGI I/O functionality
-			 */
-			class exchange : virtual public cgi::exchange {
-			  private:
+            /**
+             * @class exchange
+             * @brief provides interface to fast CGI I/O functionality
+             */
+            class exchange : virtual public cgi::exchange {
+              private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				exchange(exchange &);
+                /**
+                 * copy constructor
+                 * @note to prevent copying
+                 */
+                exchange(exchange &);
 
-			  public:
+              public:
 
-				/**
-				 * constructor
-				 * @param request defines CGI request descriptor
-				 * @param protection defines type of IO protection, @see channel::io::channel::protectionEnum
-				 */
-				exchange(const __request__ &request,
-						 short             protection = io::channel::PROTECTION_PROCESS);
+                /**
+                 * constructor
+                 * @param request defines CGI request descriptor
+                 * @param protection defines type of IO protection, @see channel::io::channel::protectionEnum
+                 */
+                exchange(const __request__ &request,
+                         short             protection = io::channel::PROTECTION_PROCESS);
 
-				/**
-				 * destructor
-				 */
-				virtual ~exchange();
+                /**
+                 * destructor
+                 */
+                virtual ~exchange();
 
-				/**
-				 * flush output
-				 */
-				virtual void flush() const;
+                /**
+                 * flush output
+                 */
+                virtual void flush() const;
 
-				/**
-				 * @return environment variable
-				 * @param var defines name of environment variable
-				 */
-				virtual char *getenv(const char *var);
+                /**
+                 * @return environment variable
+                 * @param var defines name of environment variable
+                 */
+                virtual char *getenv(const char *var);
 
-			  protected:
+              protected:
 
-				/**
-				 * @return descriptor of input stream
-				 */
-				virtual int inDescriptor() const;
+                /**
+                 * @return descriptor of input stream
+                 */
+                virtual int inDescriptor() const;
 
-				/**
-				 * @return descriptor of output stream
-				 */
-				virtual int outDescriptor() const;
+                /**
+                 * @return descriptor of output stream
+                 */
+                virtual int outDescriptor() const;
 
-				/**
-				 * read
-				 * @param data is filled with read data
-				 * if blockSize bigger than buffer size - reads with few iterations
-				 */
-				virtual void _read(char * const data) const;
+                /**
+                 * read
+                 * @param data is filled with read data
+                 * if blockSize bigger than buffer size - reads with few iterations
+                 */
+                virtual void _read(char * const data) const;
 
-				/**
-				 * read from stream - '\0' or '\n' - terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then blockSize(including '\0')
-				 */
-				virtual unsigned long _readString(char * const data) const;
+                /**
+                 * read from stream - '\0' or '\n' - terminated string
+                 * @param data defines buffer that will be filled
+                 * @note not more then blockSize(including '\0')
+                 */
+                virtual unsigned long _readString(char * const data) const;
 
-				/**
-				 * write
-				 * @param data is data that will be written
-				 * if blockSize bigger than buffer size - writes with few iterations
-				 */
-				virtual void _write(const char * const data) const;
+                /**
+                 * write
+                 * @param data is data that will be written
+                 * if blockSize bigger than buffer size - writes with few iterations
+                 */
+                virtual void _write(const char * const data) const;
 
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 */
-				virtual void _writeString(const char * const data) const;
+                /**
+                 * write to stream - '\0' - terminated string
+                 * @param data defines data that will be written
+                 */
+                virtual void _writeString(const char * const data) const;
 
-			  private:
+              private:
 
-				__request__ *request; ///< fast CGI descriptor
-			};
-		};
-	};
+                __request__ *request; ///< fast CGI descriptor
+            };
+        };
+    };
 };
 #endif
 #endif

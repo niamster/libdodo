@@ -18,33 +18,29 @@ using namespace tools;
 typedef void (*print)(const dodoString &data);
 #endif
 
-int main(int argc, char **argv)
+int
+main(int  argc,
+     char **argv)
 {
-
-	try
-	{
-
+    try {
 #ifdef DL_EXT
 #ifdef BFD_EXT
-		dodoStringArray arr = library::symbols("./module");
-		dodoStringArray::iterator i = arr.begin(), j = arr.end();
-		for (; i != j; ++i)
-			cout << *i << endl;
-		cout << endl;
+        dodoStringArray arr = library::symbols("./module");
+        dodoStringArray::iterator i = arr.begin(), j = arr.end();
+        for (; i != j; ++i)
+            cout << *i << endl;
+        cout << endl;
 #endif
 
-		library sll("./module");
+        library sll("./module");
 
 
-		((print)sll["print"])("operator[]");
+        ((print)sll["print"])("operator[]");
 
-		((print)sll.function("print"))("get");
+        ((print)sll.function("print"))("get");
 #endif
-
-	}
-	catch (dodo::exception::basic &ex)
-	{
-		cout << (dodoString)ex << "\t" << ex.line << endl;
-	}
-	return 0;
+    } catch (dodo::exception::basic &ex)   {
+        cout << (dodoString)ex << "\t" << ex.line << endl;
+    }
+    return 0;
 }

@@ -36,50 +36,50 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace io {
-		namespace ssl {
-			struct __connection__;
-			struct __context__;
+    namespace io {
+        namespace ssl {
+            struct __connection__;
+            struct __context__;
 
-			enum keyEnum {
-				KEY_PKEY,
-				KEY_RSA,
-			};
+            enum keyEnum {
+                KEY_PKEY,
+                KEY_RSA,
+            };
 
-			/**
-			 * @struct __certificates__
-			 * @brief defines SSL options
-			 * @note key, certificate or CA should be in PEM format
-			 * allowed ciphers you can list by `openssl ciphers -v` command
-			 * ciphers should be separated with ':'
-			 * some of them:
-			 * RC4-MD5
-			 * RC4-SHA
-			 * AES256-SHA
-			 * DES-CBC3-SHA
-			 * DES-CBC3-MD5
-			 * DHE-RSA-AES128-SHA
-			 * DHE-DSS-AES128-SHA
-			 * AES128-SHA
-			 * DES-CBC-SHA
-			 * DES-CBC-MD5
-			 */
-			struct __certificates__ {
-				/**
-				 * constructor
-				 */
-				__certificates__();
+            /**
+             * @struct __certificates__
+             * @brief defines SSL options
+             * @note key, certificate or CA should be in PEM format
+             * allowed ciphers you can list by `openssl ciphers -v` command
+             * ciphers should be separated with ':'
+             * some of them:
+             * RC4-MD5
+             * RC4-SHA
+             * AES256-SHA
+             * DES-CBC3-SHA
+             * DES-CBC3-MD5
+             * DHE-RSA-AES128-SHA
+             * DHE-DSS-AES128-SHA
+             * AES128-SHA
+             * DES-CBC-SHA
+             * DES-CBC-MD5
+             */
+            struct __certificates__ {
+                /**
+                 * constructor
+                 */
+                __certificates__();
 
-				dodoString key;         ///< pathname to the key file
-				dodoString keyPassword; ///< password for the key file
-				short      keyType;     ///< type of the key, @see io::ssl::keyEnum
-				dodoString cert;        ///< pathname to the certificate file
-				dodoString ca;          ///< pathname to the certificate authority file
-				dodoString caPath;      ///< pathname to a directory that contains trusted SSL CA certificates in PEM format or to a file of CA certificates in PEM format
-				dodoString cipher;      ///< allowed SSL ciphers
-			};
-		};
-	};
+                dodoString key;         ///< pathname to the key file
+                dodoString keyPassword; ///< password for the key file
+                short      keyType;     ///< type of the key, @see io::ssl::keyEnum
+                dodoString cert;        ///< pathname to the certificate file
+                dodoString ca;          ///< pathname to the certificate authority file
+                dodoString caPath;      ///< pathname to a directory that contains trusted SSL CA certificates in PEM format or to a file of CA certificates in PEM format
+                dodoString cipher;      ///< allowed SSL ciphers
+            };
+        };
+    };
 };
 #endif
 #endif

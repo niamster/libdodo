@@ -42,14 +42,14 @@ node::node() : CDATA(false)
 //-------------------------------------------------------------------
 
 node::node(const dodoString    &name,
-		   const dodoStringMap &attributes,
-		   const dodoString    &value,
-		   const dodoString    &a_ns) : attributes(attributes),
-										name(name),
-										nodeValue(value),
-										CDATA(false)
+           const dodoStringMap &attributes,
+           const dodoString    &value,
+           const dodoString    &a_ns) : attributes(attributes),
+                                        name(name),
+                                        nodeValue(value),
+                                        CDATA(false)
 {
-	ns.prefix = a_ns;
+    ns.prefix = a_ns;
 }
 
 //-------------------------------------------------------------------
@@ -57,7 +57,7 @@ node::node(const dodoString    &name,
 void
 node::addChild(const node &child)
 {
-	nodeChildren[child.name].push_back(child);
+    nodeChildren[child.name].push_back(child);
 }
 
 //-------------------------------------------------------------------
@@ -65,31 +65,31 @@ node::addChild(const node &child)
 void
 node::setChildren(const dodoArray<node> &a_children)
 {
-	dodoArray<node>::const_iterator i = a_children.begin(), j = a_children.end();
-	for (; i != j; ++i)
-		nodeChildren[i->name].push_back(*i);
+    dodoArray<node>::const_iterator i = a_children.begin(), j = a_children.end();
+    for (; i != j; ++i)
+        nodeChildren[i->name].push_back(*i);
 }
 
 //-------------------------------------------------------------------
 
 dodoArray<node>
 node::children(const dodoString &name,
-				  bool             recursive)
+               bool             recursive)
 {
-	dodoArray<node> nodes = nodeChildren[name];
+    dodoArray<node> nodes = nodeChildren[name];
 
-	if (recursive) {
-		dodoArray<node> subnodes;
+    if (recursive) {
+        dodoArray<node> subnodes;
 
-		dodoArray<node>::iterator i = nodes.begin(), j = nodes.end();
-		for (; i != j; ++i) {
-			subnodes = i->children(name, true);
+        dodoArray<node>::iterator i = nodes.begin(), j = nodes.end();
+        for (; i != j; ++i) {
+            subnodes = i->children(name, true);
 
-			nodes.insert(nodes.end(), subnodes.begin(), subnodes.end());
-		}
-	}
+            nodes.insert(nodes.end(), subnodes.begin(), subnodes.end());
+        }
+    }
 
-	return nodes;
+    return nodes;
 }
 
 //-------------------------------------------------------------------
@@ -97,38 +97,38 @@ node::children(const dodoString &name,
 dodo::dodoStringArray
 node::childrenNames(bool recursive)
 {
-	dodoStringArray names;
+    dodoStringArray names;
 
-	if (recursive) {
-		dodoStringArray subnames;
-		dodoStringArray::iterator x, y;
+    if (recursive) {
+        dodoStringArray subnames;
+        dodoStringArray::iterator x, y;
 
-		dodoArray<node>::iterator o, p;
+        dodoArray<node>::iterator o, p;
 
-		dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::iterator i = nodeChildren.begin(), j = nodeChildren.end();
-		for (; i != j; ++i) {
-			o = i->second.begin();
-			p = i->second.end();
-			for (; o != p; ++o) {
-				if (!tools::misc::isInArray(names, o->name))
-					names.push_back(o->name);
+        dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::iterator i = nodeChildren.begin(), j = nodeChildren.end();
+        for (; i != j; ++i) {
+            o = i->second.begin();
+            p = i->second.end();
+            for (; o != p; ++o) {
+                if (!tools::misc::isInArray(names, o->name))
+                    names.push_back(o->name);
 
-				subnames = o->childrenNames(true);
+                subnames = o->childrenNames(true);
 
-				x = subnames.begin();
-				y = subnames.end();
-				for (; x != y; ++x)
-					if (!tools::misc::isInArray(names, *x))
-						names.push_back(*x);
-			}
-		}
-	} else {
-		dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::iterator i = nodeChildren.begin(), j = nodeChildren.end();
-		for (; i != j; ++i)
-			names.push_back(i->first);
-	}
+                x = subnames.begin();
+                y = subnames.end();
+                for (; x != y; ++x)
+                    if (!tools::misc::isInArray(names, *x))
+                        names.push_back(*x);
+            }
+        }
+    } else {
+        dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::iterator i = nodeChildren.begin(), j = nodeChildren.end();
+        for (; i != j; ++i)
+            names.push_back(i->first);
+    }
 
-	return names;
+    return names;
 }
 
 //-------------------------------------------------------------------
@@ -136,17 +136,17 @@ node::childrenNames(bool recursive)
 dodoString
 node::operator[](const dodoString &name)
 {
-	return attributes[name];
+    return attributes[name];
 }
 
 //-------------------------------------------------------------------
 
 void
 node::setValue(const dodoString &a_value,
-			   bool             a_CDATA)
+               bool             a_CDATA)
 {
-	CDATA = a_CDATA;
-	nodeValue = a_value;
+    CDATA = a_CDATA;
+    nodeValue = a_value;
 }
 
 //-------------------------------------------------------------------
@@ -154,7 +154,7 @@ node::setValue(const dodoString &a_value,
 dodoString
 node::value()
 {
-	return nodeValue;
+    return nodeValue;
 }
 
 //-------------------------------------------------------------------

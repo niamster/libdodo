@@ -14,54 +14,47 @@ using namespace std;
 using namespace io;
 
 void
-handler(int module, dodo::exception::basic *ex, void *data)
+handler(int                    module,
+        dodo::exception::basic *ex,
+        void                   *data)
 {
-	cout << "baseHandler: " << (dodoString)*ex << endl << ex->backtrace() << endl;
+    cout << "baseHandler: " << (dodoString) * ex << endl << ex->backtrace() << endl;
 }
 
-int main(int argc, char **argv)
+int
+main(int  argc,
+     char **argv)
 {
-	try
-	{
-		dodo::exception::basic::setHandler(dodo::exception::MODULE_IOFILEREGULAR, &handler, NULL);
+    try {
+        dodo::exception::basic::setHandler(dodo::exception::MODULE_IOFILEREGULAR, &handler, NULL);
 #ifdef DL_EXT
-		dodo::exception::basic::setHandler("./module", NULL);
+        dodo::exception::basic::setHandler("./module", NULL);
 #endif
 
-		try
-		{
-			tools::filesystem::unlink("some.file", false);
-		}
-		catch(...)
-		{
-		}
+        try {
+            tools::filesystem::unlink("some.file", false);
+        } catch (...)    {
+        }
 
-		try
-		{
-			file::regular f;
-			f.open("some.file", file::regular::OPEN_MODE_READ_ONLY);
-		}
-		catch(...)
-		{
-		}
+        try {
+            file::regular f;
+            f.open("some.file", file::regular::OPEN_MODE_READ_ONLY);
+        } catch (...)    {
+        }
 
-		dodoString string = "abcdef";
-		dodoString original = string;
-		tools::string::replace("cd", "CD", string);
-		cout << "In " << original << " 'cd' replaced with 'CD': " << string << endl;
+        dodoString string = "abcdef";
+        dodoString original = string;
+        tools::string::replace("cd", "CD", string);
+        cout << "In " << original << " 'cd' replaced with 'CD': " << string << endl;
 
-		dodoString random = tools::misc::stringRandom(12);
-		cout << "Random:" << tools::code::MD5Hex(random) << endl;
-	}
-	catch (dodo::exception::basic &ex)
-	{
-		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
-	}
-	catch (std::exception &ex)
-	{
-		cout << endl << ex.what() << endl;
-	}
+        dodoString random = tools::misc::stringRandom(12);
+        cout << "Random:" << tools::code::MD5Hex(random) << endl;
+    } catch (dodo::exception::basic &ex)   {
+        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } catch (std::exception &ex)   {
+        cout << endl << ex.what() << endl;
+    }
 
-	return 0;
+    return 0;
 }
 

@@ -33,34 +33,34 @@
 #include <libdodo/directives.h>
 
 namespace dodo {
-	namespace pc {
-		namespace sync {
-			/**
-			 * @class protector
-			 * @brief provides shared data management functionality
-			 */
-			class protector {
-			  public:
+    namespace pc {
+        namespace sync {
+            /**
+             * @class protector
+             * @brief provides shared data management functionality
+             */
+            class protector {
+              public:
 
-				/**
-				 * destructor
-				 */
-				virtual ~protector() = 0;
+                /**
+                 * destructor
+                 */
+                virtual ~protector() = 0;
 
-				/**
-				 * lock
-				 * @param timeout defines wait timeout for unlock in microseconds
-				 * @note if timeout is 0 it will wait infinitely
-				 */
-				virtual void acquire(unsigned long timeout) = 0;
+                /**
+                 * lock
+                 * @param timeout defines wait timeout for unlock in microseconds
+                 * @note if timeout is 0 it will wait infinitely
+                 */
+                virtual void acquire(unsigned long timeout) = 0;
 
-				/**
-				 * unlock
-				 */
-				virtual void release() = 0;
-			};
-		};
-	};
+                /**
+                 * unlock
+                 */
+                virtual void release() = 0;
+            };
+        };
+    };
 };
 #endif
 

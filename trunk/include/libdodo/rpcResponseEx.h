@@ -35,26 +35,26 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace rpc {
-		/**
-		 * libdodo defined errors
-		 */
-		enum responseExR {
-			RESPONSEEX_ARRAYOUTOFBOUNDS,
-		};
+    namespace rpc {
+        /**
+         * libdodo defined errors
+         */
+        enum responseExR {
+            RESPONSEEX_ARRAYOUTOFBOUNDS,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR "Array index out of bounds"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum responseFunctionsID {
-			RESPONSEEX_BROPERATORUNSIGNEDLONG,
-			RESPONSEEX_GETVALUE,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum responseFunctionsID {
+            RESPONSEEX_BROPERATORUNSIGNEDLONG,
+            RESPONSEEX_GETVALUE,
+        };
+    };
 };
 #endif

@@ -35,30 +35,30 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace data {
-		namespace base {
-			/**
-			 * libdodo defined errors
-			 */
-			enum mysqlExR {
-				MYSQLEX_NOTOPENED,
-			};
+    namespace data {
+        namespace base {
+            /**
+             * libdodo defined errors
+             */
+            enum mysqlExR {
+                MYSQLEX_NOTOPENED,
+            };
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
+            /**
+             * explanations for libdodo defined errors
+             */
 #define DATABASEMYSQLEX_NOTOPENED_STR      "Database not opened"
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum mysqlFunctionsID {
-				MYSQLEX_CONNECT,
-				MYSQLEX_EXEC,
-				MYSQLEX_MYSQL,
-				MYSQLEX_GETFIELDSTYPES,
-			};
-		};
-	};
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum mysqlFunctionsID {
+                MYSQLEX_CONNECT,
+                MYSQLEX_EXEC,
+                MYSQLEX_MYSQL,
+                MYSQLEX_GETFIELDSTYPES,
+            };
+        };
+    };
 };
 #endif

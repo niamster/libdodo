@@ -35,16 +35,16 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		namespace event {
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum managerFunctionsID {
-				MANAGEREX_ISREADABLE,
-				MANAGEREX_ISWRITABLE,
-			};
-		};
-	};
+    namespace io {
+        namespace event {
+            /**
+             * IDs of functions where exception might be thrown
+             */
+            enum managerFunctionsID {
+                MANAGEREX_ISREADABLE,
+                MANAGEREX_ISWRITABLE,
+            };
+        };
+    };
 };
 #endif

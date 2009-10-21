@@ -33,33 +33,33 @@
 #include <libdodo/directives.h>
 
 namespace dodo {
-	namespace io {
-		namespace event {
-			/**
-			 * @class descriptor
-			 * @brief provides interface for event to get descriptors for io::event::manager
-			 */
-			class descriptor {
-				friend class manager;
+    namespace io {
+        namespace event {
+            /**
+             * @class descriptor
+             * @brief provides interface for event to get descriptors for io::event::manager
+             */
+            class descriptor {
+                friend class manager;
 
-			  protected:
+              protected:
 
-				/**
-				 * destructor
-				 */
-				virtual ~descriptor() = 0;
+                /**
+                 * destructor
+                 */
+                virtual ~descriptor() = 0;
 
-				/**
-				 * @return descriptor of input stream
-				 */
-				virtual int inDescriptor() const = 0;
+                /**
+                 * @return descriptor of input stream
+                 */
+                virtual int inDescriptor() const = 0;
 
-				/**
-				 * @return descriptor of output stream
-				 */
-				virtual int outDescriptor() const = 0;
-			};
-		};
-	};
+                /**
+                 * @return descriptor of output stream
+                 */
+                virtual int outDescriptor() const = 0;
+            };
+        };
+    };
 };
 #endif

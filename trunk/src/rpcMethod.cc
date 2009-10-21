@@ -50,7 +50,7 @@ method::~method()
 void
 method::setName(const dodoString &name)
 {
-	this->name = name;
+    this->name = name;
 }
 
 //-------------------------------------------------------------------
@@ -58,7 +58,7 @@ method::setName(const dodoString &name)
 void
 method::clear()
 {
-	arguments.clear();
+    arguments.clear();
 }
 
 //-------------------------------------------------------------------
@@ -66,7 +66,7 @@ method::clear()
 void
 method::addArgument(const value &argument)
 {
-	arguments.push_back(argument);
+    arguments.push_back(argument);
 }
 
 //-------------------------------------------------------------------

@@ -37,136 +37,136 @@
 #include <libdodo/ioBlockChannel.h>
 
 namespace dodo {
-	namespace io {
-		/**
-		 * @class memory
-		 * @brief provides memory I/O manipulations
-		 */
-		class memory : virtual public block::channel {
-		  public:
+    namespace io {
+        /**
+         * @class memory
+         * @brief provides memory I/O manipulations
+         */
+        class memory : virtual public block::channel {
+          public:
 
-			/*
-			 * @enum flagsEnum defines flags of memory serviced by io::memory interface
-			 */
-			enum flagsEnum {
-				FLAGS_NORMAL = 1,
-				FLAGS_EXTERN = 2,
-				FLAGS_FIXED_LENGTH = 4,
-			};
+            /*
+             * @enum flagsEnum defines flags of memory serviced by io::memory interface
+             */
+            enum flagsEnum {
+                FLAGS_NORMAL = 1,
+                FLAGS_EXTERN = 2,
+                FLAGS_FIXED_LENGTH = 4,
+            };
 
-			/**
-			 * constructor
-			 * @param data defines pointer to memory region
-			 * @param size defines memory region size
-			 * @param flags defines memory region flags, @see io::memory::flagsEnum
-			 * @param protection defines flags of IO protection, @see io::channel::protectionEnum
-			 */
-			memory(char          *data,
-				   unsigned long size,
-				   short         flags = FLAGS_NORMAL,
-				   short         protection = channel::PROTECTION_PROCESS);
+            /**
+             * constructor
+             * @param data defines pointer to memory region
+             * @param size defines memory region size
+             * @param flags defines memory region flags, @see io::memory::flagsEnum
+             * @param protection defines flags of IO protection, @see io::channel::protectionEnum
+             */
+            memory(char          *data,
+                   unsigned long size,
+                   short         flags = FLAGS_NORMAL,
+                   short         protection = channel::PROTECTION_PROCESS);
 
-			/**
-			 * constructor
-			 * @param protection defines flags of IO protection, @see io::channel::protectionEnum
-			 */
-			memory(short protection = channel::PROTECTION_PROCESS);
+            /**
+             * constructor
+             * @param protection defines flags of IO protection, @see io::channel::protectionEnum
+             */
+            memory(short protection = channel::PROTECTION_PROCESS);
 
-			/**
-			 * copy constructor
-			 * @note xexec object is not copied
-			 */
-			memory(const memory &fd);
+            /**
+             * copy constructor
+             * @note xexec object is not copied
+             */
+            memory(const memory &fd);
 
-			/**
-			 * constructor
-			 * @param data defines initial data for the interface
-			 * @param protection defines flags of IO protection, @see io::channel::protectionEnum
-			 */
-			memory(const dodoString &data,
-				   short            protection = channel::PROTECTION_PROCESS);
+            /**
+             * constructor
+             * @param data defines initial data for the interface
+             * @param protection defines flags of IO protection, @see io::channel::protectionEnum
+             */
+            memory(const dodoString &data,
+                   short            protection = channel::PROTECTION_PROCESS);
 
-			/**
-			 * destructor
-			 */
-			virtual ~memory();
+            /**
+             * destructor
+             */
+            virtual ~memory();
 
-			/**
-			 * clone file object
-			 * @param fd defines object to clone
-			 * @note xexec object is not copied
-			 */
-			void clone(const memory &fd);
+            /**
+             * clone file object
+             * @param fd defines object to clone
+             * @note xexec object is not copied
+             */
+            void clone(const memory &fd);
 
-			/**
-			 * erase node on position
-			 */
-			virtual void erase();
+            /**
+             * erase node on position
+             */
+            virtual void erase();
 
-			/**
-			 * flush output
-			 */
-			virtual void flush() const;
+            /**
+             * flush output
+             */
+            virtual void flush() const;
 
-			/**
-			 * clear buffer
-			 */
-			virtual void clear();
+            /**
+             * clear buffer
+             */
+            virtual void clear();
 
-			/**
-			 * @return memory
-			 */
-			operator const char*();
+            /**
+             * @return memory
+             */
+            operator const char*();
 
-		  protected:
+          protected:
 
-			/**
-			 * @return descriptor of the input stream
-			 */
-			virtual int inDescriptor() const;
+            /**
+             * @return descriptor of the input stream
+             */
+            virtual int inDescriptor() const;
 
-			/**
-			 * @return descriptor of the output stream
-			 */
-			virtual int outDescriptor() const;
+            /**
+             * @return descriptor of the output stream
+             */
+            virtual int outDescriptor() const;
 
-			/**
-			 * @param data defines buffer that will be filled
-			 * @note not more then blockSize(including null)
-			 * if block is true read offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
-			 */
-			virtual void _read(char * const data) const;
+            /**
+             * @param data defines buffer that will be filled
+             * @note not more then blockSize(including null)
+             * if block is true read offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
+             */
+            virtual void _read(char * const data) const;
 
-			/**
-			 * read from stream null- or newline- terminated memory
-			 * @param data defines buffer that will be filled
-			 * @note not more then blockSize(including null)
-			 * if block is true read offset is calculated as pos*'# of \n terminated memorys' otherwise offset it taken pos bytes from the beginning
-			 */
-			virtual unsigned long _readString(char * const data) const;
+            /**
+             * read from stream null- or newline- terminated memory
+             * @param data defines buffer that will be filled
+             * @note not more then blockSize(including null)
+             * if block is true read offset is calculated as pos*'# of \n terminated memorys' otherwise offset it taken pos bytes from the beginning
+             */
+            virtual unsigned long _readString(char * const data) const;
 
-			/**
-			 * @param data defines data that will be written
-			 * @note if block is true write offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
-			 */
-			virtual void _write(const char * const data) const;
+            /**
+             * @param data defines data that will be written
+             * @note if block is true write offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
+             */
+            virtual void _write(const char * const data) const;
 
-			/**
-			 * write to stream null- terminated memory
-			 * @param data defines data that will be written
-			 * @note write only to the end of the file(append)
-			 */
-			virtual void _writeString(const char * const data) const;
+            /**
+             * write to stream null- terminated memory
+             * @param data defines data that will be written
+             * @note write only to the end of the file(append)
+             */
+            virtual void _writeString(const char * const data) const;
 
-		  protected:
+          protected:
 
-			mutable char *data;         ///< data
-			mutable unsigned long size; ///< size of data
+            mutable char *data;         ///< data
+            mutable unsigned long size; ///< size of data
 
-			short flags;
+            short flags;
 
-			mutable bool nullEnd;		///< true if null is set up in the end
-		};
-	};
+            mutable bool nullEnd;       ///< true if null is set up in the end
+        };
+    };
 };
 #endif

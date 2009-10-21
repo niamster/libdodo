@@ -36,29 +36,29 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace data {
-		namespace base {
-			namespace sql {
-				/**
-				 * libdodo defined errors
-				 */
-				enum sqlConstructorExR {
-					SQLCONSTRUCTOREX_UNKNOWNJOINTYPE,
-				};
+    namespace data {
+        namespace base {
+            namespace sql {
+                /**
+                 * libdodo defined errors
+                 */
+                enum sqlConstructorExR {
+                    SQLCONSTRUCTOREX_UNKNOWNJOINTYPE,
+                };
 
-				/**
-				 * explanations for libdodo defined errors
-				 */
+                /**
+                 * explanations for libdodo defined errors
+                 */
 #define DATABASESQLCONSTRUCTOREX_UNKNOWNJOIN_STR "Unknown join type"
 
-				/**
-				 * IDs of functions where exception might be thrown
-				 */
-				enum sqlConstructorFunctionsID {
-					SQLCONSTRUCTOREX_JOINCOLLECT,
-				};
-			};
-		};
-	};
+                /**
+                 * IDs of functions where exception might be thrown
+                 */
+                enum sqlConstructorFunctionsID {
+                    SQLCONSTRUCTOREX_JOINCOLLECT,
+                };
+            };
+        };
+    };
 };
 #endif

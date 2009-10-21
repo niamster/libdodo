@@ -35,70 +35,70 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	namespace pc {
-		namespace execution {
-			/**
-			 * @typedef routine
-			 * @brief defines job function
-			 * @param data defines user data
-			 */
-			typedef int (*routine)(void *data);
+    namespace pc {
+        namespace execution {
+            /**
+             * @typedef routine
+             * @brief defines job function
+             * @param data defines user data
+             */
+            typedef int (*routine)(void *data);
 
-			/**
-			 * @enum onDestructionEnum defines action with processes on object destruction
-			 */
-			enum onDestructionEnum {
-				ON_DESTRUCTION_KEEP_ALIVE,
-				ON_DESTRUCTION_STOP,     ///< send SIGINT to process
-				ON_DESTRUCTION_WAIT
-			};
+            /**
+             * @enum onDestructionEnum defines action with processes on object destruction
+             */
+            enum onDestructionEnum {
+                ON_DESTRUCTION_KEEP_ALIVE,
+                ON_DESTRUCTION_STOP,     ///< send SIGINT to process
+                ON_DESTRUCTION_WAIT
+            };
 
-			/**
-			 * @class job
-			 * @brief provides interface for job job management
-			 */
-			class job {
-			  public:
+            /**
+             * @class job
+             * @brief provides interface for job job management
+             */
+            class job {
+              public:
 
-				/**
-				 * constructor
-				 */
-				job();
+                /**
+                 * constructor
+                 */
+                job();
 
-				/**
-				 * copy constructor
-				 */
-				job(const job&);
+                /**
+                 * copy constructor
+                 */
+                job(const job &);
 
-				/**
-				 * destructor
-				 */
-				virtual ~job() = 0;
+                /**
+                 * destructor
+                 */
+                virtual ~job() = 0;
 
-				/**
-				 * execute job
-				 */
-				virtual void run() = 0;
+                /**
+                 * execute job
+                 */
+                virtual void run() = 0;
 
-				/**
-				 * stop the job
-				 */
-				virtual void stop() = 0;
+                /**
+                 * stop the job
+                 */
+                virtual void stop() = 0;
 
-				/**
-				 * wait for the job termination
-				 * @return exit status
-				 */
-				virtual int wait() = 0;
+                /**
+                 * wait for the job termination
+                 * @return exit status
+                 */
+                virtual int wait() = 0;
 
-				/**
-				 * @return true if job is running
-				 */
-				virtual bool isRunning() const = 0;
+                /**
+                 * @return true if job is running
+                 */
+                virtual bool isRunning() const = 0;
 
-				mutable bool cloned; ///< true if object was cloned
-			};
-		};
-	};
+                mutable bool cloned; ///< true if object was cloned
+            };
+        };
+    };
 };
 #endif

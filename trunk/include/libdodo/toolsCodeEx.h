@@ -35,21 +35,21 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace tools {
-		/**
-		 * libdodo defined errors
-		 */
-		enum codeExR {
-			CODEEX_BADASCII85,
-			CODEEX_BADBZCOMPRESSION,
-			CODEEX_BADBZDECOMPRESSIONINIT,
-			CODEEX_BADBZDECOMPRESSIONFINISH,
-			CODEEX_BADBZDECOMPRESSION,
-		};
+    namespace tools {
+        /**
+         * libdodo defined errors
+         */
+        enum codeExR {
+            CODEEX_BADASCII85,
+            CODEEX_BADBZCOMPRESSION,
+            CODEEX_BADBZDECOMPRESSIONINIT,
+            CODEEX_BADBZDECOMPRESSIONFINISH,
+            CODEEX_BADBZDECOMPRESSION,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define TOOLSCODEEX_BADASCII85_STR "Bad character in ASCII85"
 #ifdef BZIP2_EXT
 #define TOOLSCODEEX_BADBZCOMPRESSION_STR         "Error occured during comression"
@@ -58,23 +58,23 @@ namespace dodo {
 #define TOOLSCODEEX_BADBZDECOMPRESSION_STR       "Error occured during decompression"
 #endif
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum codeFunctionsID {
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum codeFunctionsID {
 #ifdef ICONV_EXT
-			CODEEX_CODESETCONVERSION,
+            CODEEX_CODESETCONVERSION,
 #endif
 #ifdef ZLIB_EXT
-			CODEEX_ZCOMPRESS,
-			CODEEX_ZDECOMPRESS,
+            CODEEX_ZCOMPRESS,
+            CODEEX_ZDECOMPRESS,
 #endif
-			CODEEX_DECODEASCII85,
+            CODEEX_DECODEASCII85,
 #ifdef BZIP2_EXT
-			CODEEX_BZCOMPRESS,
-			CODEEX_BZDECOMPRESS,
+            CODEEX_BZCOMPRESS,
+            CODEEX_BZDECOMPRESS,
 #endif
-		};
-	};
+        };
+    };
 };
 #endif

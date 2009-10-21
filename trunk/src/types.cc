@@ -39,23 +39,23 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-	dodoString __dodostring__;
+    dodoString __dodostring__;
 
-	//-------------------------------------------------------------------
+    //-------------------------------------------------------------------
 
-	dodoStringArray __dodostringarray__;
+    dodoStringArray __dodostringarray__;
 
-	//-------------------------------------------------------------------
+    //-------------------------------------------------------------------
 
-	dodoStringMap __dodostringmap__;
+    dodoStringMap __dodostringmap__;
 
-	//-------------------------------------------------------------------
+    //-------------------------------------------------------------------
 
-	dodoArray<dodoStringArray> __dodostringarrayarray__;
+    dodoArray<dodoStringArray> __dodostringarrayarray__;
 
-	//-------------------------------------------------------------------
+    //-------------------------------------------------------------------
 
-	dodoStringMapArray __dodostringmaparray__;
+    dodoStringMapArray __dodostringmaparray__;
 };
 
 //-------------------------------------------------------------------
@@ -66,36 +66,36 @@ using namespace dodo;
 
 bool
 dodoMapStringCompare::operator()(const dodoString &first,
-								 const dodoString &second)
+                                 const dodoString &second)
 {
-	return strcmp(first.data(), second.data()) < 0 ? true : false;
+    return strcmp(first.data(), second.data()) < 0 ? true : false;
 }
 
 //-------------------------------------------------------------------
 
 bool
 dodoMapICaseStringCompare::operator()(const dodoString &first,
-									  const dodoString &second)
+                                      const dodoString &second)
 {
-	return strcasecmp(first.data(), second.data()) < 0 ? true : false;
+    return strcasecmp(first.data(), second.data()) < 0 ? true : false;
 }
 
 //-------------------------------------------------------------------
 
 bool
 dodoMapStringCompare::operator()(const dodoString &first,
-								 const dodoString &second) const
+                                 const dodoString &second) const
 {
-	return strcmp(first.data(), second.data()) < 0 ? true : false;
+    return strcmp(first.data(), second.data()) < 0 ? true : false;
 }
 
 //-------------------------------------------------------------------
 
 bool
 dodoMapICaseStringCompare::operator()(const dodoString &first,
-									  const dodoString &second) const
+                                      const dodoString &second) const
 {
-	return strcasecmp(first.data(), second.data()) < 0 ? true : false;
+    return strcasecmp(first.data(), second.data()) < 0 ? true : false;
 }
 
 //-------------------------------------------------------------------

@@ -38,161 +38,161 @@
 #include <libdodo/xexec.h>
 
 namespace dodo {
-	namespace io {
-		namespace network {
-			namespace ssl {
-				class server;
-			};
+    namespace io {
+        namespace network {
+            namespace ssl {
+                class server;
+            };
 
-			/**
-			 * @class exchange
-			 * @brief provides communication interface[send/receive data]
-			 * @note readString*: if length of read data is blockSize, data will contain exact blockSize, no null will be set in the end this is specific only for network sessions
-			 * writesStream* put extra null in the end of the string
-			 */
-			class exchange : public connection,
-							 virtual public stream::channel {
-				friend class server;
-				friend class client;
-				friend class http::client;
+            /**
+             * @class exchange
+             * @brief provides communication interface[send/receive data]
+             * @note readString*: if length of read data is blockSize, data will contain exact blockSize, no null will be set in the end this is specific only for network sessions
+             * writesStream* put extra null in the end of the string
+             */
+            class exchange : public connection,
+                             virtual public stream::channel {
+                friend class server;
+                friend class client;
+                friend class http::client;
 
-			  private:
+              private:
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				exchange(exchange &);
+                /**
+                 * copy constructor
+                 * @note to prevent copying
+                 */
+                exchange(exchange &);
 
-			  public:
+              public:
 
-				/**
-				 * @enum operationEnum defines type of operation for xexec
-				 */
-				enum operationEnum {
-					OPERATION_CLOSE = 128,
-				};
+                /**
+                 * @enum operationEnum defines type of operation for xexec
+                 */
+                enum operationEnum {
+                    OPERATION_CLOSE = 128,
+                };
 
-				/**
-				 * @class __init__
-				 * @brief holds info that is passed to accept call, and then inits exchange
-				 */
-				class __init__ {
-					friend class exchange;
-					friend class client;
-					friend class server;
-					friend class ssl::server;
+                /**
+                 * @class __init__
+                 * @brief holds info that is passed to accept call, and then inits exchange
+                 */
+                class __init__ {
+                    friend class exchange;
+                    friend class client;
+                    friend class server;
+                    friend class ssl::server;
 
-				  public:
+                  public:
 
-					/**
-					 * constructor
-					 */
-					__init__();
+                    /**
+                     * constructor
+                     */
+                    __init__();
 
-					/**
-					 * copy constructor
-					 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
-					 */
-					__init__(__init__ &);
+                    /**
+                     * copy constructor
+                     * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ::accept method
+                     */
+                    __init__(__init__ &);
 
-					/**
-					 * destructor
-					 */
-					virtual ~__init__();
+                    /**
+                     * destructor
+                     */
+                    virtual ~__init__();
 
-				  protected:
+                  protected:
 
-					int socket;             ///< socket
+                    int socket;             ///< socket
 
-					bool blocked;           ///< true if blocked
-					bool blockInherited;    ///< true if block flag is inherited
-				};
+                    bool blocked;           ///< true if blocked
+                    bool blockInherited;    ///< true if block flag is inherited
+                };
 
-				/**
-				 * constructor
-				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-				 */
-				exchange(short protection = channel::PROTECTION_PROCESS);
+                /**
+                 * constructor
+                 * @param protection defines type of IO protection, @see io::channel::protectionEnum
+                 */
+                exchange(short protection = channel::PROTECTION_PROCESS);
 
-				/**
-				 * constructor
-				 * @param init is initial data[got from the ::accept method]
-				 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-				 * @note the object that has inited the object of current instance can be used for another connections
-				 */
-				exchange(__init__ &init,
-						 short             protection = channel::PROTECTION_PROCESS);
+                /**
+                 * constructor
+                 * @param init is initial data[got from the ::accept method]
+                 * @param protection defines type of IO protection, @see io::channel::protectionEnum
+                 * @note the object that has inited the object of current instance can be used for another connections
+                 */
+                exchange(__init__ &init,
+                         short    protection = channel::PROTECTION_PROCESS);
 
-				/**
-				 * destructor
-				 */
-				virtual ~exchange();
+                /**
+                 * destructor
+                 */
+                virtual ~exchange();
 
-				/**
-				 * @return true if connection is alive
-				 */
-				virtual bool isAlive();
+                /**
+                 * @return true if connection is alive
+                 */
+                virtual bool isAlive();
 
-				/**
-				 * close connection
-				 */
-				virtual void close();
+                /**
+                 * close connection
+                 */
+                virtual void close();
 
-			  protected:
+              protected:
 
-				/**
-				 * @return descriptor of input stream
-				 */
-				virtual int inDescriptor() const;
+                /**
+                 * @return descriptor of input stream
+                 */
+                virtual int inDescriptor() const;
 
-				/**
-				 * @return descriptor of output stream
-				 */
-				virtual int outDescriptor() const;
+                /**
+                 * @return descriptor of output stream
+                 */
+                virtual int outDescriptor() const;
 
-				/**
-				 * init current instance
-				 * @param socket defines socket
-				 * @param blocked defines the connection block status
-				 * @param blockInherited defines block flag inheritance
-				 */
-				void init(int  socket,
-						  bool blocked,
-						  bool blockInherited);
+                /**
+                 * init current instance
+                 * @param socket defines socket
+                 * @param blocked defines the connection block status
+                 * @param blockInherited defines block flag inheritance
+                 */
+                void init(int  socket,
+                          bool blocked,
+                          bool blockInherited);
 
-				/**
-				 * flush output
-				 * @note does nothing for network connections
-				 */
-				virtual void flush() const;
+                /**
+                 * flush output
+                 * @note does nothing for network connections
+                 */
+                virtual void flush() const;
 
-				/**
-				 * @param data defines buffer that will be filled
-				 * @note not more then blockSize(including null)
-				 */
-				virtual void _read(char * const data) const;
+                /**
+                 * @param data defines buffer that will be filled
+                 * @note not more then blockSize(including null)
+                 */
+                virtual void _read(char * const data) const;
 
-				/**
-				 * read from stream null or newline terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then blockSize(including null)
-				 */
-				virtual unsigned long _readString(char * const data) const;
+                /**
+                 * read from stream null or newline terminated string
+                 * @param data defines buffer that will be filled
+                 * @note not more then blockSize(including null)
+                 */
+                virtual unsigned long _readString(char * const data) const;
 
-				/**
-				 * @param data defines data that will be written
-				 */
-				virtual void _write(const char * const data) const;
+                /**
+                 * @param data defines data that will be written
+                 */
+                virtual void _write(const char * const data) const;
 
-				/**
-				 * write to stream null terminated string
-				 * @param data defines data that will be written
-				 * @note puts extra null in the end of the string
-				 */
-				virtual void _writeString(const char * const data) const;
-			};
-		};
-	};
+                /**
+                 * write to stream null terminated string
+                 * @param data defines data that will be written
+                 * @note puts extra null in the end of the string
+                 */
+                virtual void _writeString(const char * const data) const;
+            };
+        };
+    };
 };
 #endif

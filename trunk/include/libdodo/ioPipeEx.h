@@ -35,37 +35,37 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace io {
-		/**
-		 * libdodo defined errors
-		 */
-		enum pipeExR {
-			PIPEEX_PIPENOTOPENED,
-		};
+    namespace io {
+        /**
+         * libdodo defined errors
+         */
+        enum pipeExR {
+            PIPEEX_PIPENOTOPENED,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define IOPIPEEX_NOTOPENED_STR                  "Pipe not opened"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum pipeFunctionsID {
-			PIPEEX_PIPE,
-			PIPEEX_CLOSE,
-			PIPEEX_CLONE,
-			PIPEEX_OPEN,
-			PIPEEX__READ,
-			PIPEEX__WRITE,
-			PIPEEX__READSTREAM,
-			PIPEEX__WRITESTREAM,
-			PIPEEX_FLUSH,
-			PIPEEX_PEERINFO,
-			PIPEEX_BLOCK,
-			PIPEEX_INDESCRIPTOR,
-			PIPEEX_OUTDESCRIPTOR,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum pipeFunctionsID {
+            PIPEEX_PIPE,
+            PIPEEX_CLOSE,
+            PIPEEX_CLONE,
+            PIPEEX_OPEN,
+            PIPEEX__READ,
+            PIPEEX__WRITE,
+            PIPEEX__READSTREAM,
+            PIPEEX__WRITESTREAM,
+            PIPEEX_FLUSH,
+            PIPEEX_PEERINFO,
+            PIPEEX_BLOCK,
+            PIPEEX_INDESCRIPTOR,
+            PIPEEX_OUTDESCRIPTOR,
+        };
+    };
 };
 #endif

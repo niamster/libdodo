@@ -35,29 +35,29 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace tools {
-		/**
-		 * libdodo defined errors
-		 */
-		enum libraryExR {
-			LIBRARYEX_LIBRARYNOTOPENED,
-		};
+    namespace tools {
+        /**
+         * libdodo defined errors
+         */
+        enum libraryExR {
+            LIBRARYEX_LIBRARYNOTOPENED,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define TOOLSLIBRARYEX_NOTOPENED_STR "Library not opened"
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum libraryFunctionsID {
-			LIBRARYEX_OPEN,
-			LIBRARYEX_CLOSE,
-			LIBRARYEX_FUNCTION,
-			LIBRARYEX_BROPERATORSTRING,
-			LIBRARYEX_SYMBOLS,
-			LIBRARYEX_LIBRARY,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum libraryFunctionsID {
+            LIBRARYEX_OPEN,
+            LIBRARYEX_CLOSE,
+            LIBRARYEX_FUNCTION,
+            LIBRARYEX_BROPERATORSTRING,
+            LIBRARYEX_SYMBOLS,
+            LIBRARYEX_LIBRARY,
+        };
+    };
 };
 #endif

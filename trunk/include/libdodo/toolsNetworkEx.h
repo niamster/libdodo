@@ -35,34 +35,34 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace tools {
-		/**
-		 * libdodo defined errors
-		 */
-		enum networkExR {
-			NETWORKEX_BADMAILHELO,
-			NETWORKEX_BADMAILAUTH,
-		};
+    namespace tools {
+        /**
+         * libdodo defined errors
+         */
+        enum networkExR {
+            NETWORKEX_BADMAILHELO,
+            NETWORKEX_BADMAILAUTH,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define TOOLSNETWORKEX_BADMAILHELO_STR    "Error occurd while sending EHLO"
 #define TOOLSNETWORKEX_BADMAILAUTH_STR    "Error during authentication"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum networkFunctionsID {
-			NETWORKEX_HOST,
-			NETWORKEX_HOSTPRIMARYIP,
-			NETWORKEX_SETLOCALNAME,
-			NETWORKEX_LOCALNAME,
-			NETWORKEX_SERVICE,
-			NETWORKEX_INTERFACE,
-			NETWORKEX_INTERFACESNAMES,
-			NETWORKEX_MAIL,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum networkFunctionsID {
+            NETWORKEX_HOST,
+            NETWORKEX_HOSTPRIMARYIP,
+            NETWORKEX_SETLOCALNAME,
+            NETWORKEX_LOCALNAME,
+            NETWORKEX_SERVICE,
+            NETWORKEX_INTERFACE,
+            NETWORKEX_INTERFACESNAMES,
+            NETWORKEX_MAIL,
+        };
+    };
 };
 #endif

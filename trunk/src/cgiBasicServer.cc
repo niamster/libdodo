@@ -55,9 +55,9 @@ server::~server()
 void
 server::serve(handler func)
 {
-	exchange ex;
+    exchange ex;
 
-	func(ex);
+    func(ex);
 }
 
 //-------------------------------------------------------------------

@@ -36,68 +36,68 @@
 #include <libdodo/ioPipe.h>
 
 namespace dodo {
-	namespace io {
-		/**
-		 * @class stdio
-		 * @brief provides interface for stdin/stdout/stderr I/O operations
-		 */
-		class stdio : virtual public pipe {
-		  private:
+    namespace io {
+        /**
+         * @class stdio
+         * @brief provides interface for stdin/stdout/stderr I/O operations
+         */
+        class stdio : virtual public pipe {
+          private:
 
-			/**
-			 * copy constructor
-			 * @note to prevent copying
-			 */
-			stdio(stdio &);
+            /**
+             * copy constructor
+             * @note to prevent copying
+             */
+            stdio(stdio &);
 
-		  public:
+          public:
 
-			/**
-			 * constructor
-			 * @param protection defines type of IO protection, @see io::channel::protectionEnum
-			 */
-			stdio(short protection = channel::PROTECTION_PROCESS);
+            /**
+             * constructor
+             * @param protection defines type of IO protection, @see io::channel::protectionEnum
+             */
+            stdio(short protection = channel::PROTECTION_PROCESS);
 
-			/**
-			 * destructor
-			 */
-			virtual ~stdio();
+            /**
+             * destructor
+             */
+            virtual ~stdio();
 
-			/**
-			 * redirect output stream to stderr or stdout
-			 * @param toStderr defines to redirect stream to stderr if true
-			 */
-			virtual void redirectToStderr(bool toStderr);
+            /**
+             * redirect output stream to stderr or stdout
+             * @param toStderr defines to redirect stream to stderr if true
+             */
+            virtual void redirectToStderr(bool toStderr);
 
-			/**
-			 * @return true if output stream is redirected to stderr
-			 */
-			virtual bool isRedirectedToStderr();
+            /**
+             * @return true if output stream is redirected to stderr
+             */
+            virtual bool isRedirectedToStderr();
 
-		  protected:
+          protected:
 
-			/**
-			 * write to stream null terminated string
-			 * @param data defines data that will be written
-			 */
-			virtual void _writeString(const char * const data) const;
+            /**
+             * write to stream null terminated string
+             * @param data defines data that will be written
+             */
+            virtual void _writeString(const char * const data) const;
 
-		  private:
+          private:
 
-			/**
-			 * do nothing
-			 * @note stdin/stdout/stderr are already available for I/O
-			 */
-			virtual void open();
+            /**
+             * do nothing
+             * @note stdin/stdout/stderr are already available for I/O
+             */
+            virtual void open();
 
-			/**
-			 * do nothing
-			 * @note stdin/stdout/stderr shouldn't be closed
-			 */
-			virtual void close();
+            /**
+             * do nothing
+             * @note stdin/stdout/stderr shouldn't be closed
+             */
+            virtual void close();
 
-			bool err; ///< true if output stream is redirected to stderr
-		};
-	};
+            bool err; ///< true if output stream is redirected to stderr
+        };
+    };
 };
 #endif

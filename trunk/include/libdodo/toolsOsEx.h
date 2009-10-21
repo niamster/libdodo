@@ -35,53 +35,53 @@
 #include <libdodo/exceptionBasic.h>
 
 namespace dodo {
-	namespace tools {
-		/**
-		 * libdodo defined errors
-		 */
-		enum osExR {
-			OSEX_WRONGPARAMETER,
-		};
+    namespace tools {
+        /**
+         * libdodo defined errors
+         */
+        enum osExR {
+            OSEX_WRONGPARAMETER,
+        };
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
+        /**
+         * explanations for libdodo defined errors
+         */
 #define TOOLSOSEX_WRONGPARAMETER_STR "Wrong paramather passed to function"
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum osFunctionsID {
-			SYNCTHREADSECTION_RELEASE,
-			SYNCTHREADSECTION_ACQUIRE,
-			SYNCTHREADSECTION_SYNCTHREADSECTION,
-			OSEX_SETWORKINGDIR,
-			OSEX_WORKINGDIR,
-			OSEX_USAGE,
-			OSEX_LIMIT,
-			OSEX_SETLIMIT,
-			OSEX_PRIORITY,
-			OSEX_SETPRIORITY,
-			OSEX_UID,
-			OSEX_SETUID,
-			OSEX_GID,
-			OSEX_SETGID,
-			OSEX_USER,
-			OSEX_USERS,
-			OSEX_GROUP,
-			OSEX_GROUPS,
-			OSEX_CHANGEROOT,
-			OSEX_ATEXIT,
-			OSEX_GPID,
-			OSEX_SETGROUPPID,
-			OSEX_SETSIGNALHANDLER,
-			OSEX_REMOVESIGNALHANDLER,
-			OSEX_MODULE,
-			OSEX_SENDSIGNAL,
-			OSEX_SETTIMER,
-			OSEX_SETMICROTIMER,
-			OSEX_DAEMONIZE,
-		};
-	};
+        /**
+         * IDs of functions where exception might be thrown
+         */
+        enum osFunctionsID {
+            SYNCTHREADSECTION_RELEASE,
+            SYNCTHREADSECTION_ACQUIRE,
+            SYNCTHREADSECTION_SYNCTHREADSECTION,
+            OSEX_SETWORKINGDIR,
+            OSEX_WORKINGDIR,
+            OSEX_USAGE,
+            OSEX_LIMIT,
+            OSEX_SETLIMIT,
+            OSEX_PRIORITY,
+            OSEX_SETPRIORITY,
+            OSEX_UID,
+            OSEX_SETUID,
+            OSEX_GID,
+            OSEX_SETGID,
+            OSEX_USER,
+            OSEX_USERS,
+            OSEX_GROUP,
+            OSEX_GROUPS,
+            OSEX_CHANGEROOT,
+            OSEX_ATEXIT,
+            OSEX_GPID,
+            OSEX_SETGROUPPID,
+            OSEX_SETSIGNALHANDLER,
+            OSEX_REMOVESIGNALHANDLER,
+            OSEX_MODULE,
+            OSEX_SENDSIGNAL,
+            OSEX_SETTIMER,
+            OSEX_SETMICROTIMER,
+            OSEX_DAEMONIZE,
+        };
+    };
 };
 #endif

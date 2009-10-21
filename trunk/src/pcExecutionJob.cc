@@ -41,7 +41,7 @@ job::job() : cloned(false)
 
 job::job(const job &j)
 {
-	j.cloned = true;
+    j.cloned = true;
 }
 
 //-------------------------------------------------------------------

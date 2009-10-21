@@ -35,31 +35,31 @@
 #include <libdodo/ioStreamChannel.h>
 
 namespace dodo {
-	namespace cgi {
-		/**
-		 * @class exchange
-		 * @brief provides interface to  CGI I/O functionality
-		 */
-		class exchange : virtual public io::stream::channel {
-		  public:
+    namespace cgi {
+        /**
+         * @class exchange
+         * @brief provides interface to  CGI I/O functionality
+         */
+        class exchange : virtual public io::stream::channel {
+          public:
 
-			/**
-			 * constructor
-			 * @param protection defines type of IO protection, @see channel::io::channel::protectionEnum
-			 */
-			exchange(short protection);
+            /**
+             * constructor
+             * @param protection defines type of IO protection, @see channel::io::channel::protectionEnum
+             */
+            exchange(short protection);
 
-			/**
-			 * destructor
-			 */
-			virtual ~exchange() = 0;
+            /**
+             * destructor
+             */
+            virtual ~exchange() = 0;
 
-			/**
-			 * @return environment variable
-			 * @param var defines name of environment variable
-			 */
-			virtual char *getenv(const char *var) = 0;
-		};
-	};
+            /**
+             * @return environment variable
+             * @param var defines name of environment variable
+             */
+            virtual char *getenv(const char *var) = 0;
+        };
+    };
 };
 #endif

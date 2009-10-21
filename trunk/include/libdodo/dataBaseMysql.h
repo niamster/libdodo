@@ -37,152 +37,153 @@
 #include <libdodo/dataBaseSqlConstructor.h>
 
 namespace dodo {
-	namespace data {
-		namespace base {
-			struct __mysql__;
+    namespace data {
+        namespace base {
+            struct __mysql__;
 
-			/**
-			 * @class mysql
-			 * @brief provides an interface to MySQL db
-			 */
-			class mysql : public sql::constructor {
-			  public:
-				/**
-				 * @struct __ssl_options__
-				 * @brief defines SSL mySQL options
-				 */
-				struct __ssl_options__ {
-					dodoString key;     ///< pathname to the key file
-					dodoString cert;    ///< pathname to the certificate file
-					dodoString ca;      ///< pathname to the certificate authority file
-					dodoString capath;  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
-					dodoString cipher;  ///< allowed SSL ciphers
-				};
+            /**
+             * @class mysql
+             * @brief provides an interface to MySQL db
+             */
+            class mysql : public sql::constructor {
+              public:
 
-			  private:
+                /**
+                 * @struct __ssl_options__
+                 * @brief defines SSL mySQL options
+                 */
+                struct __ssl_options__ {
+                    dodoString key;     ///< pathname to the key file
+                    dodoString cert;    ///< pathname to the certificate file
+                    dodoString ca;      ///< pathname to the certificate authority file
+                    dodoString capath;  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
+                    dodoString cipher;  ///< allowed SSL ciphers
+                };
 
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				mysql(mysql &);
+              private:
 
-			  public:
+                /**
+                 * copy constructor
+                 * @note to prevent copying
+                 */
+                mysql(mysql &);
 
-				/**
-				 * constructor
-				 */
-				mysql();
+              public:
 
-				/**
-				 * constructor
-				 * @param dbInfo defines information for connection to db
-				 */
-				mysql(const __connection__ &dbInfo);
+                /**
+                 * constructor
+                 */
+                mysql();
 
-				/**
-				 * destructor
-				 */
-				virtual ~mysql();
+                /**
+                 * constructor
+                 * @param dbInfo defines information for connection to db
+                 */
+                mysql(const __connection__ &dbInfo);
 
-				/*
-				 * set connection settings
-				 * @param type defines type of connection, @see mySQL documentation
-				 * @param options defines options of ssl connection
-				 * @note type can be:
-				 *  CLIENT_COMPRESS         Use compression protocol
-				 *	CLIENT_MULTI_STATEMENTS Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
-				 */
-				void setConnectionSettings(unsigned long             type,
-										   const __ssl_options__ &options = __ssl_options__());
+                /**
+                 * destructor
+                 */
+                virtual ~mysql();
 
-				/**
-				 * connect to the database
-				 * @param dbInfo defines information for connection to db
-				 */
-				virtual void connect(const __connection__ &dbInfo);
+                /*
+                 * set connection settings
+                 * @param type defines type of connection, @see mySQL documentation
+                 * @param options defines options of ssl connection
+                 * @note type can be:
+                 *  CLIENT_COMPRESS         Use compression protocol
+                 *	CLIENT_MULTI_STATEMENTS Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
+                 */
+                void setConnectionSettings(unsigned long         type,
+                                           const __ssl_options__ &options = __ssl_options__());
 
-				/**
-				 * disconnect from the database
-				 */
-				virtual void disconnect();
+                /**
+                 * connect to the database
+                 * @param dbInfo defines information for connection to db
+                 */
+                virtual void connect(const __connection__ &dbInfo);
 
-				/**
-				 * automaticaly detect fields types
-				 * @param table defines table for which rules will be applied
-				 */
-				virtual void requestFieldsTypes(const dodoString &table);
+                /**
+                 * disconnect from the database
+                 */
+                virtual void disconnect();
 
-				/**
-				 * @return amount of affected rows from the evaluated request
-				 */
-				virtual unsigned int affectedRows() const;
+                /**
+                 * automaticaly detect fields types
+                 * @param table defines table for which rules will be applied
+                 */
+                virtual void requestFieldsTypes(const dodoString &table);
 
-				/**
-				 * @return amount of received rows from the evaluated request
-				 */
-				virtual unsigned int requestedRows() const;
+                /**
+                 * @return amount of affected rows from the evaluated request
+                 */
+                virtual unsigned int affectedRows() const;
 
-				/**
-				 * @return amount of received fields from the evaluated request
-				 */
-				virtual unsigned int requestedFields() const;
+                /**
+                 * @return amount of received rows from the evaluated request
+                 */
+                virtual unsigned int requestedRows() const;
 
-				/**
-				 * @return received rows from the evaluated request
-				 */
-				virtual dodoArray<dodoStringArray> fetchRows() const;
+                /**
+                 * @return amount of received fields from the evaluated request
+                 */
+                virtual unsigned int requestedFields() const;
 
-				/**
-				 * @return received fields from the evaluated request
-				 */
-				virtual dodoStringArray fetchFields() const;
+                /**
+                 * @return received rows from the evaluated request
+                 */
+                virtual dodoArray<dodoStringArray> fetchRows() const;
 
-				/**
-				 * @return structure received rows and fields from the evaluated request
-				 */
-				virtual __tuples__ fetch() const;
+                /**
+                 * @return received fields from the evaluated request
+                 */
+                virtual dodoStringArray fetchFields() const;
 
-				/**
-				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
-				 */
-				virtual dodoStringMapArray fetchFieldsToRows() const;
+                /**
+                 * @return structure received rows and fields from the evaluated request
+                 */
+                virtual __tuples__ fetch() const;
 
-				/**
-				 * execute request
-				 * @param query defines query; you may define it if you don't use db methods like select, update
-				 * @param result defines type of result; if true query return the result
-				 */
-				virtual void exec(const dodoString &query = __dodostring__,
-								  bool             result = false);
+                /**
+                 * @return received rows and fields from the evaluated request using hash `key`=>`value`
+                 */
+                virtual dodoStringMapArray fetchFieldsToRows() const;
 
-				/**
-				 * set sessions charset
-				 * @param charset defines charset
-				 */
-				void setCharset(const dodoString &charset);
+                /**
+                 * execute request
+                 * @param query defines query; you may define it if you don't use db methods like select, update
+                 * @param result defines type of result; if true query return the result
+                 */
+                virtual void exec(const dodoString &query = __dodostring__,
+                                  bool             result = false);
 
-				/**
-				 * @return current session charset
-				 */
-				dodoString charset() const;
+                /**
+                 * set sessions charset
+                 * @param charset defines charset
+                 */
+                void setCharset(const dodoString &charset);
 
-				/**
-				 * set connection timeout
-				 * @param time defines connection timeout in seconds
-				 */
-				void setConnectionTimeout(unsigned int time);
+                /**
+                 * @return current session charset
+                 */
+                dodoString charset() const;
 
-			  private:
+                /**
+                 * set connection timeout
+                 * @param time defines connection timeout in seconds
+                 */
+                void setConnectionTimeout(unsigned int time);
 
-				bool empty;             ///< true id mysqlRes is empty
+              private:
 
-				__mysql__ *handle;      ///< DB handle
+                bool empty;             ///< true id mysqlRes is empty
 
-				unsigned long type;     ///< connection type
-			};
-		};
-	};
+                __mysql__ *handle;      ///< DB handle
+
+                unsigned long type;     ///< connection type
+            };
+        };
+    };
 };
 #endif
 #endif

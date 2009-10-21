@@ -42,119 +42,119 @@ using namespace dodo::tools;
 
 bool
 string::equal(const dodoString &first,
-			  const dodoString &second)
+              const dodoString &second)
 {
-	unsigned long firstSize = first.size();
+    unsigned long firstSize = first.size();
 
-	if (firstSize != second.size())
-		return false;
+    if (firstSize != second.size())
+        return false;
 
-	if (firstSize == 0)
-		return true;
+    if (firstSize == 0)
+        return true;
 
-	for (unsigned long i = 0; i < firstSize; ++i)
-		if (first[i] != second[i])
-			return false;
+    for (unsigned long i = 0; i < firstSize; ++i)
+        if (first[i] != second[i])
+            return false;
 
-	return true;
+    return true;
 }
 
 //-------------------------------------------------------------------
 
 bool
 string::iequal(const dodoString &first,
-			   const dodoString &second)
+               const dodoString &second)
 {
-	unsigned long firstSize = first.size();
+    unsigned long firstSize = first.size();
 
-	if (firstSize != second.size())
-		return false;
+    if (firstSize != second.size())
+        return false;
 
-	if (firstSize == 0)
-		return true;
+    if (firstSize == 0)
+        return true;
 
-	for (unsigned long i = 0; i < firstSize; ++i)
-		if (tolower(first[i]) != tolower(second[i]))
-			return false;
+    for (unsigned long i = 0; i < firstSize; ++i)
+        if (tolower(first[i]) != tolower(second[i]))
+            return false;
 
-	return true;
+    return true;
 }
 
 //-------------------------------------------------------------------
 
 bool
 string::contains(const dodoString &str,
-				 const dodoString &needle,
-				 bool             icase)
+                 const dodoString &needle,
+                 bool             icase)
 {
-	if (icase) {
-		if (strcasestr(str.data(), needle.data()) != NULL)
-			return true;
-	} else if (strstr(str.data(), needle.data()) != NULL)
-		return true;
+    if (icase) {
+        if (strcasestr(str.data(), needle.data()) != NULL)
+            return true;
+    } else if (strstr(str.data(), needle.data()) != NULL)
+        return true;
 
 
-	return false;
+    return false;
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
 string::find(const dodoString &str,
-			 const dodoString &needle,
-			 unsigned long    position,
-			 bool             icase)
+             const dodoString &needle,
+             unsigned long    position,
+             bool             icase)
 {
-	if (position > str.size())
-		return dodoString::npos;
+    if (position > str.size())
+        return dodoString::npos;
 
-	char *pos = NULL;
+    char *pos = NULL;
 
-	if (icase) {
-		if ((pos = strcasestr((char *)(str.data() + position), needle.data())) == NULL)
-			return dodoString::npos;
-		else
-			return (pos - str.data());
-	} else {
-		if ((pos = strstr((char *)(str.data() + position), needle.data())) == NULL)
-			return dodoString::npos;
-		else
-			return (pos - str.data());
-	}
+    if (icase) {
+        if ((pos = strcasestr((char *)(str.data() + position), needle.data())) == NULL)
+            return dodoString::npos;
+        else
+            return (pos - str.data());
+    } else {
+        if ((pos = strstr((char *)(str.data() + position), needle.data())) == NULL)
+            return dodoString::npos;
+        else
+            return (pos - str.data());
+    }
 
-	return dodoString::npos;
+    return dodoString::npos;
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
 string::find(const dodoString &str,
-			 const dodoString &needle,
-			 bool             icase)
+             const dodoString &needle,
+             bool             icase)
 {
-	return find(str, needle, 0, icase);
+    return find(str, needle, 0, icase);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
 string::format(const dodoString &format,
-			   ...)
+               ...)
 {
-	unsigned long length = format.size() * 3;
-	char *str = new char[length + 1];
+    unsigned long length = format.size() * 3;
+    char *str = new char[length + 1];
 
-	va_list ap;
+    va_list ap;
 
-	va_start(ap, format);
-	vsnprintf(str, length, format.data(), ap);
-	va_end(ap);
+    va_start(ap, format);
+    vsnprintf(str, length, format.data(), ap);
+    va_end(ap);
 
-	dodoString res = str;
+    dodoString res = str;
 
-	delete [] str;
+    delete [] str;
 
-	return res;
+    return res;
 }
 
 //-------------------------------------------------------------------
@@ -162,10 +162,10 @@ string::format(const dodoString &format,
 dodoString
 string::lToString(long number)
 {
-	char temp[NUMERIC_STRING_SIZE];
-	sprintf(temp, "%ld", number);
+    char temp[NUMERIC_STRING_SIZE];
+    sprintf(temp, "%ld", number);
 
-	return temp;
+    return temp;
 }
 
 //-------------------------------------------------------------------
@@ -173,10 +173,10 @@ string::lToString(long number)
 dodoString
 string::ulToString(unsigned long number)
 {
-	char temp[NUMERIC_STRING_SIZE];
-	sprintf(temp, "%ld", number);
+    char temp[NUMERIC_STRING_SIZE];
+    sprintf(temp, "%ld", number);
 
-	return temp;
+    return temp;
 }
 
 //-------------------------------------------------------------------
@@ -184,10 +184,10 @@ string::ulToString(unsigned long number)
 dodoString
 string::iToString(int number)
 {
-	char temp[NUMERIC_STRING_SIZE];
-	sprintf(temp, "%d", number);
+    char temp[NUMERIC_STRING_SIZE];
+    sprintf(temp, "%d", number);
 
-	return temp;
+    return temp;
 }
 
 //-------------------------------------------------------------------
@@ -195,10 +195,10 @@ string::iToString(int number)
 dodoString
 string::uiToString(unsigned int number)
 {
-	char temp[NUMERIC_STRING_SIZE];
-	sprintf(temp, "%u", number);
+    char temp[NUMERIC_STRING_SIZE];
+    sprintf(temp, "%u", number);
 
-	return temp;
+    return temp;
 }
 
 //-------------------------------------------------------------------
@@ -206,10 +206,10 @@ string::uiToString(unsigned int number)
 dodoString
 string::sToString(short number)
 {
-	char temp[NUMERIC_STRING_SIZE];
-	sprintf(temp, "%hd", number);
+    char temp[NUMERIC_STRING_SIZE];
+    sprintf(temp, "%hd", number);
 
-	return temp;
+    return temp;
 }
 
 //-------------------------------------------------------------------
@@ -217,10 +217,10 @@ string::sToString(short number)
 dodoString
 string::usToString(unsigned short number)
 {
-	char temp[NUMERIC_STRING_SIZE];
-	sprintf(temp, "%hd", number);
+    char temp[NUMERIC_STRING_SIZE];
+    sprintf(temp, "%hd", number);
 
-	return temp;
+    return temp;
 }
 
 //-------------------------------------------------------------------
@@ -228,10 +228,10 @@ string::usToString(unsigned short number)
 dodoString
 string::fToString(float number)
 {
-	char temp[NUMERIC_STRING_SIZE];
-	sprintf(temp, "%f", number);
+    char temp[NUMERIC_STRING_SIZE];
+    sprintf(temp, "%f", number);
 
-	return temp;
+    return temp;
 }
 
 //-------------------------------------------------------------------
@@ -239,99 +239,99 @@ string::fToString(float number)
 dodoString
 string::dToString(double number)
 {
-	char temp[NUMERIC_STRING_SIZE];
-	sprintf(temp, "%f", number);
+    char temp[NUMERIC_STRING_SIZE];
+    sprintf(temp, "%f", number);
 
-	return temp;
+    return temp;
 }
 
 //-------------------------------------------------------------------
 
 dodoString
 string::lTrim(const dodoString &data,
-			  char             symbol)
+              char             symbol)
 {
-	int size = data.size(), i(0);
+    int size = data.size(), i(0);
 
-	for (; i < size; ++i)
-		if (data[i] != symbol)
-			break;
+    for (; i < size; ++i)
+        if (data[i] != symbol)
+            break;
 
-	return dodoString(data.data() + i, size - i);
+    return dodoString(data.data() + i, size - i);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
 string::rTrim(const dodoString &data,
-			  char             symbol)
+              char             symbol)
 {
-	int i(data.size() - 1);
+    int i(data.size() - 1);
 
-	for (; i >= 0; --i)
-		if (data[i] != symbol)
-			break;
+    for (; i >= 0; --i)
+        if (data[i] != symbol)
+            break;
 
-	return dodoString(data.data(), i + 1);
+    return dodoString(data.data(), i + 1);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
 string::rTrim(const dodoString &data,
-			  const char       symbols[],
-			  int              symCount)
+              const char       symbols[],
+              int              symCount)
 {
-	int i(data.size() - 1), j, empty;
+    int i(data.size() - 1), j, empty;
 
-	for (; i >= 0; --i) {
-		for (j = 0, empty = 0; j < symCount; ++j)
-			if (data[i] != symbols[j])
-				++empty;
-		if (empty == symCount)
-			break;
-	}
+    for (; i >= 0; --i) {
+        for (j = 0, empty = 0; j < symCount; ++j)
+            if (data[i] != symbols[j])
+                ++empty;
+        if (empty == symCount)
+            break;
+    }
 
-	return dodoString(data.data(), i + 1);
+    return dodoString(data.data(), i + 1);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
 string::lTrim(const dodoString &data,
-			  const char       symbols[],
-			  int              symCount)
+              const char       symbols[],
+              int              symCount)
 {
-	int size = data.size(), i(0), empty, j;
+    int size = data.size(), i(0), empty, j;
 
-	for (; i < size; ++i) {
-		for (j = 0, empty = 0; j < symCount; ++j)
-			if (data[i] != symbols[j])
-				++empty;
-		if (empty == symCount)
-			break;
-	}
+    for (; i < size; ++i) {
+        for (j = 0, empty = 0; j < symCount; ++j)
+            if (data[i] != symbols[j])
+                ++empty;
+        if (empty == symCount)
+            break;
+    }
 
-	return dodoString(data.data() + i, size - i);
+    return dodoString(data.data() + i, size - i);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
 string::trim(const dodoString &data,
-			 const char       symbols[],
-			 int              symCount)
+             const char       symbols[],
+             int              symCount)
 {
-	return rTrim(lTrim(data, symbols, symCount), symbols, symCount);
+    return rTrim(lTrim(data, symbols, symCount), symbols, symCount);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
 string::trim(const dodoString &data,
-			 char             symbol)
+             char             symbol)
 {
-	return rTrim(lTrim(data, symbol), symbol);
+    return rTrim(lTrim(data, symbol), symbol);
 }
 
 //-------------------------------------------------------------------
@@ -339,7 +339,7 @@ string::trim(const dodoString &data,
 long
 string::stringToL(const dodoString &data)
 {
-	return atol(data.data());
+    return atol(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -347,7 +347,7 @@ string::stringToL(const dodoString &data)
 unsigned long
 string::stringToUL(const dodoString &data)
 {
-	return strtoul(data.data(), NULL, 10);
+    return strtoul(data.data(), NULL, 10);
 }
 
 //-------------------------------------------------------------------
@@ -355,7 +355,7 @@ string::stringToUL(const dodoString &data)
 int
 string::stringToI(const dodoString &data)
 {
-	return atoi(data.data());
+    return atoi(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -363,7 +363,7 @@ string::stringToI(const dodoString &data)
 unsigned int
 string::stringToUI(const dodoString &data)
 {
-	return (unsigned int)atol(data.data());
+    return (unsigned int)atol(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -371,7 +371,7 @@ string::stringToUI(const dodoString &data)
 short
 string::stringToS(const dodoString &data)
 {
-	return (short)atoi(data.data());
+    return (short)atoi(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -379,7 +379,7 @@ string::stringToS(const dodoString &data)
 unsigned short
 string::stringToUS(const dodoString &data)
 {
-	return (unsigned short)atoi(data.data());
+    return (unsigned short)atoi(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -387,7 +387,7 @@ string::stringToUS(const dodoString &data)
 float
 string::stringToF(const dodoString &data)
 {
-	return (float)atof(data.data());
+    return (float)atof(data.data());
 }
 
 //-------------------------------------------------------------------
@@ -395,39 +395,39 @@ string::stringToF(const dodoString &data)
 double
 string::stringToD(const dodoString &data)
 {
-	return atof(data.data());
+    return atof(data.data());
 }
 
 //-------------------------------------------------------------------
 
 void
 string::replace(const dodoStringArray &needle,
-				const dodoStringArray &replacement,
-				dodoString            &data)
+                const dodoStringArray &replacement,
+                dodoString            &data)
 {
-	dodoStringArray::const_iterator i(needle.begin()), j(needle.end());
-	dodoStringArray::const_iterator o(replacement.begin()), p(replacement.end());
-	for (; i != j && o != p; ++i, ++o)
-		replace(*i, *o, data);
+    dodoStringArray::const_iterator i(needle.begin()), j(needle.end());
+    dodoStringArray::const_iterator o(replacement.begin()), p(replacement.end());
+    for (; i != j && o != p; ++i, ++o)
+        replace(*i, *o, data);
 }
 
 //-------------------------------------------------------------------
 
 void
 string::replace(const dodoString &needle,
-				const dodoString &replacement,
-				dodoString       &data)
+                const dodoString &replacement,
+                dodoString       &data)
 {
-	unsigned long i(0), j(needle.size()), k(replacement.size());
+    unsigned long i(0), j(needle.size()), k(replacement.size());
 
-	while (true) {
-		i = data.find(needle, i);
-		if (i == dodoString::npos)
-			break;
+    while (true) {
+        i = data.find(needle, i);
+        if (i == dodoString::npos)
+            break;
 
-		data.replace(i, j, replacement, 0, k);
-		i += k;
-	}
+        data.replace(i, j, replacement, 0, k);
+        i += k;
+    }
 }
 
 //-------------------------------------------------------------------
