@@ -72,7 +72,8 @@ exchange::__init__::~__init__()
 
 //-------------------------------------------------------------------
 
-exchange::exchange(exchange &fse) : stream::channel(fse.protection)
+exchange::exchange(exchange &e) : stream::channel(e.protection),
+                                  network::exchange(e.protection)
 {
 }
 

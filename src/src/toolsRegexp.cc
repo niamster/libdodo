@@ -59,7 +59,7 @@ namespace dodo {
 
 using namespace dodo::tools;
 
-regexp::regexp(regexp &rt)
+regexp::regexp(regexp &)
 {
 }
 

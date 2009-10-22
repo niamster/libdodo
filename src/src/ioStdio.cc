@@ -53,7 +53,8 @@ stdio::stdio(short protection) : stream::channel(protection),
 
 //-------------------------------------------------------------------
 
-stdio::stdio(stdio &fd) : stream::channel(protection)
+stdio::stdio(stdio &s) : stream::channel(s.protection),
+                         io::pipe(s.protection)
 {
 }
 

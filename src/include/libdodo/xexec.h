@@ -52,7 +52,7 @@ namespace dodo {
      * @brief provides pre/post exec actions for defrived classes
      */
     class xexec {
-      private:
+      protected:
 
         /*
          * copy constructor

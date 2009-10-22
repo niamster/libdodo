@@ -55,7 +55,7 @@ xexec::__collected_data__::setExecObject(short execObject)
 
 //-------------------------------------------------------------------
 
-xexec::xexec(const xexec &exec)
+xexec::xexec(const xexec &)
 {
 }
 

@@ -78,7 +78,7 @@ shared::__shared__::__shared__() : data(NULL)
 
 //-------------------------------------------------------------------
 
-shared::shared(shared &sts)
+shared::shared(shared &)
 {
 }
 

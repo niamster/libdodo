@@ -43,7 +43,7 @@
 
 using namespace dodo::io::event;
 
-manager::manager(manager &rt)
+manager::manager(manager &)
 {
 }
 

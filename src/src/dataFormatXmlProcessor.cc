@@ -142,15 +142,15 @@ const dodoString processor::statements[] = {
 
 #ifdef LIBXML2_EXT
 void
-errHandler(void        *data,
-           xmlErrorPtr error)
+errHandler(void *,
+           xmlErrorPtr)
 {
 }
 #endif
 
 //-------------------------------------------------------------------
 
-processor::processor(processor &xt)
+processor::processor(processor &)
 {
 }
 

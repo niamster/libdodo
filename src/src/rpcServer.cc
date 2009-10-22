@@ -53,10 +53,10 @@ server::~server()
 //-------------------------------------------------------------------
 
 response
-server::rpcDefaultHandler(const dodoString       &method,
-                          const dodoArray<value> &arguments,
-                          const void             *idata,
-                          void                   *odata)
+server::rpcDefaultHandler(const dodoString &,
+                          const dodoArray<value> &,
+                          const void *,
+                          void *)
 {
     response response;
     response.fault(dodoString("rpcDefaultHandler"));

@@ -1142,7 +1142,7 @@ processor::_for(const dodoString &buffer,
                 dodoMap<dodoString, dodoStringArray>::iterator o = globalArray.find(temp[0]);
                 if (o != globalArray.end()) {
                     unsigned long pos = tools::string::stringToUL(temp[1]);
-                    if (pos >= 0 && pos <= o->second.size()) {
+                    if (pos <= o->second.size()) {
                         dodoStringMap &lns = local[namespaceDeepness];
 
                         unsigned long iteratorPrev = iterator;
@@ -1177,7 +1177,7 @@ processor::_for(const dodoString &buffer,
                 dodoMap<dodoString, dodoArray<dodoStringMap> >::iterator d = globalArrayHash.find(temp[0]);
                 if (d != globalArrayHash.end()) {
                     unsigned long pos = tools::string::stringToUL(temp[1]);
-                    if (pos >= 0 && pos <= d->second.size()) {
+                    if (pos <= d->second.size()) {
                         dodoStringMap &lns = local[namespaceDeepness];
 
                         unsigned long iteratorPrev = iterator;
@@ -1214,7 +1214,7 @@ processor::_for(const dodoString &buffer,
                     dodoMap<dodoString, dodoArray<dodoStringMap> >::iterator d = globalArrayHash.find(temp[0]);
                     if (d != globalArrayHash.end()) {
                         unsigned long pos = tools::string::stringToUL(temp[1]);
-                        if (pos >= 0 && pos <= d->second.size()) {
+                        if (pos <= d->second.size()) {
                             dodoStringMap::iterator k = d->second[pos].find(temp[2]);
                             if (k != d->second[pos].end()) {
                                 dodoStringMap &lns = local[namespaceDeepness];
@@ -1376,7 +1376,7 @@ processor::getVar(const dodoString &a_varName,
             if (k != dodo.end()) {
                 if (temp.size() == 3) {
                     unsigned long pos = tools::string::stringToUL(temp[2]);
-                    if (pos >= 0 && pos <= k->second.size())
+                    if (pos <= k->second.size())
                         return dodoString(1, k->second[pos]);
                     else
                         return __dodostring__;
@@ -1393,7 +1393,7 @@ processor::getVar(const dodoString &a_varName,
             dodoStringMap::iterator k = lpnsi->second.find(temp[0]);
             if (k != lpnsi->second.end()) {
                 unsigned long pos = tools::string::stringToUL(temp[1]);
-                if (pos >= 0 && pos <= k->second.size())
+                if (pos <= k->second.size())
                     return dodoString(1, k->second[pos]);
                 else
                     return __dodostring__;
@@ -1409,7 +1409,7 @@ processor::getVar(const dodoString &a_varName,
                 if (k != g->second.end()) {
                     if (temp.size() == 3) {
                         unsigned long pos = tools::string::stringToUL(temp[2]);
-                        if (pos >= 0 && pos <= k->second.size())
+                        if (pos <= k->second.size())
                             return dodoString(1, k->second[pos]);
                         else
                             return __dodostring__;
@@ -1422,7 +1422,7 @@ processor::getVar(const dodoString &a_varName,
         dodoStringMap::iterator k = global.find(temp[0]);
         if (k != global.end()) {
             unsigned long pos = tools::string::stringToUL(temp[1]);
-            if (pos >= 0 && pos <= k->second.size())
+            if (pos <= k->second.size())
                 return dodoString(1, k->second[pos]);
             else
                 return __dodostring__;
@@ -1434,7 +1434,7 @@ processor::getVar(const dodoString &a_varName,
             if (k != g->second.end()) {
                 if (temp.size() == 3) {
                     unsigned long pos = tools::string::stringToUL(temp[2]);
-                    if (pos >= 0 && pos <= k->second.size())
+                    if (pos <= k->second.size())
                         return dodoString(1, k->second[pos]);
                     else
                         return __dodostring__;
@@ -1446,10 +1446,10 @@ processor::getVar(const dodoString &a_varName,
         dodoMap<dodoString, dodoStringArray>::iterator o = globalArray.find(temp[0]);
         if (o != globalArray.end()) {
             unsigned long pos = tools::string::stringToUL(temp[1]);
-            if (pos >= 0 && pos <= o->second.size()) {
+            if (pos <= o->second.size()) {
                 if (temp.size() == 3) {
                     unsigned long pos1 = tools::string::stringToUL(temp[2]);
-                    if (pos >= 0 && pos1 <= o->second[pos].size())
+                    if (pos1 <= o->second[pos].size())
                         return dodoString(1, o->second[pos][pos1]);
                     else
                         return __dodostring__;
@@ -1462,12 +1462,12 @@ processor::getVar(const dodoString &a_varName,
             dodoMap<dodoString, dodoArray<dodoStringMap> >::iterator d = globalArrayHash.find(temp[0]);
             if (d != globalArrayHash.end()) {
                 unsigned long pos = tools::string::stringToUL(temp[1]);
-                if (pos >= 0 && pos <= d->second.size()) {
+                if (pos <= d->second.size()) {
                     k = d->second[pos].find(temp[2]);
                     if (k != d->second[pos].end()) {
                         if (temp.size() == 4) {
                             pos = tools::string::stringToUL(temp[3]);
-                            if (pos >= 0 && pos <= k->second.size())
+                            if (pos <= k->second.size())
                                 return dodoString(1, k->second[pos]);
                             else
                                 return __dodostring__;

@@ -152,7 +152,7 @@ client::client(const dodoString &url) : followRedirection(true),
 
 //-------------------------------------------------------------------
 
-client::client(client &fd)
+client::client(client &)
 {
 }
 

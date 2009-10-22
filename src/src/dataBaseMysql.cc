@@ -113,7 +113,7 @@ mysql::mysql(const __connection__ &info) : empty(true),
 
 //-------------------------------------------------------------------
 
-mysql::mysql(mysql &a_mypp)
+mysql::mysql(mysql &)
 {
 }
 

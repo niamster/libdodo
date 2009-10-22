@@ -52,7 +52,7 @@ dodo::pc::sync::thread server::request;
 //-------------------------------------------------------------------
 
 void
-dummyfastCGIThread(dodo::cgi::exchange &data)
+dummyfastCGIThread(dodo::cgi::exchange &)
 {
 }
 
@@ -62,7 +62,7 @@ dodo::cgi::server::handler server::handler = &dummyfastCGIThread;
 
 //-------------------------------------------------------------------
 
-server::server(server &cf)
+server::server(server &)
 {
 }
 
