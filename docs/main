@@ -32,12 +32,14 @@ Brief overview of libdodo subsystems:
    * pipe provides simple inter-process communication stream interface for data exchange
  * pc stands for parallel computation and defines needed tools for this purpose
    * sync handles synchronization mechanisms between asynchronous events such as threads or processes
-     * data provides access synchronization interface
-       * single interface provides access synchronization for single data entry
-       * collection interface provides access synchronization for collection of entries
-     * section provides access synchronization interface for program flow
-   * job subsystem provides manager interface as an abstraction of asynchronous program flow management
-     process::manager and thread::manager are helper interfaces for handling processes and threads management accordingly
+     * data provides data access synchronization interface
+       * object interface provides access synchronization for single data entry
+     * protector is an abstraction interface for execution flow synchronization
+     * process and thread are synchronization helpers
+     * stack provides easy interface for access synchronization of code sections
+   * execution subsystem provides abstraction of asynchronous program flow management
+     * process and thread are helper interfaces for handling processe and thread management accordingly
+     * manager is a helper interface to handle set of jobs
  * rpc provides interface for remote procedure calls
    client interface serves for client-side connection and server is for handling server-side 
    value, method and response represents RPC value, client request and server response accordingly
