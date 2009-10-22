@@ -74,7 +74,7 @@ AC_SUBST(DEPS)
 DEPS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/d} "; done)
 
 AC_SUBST(TESTS)
-TESTS=$(for i in tests/*; do test -d $i && echo -n "${i#tests/} "; done)
+TESTS=$(for i in examples/*; do test -d $i && echo -n "${i#tests/} "; done)
 
 cat > include/libdodo/directives.runtime.h  <<EOF
 /***************************************************************************
@@ -786,44 +786,44 @@ echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
 AC_CONFIG_FILES([Makefile:$TARGET_MAKEFILE])
 
 AC_CONFIG_FILES([bin/dodo-config
-	tests/Makefile
-	tests/image_test/Makefile
-	tests/cgifast_test/Makefile
-	tests/cgi_test/Makefile
-	tests/dbmysql_test/Makefile
-	tests/dbpostgresql_test/Makefile
-	tests/dbsqlite_test/Makefile
-	tests/db_test/Makefile
-	tests/iononblocked_ionetwork_test/Makefile
-	tests/iononblocked_ionetworkssl_test/Makefile
-	tests/iostdio_test/Makefile
-	tests/iofile_toolsfilesystem_test/Makefile
-	tests/iomemory_test/Makefile
-	tests/iopipe_iofilefifo_pcthreadcollection_test/Makefile
-	tests/ionetwork_pcthreads_test/Makefile
-	tests/ionetworkclient_test/Makefile
-	tests/ionetworkserver_test/Makefile
-	tests/ionetworksslserver_test/Makefile
-	tests/ionetworksslclient_test/Makefile
-	tests/ionetworkhttp_test/Makefile
-	tests/pcthreadcollection_test/Makefile
-	tests/pcprocesscollection_test/Makefile
-	tests/pcjobcollection_test/Makefile
-	tests/toolsnetwork_test/Makefile
-	tests/toolsos_test/Makefile
-	tests/toolstime_test/Makefile
-	tests/toolsmisc_test/Makefile
-	tests/toolscode_test/Makefile
-	tests/toolslogger_test/Makefile
-	tests/toolslibrary_test/Makefile
-	tests/toolsregexp_test/Makefile
-	tests/xexec_test/Makefile
-	tests/rpcxmlhttpclient_test/Makefile
-	tests/rpcxmlcgiserver_test/Makefile
-	tests/rpcjsonhttpclient_test/Makefile
-	tests/rpcjsoncgiserver_test/Makefile
-	tests/dataformatjson_test/Makefile
-	tests/dataformatxml_test/Makefile])
+	examples/Makefile
+	examples/image/Makefile
+	examples/cgifast/Makefile
+	examples/cgi/Makefile
+	examples/dbmysql/Makefile
+	examples/dbpostgresql/Makefile
+	examples/dbsqlite/Makefile
+	examples/db/Makefile
+	examples/iononblocked_ionetwork/Makefile
+	examples/iononblocked_ionetworkssl/Makefile
+	examples/iostdio/Makefile
+	examples/iofile_toolsfilesystem/Makefile
+	examples/iomemory/Makefile
+	examples/iopipe_iofilefifo_pcthread/Makefile
+	examples/ionetwork_pcthreads/Makefile
+	examples/ionetworkclient/Makefile
+	examples/ionetworkserver/Makefile
+	examples/ionetworksslserver/Makefile
+	examples/ionetworksslclient/Makefile
+	examples/ionetworkhttp/Makefile
+	examples/pcthread/Makefile
+	examples/pcprocess/Makefile
+	examples/pcjob/Makefile
+	examples/toolsnetwork/Makefile
+	examples/toolsos/Makefile
+	examples/toolstime/Makefile
+	examples/toolsmisc/Makefile
+	examples/toolscode/Makefile
+	examples/toolslogger/Makefile
+	examples/toolslibrary/Makefile
+	examples/toolsregexp/Makefile
+	examples/xexec/Makefile
+	examples/rpcxmlhttpclient/Makefile
+	examples/rpcxmlcgiserver/Makefile
+	examples/rpcjsonhttpclient/Makefile
+	examples/rpcjsoncgiserver/Makefile
+	examples/dataformatjson/Makefile
+	examples/dataformatxml/Makefile])
 
 AC_OUTPUT
 
