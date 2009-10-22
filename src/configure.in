@@ -73,8 +73,8 @@ OBJECTS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/o} "; done)
 AC_SUBST(DEPS)
 DEPS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/d} "; done)
 
-AC_SUBST(TESTS)
-TESTS=$(for i in examples/*; do test -d $i && echo -n "${i#tests/} "; done)
+AC_SUBST(EXAMPLES)
+EXAMPLES=$(for i in examples/*; do test -d $i && echo -n "${i#examples/} "; done)
 
 cat > include/libdodo/directives.runtime.h  <<EOF
 /***************************************************************************

@@ -640,7 +640,7 @@ ac_includes_default="\
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 DEBUG
-TESTS
+EXAMPLES
 DEPS
 OBJECTS
 TAGS
@@ -5373,7 +5373,7 @@ OBJECTS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/o} "; done)
 DEPS=$(for i in src/*cc; do i=${i#src/}; echo -n "${i/%cc/d} "; done)
 
 
-TESTS=$(for i in examples/*; do test -d $i && echo -n "${i#tests/} "; done)
+EXAMPLES=$(for i in examples/*; do test -d $i && echo -n "${i#examples/} "; done)
 
 cat > include/libdodo/directives.runtime.h  <<EOF
 /***************************************************************************

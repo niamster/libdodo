@@ -1,11 +1,11 @@
-TESTS=@TESTS@
+EXAMPLES=@EXAMPLES@
 
-.PHONY:$(TESTS)
+.PHONY:$(EXAMPLES)
 
-all: $(TESTS)
-$(TESTS):
+all: $(EXAMPLES)
+$(EXAMPLES):
 	@echo "-- Building test for $@"; $(MAKE) -s -C $@; if test $$? != 0; then echo "-- Building test for $@ failed" >&2; exit $$?; fi 
 
 clean:
-	@for i in $(TESTS); do $(MAKE) -s -C $$i clean; done;
+	@for i in $(EXAMPLES); do $(MAKE) -s -C $$i clean; done;
 
