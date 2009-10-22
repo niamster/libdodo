@@ -113,6 +113,7 @@ namespace dodo {
                     char  name[64];         ///< name of module
                     char  discription[256]; ///< discription of module
                     char  hook[64];         ///< name of function in module that will be a hook
+                    char  cookie[32];       ///< cookie that would be passed to deinitModule
                     bool  detached;         ///< true if thread is detached
                     int   stackSize;        ///< size of stack for thread in bytes
                     short action;           ///< action on object destruction, @see onDestructionEnum
@@ -129,9 +130,10 @@ namespace dodo {
                 /**
                  * @typedef deinitModule
                  * @brief defines type of deinit function for library
+                 * @param cookie defines cookie data returned from initModule
                  * @note name in the library must be deinitPcExecutionThreadModule
                  */
-                typedef void (*deinitModule)();
+                typedef void (*deinitModule)(char cookie[32]);
 
                 /**
                  * @return info about library

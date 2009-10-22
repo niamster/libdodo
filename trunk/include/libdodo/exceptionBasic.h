@@ -151,6 +151,7 @@ namespace dodo {
                 char name[64];                              ///< name of the library
                 char discription[256];                      ///< discription of the library
                 char hook[64];                              ///< name of the function in module that will be as a hook
+                char cookie[32];                            ///< cookie that would be passed to deinitModule
                 bool modules[MODULE_ENUMSIZE];              ///< for what modules handler should be set, @see exception::moduleEnum
             };
 
@@ -165,9 +166,10 @@ namespace dodo {
             /**
              * @typedef deinitModule
              * @brief defines type of deinit function for library
+             * @param cookie defines cookie data returned from initModule
              * @note name in the library must be deinitExceptionBasicModule
              */
-            typedef void (*deinitModule)();
+            typedef void (*deinitModule)(char cookie[32]);
 #endif
 
             /**
@@ -291,6 +293,7 @@ namespace dodo {
 
 #ifdef DL_EXT
             static void *handles[MODULE_ENUMSIZE];          ///< handles to the libraries
+            static char cookies[MODULE_ENUMSIZE][32];          ///< handles to the libraries
 
             static bool handlesOpened[MODULE_ENUMSIZE];     ///< map of the opened libraries
 #endif

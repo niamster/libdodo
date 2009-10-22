@@ -103,6 +103,29 @@ bool os::handlesOpenedSig[] = {
     false,
     false
 };
+//-------------------------------------------------------------------
+
+char os::handlesCookiesSig[][32] = {
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', }
+};
 #endif
 
 //-------------------------------------------------------------------
@@ -743,7 +766,7 @@ os::setSignalHandler(long          signal,
     if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
         deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
         if (deinit != NULL)
-            deinit();
+            deinit(handlesCookiesSig[handleSignal]);
 
 #ifndef DL_FAST
         dlclose(handlesSig[handleSignal]);
@@ -783,7 +806,7 @@ os::setMicroTimer(unsigned long timeout,
     if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
         deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
         if (deinit != NULL)
-            deinit();
+            deinit(handlesCookiesSig[handleSignal]);
 
 #ifndef DL_FAST
         dlclose(handlesSig[handleSignal]);
@@ -839,7 +862,7 @@ os::setTimer(long          timeout,
     if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
         deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
         if (deinit != NULL)
-            deinit();
+            deinit(handlesCookiesSig[handleSignal]);
 
 #ifndef DL_FAST
         dlclose(handlesSig[handleSignal]);
@@ -911,7 +934,7 @@ os::removeSignalHandler(long signal)
     if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
         deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
         if (deinit != NULL)
-            deinit();
+            deinit(handlesCookiesSig[handleSignal]);
 
 #ifndef DL_FAST
         dlclose(handlesSig[handleSignal]);
@@ -950,10 +973,14 @@ os::module(const dodoString &module,
 
     __signal_module__ mod = init(toInit);
 
+    deinitSignalModule deinit = (deinitSignalModule)dlsym(handle, "deinitToolsOsSignalModule");
+    if (init != NULL)
+        deinit(mod.cookie);
+
+
 #ifndef DL_FAST
     if (dlclose(handle) != 0)
         throw exception::basic(exception::MODULE_TOOLSOS, OSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-
 #endif
 
     return mod;
@@ -987,7 +1014,7 @@ os::setSignalHandler(const dodoString &path,
     if (handleSignal > 0 && handlesOpenedSig[handleSignal]) {
         deinit = (deinitSignalModule)dlsym(handlesSig[handleSignal], "deinitToolsOsSignalModule");
         if (deinit != NULL)
-            deinit();
+            deinit(handlesCookiesSig[handleSignal]);
 
 #ifndef DL_FAST
         dlclose(handlesSig[handleSignal]);

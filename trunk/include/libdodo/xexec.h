@@ -65,29 +65,31 @@ namespace dodo {
 #ifdef DL_EXT
         /**
          * @struct __module__
-         * @brief is returned from moduleInit in the library
+         * @brief is returned from initModule in the library
          */
         struct __module__ {
             char  name[64];         ///< name of the library
             char  discription[256]; ///< discription of the library
             char  hook[64];         ///< name of function in the library that will be used as hook
+            char  cookie[32];       ///< cookie that would be passed to deinitModule
             short type;             ///< type of hook, @see xexec::actionEnum, could me grouped with OR
         };
 
         /**
-         * @typedef moduleInit
+         * @typedef initModule
          * @brief defines type of init function for library
          * @param data defines user data
          * @note name in the library must be initXexecModule
          */
-        typedef __module__ (*moduleInit)(void *data);
+        typedef __module__ (*initModule)(void *data);
 
         /**
-         * @typedef moduleDeinit
+         * @typedef deinitModule
          * @brief defines type of deinit function for library
+         * @param cookie defines cookie data returned from initModule
          * @note name in the library must be deinitXexecModule
          */
-        typedef void (*moduleDeinit)();
+        typedef void (*deinitModule)(char cookie[32]);
 #endif
 
         /**
@@ -245,6 +247,7 @@ namespace dodo {
             int  id;                                    ///< object identificator
 #ifdef DL_EXT
             void *handle;                               ///< handle to library
+            char cookie[32];                            ///< cookie that would be passed to deinitModule
 #endif
         };
 

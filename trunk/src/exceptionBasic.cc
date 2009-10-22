@@ -31,6 +31,7 @@
 
 #ifdef DL_EXT
 #include <dlfcn.h>
+#include <string.h>
 #endif
 #ifdef __GNUC__
 #include <cxxabi.h>
@@ -302,6 +303,60 @@ void *basic::handles[] = {
     NULL,
     NULL,
     NULL
+};
+
+//-------------------------------------------------------------------
+
+char basic::cookies[][32] = {
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', },
+    {'\0', }
 };
 #endif
 
@@ -813,7 +868,7 @@ basic::~basic() throw ()
 
             deinit = (deinitModule)dlsym(handles[i], "deinitExceptionBasicModule");
             if (deinit != NULL)
-                deinit();
+                deinit(cookies[i]);
 
             handlesOpened[i] = false;
 
@@ -880,7 +935,7 @@ basic::setHandler(moduleEnum module,
 
         deinit = (deinitModule)dlsym(handles[module], "deinitExceptionBasicModule");
         if (deinit != NULL)
-            deinit();
+            deinit(cookies[module]);
 
 #ifndef DL_FAST
         dlclose(handles[module]);
@@ -915,7 +970,7 @@ basic::setHandler(handler handler,
         if (handlesOpened[i]) {
             deinit = (deinitModule)dlsym(handles[i], "deinitExceptionBasicModule");
             if (deinit != NULL)
-                deinit();
+                deinit(cookies[i]);
 
 #ifndef DL_FAST
             dlclose(handles[i]);
@@ -945,7 +1000,7 @@ basic::removeHandler(moduleEnum module)
 
         deinit = (deinitModule)dlsym(handles[module], "deinitExceptionBasicModule");
         if (deinit != NULL)
-            deinit();
+            deinit(cookies[module]);
 
 #ifndef DL_FAST
         dlclose(handles[module]);
@@ -977,7 +1032,7 @@ basic::removeHandlers()
         if (handlesOpened[i]) {
             deinit = (deinitModule)dlsym(handles[i], "deinitExceptionBasicModule");
             if (deinit != NULL)
-                deinit();
+                deinit(cookies[i]);
 
 #ifndef DL_FAST
             dlclose(handles[i]);
@@ -1029,7 +1084,7 @@ basic::setHandler(const dodoString &path,
         if (handlesOpened[i]) {
             deinit = (deinitModule)dlsym(handles[i], "deinitExceptionBasicModule");
             if (deinit != NULL)
-                deinit();
+                deinit(cookies[i]);
 
 #ifndef DL_FAST
             dlclose(handles[i]);
@@ -1047,6 +1102,7 @@ basic::setHandler(const dodoString &path,
             continue;
 
         handlesOpened[i] = true;
+        memcpy(cookies[i], mod.cookie, 32);
 
         handlers[i] = in;
         handlerMap[i] = true;
@@ -1075,6 +1131,10 @@ basic::module(const dodoString &module,
         return __module__();
 
     __module__ mod = init(toInit);
+
+	deinitModule deinit = (deinitModule)dlsym(handle, "deinitExceptionBasicModule");
+	if (deinit != NULL)
+		deinit(mod.cookie);
 
 #ifndef DL_FAST
     if (dlclose(handle) != 0)

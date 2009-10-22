@@ -97,6 +97,7 @@ namespace dodo {
                 char name[64];              ///< name of the library
                 char discription[256];      ///< discription of the library
                 char hook[64];              ///< name of function in module that will be as a hook
+                char cookie[32];            ///< cookie that would be passed to deinitModule
                 long signal;                ///< signal to set handler
                 int  blockSignals;          ///< signals to block during signal handling; -1 to ignore
             };
@@ -112,9 +113,10 @@ namespace dodo {
             /**
              * @typedef deinitSignalModule
              * @brief defines type of deinit function for library
+             * @param cookie defines cookie data returned from initModule
              * @note name in the library must be deinitToolOsSignalModule
              */
-            typedef void (*deinitSignalModule)();
+            typedef void (*deinitSignalModule)(char cookie[32]);
 #endif
 
             /**
@@ -516,6 +518,7 @@ namespace dodo {
 #ifdef DL_EXT
             static void *handlesSig[SIGNAL_ENUMSIZE];           ///< handles to modules
             static bool handlesOpenedSig[SIGNAL_ENUMSIZE];      ///< map of opened modules
+            static char handlesCookiesSig[SIGNAL_ENUMSIZE][32]; ///< module cookies
 #endif
 
             static pc::sync::thread keeper;                     ///< section locker

@@ -31,6 +31,7 @@
 
 #ifdef DL_EXT
 #include <dlfcn.h>
+#include <string.h>
 #endif
 
 #include <libdodo/xexec.h>
@@ -73,16 +74,16 @@ xexec::xexec() : safeXExecs(true),
 xexec::~xexec()
 {
 #ifdef DL_EXT
-    moduleDeinit deinit;
+    deinitModule deinit;
 
     dodoList<__item__>::iterator i(preExec.begin()), j(preExec.end());
     for (; i != j; ++i) {
         if (i->handle == NULL)
             continue;
 
-        deinit = (moduleDeinit)dlsym(i->handle, "deinitXexecModule");
+        deinit = (deinitModule)dlsym(i->handle, "deinitXexecModule");
         if (deinit != NULL)
-            deinit();
+            deinit(i->cookie);
 
 #ifndef DL_FAST
         dlclose(i->handle);
@@ -95,9 +96,9 @@ xexec::~xexec()
         if (i->handle == NULL)
             continue;
 
-        deinit = (moduleDeinit)dlsym(i->handle, "deinitXexecModule");
+        deinit = (deinitModule)dlsym(i->handle, "deinitXexecModule");
         if (deinit != NULL)
-            deinit();
+            deinit(i->cookie);
 
 #ifndef DL_FAST
         dlclose(i->handle);
@@ -142,11 +143,11 @@ xexec::removeXExec(int id)
 
 #ifdef DL_EXT
     if (current->handle != NULL) {
-        moduleDeinit deinit;
+        deinitModule deinit;
 
-        deinit = (moduleDeinit)dlsym(current->handle, "deinitXexecModule");
+        deinit = (deinitModule)dlsym(current->handle, "deinitXexecModule");
         if (deinit != NULL)
-            deinit();
+            deinit(current->cookie);
 
 #ifndef DL_FAST
         if (dlclose(current->handle) != 0)
@@ -224,11 +225,15 @@ xexec::module(const dodoString &module,
     if (handle == NULL)
         throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-    moduleInit init = (moduleInit)dlsym(handle, "initXexecModule");
+    initModule init = (initModule)dlsym(handle, "initXexecModule");
     if (init == NULL)
         throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     __module__ mod = init(initData);
+
+    deinitModule deinit = (deinitModule)dlsym(handle, "deinitXexecModule");
+    if (deinit != NULL)
+        deinit(mod.cookie);
 
 #ifndef DL_FAST
     if (dlclose(handle) != 0)
@@ -260,25 +265,26 @@ xexec::addXExec(const dodoString &module,
     if (e.handle == NULL)
         throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-    moduleInit init = (moduleInit)dlsym(e.handle, "initXexecModule");
+    initModule init = (initModule)dlsym(e.handle, "initXexecModule");
     if (init == NULL)
         throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-    __module__ info = init(initData);
+    __module__ mod = init(initData);
 
-    hook in = (hook)dlsym(e.handle, info.hook);
+    hook in = (hook)dlsym(e.handle, mod.hook);
     if (in == NULL)
         throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     e.func = in;
+    memcpy(e.cookie, mod.cookie, 32);
 
-    if (info.type & ACTION_PREEXEC) {
+    if (mod.type & ACTION_PREEXEC) {
         e.id = ++execs;
         preExec.push_back(e);
         preExecId = e.id;
     }
 
-    if (info.type & ACTION_POSTEXEC) {
+    if (mod.type & ACTION_POSTEXEC) {
         e.id = ++execs;
         postExec.push_back(e);
         postExecId = e.id;
