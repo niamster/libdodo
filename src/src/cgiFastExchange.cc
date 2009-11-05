@@ -104,39 +104,36 @@ exchange::outDescriptor() const
 
 //-------------------------------------------------------------------
 
-void
-exchange::_read(char * const a_data) const
+unsigned long
+exchange::_read(char * const data) const
 {
-    FCGX_GetStr(a_data, blockSize, request->request->in);
+    return FCGX_GetStr(data, bs, request->request->in);
 }
 
 //-------------------------------------------------------------------
 
-void
-exchange::_write(const char *const buf) const
+unsigned long
+exchange::_write(const char *const data) const
 {
-    if (FCGX_PutStr(buf, blockSize, request->request->out) == -1)
+    long n;
+
+    if ((n = FCGX_PutStr(data, bs, request->request->out)) == -1)
         throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
+
+    return n;
 }
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 exchange::_writeString(const char * const data) const
 {
-    unsigned long _blockSize = blockSize;
+    long n;
 
-    try {
-        blockSize = strnlen(data, blockSize);
+    if ((n = FCGX_PutStr(data, strnlen(data, bs), request->request->out)) == -1)
+        throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITESTRING, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 
-        _write(data);
-
-        blockSize = _blockSize;
-    } catch (...) {
-        blockSize = _blockSize;
-
-        throw;
-    }
+    return n;
 }
 
 //-------------------------------------------------------------------
@@ -144,13 +141,7 @@ exchange::_writeString(const char * const data) const
 unsigned long
 exchange::_readString(char * const data) const
 {
-    unsigned long _blockSize = blockSize++;
-
-    _read(data);
-
-    blockSize = _blockSize;
-
-    return strlen(data);
+    return FCGX_GetStr(data, bs+1, request->request->in);
 }
 #endif
 

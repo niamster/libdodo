@@ -38,7 +38,9 @@
 using namespace dodo::cgi::basic;
 
 exchange::exchange(exchange &e) : io::stream::channel(e.protection),
-                                  dodo::cgi::exchange(e.protection)
+                                  dodo::cgi::exchange(e.protection),
+                                  io::pipe(e.protection),
+                                  io::stdio(e.protection)
 {
 }
 

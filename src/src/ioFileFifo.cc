@@ -160,7 +160,7 @@ fifo::fifo(const fifo &fd) : stream::channel(fd.protection),
     collectedData.setExecObject(xexec::OBJECT_IOFILEFIFO);
 #endif
 
-    blockSize = fd.blockSize;
+    bs = fd.bs;
 
     if (fd.handle->file != NULL) {
         int oldDesc, newDesc;
@@ -253,7 +253,7 @@ fifo::clone(const fifo &fd)
     blocked = fd.blocked;
     path = fd.path;
     mode = fd.mode;
-    blockSize = fd.blockSize;
+    bs = fd.bs;
 
     if (fd.handle->file != NULL) {
         int oldDesc, newDesc;
@@ -437,21 +437,21 @@ fifo::block(bool flag)
 
 //-------------------------------------------------------------------
 
-void
-fifo::_read(char * const a_data) const
+unsigned long
+fifo::_read(char * const data) const
 {
     if (handle->file == NULL)
         throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READ, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-    char *data = a_data;
+    char *s = data;
 
-    unsigned long batch = blockSize, n;
+    unsigned long batch = bs, n;
 
-    while (batch > 0) {
+    while (batch != 0) {
         while (true) {
-            if ((n = fread(data, 1, batch, handle->file)) == 0) {
+            if ((n = fread(s, 1, batch, handle->file)) == 0) {
                 if (feof(handle->file) != 0 || errno == EAGAIN)
-                    break;
+                    return bs - batch;
 
                 if (errno == EINTR)
                     continue;
@@ -464,30 +464,32 @@ fifo::_read(char * const a_data) const
         }
 
         batch -= n;
-        data += n;
+        s += n;
     }
+
+    return bs - batch;
 }
 
 //-------------------------------------------------------------------
 
-void
-fifo::_write(const char *const a_data) const
+unsigned long
+fifo::_write(const char *const data) const
 {
     if (handle->file == NULL)
         throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__WRITE, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-    const char *data = a_data;
+    const char *s = data;
 
-    unsigned long batch = blockSize, n;
+    unsigned long batch = bs, n;
 
-    while (batch > 0) {
+    while (batch != 0) {
         while (true) {
-            if ((n = fwrite(data, 1, batch, handle->file)) == 0) {
+            if ((n = fwrite(s, 1, batch, handle->file)) == 0) {
                 if (errno == EINTR)
                     continue;
 
                 if (errno == EAGAIN)
-                    break;
+                    return bs - batch;
 
                 if (ferror(handle->file) != 0)
                     throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -497,8 +499,10 @@ fifo::_write(const char *const a_data) const
         }
 
         batch -= n;
-        data += n;
+        s += n;
     }
+
+    return bs;
 }
 
 //-------------------------------------------------------------------
@@ -518,46 +522,45 @@ fifo::flush() const
 //-------------------------------------------------------------------
 
 unsigned long
-fifo::_readString(char * const a_data) const
+fifo::_readString(char * const data) const
 {
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READSTREAM, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
+        throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READSTRING, exception::ERRNO_LIBDODO, FIFOEX_NOTOPENED, IOFILEFIFOEX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
-    unsigned long readSize = blockSize + 1;
-
-    memset(a_data, '\0', readSize);
+    unsigned long readSize = bs + 1;
 
     while (true) {
-        if (fgets(a_data, readSize, handle->file) == NULL) {
+        if (fgets(data, readSize, handle->file) == NULL) {
             if (errno == EINTR)
                 continue;
 
             if (errno == EAGAIN)
-                break;
+                return 0;
 
             if (ferror(handle->file) != 0)
-                throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         break;
     }
 
-    return strlen(a_data);
+    return strlen(data);
 }
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 fifo::_writeString(const char *const data) const
 {
-    unsigned long _blockSize = blockSize;
+    unsigned long _bs = bs;
+    unsigned long written;
 
     try {
-        blockSize = strnlen(data, blockSize);
+        bs = strnlen(data, bs);
 
-        _write(data);
+        written = _write(data);
 
-        if (data[blockSize - 1] != '\n') {
+        if (data[bs - 1] != '\n') {
             while (true) {
                 if (fputc('\n', handle->file) == EOF) {
                     if (errno == EINTR)
@@ -567,19 +570,21 @@ fifo::_writeString(const char *const data) const
                         break;
 
                     if (ferror(handle->file) != 0)
-                        throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                        throw exception::basic(exception::MODULE_IOFILEFIFO, FIFOEX__WRITESTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
 
                 break;
             }
         }
 
-        blockSize = _blockSize;
+        bs = _bs;
     } catch (...) {
-        blockSize = _blockSize;
+        bs = _bs;
 
         throw;
     }
+
+    return written;
 }
 
 //-------------------------------------------------------------------

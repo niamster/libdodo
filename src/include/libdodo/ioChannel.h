@@ -122,64 +122,70 @@ namespace dodo {
 
             /**
              * @return read data
-             * @note not more then blockSize
+             * @note not more then bs
              */
             virtual dodoString read() const = 0;
 
             /**
+             * @return successfully written bytes
              * @param data defines data that will be written
-             * @note not more then blockSize
+             * @note not more then bs
              */
-            virtual void write(const dodoString &data) const = 0;
+            virtual unsigned long write(const dodoString &data) const = 0;
 
             /**
-             * read from stream null- or newline- terminated string
+             * read null- or newline- terminated string
              * @return read data
-             * @note not more then blockSize
+             * @note not more then bs
              */
             virtual dodoString readString() const = 0;
 
             /**
-             * write to stream null- terminated string
+             * write null- terminated string
+             * @return successfully written bytes
              * @param data defines data that will be written
-             * @note not more then blockSize
+             * @note not more then bs
              */
-            virtual void writeString(const dodoString &data) const = 0;
+            virtual unsigned long writeString(const dodoString &data) const = 0;
 
             /**
              * flush output
              */
             virtual void flush() const = 0;
 
-            mutable unsigned long blockSize;   ///< size of data block for read/write operations
+            mutable unsigned long bs;   ///< size of data block for read/write operations
 
           protected:
 
             /**
+             * @return successfully read bytes
              * @param data defines buffer that will be filled
-             * @note not more then blockSize(including null)
+             * @note not more then bs(including null)
              */
-            virtual void _read(char * const data) const = 0;
+            virtual unsigned long _read(char * const data) const = 0;
 
             /**
-             * read from stream null- or newline- terminated string
+             * read null- or newline- terminated string
+             * @return successfully read bytes
              * @param data defines buffer that will be filled
-             * @note not more then blockSize(including null)
+             * @note not more then bs(including null)
              */
             virtual unsigned long _readString(char * const data) const = 0;
 
             /**
+             * @return successfully written bytes
              * @param data defines data that will be written
-             * @note not more then blockSize(including null)
+             * @note not more then bs(including null)
              */
-            virtual void _write(const char * const data) const = 0;
+            virtual unsigned long _write(const char * const data) const = 0;
 
             /**
-             * write to stream null- terminated string
+             * write null- terminated string
+             * @return successfully written bytes
              * @param data defines data that will be written
-             * @note not more then blockSize(including null)
+             * @note not more then bs(including null)
              */
-            virtual void _writeString(const char * const data) const = 0;
+            virtual unsigned long _writeString(const char * const data) const = 0;
 
             pc::sync::protector *keeper;                                    ///< section locker
             short protection;                                               ///< type of IO protection, @see io::channel::protectionEnum

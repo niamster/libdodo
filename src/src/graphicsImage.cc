@@ -147,16 +147,16 @@ __image_init__::~__image_init__()
 //-------------------------------------------------------------------
 
 void
-__image_init__::imWarningHandler(const ExceptionType et,
-                                 const char          *reason,
-                                 const char          *description)
+__image_init__::imWarningHandler(const ExceptionType,
+                                 const char *,
+                                 const char *)
 {
 }
 
 //-------------------------------------------------------------------
 
 void
-__image_init__::imErrorHandler(const ExceptionType et,
+__image_init__::imErrorHandler(const ExceptionType,
                                const char          *reason,
                                const char          *description)
 {
@@ -214,9 +214,10 @@ const int image::compressionStatements[] = {
 
 //-------------------------------------------------------------------
 
-image::image(image &a_image)
+image::image(image &i)
 #ifndef GRAPHICS_WO_XEXEC
-    : collectedData(this, OBJECT_GRAPHICSIMAGE)
+    : xexec(i),
+      collectedData(this, OBJECT_GRAPHICSIMAGE)
 #endif
 {
 }

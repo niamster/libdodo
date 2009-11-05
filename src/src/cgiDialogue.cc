@@ -286,12 +286,12 @@ dialogue::print(const dodoString &buf)
 {
     printHeaders();
 
-    unsigned long blockSizeOrig = io.blockSize;;
+    unsigned long bsOrig = io.bs;;
 
-    io.blockSize = buf.size();
+    io.bs = buf.size();
     io.write(buf);
 
-    io.blockSize = blockSizeOrig;
+    io.bs = bsOrig;
 }
 
 //-------------------------------------------------------------------
@@ -595,21 +595,21 @@ dialogue::printHeaders() const
 void
 dialogue::makeContent(unsigned long postSize)
 {
-    unsigned long blockSize = tools::string::stringToUL(ENVIRONMENT[ENVIRONMENT_CONTENTLENGTH]);
-    unsigned long blockSizeOrig;
+    unsigned long bs = tools::string::stringToUL(ENVIRONMENT[ENVIRONMENT_CONTENTLENGTH]);
+    unsigned long bsOrig;
 
-    if (blockSize <= 0)
+    if (bs <= 0)
         return ;
 
-    if (blockSize > postSize)
-        blockSize = postSize;
+    if (bs > postSize)
+        bs = postSize;
 
-    blockSizeOrig = io.blockSize;
-    io.blockSize = blockSize;
+    bsOrig = io.bs;
+    io.bs = bs;
 
     content = io.read();
 
-    io.blockSize = blockSizeOrig;
+    io.bs = bsOrig;
 }
 
 //-------------------------------------------------------------------

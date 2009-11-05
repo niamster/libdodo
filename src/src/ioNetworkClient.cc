@@ -59,9 +59,10 @@ client::__collected_data__::__collected_data__(xexec *executor,
 
 //-------------------------------------------------------------------
 
-client::client(client &fs)
+client::client(client &c)
 #ifndef IO_WO_XEXEC
-    : collectedData(this, xexec::OBJECT_IONETWORKCLIENT)
+    : xexec(c),
+      collectedData(this, xexec::OBJECT_IONETWORKCLIENT)
 #endif
 {
 }

@@ -94,7 +94,7 @@ sqlite::sqlite(const __connection__ &info) : handle(new __sqlite__),
 
 //-------------------------------------------------------------------
 
-sqlite::sqlite(sqlite &a_pp)
+sqlite::sqlite(sqlite &)
 {
 }
 

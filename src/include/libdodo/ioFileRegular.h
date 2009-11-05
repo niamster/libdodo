@@ -41,11 +41,15 @@ namespace dodo {
         struct __file__;
 
         namespace file {
+            class temp;
+
             /**
              * @class regular
              * @brief provides file I/O manipulations
              */
             class regular : virtual public block::channel {
+                friend class file::temp;
+
               public:
 
 #ifndef IO_WO_XEXEC
@@ -106,8 +110,8 @@ namespace dodo {
                  * @param path defines path to the file
                  * @param mode defines mode to open file, @see file::regular::openModeEnum
                  */
-                virtual void open(const dodoString &path,
-                                  short            mode);
+                void open(const dodoString &path,
+                          short            mode);
 
                 /**
                  * close file
@@ -137,32 +141,33 @@ namespace dodo {
                 virtual int outDescriptor() const;
 
                 /**
+                 * @return successfully read bytes
                  * @param data defines buffer that will be filled
-                 * @note not more then blockSize(including null)
-                 * if block is true read offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
+                 * @note not more then bs(including null)
                  */
-                virtual void _read(char * const data) const;
+                virtual unsigned long _read(char * const data) const;
 
                 /**
-                 * read from stream null- or newline- terminated string
+                 * read null- or newline- terminated string
+                 * @return successfully read bytes
                  * @param data defines buffer that will be filled
-                 * @note not more then blockSize(including null)
-                 * if block is true read offset is calculated as pos*'# of \n terminated strings' otherwise offset it taken pos bytes from the beginning
+                 * @note not more then bs(including null)
                  */
                 virtual unsigned long _readString(char * const data) const;
 
                 /**
+                 * @return successfully written bytes
                  * @param data defines data that will be written
-                 * @note if block is true write offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
                  */
-                virtual void _write(const char * const data) const;
+                virtual unsigned long _write(const char * const data) const;
 
                 /**
-                 * write to stream null- terminated string
+                 * write null- terminated string
+                 * @return successfully written bytes
                  * @param data defines data that will be written
                  * @note write only to the end of the file(append)
                  */
-                virtual void _writeString(const char * const data) const;
+                virtual unsigned long _writeString(const char * const data) const;
 
               private:
 

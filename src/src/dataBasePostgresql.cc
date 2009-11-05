@@ -150,7 +150,7 @@ postgresql::postgresql(const __connection__ &info) : empty(true),
 
 //-------------------------------------------------------------------
 
-postgresql::postgresql(postgresql &a_mypp)
+postgresql::postgresql(postgresql &)
 {
 }
 

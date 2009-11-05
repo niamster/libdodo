@@ -56,9 +56,10 @@ server::__collected_data__::__collected_data__(xexec *a_executor,
 
 //-------------------------------------------------------------------
 
-server::server(server &fs)
+server::server(server &s)
 #ifndef IO_WO_XEXEC
-    : collectedData(this, xexec::OBJECT_IONETWORKSERVER)
+    : xexec(s),
+      collectedData(this, xexec::OBJECT_IONETWORKSERVER)
 #endif
 {
 }

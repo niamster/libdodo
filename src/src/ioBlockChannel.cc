@@ -41,7 +41,6 @@ using namespace dodo::io::block;
 
 channel::channel(short protection) : io::channel(protection),
                                      pos(0),
-                                     block(false),
                                      append(false)
 {
 }
@@ -59,20 +58,19 @@ channel::read() const
 {
     pc::sync::stack pg(keeper);
 
-    dodoString a_str;
+    dodoString data;
+    unsigned long n;
 
 #ifndef IO_WO_XEXEC
     performPreExec(OPERATION_READ);
-
-    collectedData.buffer.reserve(blockSize);
 #endif
 
-    a_str.assign(blockSize, '\0');
+    data.assign(bs, '\0');
 
     try {
-        _read((char *)a_str.data());
+        n = _read((char *)data.data());
     } catch (...) {
-        a_str.clear();
+        data.clear();
 
 #ifndef IO_WO_XEXEC
         collectedData.buffer.clear();
@@ -82,19 +80,19 @@ channel::read() const
     }
 
 #ifndef IO_WO_XEXEC
-    collectedData.buffer = a_str;
+    collectedData.buffer = data;
 
     performPostExec(OPERATION_READ);
 
-    a_str = collectedData.buffer;
+    data = collectedData.buffer;
 
     collectedData.buffer.clear();
 #else
 #endif
 
-    pos += blockSize;
+    pos += n;
 
-    return a_str;
+    return data;
 }
 
 //-------------------------------------------------------------------
@@ -104,66 +102,62 @@ channel::readString() const
 {
     pc::sync::stack pg(keeper);
 
-    dodoString a_str;
+    dodoString data;
+    unsigned long n;
 
 #ifndef IO_WO_XEXEC
     performPreExec(OPERATION_READSTRING);
 #endif
 
-    a_str.assign(blockSize, '\0');
-    unsigned long n = 0;
+    data.assign(bs, '\0');
 
     try {
-        n = _readString((char *)a_str.data());
-        a_str.resize(n);
+        n = _readString((char *)data.data());
+        data.resize(n);
     } catch (...) {
-        a_str.clear();
+        data.clear();
 
         throw;
     }
 
 #ifndef IO_WO_XEXEC
-    if (n > 0)
-        collectedData.buffer = a_str;
-    else
-        collectedData.buffer.clear();
+    collectedData.buffer = data;
 
     performPostExec(OPERATION_READSTRING);
 
-    a_str = collectedData.buffer;
+    data = collectedData.buffer;
 
     collectedData.buffer.clear();
-#else
-    if (n == 0)
-        a_str.clear();
 #endif
 
     pos += n;
 
-    return a_str;
+    return data;
 }
 
 //-------------------------------------------------------------------
 
-void
-channel::write(const dodoString &a_data) const
+unsigned long
+channel::write(const dodoString &data) const
 {
     pc::sync::stack pg(keeper);
 
+    unsigned long n;
+
 #ifndef IO_WO_XEXEC
-    collectedData.buffer.assign(a_data, 0, blockSize);
+    collectedData.buffer.assign(data, 0, bs);
 
     performPreExec(OPERATION_WRITE);
 
     try {
-        _write(collectedData.buffer.data());
+        n = _write(collectedData.buffer.data());
     } catch (...) {
         collectedData.buffer.clear();
 
         throw;
     }
 #else
-    _write(a_data.data());
+    n = _write(data.data());
 #endif
 
 #ifndef IO_WO_XEXEC
@@ -172,34 +166,38 @@ channel::write(const dodoString &a_data) const
     collectedData.buffer.clear();
 #endif
 
-    pos += blockSize;
+    pos += n;
+
+    return n;
 }
 
 //-------------------------------------------------------------------
 
-void
-channel::writeString(const dodoString &a_data) const
+unsigned long
+channel::writeString(const dodoString &data) const
 {
     pc::sync::stack pg(keeper);
 
+    unsigned long n;
+
 #ifndef IO_WO_XEXEC
-    collectedData.buffer = a_data;
+    collectedData.buffer = data;
 
     performPreExec(OPERATION_WRITESTRING);
 
     try {
-        _writeString(collectedData.buffer.data());
+        n = _writeString(collectedData.buffer.data());
     } catch (...) {
         collectedData.buffer.clear();
 
         throw;
     }
 
-    pos += collectedData.buffer.size();
+    pos += n;
 #else
-    _writeString(a_data.data());
+    n = _writeString(data.data());
 
-    pos += a_data.size();
+    pos += n;
 #endif
 
 #ifndef IO_WO_XEXEC
@@ -207,6 +205,8 @@ channel::writeString(const dodoString &a_data) const
 
     collectedData.buffer.clear();
 #endif
+
+    return n;
 }
 
 //-------------------------------------------------------------------

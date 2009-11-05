@@ -99,10 +99,9 @@ memory::memory(const memory &fd) : block::channel(fd.protection),
         data = fd.data;
     }
 
-    block = fd.block;
     append = fd.append;
     pos = fd.pos;
-    blockSize = fd.blockSize;
+    bs = fd.bs;
 }
 
 //-------------------------------------------------------------------
@@ -181,9 +180,8 @@ memory::clone(const memory &fd)
     pc::sync::stack pg(keeper);
 
     pos = fd.pos;
-    block = fd.block;
     append = fd.append;
-    blockSize = fd.blockSize;
+    bs = fd.bs;
     flags = fd.flags;
     size = fd.size;
 
@@ -196,41 +194,39 @@ memory::clone(const memory &fd)
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 memory::_read(char * const a_data) const
 {
-    unsigned long pos = block ? this->pos * blockSize : this->pos;
-
-    if ((pos + blockSize) > size)
+    if (pos + bs > size)
         throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__READ, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
 
-    memcpy(a_data, data + pos, blockSize);
+    memcpy(a_data, data + pos, bs);
+
+    return bs;
 }
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 memory::_write(const char *const a_data) const
 {
     if (append) {
-        if (flags & FLAGS_FIXED_LENGTH)
+        if (flags & FLAGS_FIXED_LENGTH) {
             throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_APPENDTOFIXED, IOMEMORYEX_APPENDTOFIXED_STR, __LINE__, __FILE__);
-        else {
-            char *newData = new char[size + blockSize];
+        } else {
+            char *newData = new char[size + bs];
             memcpy(newData, data, size);
-            memcpy(newData + size, a_data, blockSize);
-            size += blockSize;
+            memcpy(newData + size, a_data, bs);
+            size += bs;
             delete [] data;
             data = newData;
         }
     } else {
-        unsigned long pos = block ? this->pos * blockSize : this->pos;
-
-        unsigned long shift = pos + blockSize;
+        unsigned long shift = pos + bs;
         if (shift > size) {
-            if (flags & FLAGS_FIXED_LENGTH)
+            if (flags & FLAGS_FIXED_LENGTH) {
                 throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
-            else {
+            } else {
                 shift -= size;
                 char *newData = new char[size + shift];
                 memcpy(newData, data, size);
@@ -241,8 +237,10 @@ memory::_write(const char *const a_data) const
             }
         }
 
-        memcpy(data + pos, a_data, blockSize);
+        memcpy(data + pos, a_data, bs);
     }
+
+    return bs;
 }
 
 //-------------------------------------------------------------------
@@ -252,13 +250,11 @@ memory::erase()
 {
     pc::sync::stack pg(keeper);
 
-    unsigned long pos = block ? this->pos * blockSize : this->pos;
-
-    unsigned long shift = pos + blockSize;
+    unsigned long shift = pos + bs;
     if (shift > size) {
-        if (flags & FLAGS_FIXED_LENGTH)
+        if (flags & FLAGS_FIXED_LENGTH) {
             throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_ERASE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
-        else {
+        } else {
             shift -= size;
             char *newData = new char[size + shift];
             memcpy(newData, data, size);
@@ -269,7 +265,7 @@ memory::erase()
         }
     }
 
-    memset(data + pos, 0x0, blockSize);
+    memset(data + pos, 0x0, bs);
 }
 
 //-------------------------------------------------------------------
@@ -277,43 +273,17 @@ memory::erase()
 unsigned long
 memory::_readString(char * const a_data) const
 {
-    unsigned long readSize = blockSize + 1;
-
-    memset(a_data, '\0', readSize);
+    unsigned long readSize = bs + 1;
 
     unsigned long read = 0;
 
-    if (block) {
-        unsigned long block = 0;
-        unsigned long index = 0;
-        for (; index < size; ++index) {
-            if (data[index] == '\n' || data[index] == '\0')
-                ++block;
+    for (unsigned long i = pos; i < size && read < readSize; ++i) {
+        a_data[read] = data[i];
 
-            if (block == pos) {
-                ++index;
+        ++read;
 
-                for (unsigned long i = index; i < size && read < readSize; ++i) {
-                    a_data[read] = data[i];
-
-                    ++read;
-
-                    if (data[i] == '\n' || data[i] == '\0')
-                        break;
-                }
-
-                break;
-            }
-        }
-    } else {
-        for (unsigned long i = pos; i < size && read < readSize; ++i) {
-            a_data[read] = data[i];
-
-            ++read;
-
-            if (data[i] == '\n' || data[i] == '\0')
-                break;
-        }
+        if (data[i] == '\n' || data[i] == '\0')
+            break;
     }
 
     return read;
@@ -321,22 +291,24 @@ memory::_readString(char * const a_data) const
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 memory::_writeString(const char *const a_data) const
 {
     if (flags & FLAGS_FIXED_LENGTH)
-        throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITESTREAM, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+        throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITESTRING, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
 
-    unsigned long _blockSize = strnlen(a_data, blockSize);
+    unsigned long _bs = strnlen(a_data, bs);
 
-    char *newData = new char[size + _blockSize + 1];
+    char *newData = new char[size + _bs + 1];
     memcpy(newData, data, size);
-    memcpy(newData + size, a_data, _blockSize);
-    size += _blockSize;
+    memcpy(newData + size, a_data, _bs);
+    size += _bs;
     newData[size] = '\0';
     delete [] data;
     data = newData;
     nullEnd = true;
+
+    return _bs;
 }
 
 //-------------------------------------------------------------------

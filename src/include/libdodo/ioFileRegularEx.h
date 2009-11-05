@@ -42,7 +42,6 @@ namespace dodo {
              */
             enum regularExR {
                 REGULAREX_WRONGFILENAME,
-                REGULAREX_FILEISSHORTERTHANGIVENPOSITION,
                 REGULAREX_NOTOPENED
             };
 
@@ -50,7 +49,6 @@ namespace dodo {
              * explanations for libdodo defined errors
              */
 #define IOFILEREGULAREX_WRONGFILENAME_STR                  "Wrong filename"
-#define IOFILEREGULAREX_FILEISSHORTERTHANGIVENPOSITION_STR "Access data out of bounds"
 #define IOFILEREGULAREX_NOTOPENED_STR                       "File not opened"
 
             /**
@@ -63,8 +61,8 @@ namespace dodo {
                 REGULAREX_OPEN,
                 REGULAREX__READ,
                 REGULAREX__WRITE,
-                REGULAREX__READSTREAM,
-                REGULAREX__WRITESTREAM,
+                REGULAREX__READSTRING,
+                REGULAREX__WRITESTRING,
                 REGULAREX_FLUSH,
                 REGULAREX_INDESCRIPTOR,
                 REGULAREX_OUTDESCRIPTOR,

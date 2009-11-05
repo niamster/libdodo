@@ -126,7 +126,7 @@ exchange::close()
 //-------------------------------------------------------------------
 
 void
-exchange::init(int  a_socket,
+exchange::init(int  dataocket,
                bool a_blocked,
                bool blockInherited)
 {
@@ -139,7 +139,7 @@ exchange::init(int  a_socket,
     }
 
     blocked = a_blocked;
-    socket = a_socket;
+    socket = dataocket;
 
     setInBufferSize(inSocketBufferSize);
     setOutBufferSize(outSocketBufferSize);
@@ -185,16 +185,16 @@ exchange::isAlive()
 
 //-------------------------------------------------------------------
 
-void
-exchange::_write(const char * const a_data) const
+unsigned long
+exchange::_write(const char * const data) const
 {
     if (socket == -1)
         throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-    unsigned long iter = blockSize / outSocketBufferSize;
-    unsigned long rest = blockSize % outSocketBufferSize;
+    unsigned long iter = bs / outSocketBufferSize;
+    unsigned long rest = bs % outSocketBufferSize;
 
-    const char *data = a_data;
+    const char *s = data;
 
     long batch, n;
 
@@ -202,12 +202,12 @@ exchange::_write(const char * const a_data) const
         batch = outSocketBufferSize;
         while (batch > 0) {
             while (true) {
-                if ((n = ::send(socket, data, batch, 0)) == -1) {
+                if ((n = ::send(socket, s, batch, 0)) == -1) {
                     if (errno == EINTR)
                         continue;
 
                     if (errno == EAGAIN)
-                        break;
+                        return s - data;
 
                     throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
@@ -216,7 +216,7 @@ exchange::_write(const char * const a_data) const
             }
 
             batch -= n;
-            data += n;
+            s += n;
         }
     }
 
@@ -224,12 +224,12 @@ exchange::_write(const char * const a_data) const
         batch = rest;
         while (batch > 0) {
             while (true) {
-                if ((n = ::send(socket, data, batch, 0)) == -1) {
+                if ((n = ::send(socket, s, batch, 0)) == -1) {
                     if (errno == EINTR)
                         continue;
 
                     if (errno == EAGAIN)
-                        break;
+                        return s - data;
 
                     throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
@@ -238,23 +238,26 @@ exchange::_write(const char * const a_data) const
             }
 
             batch -= n;
-            data += n;
+            s += n;
         }
     }
+
+    return bs;
 }
 
 //-------------------------------------------------------------------
 
-void
-exchange::_read(char * const a_data) const
+unsigned long
+exchange::_read(char * const data) const
 {
     if (socket == -1)
         throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-    unsigned long iter = blockSize / inSocketBufferSize;
-    unsigned long rest = blockSize % inSocketBufferSize;
+    unsigned long iter = bs / inSocketBufferSize;
+    unsigned long rest = bs % inSocketBufferSize;
 
-    char *data = a_data;
+    char *s = data;
+    char *_s = s;
 
     long batch, n;
 
@@ -262,12 +265,12 @@ exchange::_read(char * const a_data) const
         batch = inSocketBufferSize;
         while (batch > 0) {
             while (true) {
-                if ((n = ::recv(socket, data, batch, 0)) == -1) {
+                if ((n = ::recv(socket, s, batch, 0)) == -1) {
                     if (errno == EINTR)
                         continue;
 
                     if (errno == EAGAIN)
-                        break;
+                        return s - _s;
 
                     throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
@@ -276,10 +279,10 @@ exchange::_read(char * const a_data) const
             }
 
             if (n == 0)
-                break;
+                return s - _s;
 
             batch -= n;
-            data += n;
+            s += n;
         }
     }
 
@@ -287,12 +290,12 @@ exchange::_read(char * const a_data) const
         batch = rest;
         while (batch > 0) {
             while (true) {
-                if ((n = ::recv(socket, data, batch, 0)) == -1) {
+                if ((n = ::recv(socket, s, batch, 0)) == -1) {
                     if (errno == EINTR)
                         continue;
 
                     if (errno == EAGAIN)
-                        break;
+                        return s - _s;
 
                     throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
@@ -301,53 +304,58 @@ exchange::_read(char * const a_data) const
             }
 
             if (n == 0)
-                break;
+                return s - _s;
 
             batch -= n;
-            data += n;
+            s += n;
         }
     }
-}
 
-//-------------------------------------------------------------------
-
-void
-exchange::_writeString(const char * const data) const
-{
-    unsigned long _blockSize = blockSize;
-
-    try {
-        blockSize = strnlen(data, blockSize) + 1;
-
-        _write(data);
-
-        blockSize = _blockSize;
-    } catch (...) {
-        blockSize = _blockSize;
-
-        throw;
-    }
+    return bs;
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-exchange::_readString(char * const data) const
+exchange::_writeString(const char * const s) const
+{
+    unsigned long _bs = bs;
+    unsigned long written;
+
+    try {
+        bs = strnlen(s, bs) + 1;
+
+        written = _write(s);
+
+        bs = _bs;
+    } catch (...) {
+        bs = _bs;
+
+        throw;
+    }
+
+    return written;
+}
+
+//-------------------------------------------------------------------
+
+unsigned long
+exchange::_readString(char * const s) const
 {
     if (socket == -1)
-        throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+        throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
     long n = 0;
 
     while (true) {
-        if ((n = ::recv(socket, data, blockSize, 0)) == -1) {
+        if ((n = ::recv(socket, s, bs, 0)) == -1) {
             if (errno == EINTR)
                 continue;
 
             if (errno == EAGAIN)
-                break;
+                return 0;
 
-            throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         break;

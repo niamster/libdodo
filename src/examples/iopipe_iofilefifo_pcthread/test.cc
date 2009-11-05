@@ -32,7 +32,7 @@ threadRead(void *data)
         cout << "%" << str << "%\n";
         cout.flush();
 
-        pipe->blockSize = tools::string::stringToUL(str);
+        pipe->bs = tools::string::stringToUL(str);
         str = pipe->read();
         cout << "%MD5: " << tools::code::MD5Hex(str) << "%\n";
         cout.flush();
@@ -65,7 +65,7 @@ threadWrite(void *data)
         pipe->writeString(tools::string::ulToString(str.size()));
         pipe->flush();
 
-        pipe->blockSize = str.size();
+        pipe->bs = str.size();
         pipe->write(str);
         pipe->flush();
     } catch (dodo::exception::basic &ex)   {
@@ -102,7 +102,7 @@ main(int  argc,
         threads.wait();
 
         cout << "\n~~using original cloned pipe for one thread and copy for the second~~\n";
-        pipe1.blockSize = 4096;
+        pipe1.bs = 4096;
 
         io::pipe pipe2 = pipe1;
         //or clone

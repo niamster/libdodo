@@ -37,12 +37,12 @@ class cgiIO : public io::stream::channel {
         unsigned int size = provider.content.size();
 
         if (size != 0) {
-            if (size > blockSize)
-                size = blockSize;
+            if (size > bs)
+                size = bs;
 
             memcpy(data, provider.content.data(), size);
-            if (size < blockSize)
-                memset(data + size, 0x0, blockSize - size);
+            if (size < bs)
+                memset(data + size, 0x0, bs - size);
         }
 
         provider.content.clear();

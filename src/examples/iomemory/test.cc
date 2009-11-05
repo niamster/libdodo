@@ -30,7 +30,7 @@ main(int  argc,
         io::memory io1 = io0;
 
         io1.pos = 1;
-        io1.blockSize = 14;
+        io1.bs = 14;
         io1.write("!12345890$!~@\n");
 
         /**

@@ -93,31 +93,33 @@ namespace dodo {
                 virtual int outDescriptor() const;
 
                 /**
-                 * read
-                 * @param data is filled with read data
-                 * if blockSize bigger than buffer size - reads with few iterations
+                 * @return successfully read bytes
+                 * @param data defines buffer that will be filled
+                 * @note not more then bs(including null)
                  */
-                virtual void _read(char * const data) const;
+                virtual unsigned long _read(char * const data) const;
 
                 /**
-                 * read from stream - '\0' or '\n' - terminated string
+                 * read null- or newline- terminated string
+                 * @return successfully read bytes
                  * @param data defines buffer that will be filled
-                 * @note not more then blockSize(including '\0')
+                 * @note not more then bs(including null)
                  */
                 virtual unsigned long _readString(char * const data) const;
 
                 /**
-                 * write
-                 * @param data is data that will be written
-                 * if blockSize bigger than buffer size - writes with few iterations
-                 */
-                virtual void _write(const char * const data) const;
-
-                /**
-                 * write to stream - '\0' - terminated string
+                 * @return successfully written bytes
                  * @param data defines data that will be written
                  */
-                virtual void _writeString(const char * const data) const;
+                virtual unsigned long _write(const char * const data) const;
+
+                /**
+                 * write null- terminated string
+                 * @return successfully written bytes
+                 * @param data defines data that will be written
+                 * @note puts extra null in the end of the string
+                 */
+                virtual unsigned long _writeString(const char * const data) const;
 
               private:
 
