@@ -214,8 +214,10 @@ namespace dodo {
             /**
              * write image
              * @param img defines source for writing image
+             * @param encoder defines type of image encoder, @see image::encoderEnum
              */
-            void write(const io::channel &img);
+            void write(const io::channel &img,
+                       short encoder);
 
             /**
              * close access to image
@@ -255,12 +257,6 @@ namespace dodo {
              * @param background define image background color
              */
             void setBackgroundColor(__color__ background);
-
-            /**
-             * set image output encoder
-             * @param encoder defines image encoder, @see image::encoderEnum
-             */
-            void setEncoder(short encoder);
 
             /**
              * set image compression type

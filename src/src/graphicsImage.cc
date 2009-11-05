@@ -414,7 +414,8 @@ image::close()
 //-------------------------------------------------------------------
 
 void
-image::write(const io::channel &img)
+image::write(const io::channel &img,
+             short encoder)
 {
 #ifndef GRAPHICS_WO_XEXEC
     performPreExec(OPERATION_WRITE);
@@ -424,6 +425,11 @@ image::write(const io::channel &img)
         throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     GetExceptionInfo((ExceptionInfo *)exInfo);
+
+    if (encoder < 0 || encoder >= ENCODER_ENUMSIZE)
+        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
+
+    strcpy(collectedData.handle->imInfo->magick, encoderStatements[encoder]);
 
     size_t size = 0;
     unsigned char *imData = ImageToBlob(collectedData.handle->imInfo, collectedData.handle->im, (size_t *)&size, (ExceptionInfo *)exInfo);
@@ -444,7 +450,7 @@ void
 image::setCompression(short type)
 {
     if (type < 0 || type >= COMPRESSION_ENUMSIZE)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETENCODER, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
+        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETCOMPRESSION, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
     collectedData.handle->imInfo->compression = (CompressionType)compressionStatements[type];
 }
@@ -455,17 +461,6 @@ void
 image::setQuality(short quality)
 {
     collectedData.handle->imInfo->quality = quality;
-}
-
-//-------------------------------------------------------------------
-
-void
-image::setEncoder(short encoder)
-{
-    if (encoder < 0 || encoder >= ENCODER_ENUMSIZE)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETENCODER, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
-
-    strcpy(collectedData.handle->imInfo->magick, encoderStatements[encoder]);
 }
 
 //-------------------------------------------------------------------

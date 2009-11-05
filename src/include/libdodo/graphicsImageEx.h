@@ -63,7 +63,7 @@ namespace dodo {
             IMAGEEX_READ,
             IMAGEEX_CREATE,
             IMAGEEX_WRITE,
-            IMAGEEX_SETENCODER,
+            IMAGEEX_SETCOMPRESSION,
             IMAGEEX_SETTYPE,
             IMAGEEX_SETALPHA,
             IMAGEEX_REMOVEALPHA,
