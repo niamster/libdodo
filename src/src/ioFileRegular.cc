@@ -395,6 +395,8 @@ regular::_read(char * const a_data) const
 
         break;
     }
+
+    this->pos += blockSize;
 }
 
 //-------------------------------------------------------------------
@@ -429,6 +431,8 @@ regular::_write(const char *const a_data) const
 
         break;
     }
+
+    this->pos += blockSize;
 }
 
 //-------------------------------------------------------------------

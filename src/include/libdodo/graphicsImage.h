@@ -38,6 +38,10 @@
 #include <libdodo/xexec.h>
 
 namespace dodo {
+    namespace io {
+        class channel;
+    };
+
     namespace graphics {
         struct __image__;
 
@@ -128,18 +132,6 @@ namespace dodo {
             };
 
             /**
-             * @struct __info__
-             * @brief defines image information
-             */
-            struct __info__ {
-                void          *data;            ///< 2D array of pixels
-                unsigned long width;            ///< width of the image
-                unsigned long height;           ///< height of the image
-                short         mapping;          ///< type of mapping, @see image::mappingEnum
-                short         pixelSize;        ///< type of pixel
-            };
-
-            /**
              * @struct __size__
              * @brief defines image dimensions
              */
@@ -215,33 +207,15 @@ namespace dodo {
 
             /**
              * read image
-             * @param path defines path to image
+             * @param img defines source for reading image
              */
-            void readFile(const dodoString &path);
-
-            /**
-             * read image
-             * @param info defines image info
-             */
-            void readMemory(const __info__ &info);
-
-            /**
-             * read image
-             * @param data defines image data
-             */
-            void readMemory(const dodoString &data);
+            void read(const io::channel &img);
 
             /**
              * write image
-             * @param path describes path to image
+             * @param img defines source for writing image
              */
-            void writeFile(const dodoString &path);
-
-            /**
-             * write image
-             * @param data defines image data
-             */
-            void writeMemory(dodoString &data);
+            void write(const io::channel &img);
 
             /**
              * close access to image

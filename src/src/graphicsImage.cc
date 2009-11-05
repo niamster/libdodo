@@ -45,6 +45,7 @@
 #include <libdodo/graphicsColor.h>
 #include <libdodo/graphicsImageEx.h>
 #include <libdodo/xexec.h>
+#include <libdodo/ioChannel.h>
 
 namespace dodo {
     namespace graphics {
@@ -251,43 +252,7 @@ image::~image()
 //-------------------------------------------------------------------
 
 void
-image::readFile(const dodoString &str)
-{
-#ifndef GRAPHICS_WO_XEXEC
-    performPreExec(OPERATION_READ);
-#endif
-
-    unsigned long size = str.size() + 1;
-
-    if (size >= MaxTextExtent)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_LIBDODO, IMAGEEX_LONGPATH, GRAPHICSIMAGEEX_LONGPATH_STR, __LINE__, __FILE__);
-
-    GetExceptionInfo((ExceptionInfo *)exInfo);
-    GetImageInfo(collectedData.handle->imInfo);
-
-    strncpy(collectedData.handle->imInfo->filename, str.data(), size);
-
-    if (collectedData.handle->im != NULL)
-        DestroyImage(collectedData.handle->im);
-
-    collectedData.handle->im = ReadImage(collectedData.handle->imInfo, (ExceptionInfo *)exInfo);
-    if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
-
-    collectedData.handle->imInfo->compression = collectedData.handle->im->compression;
-    collectedData.handle->imInfo->quality = collectedData.handle->im->quality;
-
-    strcpy(collectedData.handle->imInfo->magick, collectedData.handle->im->magick);
-
-#ifndef GRAPHICS_WO_XEXEC
-    performPostExec(OPERATION_READ);
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-image::readMemory(const dodoString &data)
+image::read(const io::channel &img)
 {
 #ifndef GRAPHICS_WO_XEXEC
     performPreExec(OPERATION_READ);
@@ -298,40 +263,19 @@ image::readMemory(const dodoString &data)
 
     if (collectedData.handle->im != NULL)
         DestroyImage(collectedData.handle->im);
+
+    dodoString data, dataPart;
+
+    while (true) {
+        dataPart = img.read();
+        if (dataPart.size() == 0)
+            break;
+
+        data.append(dataPart);
+    }
+    dataPart.clear();
 
     collectedData.handle->im = BlobToImage(collectedData.handle->imInfo, data.data(), data.size(), (ExceptionInfo *)exInfo);
-    if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
-
-    collectedData.handle->imInfo->compression = collectedData.handle->im->compression;
-    collectedData.handle->imInfo->quality = collectedData.handle->im->quality;
-
-    strcpy(collectedData.handle->imInfo->magick, collectedData.handle->im->magick);
-
-#ifndef GRAPHICS_WO_XEXEC
-    performPostExec(OPERATION_READ);
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-image::readMemory(const __info__ &info)
-{
-#ifndef GRAPHICS_WO_XEXEC
-    performPreExec(OPERATION_READ);
-#endif
-
-    if (info.mapping < 0 || info.mapping >= MAPPING_ENUMSIZE || info.pixelSize < 0 || info.pixelSize >= PIXEL_SIZE_ENUMSIZE)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
-
-    GetExceptionInfo((ExceptionInfo *)exInfo);
-    GetImageInfo(collectedData.handle->imInfo);
-
-    if (collectedData.handle->im != NULL)
-        DestroyImage(collectedData.handle->im);
-
-    collectedData.handle->im = ConstituteImage(info.width, info.height, mappingStatements[info.mapping], (StorageType)pixelSizeStatements[info.pixelSize], info.data, (ExceptionInfo *)exInfo);
     if (collectedData.handle->im == NULL)
         throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
 
@@ -469,36 +413,7 @@ image::close()
 //-------------------------------------------------------------------
 
 void
-image::writeFile(const dodoString &str)
-{
-#ifndef GRAPHICS_WO_XEXEC
-    performPreExec(OPERATION_WRITE);
-#endif
-
-    if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-
-    unsigned long size = str.size() + 1;
-
-    if (size >= MaxTextExtent)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_LIBDODO, IMAGEEX_LONGPATH, GRAPHICSIMAGEEX_LONGPATH_STR, __LINE__, __FILE__);
-
-    strncpy(collectedData.handle->im->filename, str.data(), size);
-
-    GetExceptionInfo((ExceptionInfo *)exInfo);
-
-    if (WriteImage(collectedData.handle->imInfo, collectedData.handle->im) == MagickFalse)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, collectedData.handle->im->exception.error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
-
-#ifndef GRAPHICS_WO_XEXEC
-    performPostExec(OPERATION_WRITE);
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-image::writeMemory(dodoString &data)
+image::write(const io::channel &img)
 {
 #ifndef GRAPHICS_WO_XEXEC
     performPreExec(OPERATION_WRITE);
@@ -514,7 +429,8 @@ image::writeMemory(dodoString &data)
     if (imData == NULL)
         throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
 
-    data.assign((char *)imData, size);
+    img.blockSize = size;
+    img.write((char *)imData);
 
 #ifndef GRAPHICS_WO_XEXEC
     performPostExec(OPERATION_WRITE);
