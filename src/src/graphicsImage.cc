@@ -432,12 +432,12 @@ image::write(const io::channel &img,
     strcpy(collectedData.handle->imInfo->magick, encoderStatements[encoder]);
 
     size_t size = 0;
-    unsigned char *imData = ImageToBlob(collectedData.handle->imInfo, collectedData.handle->im, (size_t *)&size, (ExceptionInfo *)exInfo);
-    if (imData == NULL)
+    unsigned char *data = ImageToBlob(collectedData.handle->imInfo, collectedData.handle->im, (size_t *)&size, (ExceptionInfo *)exInfo);
+    if (data == NULL)
         throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
 
     img.bs = size;
-    img.write((char *)imData);
+    img.write(dodoString((char *)data, size));
 
 #ifndef GRAPHICS_WO_XEXEC
     performPostExec(OPERATION_WRITE);
