@@ -57,6 +57,7 @@ channel::read() const
     pc::sync::stack pg(keeper);
 
     dodoString data;
+    unsigned long n;
 
 #ifndef IO_WO_XEXEC
     performPreExec(OPERATION_READ);
@@ -67,7 +68,8 @@ channel::read() const
     data.assign(bs, '\0');
 
     try {
-        _read((char *)data.data());
+        n = _read((char *)data.data());
+        data.resize(n);
     } catch (...) {
         data.clear();
 

@@ -69,6 +69,7 @@ channel::read() const
 
     try {
         n = _read((char *)data.data());
+        data.resize(n);
     } catch (...) {
         data.clear();
 

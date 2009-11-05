@@ -430,7 +430,7 @@ image::write(const io::channel &img)
     if (imData == NULL)
         throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
 
-    img.blockSize = size;
+    img.bs = size;
     img.write((char *)imData);
 
 #ifndef GRAPHICS_WO_XEXEC
