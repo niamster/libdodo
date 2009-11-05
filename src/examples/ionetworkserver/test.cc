@@ -28,12 +28,12 @@ process(exchange &ex)
     ex.setInBufferSize(1);
     ex.setOutBufferSize(1);
 
-    ex.blockSize = 7;
+    ex.bs = 7;
     ex.writeString("test\n");
 
     dodoString str = "";
     try {
-        ex.blockSize = 4;
+        ex.bs = 4;
         str = ex.read();
 
         cout << str << ":" << str.size() << endl;

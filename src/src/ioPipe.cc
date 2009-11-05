@@ -85,7 +85,7 @@ io::pipe::pipe(const pipe &fd) : stream::channel(protection),
     collectedData.setExecObject(xexec::OBJECT_IOPIPE);
 #endif
 
-    blockSize = fd.blockSize;
+    bs = fd.bs;
 
     if (fd.in->file != NULL && fd.out->file != NULL) {
         int oldDesc, newDesc;
@@ -152,7 +152,7 @@ io::pipe::clone(const pipe &fd)
     }
 
     blocked = fd.blocked;
-    blockSize = fd.blockSize;
+    bs = fd.bs;
 
     if (fd.in->file != NULL && fd.out->file != NULL) {
         int oldDesc, newDesc;
@@ -284,21 +284,21 @@ io::pipe::open()
 
 //-------------------------------------------------------------------
 
-void
-io::pipe::_read(char * const a_data) const
+unsigned long
+io::pipe::_read(char * const data) const
 {
     if (in->file == NULL)
         throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-    char *data = a_data;
+    char *s = data;
 
-    unsigned long batch = blockSize, n;
+    unsigned long batch = bs, n;
 
     while (batch > 0) {
         while (true) {
-            if ((n = fread(data, 1, batch, in->file)) == 0) {
+            if ((n = fread(s, 1, batch, in->file)) == 0) {
                 if (feof(in->file) != 0 || errno == EAGAIN)
-                    break;
+                    return bs - batch;
 
                 if (errno == EINTR)
                     continue;
@@ -311,30 +311,32 @@ io::pipe::_read(char * const a_data) const
         }
 
         batch -= n;
-        data += n;
+        s += n;
     }
+
+    return bs;
 }
 
 //-------------------------------------------------------------------
 
-void
-io::pipe::_write(const char *const buf) const
+unsigned long
+io::pipe::_write(const char *const data) const
 {
     if (out->file == NULL)
         throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-    const char *data = buf;
+    const char *s = data;
 
-    unsigned long batch = blockSize, n;
+    unsigned long batch = bs, n;
 
-    while (batch > 0) {
+    while (batch != 0) {
         while (true) {
-            if ((n = fwrite(data, 1, batch, out->file)) == 0) {
+            if ((n = fwrite(s, 1, batch, out->file)) == 0) {
                 if (errno == EINTR)
                     continue;
 
                 if (errno == EAGAIN)
-                    break;
+                    return bs - batch;
 
                 if (ferror(out->file) != 0)
                     throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -344,8 +346,10 @@ io::pipe::_write(const char *const buf) const
         }
 
         batch -= n;
-        data += n;
+        s += n;
     }
+
+    return bs;
 }
 
 //-------------------------------------------------------------------
@@ -486,49 +490,48 @@ io::pipe::block(bool flag)
 //-------------------------------------------------------------------
 
 unsigned long
-io::pipe::_readString(char * const a_data) const
+io::pipe::_readString(char * const data) const
 {
     if (in->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTRING, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-    unsigned long readSize = blockSize + 1;
-
-    memset(a_data, '\0', readSize);
+    unsigned long readSize = bs + 1;
 
     while (true) {
-        if (fgets(a_data, readSize, in->file) == NULL) {
+        if (fgets(data, readSize, in->file) == NULL) {
             if (errno == EINTR)
                 continue;
 
             if (errno == EAGAIN)
-                break;
+                return 0;
 
             if (ferror(in->file) != 0)
-                throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         break;
     }
 
-    return strlen(a_data);
+    return strlen(data);
 }
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 io::pipe::_writeString(const char * const data) const
 {
     if (out->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTREAM, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTRING, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-    unsigned long _blockSize = blockSize;
+    unsigned long _bs = bs;
+    unsigned long written;
 
     try {
-        blockSize = strnlen(data, blockSize);
+        bs = strnlen(data, bs);
 
-        _write(data);
+        written = _write(data);
 
-        if (data[blockSize - 1] != '\n') {
+        if (data[bs - 1] != '\n') {
             while (true) {
                 if (fputc('\n', out->file) == EOF) {
                     if (errno == EINTR)
@@ -538,19 +541,21 @@ io::pipe::_writeString(const char * const data) const
                         break;
 
                     if (ferror(out->file) != 0)
-                        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITESTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITESTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
 
                 break;
             }
         }
 
-        blockSize = _blockSize;
+        bs = _bs;
     } catch (...) {
-        blockSize = _blockSize;
+        bs = _bs;
 
         throw;
     }
+
+    return written;
 }
 
 //-------------------------------------------------------------------

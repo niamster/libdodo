@@ -77,7 +77,7 @@ main(int  argc,
 
         file::regular io;
         io.open("my.png", file::regular::OPEN_MODE_READ_WRITE_TRUNCATE);
-        io.blockSize = img.size();
+        io.bs = img.size();
         io.write(img);
 
         cout << img.size() << endl;

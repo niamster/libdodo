@@ -77,10 +77,11 @@ namespace dodo {
           protected:
 
             /**
-             * write to stream null terminated string
+             * write null- terminated string
+             * @return successfully written bytes
              * @param data defines data that will be written
              */
-            virtual void _writeString(const char * const data) const;
+            virtual unsigned long _writeString(const char * const data) const;
 
           private:
 

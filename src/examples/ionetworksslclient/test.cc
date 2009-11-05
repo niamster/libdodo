@@ -45,22 +45,22 @@ main(int  argc,
         st.connect(tools::network::hostPrimaryIp(host), 443, ex);
 
         str = "GET / HTTP/1.1\r\n";
-        ex.blockSize = str.size();
+        ex.bs = str.size();
         ex.write(str);
 
         str = "Host: " + host + "\r\n";
-        ex.blockSize = str.size();
+        ex.bs = str.size();
         ex.write(str);
 
         str = "Connection: Close\r\n";
-        ex.blockSize = str.size();
+        ex.bs = str.size();
         ex.write(str);
 
         str = "User-Agent: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n\r\n";
-        ex.blockSize = str.size();
+        ex.bs = str.size();
         ex.write(str);
 
-        ex.blockSize = 4096;
+        ex.bs = 4096;
         str = ex.readString();
 
         cout << tools::misc::split(str, "\r\n\r\n")[0] << endl;

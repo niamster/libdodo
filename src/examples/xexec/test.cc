@@ -33,7 +33,7 @@ main(int  argc,
 #endif
 #endif
 
-        io.blockSize = sizeof("xexec") - 1;
+        io.bs = sizeof("xexec") - 1;
         io.write("xexec");
         io.flush();
     } catch (dodo::exception::basic &ex)   {

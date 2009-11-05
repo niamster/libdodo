@@ -44,7 +44,6 @@ namespace dodo {
             /**
              * @class fifo
              * @brief provides I/O manipulations with fifo files
-             * @note writeString* put extra newline- to the end of the string, so no need to add it manually
              */
             class fifo : virtual public stream::channel {
               public:
@@ -144,29 +143,33 @@ namespace dodo {
                 virtual int outDescriptor() const;
 
                 /**
+                 * @return successfully read bytes
                  * @param data defines buffer that will be filled
-                 * @note not more then blockSize(including null)
+                 * @note not more then bs(including null)
                  */
-                virtual void _read(char * const data) const;
+                virtual unsigned long _read(char * const data) const;
 
                 /**
-                 * read from stream null- or newline- terminated string
+                 * read null- or newline- terminated string
+                 * @return successfully read bytes
                  * @param data defines buffer that will be filled
-                 * @note not more then blockSize(including null)
+                 * @note not more then bs(including null)
                  */
                 virtual unsigned long _readString(char * const data) const;
 
                 /**
+                 * @return successfully written bytes
                  * @param data defines data that will be written
                  */
-                virtual void _write(const char * const data) const;
+                virtual unsigned long _write(const char * const data) const;
 
                 /**
-                 * write to stream null- terminated string
+                 * write null- terminated string
+                 * @return successfully written bytes
                  * @param data defines data that will be written
                  * @note puts extra newline- to the end of the string
                  */
-                virtual void _writeString(const char * const data) const;
+                virtual unsigned long _writeString(const char * const data) const;
 
               private:
 

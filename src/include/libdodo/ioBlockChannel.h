@@ -41,12 +41,6 @@ namespace dodo {
             /**
              * @class channel
              * @brief implements an interface for I/O operations on block sources
-             * @note if block is false then read/write position is amount of bytes from the beginning,
-             * if block is true then:
-             *	offset for write is calculated as pos*blockSize
-             *	offset for read is calculated as pos*blockSize
-             *	offset for readString is calculated as pos*(amount of null- or newline- terminated strings)
-             *	offset for writeString is calculated as pos*(amount of null- or newline- terminated strings)
              */
             class channel : public io::channel {
               public:
@@ -64,33 +58,34 @@ namespace dodo {
 
                 /**
                  * @return read data
-                 * @note not more then blockSize
+                 * @note not more then bs
                  */
                 virtual dodoString read() const;
 
                 /**
+                 * @return successfully written bytes
                  * @param data defines data that will be written
-                 * @note not more then blockSize
+                 * @note not more then bs
                  */
-                virtual void write(const dodoString &data) const;
+                virtual unsigned long write(const dodoString &data) const;
 
                 /**
-                 * read from stream null- or newline- terminated string
+                 * read null- or newline- terminated string
                  * @return read data
-                 * @note not more then blockSize
+                 * @note not more then bs
                  */
                 virtual dodoString readString() const;
 
                 /**
-                 * write to stream null- terminated string
+                 * write null- terminated string
+                 * @return successfully written bytes
                  * @param data defines data that will be written
-                 * @note not more then blockSize
+                 * @note not more then bs
                  */
-                virtual void writeString(const dodoString &data) const;
+                virtual unsigned long writeString(const dodoString &data) const;
 
                 mutable unsigned long pos;  ///< read/write/erase position; incremented on read/write/erase[0 by default]
 
-                bool block;                 ///< use block I/O[false by default]
                 bool append;                ///< append to the end[false by default]
             };
         };

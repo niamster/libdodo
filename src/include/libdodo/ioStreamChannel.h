@@ -58,29 +58,31 @@ namespace dodo {
 
                 /**
                  * @return read data
-                 * @note not more then blockSize
+                 * @note not more then bs
                  */
                 virtual dodoString read() const;
 
                 /**
+                 * @return successfully written bytes
                  * @param data defines data that will be written
-                 * @note not more then blockSize
+                 * @note not more then bs
                  */
-                virtual void write(const dodoString &data) const;
+                virtual unsigned long write(const dodoString &data) const;
 
                 /**
-                 * read from stream null or newline terminated string
+                 * read null- or newline- terminated string
                  * @return read data
-                 * @note not more then blockSize
+                 * @note not more then bs
                  */
                 virtual dodoString readString() const;
 
                 /**
-                 * write to stream null terminated string
+                 * write null- terminated string
+                 * @return successfully written bytes
                  * @param data defines data that will be written
-                 * @note not more then blockSize
+                 * @note not more then bs
                  */
-                virtual void writeString(const dodoString &data) const;
+                virtual unsigned long writeString(const dodoString &data) const;
             };
         };
     };

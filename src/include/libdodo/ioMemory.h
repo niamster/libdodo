@@ -131,32 +131,33 @@ namespace dodo {
             virtual int outDescriptor() const;
 
             /**
+             * @return successfully read bytes
              * @param data defines buffer that will be filled
-             * @note not more then blockSize(including null)
-             * if block is true read offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
+             * @note not more then bs(including null)
              */
-            virtual void _read(char * const data) const;
+            virtual unsigned long _read(char * const data) const;
 
             /**
-             * read from stream null- or newline- terminated memory
+             * read null- or newline- terminated memory
+             * @return successfully read bytes
              * @param data defines buffer that will be filled
-             * @note not more then blockSize(including null)
-             * if block is true read offset is calculated as pos*'# of \n terminated memorys' otherwise offset it taken pos bytes from the beginning
+             * @note not more then bs(including null)
              */
             virtual unsigned long _readString(char * const data) const;
 
             /**
+             * @return successfully written bytes
              * @param data defines data that will be written
-             * @note if block is true write offset is calculated as pos*blockSize otherwise offset it taken pos bytes from the beginning
              */
-            virtual void _write(const char * const data) const;
+            virtual unsigned long _write(const char * const data) const;
 
             /**
-             * write to stream null- terminated memory
+             * write null- terminated memory
+             * @return successfully written bytes
              * @param data defines data that will be written
              * @note write only to the end of the file(append)
              */
-            virtual void _writeString(const char * const data) const;
+            virtual unsigned long _writeString(const char * const data) const;
 
           protected:
 

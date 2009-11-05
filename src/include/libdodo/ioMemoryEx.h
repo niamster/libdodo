@@ -62,7 +62,7 @@ namespace dodo {
         enum memoryFunctionsID {
             MEMORYEX__READ,
             MEMORYEX__WRITE,
-            MEMORYEX__WRITESTREAM,
+            MEMORYEX__WRITESTRING,
             MEMORYEX_ERASE,
             MEMORYEX_INDESCRIPTOR,
             MEMORYEX_OUTDESCRIPTOR,

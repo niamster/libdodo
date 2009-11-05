@@ -106,22 +106,25 @@ stdio::isRedirectedToStderr()
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 stdio::_writeString(const char * const data) const
 {
-    unsigned long _blockSize = blockSize;
+    unsigned long _bs = bs;
+    unsigned long written;
 
     try {
-        blockSize = strnlen(data, blockSize);
+        bs = strnlen(data, bs);
 
-        _write(data);
+        written = _write(data);
 
-        blockSize = _blockSize;
+        bs = _bs;
     } catch (...) {
-        blockSize = _blockSize;
+        bs = _bs;
 
         throw;
     }
+
+    return written;
 }
 
 //-------------------------------------------------------------------
