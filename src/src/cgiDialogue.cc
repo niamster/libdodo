@@ -254,12 +254,12 @@ dialogue::flush() const
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 dialogue::printString(const dodoString &buf)
 {
     printHeaders();
 
-    io.writeString(buf);
+    return io.writeString(buf);
 }
 
 //-------------------------------------------------------------------
@@ -281,17 +281,19 @@ dialogue::charset()
     return __dodostring__;
 }
 
-void
+unsigned long
 dialogue::print(const dodoString &buf)
 {
     printHeaders();
 
-    unsigned long bsOrig = io.bs;;
+    unsigned long bsOrig = io.bs;
 
     io.bs = buf.size();
-    io.write(buf);
+    unsigned long printed = io.write(buf);
 
     io.bs = bsOrig;
+
+    return printed;
 }
 
 //-------------------------------------------------------------------

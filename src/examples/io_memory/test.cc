@@ -20,7 +20,6 @@ main(int  argc,
 {
     try {
         io::memory io0;
-        io0.block = true;
 
         io0.writeString("!12345890#!!@\n");
         io0.writeString("!12345890-!!@\n");
@@ -29,7 +28,7 @@ main(int  argc,
 
         io::memory io1 = io0;
 
-        io1.pos = 1;
+        io1.pos = 14;
         io1.bs = 14;
         io1.write("!12345890$!~@\n");
 
@@ -43,12 +42,12 @@ main(int  argc,
 
         dodoString str;
 
-        io1.pos = 2;
+        io1.pos = 2*14;
         str = io1.readString();
         cout << "\nSize: " << str.size() << endl;
         cout << "~~" << str << "~~" << endl << endl;
 
-        io1.pos = 2;
+        io1.pos = 2*14;
         str = io1.read();
         cout << "\nSize: " << str.size() << endl;
         cout << "~~" << str << "~~" << endl << endl;

@@ -166,7 +166,7 @@ namespace dodo {
                 virtual void flush() const;
 
                 /**
-                 * @return successfully read bytes
+                 * @return amount in bytes of successfully read data
                  * @param data defines buffer that will be filled
                  * @note not more then bs(including null)
                  */
@@ -174,21 +174,21 @@ namespace dodo {
 
                 /**
                  * read null- or newline- terminated string
-                 * @return successfully read bytes
+                 * @return amount in bytes of successfully read data
                  * @param data defines buffer that will be filled
                  * @note not more then bs(including null)
                  */
                 virtual unsigned long _readString(char * const data) const;
 
                 /**
-                 * @return successfully written bytes
+                 * @return amount in bytes of successfully written data
                  * @param data defines data that will be written
                  */
                 virtual unsigned long _write(const char * const data) const;
 
                 /**
                  * write null- terminated string
-                 * @return successfully written bytes
+                 * @return amount in bytes of successfully written data
                  * @param data defines data that will be written
                  * @note puts extra null in the end of the string
                  */

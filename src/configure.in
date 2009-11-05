@@ -787,43 +787,43 @@ AC_CONFIG_FILES([Makefile:$TARGET_MAKEFILE])
 
 AC_CONFIG_FILES([bin/dodo-config
 	examples/Makefile
-	examples/image/Makefile
-	examples/cgifast/Makefile
-	examples/cgi/Makefile
-	examples/dbmysql/Makefile
-	examples/dbpostgresql/Makefile
-	examples/dbsqlite/Makefile
+	examples/graphics/Makefile
+	examples/cgi_fast/Makefile
+	examples/cgi_basic/Makefile
+	examples/db_mysql/Makefile
+	examples/db_postgresql/Makefile
+	examples/db_sqlite/Makefile
 	examples/db/Makefile
-	examples/iononblocked_ionetwork/Makefile
-	examples/iononblocked_ionetworkssl/Makefile
-	examples/iostdio/Makefile
-	examples/iofile_toolsfilesystem/Makefile
-	examples/iomemory/Makefile
-	examples/iopipe_iofilefifo_pcthread/Makefile
-	examples/ionetwork_pcthreads/Makefile
-	examples/ionetworkclient/Makefile
-	examples/ionetworkserver/Makefile
-	examples/ionetworksslserver/Makefile
-	examples/ionetworksslclient/Makefile
-	examples/ionetworkhttp/Makefile
-	examples/pcthread/Makefile
-	examples/pcprocess/Makefile
-	examples/pcjob/Makefile
-	examples/toolsnetwork/Makefile
-	examples/toolsos/Makefile
-	examples/toolstime/Makefile
-	examples/toolsmisc/Makefile
-	examples/toolscode/Makefile
-	examples/toolslogger/Makefile
-	examples/toolslibrary/Makefile
-	examples/toolsregexp/Makefile
+	examples/io_network_server.nonblocked/Makefile
+	examples/io_network_ssl_server.nonblocked/Makefile
+	examples/io_stdio/Makefile
+	examples/io_file.tools_filesystem/Makefile
+	examples/io_memory/Makefile
+	examples/io_pipe.io_file_fifo.pc_thread/Makefile
+	examples/io_network.pc_thread/Makefile
+	examples/io_network_client/Makefile
+	examples/io_network_server/Makefile
+	examples/io_network_ssl_server/Makefile
+	examples/io_network_ssl_client/Makefile
+	examples/io_network_http/Makefile
+	examples/pc_thread/Makefile
+	examples/pc_process/Makefile
+	examples/pc_job/Makefile
+	examples/tools_network/Makefile
+	examples/tools_os/Makefile
+	examples/tools_time/Makefile
+	examples/tools_misc/Makefile
+	examples/tools_code/Makefile
+	examples/tools_logger/Makefile
+	examples/tools_library/Makefile
+	examples/tools_regexp/Makefile
 	examples/xexec/Makefile
-	examples/rpcxmlhttpclient/Makefile
-	examples/rpcxmlcgiserver/Makefile
-	examples/rpcjsonhttpclient/Makefile
-	examples/rpcjsoncgiserver/Makefile
-	examples/dataformatjson/Makefile
-	examples/dataformatxml/Makefile])
+	examples/rpc_xml_http_client/Makefile
+	examples/rpc_xml_cgi_server/Makefile
+	examples/rpc_json_http_client/Makefile
+	examples/rpc_json_cgi_server/Makefile
+	examples/data_format_json/Makefile
+	examples/data_format_xml/Makefile])
 
 AC_OUTPUT
 

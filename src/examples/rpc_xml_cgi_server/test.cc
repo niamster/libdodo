@@ -25,10 +25,10 @@ class cgiIO : public io::stream::channel {
 
   protected:
 
-    virtual void
+    virtual unsigned long
     _read(char * const data) const
     {
-        _readString(data);
+        return _readString(data);
     }
 
     virtual unsigned long
@@ -50,16 +50,16 @@ class cgiIO : public io::stream::channel {
         return size;
     }
 
-    virtual void
+    virtual unsigned long
     _write(const char * const data) const
     {
-        provider.print(data);
+        return provider.print(data);
     }
 
-    virtual void
+    virtual unsigned long
     _writeString(const char * const data) const
     {
-        provider.printString(data);
+        return provider.printString(data);
     }
 
     int
@@ -90,6 +90,7 @@ handler(const dodoString       &method,
 {
     response resp;
 
+
     resp.addArgument(dodoString("Got method: ") + method + "\n");
     resp.addArgument(dodoString("Amount of values: ") + tools::string::ulToString(values.size()) + "\n");
 
@@ -106,7 +107,7 @@ main(int  argc,
     cgi::basic::exchange io;
     cgiIO provider(io, headers);
 
-    json::server srv(provider);
+    xml::server srv(provider);
 
     try {
         srv.setHandler("callTest", ::handler);

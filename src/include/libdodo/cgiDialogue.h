@@ -164,16 +164,18 @@ namespace dodo {
 
             /**
              * print data to the output
+             * @return amount in bytes of successfully printed data
              * @param data defines data that would be printed
              */
-            void print(const dodoString &data);
+            unsigned long print(const dodoString &data);
 
             /**
              * print data to the output
+             * @return amount in bytes of successfully printed data
              * @param data defines data that would be printed
              * @note print until '\n' is reached
              */
-            void printString(const dodoString &data);
+            unsigned long printString(const dodoString &data);
 
             /**
              * flush output

@@ -14,7 +14,6 @@ using namespace rpc;
 
 using namespace std;
 
-
 class httpIO : public io::stream::channel, public io::network::http::client {
   public:
 
@@ -32,10 +31,10 @@ class httpIO : public io::stream::channel, public io::network::http::client {
 
   protected:
 
-    virtual void
+    virtual unsigned long
     _read(char * const data) const
     {
-        _readString(data);
+        return _readString(data);
     }
 
     virtual unsigned long
@@ -61,16 +60,18 @@ class httpIO : public io::stream::channel, public io::network::http::client {
         return size;
     }
 
-    virtual void
+    virtual unsigned long
     _write(const char * const data) const
     {
         throw dodoString("Not implemented");
     }
 
-    virtual void
+    virtual unsigned long
     _writeString(const char * const idata) const
     {
         data.append(idata);
+
+        return strlen(idata);
     }
 
     int
@@ -106,8 +107,8 @@ main(int  argc,
      char **argv)
 {
     try {
-        httpIO io("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi");
-        xml::client client(io);
+        httpIO io("http://localhost/libdodo/rpcjsoncgiserver_test/test.cgi");
+        json::client client(io);
 
         method method;
         value argument;
@@ -131,10 +132,11 @@ main(int  argc,
         response resp = client.call(method);
 
         cout << "Amount of values: " << resp.values().size() << endl;
+        cout << "Response ID: " << client.responseId() << endl;
         cout << "First value: " << resp.value().string() << endl;
         cout << "Second value: " << resp.value(1).string() << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodoString)ex << endl;
     }
 
     return 0;

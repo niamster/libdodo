@@ -69,9 +69,8 @@ main(int  argc,
         file::regular io1 = io0;
         io0.close();
 
-        io1.pos = 1;
+        io1.pos = 14;
         io1.bs = 14;
-        io1.block = true;
         io1.write("!12345890$!~@\n");
         /**
          * test.dat should contain
@@ -83,7 +82,7 @@ main(int  argc,
 
         dodoString str;
 
-        io1.pos = 2;
+        io1.pos = 2*14;
         str = io1.readString();
         cout << "\nSize: " << str.size() << endl;
         cout << "~~" << str << "~~" << endl << endl;

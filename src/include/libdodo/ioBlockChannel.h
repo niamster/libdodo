@@ -63,7 +63,7 @@ namespace dodo {
                 virtual dodoString read() const;
 
                 /**
-                 * @return successfully written bytes
+                 * @return amount in bytes of successfully written data
                  * @param data defines data that will be written
                  * @note not more then bs
                  */
@@ -78,7 +78,7 @@ namespace dodo {
 
                 /**
                  * write null- terminated string
-                 * @return successfully written bytes
+                 * @return amount in bytes of successfully written data
                  * @param data defines data that will be written
                  * @note not more then bs
                  */
