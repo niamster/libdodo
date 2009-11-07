@@ -40,6 +40,10 @@
 #include <string.h>
 
 namespace dodo {
+    namespace exception {
+        class basic;
+    };
+
     namespace pc {
         namespace execution {
             /**
@@ -56,7 +60,8 @@ namespace dodo {
 #endif
                     executed(false),
                     joined(false),
-                    status(0)
+                    status(0),
+                    ex(NULL)
 #ifdef DL_EXT
                     ,
                     handle(NULL)
@@ -78,13 +83,17 @@ namespace dodo {
                 static void *routine(void *data);
 #endif
 
+                void           *func;               ///< function to execute
                 void           *data;               ///< thread data
+
                 bool           executed;            ///< true if thread is running
                 bool           joined;              ///< true if the thread was joined
                 int            status;              ///< thread exit status
                 bool           detached;            ///< true if thread is detached
-                void           *func;               ///< function to execute
                 short          action;              ///< action on object destruction[@see onDestructionEnum]
+
+                exception::basic *ex; ///< uncought exception thrown by thread routine
+
 #ifdef DL_EXT
                 void           *handle;             ///< handle to library
                 char            cookie[32];         ///< cookie that would be passed to deinitModule
@@ -99,6 +108,7 @@ namespace dodo {
 #include <libdodo/toolsOs.h>
 #include <libdodo/pcExecutionThreadEx.h>
 #include <libdodo/types.h>
+#include <libdodo/exceptionBasic.h>
 
 using namespace dodo::pc::execution;
 
@@ -108,7 +118,15 @@ __thread__::routine(void *data)
 {
     __thread__ *ti = (__thread__ *)data;
 
-    ti->status = ((execution::routine)ti->func)(ti->data);
+    try {
+        delete ti->ex;
+        ti->ex = NULL;
+
+        ti->status = ((execution::routine)ti->func)(ti->data);
+    } catch (exception::basic &ex) {
+        ti->ex = new exception::basic(ex);
+        ti->status = 0;
+    }
 
     return NULL;
 }
@@ -282,6 +300,8 @@ thread::~thread()
 #endif
     }
 
+    delete handle->ex;
+
     delete handle;
 }
 
@@ -405,5 +425,13 @@ thread::module(const dodoString &module,
     return mod;
 }
 #endif
+
+//-------------------------------------------------------------------
+
+dodo::exception::basic *
+thread::exception()
+{
+    return handle->ex;
+}
 
 //-------------------------------------------------------------------

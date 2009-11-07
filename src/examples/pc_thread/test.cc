@@ -30,8 +30,11 @@ thread(void *data)
         cout << endl << (char *)data << ": " << tools::time::now() << endl;
         cout.flush();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << ex.line << endl;
+        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
+
+    // throwing exception
+    tools::os::os::setWorkingDir("./dir/");
 
     return 0;
 }
@@ -65,9 +68,16 @@ main(int  argc,
 
         manager.wait();
 
+        for (int i = 0; i < amount; ++i) {
+            dodo::exception::basic *ex = manager.job(pos[i])->exception();
+            if (ex) {
+                cout << "Thread " << i << ":\t" << (dodoString)*ex << "\t" << ex->line << "\t" << ex->file << endl;
+            }
+        }
+
         delete data;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << endl;
+        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

@@ -36,6 +36,10 @@
 #include <libdodo/types.h>
 
 namespace dodo {
+    namespace exception {
+        class basic;
+    };
+
     namespace pc {
         namespace execution {
             struct __thread__;
@@ -103,6 +107,11 @@ namespace dodo {
                  * @return true if thread is running
                  */
                 virtual bool isRunning() const;
+
+                /**
+                 * @return uncought exception thrown by thread routine
+                 */
+                virtual exception::basic *exception();
 
 #ifdef DL_EXT
                 /**

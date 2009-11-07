@@ -142,6 +142,31 @@ namespace dodo {
 
           public:
 
+            /**
+             * constructor
+             * @param module defines module where exception has been thrown
+             * @param function defines function where exception has been thrown, @see *Ex.h headers for IDs
+             * @param errnoSource defines source of the error code and of the error string, @see exception::errnoEnum
+             * @param errNo defines error code
+             * @param errStr defines error string
+             * @param line defines line where exception has been thrown
+             * @param file defines file where exception has been thrown
+             * @param message defines custom message that might clarify the exception
+             */
+            basic(int              module,
+                  int              function,
+                  int              errnoSource,
+                  int              errNo,
+                  const dodoString &errStr,
+                  unsigned long    line,
+                  const dodoString &file,
+                  const dodoString &message = __dodostring__) throw ();
+
+            /**
+             * destructor
+             */
+            ~basic() throw ();
+
 #ifdef DL_EXT
             /**
              * @struct __module__
@@ -180,31 +205,6 @@ namespace dodo {
              * @param data defines user data
              */
             typedef void (*handler)(int module, basic *ex, void *data);
-
-            /**
-             * constructor
-             * @param module defines module where exception has been thrown
-             * @param function defines function where exception has been thrown, @see *Ex.h headers for IDs
-             * @param errnoSource defines source of the error code and of the error string, @see exception::errnoEnum
-             * @param errNo defines error code
-             * @param errStr defines error string
-             * @param line defines line where exception has been thrown
-             * @param file defines file where exception has been thrown
-             * @param message defines custom message that might clarify the exception
-             */
-            basic(int              module,
-                  int              function,
-                  int              errnoSource,
-                  int              errNo,
-                  const dodoString &errStr,
-                  unsigned long    line,
-                  const dodoString &file,
-                  const dodoString &message = __dodostring__) throw ();
-
-            /**
-             * destructor
-             */
-            ~basic() throw ();
 
             /**
              * @return error string
