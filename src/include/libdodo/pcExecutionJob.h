@@ -96,6 +96,8 @@ namespace dodo {
                  */
                 virtual bool isRunning() const = 0;
 
+              protected:
+
                 mutable bool cloned; ///< true if object was cloned
             };
         };

@@ -56,6 +56,7 @@ namespace dodo {
                 MANAGEREX_WAIT,
                 MANAGEREX_STOP,
                 MANAGEREX_ISRUNNING,
+                MANAGEREX_JOB,
             };
         };
     };

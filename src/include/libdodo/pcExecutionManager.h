@@ -54,21 +54,21 @@ namespace dodo {
                 /**
                  * destructor
                  */
-                virtual ~manager();
+                ~manager();
 
                 /**
                  * add a job
                  * @return job identificator
                  * @param job defines job for managing
                  */
-                virtual unsigned long add(const T &job);
+                unsigned long add(const T &job);
 
                 /**
                  * remove registered job
                  * @param id defines job identificator
                  * @param terminate defines termination condition
                  */
-                virtual void remove(unsigned long id,
+                void remove(unsigned long id,
                                     bool          terminate = false);
 
                 /**
@@ -76,46 +76,52 @@ namespace dodo {
                  * @param id defines job identificator
                  * @param force defines run condition; if true and job is running run job anyway
                  */
-                virtual void run(unsigned long id);
+                void run(unsigned long id);
 
                 /**
                  * stop job
                  * @param id defines job identificator
                  */
-                virtual void stop(unsigned long id);
+                void stop(unsigned long id);
 
                 /**
                  * stop all registered jobs
                  */
-                virtual void stop();
+                void stop();
 
                 /**
                  * wait for job termination
                  * @return status of the job
                  * @param id defines job identificator
                  */
-                virtual int wait(unsigned long id);
+                int wait(unsigned long id);
 
                 /**
                  * wait for all registered jobs termination
                  */
-                virtual void wait();
+                void wait();
 
                 /**
                  * @return true if job is running
                  * @param id defines job identificator
                  */
-                virtual bool isRunning(unsigned long id) const;
+                bool isRunning(unsigned long id) const;
 
                 /**
                  * @return amount of running jobs
                  */
-                virtual unsigned long running() const;
+                unsigned long running() const;
 
                 /**
                  * @return list of jobs in object
                  */
-                virtual dodoList<unsigned long> jobs();
+                dodoList<unsigned long> jobs();
+
+                /**
+                 * @return job object
+                 * @param id defines job identificator
+                 */
+                T *job(unsigned long id);
 
               protected:
 

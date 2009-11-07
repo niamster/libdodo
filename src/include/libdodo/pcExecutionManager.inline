@@ -222,3 +222,20 @@ dodo::pc::execution::manager<T
 }
 
 //-------------------------------------------------------------------
+
+template <typename T>
+T *
+dodo::pc::execution::manager<T
+                             >::job(unsigned long id)
+{
+    pc::sync::stack tg(keeper);
+
+    typename dodoMap<unsigned long, T>::const_iterator job = handles.find(id);
+
+    if (job == handles.end())
+        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_JOB, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+
+    return (T *)&job->second;
+}
+
+//-------------------------------------------------------------------
