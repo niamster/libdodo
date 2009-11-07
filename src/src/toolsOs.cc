@@ -1242,7 +1242,7 @@ os::blockSignal(long signals,
 //-------------------------------------------------------------------
 
 void
-os::becomeDaemon()
+os::daemonize()
 {
     pid_t pid = fork();
 
@@ -1270,7 +1270,7 @@ os::becomeDaemon()
 //-------------------------------------------------------------------
 
 void
-os::releaseDaemon(daemon func,
+os::daemonize(daemon func,
                   void   *data)
 {
     pid_t pid = fork();

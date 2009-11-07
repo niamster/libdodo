@@ -232,14 +232,14 @@ namespace dodo {
              * @param data defines daemon data
              * @note the code after the call to releaseDaemon would never be executed
              */
-            static void releaseDaemon(daemon func,
+            static void daemonize(daemon func,
                                       void   *data);
 
             /**
              * daemonize application
              * @note the code after the call to becomeDaemon would run in background as a daemon
              */
-            static void becomeDaemon();
+            static void daemonize();
 
             /**
              * print message to stderr and terminate the program and all child processes
