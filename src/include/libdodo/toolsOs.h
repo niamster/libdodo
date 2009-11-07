@@ -233,7 +233,7 @@ namespace dodo {
              * @note the code after the call to releaseDaemon would never be executed
              */
             static void daemonize(daemon func,
-                                      void   *data);
+                                  void   *data);
 
             /**
              * daemonize application

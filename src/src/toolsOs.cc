@@ -1271,7 +1271,7 @@ os::daemonize()
 
 void
 os::daemonize(daemon func,
-                  void   *data)
+              void   *data)
 {
     pid_t pid = fork();
 

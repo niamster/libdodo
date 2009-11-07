@@ -53,8 +53,7 @@ dodo::pc::execution::manager<T>::~manager()
 
 template <typename T>
 unsigned long
-dodo::pc::execution::manager<T
-                             >::add(const T &job)
+dodo::pc::execution::manager<T>::add(const T &job)
 {
     pc::sync::stack tg(keeper);
 
@@ -67,8 +66,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 void
-dodo::pc::execution::manager<T
-                             >::remove(unsigned long id,
+dodo::pc::execution::manager<T>::remove(unsigned long id,
                                        bool          terminate)
 {
     pc::sync::stack tg(keeper);
@@ -88,8 +86,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 void
-dodo::pc::execution::manager<T
-                             >::run(unsigned long id)
+dodo::pc::execution::manager<T>::run(unsigned long id)
 {
     pc::sync::stack tg(keeper);
 
@@ -105,8 +102,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 void
-dodo::pc::execution::manager<T
-                             >::stop(unsigned long id)
+dodo::pc::execution::manager<T>::stop(unsigned long id)
 {
     pc::sync::stack tg(keeper);
 
@@ -122,8 +118,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 void
-dodo::pc::execution::manager<T
-                             >::stop()
+dodo::pc::execution::manager<T>::stop()
 {
     pc::sync::stack tg(keeper);
 
@@ -137,8 +132,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 int
-dodo::pc::execution::manager<T
-                             >::wait(unsigned long id)
+dodo::pc::execution::manager<T>::wait(unsigned long id)
 {
     pc::sync::stack tg(keeper);
 
@@ -154,8 +148,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 void
-dodo::pc::execution::manager<T
-                             >::wait()
+dodo::pc::execution::manager<T>::wait()
 {
     pc::sync::stack tg(keeper);
 
@@ -169,8 +162,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 bool
-dodo::pc::execution::manager<T
-                             >::isRunning(unsigned long id) const
+dodo::pc::execution::manager<T>::isRunning(unsigned long id) const
 {
     pc::sync::stack tg(keeper);
 
@@ -186,8 +178,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 unsigned long
-dodo::pc::execution::manager<T
-                             >::running() const
+dodo::pc::execution::manager<T>::running() const
 {
     pc::sync::stack tg(keeper);
 
@@ -206,8 +197,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 dodoList<unsigned long>
-dodo::pc::execution::manager<T
-                             >::jobs()
+dodo::pc::execution::manager<T>::jobs()
 {
     pc::sync::stack tg(keeper);
 
@@ -225,8 +215,7 @@ dodo::pc::execution::manager<T
 
 template <typename T>
 T *
-dodo::pc::execution::manager<T
-                             >::job(unsigned long id)
+dodo::pc::execution::manager<T>::job(unsigned long id)
 {
     pc::sync::stack tg(keeper);
 
