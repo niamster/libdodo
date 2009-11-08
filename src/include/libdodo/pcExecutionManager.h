@@ -74,7 +74,6 @@ namespace dodo {
                 /**
                  * execute job
                  * @param id defines job identificator
-                 * @param force defines run condition; if true and job is running run job anyway
                  */
                 void run(unsigned long id);
 
