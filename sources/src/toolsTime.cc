@@ -33,6 +33,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <sys/time.h>
 
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsTimeEx.h>
@@ -91,6 +92,19 @@ tools::time::byFormat(const dodoString &format,
     strftime(formatted, 30, format.data(), tTime);
 
     return formatted;
+}
+
+//-------------------------------------------------------------------
+
+unsigned long
+tools::time::millinow()
+{
+    timeval tv;
+
+    if (gettimeofday(&tv, NULL) == -1)
+        throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_MILLINOW, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+    return 1000 * tv.tv_sec + tv.tv_usec / 1000;
 }
 
 //-------------------------------------------------------------------

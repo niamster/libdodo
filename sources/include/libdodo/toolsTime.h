@@ -136,6 +136,11 @@ namespace dodo {
             static long now();
 
             /**
+             * @return number of milliseconds from 00:00:00 UTC, January 1, 1970 till now
+             */
+            static unsigned long millinow();
+
+            /**
              * @return dates of the week
              * @param date defines timestamp in the weekv
              * @param format defines time/date/... format string

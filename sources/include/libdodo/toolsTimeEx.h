@@ -42,6 +42,7 @@ namespace dodo {
         enum timeFunctionsID {
             TIMEEX_BYFORMAT,
             TIMEEX_NOW,
+            TIMEEX_MILLINOW,
             TIMEEX_MAKETIME,
         };
     };
