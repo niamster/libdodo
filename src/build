@@ -7,11 +7,11 @@ function build()
 		echo Building with $@ >&3 && \
 		./configure $@ && \
 		make clean && \
-		make -s -C tests clean && \
+		make -s -C examples clean && \
 		echo Building libdodo >&3 && \
 		make && \
-		echo Building tests >&3 && \
-		make -s -C tests; \
+		echo Building examples >&3 && \
+		make -s -C examples; \
 
 		exec 1>&3
 	)

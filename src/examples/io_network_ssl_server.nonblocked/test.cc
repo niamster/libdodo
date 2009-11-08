@@ -17,8 +17,8 @@ using namespace io::network::ssl;
 using namespace std;
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     try {
 #ifdef OPENSSL_EXT

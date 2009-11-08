@@ -14,8 +14,8 @@ using namespace tools;
 using namespace std;
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     try {
         network::__host__ host;

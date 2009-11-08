@@ -103,8 +103,8 @@ class httpIO : public io::stream::channel, public io::network::http::client {
 };
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     try {
         httpIO io("http://localhost/libdodo/rpcjsoncgiserver_test/test.cgi");

@@ -32,6 +32,12 @@
 
 #include <libdodo/directives.runtime.h>
 
+#ifdef __GNUC__
+#define UNUSED __attribute__ (( unused ))
+#else
+#define UNUSED
+#endif
+
 /**
  * size of key for shared entities
  */

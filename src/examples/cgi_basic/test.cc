@@ -115,8 +115,8 @@ handler(exchange &ex)
 }
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     using namespace cgi::basic;
 

@@ -79,8 +79,8 @@ process(void *data)
 }
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     try {
         server s(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);

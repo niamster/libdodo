@@ -42,8 +42,8 @@ hook(xexec::__collected_data__ *odata,
 #endif
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     try {
 #ifdef IMAGEMAGICK_EXT

@@ -189,7 +189,6 @@ namespace dodo {
                      */
                     node parse(const __definition__ &definition);
 
-#ifdef LIBXML2_EXT
                     /**
                      * @return true if content is in CDATA
                      * @param xnode defines XML tree node
@@ -237,16 +236,6 @@ namespace dodo {
                      */
                     void getNode(const __node__ &xnode,
                                  node           &sample);
-#endif
-#ifdef LIBXML2_EXT
-                    /**
-                     * @typedef strCmp
-                     * @brief defines name compare function
-                     * @param one defines string to compare
-                     * @param two defines string to compare
-                     */
-                    typedef int (*strCmp)(const unsigned char *one, const unsigned char *two);
-                    strCmp cmpFunc;     ///< name compare function
 
                     /**
                      * find node by definition
@@ -256,8 +245,15 @@ namespace dodo {
                     __node__ findNode(const __definition__ &definition,
                                       const __node__       &xnode);
 
+                    /**
+                     * @typedef strCmp
+                     * @brief defines name compare function
+                     * @param one defines string to compare
+                     * @param two defines string to compare
+                     */
+                    typedef int (*strCmp)(const unsigned char *one, const unsigned char *two);
+
                     __doc__ *document;  ///< XML Document
-#endif
 
                     /**
                      * @enum processorStatementEnum defines processor statements

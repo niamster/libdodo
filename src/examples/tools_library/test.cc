@@ -19,8 +19,8 @@ typedef void (*print)(const dodoString &data);
 #endif
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     try {
 #ifdef DL_EXT

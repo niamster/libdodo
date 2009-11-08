@@ -32,8 +32,8 @@ hook(xexec::__collected_data__ *odata,
 #endif
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     if (argc == 1) {
         cout << "usage: " << argv[0] << " [postgresql|mysql|sqlite]" << endl;

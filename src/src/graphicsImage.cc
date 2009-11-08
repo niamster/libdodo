@@ -214,10 +214,11 @@ const int image::compressionStatements[] = {
 
 //-------------------------------------------------------------------
 
-image::image(image &i)
 #ifndef GRAPHICS_WO_XEXEC
-    : xexec(i),
-      collectedData(this, OBJECT_GRAPHICSIMAGE)
+image::image(image &i) : xexec(i),
+                         collectedData(this, OBJECT_GRAPHICSIMAGE)
+#else
+image::image(image &)
 #endif
 {
 }

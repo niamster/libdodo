@@ -89,8 +89,8 @@ process1(void *data)
 }
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     try {
         data1.set((char *)"%test%\n");

@@ -154,7 +154,7 @@ channel::write(const dodoString &data) const
         throw;
     }
 #else
-    _write(data.data());
+    n = _write(data.data());
 #endif
 
 #ifndef IO_WO_XEXEC
@@ -188,7 +188,7 @@ channel::writeString(const dodoString &data) const
         throw;
     }
 #else
-    _writeString(data.data());
+    n = _writeString(data.data());
 #endif
 
 #ifndef IO_WO_XEXEC

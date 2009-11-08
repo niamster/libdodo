@@ -37,8 +37,8 @@ exit(int,
 }
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     cout << "PID: " << os::PID() << endl;
 

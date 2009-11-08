@@ -13,8 +13,8 @@ using namespace dodo;
 using namespace std;
 
 int
-main(int  argc,
-     char **argv)
+main(int  argc UNUSED,
+     char **argv UNUSED)
 {
     try {
         cout << tools::time::byFormat("%A-%Y-%H", tools::time::now()) << endl;
