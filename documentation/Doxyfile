@@ -38,7 +38,7 @@ PROJECT_NUMBER         = <version>
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = docs/<version>
+OUTPUT_DIRECTORY       = documentation/<version>
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 4096 sub-directories (in 2 levels) under the output directory of each output 
@@ -1262,15 +1262,11 @@ INCLUDE_FILE_PATTERNS  =
 # undefined via #undef or recursively expanded use the := operator 
 # instead of the = operator.
 
-PREDEFINED             = USE_DEQUE \
-                         SQLITE3_EXT \
+PREDEFINED             = SQLITE3_EXT \
                          POSTGRESQL_EXT \
                          MYSQL_EXT \
-                         FAST_CGI_EXT \
-                         PCRE_EXT \
+                         FASTCGI_EXT \
                          DL_EXT \
-                         LIBXML2_EXT \
-                         PTHREAD_EXT \
                          BZIP2_EXT \
                          ZLIB_EXT \
                          ICONV_EXT \
