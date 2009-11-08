@@ -124,7 +124,7 @@ namespace dodo {
              * @brief defines process information
              */
             struct __usage__ {
-                long time;                  ///< processor time of execution in miliseconds
+                long time;                  ///< processor time of execution in milliseconds
                 long mem;                   ///< memory usage in bytes
             };
 

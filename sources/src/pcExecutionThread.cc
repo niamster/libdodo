@@ -314,7 +314,7 @@ thread::run()
         throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_RUN, exception::ERRNO_LIBDODO, THREADEX_ISALREADYRUNNING, PCEXECUTIONTHREADEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
-    errno = pthread_create(&(handle->thread), &handle->attr, __thread__::routine, handle);
+    errno = pthread_create(&handle->thread, &handle->attr, __thread__::routine, handle);
     if (errno != 0)
         throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 #endif

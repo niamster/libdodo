@@ -1,8 +1,8 @@
 /***************************************************************************
- *            pcExecutionManager.h
+ *            pcExecutionScheduler.h
  *
- *  Mon Mar 05 2007
- *  Copyright  2007  Ni@m
+ *  Sun Nov 08 2009
+ *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCEXECUTIONMANAGER_H_
-#define _PCEXECUTIONMANAGER_H_ 1
+#ifndef _PCEXECUTIONSCHEDULER_H_
+#define _PCEXECUTIONSCHEDULER_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -40,31 +40,40 @@ namespace dodo {
             class protector;
         };
 
+        struct __manager__;
+
         namespace execution {
+            class job;
+
             /**
-             * @class manager
+             * @class scheduler
              * @brief provides interface for jobs management
              */
-            template <typename T>
-            class manager {
+            class scheduler {
+                friend struct __manager__;
+
               public:
 
                 /**
                  * constructor
                  */
-                manager();
+                scheduler();
 
                 /**
                  * destructor
                  */
-                ~manager();
+                ~scheduler();
 
                 /**
-                 * add a job
+                 * schedule a job
                  * @return job identificator
-                 * @param job defines job for managing
+                 * @param job defines job for scheduling
+                 * @param timeout defines timeout of job scheduling in milliseconds
+                 * @param repeat defines if job should be rescheduled again
                  */
-                unsigned long add(const T &job);
+                unsigned long schedule(execution::job *job,
+                                       unsigned long timeout,
+                                       bool repeat = false);
 
                 /**
                  * remove registered job
@@ -74,69 +83,25 @@ namespace dodo {
                 void remove(unsigned long id,
                             bool          terminate = false);
 
-                /**
-                 * execute job
-                 * @param id defines job identificator
-                 */
-                void run(unsigned long id);
-
-                /**
-                 * stop job
-                 * @param id defines job identificator
-                 */
-                void stop(unsigned long id);
-
-                /**
-                 * stop all registered jobs
-                 */
-                void stop();
-
-                /**
-                 * wait for job termination
-                 * @return status of the job
-                 * @param id defines job identificator
-                 */
-                int wait(unsigned long id);
-
-                /**
-                 * wait for all registered jobs termination
-                 */
-                void wait();
-
-                /**
-                 * @return true if job is running
-                 * @param id defines job identificator
-                 */
-                bool isRunning(unsigned long id) const;
-
-                /**
-                 * @return amount of running jobs
-                 */
-                unsigned long running() const;
-
-                /**
-                 * @return list of jobs in object
-                 */
-                dodoList<unsigned long> jobs();
-
-                /**
-                 * @return job object
-                 * @param id defines job identificator
-                 */
-                T *job(unsigned long id);
-
               protected:
 
-                dodoMap<unsigned long, T> handles;  ///< managed jobs
+                struct __job__ {
+                    execution::job *job; ///< job for scheduling
+                    unsigned long timeout; ///< timeout for job scheduling
+                    unsigned long ts; ///< timestamp of last time job was executed or added
+                    bool repeat; ///< if the job is to be rescheduled
+                };
+
+                dodoMap<unsigned long, __job__> handles;  ///< managed jobs
 
                 unsigned long counter;              ///< job id counter
 
                 sync::protector *keeper;            ///< section locker
+
+                __manager__ *manager; ///< schedule manager handle
             };
         };
     };
 };
-
-#include <libdodo/pcExecutionManager.inline>
 
 #endif

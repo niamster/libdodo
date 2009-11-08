@@ -70,6 +70,7 @@ thread::thread() : lock(new thread::__lock__)
 {
 #ifdef PTHREAD_EXT
     pthread_mutexattr_t attr;
+
     errno = pthread_mutexattr_init(&attr);
     if (errno != 0) {
         delete lock;

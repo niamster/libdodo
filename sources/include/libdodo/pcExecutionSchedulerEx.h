@@ -1,7 +1,7 @@
 /***************************************************************************
- *            pc.h
+ *            pcExecutionSchedulerEx.h
  *
- *  Thu Mar 26 2009
+ *  Sun Nov 08 2009
  *  Copyright  2009  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,22 +27,25 @@
  * set shiftwidth=4
  */
 
-#ifndef _PC_H_
-#define _PC_H_ 1
+#ifndef _PCEXECUTIONSCHEDULEREX_H_
+#define _PCEXECUTIONSCHEDULEREX_H_ 1
 
-#include <libdodo/pcExecutionJob.h>
-#include <libdodo/pcExecutionThread.h>
-#include <libdodo/pcExecutionThreadEx.h>
-#include <libdodo/pcExecutionProcess.h>
-#include <libdodo/pcExecutionProcessEx.h>
-#include <libdodo/pcExecutionManager.h>
-#include <libdodo/pcExecutionScheduler.h>
-#include <libdodo/pcExecutionSchedulerEx.h>
-#include <libdodo/pcSyncDataObject.h>
-#include <libdodo/pcSyncProcess.h>
-#include <libdodo/pcSyncProcessEx.h>
-#include <libdodo/pcSyncThread.h>
-#include <libdodo/pcSyncThreadEx.h>
-#include <libdodo/pcSyncProtector.h>
-#include <libdodo/pcSyncStack.h>
+#include <libdodo/directives.h>
+
+#include <libdodo/exceptionBasic.h>
+
+namespace dodo {
+    namespace pc {
+        namespace execution {
+            /**
+             * ID of function where exception was thrown
+             */
+            enum schedulerFunctionsID {
+                SCHEDULEREX___MANAGER__CONSTRUCTOR,
+                SCHEDULEREX_CONSTRUCTOR,
+            };
+        };
+    };
+};
 #endif
+
