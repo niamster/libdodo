@@ -215,7 +215,23 @@ process::isRunning() const
         throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 
-    return true;
+    int status;
+
+    res = waitpid(handle->pid, &status, WNOHANG);
+
+    if (res == 0) {
+        return true;
+    } else if (res == handle->pid) {
+        if (WIFEXITED(status))
+            handle->status = WEXITSTATUS(status);
+
+        handle->executed = false;
+        handle->joined = true;
+
+        return false;
+    }
+
+    throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
