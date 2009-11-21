@@ -42,12 +42,14 @@ namespace dodo {
              */
             enum managerExR {
                 MANAGEREX_NOTFOUND,
+                MANAGEREX_UNKNOWNJOB,
             };
 
             /**
              * libdodo defined errors explanation
              */
 #define PCEXECUTIONMANAGEREX_NOTFOUND_STR    "Job was not found"
+#define PCEXECUTIONMANAGEREX_UNKNOWNJOB_STR  "Unknown type of job"
             /**
              * ID of function where exception was thrown
              */
@@ -57,6 +59,7 @@ namespace dodo {
                 MANAGEREX_STOP,
                 MANAGEREX_ISRUNNING,
                 MANAGEREX_JOB,
+                MANAGEREX_ADD,
             };
         };
     };

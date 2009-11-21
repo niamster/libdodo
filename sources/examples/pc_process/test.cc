@@ -101,7 +101,7 @@ main(int  argc UNUSED,
 
         data0.set((char *)"!test!\n");
 
-        execution::manager<execution::process> manager;
+        execution::manager manager;
 
         const int amount = 10;
 

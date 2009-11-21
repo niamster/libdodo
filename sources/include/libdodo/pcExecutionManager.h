@@ -41,11 +41,12 @@ namespace dodo {
         };
 
         namespace execution {
+            class job;
+
             /**
              * @class manager
              * @brief provides interface for jobs management
              */
-            template <typename T>
             class manager {
               public:
 
@@ -64,7 +65,7 @@ namespace dodo {
                  * @return job identificator
                  * @param job defines job for managing
                  */
-                unsigned long add(const T &job);
+                unsigned long add(const job &job);
 
                 /**
                  * remove registered job
@@ -123,11 +124,11 @@ namespace dodo {
                  * @return job object
                  * @param id defines job identificator
                  */
-                T *job(unsigned long id);
+                execution::job *job(unsigned long id);
 
               protected:
 
-                dodoMap<unsigned long, T> handles;  ///< managed jobs
+                dodoMap<unsigned long, execution::job *> handles;  ///< managed jobs
 
                 unsigned long counter;              ///< job id counter
 
@@ -136,7 +137,5 @@ namespace dodo {
         };
     };
 };
-
-#include <libdodo/pcExecutionManager.inline>
 
 #endif

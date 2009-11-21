@@ -83,7 +83,7 @@ main(int  argc UNUSED,
      char **argv UNUSED)
 {
     try {
-        manager<thread> threads;
+        manager threads;
 
         cout << "\n~~using one pipe for the thread~~\n";
 

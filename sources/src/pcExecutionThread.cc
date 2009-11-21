@@ -147,7 +147,7 @@ thread::thread(routine       func,
                short         action,
                bool          detached,
                unsigned long stackSize)
-try : job(),
+try : job(TYPE_THREAD),
       handle(NULL)
     {
         handle = new __thread__;
@@ -192,7 +192,7 @@ try : job(),
 thread::thread(const dodoString &module,
                void             *data,
                void             *toInit)
-try : job(),
+try : job(TYPE_THREAD),
       handle(NULL)
     {
         handle = new __thread__;

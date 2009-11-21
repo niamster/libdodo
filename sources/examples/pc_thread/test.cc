@@ -48,7 +48,7 @@ main(int  argc UNUSED,
 
         ::data.set((void *)data);
 
-        execution::manager<execution::thread> manager;
+        execution::manager manager;
 
         const int amount = 10;
 
@@ -69,7 +69,7 @@ main(int  argc UNUSED,
         manager.wait();
 
         for (int i = 0; i < amount; ++i) {
-            dodo::exception::basic *ex = manager.job(pos[i])->exception();
+            dodo::exception::basic *ex = dynamic_cast<execution::thread *>(manager.job(pos[i]))->exception();
             if (ex) {
                 cout << "Thread " << i << ":\t" << (dodoString)*ex << "\t" << ex->line << "\t" << ex->file << endl;
             }

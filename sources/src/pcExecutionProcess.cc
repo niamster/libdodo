@@ -97,7 +97,7 @@ process::process(const process &p) : job(p),
 
 process::process(routine func,
                  void    *data,
-                 short   action) : job(),
+                 short   action) : job(TYPE_PROCESS),
                                    handle(new __process__)
 {
     handle->data = data;
@@ -115,7 +115,7 @@ process::process(routine func,
 process::process(const dodoString &module,
                  void             *data,
                  void             *toInit)
-try : job(),
+try : job(TYPE_PROCESS),
       handle(NULL)
     {
         handle = new __process__;
