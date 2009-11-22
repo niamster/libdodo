@@ -48,14 +48,11 @@ main(int  argc UNUSED,
     try {
         const int amount = 10;
 
-        execution::thread periodic(::job0, (void *)"periodic", execution::ON_DESTRUCTION_STOP);
-        execution::thread oneshot0(::job0, (void *)"oneshot", execution::ON_DESTRUCTION_STOP);
-        execution::process oneshot1(::job0, (void *)"oneshot", execution::ON_DESTRUCTION_STOP);
         execution::scheduler scheduler;
 
-        unsigned long pID = scheduler.schedule(&periodic, 1000, true);
-        scheduler.schedule(&oneshot0, 2000);
-        scheduler.schedule(&oneshot1, 3000);
+        unsigned long pID = scheduler.schedule(execution::thread(::job0, (void *)"periodic", execution::ON_DESTRUCTION_STOP), 1000, true);
+        scheduler.schedule(execution::thread(::job0, (void *)"oneshot thread", execution::ON_DESTRUCTION_STOP), 2000);
+        scheduler.schedule(execution::process(::job0, (void *)"oneshot process", execution::ON_DESTRUCTION_STOP), 3000);
 
         execution::manager manager;
 
@@ -89,7 +86,7 @@ main(int  argc UNUSED,
         for (int i = 0; i < amount; ++i)
             cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
 
-        pID = scheduler.schedule(&periodic, 100, true);
+        pID = scheduler.schedule(execution::thread(::job0, (void *)"periodic", execution::ON_DESTRUCTION_STOP), 100, true);
         cout << tools::time::millinow() << endl;
         tools::os::sleep(2);
         scheduler.remove(pID);

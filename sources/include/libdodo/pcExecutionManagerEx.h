@@ -50,6 +50,7 @@ namespace dodo {
              */
 #define PCEXECUTIONMANAGEREX_NOTFOUND_STR    "Job was not found"
 #define PCEXECUTIONMANAGEREX_UNKNOWNJOB_STR  "Unknown type of job"
+
             /**
              * ID of function where exception was thrown
              */

@@ -38,6 +38,7 @@ namespace dodo {
     namespace pc {
         namespace execution {
             class manager;
+            class scheduler;
 
             /**
              * @typedef routine
@@ -61,6 +62,7 @@ namespace dodo {
              */
             class job {
                 friend class manager;
+                friend class scheduler;
 
               public:
 

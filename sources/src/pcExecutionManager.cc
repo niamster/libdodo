@@ -80,7 +80,7 @@ manager::add(const execution::job &job)
             break;
 
         default:
-            throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_UNKNOWNJOB, PCEXECUTIONMANAGEREX_UNKNOWNJOB_STR, __LINE__, __FILE__);
+            throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ADD, exception::ERRNO_LIBDODO, MANAGEREX_UNKNOWNJOB, PCEXECUTIONMANAGEREX_UNKNOWNJOB_STR, __LINE__, __FILE__);
     }
 
     handles.insert(std::make_pair(counter, j));

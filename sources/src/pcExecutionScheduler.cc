@@ -76,6 +76,8 @@ namespace dodo {
 #include <libdodo/pcExecutionScheduler.h>
 #include <libdodo/pcExecutionSchedulerEx.h>
 #include <libdodo/pcExecutionJob.h>
+#include <libdodo/pcExecutionThread.h>
+#include <libdodo/pcExecutionProcess.h>
 #include <libdodo/types.h>
 #include <libdodo/pcSyncThread.h>
 #include <libdodo/pcSyncStack.h>
@@ -248,13 +250,32 @@ scheduler::~scheduler()
 //-------------------------------------------------------------------
 
 unsigned long
-scheduler::schedule(execution::job *job,
+scheduler::schedule(const execution::job &job,
                     unsigned long timeout,
                     bool repeat)
 {
     pc::sync::stack tg(keeper);
 
-    __job__ j = {job, timeout, tools::time::millinow(), repeat};
+    execution::job *_job;
+
+    execution::job *orig = const_cast<execution::job *>(&job);
+
+    switch (job.type) {
+        case execution::job::TYPE_PROCESS:
+            _job = new process(*dynamic_cast<process *>(orig));
+
+            break;
+
+        case execution::job::TYPE_THREAD:
+            _job = new thread(*dynamic_cast<thread *>(orig));
+
+            break;
+
+        default:
+            throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX_SCHEDULE, exception::ERRNO_LIBDODO, SCHEDULEREX_UNKNOWNJOB, PCEXECUTIONSCHEDULEREX_UNKNOWNJOB_STR, __LINE__, __FILE__);
+    }
+
+    __job__ j = {_job, timeout, tools::time::millinow(), repeat};
 
     handles.insert(std::make_pair(counter, j));
 
