@@ -68,9 +68,9 @@ namespace dodo {
 #endif
 
                     dodoString where;                           ///< `where` for the request(can be used as `as` for `callFunction`)
-                    dodoStringArray fields;                     ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
-                    dodoArray<dodoStringArray> values;          ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
-                    dodoString table;                           ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
+                    dodoStringArray fields;                     ///< `fields` for request(as `arguments` for `callFunction`; as `arguments` for `callProcedure`)
+                    dodoArray<dodoStringArray> values;          ///< `values` for the request
+                    dodoString table;                           ///< `table` for the request(as `name` for `callFunction`; as `name` for `callProcedure`)
                     dodoString order;                           ///< `order` for the request
                     dodoString having;                          ///< `having` for the request
                     dodoString group;                           ///< `group` for the request
