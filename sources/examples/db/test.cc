@@ -66,6 +66,8 @@ main(int  argc UNUSED,
 #else
             return 1;
 #endif
+        } else {
+            return 1;
         }
 
 #ifndef DATABASE_WO_XEXEC

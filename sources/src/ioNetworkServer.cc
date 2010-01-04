@@ -60,6 +60,8 @@ server::server(server &s)
 #ifndef IO_WO_XEXEC
     : xexec(s),
       collectedData(this, xexec::OBJECT_IONETWORKSERVER)
+#else
+server::server(server &)
 #endif
 {
 }
