@@ -111,8 +111,27 @@ const dodoString postgresql::encodingStatements[] = {
 
 //-------------------------------------------------------------------
 
-postgresql::postgresql() : empty(true),
-                           handle(new __postgresql__)
+postgresql::__connection_options__::__connection_options__(const dodoString &db,
+                                                           const dodoString &host,
+                                                           const dodoString &user,
+                                                           const dodoString &password,
+                                                           unsigned int     port) : db(db),
+                                                                                    host(host),
+                                                                                    user(user),
+                                                                                    password(password),
+                                                                                    port(port)
+{
+}
+
+//-------------------------------------------------------------------
+
+postgresql::__connection_options__::__connection_options__()
+{
+}
+
+//-------------------------------------------------------------------
+
+postgresql::postgresql() : handle(new __postgresql__)
 {
 #ifndef DATABASE_WO_XEXEC
     collectedData.setExecObject(xexec::OBJECT_DATABASEPOSTGRESQL);
@@ -121,30 +140,32 @@ postgresql::postgresql() : empty(true),
 
 //-------------------------------------------------------------------
 
-postgresql::postgresql(const __connection__ &info) : empty(true),
-                                                     handle(new __postgresql__)
+postgresql::postgresql(const data::base::__connection_options__ &a_info) : handle(new __postgresql__),
+                                                                           info(*dynamic_cast<const postgresql::__connection_options__ *>(&a_info))
 {
 #ifndef DATABASE_WO_XEXEC
     collectedData.setExecObject(xexec::OBJECT_DATABASEPOSTGRESQL);
 #endif
 
-    collectedData.dbInfo = info;
-
     handle->handle = PQsetdbLogin(
-        collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.data(),
-        tools::string::uiToString(collectedData.dbInfo.port).data(),
+        info.host.size() == 0 ? NULL : info.host.data(),
+        tools::string::uiToString(info.port).data(),
         NULL,
         NULL,
-        collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.data(),
-        collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.data(),
-        collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.data());
+        info.db.size() == 0 ? NULL : info.db.data(),
+        info.user.size() == 0 ? NULL : info.user.data(),
+        info.password.size() == 0 ? NULL : info.password.data());
 
     int status = PQstatus(handle->handle);
 
-    if (status != CONNECTION_OK) {
+    try {
+        if (status != CONNECTION_OK) {
+            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_POSTGRESQL, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
+        }
+    } catch (...) {
         delete handle;
 
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_POSTGRESQL, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
+        throw;
     }
 }
 
@@ -159,7 +180,7 @@ postgresql::postgresql(postgresql &)
 postgresql::~postgresql()
 {
     if (handle->handle != NULL) {
-        if (!empty)
+        if (handle->result)
             PQclear(handle->result);
 
         PQfinish(handle->handle);
@@ -171,18 +192,18 @@ postgresql::~postgresql()
 //-------------------------------------------------------------------
 
 void
-postgresql::connect(const __connection__ &info)
+postgresql::connect(const data::base::__connection_options__ &a_info)
 {
-    collectedData.dbInfo = info;
-
 #ifndef DATABASE_WO_XEXEC
     performPreExec(OPERATION_CONNECT);
 #endif
 
+    info = *dynamic_cast<const postgresql::__connection_options__ *>(&a_info);
+
     if (handle->handle != NULL) {
-        if (!empty) {
+        if (handle->result) {
             PQclear(handle->result);
-            empty = true;
+            handle->result = NULL;
         }
 
         PQfinish(handle->handle);
@@ -191,13 +212,13 @@ postgresql::connect(const __connection__ &info)
     }
 
     handle->handle = PQsetdbLogin(
-        collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.data(),
-        tools::string::uiToString(collectedData.dbInfo.port).data(),
+        info.host.size() == 0 ? NULL : info.host.data(),
+        tools::string::uiToString(info.port).data(),
         NULL,
         NULL,
-        collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.data(),
-        collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.data(),
-        collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.data());
+        info.db.size() == 0 ? NULL : info.db.data(),
+        info.user.size() == 0 ? NULL : info.user.data(),
+        info.password.size() == 0 ? NULL : info.password.data());
 
     int status = PQstatus(handle->handle);
 
@@ -222,9 +243,9 @@ postgresql::disconnect()
         performPreExec(OPERATION_DISCONNECT);
 #endif
 
-        if (!empty) {
+        if (handle->result) {
             PQclear(handle->result);
-            empty = true;
+            handle->result = NULL;
         }
 
         PQfinish(handle->handle);
@@ -239,122 +260,66 @@ postgresql::disconnect()
 
 //-------------------------------------------------------------------
 
-dodoArray<dodo::dodoStringArray>
-postgresql::fetchRows() const
+void
+postgresql::fetchedRows(data::base::rows &a_rows) const
 {
-    if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+    sql::rows *rows = dynamic_cast<sql::rows *>(&a_rows);
 
 #ifndef DATABASE_WO_XEXEC
-    performPreExec(OPERATION_FETCHROWS);
+    performPreExec(OPERATION_FETCHEDROWS);
 #endif
 
-    dodoArray<dodoStringArray> rows;
+    rows->fields.clear();
+    rows->values.clear();
 
-    if (empty || !show)
-        return rows;
+    if (!handle->result) // FIXME: throw exception?
+        return;
 
     int rowsNum = PQntuples(handle->result);
     int fieldsNum = PQnfields(handle->result);
 
 #ifndef USE_DEQUE
-    rows.reserve(rowsNum);
+    rows->fields.reserve(fieldsNum);
+    rows->values.reserve(rowsNum);
 #endif
 
-    dodoStringArray rowsPart;
+    dodoStringArray values;
 
 #ifndef USE_DEQUE
-    rowsPart.reserve(fieldsNum);
-#endif
-
-    int j;
-    for (int i(0); i < rowsNum; ++i) {
-        rowsPart.clear();
-
-        for (j = 0; j < fieldsNum; ++j) {
-            if (PQgetisnull(handle->result, i, j) == 1)
-                rowsPart.push_back(statements[sql::constructor::STATEMENT_NULL]);
-            else
-                rowsPart.push_back(dodoString(PQgetvalue(handle->result, i, j), PQgetlength(handle->result, i, j)));
-        }
-
-        rows.push_back(rowsPart);
-    }
-
-#ifndef DATABASE_WO_XEXEC
-    performPostExec(OPERATION_FETCHROWS);
-#endif
-
-    return rows;
-}
-
-//-------------------------------------------------------------------
-
-dodo::dodoStringArray
-postgresql::fetchFields() const
-{
-    if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-
-#ifndef DATABASE_WO_XEXEC
-    performPreExec(OPERATION_FETCHFIELDS);
-#endif
-
-    dodoStringArray fields;
-
-    if (empty || !show)
-        return fields;
-
-    int fieldsNum = PQnfields(handle->result);
-
-#ifndef USE_DEQUE
-    fields.reserve(fieldsNum);
+    values.reserve(fieldsNum);
 #endif
 
     for (int i(0); i < fieldsNum; ++i)
-        fields.push_back(PQfname(handle->result, i));
+        rows->fields.push_back(PQfname(handle->result, i));
+
+    int j;
+    for (int i(0); i < rowsNum; ++i) {
+        for (j = 0; j < fieldsNum; ++j) {
+            if (PQgetisnull(handle->result, i, j) == 1)
+                values.push_back(statements[sql::constructor::STATEMENT_NULL]);
+            else
+                values.push_back(dodoString(PQgetvalue(handle->result, i, j), PQgetlength(handle->result, i, j)));
+        }
+
+        rows->values.push_back(values);
+
+        values.clear();
+    }
 
 #ifndef DATABASE_WO_XEXEC
-    performPostExec(OPERATION_FETCHFIELDS);
+    performPostExec(OPERATION_FETCHEDROWS);
 #endif
-
-    return fields;
-}
-
-//-------------------------------------------------------------------
-
-__tuples__
-postgresql::fetch() const
-{
-    return __tuples__(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
 
 unsigned int
-postgresql::requestedRows() const
+postgresql::fetchedRows() const
 {
-    if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+    if (handle->result == NULL)
+        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_FETCHEDROWS, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-    if (empty || !show)
-        return 0;
-    else
-        return PQntuples(handle->result);
-}
-
-//-------------------------------------------------------------------
-
-unsigned int
-postgresql::requestedFields() const
-{
-    if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
-
-    if (empty || !show)
-        return 0;
-    else
-        return PQnfields(handle->result);
+    return PQntuples(handle->result);
 }
 
 //-------------------------------------------------------------------
@@ -362,13 +327,10 @@ postgresql::requestedFields() const
 unsigned int
 postgresql::affectedRows() const
 {
-    if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+    if (handle->result == NULL)
+        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_AFFECTEDROWS, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-    if (empty || show)
-        return 0;
-    else
-        return atoi(PQcmdTuples(handle->result));
+    return atoi(PQcmdTuples(handle->result));
 }
 
 //-------------------------------------------------------------------
@@ -377,25 +339,21 @@ void
 postgresql::requestFieldsTypes(const dodoString &table)
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_REQUESTFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-    dodoString temp = collectedData.dbInfo.db + ":" + table;
-
-    dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
+    dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(table);
 
     if (types == fieldTypes.end())
-        types = fieldTypes.insert(make_pair(temp, dodoMap<dodoString, short, dodoMapICaseStringCompare>())).first;
+        types = fieldTypes.insert(make_pair(table, dodoMap<dodoString, short, dodoMapICaseStringCompare>())).first;
 
-    request = "select column_name, data_type from information_schema.columns where table_name='" + table + "'";
+    dodoString request = "select column_name, data_type from information_schema.columns where table_name='" + table + "'";
 
-    if (!empty) {
+    if (handle->result)
         PQclear(handle->result);
-        empty = true;
-    }
 
     handle->result = PQexecParams(handle->handle, request.data(), 0, NULL, NULL, NULL, NULL, 1);
     if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__, request);
+        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__, request);
 
     int status = PQresultStatus(handle->result);
 
@@ -405,10 +363,8 @@ postgresql::requestFieldsTypes(const dodoString &table)
         case PGRES_NONFATAL_ERROR:
         case PGRES_FATAL_ERROR:
 
-            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
+            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
     }
-
-    empty = false;
 
     int rowsNum = PQntuples(handle->result);
 
@@ -457,100 +413,124 @@ postgresql::requestFieldsTypes(const dodoString &table)
         }
     }
 
-    if (!empty) {
-        PQclear(handle->result);
-        empty = true;
-    }
+    PQclear(handle->result);
+    handle->result = NULL;
 }
 
 //-------------------------------------------------------------------
 
 void
-postgresql::exec(const dodoString &query,
-                 bool             result)
+postgresql::exec()
 {
-    if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+    exec(sql::query(construct()));
+}
+
+//-------------------------------------------------------------------
+
+void
+postgresql::exec(const query &a_query)
+    try
+    {
+        collectedData.query = dynamic_cast<const sql::query *>(&a_query);
+
+        if (handle->handle == NULL)
+            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
-    performPreExec(OPERATION_EXEC);
+        performPreExec(OPERATION_EXEC);
 #endif
 
-    int status;
+        int status;
 
-    if (query.size() == 0)
-        construct();
-    else {
-        request = query;
-        show = result;
-    }
+        if (handle->result)
+            PQclear(handle->result);
 
-    if (!empty) {
-        PQclear(handle->result);
-        empty = true;
-    }
+        unsigned long size = blobs.size();
 
-    unsigned long size = blobs.size();
+        if (size > 0) {
+            char **values = new char*[size];
+            int *lengths = new int[size];
+            int *formats = new int[size];
 
-    if (size > 0) {
-        char **values = new char*[size];
-        int *lengths = new int[size];
-        int *formats = new int[size];
+            dodoList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
+            for (int o = 0; i != j; ++i, ++o) {
+                values[o] = (char *)i->value->data();
+                lengths[o] = i->value->size();
+                formats[o] = 1;
+            }
 
-        dodoList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
-        for (int o = 0; i != j; ++i, ++o) {
-            values[o] = (char *)i->value->data();
-            lengths[o] = i->value->size();
-            formats[o] = 1;
+            handle->result = PQexecParams(handle->handle, collectedData.query->sql.data(), size, NULL, values, lengths, formats, 0);
+
+            blobs.clear();
+        } else {
+            handle->result = PQexecParams(handle->handle, collectedData.query->sql.data(), 0, NULL, NULL, NULL, NULL, 1);
         }
 
-        handle->result = PQexecParams(handle->handle, request.data(), size, NULL, values, lengths, formats, 0);
+        if (handle->result == NULL)
+            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
 
-        blobs.clear();
-    } else
-        handle->result = PQexecParams(handle->handle, request.data(), 0, NULL, NULL, NULL, NULL, 1);
+        status = PQresultStatus(handle->result);
+        switch (status) {
+            case PGRES_EMPTY_QUERY:
+            case PGRES_BAD_RESPONSE:
+            case PGRES_NONFATAL_ERROR:
+            case PGRES_FATAL_ERROR:
 
-    if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__);
+                throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
 
-    status = PQresultStatus(handle->result);
-    switch (status) {
-        case PGRES_EMPTY_QUERY:
-        case PGRES_BAD_RESPONSE:
-        case PGRES_NONFATAL_ERROR:
-        case PGRES_FATAL_ERROR:
+            /* case PGRES_COMMAND_OK: */
 
-            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
-    }
+            /*     PQclear(handle->result); */
+            /*     handle->result = NULL; */
 
-    empty = false;
+            /*     break; */
+        }
 
 #ifndef DATABASE_WO_XEXEC
-    performPostExec(OPERATION_EXEC);
+        performPostExec(OPERATION_EXEC);
 #endif
 
-    cleanCollected();
-    request.clear();
+        collectedData.clear();
+    } catch (...) {
+        collectedData.clear();
+    }
+
+//-------------------------------------------------------------------
+
+void
+postgresql::insert(const data::base::rows      &rows,
+                   const data::base::condition &condition)
+{
+    constructor::insert(rows, condition);
 }
 
 //-------------------------------------------------------------------
 
 void
-postgresql::updateCollect()
+postgresql::update(const data::base::rows      &rows,
+                   const data::base::condition &condition)
 {
-    request = statements[sql::constructor::STATEMENT_UPDATE];
-    request.append(collectedData.table);
+    constructor::update(rows, condition);
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+postgresql::update()
+{
+    dodoString request = statements[sql::constructor::STATEMENT_UPDATE];
+    request.append(collectedData.condition._table);
     request.append(statements[sql::constructor::STATEMENT_SET]);
 
-    dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
-    if (v != collectedData.values.end()) {
-        unsigned int fn(collectedData.fields.size()), fv(v->size());
+    dodoArray<dodoStringArray>::iterator v = collectedData.rows.values.begin();
+    if (v != collectedData.rows.values.end()) {
+        unsigned int fn(collectedData.rows.fields.size()), fv(v->size());
 
         unsigned int o(fn <= fv ? fn : fv);
 
-        dodoStringArray::const_iterator i(collectedData.fields.begin()), j(v->begin());
+        dodoStringArray::const_iterator i(collectedData.rows.fields.begin()), j(v->begin());
         if (i != j) {
-            dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[sql::constructor::STATEMENT_COLON] + collectedData.table);
+            dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
             if (types != fieldTypes.end()) {
                 dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
                 dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
@@ -632,26 +612,28 @@ postgresql::updateCollect()
             }
         }
     }
+
+    return request;
 }
 
 //-------------------------------------------------------------------
 
-void
-postgresql::insertCollect()
+dodoString
+postgresql::insert()
 {
-    request = statements[sql::constructor::STATEMENT_INSERT];
+    dodoString request = statements[sql::constructor::STATEMENT_INSERT];
     request.append(statements[sql::constructor::STATEMENT_INTO]);
-    request.append(collectedData.table);
-    if (collectedData.fields.size() != 0) {
+    request.append(collectedData.condition._table);
+    if (collectedData.rows.fields.size() != 0) {
         request.append(statements[sql::constructor::STATEMENT_LEFTBRACKET]);
-        request.append(tools::misc::join(collectedData.fields, statements[sql::constructor::STATEMENT_COMA]));
+        request.append(tools::misc::join(collectedData.rows.fields, statements[sql::constructor::STATEMENT_COMA]));
         request.append(statements[sql::constructor::STATEMENT_RIGHTBRACKET]);
     }
     request.append(statements[sql::constructor::STATEMENT_VALUES]);
 
-    dodoArray<dodoStringArray>::iterator k(collectedData.values.begin()), l(collectedData.values.end());
+    dodoArray<dodoStringArray>::iterator k(collectedData.rows.values.begin()), l(collectedData.rows.values.end());
     if (k != l) {
-        dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[sql::constructor::STATEMENT_COLON] + collectedData.table);
+        dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
         if (types != fieldTypes.end()) {
             dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
             dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
@@ -666,7 +648,7 @@ postgresql::insertCollect()
             for (; k != l; ++k) {
                 request.append(statements[sql::constructor::STATEMENT_LEFTBRACKET]);
 
-                t = collectedData.fields.begin();
+                t = collectedData.rows.fields.begin();
 
                 dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
                 for (; i != j; ++i, ++t) {
@@ -715,7 +697,7 @@ postgresql::insertCollect()
             }
             request.append(statements[sql::constructor::STATEMENT_LEFTBRACKET]);
 
-            t = collectedData.fields.begin();
+            t = collectedData.rows.fields.begin();
 
             dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
             for (; i != j; ++i, ++t) {
@@ -773,42 +755,8 @@ postgresql::insertCollect()
             request.append(statements[sql::constructor::STATEMENT_RIGHTBRACKET]);
         }
     }
-}
 
-//-------------------------------------------------------------------
-
-dodo::dodoStringMapArray
-postgresql::fetchFieldsToRows() const
-{
-    dodoStringMapArray rowsFields;
-
-    if (empty || !show)
-        return rowsFields;
-
-    int rowsNum = PQntuples(handle->result);
-    int fieldsNum = PQnfields(handle->result);
-
-#ifndef USE_DEQUE
-    rowsFields.reserve(rowsNum);
-#endif
-
-    dodoStringMap rowFieldsPart;
-
-    int j;
-    for (int i(0); i < rowsNum; ++i) {
-        rowFieldsPart.clear();
-
-        for (j = 0; j < fieldsNum; ++j) {
-            if (PQgetisnull(handle->result, i, j) == 1)
-                rowFieldsPart.insert(make_pair(PQfname(handle->result, j), statements[sql::constructor::STATEMENT_NULL]));
-            else
-                rowFieldsPart.insert(make_pair(PQfname(handle->result, j), dodoString(PQgetvalue(handle->result, i, j), PQgetlength(handle->result, i, j))));
-        }
-
-        rowsFields.push_back(rowFieldsPart);
-    }
-
-    return rowsFields;
+    return request;
 }
 
 //-------------------------------------------------------------------
@@ -817,7 +765,7 @@ void
 postgresql::setCharset(const dodoString &charset)
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     int status = PQsetClientEncoding(handle->handle, charset.data());
     if (status == -1)
@@ -830,7 +778,7 @@ dodoString
 postgresql::charset() const
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_CHARSET, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
     int encoding = PQclientEncoding(handle->handle);

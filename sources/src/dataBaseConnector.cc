@@ -34,36 +34,25 @@
 
 using namespace dodo::data::base;
 
-__connection__::__connection__(const dodoString &a_db,
-                               const dodoString &a_host,
-                               const dodoString &a_user,
-                               const dodoString &a_password,
-                               const dodoString &a_path,
-                               int              a_port) : db(a_db),
-                                                          host(a_host),
-                                                          user(a_user),
-                                                          password(a_password),
-                                                          path(a_path),
-                                                          port(a_port)
+__connection_options__::~__connection_options__()
 {
 }
 
 //-------------------------------------------------------------------
 
-__connection__::__connection__()
+condition::~condition()
 {
 }
 
 //-------------------------------------------------------------------
 
-__tuples__::__tuples__(dodoArray<dodoStringArray> a_rows, dodoStringArray a_fields) : rows(a_rows),
-                                                                                      fields(a_fields)
+rows::~rows()
 {
 }
 
 //-------------------------------------------------------------------
 
-__tuples__::__tuples__()
+query::~query()
 {
 }
 
@@ -80,4 +69,3 @@ connector::~connector()
 }
 
 //-------------------------------------------------------------------
-

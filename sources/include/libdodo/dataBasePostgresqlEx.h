@@ -57,7 +57,10 @@ namespace dodo {
                 POSTGRESQLEX_EXEC,
                 POSTGRESQLEX_POSTGRESQL,
                 POSTGRESQLEX_SETCHARSET,
-                POSTGRESQLEX_GETFIELDSTYPES,
+                POSTGRESQLEX_CHARSET,
+                POSTGRESQLEX_REQUESTFIELDSTYPES,
+                POSTGRESQLEX_FETCHEDROWS,
+                POSTGRESQLEX_AFFECTEDROWS,
             };
         };
     };

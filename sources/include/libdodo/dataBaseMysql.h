@@ -49,15 +49,62 @@ namespace dodo {
               public:
 
                 /**
-                 * @struct __ssl_options__
-                 * @brief defines SSL mySQL options
+                 * @struct __connection_options__
+                 * @brief defines connection options for the server
                  */
-                struct __ssl_options__ {
-                    dodoString key;     ///< pathname to the key file
-                    dodoString cert;    ///< pathname to the certificate file
-                    dodoString ca;      ///< pathname to the certificate authority file
-                    dodoString capath;  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
-                    dodoString cipher;  ///< allowed SSL ciphers
+                struct __connection_options__ : public data::base::__connection_options__ {
+                    /**
+                     * @enum typeEnum defines connection type
+                     */
+                    enum typeEnum {
+                        TYPE_COMPRESS = 2,
+                        TYPE_MULTI_STATEMENTS = 4,
+                    };
+
+                    /**
+                     * @struct __ssl_options__
+                     * @brief defines SSL mySQL options
+                     */
+                    struct __ssl_options__ {
+                        dodoString key;     ///< pathname to the key file
+                        dodoString cert;    ///< pathname to the certificate file
+                        dodoString ca;      ///< pathname to the certificate authority file
+                        dodoString capath;  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
+                        dodoString cipher;  ///< allowed SSL ciphers
+                    };
+
+                    /**
+                     * constructor
+                     */
+                    __connection_options__();
+
+                    /**
+                     * constructor
+                     * @param db defines name of db
+                     * @param host defines host
+                     * @param user defines user
+                     * @param password defines password
+                     * @param path defines path to db or unix socket
+                     * @param port defines port
+                     * @param type defines type of connection
+                     */
+                    __connection_options__(const dodoString &db,
+                                           const            dodoString &host,
+                                           const            dodoString &user,
+                                           const            dodoString &password,
+                                           const            dodoString &path = __dodostring__,
+                                           unsigned int              port = 0,
+                                           unsigned long    type = TYPE_MULTI_STATEMENTS);
+
+                    unsigned long type; ///< type of connection [@see __connection_options__::typeEnum]
+
+                    dodoString   db;        ///< database name
+                    dodoString   host;      ///< hostname
+                    dodoString   user;      ///< username
+                    dodoString   password;  ///< password
+                    dodoString   path;      ///< path to db or unix socket
+                    unsigned int port;      ///< port
+                    __ssl_options__ ssl;    ///< SSL options
                 };
 
               private:
@@ -77,31 +124,20 @@ namespace dodo {
 
                 /**
                  * constructor
-                 * @param dbInfo defines information for connection to db
+                 * @param info defines information for connection to db
                  */
-                mysql(const __connection__ &dbInfo);
+                mysql(const data::base::__connection_options__ &info);
 
                 /**
                  * destructor
                  */
                 virtual ~mysql();
 
-                /*
-                 * set connection settings
-                 * @param type defines type of connection, @see mySQL documentation
-                 * @param options defines options of ssl connection
-                 * @note type can be:
-                 *  CLIENT_COMPRESS         Use compression protocol
-                 *	CLIENT_MULTI_STATEMENTS Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
-                 */
-                void setConnectionSettings(unsigned long         type,
-                                           const __ssl_options__ &options = __ssl_options__());
-
                 /**
                  * connect to the database
-                 * @param dbInfo defines information for connection to db
+                 * @param info defines information for connection to db
                  */
-                virtual void connect(const __connection__ &dbInfo);
+                virtual void connect(const data::base::__connection_options__ &info);
 
                 /**
                  * disconnect from the database
@@ -115,6 +151,11 @@ namespace dodo {
                 virtual void requestFieldsTypes(const dodoString &table);
 
                 /**
+                 * @param rows defines rows got from the request
+                 */
+                virtual void fetchedRows(data::base::rows &rows) const;
+
+                /**
                  * @return amount of affected rows from the evaluated request
                  */
                 virtual unsigned int affectedRows() const;
@@ -122,40 +163,18 @@ namespace dodo {
                 /**
                  * @return amount of received rows from the evaluated request
                  */
-                virtual unsigned int requestedRows() const;
+                virtual unsigned int fetchedRows() const;
 
                 /**
-                 * @return amount of received fields from the evaluated request
+                 * execute request for data base
+                 * @param query contains query for data base
                  */
-                virtual unsigned int requestedFields() const;
+                virtual void exec(const data::base::query &query);
 
                 /**
-                 * @return received rows from the evaluated request
+                 * execute collected request for data base
                  */
-                virtual dodoArray<dodoStringArray> fetchRows() const;
-
-                /**
-                 * @return received fields from the evaluated request
-                 */
-                virtual dodoStringArray fetchFields() const;
-
-                /**
-                 * @return structure received rows and fields from the evaluated request
-                 */
-                virtual __tuples__ fetch() const;
-
-                /**
-                 * @return received rows and fields from the evaluated request using hash `key`=>`value`
-                 */
-                virtual dodoStringMapArray fetchFieldsToRows() const;
-
-                /**
-                 * execute request
-                 * @param query defines query; you may define it if you don't use db methods like select, update
-                 * @param result defines type of result; if true query return the result
-                 */
-                virtual void exec(const dodoString &query = __dodostring__,
-                                  bool             result = false);
+                virtual void exec();
 
                 /**
                  * set sessions charset
@@ -176,11 +195,9 @@ namespace dodo {
 
               private:
 
-                bool empty;             ///< true id mysqlRes is empty
-
                 __mysql__ *handle;      ///< DB handle
 
-                unsigned long type;     ///< connection type
+                __connection_options__ info; ///< DB connection information
             };
         };
     };

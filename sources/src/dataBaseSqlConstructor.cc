@@ -32,42 +32,10 @@
 #include <libdodo/dataBaseSqlConstructor.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/dataBaseSqlConstructorEx.h>
-#include <libdodo/dataBaseAccumulator.h>
+#include <libdodo/toolsString.h>
+#include <libdodo/dataBaseConnector.h>
 
 using namespace dodo::data::base::sql;
-
-const dodoString constructor::subrequestStatements[] = {
-    " union ",
-    " union all ",
-    " minus ",
-    " intersect "
-};
-
-//-------------------------------------------------------------------
-
-const dodoString constructor::joinStatements[] = {
-    " join ",
-    " left outer join ",
-    " right outer join ",
-    " full outer join ",
-    " inner join ",
-    " cross join "
-};
-
-//-------------------------------------------------------------------
-
-const dodoString constructor::additionalRequestStatements[] = {
-    " where ",
-    " having ",
-    " group by ",
-    " order by ",
-    " limit ",
-    " offset ",
-    " as ",
-};
-
-//-------------------------------------------------------------------
 
 const dodoString constructor::statements[] = {
     "=",
@@ -77,8 +45,8 @@ const dodoString constructor::statements[] = {
     " ( ",
     " ) ",
     "select ",
-    "call ",
     " from ",
+    "*",
     ":",
     "',",
     "),",
@@ -89,12 +57,254 @@ const dodoString constructor::statements[] = {
     "update ",
     " set ",
     "delete ",
+    " where ",
+    " limit ",
+    " offset ",
+    " order by ",
+    " inner join ",
+    " outer join ",
+    " left join ",
+    " right join ",
+    " on ",
     "NULL",
 };
 
 //-------------------------------------------------------------------
 
+condition::condition() : _limit(-1),
+                         _offset(-1)
+{
+}
+
+//-------------------------------------------------------------------
+
+condition::condition(const dodoString &table,
+                     const dodoString &statement) : _limit(-1),
+                                                    _offset(-1),
+                                                    _table(table),
+                                                    _statement(statement)
+{
+}
+
+//-------------------------------------------------------------------
+
+condition::condition(const dodoString &table,
+                     const dodoStringArray &fields,
+                     const dodoString &statement) : _limit(-1),
+                                                    _offset(-1),
+                                                    _table(table),
+                                                    _statement(statement),
+                                                    _fields(fields)
+{
+}
+
+//-------------------------------------------------------------------
+
+const condition &
+condition::limit(long a_limit) const
+{
+    _limit = a_limit;
+
+    return *this;
+}
+
+//-------------------------------------------------------------------
+
+const condition &
+condition::offset(long a_offset) const
+{
+    _offset = a_offset;
+
+    return *this;
+}
+
+//-------------------------------------------------------------------
+
+const condition &
+condition::order(const dodoString &field,
+                 short direction) const
+{
+    dodoString dir[] = {
+        " ASC",
+        " DESC",
+    };
+
+    switch (direction) {
+        case ORDER_DIRECTION_ASC:
+        case ORDER_DIRECTION_DESC:
+            if (!_orderby.empty())
+                _orderby.append(", ");
+            _orderby.append(field);
+            _orderby.append(dir[direction]);
+    }
+
+    return *this;
+}
+
+//-------------------------------------------------------------------
+
+const condition &
+condition::join(const dodoString &table,
+                const dodoString &condition,
+                short type) const
+{
+    __join__ j;
+
+    j.type = type;
+    j.table = table;
+    j.condition = condition;
+
+    _join.push_back(j);
+
+    return *this;
+}
+
+//-------------------------------------------------------------------
+
+condition::~condition()
+{
+}
+
+//-------------------------------------------------------------------
+
+rows::rows()
+{
+}
+
+//-------------------------------------------------------------------
+
+rows::rows(const dodoArray<dodoStringArray> &values,
+           const dodoStringArray &fields) : fields(fields),
+                                           values(values)
+{
+}
+
+//-------------------------------------------------------------------
+
+rows::rows(const dodoStringArray &a_values,
+           const dodoStringArray &fields) : fields(fields)
+{
+    values.push_back(a_values);
+}
+
+//-------------------------------------------------------------------
+
+rows::rows(const dodoArray<dodoStringMap> &map)
+{
+    dodoArray<dodoStringMap>::const_iterator i = map.begin(), j = map.end();
+
+    if (i != j) {
+        dodoStringMap::const_iterator o = i->begin(), p = i->end();
+
+        if (o != p) {
+            for (;o!=p;++o)
+                fields.push_back(o->first);
+
+            dodoStringArray array;
+#ifndef USE_DEQUE
+            array.reserve(o->size());
+#endif
+
+            for (;i!=j;++i) {
+                array.clear();
+
+                o = i->begin();
+                p = i->end();
+
+                for (;o!=p;++o)
+                    array.push_back(o->second);
+                values.push_back(array);
+            }
+        }
+    }
+}
+
+//-------------------------------------------------------------------
+
+rows::rows(const dodoStringMap &map)
+{
+    dodoStringMap::const_iterator o = map.begin(), p = map.end();
+    if (o!=p) {
+        for (;o!=p;++o)
+            fields.push_back(o->first);
+
+        o = map.begin();
+
+        dodoStringArray array;
+#ifndef USE_DEQUE
+        array.reserve(o->size());
+#endif
+
+        for (;o!=p;++o)
+            array.push_back(o->second);
+        values.push_back(array);
+    }
+}
+
+//-------------------------------------------------------------------
+
+rows::~rows()
+{
+}
+
+//-------------------------------------------------------------------
+
+query::query()
+{
+}
+
+//-------------------------------------------------------------------
+
+query::query(const dodoString &sql) : sql(sql)
+{
+}
+
+//-------------------------------------------------------------------
+
+query::~query()
+{
+}
+
+//-------------------------------------------------------------------
+
+#ifndef DATABASE_WO_XEXEC
+constructor::__collected_data__::__collected_data__(xexec *a_executor,
+                                                    short execObject) : xexec::__collected_data__(a_executor, execObject),
+                                                                        type(REQUEST_NONE),
+                                                                        query(NULL)
+{
+}
+#else
+constructor::__collected_data__::__collected_data__() : type(REQUEST_NONE),
+                                                        query(NULL)
+{
+}
+#endif
+
+//-------------------------------------------------------------------
+
+void
+constructor::__collected_data__::clear()
+{
+    query = NULL;
+    type = REQUEST_NONE;
+    condition._orderby.clear();
+    condition._limit = -1;
+    condition._offset = -1;
+    condition._table.clear();
+    condition._statement.clear();
+    condition._fields.clear();
+    condition._join.clear();
+    rows.fields.clear();
+    rows.values.clear();
+}
+
+//-------------------------------------------------------------------
+
 constructor::constructor()
+#ifndef DATABASE_WO_XEXEC
+    : collectedData(this, xexec::OBJECT_XEXEC)
+#endif
 {
 }
 
@@ -107,86 +317,154 @@ constructor::~constructor()
 //-------------------------------------------------------------------
 
 void
+constructor::select(const dodo::data::base::condition &condition)
+{
+    collectedData.condition = *dynamic_cast<const sql::condition *>(&condition);
+
+    collectedData.type = REQUEST_SELECT;
+}
+
+//-------------------------------------------------------------------
+
+void
+constructor::insert(const dodo::data::base::rows      &rows,
+                    const dodo::data::base::condition &condition)
+{
+    collectedData.condition = *dynamic_cast<const sql::condition *>(&condition);
+    collectedData.rows = *dynamic_cast<const sql::rows *>(&rows);
+
+    collectedData.type = REQUEST_INSERT;
+}
+
+//-------------------------------------------------------------------
+
+void
+constructor::update(const dodo::data::base::rows      &rows,
+                    const dodo::data::base::condition &condition)
+{
+    collectedData.condition = *dynamic_cast<const sql::condition *>(&condition);
+    collectedData.rows = *dynamic_cast<const sql::rows *>(&rows);
+
+    collectedData.type = REQUEST_UPDATE;
+}
+
+//-------------------------------------------------------------------
+
+void
+constructor::remove(const dodo::data::base::condition &condition)
+{
+    collectedData.condition = *dynamic_cast<const sql::condition *>(&condition);
+
+    collectedData.type = REQUEST_REMOVE;
+}
+
+//-------------------------------------------------------------------
+
+void
 constructor::setFieldType(const dodoString &table,
                           const dodoString &field,
                           short            type)
 {
-    fieldTypes[collectedData.dbInfo.db + statements[STATEMENT_COLON] + table][field] = type;
+    fieldTypes[table][field] = type;
 }
 
 //-------------------------------------------------------------------
 
-void
-constructor::additionalCollect(unsigned int     typeTocheck,
-                               const dodoString &collectedString)
+dodoString
+constructor::select()
 {
-    if (collectedData.additional == STATE_NONE)
-        return ;
+    dodoString request;
 
-    if (isSetFlag(collectedData.additional, 1 << typeTocheck)) {
-        request.append(additionalRequestStatements[typeTocheck - 1]);
-        request.append(collectedString);
-    }
-}
-
-//-------------------------------------------------------------------
-
-void
-constructor::functionCollect()
-{
-    request = statements[STATEMENT_SELECT];
-    request.append(collectedData.table);
-    request.append(statements[STATEMENT_LEFTBRACKET]);
-    request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
-    request.append(statements[STATEMENT_RIGHTBRACKET]);
-}
-
-//-------------------------------------------------------------------
-
-void
-constructor::procedureCollect()
-{
-    request = statements[STATEMENT_CALL];
-    request.append(collectedData.table);
-    request.append(statements[STATEMENT_LEFTBRACKET]);
-    request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
-    request.append(statements[STATEMENT_RIGHTBRACKET]);
-}
-
-//-------------------------------------------------------------------
-
-void
-constructor::selectCollect()
-{
-    if (collectedData.table.size() > 0) {
+    if (collectedData.condition._table.size() > 0) {
         request = statements[STATEMENT_SELECT];
-        request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
+        if (collectedData.condition._fields.size() == 0)
+            request.append(statements[STATEMENT_STAR]);
+        else
+            request.append(tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]));
         request.append(statements[STATEMENT_FROM]);
-        request.append(collectedData.table);
+        request.append(collectedData.condition._table);
     } else {
         request = statements[STATEMENT_SELECT];
-        request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
+        if (collectedData.condition._fields.size() == 0)
+            request.append(statements[STATEMENT_STAR]);
+        else
+            request.append(tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]));
     }
+
+    if (collectedData.condition._statement.size() > 0) {
+        request.append(statements[STATEMENT_WHERE]);
+        request.append(collectedData.condition._statement);
+    }
+
+    if (collectedData.condition._orderby.size() > 0) {
+        request.append(statements[STATEMENT_ORDERBY]);
+        request.append(collectedData.condition._orderby);
+    }
+
+    if (collectedData.condition._limit != -1) {
+        request.append(statements[STATEMENT_LIMIT]);
+        request.append(tools::string::lToString(collectedData.condition._limit));
+
+        if (collectedData.condition._offset != -1) {
+            request.append(statements[STATEMENT_OFFSET]);
+            request.append(tools::string::lToString(collectedData.condition._offset));
+        }
+    }
+
+    if (collectedData.condition._join.size() > 0) {
+        dodoArray<condition::__join__>::iterator i = collectedData.condition._join.begin(), j = collectedData.condition._join.end();
+        for (;i!=j;++i) {
+            switch (i->type) {
+                case condition::JOIN_LEFT:
+                    request.append(statements[STATEMENT_JOINLEFT]);
+
+                    break;
+
+                case condition::JOIN_RIGHT:
+                    request.append(statements[STATEMENT_JOINRIGHT]);
+
+                    break;
+
+                case condition::JOIN_INNER:
+                    request.append(statements[STATEMENT_JOININNER]);
+
+                    break;
+
+                case condition::JOIN_OUTER:
+                    request.append(statements[STATEMENT_JOINOUTER]);
+
+                    break;
+            }
+            request.append(i->table);
+            if (!i->condition.empty()) {
+                request.append(statements[STATEMENT_ON]);
+                request.append(i->condition);
+            }
+        }
+    }
+
+    return request;
 }
 
 //-------------------------------------------------------------------
 
-void
-constructor::insertCollect()
+dodoString
+constructor::insert()
 {
-    request = statements[STATEMENT_INSERT];
+    dodoString request = statements[STATEMENT_INSERT];
+
     request.append(statements[STATEMENT_INTO]);
-    request.append(collectedData.table);
-    if (collectedData.fields.size() != 0) {
+    request.append(collectedData.condition._table);
+    if (collectedData.rows.fields.size() != 0) {
         request.append(statements[STATEMENT_LEFTBRACKET]);
-        request.append(tools::misc::join(collectedData.fields, statements[STATEMENT_COMA]));
+        request.append(tools::misc::join(collectedData.rows.fields, statements[STATEMENT_COMA]));
         request.append(statements[STATEMENT_RIGHTBRACKET]);
     }
     request.append(statements[STATEMENT_VALUES]);
 
-    dodoArray<dodoStringArray>::iterator k(collectedData.values.begin()), l(collectedData.values.end());
+    dodoArray<dodoStringArray>::iterator k(collectedData.rows.values.begin()), l(collectedData.rows.values.end());
     if (k != l) {
-        dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[STATEMENT_COLON] + collectedData.table);
+        dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
         if (types != fieldTypes.end()) {
             dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
             dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
@@ -197,7 +475,7 @@ constructor::insertCollect()
             for (; k != l; ++k) {
                 request.append(statements[STATEMENT_LEFTBRACKET]);
 
-                t = collectedData.fields.begin();
+                t = collectedData.rows.fields.begin();
 
                 dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
                 for (; i != j; ++i, ++t) {
@@ -223,7 +501,7 @@ constructor::insertCollect()
             }
             request.append(statements[STATEMENT_LEFTBRACKET]);
 
-            t = collectedData.fields.begin();
+            t = collectedData.rows.fields.begin();
 
             dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
             for (; i != j; ++i, ++t) {
@@ -258,26 +536,29 @@ constructor::insertCollect()
             request.append(statements[STATEMENT_RIGHTBRACKET]);
         }
     }
+
+    return request;
 }
 
 //-------------------------------------------------------------------
 
-void
-constructor::updateCollect()
+dodoString
+constructor::update()
 {
-    request = statements[STATEMENT_UPDATE];
-    request.append(collectedData.table);
+    dodoString request = statements[STATEMENT_UPDATE];
+
+    request.append(collectedData.condition._table);
     request.append(statements[STATEMENT_SET]);
 
-    dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
-    if (v != collectedData.values.end()) {
-        dodoStringArray::const_iterator i(collectedData.fields.begin()), j(v->begin());
+    dodoArray<dodoStringArray>::iterator v = collectedData.rows.values.begin();
+    if (v != collectedData.rows.values.end()) {
+        dodoStringArray::const_iterator i(collectedData.rows.fields.begin()), j(v->begin());
         if (i != j) {
-            unsigned int fn(collectedData.fields.size()), fv(v->size());
+            unsigned int fn(collectedData.rows.fields.size()), fv(v->size());
 
             unsigned int o(fn <= fv ? fn : fv);
 
-            dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[STATEMENT_COLON] + collectedData.table);
+            dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
             if (types != fieldTypes.end()) {
                 dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
                 dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
@@ -335,47 +616,51 @@ constructor::updateCollect()
             }
         }
     }
-}
 
-//-------------------------------------------------------------------
-
-void
-constructor::delCollect()
-{
-    request = statements[STATEMENT_DELETE];
-    request.append(statements[STATEMENT_FROM]);
-    request.append(collectedData.table);
-}
-
-//-------------------------------------------------------------------
-
-void
-constructor::subCollect()
-{
-    request = tools::misc::join(collectedData.subQueries, subrequestStatements[collectedData.type - 1]);
-}
-
-//-------------------------------------------------------------------
-
-void
-constructor::joinCollect()
-{
-    dodoStringArray::iterator i = collectedData.joinTables.begin(), j = collectedData.joinTables.end();
-    dodoStringArray::iterator o = collectedData.joinConds.begin(), p = collectedData.joinConds.end();
-    dodoArray<int>::iterator m = collectedData.joinTypes.begin(), n = collectedData.joinTypes.end();
-    for (; i != j; ++i, ++o, ++m) {
-        if (*m >= 0 && *m < JOIN_ENUMSIZE)
-            request.append(joinStatements[*m]);
-        else
-            throw exception::basic(exception::MODULE_DATABASESQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, exception::ERRNO_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DATABASESQLCONSTRUCTOREX_UNKNOWNJOIN_STR, __LINE__, __FILE__);
-
-        request.append(*i);
-
-        if (o->size() > 0) {
-            request.append(" on ");
-            request.append(*o);
-        }
+    if (collectedData.condition._statement.size() > 0) {
+        request.append(statements[STATEMENT_WHERE]);
+        request.append(collectedData.condition._statement);
     }
+
+    if (collectedData.condition._orderby.size() > 0) {
+        request.append(statements[STATEMENT_ORDERBY]);
+        request.append(collectedData.condition._orderby);
+    }
+
+    if (collectedData.condition._limit != -1) {
+        request.append(statements[STATEMENT_LIMIT]);
+        request.append(tools::string::lToString(collectedData.condition._limit));
+    }
+
+    return request;
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+constructor::remove()
+{
+    dodoString request = statements[STATEMENT_DELETE];
+
+    request.append(statements[STATEMENT_FROM]);
+    request.append(collectedData.condition._table);
+
+    if (collectedData.condition._statement.size() > 0) {
+        request.append(statements[STATEMENT_WHERE]);
+        request.append(collectedData.condition._statement);
+    }
+
+    if (collectedData.condition._orderby.size() > 0) {
+        request.append(statements[STATEMENT_ORDERBY]);
+        request.append(collectedData.condition._orderby);
+    }
+
+    if (collectedData.condition._limit != -1) {
+        request.append(statements[STATEMENT_LIMIT]);
+        request.append(tools::string::lToString(collectedData.condition._limit));
+    }
+
+    return request;
 }
 
 //-------------------------------------------------------------------
@@ -383,79 +668,21 @@ constructor::joinCollect()
 dodoString
 constructor::construct()
 {
-    bool additionalActions = true;
-    bool selectAction = false;
-
     switch (collectedData.type) {
         case REQUEST_SELECT:
-
-            selectCollect();
-            selectAction = true;
-
-            break;
+            return select();
 
         case REQUEST_INSERT:
-
-            insertCollect();
-            additionalActions = false;
-
-            break;
+            return insert();
 
         case REQUEST_UPDATE:
+            return update();
 
-            updateCollect();
-
-            break;
-
-        case REQUEST_DELETE:
-
-            delCollect();
-
-            break;
-
-        case SUBREQUEST_UNION:
-        case SUBREQUEST_UNION_ALL:
-        case SUBREQUEST_MINUS:
-        case SUBREQUEST_INTERSECT:
-
-            subCollect();
-            additionalActions = false;
-
-            break;
-
-        case REQUEST_FUNCTION:
-
-            functionCollect();
-            selectAction = true;
-
-            break;
-
-        case REQUEST_PROCEDURE:
-
-            procedureCollect();
-
-            break;
-
-        default:
-
-            additionalActions = false;
+        case REQUEST_REMOVE:
+            return remove();
     }
 
-    if (additionalActions) {
-        if (selectAction && isSetFlag(collectedData.additional, 1 << ADDITIONAL_REQUEST_JOIN))
-            joinCollect();
-        additionalCollect(ADDITIONAL_REQUEST_AS, collectedData.where);
-        additionalCollect(ADDITIONAL_REQUEST_WHERE, collectedData.where);
-        if (selectAction) {
-            additionalCollect(ADDITIONAL_REQUEST_GROUPBY, collectedData.group);
-            additionalCollect(ADDITIONAL_REQUEST_HAVING, collectedData.having);
-        }
-        additionalCollect(ADDITIONAL_REQUEST_ORDERBY, collectedData.order);
-        additionalCollect(ADDITIONAL_REQUEST_LIMIT, collectedData.limit);
-        additionalCollect(ADDITIONAL_REQUEST_OFFSET, collectedData.offset);
-    }
-
-    return request;
+    return __dodostring__;
 }
 
 //-------------------------------------------------------------------

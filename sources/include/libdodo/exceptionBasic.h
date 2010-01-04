@@ -64,7 +64,6 @@ namespace dodo {
         enum moduleEnum {
             MODULE_DATABASEMYSQL = 0,
             MODULE_DATABASEPOSTGRESQL,
-            MODULE_DATABASESQLCONSTRUCTOR,
             MODULE_DATABASESQLITE,
             MODULE_DATAFORMATXMLPROCESSOR,
             MODULE_DATAFORMATJSONNODE,

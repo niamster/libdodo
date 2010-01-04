@@ -46,6 +46,27 @@ namespace dodo {
              * @brief provides an interface to sqlite db
              */
             class sqlite : public sql::constructor {
+              public:
+
+                /**
+                 * @struct __connection_options__
+                 * @brief defines connection options for the server
+                 */
+                struct __connection_options__ : public data::base::__connection_options__ {
+                    /**
+                     * constructor
+                     */
+                    __connection_options__();
+
+                    /**
+                     * constructor
+                     * @param path defines path to db or unix socket
+                     */
+                    __connection_options__(const            dodoString &path);
+
+                    dodoString   path;      ///< path to db or unix socket
+                };
+
               private:
 
                 /**
@@ -63,9 +84,9 @@ namespace dodo {
 
                 /**
                  * constructor
-                 * @param dbInfo defines information for connection to db
+                 * @param info defines information for connection to db
                  */
-                sqlite(const __connection__ &dbInfo);
+                sqlite(const data::base::__connection_options__ &info);
 
                 /**
                  * destructor
@@ -74,9 +95,9 @@ namespace dodo {
 
                 /**
                  * connect to the database
-                 * @param dbInfo defines information for connection to db
+                 * @param info defines information for connection to db
                  */
-                virtual void connect(const __connection__ &dbInfo);
+                virtual void connect(const data::base::__connection_options__ &info);
 
                 /**
                  * disconnect from the database
@@ -97,52 +118,49 @@ namespace dodo {
                 /**
                  * @return amount of received rows from the evaluated request
                  */
-                virtual unsigned int requestedRows() const;
+                virtual unsigned int fetchedRows() const;
 
                 /**
-                 * @return amount of received fields from the evaluated request
+                 * @param rows defines rows got from the request
                  */
-                virtual unsigned int requestedFields() const;
+                virtual void fetchedRows(data::base::rows &rows) const;
 
                 /**
-                 * @return received rows from the evaluated request
+                 * execute request for data base
+                 * @param query contains query for data base
                  */
-                virtual dodoArray<dodoStringArray> fetchRows() const;
+                virtual void exec(const data::base::query &query);
 
                 /**
-                 * @return received fields from the evaluated request
+                 * execute collected request for data base
                  */
-                virtual dodoStringArray fetchFields() const;
+                virtual void exec();
 
                 /**
-                 * @return structure received rows and fields from the evaluated request
+                 * @param rows defines rows for insertion into data base
+                 * @param condition defines row insertion condition
                  */
-                virtual __tuples__ fetch() const;
+                virtual void insert(const data::base::rows      &rows,
+                                    const data::base::condition &condition);
 
                 /**
-                 * @return received rows and fields from the evaluated request using hash `key`=>`value`
+                 * @param rows defines values of row for update
+                 * @param condition defines row update condition
                  */
-                virtual dodoStringMapArray fetchFieldsToRows() const;
-
-                /**
-                 * execute request
-                 * @param query defines query; you may define it if you don't use db methods like select, update
-                 * @param result defines type of result; if true query return the result
-                 */
-                virtual void exec(const dodoString &query = __dodostring__,
-                                  bool             result = false);
+                virtual void update(const data::base::rows      &rows,
+                                    const data::base::condition &condition);
 
               protected:
 
                 /**
-                 * construct `insert` statement
+                 * @return insert SQL statement
                  */
-                virtual void insertCollect();
+                virtual dodoString insert();
 
                 /**
-                 * construct `update` statement
+                 * @return update SQL statement
                  */
-                virtual void updateCollect();
+                virtual dodoString update();
 
                 /**
                  * @struct __blob__
@@ -159,7 +177,7 @@ namespace dodo {
 
                 __sqlite__ *handle;                 ///< DB handle
 
-                bool empty;                         ///< true if liteStmt is empty
+                __connection_options__ info; ///< DB connection information
             };
         };
     };

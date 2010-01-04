@@ -22,11 +22,10 @@ hook(xexec::__collected_data__ *odata,
      short                     operation,
      void                      *udata)
 {
-    accumulator::__collected_data__ *sql = (accumulator::__collected_data__ *)odata;
+    sql::constructor::__collected_data__ *sql = (sql::constructor::__collected_data__ *)odata;
 
-    if (operation == data::base::connector::OPERATION_EXEC) {
-        cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->construct() << endl << endl;
-    }
+    if (operation == data::base::connector::OPERATION_EXEC && sql->query)
+        cout << endl << endl << "request: " << sql->query->sql.data() << endl << endl;
 }
 #endif
 #endif
@@ -37,40 +36,40 @@ main(int  argc UNUSED,
 {
     long now = tools::time::now();
 
+    mysql::__connection_options__ ci("test", argc>1?argv[1]:"localhost", "root", "password", "", 3306);
+
 #ifdef MYSQL_EXT
     try {
-        mysql db(__connection__("test", "localhost", "root", "password", "", 3306));
+        mysql db(ci);
 
 #ifndef DATABASE_WO_XEXEC
         db.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
 #endif
 
         try {
-            db.exec("DROP TABLE test0");
+            db.exec(sql::query("DROP TABLE test0"));
         } catch (...)   {
         }
         try {
-            db.exec("DROP TABLE test1");
+            db.exec(sql::query("DROP TABLE test1"));
         } catch (...)   {
         }
 
-        db.exec("CREATE TABLE test0 (id int(11) NOT NULL auto_increment, i int(11), t0 text NOT NULL, t1 text NOT NULL, PRIMARY KEY  (id))");
-        db.exec("CREATE TABLE test1 (id int(11) NOT NULL auto_increment, i int(11), t0 text NOT NULL, t1 text NOT NULL, PRIMARY KEY  (id))");
+        db.exec(sql::query("CREATE TABLE test0 (id int(11) NOT NULL auto_increment, i int(11), t0 text NOT NULL, t1 text NOT NULL, PRIMARY KEY  (id))"));
+        db.exec(sql::query("CREATE TABLE test1 (id int(11) NOT NULL auto_increment, i int(11), t0 text NOT NULL, t1 text NOT NULL, PRIMARY KEY  (id))"));
 
         db.requestFieldsTypes("test0");
         db.requestFieldsTypes("test1");
 
+        sql::rows rows;
         dodoStringArray fields;
-        __tuples__ storage;
 
-        db.select("test0");
-        db.join("test1", JOIN_JOIN, "test0.t0 = test1.t0");
-        db.limit(10);
+        db.select(sql::condition("test0").limit(10).join("test1", "test0.t0 = test1.t0"));
         db.exec();
 
-        storage = db.fetch();
+        db.fetchedRows(rows);
 
-        dodoStringArray::iterator i = storage.fields.begin(), j = storage.fields.end();
+        dodoStringArray::iterator i = rows.fields.begin(), j = rows.fields.end();
         for (; i != j; ++i)
             cout << "[" << *i << "]\t";
         cout << endl;
@@ -88,23 +87,23 @@ main(int  argc UNUSED,
         array["t1"] = "a\nbc";
         mapArray.push_back(array);
 
-        db.insert("test0", mapArray);
+        db.insert(sql::rows(mapArray), sql::condition("test0"));
         db.exec();
 
         array.clear();
 
         db.disconnect();
-        db.connect(__connection__("test", "localhost", "root", "password", "", 3306));
+        db.connect(ci);
 
         array["i"] = "100000";
-        db.update("test0", array);
+        db.update(sql::rows(array), sql::condition("test0"));
         db.exec();
 
         fields.clear();
         fields.push_back("t0");
         fields.push_back("t1");
 
-        db.insert("test0", values, fields);
+        db.insert(sql::rows(values, fields), sql::condition("test0"));
         db.exec();
 
 #ifndef DATABASE_WO_XEXEC
@@ -112,7 +111,7 @@ main(int  argc UNUSED,
 #endif
 
         for (int o = 0; o < 100000; o++) {
-            db.insert("test0", values, fields);
+            db.insert(sql::rows(values, fields), sql::condition("test0"));
             db.exec();
         }
 
@@ -120,36 +119,20 @@ main(int  argc UNUSED,
         db.disableXExecs = false;
 #endif
 
-        dodoStringArray u;
+        dodoString u;
+        db.select(sql::condition("test0", "id>1").limit(10).offset(20));
+        u = db.construct();
+        u += " union all ";
+        db.select(sql::condition("test0", "id<100"));
+        u += db.construct();
+        db.exec(sql::query(u));
 
-        db.select("test0", dodoStringArray(), "id>1");
-        db.limit(10);
-        db.offset(23);
-
-        dodoString subrequest = db.construct();
-        u.push_back(subrequest);
-        u.push_back(subrequest);
-        db.subquery(u);
-        subrequest = db.construct();
-
-        db.select("test0", dodoStringArray(), "id<100");
-
-        u.clear();
-        u.push_back(subrequest);
-        u.push_back(db.construct());
-        db.subquery(u, SUBREQUEST_UNION_ALL);
-
-        db.order("id desc");
-        db.limit(5);
+        db.select(sql::condition("test0").limit(10));
         db.exec();
 
-        db.select("test0");
-        db.limit(10);
-        db.exec();
+        db.fetchedRows(rows);
 
-        storage = db.fetch();
-
-        dodoArray<dodoStringArray>::iterator o(storage.rows.begin()), p(storage.rows.end());
+        dodoArray<dodoStringArray>::iterator o(rows.values.begin()), p(rows.values.end());
         dodoStringArray::iterator m, n;
         for (; o != p; o++) {
             m = o->begin();
@@ -159,7 +142,7 @@ main(int  argc UNUSED,
             cout << endl;
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl << ex.backtrace();
     }
 #else
     cout << "No MySQL extension was compiled!";

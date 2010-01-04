@@ -57,9 +57,9 @@ namespace dodo {
                 SQLITEEX_CONNECT,
                 SQLITEEX_EXEC,
                 SQLITEEX_SQLITE,
-                SQLITEEX_FETCHROWS,
-                SQLITEEX_FETCHFIELDSTOROWS,
-                SQLITEEX_GETFIELDSTYPES,
+                SQLITEEX_FETCHEDROWS,
+                SQLITEEX_AFFECTEDROWS,
+                SQLITEEX_REQUESTFIELDSTYPES,
             };
         };
     };

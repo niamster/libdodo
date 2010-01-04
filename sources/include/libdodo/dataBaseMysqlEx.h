@@ -56,7 +56,12 @@ namespace dodo {
                 MYSQLEX_CONNECT,
                 MYSQLEX_EXEC,
                 MYSQLEX_MYSQL,
-                MYSQLEX_GETFIELDSTYPES,
+                MYSQLEX_REQUESTFIELDSTYPES,
+                MYSQLEX_FETCHEDROWS,
+                MYSQLEX_AFFECTEDROWS,
+                MYSQLEX_SETCONNECTIONTIMEOUT,
+                MYSQLEX_CHARSET,
+                MYSQLEX_SETCHARSET,
             };
         };
     };

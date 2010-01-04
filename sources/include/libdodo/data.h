@@ -30,14 +30,12 @@
 #ifndef _DATA_H_
 #define _DATA_H_ 1
 
-#include <libdodo/dataBaseAccumulator.h>
 #include <libdodo/dataBaseConnector.h>
 #include <libdodo/dataBaseMysql.h>
 #include <libdodo/dataBaseMysqlEx.h>
 #include <libdodo/dataBasePostgresql.h>
 #include <libdodo/dataBasePostgresqlEx.h>
 #include <libdodo/dataBaseSqlConstructor.h>
-#include <libdodo/dataBaseSqlConstructorEx.h>
 #include <libdodo/dataBaseSqlite.h>
 #include <libdodo/dataBaseSqliteEx.h>
 #include <libdodo/dataFormatJsonNode.h>

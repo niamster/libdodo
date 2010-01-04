@@ -22,11 +22,10 @@ hook(xexec::__collected_data__ *odata,
      short                     operation,
      void                      *udata)
 {
-    accumulator::__collected_data__ *sql = (accumulator::__collected_data__ *)odata;
+    sql::constructor::__collected_data__ *sql = (sql::constructor::__collected_data__ *)odata;
 
-    if (operation == data::base::connector::OPERATION_EXEC) {
-        cout << endl << endl << "request: " << dynamic_cast<sql::constructor *>(sql->executor)->construct() << endl << endl;
-    }
+    if (operation == data::base::connector::OPERATION_EXEC && sql->query)
+        cout << endl << endl << "request: " << sql->query->sql.data() << endl << endl;
 }
 #endif
 #endif
@@ -37,62 +36,58 @@ main(int  argc UNUSED,
 {
 #ifdef POSTGRESQL_EXT
     try {
-        __connection__ info;
-        info.db = "test";
-        info.host = "localhost";
-        info.port = 5432;
-        info.user = "postgres";
+        postgresql::__connection_options__ ci("test", argc>1?argv[1]:"localhost", "postgres", "", 5432);
 
-        postgresql db(info);
+        postgresql db(ci);
 
 #ifndef DATABASE_WO_XEXEC
         db.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
 #endif
 
         try {
-            db.exec("DROP TABLE test");
+            db.exec(sql::query("DROP TABLE test"));
         } catch (...)   {
         }
 
-        db.exec("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id integer default NULL, i integer default NULL, b bytea)");
+        db.exec(sql::query("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id integer default NULL, i integer default NULL, b bytea)"));
 
-        __tuples__ store;
+        sql::rows rows;
 
         dodoStringMap array;
         array["t0"] = "xyz";
         array["t1"] = "abc";
 
-        dodoStringArray select;
-        select.push_back("t0");
-        select.push_back("t1");
+        dodoStringArray fields;
+        fields.push_back("t0");
+        fields.push_back("t1");
 
         for (int i = 0; i < 10; i++) {
-            db.select("test", select, "id<20 or t1='abc'");
+            db.select(sql::condition("test", fields, "id<20 or t1='abc'"));
             db.exec();
 
-            store = db.fetch();
+            db.fetchedRows(rows);
 
-            db.insert("test", array);
+            db.insert(sql::rows(array), sql::condition("test"));
             db.exec();
 
             array["t1"] = "def";
-            db.update("test", array);
+            db.update(sql::rows(array), sql::condition("test"));
             db.exec();
 
             array["t1"] = "abc";
         }
 
         db.disconnect();
-        db.connect(info);
+        db.connect(ci);
 
-        db.select("test", select, "t1='def'");
+        db.select(sql::condition("test", fields, "t1='def'"));
         db.exec();
 
-        cout << db.fetch().rows.size() << endl;
+        db.fetchedRows(rows);
 
-        store = db.fetch();
+        cout << rows.values.size() << endl;
 
-        dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
+        dodoArray<dodoStringArray>::iterator i(rows.values.begin()), j(rows.values.end());
         dodoStringArray::iterator m, n;
         for (; i != j; i++) {
             m = i->begin();

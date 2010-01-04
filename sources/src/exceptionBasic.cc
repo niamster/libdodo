@@ -98,14 +98,12 @@ bool basic::handlerMap[] = {
     false,
     false,
     false,
-    false,
     false
 };
 
 //-------------------------------------------------------------------
 
 basic::handler basic::handlers[] = {
-    NULL,
     NULL,
     NULL,
     NULL,
@@ -202,7 +200,6 @@ void *basic::handlerData[] = {
     NULL,
     NULL,
     NULL,
-    NULL,
     NULL
 };
 
@@ -210,7 +207,6 @@ void *basic::handlerData[] = {
 
 #ifdef DL_EXT
 bool basic::handlesOpened[] = {
-    false,
     false,
     false,
     false,
@@ -306,14 +302,12 @@ void *basic::handles[] = {
     NULL,
     NULL,
     NULL,
-    NULL,
     NULL
 };
 
 //-------------------------------------------------------------------
 
 char basic::cookies[][32] = {
-    {'\0', },
     {'\0', },
     {'\0', },
     {'\0', },

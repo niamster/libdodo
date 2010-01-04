@@ -46,6 +46,40 @@ namespace dodo {
              * @brief provides an interface to postgresql db
              */
             class postgresql : public sql::constructor {
+              public:
+
+                /**
+                 * @struct __connection_options__
+                 * @brief defines connection options for the server
+                 */
+                struct __connection_options__ : public data::base::__connection_options__ {
+                    /**
+                     * constructor
+                     */
+                    __connection_options__();
+
+                    /**
+                     * constructor
+                     * @param db defines name of db
+                     * @param host defines host
+                     * @param user defines user
+                     * @param password defines password
+                     * @param path defines path to db or unix socket
+                     * @param port defines port
+                     */
+                    __connection_options__(const dodoString &db,
+                                           const            dodoString &host,
+                                           const            dodoString &user,
+                                           const            dodoString &password,
+                                           unsigned int                port = 0);
+
+                    dodoString   db;        ///< database name
+                    dodoString   host;      ///< hostname
+                    dodoString   user;      ///< username
+                    dodoString   password;  ///< password
+                    unsigned int port;      ///< port
+                };
+
               private:
 
                 /**
@@ -63,9 +97,9 @@ namespace dodo {
 
                 /**
                  * constructor
-                 * @param dbInfo defines information for connection to db
+                 * @param info defines information for connection to db
                  */
-                postgresql(const __connection__ &dbInfo);
+                postgresql(const data::base::__connection_options__ &info);
 
                 /**
                  * destructor
@@ -74,9 +108,9 @@ namespace dodo {
 
                 /**
                  * connect to the database
-                 * @param dbInfo defines information for connection to db
+                 * @param info defines information for connection to db
                  */
-                virtual void connect(const __connection__ &dbInfo);
+                virtual void connect(const data::base::__connection_options__ &info);
 
                 /**
                  * disconnect from the database
@@ -97,40 +131,23 @@ namespace dodo {
                 /**
                  * @return amount of received rows from the evaluated request
                  */
-                virtual unsigned int requestedRows() const;
+                virtual unsigned int fetchedRows() const;
 
                 /**
-                 * @return amount of received fields from the evaluated request
+                 * @param rows defines rows got from the request
                  */
-                virtual unsigned int requestedFields() const;
+                virtual void fetchedRows(data::base::rows &rows) const;
 
                 /**
-                 * @return received rows from the evaluated request
+                 * execute request for data base
+                 * @param query contains query for data base
                  */
-                virtual dodoArray<dodoStringArray> fetchRows() const;
+                virtual void exec(const data::base::query &query);
 
                 /**
-                 * @return received fields from the evaluated request
+                 * execute collected request for data base
                  */
-                virtual dodoStringArray fetchFields() const;
-
-                /**
-                 * @return structure received rows and fields from the evaluated request
-                 */
-                virtual __tuples__ fetch() const;
-
-                /**
-                 * @return received rows and fields from the evaluated request using hash `key`=>`value`
-                 */
-                virtual dodoStringMapArray fetchFieldsToRows() const;
-
-                /**
-                 * execute request
-                 * @param query defines query; you may define it if you don't use db methods like select, update
-                 * @param result defines type of result; if true query return the result
-                 */
-                virtual void exec(const dodoString &query = __dodostring__,
-                                  bool             result = false);
+                virtual void exec();
 
                 /**
                  * set sessions charset
@@ -143,17 +160,31 @@ namespace dodo {
                  */
                 dodoString charset() const;
 
+                /**
+                 * @param rows defines rows for insertion into data base
+                 * @param condition defines row insertion condition
+                 */
+                virtual void insert(const data::base::rows      &rows,
+                                    const data::base::condition &condition);
+
+                /**
+                 * @param rows defines values of row for update
+                 * @param condition defines row update condition
+                 */
+                virtual void update(const data::base::rows      &rows,
+                                    const data::base::condition &condition);
+
               protected:
 
                 /**
-                 * construct `insert` statement
+                 * @return insert SQL statement
                  */
-                virtual void insertCollect();
+                virtual dodoString insert();
 
                 /**
-                 * construct `update` statement
+                 * @return update SQL statement
                  */
-                virtual void updateCollect();
+                virtual dodoString update();
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
                 /**
@@ -222,9 +253,9 @@ namespace dodo {
 
               private:
 
-                bool empty;                                                                             ///< true id pgResult is empty
-
                 __postgresql__ *handle;                                                                 ///< DB handle
+
+                __connection_options__ info; ///< DB connection information
             };
         };
     };

@@ -33,12 +33,189 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/dataBaseAccumulator.h>
+#include <libdodo/dataBaseConnector.h>
 
 namespace dodo {
     namespace data {
         namespace base {
             namespace sql {
+                /**
+                 * @class condition
+                 * @brief defines condition for data base operations
+                 */
+                class condition : public data::base::condition {
+                  public:
+
+                    /*
+                     * @enum orderDirectionEnum defines order condition direction
+                     */
+                    enum orderDirectionEnum {
+                        ORDER_DIRECTION_ASC,
+                        ORDER_DIRECTION_DESC,
+                    };
+
+                    /**
+                     * constructor
+                     */
+                    condition();
+
+                    /**
+                     * constructor
+                     * @param table defines query table
+                     * @param statement defines query condition
+                     */
+                    condition(const dodoString &table,
+                              const dodoString &statement = __dodostring__);
+
+                    /**
+                     * constructor
+                     * @param table defines query table
+                     * @param fields defines fields in table that correspond to data in rows
+                     * @param statement defines query condition
+                     */
+                    condition(const dodoString &table,
+                              const dodoStringArray &fields,
+                              const dodoString &statement = __dodostring__);
+
+                    /**
+                     * destructor
+                     */
+                    virtual ~condition();
+
+                    /**
+                     * @return condition
+                     * @param limit defines limit condition
+                     */
+                    const condition &limit(long limit) const;
+
+                    /**
+                     * @return condition
+                     * @param offset defines offset condition
+                     */
+                    const condition &offset(long offset) const;
+
+                    /**
+                     * @return condition
+                     * @param field defines field name for order condition
+                     * @param direction defines direction for order condition[@see enum orderDirectionEnum]
+                     */
+                    const condition &order(const dodoString &field,
+                                           short direction = ORDER_DIRECTION_ASC) const;
+
+                    /**
+                     * @enum joinEnum defines JOIN types
+                     */
+                    enum joinEnum {
+                        JOIN_INNER,
+                        JOIN_OUTER,
+                        JOIN_LEFT,
+                        JOIN_RIGHT,
+                    };
+
+                    /**
+                     * @return condition
+                     * @param table defines table to join with
+                     * @param condition defines JOIN condition
+                     * @param type defines JOIN type
+                     */
+                    const condition &join(const dodoString &table,
+                                          const dodoString &condition,
+                                          short type = JOIN_INNER) const;
+
+                    /**
+                     * @struct __join__
+                     * @brief defines JOIN statement
+                     */
+                    struct __join__ {
+                        short type; ///< JOIN type [@see condition::joinEnum]
+                        dodoString table; ///< table to join with
+                        dodoString condition; ///< JOIN condition
+                    };
+
+                    mutable dodoArray<__join__> _join;
+                    mutable dodoString _orderby; ///< order condition
+                    mutable long _limit; ///< limit condition
+                    mutable long _offset; ///< offset condition
+                    dodoString _table; ///< table in data base
+                    dodoString _statement; ///< SQL request condition
+                    dodoStringArray _fields; ///< names of fiels
+                };
+
+                /**
+                 * @class row
+                 * @brief defines rows of data base
+                 */
+                class rows : public data::base::rows {
+                  public:
+
+                    /**
+                     * constructor
+                     */
+                    rows();
+
+                    /**
+                     * constructor
+                     * @param values defines data in rows
+                     * @param fields defines fields in table that correspond to data in rows
+                     */
+                    rows(const dodoArray<dodoStringArray> &values,
+                         const dodoStringArray &fields = __dodostringarray__);
+
+                    /**
+                     * constructor
+                     * @param values defines data in rows
+                     * @param fields defines fields in table that correspond to data in rows
+                     */
+                    rows(const dodoStringArray &values,
+                         const dodoStringArray &fields = __dodostringarray__);
+
+                    /**
+                     * constructor
+                     * @param map defines array of mapping of fields to data in row
+                     */
+                    rows(const dodoArray<dodoStringMap> &map);
+
+                    /**
+                     * constructor
+                     * @param map defines mapping of fields to data in row
+                     */
+                    rows(const dodoStringMap &map);
+
+                    /**
+                     * destructor
+                     */
+                    virtual ~rows();
+
+                    dodoStringArray fields; ///< names of fiels
+                    dodoArray<dodoStringArray> values; ///< data in rows
+                };
+
+                /**
+                 * @class query
+                 * @brief defines data base query
+                 */
+                class query: public data::base::query {
+                  public:
+
+                    /**
+                     * constructor
+                     */
+                    query();
+
+                    /**
+                     * constructor
+                     * @param sql defines data base request in SQL form
+                     */
+                    query(const dodoString &sql);
+
+                    /**
+                     * destructor
+                     */
+                    virtual ~query();
+
+                    dodoString sql;
+                };
+
                 /**
                  * @enum fieldEnum defines field type
                  */
@@ -54,8 +231,57 @@ namespace dodo {
                  * @note all data become escaped and framed with '. Names of fields are not framed with ` to prevent cases as `count(*)`, etc.
                  * If you want to prevent data framing define preventFraming sqlConstructor class propertie as true but remember
                  */
-                class constructor : public accumulator {
+                class constructor : public connector {
                   public:
+
+                    /**
+                     * @enum requestEnum defines type of request
+                     */
+                    enum requestEnum {
+                        REQUEST_NONE,
+                        REQUEST_SELECT,
+                        REQUEST_INSERT,
+                        REQUEST_UPDATE,
+                        REQUEST_REMOVE,
+                    };
+
+                    /**
+                     * @class __collected_data__
+                     * @brief defines data that could be retrieved from the db object
+                     */
+                    class __collected_data__
+#ifndef DATABASE_WO_XEXEC
+                        : public xexec::__collected_data__
+#endif
+                    {
+                      public:
+
+#ifndef DATABASE_WO_XEXEC
+                        /**
+                         * constructor
+                         * @param executor defines class that executed hook
+                         * @param execObject defines type of object that executed a hook, @see xexec::objectEnum
+                         */
+                        __collected_data__(xexec *executor,
+                                           short execObject);
+#else
+                        /**
+                         * constructor
+                         */
+                        __collected_data__();
+#endif
+                        /**
+                         * clear collected data
+                         */
+                        void clear();
+
+                        int type;                                   ///< type of request @see constructor::requestEnum
+
+                        sql::condition condition; ///< request condition
+                        sql::rows rows; ///< request data
+
+                        const sql::query *query; ///< ready for execution query
+                    };
 
                     /*
                      * constructor
@@ -66,6 +292,32 @@ namespace dodo {
                      * destructor
                      */
                     virtual ~constructor();
+
+                    /**
+                     * @param fields defines fields to select
+                     * @param condition defines row selection condition
+                     * @note if param fields is empty all fields are fetched
+                     */
+                    virtual void select(const data::base::condition &condition);
+
+                    /**
+                     * @param rows defines rows for insertion into data base
+                     * @param condition defines row insertion condition
+                     */
+                    virtual void insert(const data::base::rows      &rows,
+                                        const data::base::condition &condition);
+
+                    /**
+                     * @param rows defines values of row for update
+                     * @param condition defines row update condition
+                     */
+                    virtual void update(const data::base::rows      &rows,
+                                        const data::base::condition &condition);
+
+                    /**
+                     * @param condition defines row remove condition
+                     */
+                    virtual void remove(const data::base::condition &condition);
 
                     /**
                      * @return constructed query from collected data
@@ -99,55 +351,25 @@ namespace dodo {
 
                     dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare> fieldTypes;   ///< hash of 'db:table' => 'field => 'type''
 
-                    dodoString request;                                                                                                 ///< SQL statement
+                    /**
+                     * @return select SQL statement
+                     */
+                    virtual dodoString select();
 
                     /**
-                     * construct `SELECT function` statement
+                     * @return insert SQL statement
                      */
-                    virtual void functionCollect();
+                    virtual dodoString insert();
 
                     /**
-                     * construct `select procedure` statement
+                     * @return update SQL statement
                      */
-                    virtual void procedureCollect();
+                    virtual dodoString update();
 
                     /**
-                     * construct `select` statement
+                     * @return delete SQL statement
                      */
-                    virtual void selectCollect();
-
-                    /**
-                     * construct `join` statement
-                     */
-                    virtual void joinCollect();
-
-                    /**
-                     * construct `insert` statement
-                     */
-                    virtual void insertCollect();
-
-                    /**
-                     * construct `update` statement
-                     */
-                    virtual void updateCollect();
-
-                    /**
-                     * construct `delete` statement
-                     */
-                    virtual void delCollect();
-
-                    /**
-                     * construct `union`, `minus`, `intersect` statements
-                     */
-                    virtual void subCollect();
-
-                    /**
-                     * add additional statements for query
-                     * @param qTypeToCheck defines type of additional info to check
-                     * @param collectedString defines string that defines additional statement
-                     */
-                    virtual void additionalCollect(unsigned int     qTypeToCheck,
-                                                   const dodoString &collectedString);
+                    virtual dodoString remove();
 
                     /**
                      * @return string of substrings, separated with separator, framed with frame and applied escapeFields to each
@@ -173,8 +395,8 @@ namespace dodo {
                         STATEMENT_LEFTBRACKET,
                         STATEMENT_RIGHTBRACKET,
                         STATEMENT_SELECT,
-                        STATEMENT_CALL,
                         STATEMENT_FROM,
+                        STATEMENT_STAR,
                         STATEMENT_COLON,
                         STATEMENT_APOSTROPHECOMA,
                         STATEMENT_RIGHTBRACKETCOMA,
@@ -185,18 +407,25 @@ namespace dodo {
                         STATEMENT_UPDATE,
                         STATEMENT_SET,
                         STATEMENT_DELETE,
+                        STATEMENT_WHERE,
+                        STATEMENT_LIMIT,
+                        STATEMENT_OFFSET,
+                        STATEMENT_ORDERBY,
+                        STATEMENT_JOININNER,
+                        STATEMENT_JOINOUTER,
+                        STATEMENT_JOINLEFT,
+                        STATEMENT_JOINRIGHT,
+                        STATEMENT_ON,
                         STATEMENT_NULL,
 
                         STATEMENT_ENUMSIZE
                     };
 
-                    static const dodoString statements[STATEMENT_ENUMSIZE];                                 ///< constructor statements
+                    static const dodoString statements[STATEMENT_ENUMSIZE]; ///< constructor statements
 
-                    static const dodoString additionalRequestStatements[ADDITIONAL_REQUEST_ENUMSIZE];       ///< additional statements(`where`, `limit`, ...)
+                    bool result; ///< if true try to get result from the request
 
-                    static const dodoString subrequestStatements[SUBREQUEST_ENUMSIZE];                      ///< statements for complex queries(`union`, ...)
-
-                    static const dodoString joinStatements[JOIN_ENUMSIZE];                                  ///< statements for `join` queries
+                    __collected_data__ collectedData; ///< data collected
                 };
             };
         };
