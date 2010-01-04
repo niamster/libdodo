@@ -37,6 +37,9 @@
 namespace dodo {
     namespace pc {
         namespace execution {
+            class manager;
+            class scheduler;
+
             /**
              * @typedef routine
              * @brief defines job function
@@ -58,12 +61,21 @@ namespace dodo {
              * @brief provides interface for job job management
              */
             class job {
+                friend class manager;
+                friend class scheduler;
+
               public:
+
+                enum typeEnum {
+                    TYPE_PROCESS,
+                    TYPE_THREAD
+                };
 
                 /**
                  * constructor
+                 * @param type defines type of job[@see job::typeEnum]
                  */
-                job();
+                job(short type);
 
                 /**
                  * copy constructor
@@ -99,6 +111,8 @@ namespace dodo {
               protected:
 
                 mutable bool cloned; ///< true if object was cloned
+
+                short type; ///< type of job[@see job::typeEnum]
             };
         };
     };

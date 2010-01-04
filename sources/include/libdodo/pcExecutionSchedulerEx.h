@@ -38,11 +38,24 @@ namespace dodo {
     namespace pc {
         namespace execution {
             /**
+             * libdodo defined errors
+             */
+            enum schedulerExR {
+                SCHEDULEREX_UNKNOWNJOB,
+            };
+
+            /**
+             * libdodo defined errors explanation
+             */
+#define PCEXECUTIONSCHEDULEREX_UNKNOWNJOB_STR  "Unknown type of job"
+
+            /**
              * ID of function where exception was thrown
              */
             enum schedulerFunctionsID {
                 SCHEDULEREX___MANAGER__CONSTRUCTOR,
                 SCHEDULEREX_CONSTRUCTOR,
+                SCHEDULEREX_SCHEDULE,
             };
         };
     };

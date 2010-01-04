@@ -71,7 +71,7 @@ namespace dodo {
                  * @param timeout defines timeout of job scheduling in milliseconds
                  * @param repeat defines if job should be rescheduled again
                  */
-                unsigned long schedule(execution::job *job,
+                unsigned long schedule(const execution::job &job,
                                        unsigned long timeout,
                                        bool repeat = false);
 

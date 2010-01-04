@@ -1,0 +1,84 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          trac
+# Required-Start:    $syslog $network
+# Required-Stop:     $syslog $network
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start the trac server.
+# Author:            cocoaberry, niam
+### END INIT INFO
+
+set -e
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DESC="Trac standalone server"
+NAME=tracd
+DAEMON=/usr/bin/$NAME
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+# Gracefully exit if the package has been removed.
+test -x $DAEMON || exit 0
+
+# defaults for tracd
+TRACD_PORT=9000
+TRACD_BIND_ADDRESS=127.0.01
+TRACD_ENVIRONMENTS=
+TRACD_EXTRA_OPTS=-s
+TRACD_USER=
+
+# Read config file if it is present.
+if [ -r /etc/default/$NAME ]
+then
+	. /etc/default/$NAME
+fi
+
+#
+#	Function that starts the daemon/service.
+#
+d_start() {
+	start-stop-daemon --start --background --make-pidfile --quiet \
+		--pidfile $PIDFILE --chuid $TRACD_USER \
+		--exec $DAEMON -- $TRACD_EXTRA_OPTS --port $TRACD_PORT --hostname $TRACD_BIND_ADDRESS $TRACD_ENVIRONMENTS
+}
+
+#
+#	Function that stops the daemon/service.
+#
+d_stop() {
+	start-stop-daemon --stop --quiet --oknodo --pidfile $PIDFILE \
+		--name $NAME
+}
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: $NAME"
+	d_start
+	echo "."
+	;;
+  stop)
+	echo -n "Stopping $DESC: $NAME"
+	d_stop
+	echo "."
+	;;
+  restart|force-reload)
+	#
+	#	If the "reload" option is implemented, move the "force-reload"
+	#	option to the "reload" entry above. If not, "force-reload" is
+	#	just the same as "restart".
+	#
+	echo -n "Restarting $DESC: $NAME"
+	d_stop
+	sleep 1
+	d_start
+	echo "."
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
+

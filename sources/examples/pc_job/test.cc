@@ -31,7 +31,7 @@ job1(void *data)
     try {
         cout << endl << ">>" << (char *)data << ": " << tools::time::millinow() << endl;
 
-        tools::os::sleep(2);
+        tools::os::sleep(tools::string::stringToUL((char *)data));
 
         cout << endl << "<<" << (char *)data << ": " << tools::time::millinow() << endl;
     } catch (dodo::exception::basic &ex)   {
@@ -48,37 +48,45 @@ main(int  argc UNUSED,
     try {
         const int amount = 10;
 
-        execution::thread periodic(::job0, (void *)"periodic", execution::ON_DESTRUCTION_STOP);
-        execution::thread oneshot0(::job0, (void *)"oneshot", execution::ON_DESTRUCTION_STOP);
-        execution::process oneshot1(::job0, (void *)"oneshot", execution::ON_DESTRUCTION_STOP);
         execution::scheduler scheduler;
 
-        unsigned long pID = scheduler.schedule(&periodic, 1000, true);
-        scheduler.schedule(&oneshot0, 2000);
-        scheduler.schedule(&oneshot1, 3000);
+        unsigned long pID = scheduler.schedule(execution::thread(::job0, (void *)"periodic", execution::ON_DESTRUCTION_STOP), 1000, true);
+        scheduler.schedule(execution::thread(::job0, (void *)"oneshot thread", execution::ON_DESTRUCTION_STOP), 2000);
+        scheduler.schedule(execution::process(::job0, (void *)"oneshot process", execution::ON_DESTRUCTION_STOP), 3000);
 
-        execution::job *jobs[amount];
+        execution::manager manager;
 
         dodoString ids[amount];
+        int pos[amount];
         for (int i = 0; i < amount; ++i) {
             ids[i] = tools::string::lToString(i);
-            if (i % 2 == 0)
-                jobs[i] = new execution::thread(::job1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP);
-            else
-                jobs[i] = new execution::process(::job1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP);
+            if (i % 2 == 0) {
+                pos[i] = manager.add(execution::thread(::job1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
+                cout << "Job #"<< pos[i] << " is a thread" << endl;
+            } else {
+                pos[i] = manager.add(execution::process(::job1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
+                cout << "Job #"<< pos[i] << " is a process" << endl;
+            }
         }
 
         cout << "Launching jobs" << endl;
         cout << tools::time::millinow() << endl;
 
         for (int i = 0; i < amount; ++i)
-            jobs[i]->run();
+            manager.run(pos[i]);
+
+        for (int i = 0; i < amount; ++i)
+            cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
 
         cout << tools::time::millinow() << endl;
         tools::os::sleep(2);
         cout << tools::time::millinow() << endl;
         scheduler.remove(pID);
-        pID = scheduler.schedule(&periodic, 100, true);
+
+        for (int i = 0; i < amount; ++i)
+            cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
+
+        pID = scheduler.schedule(execution::thread(::job0, (void *)"periodic", execution::ON_DESTRUCTION_STOP), 100, true);
         cout << tools::time::millinow() << endl;
         tools::os::sleep(2);
         scheduler.remove(pID);
@@ -87,10 +95,13 @@ main(int  argc UNUSED,
         cout << tools::time::millinow() << endl;
 
         for (int i = 0; i < amount; ++i)
-            cout << "status: " << jobs[i]->wait() << endl;
+            cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
 
         for (int i = 0; i < amount; ++i)
-            delete jobs[i];
+            cout << "status: " << manager.wait(pos[i]) << endl;
+
+        for (int i = 0; i < amount; ++i)
+            cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
     } catch (dodo::exception::basic &ex)   {
         cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }

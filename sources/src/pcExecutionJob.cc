@@ -33,7 +33,8 @@
 
 using namespace dodo::pc::execution;
 
-job::job() : cloned(false)
+job::job(short type) : cloned(false),
+                       type(type)
 {
 }
 

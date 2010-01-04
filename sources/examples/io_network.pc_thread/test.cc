@@ -95,7 +95,7 @@ main(int  argc UNUSED,
 
         bool exit_condition(false);
 
-        execution::manager<execution::thread> manager;
+        execution::manager manager;
 
         ::data.set((void *)&exit_condition);
 
@@ -107,9 +107,7 @@ main(int  argc UNUSED,
                 }
 
                 exchange *ex = new exchange(accepted);
-                execution::thread t(::process, (void *)ex, execution::ON_DESTRUCTION_KEEP_ALIVE);
-                t.run();
-                manager.add(t);
+                manager.run(manager.add(execution::thread(::process, (void *)ex, execution::ON_DESTRUCTION_KEEP_ALIVE)));
 
                 try {
                     dodoList<unsigned long> threads = manager.jobs();

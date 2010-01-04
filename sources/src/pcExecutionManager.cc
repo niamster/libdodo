@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcExecutionManager.inline
+ *            pcExecutionManager.cc
  *
  *  Sun Oct  30 2007
  *  Copyright  2007  Ni@m
@@ -30,164 +30,184 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/pcExecutionManager.h>
+#include <libdodo/pcExecutionJob.h>
+#include <libdodo/pcExecutionThread.h>
+#include <libdodo/pcExecutionProcess.h>
 #include <libdodo/pcExecutionManagerEx.h>
 #include <libdodo/types.h>
 #include <libdodo/pcSyncThread.h>
 #include <libdodo/pcSyncStack.h>
 
-template <typename T>
-dodo::pc::execution::manager<T>::manager() : counter(0),
-                                             keeper(new pc::sync::thread)
+using namespace dodo::pc::execution;
+
+manager::manager() : counter(0),
+                     keeper(new pc::sync::thread)
 {
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
-dodo::pc::execution::manager<T>::~manager()
+manager::~manager()
 {
+    dodoMap<unsigned long, execution::job *>::const_iterator i = handles.begin(), j = handles.end();
+
+    for (; i != j; ++i)
+        delete i->second;
+
     delete keeper;
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
 unsigned long
-dodo::pc::execution::manager<T>::add(const T &job)
+manager::add(const execution::job &job)
 {
     pc::sync::stack tg(keeper);
 
-    handles.insert(make_pair(counter, job));
+    execution::job *j;
+
+    execution::job *orig = const_cast<execution::job *>(&job);
+
+    switch (job.type) {
+        case execution::job::TYPE_PROCESS:
+            j = new process(*dynamic_cast<process *>(orig));
+
+            break;
+
+        case execution::job::TYPE_THREAD:
+            j = new thread(*dynamic_cast<thread *>(orig));
+
+            break;
+
+        default:
+            throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ADD, exception::ERRNO_LIBDODO, MANAGEREX_UNKNOWNJOB, PCEXECUTIONMANAGEREX_UNKNOWNJOB_STR, __LINE__, __FILE__);
+    }
+
+    handles.insert(std::make_pair(counter, j));
 
     return counter++;
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
 void
-dodo::pc::execution::manager<T>::remove(unsigned long id,
-                                       bool          terminate)
+manager::remove(unsigned long id,
+                bool          terminate)
 {
     pc::sync::stack tg(keeper);
 
-    typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
+    dodoMap<unsigned long, execution::job *>::iterator job = handles.find(id);
 
     if (job == handles.end())
         return;
 
-    if (terminate && job->second.isRunning())
-        job->second.stop();
+    if (terminate && job->second->isRunning())
+        job->second->stop();
+
+    delete job->second;
 
     handles.erase(job);
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
 void
-dodo::pc::execution::manager<T>::run(unsigned long id)
+manager::run(unsigned long id)
 {
     pc::sync::stack tg(keeper);
 
-    typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
+    dodoMap<unsigned long, execution::job *>::iterator job = handles.find(id);
 
     if (job == handles.end())
         throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
-    job->second.run();
+    job->second->run();
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
 void
-dodo::pc::execution::manager<T>::stop(unsigned long id)
+manager::stop(unsigned long id)
 {
     pc::sync::stack tg(keeper);
 
-    typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
+    dodoMap<unsigned long, execution::job *>::iterator job = handles.find(id);
 
     if (job == handles.end())
         throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
-    job->second.stop();
+    job->second->stop();
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
 void
-dodo::pc::execution::manager<T>::stop()
+manager::stop()
 {
     pc::sync::stack tg(keeper);
 
-    typename dodoMap<unsigned long, T>::iterator i = handles.begin(), j = handles.end();
+    dodoMap<unsigned long, execution::job *>::iterator i = handles.begin(), j = handles.end();
 
     for (; i != j; ++i)
-        i->second.stop();
+        i->second->stop();
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
 int
-dodo::pc::execution::manager<T>::wait(unsigned long id)
+manager::wait(unsigned long id)
 {
     pc::sync::stack tg(keeper);
 
-    typename dodoMap<unsigned long, T>::iterator job = handles.find(id);
+    dodoMap<unsigned long, execution::job *>::iterator job = handles.find(id);
 
     if (job == handles.end())
         throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
-    return job->second.wait();
+    return job->second->wait();
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
 void
-dodo::pc::execution::manager<T>::wait()
+manager::wait()
 {
     pc::sync::stack tg(keeper);
 
-    typename dodoMap<unsigned long, T>::iterator i = handles.begin(), j = handles.end();
+    dodoMap<unsigned long, execution::job *>::iterator i = handles.begin(), j = handles.end();
 
     for (; i != j; ++i)
-        i->second.wait();
+        i->second->wait();
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
 bool
-dodo::pc::execution::manager<T>::isRunning(unsigned long id) const
+manager::isRunning(unsigned long id) const
 {
     pc::sync::stack tg(keeper);
 
-    typename dodoMap<unsigned long, T>::const_iterator job = handles.find(id);
+    dodoMap<unsigned long, execution::job *>::const_iterator job = handles.find(id);
 
     if (job == handles.end())
         throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
-    return job->second.isRunning();
+    return job->second->isRunning();
 }
 
 //-------------------------------------------------------------------
 
-template <typename T>
 unsigned long
-dodo::pc::execution::manager<T>::running() const
+manager::running() const
 {
     pc::sync::stack tg(keeper);
 
     unsigned long jobs;
 
-    typename dodoMap<unsigned long, T>::const_iterator i = handles.begin(), j = handles.end();
+    dodoMap<unsigned long, execution::job *>::const_iterator i = handles.begin(), j = handles.end();
 
     for (; i != j; ++i)
-        if (i->second.isRunning())
+        if (i->second->isRunning())
             ++jobs;
 
     return jobs;
@@ -195,15 +215,14 @@ dodo::pc::execution::manager<T>::running() const
 
 //-------------------------------------------------------------------
 
-template <typename T>
 dodoList<unsigned long>
-dodo::pc::execution::manager<T>::jobs()
+manager::jobs()
 {
     pc::sync::stack tg(keeper);
 
     dodoList<unsigned long> jobs;
 
-    typename dodoMap<unsigned long, T>::const_iterator i = handles.begin(), j = handles.end();
+    dodoMap<unsigned long, execution::job *>::const_iterator i = handles.begin(), j = handles.end();
 
     for (; i != j; ++i)
         jobs.push_back(i->first);
@@ -213,18 +232,17 @@ dodo::pc::execution::manager<T>::jobs()
 
 //-------------------------------------------------------------------
 
-template <typename T>
-T *
-dodo::pc::execution::manager<T>::job(unsigned long id)
+dodo::pc::execution::job *
+manager::job(unsigned long id)
 {
     pc::sync::stack tg(keeper);
 
-    typename dodoMap<unsigned long, T>::const_iterator job = handles.find(id);
+    dodoMap<unsigned long, execution::job *>::const_iterator job = handles.find(id);
 
     if (job == handles.end())
         throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_JOB, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
-    return (T *)&job->second;
+    return job->second;
 }
 
 //-------------------------------------------------------------------

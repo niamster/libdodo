@@ -97,7 +97,7 @@ process::process(const process &p) : job(p),
 
 process::process(routine func,
                  void    *data,
-                 short   action) : job(),
+                 short   action) : job(TYPE_PROCESS),
                                    handle(new __process__)
 {
     handle->data = data;
@@ -115,7 +115,7 @@ process::process(routine func,
 process::process(const dodoString &module,
                  void             *data,
                  void             *toInit)
-try : job(),
+try : job(TYPE_PROCESS),
       handle(NULL)
     {
         handle = new __process__;
@@ -215,7 +215,23 @@ process::isRunning() const
         throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 
-    return true;
+    int status;
+
+    res = waitpid(handle->pid, &status, WNOHANG);
+
+    if (res == 0) {
+        return true;
+    } else if (res == handle->pid) {
+        if (WIFEXITED(status))
+            handle->status = WEXITSTATUS(status);
+
+        handle->executed = false;
+        handle->joined = true;
+
+        return false;
+    }
+
+    throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
