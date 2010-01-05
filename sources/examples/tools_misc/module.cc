@@ -15,16 +15,16 @@ using namespace dodo;
 extern "C"
 {
 void
-handler(int                    module,
+handler(int                    module UNUSED,
         dodo::exception::basic *ex,
-        void                   *data)
+        void                   *data UNUSED)
 {
     std::cout << "module:handler: " << ex->errStr << std::endl;
     std::cout << ex->message << std::endl;
 }
 
 dodo::exception::basic::__module__
-initExceptionBasicModule(void *data)
+initExceptionBasicModule(void *data UNUSED)
 {
     dodo::exception::basic::__module__ module = {
         "test",

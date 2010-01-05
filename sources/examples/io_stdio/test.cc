@@ -16,9 +16,9 @@ using namespace std;
 #ifndef IO_WO_XEXEC
 void
 hook(xexec::__collected_data__ *odata,
-     short                     type,
+     short                     type UNUSED,
      short                     operation,
-     void                      *udata)
+     void                      *udata UNUSED)
 {
     io::channel::__collected_data__ *st = (io::channel::__collected_data__ *)odata;
     if (operation == io::channel::OPERATION_WRITE) {

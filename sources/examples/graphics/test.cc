@@ -21,9 +21,9 @@ using namespace graphics;
 #ifndef GRAPHICS_WO_XEXEC
 void
 hook(xexec::__collected_data__ *odata,
-     short                     type,
+     short                     type UNUSED,
      short                     operation,
-     void                      *udata)
+     void                      *udata UNUSED)
 {
     image::__collected_data__ *imData = (image::__collected_data__ *)odata;
 
