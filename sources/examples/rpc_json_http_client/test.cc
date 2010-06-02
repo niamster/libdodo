@@ -61,7 +61,7 @@ class httpIO : public io::stream::channel, public io::network::http::client {
     }
 
     virtual unsigned long
-    _write(const char * const data) const
+    _write(const char * const data UNUSED) const
     {
         throw dodoString("Not implemented");
     }

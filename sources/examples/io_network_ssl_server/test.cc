@@ -18,9 +18,9 @@ using namespace io::network::ssl;
 #ifndef IO_WO_XEXEC
 void
 hook(xexec::__collected_data__ *odata,
-     short                     type,
-     short                     operation,
-     void                      *udata)
+     short                     type UNUSED,
+     short                     operation UNUSED,
+     void                      *udata UNUSED)
 {
     io::channel::__collected_data__ *st = (io::channel::__collected_data__ *)odata;
 

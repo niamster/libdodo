@@ -16,10 +16,10 @@ using namespace io;
 extern "C"
 {
 void
-hook(xexec::__collected_data__ *odata,
-     short                     type,
-     short                     operation,
-     void                      *udata)
+hook(xexec::__collected_data__ *odata UNUSED,
+     short                     type UNUSED,
+     short                     operation UNUSED,
+     void                      *udata UNUSED)
 {
 #ifndef IO_WO_XEXEC
     if (type == xexec::OBJECT_IOSTDIO) {
@@ -34,9 +34,9 @@ hook(xexec::__collected_data__ *odata,
 }
 
 void
-empty(xexec::__collected_data__ *odata,
-      short int                 type,
-      void                      *udata)
+empty(xexec::__collected_data__ *odata UNUSED,
+      short int                 type UNUSED,
+      void                      *udata UNUSED)
 {
     std::cout << "empty hook\n";
 }

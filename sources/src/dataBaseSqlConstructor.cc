@@ -202,18 +202,18 @@ rows::rows(const dodoArray<dodoStringMap> &map)
 
             dodoStringArray array;
 #ifndef USE_DEQUE
-            array.reserve(o->size());
+            array.reserve(i->size());
 #endif
 
             for (;i!=j;++i) {
-                array.clear();
-
                 o = i->begin();
                 p = i->end();
 
                 for (;o!=p;++o)
                     array.push_back(o->second);
                 values.push_back(array);
+
+                array.clear();
             }
         }
     }
@@ -232,7 +232,7 @@ rows::rows(const dodoStringMap &map)
 
         dodoStringArray array;
 #ifndef USE_DEQUE
-        array.reserve(o->size());
+        array.reserve(map.size());
 #endif
 
         for (;o!=p;++o)

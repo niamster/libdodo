@@ -14,9 +14,9 @@ using namespace std;
 using namespace io;
 
 void
-handler(int                    module,
+handler(int                    module UNUSED,
         dodo::exception::basic *ex,
-        void                   *data)
+        void                   *data UNUSED)
 {
     cout << "baseHandler: " << (dodoString) * ex << endl << ex->backtrace() << endl;
 }

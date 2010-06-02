@@ -18,9 +18,9 @@ using namespace data::base;
 #ifndef DATABASE_WO_XEXEC
 void
 hook(xexec::__collected_data__ *odata,
-     short                     type,
+     short                     type UNUSED,
      short                     operation,
-     void                      *udata)
+     void                      *udata UNUSED)
 {
     sql::constructor::__collected_data__ *sql = (sql::constructor::__collected_data__ *)odata;
 
@@ -36,10 +36,10 @@ main(int  argc UNUSED,
 {
     long now = tools::time::now();
 
-    mysql::__connection_options__ ci("test", argc>1?argv[1]:"localhost", "root", "password", "", 3306);
-
 #ifdef MYSQL_EXT
     try {
+        mysql::__connection_options__ ci("test", argc>1?argv[1]:"localhost", "root", "password", "", 3306);
+
         mysql db(ci);
 
 #ifndef DATABASE_WO_XEXEC

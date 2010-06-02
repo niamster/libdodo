@@ -17,9 +17,9 @@ using namespace std;
 #ifndef DATABASE_WO_XEXEC
 void
 hook(xexec::__collected_data__ *odata,
-     short                     type,
+     short                     type UNUSED,
      short                     operation,
-     void                      *udata)
+     void                      *udata UNUSED)
 {
     sql::constructor::__collected_data__ *sql = (sql::constructor::__collected_data__ *)odata;
 
@@ -66,6 +66,8 @@ main(int  argc UNUSED,
 #else
             return 1;
 #endif
+        } else {
+            return 1;
         }
 
 #ifndef DATABASE_WO_XEXEC

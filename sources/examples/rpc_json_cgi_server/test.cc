@@ -85,8 +85,8 @@ class cgiIO : public io::stream::channel {
 response
 handler(const dodoString       &method,
         const dodoArray<value> &values,
-        const void             *idata,
-        void                   *odata)
+        const void             *idata UNUSED,
+        void                   *odata UNUSED)
 {
     response resp;
 
