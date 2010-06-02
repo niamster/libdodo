@@ -1,10 +1,10 @@
 <build xmlns:c="http://bitten.edgewall.org/tools/c"
        xmlns:sh="http://bitten.edgewall.org/tools/sh">
   <step id="checkout" description="Checkout source">
-    <sh:exec executable="rm" args="-rf ${repository.revision}.tar.bz2" />
+    <sh:exec executable="rm" args="-rf *" />
     <sh:exec executable="wget"
-             args="http://hg.libdodo.org/hg/archive/${repository.revision}.tar.bz2" />
-    <sh:exec executable="tar" args="--strip-components=1 -jxf ${repository.revision}.tar.bz2" />
+             args="http://hg.libdodo.org/hg/archive/${revision}.tar.bz2" />
+    <sh:exec executable="tar" args="--strip-components=1 -jxf ${revision}.tar.bz2" />
   </step>
   <step id="configure"
         description="Configure with all enabled, POSIX ipc, PCRE regex">
