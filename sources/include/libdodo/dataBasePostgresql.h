@@ -67,16 +67,16 @@ namespace dodo {
                      * @param path defines path to db or unix socket
                      * @param port defines port
                      */
-                    __connection_options__(const dodoString &db,
-                                           const            dodoString &host,
-                                           const            dodoString &user,
-                                           const            dodoString &password,
+                    __connection_options__(const dodo::string &db,
+                                           const            dodo::string &host,
+                                           const            dodo::string &user,
+                                           const            dodo::string &password,
                                            unsigned int                port = 0);
 
-                    dodoString   db;        ///< database name
-                    dodoString   host;      ///< hostname
-                    dodoString   user;      ///< username
-                    dodoString   password;  ///< password
+                    dodo::string   db;        ///< database name
+                    dodo::string   host;      ///< hostname
+                    dodo::string   user;      ///< username
+                    dodo::string   password;  ///< password
                     unsigned int port;      ///< port
                 };
 
@@ -121,7 +121,7 @@ namespace dodo {
                  * automaticaly detect fields types
                  * @param table defines table for which rules will be applied
                  */
-                virtual void requestFieldsTypes(const dodoString &table);
+                virtual void requestFieldsTypes(const dodo::string &table);
 
                 /**
                  * @return amount of affected rows from the evaluated request
@@ -153,12 +153,12 @@ namespace dodo {
                  * set sessions charset
                  * @param charset defines charset
                  */
-                void setCharset(const dodoString &charset);
+                void setCharset(const dodo::string &charset);
 
                 /**
                  * @return current session charset
                  */
-                dodoString charset() const;
+                dodo::string charset() const;
 
                 /**
                  * @param rows defines rows for insertion into data base
@@ -179,12 +179,12 @@ namespace dodo {
                 /**
                  * @return insert SQL statement
                  */
-                virtual dodoString insert();
+                virtual dodo::string insert();
 
                 /**
                  * @return update SQL statement
                  */
-                virtual dodoString update();
+                virtual dodo::string update();
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
                 /**
@@ -237,7 +237,7 @@ namespace dodo {
                     ENCODING_ENUMSIZE
                 };
 
-                const static dodoString encodingStatements[ENCODING_ENUMSIZE];                          ///< encoding string representation according to encodingIdentefiersEnum
+                const static dodo::string encodingStatements[ENCODING_ENUMSIZE];                          ///< encoding string representation according to encodingIdentefiersEnum
 #endif
 
                 /**
@@ -246,7 +246,7 @@ namespace dodo {
                  */
                 struct __blob__ {
                     unsigned int     reference;                                                         ///< reference in request
-                    const dodoString *value;                                                            ///< pointer to blob value
+                    const dodo::string *value;                                                            ///< pointer to blob value
                 };
 
                 dodoList<__blob__> blobs;                                                               ///< references to blob data

@@ -65,7 +65,7 @@ namespace dodo {
              * constructor
              * @param pattern defines regex pattern
              */
-            regexp(const dodoString &pattern);
+            regexp(const dodo::string &pattern);
 
             /**
              * destructor
@@ -79,8 +79,8 @@ namespace dodo {
              * @param pockets defines array that will be filled with matched substrings in '()'
              * @note first in pocket is a first match
              */
-            virtual bool match(const dodoString &pattern,
-                               const dodoString &sample,
+            virtual bool match(const dodo::string &pattern,
+                               const dodo::string &sample,
                                dodoStringArray  &pockets = __dodostringarray__);
 
             /**
@@ -90,7 +90,7 @@ namespace dodo {
              * @param pockets defines array that will be filled with matched substrings in '()'
              * @note first in pocket is a first match
              */
-            virtual bool match(const dodoString &sample,
+            virtual bool match(const dodo::string &sample,
                                dodoStringArray  &pockets = __dodostringarray__);
 
             /**
@@ -101,8 +101,8 @@ namespace dodo {
              * @param replacements defines array that will be filled with matched substrings in '()'
              * @note if pattern is not matched - the sample will be returned
              */
-            virtual dodoString replace(const dodoString      &pattern,
-                                       const dodoString      &sample,
+            virtual dodo::string replace(const dodo::string      &pattern,
+                                       const dodo::string      &sample,
                                        const dodoStringArray &replacements);
 
             /**
@@ -112,14 +112,14 @@ namespace dodo {
              * @param replacements defines array that will be filled with matched substrings in '()'
              * @note if pattern is not matched - the sample will be returned
              */
-            virtual dodoString replace(const dodoString      &sample,
+            virtual dodo::string replace(const dodo::string      &sample,
                                        const dodoStringArray &replacements);
 
             /**
              * compile pattern
              * @param pattern defines regex pattern
              */
-            virtual void compile(const dodoString &pattern);
+            virtual void compile(const dodo::string &pattern);
 
             bool extended;                              ///< if true use extended regext support[true by default]
 
@@ -145,7 +145,7 @@ namespace dodo {
              * @return true if match string has matched substrings
              * @param sample defines a match string
              */
-            virtual bool boundMatch(const dodoString &sample);
+            virtual bool boundMatch(const dodo::string &sample);
 
           private:
 

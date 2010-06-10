@@ -103,8 +103,8 @@ namespace dodo {
                      * @param port defines port of host to connect
                      * @param exchange defines an oject that will perform I/O operations
                      */
-                    virtual void connectFrom(const dodoString  &local,
-                                             const dodoString  &host,
+                    virtual void connectFrom(const dodo::string  &local,
+                                             const dodo::string  &host,
                                              int               port,
                                              network::exchange &exchange);
 
@@ -114,7 +114,7 @@ namespace dodo {
                      * @param port defines port of host to connect
                      * @param exchange defines an oject that will perform I/O operations
                      */
-                    virtual void connect(const dodoString  &host,
+                    virtual void connect(const dodo::string  &host,
                                          int               port,
                                          network::exchange &exchange);
 
@@ -123,7 +123,7 @@ namespace dodo {
                      * @param path defines path to unix socket
                      * @param exchange defines an oject that will perform I/O operations
                      */
-                    virtual void connect(const dodoString  &path,
+                    virtual void connect(const dodo::string  &path,
                                          network::exchange &exchange);
 
                   protected:

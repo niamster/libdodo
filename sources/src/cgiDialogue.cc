@@ -33,6 +33,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <unistd.h>
 
 #include <libdodo/cgiDialogue.h>
 #include <libdodo/types.h>
@@ -88,7 +89,7 @@ const char *dialogue::environmentStatements[] = {
 
 //-------------------------------------------------------------------
 
-const dodoString dialogue::responseHeaderStatements[] = {
+const dodo::string dialogue::responseHeaderStatements[] = {
     "Accept-Ranges",
     "Age",
     "Allow",
@@ -109,7 +110,7 @@ const dodoString dialogue::responseHeaderStatements[] = {
     "X-Powered-By",
 };
 
-const dodoString dialogue::responseStatusStatements[] = {
+const dodo::string dialogue::responseStatusStatements[] = {
     "Status: 100 Continue\r\n",
     "Status: 101 Switching Protocols\r\n",
     "Status: 200 OK\r\n",
@@ -164,7 +165,7 @@ dialogue::dialogue(exchange      &a_cf,
                    unsigned long postSize,
                    bool          a_autocleanFiles,
                    bool          a_postFilesInMem,
-                   dodoString    a_postFilesTmpDir) : returnCode(STATUS_CODE_OK),
+                   dodo::string    a_postFilesTmpDir) : returnCode(STATUS_CODE_OK),
                                                       postFilesInMem(a_postFilesInMem),
                                                       autocleanFiles(a_autocleanFiles),
                                                       postFilesTmpDir(a_postFilesTmpDir),
@@ -174,7 +175,7 @@ dialogue::dialogue(exchange      &a_cf,
 {
     authInfo.type = AUTH_NONE;
 
-    dodoMap<short, dodoString> headers;
+    dodoMap<short, dodo::string> headers;
     initHeaders(headers);
 
     makeEnv();
@@ -193,11 +194,11 @@ dialogue::dialogue(exchange      &a_cf,
 //-------------------------------------------------------------------
 
 dialogue::dialogue(exchange &a_cf,
-                   dodoMap<short, dodoString> &headers,
+                   dodoMap<short, dodo::string> &headers,
                    unsigned long postSize,
                    bool a_autocleanFiles,
                    bool a_postFilesInMem,
-                   dodoString a_postFilesTmpDir) : returnCode(STATUS_CODE_OK),
+                   dodo::string a_postFilesTmpDir) : returnCode(STATUS_CODE_OK),
                                                    postFilesInMem(a_postFilesInMem),
                                                    autocleanFiles(a_autocleanFiles),
                                                    postFilesTmpDir(a_postFilesTmpDir),
@@ -255,7 +256,7 @@ dialogue::flush() const
 //-------------------------------------------------------------------
 
 unsigned long
-dialogue::printString(const dodoString &buf)
+dialogue::printString(const dodo::string &buf)
 {
     printHeaders();
 
@@ -264,7 +265,7 @@ dialogue::printString(const dodoString &buf)
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 dialogue::charset()
 {
     unsigned long temp;
@@ -272,17 +273,17 @@ dialogue::charset()
     dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
     for (; b != e; ++b) {
         temp = tools::string::find(*b, "charset=", true);
-        if (temp == dodoString::npos)
+        if (temp == dodo::string::npos)
             continue;
 
-        return dodoString(b->data() + temp + 8, b->size() - temp - 8);
+        return dodo::string(b->data() + temp + 8, b->size() - temp - 8);
     }
 
     return __dodostring__;
 }
 
 unsigned long
-dialogue::print(const dodoString &buf)
+dialogue::print(const dodo::string &buf)
 {
     printHeaders();
 
@@ -301,10 +302,10 @@ dialogue::print(const dodoString &buf)
 void
 dialogue::makeAuth()
 {
-    dodoString &httpAuthorization = ENVIRONMENT[ENVIRONMENT_HTTPAUTHORIZATION];
+    dodo::string &httpAuthorization = ENVIRONMENT[ENVIRONMENT_HTTPAUTHORIZATION];
 
     if (tools::string::contains(httpAuthorization, "Basic")) {
-        dodoStringArray arr = tools::misc::split(tools::code::decodeBase64(tools::string::trim(dodoString(httpAuthorization.data() + 6, httpAuthorization.size() - 6), ' ')), ":", 2);
+        dodoStringArray arr = tools::misc::split(tools::code::decodeBase64(tools::string::trim(dodo::string(httpAuthorization.data() + 6, httpAuthorization.size() - 6), ' ')), ":", 2);
 
         authInfo.type = AUTH_BASIC;
         authInfo.user = arr[0];
@@ -314,7 +315,7 @@ dialogue::makeAuth()
         if (tools::string::contains(httpAuthorization, "Digest")) {
             authInfo.type = AUTH_DIGEST;
 
-            dodoStringArray parts = tools::misc::split(dodoString(httpAuthorization.data() + 7, httpAuthorization.size() - 7), ",");
+            dodoStringArray parts = tools::misc::split(dodo::string(httpAuthorization.data() + 7, httpAuthorization.size() - 7), ",");
 
             dodoStringArray tuple;
 
@@ -325,7 +326,7 @@ dialogue::makeAuth()
                 if (tuple.size() != 2)
                     continue;
 
-                dodoString &challengePart = tuple[0];
+                dodo::string &challengePart = tuple[0];
 
                 if (tools::string::iequal(challengePart, "realm"))
                     authInfo.realm = tools::string::trim(tuple[1], '"');
@@ -355,15 +356,15 @@ dialogue::makeAuth()
 //-------------------------------------------------------------------
 
 void
-dialogue::requestAuthentication(const dodoString &realm,
+dialogue::requestAuthentication(const dodo::string &realm,
                                 short            type)
 {
     returnCode = STATUS_CODE_UNAUTHORIZED;
 
     if (type == AUTH_BASIC)
-        HEADERS.insert(make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
+        HEADERS.insert(std::make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, dodo::string("Basic realm=\"") + realm + "\""));
     else if (type == AUTH_DIGEST)
-        HEADERS.insert(make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") +
+        HEADERS.insert(std::make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, dodo::string("Digest realm=\"") +
                                  realm +
                                  "\", qop=\"auth\", nonce=\"" +
                                  tools::code::MD5Hex(tools::misc::stringRandom(16)) +
@@ -386,8 +387,8 @@ dialogue::authenticationResponse()
 //-------------------------------------------------------------------
 
 bool
-dialogue::isAuthenticated(const dodoString &user,
-                          const dodoString &password)
+dialogue::isAuthenticated(const dodo::string &user,
+                          const dodo::string &password)
 {
     if (authInfo.type == AUTH_BASIC)
         return (tools::string::equal(user, authInfo.user) && tools::string::equal(password, authInfo.password));
@@ -403,9 +404,9 @@ dialogue::isAuthenticated(const dodoString &user,
         tools::code::MD5Update(&context, (unsigned char *)password.data(), password.size());
         tools::code::MD5Final(HA, &context);
 
-        dodoString HA1 = tools::code::binToHex(dodoString((char *)&HA, 16));
+        dodo::string HA1 = tools::code::binToHex(dodo::string((char *)&HA, 16));
 
-        dodoString &methodForAuth = ENVIRONMENT[ENVIRONMENT_REQUESTMETHOD];
+        dodo::string &methodForAuth = ENVIRONMENT[ENVIRONMENT_REQUESTMETHOD];
 
         tools::code::MD5Init(&context);
         tools::code::MD5Update(&context, (unsigned char *)methodForAuth.data(), methodForAuth.size());
@@ -413,7 +414,7 @@ dialogue::isAuthenticated(const dodoString &user,
         tools::code::MD5Update(&context, (unsigned char *)authInfo.uri.data(), authInfo.uri.size());
         tools::code::MD5Final(HA, &context);
 
-        dodoString HA2 = tools::code::binToHex(dodoString((char *)&HA, 16));
+        dodo::string HA2 = tools::code::binToHex(dodo::string((char *)&HA, 16));
 
         tools::code::MD5Init(&context);
         tools::code::MD5Update(&context, (unsigned char *)HA1.data(), HA1.size());
@@ -429,7 +430,7 @@ dialogue::isAuthenticated(const dodoString &user,
         tools::code::MD5Update(&context, (unsigned char *)HA2.data(), HA2.size());
         tools::code::MD5Final(HA, &context);
 
-        return (tools::string::equal(tools::code::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
+        return (tools::string::equal(tools::code::binToHex(dodo::string((char *)&HA, 16)), authInfo.response));
     } else {
         return false;
     }
@@ -440,7 +441,7 @@ dialogue::isAuthenticated(const dodoString &user,
 void
 dialogue::cleanTmp()
 {
-    dodoMap<dodoString, file>::iterator i(FILES.begin()), j(FILES.end());
+    dodoMap<dodo::string, file>::iterator i(FILES.begin()), j(FILES.end());
     for (; i != j; ++i)
         if (!postFilesInMem)
             unlink(i->second.path.data());
@@ -471,7 +472,7 @@ dialogue::method() const
 
 void
 dialogue::makeKeyValue(dodoStringMap    &val,
-                       const dodoString &string,
+                       const dodo::string &string,
                        const char       *delim)
 {
     dodoStringArray getPair = tools::misc::split(tools::code::decodeUrl(string), delim);
@@ -483,7 +484,7 @@ dialogue::makeKeyValue(dodoStringMap    &val,
     for (; l != m; ++l) {
         temp = tools::misc::split(*l, "=");
         if (temp.size() > 1)
-            val.insert(make_pair(temp[0], temp[1]));
+            val.insert(std::make_pair(temp[0], temp[1]));
     }
 }
 
@@ -534,13 +535,13 @@ dialogue::makeEnv()
 //-------------------------------------------------------------------
 
 void
-dialogue::initHeaders(dodoMap<short, dodoString> &headers)
+dialogue::initHeaders(dodoMap<short, dodo::string> &headers)
 {
     if (headers.size() > 0) {
         HEADERS.insert(headers.begin(), headers.end());
     } else {
-        HEADERS.insert(make_pair(RESPONSE_HEADER_CONTENTTYPE, dodoString("text/html")));
-        HEADERS.insert(make_pair(RESPONSE_HEADER_XPOWEREDBY, dodoString(PACKAGE_NAME "/" PACKAGE_VERSION)));
+        HEADERS.insert(std::make_pair(RESPONSE_HEADER_CONTENTTYPE, dodo::string("text/html")));
+        HEADERS.insert(std::make_pair(RESPONSE_HEADER_XPOWEREDBY, dodo::string(PACKAGE_NAME "/" PACKAGE_VERSION)));
     }
 }
 
@@ -567,7 +568,7 @@ dialogue::printHeaders() const
 
     io.writeString(responseStatusStatements[returnCode]);
 
-    dodoMap<short, dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
+    dodoMap<short, dodo::string>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
     for (; i != j; ++i)
         io.writeString(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
 
@@ -640,11 +641,11 @@ dialogue::makePost()
             dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
             for (; b != e; ++b) {
                 temp0 = tools::string::find(*b, "boundary=", true);
-                if (temp0 == dodoString::npos)
+                if (temp0 == dodo::string::npos)
                     continue;
 
-                dodoString delimiter = "--";
-                delimiter.append(b->data() + temp0 + 9, b->size() - temp0 - 9);
+                dodo::string delimiter = "--";
+                delimiter += dodo::string(b->data() + temp0 + 9, b->size() - temp0 - 9);
 
                 postParts = tools::misc::split(content, delimiter);
             }
@@ -663,16 +664,16 @@ dialogue::makePost()
                     if (i->size() == 2 && (*i)[0] == '-' && (*i)[1] == '-') ///< '--' in the last portion
                         break;
                     else {
-                        if (i->find("filename") != dodoString::npos) {
-                            if ((temp0 = i->find("name=\"")) == dodoString::npos)
+                        if (i->find("filename") != dodo::string::npos) {
+                            if ((temp0 = i->find("name=\"")) == dodo::string::npos)
                                 continue;
 
                             temp0 += 6;
 
-                            if ((temp1 = i->find("\"", temp0)) == dodoString::npos)
+                            if ((temp1 = i->find("\"", temp0)) == dodo::string::npos)
                                 continue;
 
-                            dodoString post_name = dodoString(i->data() + temp0, temp1 - temp0);
+                            dodo::string post_name = dodo::string(i->data() + temp0, temp1 - temp0);
 
                             file file;
 
@@ -682,12 +683,12 @@ dialogue::makePost()
                             if (temp0 == temp1)
                                 continue;
 
-                            file.name = dodoString(i->data() + temp0, temp1 - temp0);
+                            file.name = dodo::string(i->data() + temp0, temp1 - temp0);
 
                             temp0 = tools::string::find(*i, "Content-Type: ", temp1, true);
                             temp0 += 14;
                             temp1 = i->find("\n", temp0);
-                            file.mime = tools::misc::split(dodoString(i->data() + temp0, temp1 - temp0), ";")[0];
+                            file.mime = tools::misc::split(dodo::string(i->data() + temp0, temp1 - temp0), ";")[0];
 
                             unsigned long lIndex = file.mime.size() - 1;
                             if (file.mime[lIndex] == '\r')
@@ -697,18 +698,18 @@ dialogue::makePost()
                             file.size = i->size() - temp1 - 2;
 
                             if (postFilesInMem) {
-                                file.data.assign(i->data() + temp1, file.size);
+                                file.data = dodo::string(i->data() + temp1, file.size);
                             } else {
                                 file.error = FILE_ERROR_NONE;
 
                                 ptr = new char[pathLength];
-                                strncpy(ptr, dodoString(postFilesTmpDir + "/" + dodoString("dodo_post_XXXXXX")).data(), pathLength);
+                                strncpy(ptr, dodo::string(postFilesTmpDir + "/" + dodo::string("dodo_post_XXXXXX")).data(), pathLength);
                                 fd = mkstemp(ptr);
                                 if (fd == -1) {
                                     delete [] ptr;
 
                                     file.error = FILE_ERROR_BAD_FILE_NAME;
-                                    FILES.insert(make_pair(post_name, file));
+                                    FILES.insert(std::make_pair(post_name, file));
 
                                     continue;
                                 }
@@ -761,19 +762,19 @@ dialogue::makePost()
                                 }
                             }
 
-                            FILES.insert(make_pair(post_name, file));
+                            FILES.insert(std::make_pair(post_name, file));
                         } else {
-                            if ((temp0 = i->find("name=\"")) == dodoString::npos)
+                            if ((temp0 = i->find("name=\"")) == dodo::string::npos)
                                 continue;
 
                             temp0 += 6;
 
-                            if ((temp1 = i->find("\"", temp0)) == dodoString::npos)
+                            if ((temp1 = i->find("\"", temp0)) == dodo::string::npos)
                                 continue;
 
                             argument = i->data();
 
-                            POST.insert(make_pair(dodoString(argument + temp0, temp1 - temp0), dodoString(argument + temp1 + 5, i->size() - temp1 - 7)));
+                            POST.insert(std::make_pair(dodo::string(argument + temp0, temp1 - temp0), dodo::string(argument + temp1 + 5, i->size() - temp1 - 7)));
                         }
                     }
                 }
@@ -797,8 +798,8 @@ dialogue::operator[](short method)
 
 //-------------------------------------------------------------------
 
-dodoString
-dialogue::operator[](const dodoString &name)
+dodo::string
+dialogue::operator[](const dodo::string &name)
 {
     dodoStringMap::iterator item = GET.find(name);
     if (item != GET.end())

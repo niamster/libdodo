@@ -59,7 +59,7 @@ processor::make(const node        &root,
         case node::DATA_STRING:
         {
             io.writeString("\"");
-            dodoString stringValue = *root.stringValue;
+            dodo::string stringValue = *root.stringValue;
             tools::string::replace("\"", "\\\"", stringValue);
             io.writeString(stringValue);
             io.writeString("\"");
@@ -71,7 +71,7 @@ processor::make(const node        &root,
         {
             io.writeString("{");
 
-            dodoMap<dodoString, node, dodoMapStringCompare>::const_iterator
+            dodoMap<dodo::string, node, dodoMapStringCompare>::const_iterator
             i = root.objectValue->begin(),
             j = root.objectValue->end();
             if (i != j) {
@@ -136,7 +136,7 @@ processor::make(const node        &root,
 
 unsigned long
 processor::processArray(dodoArray<node>  &jnode,
-                        const dodoString &root,
+                        const dodo::string &root,
                         unsigned long    pos)
 {
     bool initial = true;
@@ -189,7 +189,7 @@ processor::processArray(dodoArray<node>  &jnode,
 
 unsigned long
 processor::processValue(node             &node,
-                        const dodoString &root,
+                        const dodo::string &root,
                         unsigned long    pos)
 {
     unsigned long i(pos), j(root.size());
@@ -203,13 +203,13 @@ processor::processValue(node             &node,
 
             case '"':
                 node.valueDataType = node::DATA_STRING;
-                node.stringValue = new dodoString;
+                node.stringValue = new dodo::string;
 
                 return processString(*node.stringValue, root, i);
 
             case '{':
                 node.valueDataType = node::DATA_OBJECT;
-                node.objectValue = new dodoMap<dodoString, json::node, dodoMapStringCompare>;
+                node.objectValue = new dodoMap<dodo::string, json::node, dodoMapStringCompare>;
 
                 return processObject(*node.objectValue, root, i);
 
@@ -244,7 +244,7 @@ processor::processValue(node             &node,
 
 unsigned long
 processor::processBoolean(bool             &node,
-                          const dodoString &root,
+                          const dodo::string &root,
                           unsigned long    pos)
 {
     if ((root.size() - pos) < 4)
@@ -269,7 +269,7 @@ processor::processBoolean(bool             &node,
 //-------------------------------------------------------------------
 
 unsigned long
-processor::processNull(const dodoString &root,
+processor::processNull(const dodo::string &root,
                        unsigned long    pos)
 {
     if ((root.size() - pos) < 4)
@@ -287,10 +287,10 @@ processor::processNull(const dodoString &root,
 
 unsigned long
 processor::processNumeric(long             &node,
-                          const dodoString &root,
+                          const dodo::string &root,
                           unsigned long    pos)
 {
-    dodoString numeric;
+    dodo::string numeric;
 
     unsigned long i(pos), j(root.size());
     for (; i < j; ++i) {
@@ -315,7 +315,7 @@ processor::processNumeric(long             &node,
             case '-':
             case 'e':
             case 'E':
-                numeric.append(1, root[i]);
+                numeric += dodo::string(1, root[i]);
 
                 break;
 
@@ -337,14 +337,14 @@ processor::processNumeric(long             &node,
 //-------------------------------------------------------------------
 
 unsigned long
-processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
-                         const dodoString &root,
+processor::processObject(dodoMap<dodo::string, node, dodoMapStringCompare> &jnode,
+                         const dodo::string &root,
                          unsigned long pos)
 {
     short state = STATE_OBJECT_INITIAL;
 
     node subNodeValue;
-    dodoString subNodeName;
+    dodo::string subNodeName;
 
     unsigned long i(pos), j(root.size());
     for (; i < j; ++i) {
@@ -363,10 +363,10 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
                 else {
                     if (state == STATE_OBJECT_OBJECTVALUE) {
                         subNodeValue.valueDataType = node::DATA_OBJECT;
-                        subNodeValue.objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>;
+                        subNodeValue.objectValue = new dodoMap<dodo::string, node, dodoMapStringCompare>;
 
                         i = processObject(*subNodeValue.objectValue, root, i);
-                        jnode.insert(make_pair(subNodeName, subNodeValue));
+                        jnode.insert(std::make_pair(subNodeName, subNodeValue));
 
                         delete subNodeValue.objectValue;
                         subNodeValue.valueDataType = node::DATA_NULL;
@@ -389,10 +389,10 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
                 } else {
                     if (state == STATE_OBJECT_OBJECTVALUE) {
                         subNodeValue.valueDataType = node::DATA_STRING;
-                        subNodeValue.stringValue = new dodoString;
+                        subNodeValue.stringValue = new dodo::string;
 
                         i = processString(*subNodeValue.stringValue, root, i);
-                        jnode.insert(make_pair(subNodeName, subNodeValue));
+                        jnode.insert(std::make_pair(subNodeName, subNodeValue));
 
                         delete subNodeValue.stringValue;
                         subNodeValue.valueDataType = node::DATA_NULL;
@@ -406,7 +406,7 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
             default:
                 if (state == STATE_OBJECT_OBJECTVALUE) {
                     i = processValue(subNodeValue, root, i);
-                    jnode.insert(make_pair(subNodeName, subNodeValue));
+                    jnode.insert(std::make_pair(subNodeName, subNodeValue));
 
                     subNodeValue.~node();
                     subNodeValue.valueDataType = node::DATA_NULL;
@@ -427,16 +427,16 @@ processor::process(const io::channel &io)
     node node;
 
     node.valueDataType = node::DATA_OBJECT;
-    node.objectValue = new dodoMap<dodoString, json::node, dodoMapStringCompare>;
+    node.objectValue = new dodoMap<dodo::string, json::node, dodoMapStringCompare>;
 
-    dodoString json, jsonPart;
+    dodo::string json, jsonPart;
 
     while (true) {
         jsonPart = io.readString();
         if (jsonPart.size() == 0)
             break;
 
-        json.append(jsonPart);
+        json += dodo::string(jsonPart);
     }
     jsonPart.clear();
 
@@ -455,15 +455,15 @@ processor::fromMap(const dodoStringMap &root,
     node subNodeDef;
 
     nodeDef.valueDataType = node::DATA_OBJECT;
-    nodeDef.objectValue = new dodoMap<dodoString, json::node, dodoMapStringCompare>;
+    nodeDef.objectValue = new dodoMap<dodo::string, json::node, dodoMapStringCompare>;
 
     subNodeDef.valueDataType = node::DATA_STRING;
 
     dodoStringMap::const_iterator i = root.begin(), j = root.end();
     for (; i != j; ++i) {
-        subNodeDef.stringValue = new dodoString(i->second);
+        subNodeDef.stringValue = new dodo::string(i->second);
 
-        nodeDef.objectValue->insert(make_pair(i->first, subNodeDef));
+        nodeDef.objectValue->insert(std::make_pair(i->first, subNodeDef));
         delete subNodeDef.stringValue;
     }
     subNodeDef.valueDataType = node::DATA_NULL;
@@ -480,12 +480,12 @@ processor::toMap(const io::channel &io)
 
     dodoStringMap map;
 
-    dodoMap<dodoString, node, dodoMapStringCompare>::iterator
+    dodoMap<dodo::string, node, dodoMapStringCompare>::iterator
     i = JSON.objectValue->begin(),
     j = JSON.objectValue->end();
     for (; i != j; ++i)
         if (i->second.valueDataType == node::DATA_STRING)
-            map.insert(make_pair(i->first, *i->second.stringValue));
+            map.insert(std::make_pair(i->first, *i->second.stringValue));
 
     return map;
 }
@@ -493,8 +493,8 @@ processor::toMap(const io::channel &io)
 //-------------------------------------------------------------------
 
 unsigned long
-processor::processString(dodoString       &jnode,
-                         const dodoString &root,
+processor::processString(dodo::string       &jnode,
+                         const dodo::string &root,
                          unsigned long    pos)
 {
     bool escape = false;
@@ -524,10 +524,10 @@ processor::processString(dodoString       &jnode,
                 if (escape) {
                     escape = false;
 
-                    jnode.append(1, '\\');
-                    jnode.append(1, root[i]);
+                    jnode += dodo::string(1, '\\');
+                    jnode += dodo::string(1, root[i]);
                 } else
-                    jnode.append(1, root[i]);
+                    jnode += dodo::string(1, root[i]);
         }
     }
 

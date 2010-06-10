@@ -37,7 +37,7 @@ main(int  argc UNUSED,
         io.write("xexec");
         io.flush();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << endl;
     }
     return 0;
 }

@@ -48,7 +48,7 @@ method::~method()
 //-------------------------------------------------------------------
 
 void
-method::setName(const dodoString &name)
+method::setName(const dodo::string &name)
 {
     this->name = name;
 }

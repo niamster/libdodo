@@ -97,7 +97,7 @@ main(int  argc UNUSED,
             cout << endl;
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << ex.line;
+        cout << (dodo::string)ex << ex.line;
     }
 #else
 

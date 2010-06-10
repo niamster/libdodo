@@ -41,10 +41,10 @@ node::node() : CDATA(false)
 
 //-------------------------------------------------------------------
 
-node::node(const dodoString    &name,
+node::node(const dodo::string    &name,
            const dodoStringMap &attributes,
-           const dodoString    &value,
-           const dodoString    &a_ns) : attributes(attributes),
+           const dodo::string    &value,
+           const dodo::string    &a_ns) : attributes(attributes),
                                         name(name),
                                         nodeValue(value),
                                         CDATA(false)
@@ -73,7 +73,7 @@ node::setChildren(const dodoArray<node> &a_children)
 //-------------------------------------------------------------------
 
 dodoArray<node>
-node::children(const dodoString &name,
+node::children(const dodo::string &name,
                bool             recursive)
 {
     dodoArray<node> nodes = nodeChildren[name];
@@ -105,7 +105,7 @@ node::childrenNames(bool recursive)
 
         dodoArray<node>::iterator o, p;
 
-        dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::iterator i = nodeChildren.begin(), j = nodeChildren.end();
+        dodoMap<dodo::string, dodoArray<node>, dodoMapStringCompare>::iterator i = nodeChildren.begin(), j = nodeChildren.end();
         for (; i != j; ++i) {
             o = i->second.begin();
             p = i->second.end();
@@ -123,7 +123,7 @@ node::childrenNames(bool recursive)
             }
         }
     } else {
-        dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::iterator i = nodeChildren.begin(), j = nodeChildren.end();
+        dodoMap<dodo::string, dodoArray<node>, dodoMapStringCompare>::iterator i = nodeChildren.begin(), j = nodeChildren.end();
         for (; i != j; ++i)
             names.push_back(i->first);
     }
@@ -133,8 +133,8 @@ node::childrenNames(bool recursive)
 
 //-------------------------------------------------------------------
 
-dodoString
-node::operator[](const dodoString &name)
+dodo::string
+node::operator[](const dodo::string &name)
 {
     return attributes[name];
 }
@@ -142,7 +142,7 @@ node::operator[](const dodoString &name)
 //-------------------------------------------------------------------
 
 void
-node::setValue(const dodoString &a_value,
+node::setValue(const dodo::string &a_value,
                bool             a_CDATA)
 {
     CDATA = a_CDATA;
@@ -151,7 +151,7 @@ node::setValue(const dodoString &a_value,
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 node::value()
 {
     return nodeValue;

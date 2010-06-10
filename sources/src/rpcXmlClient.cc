@@ -55,14 +55,14 @@ client::~client()
 //-------------------------------------------------------------------
 
 void
-client::setRequestEncoding(const dodoString &a_encoding)
+client::setRequestEncoding(const dodo::string &a_encoding)
 {
     rqEncoding = a_encoding;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 client::responseEncoding()
 {
     return rpEncoding;

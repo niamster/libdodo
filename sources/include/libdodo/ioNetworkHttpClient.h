@@ -105,9 +105,9 @@ namespace dodo {
                      */
                     response();
 
-                    dodoMap<short, dodoString> headers;         ///< response headers, @see http::responseHeaderEnum
+                    dodoMap<short, dodo::string> headers;         ///< response headers, @see http::responseHeaderEnum
                     dodoArray<cgi::cookie> cookies;             ///< cookies from the server
-                    dodoString data;                            ///< response data
+                    dodo::string data;                            ///< response data
                     short code;                                 ///< response code
                     bool redirected;                            ///< true if redirection was performeed
                 };
@@ -124,16 +124,16 @@ namespace dodo {
                      * @param path defines path to file
                      * @param mime defines mimetype of the file
                      */
-                    file(const dodoString path,
-                         const dodoString mime);
+                    file(const dodo::string path,
+                         const dodo::string mime);
 
                     /**
                      * constructor
                      */
                     file();
 
-                    dodoString path;                            ///< path to file
-                    dodoString mime;                            ///< mimetype of the file
+                    dodo::string path;                            ///< path to file
+                    dodo::string mime;                            ///< mimetype of the file
                 };
 
                 /**
@@ -161,7 +161,7 @@ namespace dodo {
                      * @param url defines Url
                      * @note authentification may be as a part of URL or defined by setHttpAuthentification method
                      */
-                    client(const dodoString &url);
+                    client(const dodo::string &url);
 
                     /**
                      * destructor
@@ -176,13 +176,13 @@ namespace dodo {
                     void setSertificates(const io::ssl::__certificates__ &certs) const;
 #endif
 
-                    mutable dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request, @see http::requestHeaderEnum
+                    mutable dodoMap<short, dodo::string> requestHeaders; ///< headers that will be sent with request, @see http::requestHeaderEnum
 
                     /**
                      * @param url defines Url
                      * @note authentification may be as a part of URL or defined by setHttpAuthentification method
                      */
-                    void setUrl(const dodoString &url) const;
+                    void setUrl(const dodo::string &url) const;
 
                     /**
                      * @param host defines proxy ip
@@ -190,10 +190,10 @@ namespace dodo {
                      * @param user defines proxy user for authentication
                      * @param password defines proxy password for authentication
                      */
-                    void setProxy(const dodoString &host,
+                    void setProxy(const dodo::string &host,
                                   unsigned int     port = 3128,
-                                  const dodoString &user = __dodostring__,
-                                  const dodoString &password = __dodostring__) const;
+                                  const dodo::string &user = __dodostring__,
+                                  const dodo::string &password = __dodostring__) const;
 
                     /**
                      * set cookies for the request
@@ -207,7 +207,7 @@ namespace dodo {
                      * @param url defines Url
                      * @note authentification may be as a part of URL or defined by setHttpAuthentification method
                      */
-                    response GET(const dodoString &url) const;
+                    response GET(const dodo::string &url) const;
 
                     /**
                      * perform GET request
@@ -222,17 +222,17 @@ namespace dodo {
                      * @param type defines content type of the POST request
                      * @note authentification may be as a part of URL or defined by setHttpAuthentification method
                      */
-                    response POST(const dodoString &url,
-                                  const dodoString &data,
-                                  const dodoString &type) const;
+                    response POST(const dodo::string &url,
+                                  const dodo::string &data,
+                                  const dodo::string &type) const;
 
                     /**
                      * perform POST request
                      * @param data defines POST data
                      * @param type defines content type of the POST request
                      */
-                    response POST(const dodoString &data,
-                                  const dodoString &type) const;
+                    response POST(const dodo::string &data,
+                                  const dodo::string &type) const;
 
                     /**
                      * perform POST request
@@ -241,7 +241,7 @@ namespace dodo {
                      * @param arguments defines request arguments
                      * @note authentification may be as a part of URL or defined by setHttpAuthentification method
                      */
-                    response POST(const dodoString    &url,
+                    response POST(const dodo::string    &url,
                                   const dodoStringMap &arguments) const;
 
                     /**
@@ -258,9 +258,9 @@ namespace dodo {
                      * @param files defines files for POST request
                      * @note authentification may be as a part of URL or defined by setHttpAuthentification method
                      */
-                    response POST(const dodoString &url,
+                    response POST(const dodo::string &url,
                                   const dodoStringMap &arguments,
-                                  const dodoMap<dodoString, file> &files) const;
+                                  const dodoMap<dodo::string, file> &files) const;
 
                     /**
                      * perform POST request
@@ -268,15 +268,15 @@ namespace dodo {
                      * @param files defines files for POST request
                      */
                     response POST(const dodoStringMap &arguments,
-                                  const dodoMap<dodoString, file> &files) const;
+                                  const dodoMap<dodo::string, file> &files) const;
 
                     /**
                      * set HTTP authentification information
                      * @param user defines user name for HTTP authentification
                      * @param password defines password for HTTP authentification
                      */
-                    void setAuth(const dodoString &user,
-                                 const dodoString &password) const;
+                    void setAuth(const dodo::string &user,
+                                 const dodo::string &password) const;
 
                     bool followRedirection;     ///< if true follow the `Location` header; true by default
 
@@ -288,7 +288,7 @@ namespace dodo {
                      * @return cookie parse from the header
                      * @param header defines `Set-Cookie` value
                      */
-                    cgi::cookie parseCookie(const dodoString &header) const;
+                    cgi::cookie parseCookie(const dodo::string &header) const;
 
                     /**
                      * @enum getContentStatusEnum defines status of getContent routine
@@ -325,32 +325,32 @@ namespace dodo {
 
                     mutable unsigned short authTries;                                                               ///< autherization request counter
 
-                    static const dodoString requestHeaderStatements[REQUEST_HEADER_ENUMSIZE];                       ///< HTTP request headers, @see http::requestHeaderEnum
-                    static const dodoString responseHeaderStatements[RESPONSE_HEADER_ENUMSIZE];                     ///< HTTP response headers, @see http::responseHeaderEnum
+                    static const dodo::string requestHeaderStatements[REQUEST_HEADER_ENUMSIZE];                       ///< HTTP request headers, @see http::requestHeaderEnum
+                    static const dodo::string responseHeaderStatements[RESPONSE_HEADER_ENUMSIZE];                     ///< HTTP response headers, @see http::responseHeaderEnum
 
                     mutable __url__ urlComponents;                                                                  ///< HTTP URL components
-                    mutable dodoString urlQuery;                                                                    ///< HTTP URL query
-                    mutable dodoString urlBasePath;                                                                 ///< HTTP URL base path
+                    mutable dodo::string urlQuery;                                                                    ///< HTTP URL query
+                    mutable dodo::string urlBasePath;                                                                 ///< HTTP URL base path
 
                     /**
                      * @return status code from header
                      */
-                    short getStatusCode(const dodoString &header) const;
+                    short getStatusCode(const dodo::string &header) const;
 
                     /**
                      * @return offset of HTTP body in data or zero if headers are not complete
                      * @param data defines response data
                      * @param headers defines data with headers
                      */
-                    unsigned int extractHeaders(const dodoString &data,
-                                                dodoString       &headers) const;
+                    unsigned int extractHeaders(const dodo::string &data,
+                                                dodo::string       &headers) const;
 
                     /**
                      * fetch headers
                      * @param headers defines data with headers
                      * @param response defines response data to be filled
                      */
-                    void getHeaders(const dodoString &headers,
+                    void getHeaders(const dodo::string &headers,
                                     response         &response) const;
 
                     /**
@@ -359,8 +359,8 @@ namespace dodo {
                      * @param password defines user password
                      */
                     void makeBasicAuth(short            responseHeader,
-                                       const dodoString &user,
-                                       const dodoString &password) const;
+                                       const dodo::string &user,
+                                       const dodo::string &password) const;
 
                     /**
                      * @param requestHeader defines what header parse[RESPONSE_HEADER_WWWAUTHENTICATE or RESPONSE_HEADER_PROXYAUTHENTICATE]
@@ -372,9 +372,9 @@ namespace dodo {
                      */
                     void makeDigestAuth(short            requestHeader,
                                         short            responseHeader,
-                                        const dodoString &method,
-                                        const dodoString &user,
-                                        const dodoString &password,
+                                        const dodo::string &method,
+                                        const dodo::string &user,
+                                        const dodo::string &password,
                                         response         &response) const;
 
                     /**
@@ -409,9 +409,9 @@ namespace dodo {
                      * @brief defines proxy authentication information
                      */
                     struct __proxy_auth__ {
-                        dodoString   user;                      ///< user name
-                        dodoString   password;                  ///< user password
-                        dodoString   host;                      ///< proxy ip address
+                        dodo::string   user;                      ///< user name
+                        dodo::string   password;                  ///< user password
+                        dodo::string   host;                      ///< proxy ip address
                         unsigned int port;                      ///< proxy port
                         short        authType;                  ///< type of proxy authentication, @see http::proxyAuthEnum
                     };

@@ -62,11 +62,11 @@ namespace dodo {
 
 using namespace dodo::data::base;
 
-mysql::__connection_options__::__connection_options__(const dodoString &db,
-                                                      const dodoString &host,
-                                                      const dodoString &user,
-                                                      const dodoString &password,
-                                                      const dodoString &path,
+mysql::__connection_options__::__connection_options__(const dodo::string &db,
+                                                      const dodo::string &host,
+                                                      const dodo::string &user,
+                                                      const dodo::string &password,
+                                                      const dodo::string &path,
                                                       unsigned int     port,
                                                       unsigned long    type) : type(type),
                                                                                db(db),
@@ -303,7 +303,7 @@ mysql::fetchedRows(data::base::rows &a_rows) const
 
         for (j = 0; j < numFields; ++j) {
             if (mysqlRow[j] != NULL)
-                values.push_back(dodoString(mysqlRow[j], length[j]));
+                values.push_back(dodo::string(mysqlRow[j], length[j]));
             else
                 values.push_back(statements[sql::constructor::STATEMENT_NULL]);
         }
@@ -343,17 +343,17 @@ mysql::affectedRows() const
 //-------------------------------------------------------------------
 
 void
-mysql::requestFieldsTypes(const dodoString &table)
+mysql::requestFieldsTypes(const dodo::string &table)
 {
     if (handle->handle == NULL)
         throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_REQUESTFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-    dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(table);
+    dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(table);
 
     if (types == fieldTypes.end())
-        types = fieldTypes.insert(make_pair(table, dodoMap<dodoString, short, dodoMapICaseStringCompare>())).first;
+        types = fieldTypes.insert(std::make_pair(table, dodoMap<dodo::string, short, dodoMapICaseStringCompare>())).first;
 
-    dodoString request = "describe " + table;
+    dodo::string request = "describe " + table;
 
     if (mysql_real_query(handle->handle, request.data(), request.size()) != 0) {
         int mysqlErrno = mysql_errno(handle->handle);
@@ -371,7 +371,7 @@ mysql::requestFieldsTypes(const dodoString &table)
 
     MYSQL_ROW mysqlRow;
 
-    dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
+    dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
 
     while ((mysqlRow = mysql_fetch_row(handle->result)) != NULL) {
         field = types->second.find(mysqlRow[0]);
@@ -383,12 +383,12 @@ mysql::requestFieldsTypes(const dodoString &table)
                 strcasestr(mysqlRow[1], "text") != NULL ||
                 strcasestr(mysqlRow[1], "enum") != NULL ||
                 strcasestr(mysqlRow[1], "set") != NULL)
-                types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELD_TEXT));
+                types->second.insert(std::make_pair(dodo::string(mysqlRow[0]), sql::FIELD_TEXT));
             else {
                 if (strcasestr(mysqlRow[1], "blob") != NULL)
-                    types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELD_BINARY));
+                    types->second.insert(std::make_pair(dodo::string(mysqlRow[0]), sql::FIELD_BINARY));
                 else
-                    types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELD_NUMERIC));
+                    types->second.insert(std::make_pair(dodo::string(mysqlRow[0]), sql::FIELD_NUMERIC));
             }
         } else {
             if (strcasestr(mysqlRow[1], "char") != NULL ||
@@ -467,7 +467,7 @@ mysql::exec(const query &a_query)
 //-------------------------------------------------------------------
 
 void
-mysql::setCharset(const dodoString &charset)
+mysql::setCharset(const dodo::string &charset)
 {
     if (handle->handle == NULL)
         throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_SETCHARSET, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -488,7 +488,7 @@ mysql::setConnectionTimeout(unsigned int time)
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 mysql::charset() const
 {
     if (handle->handle == NULL)

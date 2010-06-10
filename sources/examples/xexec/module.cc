@@ -27,7 +27,7 @@ hook(xexec::__collected_data__ *odata UNUSED,
 
         channel::__collected_data__ *st = (channel::__collected_data__ *)odata;
         if (operation == channel::OPERATION_WRITE)
-            st->buffer.assign("<" + dodoString(1, st->buffer[0]) + ">\n");
+            st->buffer.assign("<" + dodo::string(1, st->buffer[0]) + ">\n");
     }
     std::cout << "hook\n";
 #endif

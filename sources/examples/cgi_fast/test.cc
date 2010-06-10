@@ -108,7 +108,7 @@ main(int  argc UNUSED,
 
         delete shared;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

@@ -113,8 +113,8 @@ namespace dodo {
              */
             static void text(graphics::image       &image,
                              const graphics::point &position,
-                             const dodoString      &text,
-                             const dodoString      &font,
+                             const dodo::string      &text,
+                             const dodo::string      &font,
                              unsigned short        fontWidth,
                              const __color__       &fillColor = color::black,
                              const __color__       &borderColor = color::black,

@@ -49,9 +49,9 @@ namespace dodo {
              * @param replacement defines string which to replace with
              * @param data defines string where to replace substrings
              */
-            static void replace(const dodoString &needle,
-                                const dodoString &replacement,
-                                dodoString       &data);
+            static void replace(const dodo::string &needle,
+                                const dodo::string &replacement,
+                                dodo::string       &data);
 
             /**
              * replace substrings in string
@@ -61,15 +61,15 @@ namespace dodo {
              */
             static void replace(const dodoStringArray &needle,
                                 const dodoStringArray &replacement,
-                                dodoString            &data);
+                                dodo::string            &data);
 
             /**
              * @return true if strings are equal
              * @param first defines string to compare
              * @param second defines string for compare
              */
-            static bool equal(const dodoString &first,
-                              const dodoString &second);
+            static bool equal(const dodo::string &first,
+                              const dodo::string &second);
 
             /**
              * @return true if strings are equal
@@ -77,8 +77,8 @@ namespace dodo {
              * @param second defines string for compare
              * @note string case is ignored
              */
-            static bool iequal(const dodoString &first,
-                               const dodoString &second);
+            static bool iequal(const dodo::string &first,
+                               const dodo::string &second);
 
             /**
              * @return true in needle is found
@@ -86,8 +86,8 @@ namespace dodo {
              * @param needle defines string which to look for
              * @param icase defines case sensitivity
              */
-            static bool contains(const dodoString &str,
-                                 const dodoString &needle,
+            static bool contains(const dodo::string &str,
+                                 const dodo::string &needle,
                                  bool             icase = false);
 
             /**
@@ -96,8 +96,8 @@ namespace dodo {
              * @param needle defines string which to look for
              * @param icase defines case sensitivity
              */
-            static unsigned long find(const dodoString &str,
-                                      const dodoString &needle,
+            static unsigned long find(const dodo::string &str,
+                                      const dodo::string &needle,
                                       bool             icase = false);
 
             /**
@@ -107,8 +107,8 @@ namespace dodo {
              * @param position defines start position for search
              * @param icase defines case sensitivity
              */
-            static unsigned long find(const dodoString &str,
-                                      const dodoString &needle,
+            static unsigned long find(const dodo::string &str,
+                                      const dodo::string &needle,
                                       unsigned long    position,
                                       bool             icase = false);
 
@@ -117,7 +117,7 @@ namespace dodo {
              * @param format defines format of the result string
              * @note format according to the printf
              */
-            static dodoString format(const dodoString &format,
+            static dodo::string format(const dodo::string &format,
                                      ...);
 
             /**
@@ -126,7 +126,7 @@ namespace dodo {
              * @param data defines string to trim
              * @param symbol defines symbol to remove
              */
-            static dodoString trim(const dodoString &data,
+            static dodo::string trim(const dodo::string &data,
                                    const char       symbol = ' ');
 
             /**
@@ -136,7 +136,7 @@ namespace dodo {
              * @param symbols defines symbols to remove
              * @param symCount is amount of symbols in @param symbols
              */
-            static dodoString trim(const dodoString &data,
+            static dodo::string trim(const dodo::string &data,
                                    const char       symbols[],
                                    int              symCount);
 
@@ -147,7 +147,7 @@ namespace dodo {
              * @param symbols defines symbols to remove
              * @param symCount is amount of symbols in @param symbols
              */
-            static dodoString rTrim(const dodoString &data,
+            static dodo::string rTrim(const dodo::string &data,
                                     const char       symbols[],
                                     int              symCount);
 
@@ -158,7 +158,7 @@ namespace dodo {
              * @param symbols defines symbols to remove
              * @param symCount is amount of symbols in @param symbols
              */
-            static dodoString lTrim(const dodoString &data,
+            static dodo::string lTrim(const dodo::string &data,
                                     const char       symbols[],
                                     int              symCount);
 
@@ -168,7 +168,7 @@ namespace dodo {
              * @param data defines string to trim
              * @param symbol defines symbol to remove
              */
-            static dodoString rTrim(const dodoString &data,
+            static dodo::string rTrim(const dodo::string &data,
                                     char             symbol = ' ');
 
             /**
@@ -177,96 +177,96 @@ namespace dodo {
              * @param data defines string to trim
              * @param symbol defines symbol to remove
              */
-            static dodoString lTrim(const dodoString &data,
+            static dodo::string lTrim(const dodo::string &data,
                                     char             symbol = ' ');
 
             /**
              * @return converted long to string
              * @param number defines number to convert
              */
-            static dodoString lToString(long number);
+            static dodo::string lToString(long number);
 
             /**
              * @return converted unsigned long to string
              * @param number defines number to convert
              */
-            static dodoString ulToString(unsigned long number);
+            static dodo::string ulToString(unsigned long number);
 
             /**
              * @return converted int to string
              * @param number defines number to convert
              */
-            static dodoString iToString(int number);
+            static dodo::string iToString(int number);
 
             /**
              * @return converted unsigned int to string
              * @param number defines number to convert
              */
-            static dodoString uiToString(unsigned int number);
+            static dodo::string uiToString(unsigned int number);
 
             /**
              * @return converted short to string
              * @param number defines number to convert
              */
-            static dodoString sToString(short number);
+            static dodo::string sToString(short number);
 
             /**
              * @return converted unsigned short to string
              * @param number defines number to convert
              */
-            static dodoString usToString(unsigned short number);
+            static dodo::string usToString(unsigned short number);
 
             /**
              * @return converted float to string
              * @param number defines number to convert
              */
-            static dodoString fToString(float number);
+            static dodo::string fToString(float number);
 
             /**
              * @return converted double to string
              * @param number defines number to convert
              */
-            static dodoString dToString(double number);
+            static dodo::string dToString(double number);
 
             /**
              * @return string converted to unsigned long
              */
-            static unsigned long stringToUL(const dodoString &data);
+            static unsigned long stringToUL(const dodo::string &data);
 
             /**
              * @return string converted to long
              */
-            static long stringToL(const dodoString &data);
+            static long stringToL(const dodo::string &data);
 
             /**
              * @return string converted to int
              */
-            static int stringToI(const dodoString &data);
+            static int stringToI(const dodo::string &data);
 
             /**
              * @return string converted to unsigned int
              */
-            static unsigned int stringToUI(const dodoString &data);
+            static unsigned int stringToUI(const dodo::string &data);
 
             /**
              * @return string converted to short
              */
-            static short stringToS(const dodoString &data);
+            static short stringToS(const dodo::string &data);
 
             /**
              * @return string converted to unsigned short
              */
-            static unsigned short stringToUS(const dodoString &data);
+            static unsigned short stringToUS(const dodo::string &data);
 
             /**
              * @return string converted to double
              */
-            static double stringToD(const dodoString &data);
+            static double stringToD(const dodo::string &data);
 
             /**
              * @return string converted to float
              */
-            static float stringToF(const dodoString &data);
+            static float stringToF(const dodo::string &data);
         };
     };
 };

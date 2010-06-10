@@ -20,7 +20,7 @@ threadRead(void *data)
     cout.flush();
 
     try {
-        dodoString str;
+        dodo::string str;
 
         io::channel *pipe = (io::channel *)data;
 
@@ -37,7 +37,7 @@ threadRead(void *data)
         cout << "%MD5: " << tools::code::MD5Hex(str) << "%\n";
         cout.flush();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     cout << "<-READER\n";
@@ -53,7 +53,7 @@ threadWrite(void *data)
     cout.flush();
 
     try {
-        dodoString str;
+        dodo::string str;
 
         io::channel *pipe = (io::channel *)data;
 
@@ -69,7 +69,7 @@ threadWrite(void *data)
         pipe->write(str);
         pipe->flush();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     cout << "<-WRITER\n";
@@ -134,7 +134,7 @@ main(int  argc UNUSED,
 
         threads.wait();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

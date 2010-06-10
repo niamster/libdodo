@@ -189,13 +189,13 @@ namespace dodo {
              * @brief defines user info
              */
             struct  __user__ {
-                dodoString name;            ///< user name
-                dodoString pass;            ///< user password
+                dodo::string name;            ///< user name
+                dodo::string pass;            ///< user password
                 int        uid;             ///< user id
                 int        gid;             ///< user group
-                dodoString realName;        ///< user real name
-                dodoString home;            ///< user home directory
-                dodoString shell;           ///< user default shell
+                dodo::string realName;        ///< user real name
+                dodo::string home;            ///< user home directory
+                dodo::string shell;           ///< user default shell
             };
 
             /**
@@ -203,7 +203,7 @@ namespace dodo {
              * @brief defines group info
              */
             struct __group__ {
-                dodoString      name;       ///< group name
+                dodo::string      name;       ///< group name
                 int             gid;        ///< group id
                 dodoStringArray members;    ///< group members
             };
@@ -247,7 +247,7 @@ namespace dodo {
              * @param status defines exit status
              * @note SIGNAL_TERMINATION is sent to the child processes
              */
-            static void die(const dodoString &message,
+            static void die(const dodo::string &message,
                             int              status = 1);
 
             /**
@@ -255,18 +255,18 @@ namespace dodo {
              * @param path defines new root(/) directory
              * @note automaticaly changes current directory to the new root(/)
              */
-            static void changeRoot(const dodoString &path);
+            static void changeRoot(const dodo::string &path);
 
             /**
              * @return current working directory
              */
-            static dodoString workingDir();
+            static dodo::string workingDir();
 
             /**
              * set current working directory
              * @param path defines path to the new working directory
              */
-            static void setWorkingDir(const dodoString &path);
+            static void setWorkingDir(const dodo::string &path);
 
             /**
              * @return os usage info
@@ -339,7 +339,7 @@ namespace dodo {
              * @return user info
              * @param name defines user login name
              */
-            static __user__ user(const dodoString &name);
+            static __user__ user(const dodo::string &name);
 
             /**
              * @return users of the os
@@ -356,7 +356,7 @@ namespace dodo {
              * @return group info
              * @param name defines group name
              */
-            static __group__ group(const dodoString &name);
+            static __group__ group(const dodo::string &name);
 
             /**
              * @return groups of the os
@@ -446,7 +446,7 @@ namespace dodo {
              * @param path defines path to the library[if not in ldconfig db] or library name
              * @param toInit defines data that will be passed to the init function
              */
-            static __signal_module__ module(const dodoString &path,
+            static __signal_module__ module(const dodo::string &path,
                                             void             *toInit = NULL);
 
             /**
@@ -454,7 +454,7 @@ namespace dodo {
              * @param path defines path to the library[if not in ldconfig db] or library name
              * @param toInit defines data that will be passed to the init function
              */
-            static void setSignalHandler(const dodoString &path,
+            static void setSignalHandler(const dodo::string &path,
                                          void             *toInit = NULL);
 #endif
 

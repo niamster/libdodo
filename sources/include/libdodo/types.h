@@ -31,12 +31,12 @@
 #define _TYPES_H_ 1
 
 #include <libdodo/directives.h>
+#include <libdodo/string.h>
 
 #include <vector>
 #include <list>
 #include <deque>
 #include <map>
-#include <string>
 
 namespace dodo {
     /**
@@ -57,20 +57,18 @@ namespace dodo {
      */
 #define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
 
-#define dodoString std::string
-
     /**
      * @struct __url__
      * @brief defines URL parts
      */
     struct __url__ {
-        dodoString protocol;    ///< scheme
-        dodoString host;        ///< host name
-        dodoString path;        ///< path to CGI
-        dodoString request;     ///< CGI request
-        dodoString login;       ///< login
-        dodoString password;    ///< password
-        dodoString port;        ///< port
+        dodo::string protocol;    ///< scheme
+        dodo::string host;        ///< host name
+        dodo::string path;        ///< path to CGI
+        dodo::string request;     ///< CGI request
+        dodo::string login;       ///< login
+        dodo::string password;    ///< password
+        dodo::string port;        ///< port
     };
 
     /**
@@ -85,16 +83,16 @@ namespace dodo {
          * @param first defines first string to compare
          * @param second defines second string to compare
          */
-        bool operator()(const dodoString &first,
-                        const dodoString &second);
+        bool operator()(const dodo::string &first,
+                        const dodo::string &second);
 
         /**
          * compares strings
          * @param first defines first string to compare
          * @param second defines second string to compare
          */
-        bool operator()(const dodoString &first,
-                        const dodoString &second) const;
+        bool operator()(const dodo::string &first,
+                        const dodo::string &second) const;
     };
 
     /**
@@ -109,16 +107,16 @@ namespace dodo {
          * @param first defines first string to compare
          * @param second defines second string to compare
          */
-        bool operator()(const dodoString &first,
-                        const dodoString &second);
+        bool operator()(const dodo::string &first,
+                        const dodo::string &second);
 
         /**
          * compares strings
          * @param first defines first string to compare
          * @param second defines second string to compare
          */
-        bool operator()(const dodoString &first,
-                        const dodoString &second) const;
+        bool operator()(const dodo::string &first,
+                        const dodo::string &second) const;
     };
 
     /**
@@ -150,14 +148,14 @@ namespace dodo {
 #define dodoArray    std::vector
 #endif
 
-    typedef dodoArray<dodoString> dodoStringArray;                                          ///< array of strings
+    typedef dodoArray<dodo::string> dodoStringArray;                                          ///< array of strings
 
 #define dodoList std::list
 
-    typedef dodoList<dodoString> dodoStringList;                                            ///< array of strings
+    typedef dodoList<dodo::string> dodoStringList;                                            ///< array of strings
 
-    typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;            ///< hash of strings
-    typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;  ///< hash of strings[case insensitive]
+    typedef dodoMap<dodo::string, dodo::string, dodoMapStringCompare> dodoStringMap;            ///< hash of strings
+    typedef dodoMap<dodo::string, dodo::string, dodoMapICaseStringCompare> dodoICaseStringMap;  ///< hash of strings[case insensitive]
 
     typedef dodoArray<dodoStringMap> dodoStringMapArray;                                    ///< array of hashes of string
 
@@ -165,7 +163,7 @@ namespace dodo {
      * predifined constants
      */
 
-    extern dodoString __dodostring__;
+    extern dodo::string __dodostring__;
 
     extern dodoStringArray __dodostringarray__;
 

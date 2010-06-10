@@ -51,12 +51,12 @@ channel::~channel()
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 channel::read() const
 {
     pc::sync::stack pg(keeper);
 
-    dodoString data;
+    dodo::string data;
     unsigned long n;
 
 #ifndef IO_WO_XEXEC
@@ -65,7 +65,7 @@ channel::read() const
     collectedData.buffer.reserve(bs);
 #endif
 
-    data.assign(bs, '\0');
+    data = dodo::string('\0', bs);
 
     try {
         n = _read((char *)data.data());
@@ -96,18 +96,18 @@ channel::read() const
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 channel::readString() const
 {
     pc::sync::stack pg(keeper);
 
-    dodoString data;
+    dodo::string data;
 
 #ifndef IO_WO_XEXEC
     performPreExec(OPERATION_READSTRING);
 #endif
 
-    data.assign(bs, '\0');
+    data = dodo::string('\0', bs);
     unsigned long n = 0;
 
     try {
@@ -135,14 +135,14 @@ channel::readString() const
 //-------------------------------------------------------------------
 
 unsigned long
-channel::write(const dodoString &data) const
+channel::write(const dodo::string &data) const
 {
     pc::sync::stack pg(keeper);
 
     unsigned long n;
 
 #ifndef IO_WO_XEXEC
-    collectedData.buffer.assign(data, 0, bs);
+    collectedData.buffer = data;
 
     performPreExec(OPERATION_WRITE);
 
@@ -169,7 +169,7 @@ channel::write(const dodoString &data) const
 //-------------------------------------------------------------------
 
 unsigned long
-channel::writeString(const dodoString &data) const
+channel::writeString(const dodo::string &data) const
 {
     pc::sync::stack pg(keeper);
 

@@ -67,7 +67,7 @@ namespace dodo {
                  * @brief defines peer information
                  */
                 struct __peer__ {
-                    dodoString host;                        ///< host of the box
+                    dodo::string host;                        ///< host of the box
                     int        port;                        ///< port of the box
                 };
 

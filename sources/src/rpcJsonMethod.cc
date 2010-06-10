@@ -41,7 +41,7 @@ using namespace dodo::rpc::json;
 
 dodo::rpc::method
 method::jsonToMethod(dodo::data::format::json::node &node,
-                     dodoString                     &version,
+                     dodo::string                     &version,
                      long                           &id)
 {
     if (node.valueDataType != dodo::data::format::json::node::DATA_OBJECT)
@@ -75,33 +75,33 @@ method::jsonToMethod(dodo::data::format::json::node &node,
 
 dodo::data::format::json::node
 method::methodToJson(const rpc::method &data,
-                     const dodoString  &version,
+                     const dodo::string  &version,
                      long              id)
 {
     dodo::data::format::json::node meth;
     dodo::data::format::json::node node;
 
     meth.valueDataType = dodo::data::format::json::node::DATA_OBJECT;
-    meth.objectValue = new dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>;
+    meth.objectValue = new dodoMap<dodo::string, dodo::data::format::json::node, dodoMapStringCompare>;
 
     node.valueDataType = dodo::data::format::json::node::DATA_STRING;
 
-    node.stringValue = new dodoString(data.name);
-    meth.objectValue->insert(make_pair(dodoString("method"), node));
+    node.stringValue = new dodo::string(data.name);
+    meth.objectValue->insert(std::make_pair(dodo::string("method"), node));
     delete node.stringValue;
 
-    node.stringValue = new dodoString(version);
-    meth.objectValue->insert(make_pair(dodoString("version"), node));
+    node.stringValue = new dodo::string(version);
+    meth.objectValue->insert(std::make_pair(dodo::string("version"), node));
     delete node.stringValue;
 
     node.valueDataType = dodo::data::format::json::node::DATA_NUMERIC;
     node.numericValue = id;
-    meth.objectValue->insert(make_pair(dodoString("id"), node));
+    meth.objectValue->insert(std::make_pair(dodo::string("id"), node));
 
     dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
     if (i != j) {
         if (data.arguments.size() == 1 && i->valueDataType == dodo::rpc::value::DATA_STRUCT)
-            meth.objectValue->insert(make_pair(dodoString("params"), value::valueToJson(*i)));
+            meth.objectValue->insert(std::make_pair(dodo::string("params"), value::valueToJson(*i)));
         else {
             node.valueDataType = dodo::data::format::json::node::DATA_ARRAY;
             node.arrayValue = new dodoArray<dodo::data::format::json::node>;
@@ -109,7 +109,7 @@ method::methodToJson(const rpc::method &data,
             for (; i != j; ++i)
                 node.arrayValue->push_back(value::valueToJson(*i));
 
-            meth.objectValue->insert(make_pair(dodoString("params"), node));
+            meth.objectValue->insert(std::make_pair(dodo::string("params"), node));
 
             delete node.arrayValue;
             node.valueDataType = dodo::data::format::json::node::DATA_NULL;

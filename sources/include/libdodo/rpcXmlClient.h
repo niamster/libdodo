@@ -66,12 +66,12 @@ namespace dodo {
                 /**
                  * @param encoding defines request encoding
                  */
-                void setRequestEncoding(const dodoString &encoding);
+                void setRequestEncoding(const dodo::string &encoding);
 
                 /**
                  * @return response encoding
                  */
-                dodoString responseEncoding();
+                dodo::string responseEncoding();
 
               protected:
 
@@ -87,8 +87,8 @@ namespace dodo {
                  */
                 virtual rpc::response processCallResult();
 
-                dodoString rpEncoding;  ///< encoding of the messages['UTF-8' by default]
-                dodoString rqEncoding;  ///< encoding of the messages['UTF-8' by default]
+                dodo::string rpEncoding;  ///< encoding of the messages['UTF-8' by default]
+                dodo::string rqEncoding;  ///< encoding of the messages['UTF-8' by default]
             };
         };
     };

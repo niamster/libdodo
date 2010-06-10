@@ -53,7 +53,7 @@ namespace dodo {
              * consructor
              * @param path defines path to the library[if not in ldconfig db] or library name
              */
-            library(const dodoString &path);
+            library(const dodo::string &path);
 
             /**
              * destructor
@@ -64,7 +64,7 @@ namespace dodo {
              * open library
              * @param path defines path to the library[if not in ldconfig db] or library name
              */
-            virtual void open(const dodoString &path);
+            virtual void open(const dodo::string &path);
 
             /**
              * close library
@@ -76,13 +76,13 @@ namespace dodo {
              * get function from the library
              * @param name defines function name
              */
-            virtual void *function(const dodoString &name);
+            virtual void *function(const dodo::string &name);
 
             /**
              * get function from the library
              * @param name defines function name
              */
-            virtual void *operator[](const dodoString &name);
+            virtual void *operator[](const dodo::string &name);
 
 #ifdef BFD_EXT
             /**
@@ -90,7 +90,7 @@ namespace dodo {
              * @return symbols of the library
              * @param path defines path to the library[if not in ldconfig db] or library name
              */
-            static dodoStringArray symbols(const dodoString &path);
+            static dodoStringArray symbols(const dodo::string &path);
 #endif
 
           protected:

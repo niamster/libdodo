@@ -119,7 +119,7 @@ main(int  argc UNUSED,
         db.disableXExecs = false;
 #endif
 
-        dodoString u;
+        dodo::string u;
         db.select(sql::condition("test0", "id>1").limit(10).offset(20));
         u = db.construct();
         u += " union all ";
@@ -142,7 +142,7 @@ main(int  argc UNUSED,
             cout << endl;
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl << ex.backtrace();
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl << ex.backtrace();
     }
 #else
     cout << "No MySQL extension was compiled!";

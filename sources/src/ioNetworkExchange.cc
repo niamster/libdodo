@@ -34,6 +34,7 @@
 #include <poll.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/ioNetworkConnection.h>

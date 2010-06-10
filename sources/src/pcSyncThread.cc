@@ -36,6 +36,7 @@
 #include <time.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <libdodo/pcSyncThread.h>
 #include <libdodo/pcSyncThreadEx.h>

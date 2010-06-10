@@ -189,7 +189,7 @@ namespace dodo {
          * @param postExecId defines post-exec identificator if hook was set or -1
          * @note type of hook is defined in module
          */
-        void addXExec(const dodoString &path,
+        void addXExec(const dodo::string &path,
                       void             *data,
                       int              &preExecId,
                       int              &postExecId,
@@ -217,7 +217,7 @@ namespace dodo {
          * @param path defines path to the library[if not in ldconfig db] or library name
          * @param initData defines data that will be passed to the init function
          */
-        static __module__ module(const dodoString &path,
+        static __module__ module(const dodo::string &path,
                                  void             *initData = NULL);
 #endif
 

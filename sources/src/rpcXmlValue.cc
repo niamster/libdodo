@@ -47,7 +47,7 @@ const char value::trimSymbols[] = {
 dodo::rpc::value
 value::xmlToValue(dodo::data::format::xml::node &node)
 {
-    dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.nodeChildren.begin();
+    dodoMap<dodo::string, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.nodeChildren.begin();
     if (i == node.nodeChildren.end())
         return rpc::value();
 
@@ -73,7 +73,7 @@ value::xmlToValue(dodo::data::format::xml::node &node)
         } else {
             if (tools::string::iequal(i->first, "string") || tools::string::iequal(i->first, "base64") || tools::string::iequal(i->first, "dateTime.iso8601")) {
                 val.valueDataType = dodo::rpc::value::DATA_STRING;
-                val.stringValue = new dodoString;
+                val.stringValue = new dodo::string;
 
                 dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
                 if (arr0.size() > 0)
@@ -90,7 +90,7 @@ value::xmlToValue(dodo::data::format::xml::node &node)
                 } else {
                     if (tools::string::iequal(i->first, "struct")) {
                         val.valueDataType = dodo::rpc::value::DATA_STRUCT;
-                        val.structValue = new dodoMap<dodoString, rpc::value, dodoMapStringCompare>;
+                        val.structValue = new dodoMap<dodo::string, rpc::value, dodoMapStringCompare>;
 
                         dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
                         if (arr0.size() == 0)
@@ -103,7 +103,7 @@ value::xmlToValue(dodo::data::format::xml::node &node)
                             dodoArray<dodo::data::format::xml::node> &arr1 = o->nodeChildren["name"];
                             dodoArray<dodo::data::format::xml::node> &arr2 = o->nodeChildren["value"];
                             if (arr1.size() > 0 && arr2.size() > 0)
-                                val.structValue->insert(make_pair(tools::string::trim(arr1[0].nodeValue, trimSymbols, 2), xmlToValue(arr2[0])));
+                                val.structValue->insert(std::make_pair(tools::string::trim(arr1[0].nodeValue, trimSymbols, 2), xmlToValue(arr2[0])));
                         }
                     } else {
                         if (tools::string::iequal(i->first, "array")) {
@@ -152,7 +152,7 @@ value::valueToXml(const rpc::value &data)
             subNode.nodeValue = *data.stringValue;
 
             nodeArr.assign(1, subNode);
-            node.nodeChildren.insert(make_pair(subNode.name, nodeArr));
+            node.nodeChildren.insert(std::make_pair(subNode.name, nodeArr));
 
             break;
 
@@ -162,7 +162,7 @@ value::valueToXml(const rpc::value &data)
             subNode.nodeValue = data.booleanValue ? "1" : "0";
 
             nodeArr.assign(1, subNode);
-            node.nodeChildren.insert(make_pair(subNode.name, nodeArr));
+            node.nodeChildren.insert(std::make_pair(subNode.name, nodeArr));
 
             break;
 
@@ -172,7 +172,7 @@ value::valueToXml(const rpc::value &data)
             subNode.nodeValue = tools::string::dToString(data.numericValue);
 
             nodeArr.assign(1, subNode);
-            node.nodeChildren.insert(make_pair(subNode.name, nodeArr));
+            node.nodeChildren.insert(std::make_pair(subNode.name, nodeArr));
 
             break;
 
@@ -186,13 +186,13 @@ value::valueToXml(const rpc::value &data)
             dodoArray<rpc::value>::const_iterator i = data.arrayValue->begin(), j = data.arrayValue->end();
             for (; i != j; ++i)
                 nodeArr.push_back(valueToXml(*i));
-            dataNode.nodeChildren.insert(make_pair("value", nodeArr));
+            dataNode.nodeChildren.insert(std::make_pair("value", nodeArr));
 
             nodeArr.assign(1, dataNode);
-            subNode.nodeChildren.insert(make_pair(dataNode.name, nodeArr));
+            subNode.nodeChildren.insert(std::make_pair(dataNode.name, nodeArr));
 
             nodeArr.assign(1, subNode);
-            node.nodeChildren.insert(make_pair(subNode.name, nodeArr));
+            node.nodeChildren.insert(std::make_pair(subNode.name, nodeArr));
 
             break;
         }
@@ -208,7 +208,7 @@ value::valueToXml(const rpc::value &data)
 
             dodoArray<dodo::data::format::xml::node> subNodeArr;
 
-            dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator
+            dodoMap<dodo::string, rpc::value, dodoMapStringCompare>::const_iterator
             i = data.structValue->begin(),
             j = data.structValue->end();
             for (; i != j; ++i) {
@@ -217,17 +217,17 @@ value::valueToXml(const rpc::value &data)
 
                 memberNameNode.nodeValue = i->first;
                 nodeArr.assign(1, memberNameNode);
-                memberNode.nodeChildren.insert(make_pair(memberNameNode.name, nodeArr));
+                memberNode.nodeChildren.insert(std::make_pair(memberNameNode.name, nodeArr));
 
                 nodeArr.assign(1, valueToXml(i->second));
-                memberNode.nodeChildren.insert(make_pair(memberValueNode.name, nodeArr));
+                memberNode.nodeChildren.insert(std::make_pair(memberValueNode.name, nodeArr));
 
                 subNodeArr.push_back(memberNode);
             }
-            subNode.nodeChildren.insert(make_pair(memberNode.name, subNodeArr));
+            subNode.nodeChildren.insert(std::make_pair(memberNode.name, subNodeArr));
 
             nodeArr.assign(1, subNode);
-            node.nodeChildren.insert(make_pair(subNode.name, nodeArr));
+            node.nodeChildren.insert(std::make_pair(subNode.name, nodeArr));
 
             break;
         }

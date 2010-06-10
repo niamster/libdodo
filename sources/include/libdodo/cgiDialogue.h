@@ -77,7 +77,7 @@ namespace dodo {
                      unsigned long postSize = POST_SIZE_LIMIT,
                      bool          autocleanFiles = true,
                      bool          filesInMem = true,
-                     dodoString    tmpDir = "/tmp/");
+                     dodo::string    tmpDir = "/tmp/");
 
             /**
              * constructor
@@ -90,11 +90,11 @@ namespace dodo {
              * @note headers will be printed in contructor
              */
             dialogue(exchange &io,
-                     dodoMap<short, dodoString> &headers,
+                     dodoMap<short, dodo::string> &headers,
                      unsigned long postSize = POST_SIZE_LIMIT,
                      bool autocleanFiles = true,
                      bool filesInMem = true,
-                     dodoString tmpDir = "/tmp/");
+                     dodo::string tmpDir = "/tmp/");
 
             /**
              * destructor
@@ -111,7 +111,7 @@ namespace dodo {
              * @param realm defines authentication request string
              * @param type defines type of authentication, @see cgi::authEnum
              */
-            void requestAuthentication(const dodoString &realm,
+            void requestAuthentication(const dodo::string &realm,
                                        short            type = AUTH_DIGEST);
 
             /**
@@ -120,8 +120,8 @@ namespace dodo {
              * @param user defines user for authentication
              * @param password defined user's password for authentication
              */
-            bool isAuthenticated(const dodoString &user,
-                                 const dodoString &password);
+            bool isAuthenticated(const dodo::string &user,
+                                 const dodo::string &password);
 
             /**
              * set response code and message
@@ -146,7 +146,7 @@ namespace dodo {
              * @param name defines name of the variable
              * @note searches in GET first
              */
-            dodoString operator[](const dodoString &name);
+            dodo::string operator[](const dodo::string &name);
 
 
             /**
@@ -154,20 +154,20 @@ namespace dodo {
              */
             dodoStringMap POST;                                         ///< POST variables
             dodoStringMap GET;                                          ///< GET variables
-            mutable dodoMap<short, dodoString> ENVIRONMENT;             ///< environment variables, @see cgi::environmentEnum
+            mutable dodoMap<short, dodo::string> ENVIRONMENT;             ///< environment variables, @see cgi::environmentEnum
             dodoStringMap COOKIES;                                      ///< cookies sent by browser
-            dodoMap<dodoString, file, dodoMapStringCompare> FILES;      ///< POST files
+            dodoMap<dodo::string, file, dodoMapStringCompare> FILES;      ///< POST files
 
-            dodoString content;                                         ///< contents of the stdin for the POST request
+            dodo::string content;                                         ///< contents of the stdin for the POST request
 
-            dodoMap<short, dodoString> HEADERS;                         ///< headers that will be printed with printHeaders method
+            dodoMap<short, dodo::string> HEADERS;                         ///< headers that will be printed with printHeaders method
 
             /**
              * print data to the output
              * @return amount in bytes of successfully printed data
              * @param data defines data that would be printed
              */
-            unsigned long print(const dodoString &data);
+            unsigned long print(const dodo::string &data);
 
             /**
              * print data to the output
@@ -175,7 +175,7 @@ namespace dodo {
              * @param data defines data that would be printed
              * @note print until '\n' is reached
              */
-            unsigned long printString(const dodoString &data);
+            unsigned long printString(const dodo::string &data);
 
             /**
              * flush output
@@ -192,7 +192,7 @@ namespace dodo {
             /**
              * @return charset of the request
              */
-            dodoString charset();
+            dodo::string charset();
 
             /**
              * cast to exchange *
@@ -233,7 +233,7 @@ namespace dodo {
              * initiate HEADERS class property with given tuples name->value
              * @param headers defines init headers
              */
-            void initHeaders(dodoMap<short, dodoString> &headers);
+            void initHeaders(dodoMap<short, dodo::string> &headers);
 
             /**
              * process serialized string of tuples key->value
@@ -245,7 +245,7 @@ namespace dodo {
              * to : val["name1"]=value1; val["name2"]=value2;
              */
             void makeKeyValue(dodoStringMap    &values,
-                              const dodoString &request,
+                              const dodo::string &request,
                               const char       *delim = "&");
 
             /**
@@ -255,11 +255,11 @@ namespace dodo {
             void printHeaders() const;
 
             short returnCode;                                                                           ///< HTTP return code
-            dodoString returnMessage;                                                                   ///< HTTP return message
+            dodo::string returnMessage;                                                                   ///< HTTP return message
 
             bool postFilesInMem;                                                                        ///< place of POST files
             bool autocleanFiles;                                                                        ///< defines whether to clean POST files in destructor
-            dodoString postFilesTmpDir;                                                                 ///< directory for POST files if on they are saved on the disk
+            dodo::string postFilesTmpDir;                                                                 ///< directory for POST files if on they are saved on the disk
 
             dodoList<cookie> cookies;                                                                   ///< cookies
             int requestMethod;                                                                          ///< request method
@@ -276,23 +276,23 @@ namespace dodo {
             mutable bool headersPrinted;                                                                ///< true if headers have been printed
 
             static const char *environmentStatements[ENVIRONMENT_ENUMSIZE];                             ///< names of environment variables, @see cgi::environmentEnum
-            static const dodoString responseHeaderStatements[RESPONSE_HEADER_ENUMSIZE];                 ///< HTTP response headers, @see cgi::responseHeaderEnum
-            static const dodoString responseStatusStatements[STATUS_CODE_ENUMSIZE];                     ///< HTTP response headers, @see cgi::statusCodeEnum
+            static const dodo::string responseHeaderStatements[RESPONSE_HEADER_ENUMSIZE];                 ///< HTTP response headers, @see cgi::responseHeaderEnum
+            static const dodo::string responseStatusStatements[STATUS_CODE_ENUMSIZE];                     ///< HTTP response headers, @see cgi::statusCodeEnum
 
             /**
              * @struct __auth__ defines authenfication information
              */
             struct __auth__ {
-                dodoString user;                                                                        ///< user name
-                dodoString password;                                                                    ///< user password
-                dodoString realm;                                                                       ///< explanation of the authentication request
-                dodoString nonce;                                                                       ///< dialogue-specified uniquely generated data
-                dodoString opaque;                                                                      ///< dialogue-specified uniquely generated data, which should be returned by the dialogue unchanged
-                dodoString cnonce;                                                                      ///< dialogue-specified uniquely generated data
-                dodoString nonceCount;                                                                  ///< hexadecimal count of the number of requests (including the current request) that the server has sent with the nonce value in this request
-                dodoString uri;                                                                         ///< URI from Request-URI
-                dodoString qop;                                                                         ///< quality of protection
-                dodoString response;                                                                    ///< 32 hex digits. which proves that the user knows a password
+                dodo::string user;                                                                        ///< user name
+                dodo::string password;                                                                    ///< user password
+                dodo::string realm;                                                                       ///< explanation of the authentication request
+                dodo::string nonce;                                                                       ///< dialogue-specified uniquely generated data
+                dodo::string opaque;                                                                      ///< dialogue-specified uniquely generated data, which should be returned by the dialogue unchanged
+                dodo::string cnonce;                                                                      ///< dialogue-specified uniquely generated data
+                dodo::string nonceCount;                                                                  ///< hexadecimal count of the number of requests (including the current request) that the server has sent with the nonce value in this request
+                dodo::string uri;                                                                         ///< URI from Request-URI
+                dodo::string qop;                                                                         ///< quality of protection
+                dodo::string response;                                                                    ///< 32 hex digits. which proves that the user knows a password
                 short      type;                                                                        ///< authenfication type, @see cgi::authEnum
             };
 

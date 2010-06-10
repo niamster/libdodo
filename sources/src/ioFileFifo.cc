@@ -58,7 +58,7 @@ fifo::fifo(short protection) : stream::channel(protection),
 
 //-------------------------------------------------------------------
 
-fifo::fifo(const dodoString &path,
+fifo::fifo(const dodo::string &path,
            short            mode,
            short            protection) : stream::channel(protection),
                                           path(path),
@@ -310,7 +310,7 @@ fifo::close()
 //-------------------------------------------------------------------
 
 void
-fifo::open(const dodoString &a_path,
+fifo::open(const dodo::string &a_path,
            short            a_mode)
 {
     pc::sync::stack pg(keeper);

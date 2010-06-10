@@ -23,9 +23,9 @@ main(int  argc UNUSED,
         cout << tools::code::codesetConversion(tools::code::codesetConversion("тест", "utf-8", "cp1251"), "cp1251", "utf-8") << endl;
 #endif
 
-        dodoString longString = dodoString(1000000, 'l') + dodoString(1000000, 'i') + dodoString(1000000, 'b') + dodoString(1000000, 'd') + dodoString(1000000, 'o') + dodoString(1000000, 'd') + dodoString(1000000, 'o');
+        dodo::string longString = dodo::string(1000000, 'l') + dodo::string(1000000, 'i') + dodo::string(1000000, 'b') + dodo::string(1000000, 'd') + dodo::string(1000000, 'o') + dodo::string(1000000, 'd') + dodo::string(1000000, 'o');
 
-        cout << "longString = dodoString(1000000, 'l') + dodoString(1000000, 'i') + dodoString(1000000, 'b') + dodoString(1000000, 'd') + dodoString(1000000, 'o') + dodoString(1000000, 'd') + dodoString(1000000, 'o');" << endl;
+        cout << "longString = dodo::string(1000000, 'l') + dodo::string(1000000, 'i') + dodo::string(1000000, 'b') + dodo::string(1000000, 'd') + dodo::string(1000000, 'o') + dodo::string(1000000, 'd') + dodo::string(1000000, 'o');" << endl;
 
         cout << "MD5 of \"\", should be d41d8cd98f00b204e9800998ecf8427e" << endl;
         cout << "MD5 of \"\",        is " << tools::code::MD5Hex("") <<  endl;
@@ -79,7 +79,7 @@ main(int  argc UNUSED,
         cout << tools::code::encodeBase64("HEY, that's working!") << endl;
         cout << "size of test base64-encoded : " <<  tools::code::encodeBase64(tools::filesystem::fileContents("test")).size() << endl;
 
-        dodoString url = "ftp://user:pass@localhost.domain:32/path/init.cgi?net=true&work=true";
+        dodo::string url = "ftp://user:pass@localhost.domain:32/path/init.cgi?net=true&work=true";
         cout << endl << url << endl;
         cout << tools::code::parseUrl(url).host << endl;
         cout << tools::code::parseUrl(url).login << endl;
@@ -96,7 +96,7 @@ main(int  argc UNUSED,
         cout << "Size of bziped Makefile" << tools::code::bzCompress(tools::filesystem::fileContents("Makefile"), 9).size() << endl;
 #endif
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     } catch (std::exception ex)   {
         cout << endl << ex.what() << endl;
     }

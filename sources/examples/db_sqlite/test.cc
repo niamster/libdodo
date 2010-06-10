@@ -59,7 +59,7 @@ main(int  argc UNUSED,
         array["t0"] = "2005-07-08";
         array["t1"] = "abc";
 
-        dodoArray<dodoString> fields;
+        dodoArray<dodo::string> fields;
         fields.push_back("t0");
         fields.push_back("t1");
 
@@ -104,7 +104,7 @@ main(int  argc UNUSED,
             cout << endl;
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << endl << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << endl << endl;
     }
 #else
     cout << "No SQLite exteinsion was compiled!";

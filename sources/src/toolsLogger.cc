@@ -41,7 +41,7 @@
 
 using namespace dodo::tools;
 
-const dodoString logger::levels[] = {
+const dodo::string logger::levels[] = {
     "INFO",
     "NOTICE",
     "DEBUG",
@@ -123,7 +123,7 @@ logger::remove(unsigned long position)
 
 void
 logger::log(short            level,
-            const dodoString &msg)
+            const dodo::string &msg)
 {
     pc::sync::stack pg(keeper);
 
@@ -159,7 +159,7 @@ logger::log(short            level,
 //-------------------------------------------------------------------
 
 void
-logger::setTimeFormat(const dodoString &format)
+logger::setTimeFormat(const dodo::string &format)
 {
     timeFormat = " " + format + ": ";
 }

@@ -22,7 +22,7 @@ main(int  argc UNUSED,
 {
     try {
 #ifdef OPENSSL_EXT
-        dodoString host = "kernel.org";
+        dodo::string host = "kernel.org";
 
         cout << host << ":" << tools::network::hostPrimaryIp(host) << endl;
 
@@ -40,7 +40,7 @@ main(int  argc UNUSED,
         st.setSertificates(certs);
 
         exchange ex;
-        dodoString str;
+        dodo::string str;
 
         st.connect(tools::network::hostPrimaryIp(host), 443, ex);
 
@@ -66,7 +66,7 @@ main(int  argc UNUSED,
         cout << tools::misc::split(str, "\r\n\r\n")[0] << endl;
 #endif
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

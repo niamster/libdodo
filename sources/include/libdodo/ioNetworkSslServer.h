@@ -94,7 +94,7 @@ namespace dodo {
                      * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
                      * @note host can be '*' to specify all interfaces on the box
                      */
-                    virtual void serve(const dodoString &host,
+                    virtual void serve(const dodo::string &host,
                                        int              port,
                                        int              numberOfConnections);
 
@@ -105,7 +105,7 @@ namespace dodo {
                      * @param force defines if unix socket should be deleted if it exists
                      * @note host can be '*' to specify all interfaces on the box
                      */
-                    virtual void serve(const dodoString &path,
+                    virtual void serve(const dodo::string &path,
                                        int              numberOfConnections,
                                        bool             force = false);
 

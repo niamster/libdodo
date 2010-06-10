@@ -39,7 +39,7 @@
 #include <libdodo/types.h>
 
 namespace dodo {
-    dodoString __dodostring__;
+    dodo::string __dodostring__;
 
     //-------------------------------------------------------------------
 
@@ -65,8 +65,8 @@ using namespace dodo;
 //-------------------------------------------------------------------
 
 bool
-dodoMapStringCompare::operator()(const dodoString &first,
-                                 const dodoString &second)
+dodoMapStringCompare::operator()(const dodo::string &first,
+                                 const dodo::string &second)
 {
     return strcmp(first.data(), second.data()) < 0 ? true : false;
 }
@@ -74,8 +74,8 @@ dodoMapStringCompare::operator()(const dodoString &first,
 //-------------------------------------------------------------------
 
 bool
-dodoMapICaseStringCompare::operator()(const dodoString &first,
-                                      const dodoString &second)
+dodoMapICaseStringCompare::operator()(const dodo::string &first,
+                                      const dodo::string &second)
 {
     return strcasecmp(first.data(), second.data()) < 0 ? true : false;
 }
@@ -83,8 +83,8 @@ dodoMapICaseStringCompare::operator()(const dodoString &first,
 //-------------------------------------------------------------------
 
 bool
-dodoMapStringCompare::operator()(const dodoString &first,
-                                 const dodoString &second) const
+dodoMapStringCompare::operator()(const dodo::string &first,
+                                 const dodo::string &second) const
 {
     return strcmp(first.data(), second.data()) < 0 ? true : false;
 }
@@ -92,8 +92,8 @@ dodoMapStringCompare::operator()(const dodoString &first,
 //-------------------------------------------------------------------
 
 bool
-dodoMapICaseStringCompare::operator()(const dodoString &first,
-                                      const dodoString &second) const
+dodoMapICaseStringCompare::operator()(const dodo::string &first,
+                                      const dodo::string &second) const
 {
     return strcasecmp(first.data(), second.data()) < 0 ? true : false;
 }

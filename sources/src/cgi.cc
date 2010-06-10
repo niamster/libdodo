@@ -41,11 +41,11 @@ file::file() : size(0),
 
 //-------------------------------------------------------------------
 
-cookie::cookie(const dodoString &name,
-               const dodoString &value,
-               const dodoString &expires,
-               const dodoString &path,
-               const dodoString &domain,
+cookie::cookie(const dodo::string &name,
+               const dodo::string &value,
+               const dodo::string &expires,
+               const dodo::string &path,
+               const dodo::string &domain,
                bool             secure) : name(name),
                                           value(value),
                                           expires(expires),

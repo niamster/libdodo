@@ -118,7 +118,7 @@ namespace dodo {
              * @param timestamp defines number of seconds from 00:00:00 UTC, January 1, 1970
              * @param local defines local time condition; if true time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
              */
-            static dodoString byFormat(const dodoString &format,
+            static dodo::string byFormat(const dodo::string &format,
                                        long             timestamp,
                                        bool             local = true);
 
@@ -127,8 +127,8 @@ namespace dodo {
              * @param format defines time/date/... format string
              * @param dt defines formated string of time/date/...
              */
-            static long byFormat(const dodoString &format,
-                                 const dodoString &dt);
+            static long byFormat(const dodo::string &format,
+                                 const dodo::string &dt);
 
             /**
              * @return number of seconds from 00:00:00 UTC, January 1, 1970 till now
@@ -148,7 +148,7 @@ namespace dodo {
              * @note monday is first
              */
             static dodoStringArray week(long             date,
-                                        const dodoString &format,
+                                        const dodo::string &format,
                                         bool             local = true);
 
             /**
@@ -161,7 +161,7 @@ namespace dodo {
              */
             static dodoStringArray dates(long             dateFrom,
                                          long             dateTo,
-                                         const dodoString &format,
+                                         const dodo::string &format,
                                          bool             local = true);
 
             /**

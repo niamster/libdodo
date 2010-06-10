@@ -64,8 +64,8 @@ namespace dodo {
                      * @param table defines query table
                      * @param statement defines query condition
                      */
-                    condition(const dodoString &table,
-                              const dodoString &statement = __dodostring__);
+                    condition(const dodo::string &table,
+                              const dodo::string &statement = __dodostring__);
 
                     /**
                      * constructor
@@ -73,9 +73,9 @@ namespace dodo {
                      * @param fields defines fields in table that correspond to data in rows
                      * @param statement defines query condition
                      */
-                    condition(const dodoString &table,
+                    condition(const dodo::string &table,
                               const dodoStringArray &fields,
-                              const dodoString &statement = __dodostring__);
+                              const dodo::string &statement = __dodostring__);
 
                     /**
                      * destructor
@@ -99,7 +99,7 @@ namespace dodo {
                      * @param field defines field name for order condition
                      * @param direction defines direction for order condition[@see enum orderDirectionEnum]
                      */
-                    const condition &order(const dodoString &field,
+                    const condition &order(const dodo::string &field,
                                            short direction = ORDER_DIRECTION_ASC) const;
 
                     /**
@@ -118,8 +118,8 @@ namespace dodo {
                      * @param condition defines JOIN condition
                      * @param type defines JOIN type
                      */
-                    const condition &join(const dodoString &table,
-                                          const dodoString &condition,
+                    const condition &join(const dodo::string &table,
+                                          const dodo::string &condition,
                                           short type = JOIN_INNER) const;
 
                     /**
@@ -128,16 +128,16 @@ namespace dodo {
                      */
                     struct __join__ {
                         short type; ///< JOIN type [@see condition::joinEnum]
-                        dodoString table; ///< table to join with
-                        dodoString condition; ///< JOIN condition
+                        dodo::string table; ///< table to join with
+                        dodo::string condition; ///< JOIN condition
                     };
 
                     mutable dodoArray<__join__> _join;
-                    mutable dodoString _orderby; ///< order condition
+                    mutable dodo::string _orderby; ///< order condition
                     mutable long _limit; ///< limit condition
                     mutable long _offset; ///< offset condition
-                    dodoString _table; ///< table in data base
-                    dodoString _statement; ///< SQL request condition
+                    dodo::string _table; ///< table in data base
+                    dodo::string _statement; ///< SQL request condition
                     dodoStringArray _fields; ///< names of fiels
                 };
 
@@ -206,14 +206,14 @@ namespace dodo {
                      * constructor
                      * @param sql defines data base request in SQL form
                      */
-                    query(const dodoString &sql);
+                    query(const dodo::string &sql);
 
                     /**
                      * destructor
                      */
                     virtual ~query();
 
-                    dodoString sql;
+                    dodo::string sql;
                 };
 
                 /**
@@ -323,13 +323,13 @@ namespace dodo {
                      * @return constructed query from collected data
                      * @note it doesn't clean collected data
                      */
-                    virtual dodoString construct();
+                    virtual dodo::string construct();
 
                     /**
                      * automaticaly detect fields types
                      * @param table defines table for which rules will be applied
                      */
-                    virtual void requestFieldsTypes(const dodoString &table) = 0;
+                    virtual void requestFieldsTypes(const dodo::string &table) = 0;
 
                     /**
                      * set field type
@@ -337,39 +337,39 @@ namespace dodo {
                      * @param field defines field name
                      * @param type defines field type, @see data::base::sql::fieldEnum
                      */
-                    virtual void setFieldType(const dodoString &table,
-                                              const dodoString &field,
+                    virtual void setFieldType(const dodo::string &table,
+                                              const dodo::string &field,
                                               short            type);
 
                     /**
                      * @return escaped string
                      * @param data defines a string to escape
                      */
-                    static dodoString escapeFields(const dodoString &data);
+                    static dodo::string escapeFields(const dodo::string &data);
 
                   protected:
 
-                    dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare> fieldTypes;   ///< hash of 'db:table' => 'field => 'type''
+                    dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare> fieldTypes;   ///< hash of 'db:table' => 'field => 'type''
 
                     /**
                      * @return select SQL statement
                      */
-                    virtual dodoString select();
+                    virtual dodo::string select();
 
                     /**
                      * @return insert SQL statement
                      */
-                    virtual dodoString insert();
+                    virtual dodo::string insert();
 
                     /**
                      * @return update SQL statement
                      */
-                    virtual dodoString update();
+                    virtual dodo::string update();
 
                     /**
                      * @return delete SQL statement
                      */
-                    virtual dodoString remove();
+                    virtual dodo::string remove();
 
                     /**
                      * @return string of substrings, separated with separator, framed with frame and applied escapeFields to each
@@ -378,9 +378,9 @@ namespace dodo {
                      * @param frame defines frame string[frame='; substring => 'substring']
                      * @param limit defines maximum number of parts to divide string; -1 for unlimit
                      */
-                    static dodoString joinFields(const dodoStringArray &fields,
-                                                 const dodoString      &separator,
-                                                 const dodoString      &frame,
+                    static dodo::string joinFields(const dodoStringArray &fields,
+                                                 const dodo::string      &separator,
+                                                 const dodo::string      &frame,
                                                  int                   limit = -1);
 
                     /**
@@ -421,7 +421,7 @@ namespace dodo {
                         STATEMENT_ENUMSIZE
                     };
 
-                    static const dodoString statements[STATEMENT_ENUMSIZE]; ///< constructor statements
+                    static const dodo::string statements[STATEMENT_ENUMSIZE]; ///< constructor statements
 
                     bool result; ///< if true try to get result from the request
 

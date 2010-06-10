@@ -72,8 +72,8 @@ tools::__time__::__time__(unsigned int a_sec,
 
 //-------------------------------------------------------------------
 
-dodoString
-tools::time::byFormat(const dodoString &format,
+dodo::string
+tools::time::byFormat(const dodo::string &format,
                       long             timestamp,
                       bool             local)
 {
@@ -123,7 +123,7 @@ tools::time::now()
 
 dodoStringArray
 tools::time::week(long             date,
-                  const dodoString &format,
+                  const dodo::string &format,
                   bool             local)
 {
     long daynum = string::stringToL(tools::time::byFormat("%w", date, local));
@@ -144,7 +144,7 @@ tools::time::week(long             date,
 dodoStringArray
 tools::time::dates(long             dateFrom,
                    long             dateTo,
-                   const dodoString &format,
+                   const dodo::string &format,
                    bool             local)
 {
     dodoStringArray result;
@@ -267,8 +267,8 @@ tools::time::daysInMonth(unsigned int   year,
 //-------------------------------------------------------------------
 
 long
-tools::time::byFormat(const dodoString &format,
-                      const dodoString &dt)
+tools::time::byFormat(const dodo::string &format,
+                      const dodo::string &dt)
 {
     tm tTime;
     strptime(dt.data(), format.data(), &tTime);

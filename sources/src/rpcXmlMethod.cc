@@ -51,7 +51,7 @@ method::xmlToMethod(dodo::data::format::xml::node &node)
 {
     rpc::method meth;
 
-    dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.nodeChildren.begin(), j = node.nodeChildren.end();
+    dodoMap<dodo::string, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.nodeChildren.begin(), j = node.nodeChildren.end();
     for (; i != j; ++i) {
         if (tools::string::iequal(i->first, "methodName")) {
             dodoArray<dodo::data::format::xml::node> &arr0 = i->second;
@@ -95,7 +95,7 @@ method::methodToXml(const rpc::method &data)
     methodName.nodeValue = data.name;
 
     nodeArr.assign(1, methodName);
-    meth.nodeChildren.insert(make_pair(methodName.name, nodeArr));
+    meth.nodeChildren.insert(std::make_pair(methodName.name, nodeArr));
 
     dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
     if (i != j) {
@@ -111,14 +111,14 @@ method::methodToXml(const rpc::method &data)
             param.nodeChildren.clear();
 
             nodeArr.assign(1, value::valueToXml(*i));
-            param.nodeChildren.insert(make_pair("value", nodeArr));
+            param.nodeChildren.insert(std::make_pair("value", nodeArr));
 
             subNodeArr.push_back(param);
         }
-        params.nodeChildren.insert(make_pair("param", subNodeArr));
+        params.nodeChildren.insert(std::make_pair("param", subNodeArr));
 
         nodeArr.assign(1, params);
-        meth.nodeChildren.insert(make_pair(params.name, nodeArr));
+        meth.nodeChildren.insert(std::make_pair(params.name, nodeArr));
     }
 
     return meth;

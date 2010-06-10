@@ -40,7 +40,7 @@ main(int  argc UNUSED,
            !12345890$!!@
          */
 
-        dodoString str;
+        dodo::string str;
 
         io1.pos = 2*14;
         str = io1.readString();
@@ -57,7 +57,7 @@ main(int  argc UNUSED,
         cout << "io1:" << endl;
         cout << io1 << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

@@ -266,7 +266,7 @@ image::read(const io::channel &img)
     if (collectedData.handle->im != NULL)
         DestroyImage(collectedData.handle->im);
 
-    dodoString data, dataPart;
+    dodo::string data, dataPart;
 
     while (true) {
         dataPart = img.read();
@@ -438,7 +438,7 @@ image::write(const io::channel &img,
         throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
 
     img.bs = size;
-    img.write(dodoString((char *)data, size));
+    img.write(dodo::string((char *)data, size));
 
 #ifndef GRAPHICS_WO_XEXEC
     performPostExec(OPERATION_WRITE);

@@ -20,20 +20,20 @@ showJSON(const node &n,
     switch (n.type()) {
         case node::DATA_STRING:
 
-            cout << dodoString(level, '\t') << "[string]: " << n.string() << endl;
+            cout << dodo::string(level, '\t') << "[string]: " << n.string() << endl;
 
             break;
 
         case node::DATA_OBJECT:
         {
-            cout << dodoString(level, '\t') << "[object]: " << endl;
-            const dodoMap<dodoString, node, dodoMapStringCompare>
+            cout << dodo::string(level, '\t') << "[object]: " << endl;
+            const dodoMap<dodo::string, node, dodoMapStringCompare>
             &objectValue = n.object();
-            dodoMap<dodoString, node, dodoMapStringCompare>::const_iterator
+            dodoMap<dodo::string, node, dodoMapStringCompare>::const_iterator
             i = objectValue.begin(),
             j = objectValue.end();
             for (; i != j; ++i) {
-                cout << dodoString(level + 1, '\t') << "'" << i->first << "'" << endl;
+                cout << dodo::string(level + 1, '\t') << "'" << i->first << "'" << endl;
                 showJSON(i->second, level + 2);
             }
 
@@ -42,19 +42,19 @@ showJSON(const node &n,
 
         case node::DATA_NULL:
 
-            cout << dodoString(level, '\t') << "[null]" << endl;
+            cout << dodo::string(level, '\t') << "[null]" << endl;
 
             break;
 
         case node::DATA_NUMERIC:
 
-            cout << dodoString(level, '\t') << "[numeric]: " << n.numeric() << endl;
+            cout << dodo::string(level, '\t') << "[numeric]: " << n.numeric() << endl;
 
             break;
 
         case node::DATA_BOOLEAN:
 
-            cout << dodoString(level, '\t') << "[boolean]: " << (n.boolean() ? "true" : "false") << endl;
+            cout << dodo::string(level, '\t') << "[boolean]: " << (n.boolean() ? "true" : "false") << endl;
 
             break;
 
@@ -63,7 +63,7 @@ showJSON(const node &n,
             const dodoArray<node> &arrayValue = n.array();
             dodoArray<node>::const_iterator i = arrayValue.begin(), j = arrayValue.end();
 
-            cout << dodoString(level, '\t') << "[array]: " << endl;
+            cout << dodo::string(level, '\t') << "[array]: " << endl;
             for (; i != j; ++i)
                 showJSON(*i, level + 1);
 
@@ -100,7 +100,7 @@ main(int  argc UNUSED,
         node0.addObjectMember("big numeric", (long)1234567890);
         node2.addArrayElement(node0);
 
-        node1.addObjectMember("string", dodoString("string in object"));
+        node1.addObjectMember("string", dodo::string("string in object"));
         node0.addObjectMember("null", node1);
         node2.addArrayElement(node1);
 
@@ -124,7 +124,7 @@ main(int  argc UNUSED,
         p.fromMap(map, json);
         cout << endl << json << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

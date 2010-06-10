@@ -33,6 +33,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <libdodo/ioNetworkConnection.h>
 #include <libdodo/ioNetworkConnectionEx.h>

@@ -52,7 +52,7 @@ namespace dodo {
          * @param idata defines additional incoming data
          * @param odata defines additional outgoing data
          */
-        typedef response (*handler)(const dodoString &method, const dodoArray<value> &arguments, const void *idata, void *odata);
+        typedef response (*handler)(const dodo::string &method, const dodoArray<value> &arguments, const void *idata, void *odata);
 
         /**
          * @class server
@@ -77,14 +77,14 @@ namespace dodo {
              * @param method defines name of rpc method
              * @param handler defines function that will process rpc call
              */
-            void setHandler(const dodoString &method,
+            void setHandler(const dodo::string &method,
                             handler          handler);
 
             /**
              * remove handler for method
              * @param method defines name of rpc method
              */
-            void removeHandler(const dodoString &method);
+            void removeHandler(const dodo::string &method);
 
             /**
              * set function that will process unregistered calls
@@ -121,12 +121,12 @@ namespace dodo {
              * @param idata defines additional incoming data
              * @param odata defines additional outgoing data
              */
-            static response rpcDefaultHandler(const dodoString       &method,
+            static response rpcDefaultHandler(const dodo::string       &method,
                                               const dodoArray<value> &arguments,
                                               const void             *idata,
                                               void                   *odata);
 
-            dodoMap<dodoString, handler, dodoMapStringCompare> handlers;    ///< method handlers
+            dodoMap<dodo::string, handler, dodoMapStringCompare> handlers;    ///< method handlers
             handler defaultHandler;                                         ///< default handler
 
             io::channel &io;                                                ///< I/O handler

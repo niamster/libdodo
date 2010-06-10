@@ -120,8 +120,8 @@ namespace dodo {
          * @brief describes function call in call stack
          */
         struct __call__ {
-            dodoString object;      ///< name of the object where call was found
-            dodoString symbol;      ///< name of the call
+            dodo::string object;      ///< name of the object where call was found
+            dodo::string symbol;      ///< name of the call
             void       *address;    ///< address of the call
         };
 
@@ -157,10 +157,10 @@ namespace dodo {
                   int              function,
                   int              errnoSource,
                   int              errNo,
-                  const dodoString &errStr,
+                  const dodo::string &errStr,
                   unsigned long    line,
-                  const dodoString &file,
-                  const dodoString &message = __dodostring__) throw ();
+                  const dodo::string &file,
+                  const dodo::string &message = __dodostring__) throw ();
 
             /**
              * destructor
@@ -209,7 +209,7 @@ namespace dodo {
             /**
              * @return error string
              */
-            operator const dodoString & ();
+            operator const dodo::string & ();
 
             /**
              * return error string
@@ -219,16 +219,16 @@ namespace dodo {
             /**
              * @return call stack to the exception point
              */
-            virtual dodoString backtrace();
+            virtual dodo::string backtrace();
 
             int source;                             ///< module where exception has been thrown
             int function;                           ///< function where exception has been thrown, @see *Ex.h headers for IDs
             int errnoSource;                        ///< the source of the error code and of the error string
             int errNo;                              ///< error code
-            dodoString errStr;                      ///< error string
+            dodo::string errStr;                      ///< error string
             unsigned long line;                     ///< line where exception has been thrown
-            dodoString file;                        ///< file where exception has been thrown
-            dodoString message;                     ///< custom message that might clarify the exception
+            dodo::string file;                        ///< file where exception has been thrown
+            dodo::string message;                     ///< custom message that might clarify the exception
 
             dodoArray<__call__> callStack;          ///< call stack of the raised exception
 
@@ -267,7 +267,7 @@ namespace dodo {
              * @param path defines path to the library[if not in ldconfig db] or library name
              * @param toInit defines data that will be passed to the init function
              */
-            static __module__ module(const dodoString &path,
+            static __module__ module(const dodo::string &path,
                                      void             *toInit = NULL);
 
             /**
@@ -278,7 +278,7 @@ namespace dodo {
              * @param toInit defines data that will be passed to the init function
              * @note module for what to set handler is taken from the library information, @see exception::basic::__module__
              */
-            static void setHandler(const dodoString &path,
+            static void setHandler(const dodo::string &path,
                                    void             *data,
                                    void             *toInit = NULL);
 #endif

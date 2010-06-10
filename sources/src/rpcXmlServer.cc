@@ -43,7 +43,7 @@
 
 using namespace dodo::rpc::xml;
 
-__additional__::__additional__(dodoString &encoding) : encoding(encoding)
+__additional__::__additional__(dodo::string &encoding) : encoding(encoding)
 {
 }
 
@@ -63,7 +63,7 @@ server::~server()
 //-------------------------------------------------------------------
 
 void
-server::setResponseEncoding(const dodoString &a_encoding)
+server::setResponseEncoding(const dodo::string &a_encoding)
 {
     rpEncoding = a_encoding;
 }
@@ -106,13 +106,13 @@ server::serve()
     try {
         rpc::method meth = processCallRequest();
 
-        dodoString encoding = rpEncoding;
+        dodo::string encoding = rpEncoding;
 
         __additional__ idata(rqEncoding);
 
         __additional__ odata(rpEncoding);
 
-        dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
+        dodoMap<dodo::string, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
         if (handler == handlers.end())
             processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
@@ -127,7 +127,7 @@ server::serve()
         processCallResult(response);
     } catch (...) {
         rpc::response response;
-        response.fault(dodoString("An unknown error."));
+        response.fault(dodo::string("An unknown error."));
 
         processCallResult(response);
     }

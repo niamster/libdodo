@@ -34,7 +34,7 @@ hook(xexec::__collected_data__ *odata,
             image *img = dynamic_cast<image *>(imData->executor);
             transform::rotate(*img, transform::ROTATE_DIRECTION_ANGLE_180);
         } catch (dodo::exception::basic &ex)   {
-            cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+            cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
         }
     }
 }
@@ -69,7 +69,7 @@ main(int  argc UNUSED,
         im.removeXExec(postwrite);
 #endif
 
-        dodoString img;
+        dodo::string img;
         im.setCompression(image::COMPRESSION_ZIP);
         im.setQuality(4);
         im.setColorSpecification(image::COLOR_SPECIFICATION_GRAYSCALE);
@@ -125,7 +125,7 @@ main(int  argc UNUSED,
         im.write(file::regular("new-5.png", file::regular::OPEN_MODE_READ_WRITE_TRUNCATE), image::ENCODER_PNG);
 #endif
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

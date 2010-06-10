@@ -30,7 +30,7 @@ thread(void *data)
         cout << endl << (char *)data << ": " << tools::time::now() << endl;
         cout.flush();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     // throwing exception
@@ -53,7 +53,7 @@ main(int  argc UNUSED,
         const int amount = 10;
 
         int pos[amount];
-        dodoString ids[amount];
+        dodo::string ids[amount];
         for (int i = 0; i < amount; ++i) {
             ids[i] = tools::string::lToString(i);
             pos[i] = manager.add(execution::thread(thread, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
@@ -71,13 +71,13 @@ main(int  argc UNUSED,
         for (int i = 0; i < amount; ++i) {
             dodo::exception::basic *ex = dynamic_cast<execution::thread *>(manager.job(pos[i]))->exception();
             if (ex) {
-                cout << "Thread " << i << ":\t" << (dodoString)*ex << "\t" << ex->line << "\t" << ex->file << endl;
+                cout << "Thread " << i << ":\t" << (dodo::string)*ex << "\t" << ex->line << "\t" << ex->file << endl;
             }
         }
 
         delete data;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

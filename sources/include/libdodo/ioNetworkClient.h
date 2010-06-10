@@ -113,8 +113,8 @@ namespace dodo {
                  * @param port defines port of host to connect
                  * @param exchange defines an oject that will perform I/O operations
                  */
-                virtual void connectFrom(const dodoString &local,
-                                         const dodoString &host,
+                virtual void connectFrom(const dodo::string &local,
+                                         const dodo::string &host,
                                          int              port,
                                          exchange         &exchange);
 
@@ -124,7 +124,7 @@ namespace dodo {
                  * @param port defines port of host to connect
                  * @param exchange defines an oject that will perform I/O operations
                  */
-                virtual void connect(const dodoString &host,
+                virtual void connect(const dodo::string &host,
                                      int              port,
                                      exchange         &exchange);
 
@@ -133,7 +133,7 @@ namespace dodo {
                  * @param path defines path to unix socket
                  * @param exchange defines an oject that will perform I/O operations
                  */
-                virtual void connect(const dodoString &path,
+                virtual void connect(const dodo::string &path,
                                      exchange         &exchange);
 
                 bool blockInherited;                                    ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
@@ -153,7 +153,7 @@ namespace dodo {
                  */
                 virtual void makeSocket();
 
-                dodoString unixSock;                                    ///< path to unix socket
+                dodo::string unixSock;                                    ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
                 __collected_data__ collectedData;                       ///< data collected for xexec

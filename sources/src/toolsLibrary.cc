@@ -49,7 +49,7 @@ library::library() : handle(NULL)
 
 //-------------------------------------------------------------------
 
-library::library(const dodoString &path)
+library::library(const dodo::string &path)
 {
 #ifdef DL_FAST
     handle = dlopen(path.data(), RTLD_LAZY | RTLD_NODELETE);
@@ -75,7 +75,7 @@ library::~library()
 //-------------------------------------------------------------------
 
 void
-library::open(const dodoString &path)
+library::open(const dodo::string &path)
 {
 #ifndef DL_FAST
     if (handle != NULL)
@@ -109,7 +109,7 @@ library::close()
 //-------------------------------------------------------------------
 
 void *
-library::function(const dodoString &name)
+library::function(const dodo::string &name)
 {
     if (handle == NULL)
         throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_FUNCTION, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -124,7 +124,7 @@ library::function(const dodoString &name)
 //-------------------------------------------------------------------
 
 void *
-library::operator[](const dodoString &name)
+library::operator[](const dodo::string &name)
 {
     if (handle == NULL)
         throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
@@ -140,7 +140,7 @@ library::operator[](const dodoString &name)
 
 #ifdef BFD_EXT
 dodo::dodoStringArray
-library::symbols(const dodoString &path)
+library::symbols(const dodo::string &path)
 {
     bfd_init();
 

@@ -84,7 +84,7 @@ misc::random(void          *data,
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 misc::stringRandom(unsigned long size,
                    short         strength)
 {
@@ -100,7 +100,7 @@ misc::stringRandom(unsigned long size,
         if (data[i] == '\0')
             data[i] = '*';
 
-    dodoString res(data, size);
+    dodo::string res(data, size);
     delete [] data;
 
     return res;
@@ -218,11 +218,11 @@ misc::dRandom(short strength)
 
 bool
 misc::isInArray(const dodoStringArray &arr,
-                const dodoString      &needle,
+                const dodo::string      &needle,
                 bool                  icase)
 {
-    bool (*cmpFunc)(const dodoString &,
-                    const dodoString &);
+    bool (*cmpFunc)(const dodo::string &,
+                    const dodo::string &);
 
     if (icase)
         cmpFunc = string::iequal;
@@ -241,11 +241,11 @@ misc::isInArray(const dodoStringArray &arr,
 
 bool
 misc::isInList(const dodoStringList &arr,
-               const dodoString     &needle,
+               const dodo::string     &needle,
                bool                 icase)
 {
-    bool (*cmpFunc)(const dodoString &,
-                    const dodoString &);
+    bool (*cmpFunc)(const dodo::string &,
+                    const dodo::string &);
 
     if (icase)
         cmpFunc = string::iequal;
@@ -263,8 +263,8 @@ misc::isInList(const dodoStringList &arr,
 //-------------------------------------------------------------------
 
 dodo::dodoStringArray
-misc::split(const dodoString &fields,
-            const dodoString &separator,
+misc::split(const dodo::string &fields,
+            const dodo::string &separator,
             int              limit)
 {
     unsigned long i(0), j(0), sep_size(separator.size());
@@ -274,7 +274,7 @@ misc::split(const dodoString &fields,
     while (true) {
         if (limit != -1) {
             if (k > limit) {
-                arr.back().append(fields.data() + j - sep_size);
+                arr.back() += dodo::string(fields.data() + j - sep_size);
 
                 break;
             }
@@ -282,12 +282,12 @@ misc::split(const dodoString &fields,
         }
 
         i = fields.find(separator, i);
-        if (i == dodoString::npos) {
-            arr.push_back(dodoString(fields.data() + j, fields.size() - j));
+        if (i == dodo::string::npos) {
+            arr.push_back(dodo::string(fields.data() + j, fields.size() - j));
 
             break;
         } else
-            arr.push_back(dodoString(fields.data() + j, i - j));
+            arr.push_back(dodo::string(fields.data() + j, i - j));
 
         i += sep_size;
         j = i;
@@ -298,9 +298,9 @@ misc::split(const dodoString &fields,
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 misc::join(const dodoStringArray &fields,
-           const dodoString      &separator,
+           const dodo::string      &separator,
            int                   limit)
 {
     if (fields.size() == 0)
@@ -308,7 +308,7 @@ misc::join(const dodoStringArray &fields,
 
     int k(0);
 
-    dodoString temp;
+    dodo::string temp;
     dodoStringArray::const_iterator i(fields.begin()), j(fields.end());
     if (i != j) {
         --j;
@@ -319,10 +319,10 @@ misc::join(const dodoStringArray &fields,
 
                 ++k;
             }
-            temp.append(*i);
-            temp.append(separator);
+            temp += dodo::string(*i);
+            temp += dodo::string(separator);
         }
-        temp.append(*i);
+        temp += dodo::string(*i);
     }
 
     return temp;

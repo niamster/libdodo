@@ -179,12 +179,12 @@ namespace dodo {
              */
             file();
 
-            dodoString name;                            ///< real name of the file
-            dodoString mime;                            ///< mimetype of the file
-            dodoString path;                            ///< path where it was temporary saved[empty, if file is stored in the memory]
+            dodo::string name;                            ///< real name of the file
+            dodo::string mime;                            ///< mimetype of the file
+            dodo::string path;                            ///< path where it was temporary saved[empty, if file is stored in the memory]
             unsigned long size;                         ///< size of the file
             short error;                                ///< error code, @see cgi::ileErrorEnum
-            dodoString data;                            ///< contains file data[if file is stored in the memory]
+            dodo::string data;                            ///< contains file data[if file is stored in the memory]
         };
 
         /**
@@ -208,19 +208,19 @@ namespace dodo {
              * @param domain defines domain of the cookie
              * @param secure defines cookie security
              */
-            cookie(const dodoString &name,
-                   const dodoString &value,
-                   const dodoString &expires = __dodostring__,
-                   const dodoString &path = __dodostring__,
-                   const dodoString &domain = __dodostring__,
+            cookie(const dodo::string &name,
+                   const dodo::string &value,
+                   const dodo::string &expires = __dodostring__,
+                   const dodo::string &path = __dodostring__,
+                   const dodo::string &domain = __dodostring__,
                    bool             secure = false);
 
-            dodoString name;            ///< name of the cookie
-            dodoString value;           ///< value of the cookie
+            dodo::string name;            ///< name of the cookie
+            dodo::string value;           ///< value of the cookie
 
-            dodoString expires;         ///< expiration date
-            dodoString path;            ///< cookie path
-            dodoString domain;          ///< cookie domain
+            dodo::string expires;         ///< expiration date
+            dodo::string path;            ///< cookie path
+            dodo::string domain;          ///< cookie domain
             bool secure;                ///< defines cookie security; false by default
         };
 
@@ -247,7 +247,7 @@ namespace dodo {
          * @brief defines authenfication information
          */
         struct __auth__ {
-            dodoString user;            ///< user name
+            dodo::string user;            ///< user name
             short      type;            ///< authenfication type, @see cgi::authEnum
         };
     };

@@ -134,7 +134,7 @@ dodo::pc::sync::thread os::keeper;
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 os::workingDir()
 {
     char wd[PATH_MAXLEN];
@@ -148,7 +148,7 @@ os::workingDir()
 //-------------------------------------------------------------------
 
 void
-os::setWorkingDir(const dodoString &path)
+os::setWorkingDir(const dodo::string &path)
 {
     if (chdir(path.data()) == -1)
         throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETWORKINGDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -173,7 +173,7 @@ os::usage()
 //-------------------------------------------------------------------
 
 void
-os::changeRoot(const dodoString &path)
+os::changeRoot(const dodo::string &path)
 {
     setWorkingDir(path);
 
@@ -449,7 +449,7 @@ os::user(int uid)
 //-------------------------------------------------------------------
 
 os::__user__
-os::user(const dodoString &uid)
+os::user(const dodo::string &uid)
 {
     passwd *in = getpwnam(uid.data());
     if (in == NULL)
@@ -541,7 +541,7 @@ os::group(int uid)
 //-------------------------------------------------------------------
 
 os::__group__
-os::group(const dodoString &uid)
+os::group(const dodo::string &uid)
 {
     ::group *in = getgrnam(uid.data());
     if (in == NULL)
@@ -584,7 +584,7 @@ os::groups()
 //-------------------------------------------------------------------
 
 void
-os::die(const dodoString &message,
+os::die(const dodo::string &message,
         int              status)
 {
     unsigned short tries = DIE_MAXTRIES;
@@ -956,7 +956,7 @@ os::removeSignalHandler(long signal)
 
 #ifdef DL_EXT
 os::__signal_module__
-os::module(const dodoString &module,
+os::module(const dodo::string &module,
            void             *toInit)
 {
 #ifdef DL_FAST
@@ -989,7 +989,7 @@ os::module(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-os::setSignalHandler(const dodoString &path,
+os::setSignalHandler(const dodo::string &path,
                      void             *toInit)
 {
     pc::sync::stack tg(&keeper);

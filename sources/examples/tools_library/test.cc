@@ -15,7 +15,7 @@ using namespace std;
 #ifdef DL_EXT
 using namespace tools;
 
-typedef void (*print)(const dodoString &data);
+typedef void (*print)(const dodo::string &data);
 #endif
 
 int
@@ -40,7 +40,7 @@ main(int  argc UNUSED,
         ((print)sll.function("print"))("get");
 #endif
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << endl;
     }
     return 0;
 }

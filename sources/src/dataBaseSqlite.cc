@@ -64,7 +64,7 @@ namespace dodo {
 
 using namespace dodo::data::base;
 
-sqlite::__connection_options__::__connection_options__(const dodoString &path) : path(path)
+sqlite::__connection_options__::__connection_options__(const dodo::string &path) : path(path)
 {
 }
 
@@ -261,13 +261,13 @@ sqlite::fetchedRows(data::base::rows &a_rows) const
 
                         case SQLITE_TEXT:
 
-                            values.push_back(dodoString((const char *)sqlite3_column_text(handle->result, i), sqlite3_column_bytes(handle->result, i)));
+                            values.push_back(dodo::string((const char *)sqlite3_column_text(handle->result, i), sqlite3_column_bytes(handle->result, i)));
 
                             break;
 
                         case SQLITE_BLOB:
 
-                            values.push_back(dodoString((const char *)sqlite3_column_blob(handle->result, i), sqlite3_column_bytes(handle->result, i)));
+                            values.push_back(dodo::string((const char *)sqlite3_column_blob(handle->result, i), sqlite3_column_bytes(handle->result, i)));
 
                             break;
 
@@ -348,15 +348,15 @@ sqlite::affectedRows() const
 //-------------------------------------------------------------------
 
 void
-sqlite::requestFieldsTypes(const dodoString &table)
+sqlite::requestFieldsTypes(const dodo::string &table)
 {
     if (handle->handle == NULL)
         throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
-    dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(table);
+    dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(table);
 
     if (types == fieldTypes.end())
-        types = fieldTypes.insert(make_pair(table, dodoMap<dodoString, short, dodoMapICaseStringCompare>())).first;
+        types = fieldTypes.insert(std::make_pair(table, dodoMap<dodo::string, short, dodoMapICaseStringCompare>())).first;
 
     if (handle->result) {
         sqlite3_finalize(handle->result);
@@ -364,7 +364,7 @@ sqlite::requestFieldsTypes(const dodoString &table)
     }
 
 #ifdef SQLITE_ENABLE_COLUMN_METADATA
-    dodoString request = "select * from " + table + " limit 1";
+    dodo::string request = "select * from " + table + " limit 1";
 
     if (sqlite3_prepare(handle->handle, request.data(), request.size(), &handle->result, NULL) != SQLITE_OK)
         throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
@@ -376,7 +376,7 @@ sqlite::requestFieldsTypes(const dodoString &table)
 
     const char *columnType, *columnName;
 
-    dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
+    dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
 
     for (unsigned int i(0); i < numFields; ++i) {
         columnName = sqlite3_column_name(handle->result, i);
@@ -404,12 +404,12 @@ sqlite::requestFieldsTypes(const dodoString &table)
                 strcasestr(columnType, "text") != NULL ||
                 strcasestr(columnType, "enum") != NULL ||
                 strcasestr(columnType, "set") != NULL)
-                types->second.insert(make_pair(dodoString(columnName), sql::FIELD_TEXT));
+                types->second.insert(std::make_pair(dodo::string(columnName), sql::FIELD_TEXT));
             else {
                 if (strcasestr(columnType, "blob") != NULL)
-                    types->second.insert(make_pair(dodoString(columnName), sql::FIELD_BINARY));
+                    types->second.insert(std::make_pair(dodo::string(columnName), sql::FIELD_BINARY));
                 else
-                    types->second.insert(make_pair(dodoString(columnName), sql::FIELD_NUMERIC));
+                    types->second.insert(std::make_pair(dodo::string(columnName), sql::FIELD_NUMERIC));
             }
         } else {
             if (strcasestr(columnType, "char") != NULL ||
@@ -428,7 +428,7 @@ sqlite::requestFieldsTypes(const dodoString &table)
         }
     }
 #else
-    dodoString request = "pragma table_info(" + table + ")";
+    dodo::string request = "pragma table_info(" + table + ")";
 
     if (sqlite3_prepare(handle->handle, request.data(), request.size(), &handle->result, NULL) != SQLITE_OK)
         throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
@@ -440,7 +440,7 @@ sqlite::requestFieldsTypes(const dodoString &table)
 
     const char *columnType, *columnName;
 
-    dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
+    dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
 
     while (iterate) {
         switch (sqlite3_step(handle->result)) {
@@ -472,12 +472,12 @@ sqlite::requestFieldsTypes(const dodoString &table)
                         strcasestr(columnType, "text") != NULL ||
                         strcasestr(columnType, "enum") != NULL ||
                         strcasestr(columnType, "set") != NULL)
-                        types->second.insert(make_pair(dodoString(columnName), sql::FIELD_TEXT));
+                        types->second.insert(std::make_pair(dodo::string(columnName), sql::FIELD_TEXT));
                     else {
                         if (strcasestr(columnType, "blob") != NULL)
-                            types->second.insert(make_pair(dodoString(columnName), sql::FIELD_BINARY));
+                            types->second.insert(std::make_pair(dodo::string(columnName), sql::FIELD_BINARY));
                         else
-                            types->second.insert(make_pair(dodoString(columnName), sql::FIELD_NUMERIC));
+                            types->second.insert(std::make_pair(dodo::string(columnName), sql::FIELD_NUMERIC));
                     }
                 } else {
                     if (strcasestr(columnType, "char") != NULL ||
@@ -581,12 +581,12 @@ sqlite::update(const data::base::rows      &rows,
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 sqlite::update()
 {
-    dodoString request = statements[STATEMENT_UPDATE];
-    request.append(collectedData.condition._table);
-    request.append(statements[STATEMENT_SET]);
+    dodo::string request = statements[STATEMENT_UPDATE];
+    request += dodo::string(collectedData.condition._table);
+    request += dodo::string(statements[STATEMENT_SET]);
 
     dodoArray<dodoStringArray>::iterator v = collectedData.rows.values.begin();
     if (v != collectedData.rows.values.end()) {
@@ -596,85 +596,85 @@ sqlite::update()
 
         dodoStringArray::const_iterator i(collectedData.rows.fields.begin()), j(v->begin());
         if (i != j) {
-            dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
+            dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
             if (types != fieldTypes.end()) {
-                dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
-                dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
+                dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator type;
+                dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
                 __blob__ blob;
 
                 unsigned int k = 1;
                 for (; k < o; ++i, ++k, ++j) {
-                    request.append(*i);
+                    request += dodo::string(*i);
 
                     type = types->second.find(*i);
                     if (type != typesEnd) {
                         if (type->second == sql::FIELD_TEXT) {
-                            request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                            request.append(escapeFields(*j));
-                            request.append(statements[STATEMENT_APOSTROPHECOMA]);
+                            request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
+                            request += dodo::string(escapeFields(*j));
+                            request += dodo::string(statements[STATEMENT_APOSTROPHECOMA]);
                         } else {
                             if (type->second == sql::FIELD_BINARY) {
-                                request.append(statements[STATEMENT_EQUAL]);
-                                request.append("$" + tools::string::uiToString(k));
-                                request.append(statements[STATEMENT_COMA]);
+                                request += dodo::string(statements[STATEMENT_EQUAL]);
+                                request += dodo::string("$" + tools::string::uiToString(k));
+                                request += dodo::string(statements[STATEMENT_COMA]);
 
                                 blob.reference = k;
                                 blob.value = &(*j);
 
                                 blobs.push_back(blob);
                             } else {
-                                request.append(statements[STATEMENT_EQUAL]);
-                                request.append(*j);
-                                request.append(statements[STATEMENT_COMA]);
+                                request += dodo::string(statements[STATEMENT_EQUAL]);
+                                request += dodo::string(*j);
+                                request += dodo::string(statements[STATEMENT_COMA]);
                             }
                         }
                     } else {
-                        request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                        request.append(escapeFields(*j));
-                        request.append(statements[STATEMENT_APOSTROPHECOMA]);
+                        request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
+                        request += dodo::string(escapeFields(*j));
+                        request += dodo::string(statements[STATEMENT_APOSTROPHECOMA]);
                     }
                 }
-                request.append(*i);
+                request += dodo::string(*i);
 
                 type = types->second.find(*i);
                 if (type != typesEnd) {
                     if (type->second == sql::FIELD_TEXT) {
-                        request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                        request.append(escapeFields(*j));
-                        request.append(statements[STATEMENT_APOSTROPHE]);
+                        request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
+                        request += dodo::string(escapeFields(*j));
+                        request += dodo::string(statements[STATEMENT_APOSTROPHE]);
                     } else {
                         if (type->second == sql::FIELD_BINARY) {
-                            request.append(statements[STATEMENT_EQUAL]);
-                            request.append("$" + tools::string::uiToString(k));
-                            request.append(statements[STATEMENT_COMA]);
+                            request += dodo::string(statements[STATEMENT_EQUAL]);
+                            request += dodo::string("$" + tools::string::uiToString(k));
+                            request += dodo::string(statements[STATEMENT_COMA]);
 
                             blob.reference = k;
                             blob.value = &(*j);
 
                             blobs.push_back(blob);
                         } else {
-                            request.append(statements[STATEMENT_EQUAL]);
-                            request.append(*j);
-                            request.append(statements[STATEMENT_COMA]);
+                            request += dodo::string(statements[STATEMENT_EQUAL]);
+                            request += dodo::string(*j);
+                            request += dodo::string(statements[STATEMENT_COMA]);
                         }
                     }
                 } else {
-                    request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                    request.append(escapeFields(*j));
-                    request.append(statements[STATEMENT_APOSTROPHE]);
+                    request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
+                    request += dodo::string(escapeFields(*j));
+                    request += dodo::string(statements[STATEMENT_APOSTROPHE]);
                 }
             } else {
                 for (unsigned int k(1); k < o; ++i, ++k, ++j) {
-                    request.append(*i);
-                    request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                    request.append(escapeFields(*j));
-                    request.append(statements[STATEMENT_APOSTROPHECOMA]);
+                    request += dodo::string(*i);
+                    request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
+                    request += dodo::string(escapeFields(*j));
+                    request += dodo::string(statements[STATEMENT_APOSTROPHECOMA]);
                 }
-                request.append(*i);
-                request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                request.append(escapeFields(*j));
-                request.append(statements[STATEMENT_APOSTROPHE]);
+                request += dodo::string(*i);
+                request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
+                request += dodo::string(escapeFields(*j));
+                request += dodo::string(statements[STATEMENT_APOSTROPHE]);
             }
         }
     }
@@ -684,25 +684,25 @@ sqlite::update()
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 sqlite::insert()
 {
-    dodoString request = statements[STATEMENT_INSERT];
-    request.append(statements[STATEMENT_INTO]);
-    request.append(collectedData.condition._table);
+    dodo::string request = statements[STATEMENT_INSERT];
+    request += dodo::string(statements[STATEMENT_INTO]);
+    request += dodo::string(collectedData.condition._table);
     if (collectedData.rows.fields.size() != 0) {
-        request.append(statements[STATEMENT_LEFTBRACKET]);
-        request.append(tools::misc::join(collectedData.rows.fields, statements[STATEMENT_COMA]));
-        request.append(statements[STATEMENT_RIGHTBRACKET]);
+        request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
+        request += dodo::string(tools::misc::join(collectedData.rows.fields, statements[STATEMENT_COMA]));
+        request += dodo::string(statements[STATEMENT_RIGHTBRACKET]);
     }
-    request.append(statements[STATEMENT_VALUES]);
+    request += dodo::string(statements[STATEMENT_VALUES]);
 
     dodoArray<dodoStringArray>::iterator k(collectedData.rows.values.begin()), l(collectedData.rows.values.end());
     if (k != l) {
-        dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
+        dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
         if (types != fieldTypes.end()) {
-            dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
-            dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
+            dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator type;
+            dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
             dodoStringArray::iterator t;
 
@@ -712,7 +712,7 @@ sqlite::insert()
 
             --l;
             for (; k != l; ++k) {
-                request.append(statements[STATEMENT_LEFTBRACKET]);
+                request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
 
                 t = collectedData.rows.fields.begin();
 
@@ -721,47 +721,47 @@ sqlite::insert()
                     type = types->second.find(*t);
                     if (type != typesEnd) {
                         if (type->second == sql::FIELD_TEXT)
-                            request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                            request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
                         else {
                             if (type->second == sql::FIELD_BINARY) {
                                 ++o;
 
-                                request.append("$" + tools::string::uiToString(o));
-                                request.append(statements[STATEMENT_COMA]);
+                                request += dodo::string("$" + tools::string::uiToString(o));
+                                request += dodo::string(statements[STATEMENT_COMA]);
 
                                 blob.reference = o;
                                 blob.value = &(*i);
 
                                 blobs.push_back(blob);
                             } else
-                                request.append(*i + statements[STATEMENT_COMA]);
+                                request += dodo::string(*i + statements[STATEMENT_COMA]);
                         }
                     } else
-                        request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                        request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
                 }
                 type = types->second.find(*t);
                 if (type != typesEnd) {
                     if (type->second == sql::FIELD_TEXT)
-                        request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                        request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
                     else {
                         if (type->second == sql::FIELD_BINARY) {
                             ++o;
 
-                            request.append("$" + tools::string::uiToString(o));
+                            request += dodo::string("$" + tools::string::uiToString(o));
 
                             blob.reference = o;
                             blob.value = &(*i);
 
                             blobs.push_back(blob);
                         } else
-                            request.append(*i);
+                            request += dodo::string(*i);
                     }
                 } else
-                    request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                    request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
 
-                request.append(statements[STATEMENT_RIGHTBRACKETCOMA]);
+                request += dodo::string(statements[STATEMENT_RIGHTBRACKETCOMA]);
             }
-            request.append(statements[STATEMENT_LEFTBRACKET]);
+            request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
 
             t = collectedData.rows.fields.begin();
 
@@ -770,55 +770,55 @@ sqlite::insert()
                 type = types->second.find(*t);
                 if (type != typesEnd) {
                     if (type->second == sql::FIELD_TEXT)
-                        request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                        request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
                     else {
                         if (type->second == sql::FIELD_BINARY) {
                             ++o;
 
-                            request.append("$" + tools::string::uiToString(o));
-                            request.append(statements[STATEMENT_COMA]);
+                            request += dodo::string("$" + tools::string::uiToString(o));
+                            request += dodo::string(statements[STATEMENT_COMA]);
 
                             blob.reference = o;
                             blob.value = &(*i);
 
                             blobs.push_back(blob);
                         } else
-                            request.append(*i + statements[STATEMENT_COMA]);
+                            request += dodo::string(*i + statements[STATEMENT_COMA]);
                     }
                 } else
-                    request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                    request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
             }
             type = types->second.find(*t);
             if (type != typesEnd) {
                 if (type->second == sql::FIELD_TEXT)
-                    request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                    request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
                 else {
                     if (type->second == sql::FIELD_BINARY) {
                         ++o;
 
-                        request.append("$" + tools::string::uiToString(o));
+                        request += dodo::string("$" + tools::string::uiToString(o));
 
                         blob.reference = o;
                         blob.value = &(*i);
 
                         blobs.push_back(blob);
                     } else
-                        request.append(*i);
+                        request += dodo::string(*i);
                 }
             } else
-                request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
 
-            request.append(statements[STATEMENT_RIGHTBRACKET]);
+            request += dodo::string(statements[STATEMENT_RIGHTBRACKET]);
         } else {
             --l;
             for (; k != l; ++k) {
-                request.append(statements[STATEMENT_LEFTBRACKET]);
-                request.append(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
-                request.append(statements[STATEMENT_RIGHTBRACKETCOMA]);
+                request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
+                request += dodo::string(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
+                request += dodo::string(statements[STATEMENT_RIGHTBRACKETCOMA]);
             }
-            request.append(statements[STATEMENT_LEFTBRACKET]);
-            request.append(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
-            request.append(statements[STATEMENT_RIGHTBRACKET]);
+            request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
+            request += dodo::string(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
+            request += dodo::string(statements[STATEMENT_RIGHTBRACKET]);
         }
     }
 

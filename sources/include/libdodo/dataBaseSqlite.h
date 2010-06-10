@@ -62,9 +62,9 @@ namespace dodo {
                      * constructor
                      * @param path defines path to db or unix socket
                      */
-                    __connection_options__(const            dodoString &path);
+                    __connection_options__(const            dodo::string &path);
 
-                    dodoString   path;      ///< path to db or unix socket
+                    dodo::string   path;      ///< path to db or unix socket
                 };
 
               private:
@@ -108,7 +108,7 @@ namespace dodo {
                  * automaticaly detect fields types
                  * @param table defines table for which rules will be applied
                  */
-                virtual void requestFieldsTypes(const dodoString &table);
+                virtual void requestFieldsTypes(const dodo::string &table);
 
                 /**
                  * @return amount of affected rows from the evaluated request
@@ -155,12 +155,12 @@ namespace dodo {
                 /**
                  * @return insert SQL statement
                  */
-                virtual dodoString insert();
+                virtual dodo::string insert();
 
                 /**
                  * @return update SQL statement
                  */
-                virtual dodoString update();
+                virtual dodo::string update();
 
                 /**
                  * @struct __blob__
@@ -168,7 +168,7 @@ namespace dodo {
                  */
                 struct __blob__ {
                     unsigned int     reference;     ///< reference in request
-                    const dodoString *value;        ///< pointer to blob value
+                    const dodo::string *value;        ///< pointer to blob value
                 };
 
                 dodoList<__blob__> blobs;           ///< references to blob data

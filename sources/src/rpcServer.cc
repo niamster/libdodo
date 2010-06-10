@@ -53,13 +53,13 @@ server::~server()
 //-------------------------------------------------------------------
 
 response
-server::rpcDefaultHandler(const dodoString &,
+server::rpcDefaultHandler(const dodo::string &,
                           const dodoArray<value> &,
                           const void *,
                           void *)
 {
     response response;
-    response.fault(dodoString("rpcDefaultHandler"));
+    response.fault(dodo::string("rpcDefaultHandler"));
 
     return response;
 }
@@ -75,16 +75,16 @@ server::setDefault(handler handler)
 //-------------------------------------------------------------------
 
 void
-server::setHandler(const dodoString &method,
+server::setHandler(const dodo::string &method,
                    handler          handler)
 {
-    handlers.insert(make_pair(method, handler));
+    handlers.insert(std::make_pair(method, handler));
 }
 
 //-------------------------------------------------------------------
 
 void
-server::removeHandler(const dodoString &method)
+server::removeHandler(const dodo::string &method)
 {
     handlers.erase(method);
 }
@@ -97,7 +97,7 @@ server::serve()
     try {
         method meth = processCallRequest();
 
-        dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
+        dodoMap<dodo::string, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
         if (handler == handlers.end())
             processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL));
@@ -110,7 +110,7 @@ server::serve()
         processCallResult(response);
     } catch (...) {
         response response;
-        response.fault(dodoString("An unknown error."));
+        response.fault(dodo::string("An unknown error."));
 
         processCallResult(response);
     }

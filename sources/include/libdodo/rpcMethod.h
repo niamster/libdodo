@@ -76,7 +76,7 @@ namespace dodo {
              * set method name
              * @param name defines method name
              */
-            void setName(const dodoString &name);
+            void setName(const dodo::string &name);
 
             /**
              * clear arguments information
@@ -92,7 +92,7 @@ namespace dodo {
           private:
 
             dodoArray<value> arguments; ///< method arguments
-            dodoString name;            ///< method name
+            dodo::string name;            ///< method name
         };
     };
 };

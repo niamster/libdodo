@@ -18,14 +18,14 @@ main(int  argc UNUSED,
      char **argv UNUSED)
 {
     try {
-        dodoString host = "kernel.org";
+        dodo::string host = "kernel.org";
 
         cout << host << ":" << tools::network::hostPrimaryIp(host) << endl;
 
         client st(io::network::connection::PROTOCOL_FAMILY_IPV4, io::network::connection::TRANSFER_STREAM);
 
         exchange ex;
-        dodoString str;
+        dodo::string str;
 
         st.connect(tools::network::hostPrimaryIp(host), 80, ex);
 
@@ -50,7 +50,7 @@ main(int  argc UNUSED,
 
         cout << tools::misc::split(str, "\r\n\r\n")[0] << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

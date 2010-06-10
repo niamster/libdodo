@@ -48,10 +48,10 @@ namespace dodo {
              * @brief defines interface information
              */
             struct __interface__ {
-                dodoString address;         ///< ip address of the interface
-                dodoString broadcast;       ///< broadcast address of the interface
-                dodoString netmask;         ///< netmask of the interface
-                dodoString hwaddr;          ///< harware address of the interface(MAC)
+                dodo::string address;         ///< ip address of the interface
+                dodo::string broadcast;       ///< broadcast address of the interface
+                dodo::string netmask;         ///< netmask of the interface
+                dodo::string hwaddr;          ///< harware address of the interface(MAC)
                 bool       up;              ///< true if interface is up
                 bool       loop;            ///< true if interface is a loopback
             };
@@ -61,7 +61,7 @@ namespace dodo {
              * @brief defines information about host
              */
             struct __host__ {
-                dodoString      name;       ///< original name of the host
+                dodo::string      name;       ///< original name of the host
                 dodoStringArray aliases;    ///< aliases of the host
                 dodoStringArray addresses;  ///< addresses of the host
             };
@@ -71,7 +71,7 @@ namespace dodo {
              * @brief defines info about service
              */
             struct __service__ {
-                dodoString      name;       ///< original name of the service
+                dodo::string      name;       ///< original name of the service
                 dodoStringArray aliases;    ///< aliases of the service
                 int             port;       ///< port of the service
             };
@@ -85,38 +85,38 @@ namespace dodo {
              * @return information about the interface
              * @param interface defines a name of the interface
              */
-            static __interface__ interface(const dodoString &interface);
+            static __interface__ interface(const dodo::string &interface);
 
             /**
              * @return information about the given host
              * @param host defines a name of the host
              */
-            static __host__ host(const dodoString &host);
+            static __host__ host(const dodo::string &host);
 
             /**
              * @return primary host ip
              * @param host defines a name of the host
              */
-            static dodoString hostPrimaryIp(const dodoString &host);
+            static dodo::string hostPrimaryIp(const dodo::string &host);
 
             /**
              * @return name of the local host
              */
-            static dodoString localName();
+            static dodo::string localName();
 
             /**
              * set local host name
              * @param host defines name of the host
              */
-            static void setLocalName(const dodoString &host);
+            static void setLocalName(const dodo::string &host);
 
             /**
              * @return information about the service
              * @param service defices name of the service
              * @param protocol defines protocol of the service(tcp, udp ..)
              */
-            static __service__ service(const dodoString &service,
-                                       const dodoString &protocol);
+            static __service__ service(const dodo::string &service,
+                                       const dodo::string &protocol);
 
             /**
              * @return information about the service
@@ -124,7 +124,7 @@ namespace dodo {
              * @param protocol defines protocol of the service(tcp, udp ..)
              */
             static __service__ service(int              port,
-                                       const dodoString &protocol);
+                                       const dodo::string &protocol);
 
             /**
              * send mail using sendmail external program
@@ -134,11 +134,11 @@ namespace dodo {
              * @param headers defines extra headers
              * @param path defines path to sendmail
              */
-            static void mail(const dodoString &to,
-                             const dodoString &subject,
-                             const dodoString &message,
-                             const dodoString &headers = __dodostring__,
-                             const dodoString &path = "/usr/sbin/sendmail");
+            static void mail(const dodo::string &to,
+                             const dodo::string &subject,
+                             const dodo::string &message,
+                             const dodo::string &headers = __dodostring__,
+                             const dodo::string &path = "/usr/sbin/sendmail");
 
             /**
              * send mail
@@ -153,15 +153,15 @@ namespace dodo {
              * @param headers defines extra headers[each must ends with CR NR]
              * @note if login is emty no auth is performed
              */
-            static void mail(const dodoString &host,
+            static void mail(const dodo::string &host,
                              int              port,
-                             const dodoString &to,
-                             const dodoString &from,
-                             const dodoString &subject,
-                             const dodoString &message,
-                             const dodoString &login = __dodostring__,
-                             const dodoString &pass = __dodostring__,
-                             const dodoString &headers = __dodostring__);
+                             const dodo::string &to,
+                             const dodo::string &from,
+                             const dodo::string &subject,
+                             const dodo::string &message,
+                             const dodo::string &login = __dodostring__,
+                             const dodo::string &pass = __dodostring__,
+                             const dodo::string &headers = __dodostring__);
         };
     };
 };

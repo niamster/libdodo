@@ -47,7 +47,7 @@ process0(void *data)
 
         cout << endl << memory << ": " << tools::time::now() << endl, cout.flush();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << ex.line << endl, cout.flush();
+        cout << (dodo::string)ex << ex.line << endl, cout.flush();
     }
 
     return 0;
@@ -82,7 +82,7 @@ process1(void *data)
 
         cout << endl << (char *)dt << ": " << tools::time::now() << endl, cout.flush();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << ex.line << endl, cout.flush();
+        cout << (dodo::string)ex << ex.line << endl, cout.flush();
     }
 
     return 0;
@@ -106,7 +106,7 @@ main(int  argc UNUSED,
         const int amount = 10;
 
         int processes[amount];
-        dodoString ids[amount];
+        dodo::string ids[amount];
         for (int i = 0; i < amount; ++i) {
             ids[i] = tools::string::lToString(i);
             if (i % 2 == 0)
@@ -128,14 +128,14 @@ main(int  argc UNUSED,
 
         manager.wait();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
+        cout << (dodo::string)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
     }
 
     try {
         data::memory::shared::remove(data_key);
         sync::process::remove(lock_key);
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
+        cout << (dodo::string)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
     }
 
     return 0;

@@ -61,7 +61,7 @@ namespace dodo {
                  * @param id defines ID of JSON-RPC response
                  */
                 static rpc::method jsonToMethod(dodo::data::format::json::node &node,
-                                                dodoString                     &version,
+                                                dodo::string                     &version,
                                                 long                           &id);
 
                 /**
@@ -71,7 +71,7 @@ namespace dodo {
                  * @param id defines ID of JSON-RPC request
                  */
                 static dodo::data::format::json::node methodToJson(const rpc::method &data,
-                                                                   const dodoString  &version,
+                                                                   const dodo::string  &version,
                                                                    long              id);
             };
         };

@@ -37,6 +37,7 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 #include <sys/stat.h>
+#include <unistd.h>
 
 #include "ioSsl.inline"
 
@@ -257,7 +258,7 @@ server::acceptSsl(exchange::__init__ &init)
 //-------------------------------------------------------------------
 
 void
-server::serve(const dodoString &host,
+server::serve(const dodo::string &host,
               int              port,
               int              numberOfConnections)
 {
@@ -315,7 +316,7 @@ server::serve(const dodoString &host,
 //-------------------------------------------------------------------
 
 void
-server::serve(const dodoString &path,
+server::serve(const dodo::string &path,
               int              numberOfConnections,
               bool             force)
 {
@@ -404,7 +405,7 @@ server::accept(network::exchange::__init__ &init,
 
             char temp[INET_ADDRSTRLEN];
             if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
-                info.host.assign(temp);
+                info.host = dodo::string(temp);
             info.port = ntohs(sa.sin_port);
 
             break;
@@ -426,7 +427,7 @@ server::accept(network::exchange::__init__ &init,
 
             char temp[INET6_ADDRSTRLEN];
             if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
-                info.host.assign(temp);
+                info.host = dodo::string(temp);
             info.port = ntohs(sa.sin6_port);
 
             break;

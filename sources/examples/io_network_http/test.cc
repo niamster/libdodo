@@ -27,7 +27,7 @@ main(int  argc UNUSED,
         map["hidden"] = "hidden";
         map["text"] = "text";
 
-        dodoMap<dodoString, file> files;
+        dodoMap<dodo::string, file> files;
 
         files["file"] = file("./test.cc", "text/plain");
 
@@ -71,7 +71,7 @@ main(int  argc UNUSED,
         cout << res.data.size() << "\n~~\n";
 #endif
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

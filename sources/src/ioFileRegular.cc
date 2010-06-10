@@ -57,7 +57,7 @@ regular::regular(short protection) : block::channel(protection),
 
 //-------------------------------------------------------------------
 
-regular::regular(const dodoString &a_path,
+regular::regular(const dodo::string &a_path,
                  short            a_mode,
                  short            protection) : block::channel(protection),
                                                 path(a_path),
@@ -299,7 +299,7 @@ regular::close()
 //-------------------------------------------------------------------
 
 void
-regular::open(const dodoString &a_path,
+regular::open(const dodo::string &a_path,
               short            a_mode)
 {
     pc::sync::stack pg(keeper);

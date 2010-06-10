@@ -80,14 +80,14 @@ client::processCallResult()
 //-------------------------------------------------------------------
 
 void
-client::setRequestVersion(const dodoString &version)
+client::setRequestVersion(const dodo::string &version)
 {
     rqVersion = version;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 client::responseVersion()
 {
     return rpVersion;

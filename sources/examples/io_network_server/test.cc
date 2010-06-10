@@ -31,7 +31,7 @@ process(exchange &ex)
     ex.bs = 7;
     ex.writeString("test\n");
 
-    dodoString str = "";
+    dodo::string str = "";
     try {
         ex.bs = 4;
         str = ex.read();
@@ -44,7 +44,7 @@ process(exchange &ex)
             exit(0);
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
         cout.flush();
     }
 }
@@ -83,7 +83,7 @@ main(int  argc UNUSED,
             }
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

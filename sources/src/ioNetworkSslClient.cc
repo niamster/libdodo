@@ -36,6 +36,7 @@
 #include <netinet/in.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
+#include <unistd.h>
 
 #include "ioSsl.inline"
 
@@ -349,7 +350,7 @@ client::connectSsl()
 //-------------------------------------------------------------------
 
 void
-client::connect(const dodoString  &host,
+client::connect(const dodo::string  &host,
                 int               port,
                 network::exchange &ex)
 {
@@ -408,8 +409,8 @@ client::connect(const dodoString  &host,
 //-------------------------------------------------------------------
 
 void
-client::connectFrom(const dodoString  &local,
-                    const dodoString  &host,
+client::connectFrom(const dodo::string  &local,
+                    const dodo::string  &host,
                     int               port,
                     network::exchange &ex)
 {
@@ -486,7 +487,7 @@ client::connectFrom(const dodoString  &local,
 //-------------------------------------------------------------------
 
 void
-client::connect(const dodoString  &path,
+client::connect(const dodo::string  &path,
                 network::exchange &ex)
 {
 #ifndef IO_WO_XEXEC

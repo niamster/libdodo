@@ -23,11 +23,11 @@ hook(xexec::__collected_data__ *odata,
     io::channel::__collected_data__ *st = (io::channel::__collected_data__ *)odata;
     if (operation == io::channel::OPERATION_WRITE) {
         stdio *io = dynamic_cast<stdio *>(st->executor);
-        dodoString buffer = st->buffer;
+        dodo::string buffer = st->buffer;
         io->bs = 100;
         io->writeString("\nhook\n");
 
-        dodoString str = ">" + buffer + "<\n";
+        dodo::string str = ">" + buffer + "<\n";
 
         io->bs = str.size();
         st->buffer.assign(str);
@@ -54,7 +54,7 @@ main(int  argc UNUSED,
 #ifndef IO_WO_XEXEC
         st.disableXExecs = true;
 #endif
-        dodoString o;
+        dodo::string o;
 
         st.bs = 33;
 
@@ -71,7 +71,7 @@ main(int  argc UNUSED,
         st.writeString(o);
         st.writeString("\nexiting\n");
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

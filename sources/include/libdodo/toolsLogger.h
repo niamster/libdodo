@@ -102,20 +102,20 @@ namespace dodo {
              * @param msg defines log message
              */
             virtual void log(short            level,
-                             const dodoString &msg);
+                             const dodo::string &msg);
 
             /**
              * set date/time format for log messages
              * @param format defines date/time format, @see tools::time
              * @note date/time format is not used for syslog
              */
-            virtual void setTimeFormat(const dodoString &format);
+            virtual void setTimeFormat(const dodo::string &format);
 
             bool forward;                                               ///< forward message to global log instance[false by default]
 
           private:
 
-            dodoString timeFormat;                                      ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
+            dodo::string timeFormat;                                      ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
 
             /**
              * @struct __log_map__
@@ -131,7 +131,7 @@ namespace dodo {
 
             unsigned long handlersNum;                                  ///< number of registered handlers
 
-            static const dodoString levels[LOG_LEVEL_ENUMSIZE];         ///< log levels statements
+            static const dodo::string levels[LOG_LEVEL_ENUMSIZE];         ///< log levels statements
             static const int syslogLevels[LOG_LEVEL_ENUMSIZE];          ///< syslog log levels
 
             pc::sync::protector *keeper;                                ///< section locker

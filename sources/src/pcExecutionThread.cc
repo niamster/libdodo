@@ -189,7 +189,7 @@ try : job(TYPE_THREAD),
     }
 
 #ifdef DL_EXT
-thread::thread(const dodoString &module,
+thread::thread(const dodo::string &module,
                void             *data,
                void             *toInit)
 try : job(TYPE_THREAD),
@@ -395,7 +395,7 @@ thread::isRunning() const
 
 #ifdef DL_EXT
 thread::__module__
-thread::module(const dodoString &module,
+thread::module(const dodo::string &module,
                void             *toInit)
 {
 #ifdef DL_FAST

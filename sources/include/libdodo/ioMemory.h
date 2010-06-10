@@ -83,7 +83,7 @@ namespace dodo {
              * @param data defines initial data for the interface
              * @param protection defines flags of IO protection, @see io::channel::protectionEnum
              */
-            memory(const dodoString &data,
+            memory(const dodo::string &data,
                    short            protection = channel::PROTECTION_PROCESS);
 
             /**

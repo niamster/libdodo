@@ -121,7 +121,7 @@ draw::line(graphics::image                  &image,
 {
     char pointDesc[128];
 
-    dodoString description = "polyline";
+    dodo::string description = "polyline";
 
     dodoArray<graphics::point>::const_iterator i = points.begin(), j = points.end();
     for (; i != j; ++i) {
@@ -154,8 +154,8 @@ draw::rectangle(graphics::image       &image,
 void
 draw::text(graphics::image       &image,
            const graphics::point &position,
-           const dodoString      &text,
-           const dodoString      &font,
+           const dodo::string      &text,
+           const dodo::string      &font,
            unsigned short        fontWidth,
            const __color__       &fillColor,
            const __color__       &borderColor,
@@ -165,7 +165,7 @@ draw::text(graphics::image       &image,
     if (image.collectedData.handle->im == NULL)
         throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-    dodoString txt = "text 0,0 \"";
+    dodo::string txt = "text 0,0 \"";
     txt.append(text);
     txt.append("\"");
 

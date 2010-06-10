@@ -27,7 +27,7 @@ handler(exchange &ex)
         ///second type: use default headers and do not print them immediately
     dialogue d(ex, POST_SIZE_LIMIT, true);
 
-    dodoString user = d.authenticationResponse().user;
+    dodo::string user = d.authenticationResponse().user;
 
     if (d.GET["status"] == "forbidden") {
         d.setResponseStatus(cgi::STATUS_CODE_FORBIDDEN);
@@ -110,7 +110,7 @@ handler(exchange &ex)
 
         p.processFile("test.tpl", *io);
     } catch (dodo::exception::basic &ex)   {
-        d.printString((dodoString)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
+        d.printString((dodo::string)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
     }
 }
 

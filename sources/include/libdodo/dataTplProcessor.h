@@ -62,14 +62,14 @@ namespace dodo {
                  * @param path defines path of template
                  * @param tpl defines stream for outputting parsed template
                  */
-                void processFile(const dodoString &path,
+                void processFile(const dodo::string &path,
                                  io::channel      &tpl);
 
                 /**
                  * @param buffer defines buffer where template is stored
                  * @param tpl defines stream for outputting parsed template
                  */
-                void processString(const dodoString &buffer,
+                void processString(const dodo::string &buffer,
                                    io::channel      &tpl);
 
                 /**
@@ -77,15 +77,15 @@ namespace dodo {
                  * @param varName defines name of variable
                  * @param varVal defines value of variable
                  */
-                void assign(dodoString       varName,
-                            const dodoString &varVal);
+                void assign(dodo::string       varName,
+                            const dodo::string &varVal);
 
                 /**
                  * set variable
                  * @param varName defines name of variable
                  * @param varVal defines value of variable(array)
                  */
-                void assign(dodoString            varName,
+                void assign(dodo::string            varName,
                             const dodoStringArray &varVal);
 
                 /**
@@ -93,7 +93,7 @@ namespace dodo {
                  * @param varName defines name of variable
                  * @param varVal defines value of variablee(hash)
                  */
-                void assign(dodoString          varName,
+                void assign(dodo::string          varName,
                             const dodoStringMap &varVal);
 
                 /**
@@ -101,7 +101,7 @@ namespace dodo {
                  * @param varName defines name of variable
                  * @param varVal defines value of variable(array of hashes)
                  */
-                void assign(dodoString                     varName,
+                void assign(dodo::string                     varName,
                             const dodoArray<dodoStringMap> &varVal);
 
                 /**
@@ -109,7 +109,7 @@ namespace dodo {
                  */
                 void clear();
 
-                dodoString basePath; ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
+                dodo::string basePath; ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
 
               private:
 
@@ -117,13 +117,13 @@ namespace dodo {
                  * @return preprocessed template
                  * @param path defines path of template
                  */
-                dodoString preProcessFile(const dodoString &path);
+                dodo::string preProcessFile(const dodo::string &path);
 
                 /**
                  * @return preprocessed template
                  * @param buffer defines buffer where template is stored
                  */
-                dodoString preProcessString(const dodoString &buffer);
+                dodo::string preProcessString(const dodo::string &buffer);
 
                 /**
                  * @return parsed template from processored buffer
@@ -131,8 +131,8 @@ namespace dodo {
                  * @param path defines path of template
                  * @param tpl defines stream for outputting parsed template
                  */
-                void _processString(const dodoString &buffer,
-                                    const dodoString &path,
+                void _processString(const dodo::string &buffer,
+                                    const dodo::string &path,
                                     io::channel      &tpl);
 
                 /**
@@ -144,11 +144,11 @@ namespace dodo {
                  * @param tpl defines stream for outputting parsed template
                  * @param path defines path of template
                  */
-                unsigned long _if(const dodoString &buffer,
+                unsigned long _if(const dodo::string &buffer,
                                   unsigned long    start,
-                                  const dodoString &statement,
+                                  const dodo::string &statement,
                                   io::channel      &tpl,
-                                  const dodoString &path);
+                                  const dodo::string &path);
 
                 /**
                  * process `for` statement
@@ -159,11 +159,11 @@ namespace dodo {
                  * @param tpl defines stream for outputting parsed template
                  * @param path defines path of template
                  */
-                unsigned long _for(const dodoString &buffer,
+                unsigned long _for(const dodo::string &buffer,
                                    unsigned long    start,
-                                   const dodoString &statement,
+                                   const dodo::string &statement,
                                    io::channel      &tpl,
-                                   const dodoString &path);
+                                   const dodo::string &path);
 
                 /**
                  * process `for` statement
@@ -173,10 +173,10 @@ namespace dodo {
                  * @param tpl defines stream for outputting parsed template
                  * @param path defines path of template
                  */
-                unsigned long _ns(const dodoString &buffer,
+                unsigned long _ns(const dodo::string &buffer,
                                   unsigned long    start,
                                   io::channel      &tpl,
-                                  const dodoString &path);
+                                  const dodo::string &path);
 
                 /**
                  * process `print` statement
@@ -187,9 +187,9 @@ namespace dodo {
                  * @param path defines path of template
                  */
                 unsigned long _print(unsigned long    start,
-                                     const dodoString &statement,
+                                     const dodo::string &statement,
                                      io::channel      &tpl,
-                                     const dodoString &path);
+                                     const dodo::string &path);
 
                 /**
                  * process `break` statement
@@ -199,8 +199,8 @@ namespace dodo {
                  * @param path defines path of template
                  */
                 bool _break(unsigned long    start,
-                            const dodoString &statement,
-                            const dodoString &path);
+                            const dodo::string &statement,
+                            const dodo::string &path);
 
                 /**
                  * process `assign` statement
@@ -210,8 +210,8 @@ namespace dodo {
                  * @param path defines path of template
                  */
                 unsigned long _assign(unsigned long    start,
-                                      const dodoString &statement,
-                                      const dodoString &path);
+                                      const dodo::string &statement,
+                                      const dodo::string &path);
 
                 /**
                  * process `include` statement
@@ -222,9 +222,9 @@ namespace dodo {
                  * @param path defines path of template
                  */
                 unsigned long _include(unsigned long    start,
-                                       const dodoString &statement,
+                                       const dodo::string &statement,
                                        io::channel      &tpl,
-                                       const dodoString &path);
+                                       const dodo::string &path);
 
                 /**
                  * clean namespace variable and bring back to life vars of prevous namespace that were overwritten
@@ -239,11 +239,11 @@ namespace dodo {
                  * @param ts defines close statement[fi, rof ...]
                  * @param path defines path of template
                  */
-                unsigned long blockEnd(const dodoString &buffer,
+                unsigned long blockEnd(const dodo::string &buffer,
                                        unsigned long    start,
-                                       const dodoString &st,
-                                       const dodoString &ts,
-                                       const dodoString &path);
+                                       const dodo::string &st,
+                                       const dodo::string &ts,
+                                       const dodo::string &path);
 
                 /**
                  * @return value of the variable
@@ -251,9 +251,9 @@ namespace dodo {
                  * @param start defines position in file
                  * @param path defines path of template
                  */
-                dodoString getVar(const dodoString &varName,
+                dodo::string getVar(const dodo::string &varName,
                                   unsigned long    start,
-                                  const dodoString &path);
+                                  const dodo::string &path);
 
                 /**
                  * @return interpolated name of the variable[expanded from {}]
@@ -261,23 +261,23 @@ namespace dodo {
                  * @param start defines position in file
                  * @param path defines path of template
                  */
-                dodoString getVarName(const dodoString &varName,
+                dodo::string getVarName(const dodo::string &varName,
                                       unsigned long    start,
-                                      const dodoString &path);
+                                      const dodo::string &path);
 
                 /**
                  * @return extracted data(e.g. removes pairs of ",',`)
                  * @param statement defines statement that needs extraction from the pairs of ",',`
                  */
-                dodoString trim(const dodoString &statement);
+                dodo::string trim(const dodo::string &statement);
 
                 /**
                  * @return preprocessed template
                  * @param buffer defines buffer where template is stored
                  * @param path defines path of template
                  */
-                dodoString _preProcessString(const dodoString &buffer,
-                                             const dodoString &path);
+                dodo::string _preProcessString(const dodo::string &buffer,
+                                             const dodo::string &path);
 
                 /**
                  * @return line number in file
@@ -291,19 +291,19 @@ namespace dodo {
                  * @return positions of new lines
                  * @param buffer defines buffer where template is stored
                  */
-                dodoArray<unsigned long> detectNewLines(const dodoString &buffer);
+                dodoArray<unsigned long> detectNewLines(const dodo::string &buffer);
 
                 dodoArray< dodoArray<unsigned long> > newLinePositions;                 ///< stack of positions of new lines of templates
 
                 dodoStringList processed;                                               ///< files that will be skipped due to the recursion
 
                 dodoStringMap global;                                                   ///< set of global variables[user-set]
-                dodoMap<dodoString, dodoStringArray> globalArray;                       ///< global user-defined variables(arrays)
-                dodoMap<dodoString, dodoStringMap> globalHash;                          ///< global user-defined variables(hashes)
-                dodoMap<dodoString, dodoArray<dodoStringMap> > globalArrayHash;         ///< global user-defined variables(array of hashes)
+                dodoMap<dodo::string, dodoStringArray> globalArray;                       ///< global user-defined variables(arrays)
+                dodoMap<dodo::string, dodoStringMap> globalHash;                          ///< global user-defined variables(hashes)
+                dodoMap<dodo::string, dodoArray<dodoStringMap> > globalArrayHash;         ///< global user-defined variables(array of hashes)
 
                 dodoMap<unsigned int, dodoStringMap> local;                             ///< local variables[occur in `for` block]
-                dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> > localHash;   ///< local variables(hashes)[occur in `for` block]
+                dodoMap<unsigned int, dodoMap<dodo::string, dodoStringMap> > localHash;   ///< local variables(hashes)[occur in `for` block]
 
                 dodoStringMap dodo;                                                     ///< auxillary variables[dodo defined][for dodo.*]
 
@@ -355,7 +355,7 @@ namespace dodo {
                     STATEMENT_ENUMSIZE
                 };
 
-                static const dodoString statements[STATEMENT_ENUMSIZE]; ///< processor statements[for dodo.*, ...]
+                static const dodo::string statements[STATEMENT_ENUMSIZE]; ///< processor statements[for dodo.*, ...]
             };
         };
     };

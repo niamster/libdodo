@@ -36,6 +36,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "ioFile.inline"
 
@@ -401,7 +402,7 @@ io::pipe::peer()
             sockaddr_in *sa4;
             sa4 = (sockaddr_in *)&sa;
             if (inet_ntop(AF_INET, &(sa4->sin_addr), temp, 15) != NULL)
-                info.host.assign(temp);
+                info.host = dodo::string(temp);
             info.port = ntohs(sa4->sin_port);
 
             return info;
@@ -414,7 +415,7 @@ io::pipe::peer()
             sockaddr_in6 *sa6;
             sa6 = (sockaddr_in6 *)&sa6;
             if (inet_ntop(AF_INET6, &(sa6->sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
-                info.host.assign(temp);
+                info.host = dodo::string(temp);
             info.port = ntohs(sa6->sin6_port);
 
             return info;

@@ -407,10 +407,10 @@ basic::basic(int              a_module,
              int              functionID,
              int              errnoSource,
              int              a_errno,
-             const dodoString &a_errstr,
+             const dodo::string &a_errstr,
              unsigned long    a_line,
-             const dodoString &a_file,
-             const dodoString &a_message) throw () : source(a_module),
+             const dodo::string &a_file,
+             const dodo::string &a_message) throw () : source(a_module),
                                                      function(functionID),
                                                      errnoSource(errnoSource),
                                                      errNo(a_errno),
@@ -882,17 +882,17 @@ basic::~basic() throw ()
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 basic::backtrace()
 {
-    dodoString stack;
+    dodo::string stack;
 
     char str[32];
 
     dodoArray<__call__>::iterator i = callStack.begin(), j = callStack.end();
     for (; i != j; ++i) {
         snprintf(str, 32, " [0x%lx]", (long)i->address);
-        stack.append(i->object + ": " + i->symbol + dodoString(str) + "\n");
+        stack += dodo::string(i->object + ": " + i->symbol + dodo::string(str) + "\n");
     }
 
     return stack;
@@ -900,7 +900,7 @@ basic::backtrace()
 
 //-------------------------------------------------------------------
 
-basic::operator const dodoString
+basic::operator const dodo::string
 & ()
 {
     sync::stack tg;
@@ -1053,7 +1053,7 @@ basic::removeHandlers()
 
 #ifdef DL_EXT
 void
-basic::setHandler(const dodoString &path,
+basic::setHandler(const dodo::string &path,
                   void             *data,
                   void             *toInit)
 {
@@ -1113,7 +1113,7 @@ basic::setHandler(const dodoString &path,
 //-------------------------------------------------------------------
 
 basic::__module__
-basic::module(const dodoString &module,
+basic::module(const dodo::string &module,
               void             *toInit)
 {
     sync::stack tg;
