@@ -7,8 +7,8 @@
     <sh:exec executable="sh" args="-c 'tar --strip-components=1 -jxf $(echo ${revision} | sed -r s/^[0-9]+://).tar.bz2'" />
   </step>
   <step id="configure"
-        description="Configure without external dependencies, POSIX ipc">
-    <sh:exec executable="sh" args="-c 'cd sources; ./configure --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec'" />
+        description="Configure with all external dependecies, POSIX ipc, PCRE regex, disable dequeue">
+    <sh:exec executable="sh" args="-c 'cd sources; ./configure --disable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick --with-bfd'" />
   </step>
   <step id="build-library" description="Build library">
     <c:make jobs="4" target="clean" directory="sources" />
