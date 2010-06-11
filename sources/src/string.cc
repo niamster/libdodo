@@ -175,11 +175,16 @@ char
 string::operator[](unsigned long index) const
 {
 }
+//-------------------------------------------------------------------
+
+string::operator const char *() const
+{
+}
+
 
 //-------------------------------------------------------------------
 
-
-bool &
+bool
 operator<(const string &s1,
           const string &s2)
 {
@@ -187,7 +192,7 @@ operator<(const string &s1,
 
 //-------------------------------------------------------------------
 
-bool &
+bool
 operator>(const string &s1,
           const string &s2)
 {
@@ -195,9 +200,17 @@ operator>(const string &s1,
 
 //-------------------------------------------------------------------
 
-bool &
+bool
 operator==(const string &s1,
            const string &s2)
+{
+}
+
+//-------------------------------------------------------------------
+
+bool
+operator==(const string &s1,
+           const char *s2)
 {
 }
 

@@ -153,6 +153,11 @@ namespace dodo {
          */
         char operator[](unsigned long index) const;
 
+        /**
+         *
+         */
+        operator const char *() const;
+
         enum positionEnum {
             POSITION_BEGIN = 0,
             POSITION_END = -1,
@@ -163,29 +168,35 @@ namespace dodo {
         char *buf; ///< internal buffer to hold string data
         unsigned long length; ///< actual length of the string
     };
-
-    /**
-     *
-     */
-    bool & operator<(const string &s1,
-                     const string &s2);
-
-    /**
-     *
-     */
-    bool & operator>(const string &s1,
-                     const string &s2);
-
-    /**
-     *
-     */
-    bool & operator==(const string &s1,
-                      const string &s2);
-
-    /**
-     *
-     */
-    string & operator+(const string &s1,
-                       const string &s2);
 };
+
+/**
+ *
+ */
+bool operator<(const dodo::string &s1,
+               const dodo::string &s2);
+
+/**
+ *
+ */
+bool operator>(const dodo::string &s1,
+               const dodo::string &s2);
+
+/**
+ *
+ */
+bool operator==(const dodo::string &s1,
+                const dodo::string &s2);
+
+/**
+ *
+ */
+bool operator==(const dodo::string &s1,
+                const char *s2);
+
+/**
+ *
+ */
+dodo::string & operator+(const dodo::string &s1,
+                         const dodo::string &s2);
 #endif
