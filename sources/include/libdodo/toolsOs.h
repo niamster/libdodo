@@ -512,7 +512,7 @@ namespace dodo {
              * @param set defines set of signals
              * @param signal defines os signal
              */
-            static void sigMask(sigset_t *set,
+            static void sigMask(void *set,
                                 long     signal);
 
 #ifdef DL_EXT

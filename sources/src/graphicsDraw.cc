@@ -127,7 +127,7 @@ draw::line(graphics::image                  &image,
     for (; i != j; ++i) {
         snprintf(pointDesc, 128, " %ld,%ld", i->x, i->y);
 
-        description.append(pointDesc);
+        description += dodo::string(pointDesc);
     }
 
     primitive(image, (char *)description.data(), color::transparent, lineColor, lineWidth);
@@ -166,8 +166,8 @@ draw::text(graphics::image       &image,
         throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     dodo::string txt = "text 0,0 \"";
-    txt.append(text);
-    txt.append("\"");
+    txt += dodo::string(text);
+    txt += dodo::string("\"");
 
 #ifndef IMAGEMAGICK_PRE_63
     DrawInfo *di = AcquireDrawInfo();

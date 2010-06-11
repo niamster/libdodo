@@ -687,66 +687,66 @@ os::setGPID(int pid,
 //-------------------------------------------------------------------
 
 void
-os::sigMask(sigset_t *set,
+os::sigMask(void *set,
             long     blockSignals)
 {
     if (blockSignals != -1) {
         if (isSetFlag(blockSignals, SIGNAL_HANGUP))
-            sigaddset(set, SIGHUP);
+            sigaddset((sigset_t *)set, SIGHUP);
 
         if (isSetFlag(blockSignals, SIGNAL_INTERRUPT))
-            sigaddset(set, SIGINT);
+            sigaddset((sigset_t *)set, SIGINT);
 
         if (isSetFlag(blockSignals, SIGNAL_QUIT))
-            sigaddset(set, SIGQUIT);
+            sigaddset((sigset_t *)set, SIGQUIT);
 
         if (isSetFlag(blockSignals, SIGNAL_ILLEGAL_INSTRUCTION))
-            sigaddset(set, SIGILL);
+            sigaddset((sigset_t *)set, SIGILL);
 
         if (isSetFlag(blockSignals, SIGNAL_ABORT))
-            sigaddset(set, SIGABRT);
+            sigaddset((sigset_t *)set, SIGABRT);
 
         if (isSetFlag(blockSignals, SIGNAL_BUS_FAULT))
-            sigaddset(set, SIGBUS);
+            sigaddset((sigset_t *)set, SIGBUS);
 
         if (isSetFlag(blockSignals, SIGNAL_FLOATINGPOINT_FAULT))
-            sigaddset(set, SIGFPE);
+            sigaddset((sigset_t *)set, SIGFPE);
 
         if (isSetFlag(blockSignals, SIGNAL_USER_DEFINED1))
-            sigaddset(set, SIGUSR1);
+            sigaddset((sigset_t *)set, SIGUSR1);
 
         if (isSetFlag(blockSignals, SIGNAL_SEGMENTATION_FAULT))
-            sigaddset(set, SIGSEGV);
+            sigaddset((sigset_t *)set, SIGSEGV);
 
         if (isSetFlag(blockSignals, SIGNAL_USER_DEFINED2))
-            sigaddset(set, SIGUSR2);
+            sigaddset((sigset_t *)set, SIGUSR2);
 
         if (isSetFlag(blockSignals, SIGNAL_PIPE_FAULT))
-            sigaddset(set, SIGPIPE);
+            sigaddset((sigset_t *)set, SIGPIPE);
 
         if (isSetFlag(blockSignals, SIGNAL_ALARM))
-            sigaddset(set, SIGALRM);
+            sigaddset((sigset_t *)set, SIGALRM);
 
         if (isSetFlag(blockSignals, SIGNAL_TERMINATION))
-            sigaddset(set, SIGTERM);
+            sigaddset((sigset_t *)set, SIGTERM);
 
         if (isSetFlag(blockSignals, SIGNAL_CHILD_CHANGED))
-            sigaddset(set, SIGCHLD);
+            sigaddset((sigset_t *)set, SIGCHLD);
 
         if (isSetFlag(blockSignals, SIGNAL_CONTINUE))
-            sigaddset(set, SIGCONT);
+            sigaddset((sigset_t *)set, SIGCONT);
 
         if (isSetFlag(blockSignals, SIGNAL_KEYBOARD_STOP))
-            sigaddset(set, SIGTSTP);
+            sigaddset((sigset_t *)set, SIGTSTP);
 
         if (isSetFlag(blockSignals, SIGNAL_CPULIMIT_EXCEEDED))
-            sigaddset(set, SIGXCPU);
+            sigaddset((sigset_t *)set, SIGXCPU);
 
         if (isSetFlag(blockSignals, SIGNAL_FILESIZE_EXCEEDED))
-            sigaddset(set, SIGXFSZ);
+            sigaddset((sigset_t *)set, SIGXFSZ);
 
         if (isSetFlag(blockSignals, SIGNAL_BAD_SYSCALL))
-            sigaddset(set, SIGSYS);
+            sigaddset((sigset_t *)set, SIGSYS);
     }
 }
 
