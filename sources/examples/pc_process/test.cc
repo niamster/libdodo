@@ -110,9 +110,9 @@ main(int  argc UNUSED,
         for (int i = 0; i < amount; ++i) {
             ids[i] = tools::string::lToString(i);
             if (i % 2 == 0)
-                processes[i] = manager.add(execution::process(::process0, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
+                processes[i] = manager.add(execution::process(::process0, (void *)ids[i].data(), execution::ON_DESTRUCTION_STOP));
             else
-                processes[i] = manager.add(execution::process(::process1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
+                processes[i] = manager.add(execution::process(::process1, (void *)ids[i].data(), execution::ON_DESTRUCTION_STOP));
         }
 
         {

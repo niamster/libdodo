@@ -30,7 +30,7 @@ hook(xexec::__collected_data__ *odata,
         dodo::string str = ">" + buffer + "<\n";
 
         io->bs = str.size();
-        st->buffer.assign(str);
+        st->buffer = dodo::string(str);
     }
 }
 #endif

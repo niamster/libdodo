@@ -61,10 +61,10 @@ main(int  argc UNUSED,
         for (int i = 0; i < amount; ++i) {
             ids[i] = tools::string::lToString(i);
             if (i % 2 == 0) {
-                pos[i] = manager.add(execution::thread(::job1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
+                pos[i] = manager.add(execution::thread(::job1, (void *)ids[i].data(), execution::ON_DESTRUCTION_STOP));
                 cout << "Job #"<< pos[i] << " is a thread" << endl;
             } else {
-                pos[i] = manager.add(execution::process(::job1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
+                pos[i] = manager.add(execution::process(::job1, (void *)ids[i].data(), execution::ON_DESTRUCTION_STOP));
                 cout << "Job #"<< pos[i] << " is a process" << endl;
             }
         }

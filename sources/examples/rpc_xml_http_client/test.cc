@@ -70,7 +70,7 @@ class httpIO : public io::stream::channel, public io::network::http::client {
     virtual unsigned long
     _writeString(const char * const idata) const
     {
-        data.append(idata);
+        data += dodo::string(idata);
 
         return strlen(idata);
     }

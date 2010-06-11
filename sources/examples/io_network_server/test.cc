@@ -38,7 +38,7 @@ process(exchange &ex)
 
         cout << str << ":" << str.size() << endl;
         cout.flush();
-        if (str.compare("exit") == 0) {
+        if (str == "exit") {
             ex.close();
 
             exit(0);

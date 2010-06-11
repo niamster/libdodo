@@ -56,7 +56,7 @@ main(int  argc UNUSED,
         dodo::string ids[amount];
         for (int i = 0; i < amount; ++i) {
             ids[i] = tools::string::lToString(i);
-            pos[i] = manager.add(execution::thread(thread, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
+            pos[i] = manager.add(execution::thread(thread, (void *)ids[i].data(), execution::ON_DESTRUCTION_STOP));
         }
 
         cout << "Launching threads" << endl;

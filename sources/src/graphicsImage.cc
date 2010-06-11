@@ -160,7 +160,7 @@ __image_init__::imErrorHandler(const ExceptionType,
                                const char          *reason,
                                const char          *description)
 {
-    throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason ? reason : __dodostring__, __LINE__, __FILE__, description ? description : __dodostring__);
+    throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason ? dodo::string(reason) : __dodostring__, __LINE__, __FILE__, description ? dodo::string(description) : __dodostring__);
 }
 
 //-------------------------------------------------------------------
@@ -273,7 +273,7 @@ image::read(const io::channel &img)
         if (dataPart.size() == 0)
             break;
 
-        data.append(dataPart);
+        data += dodo::string(dataPart);
     }
     dataPart.clear();
 
