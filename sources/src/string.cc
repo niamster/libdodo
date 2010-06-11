@@ -31,77 +31,181 @@
 
 #include <libdodo/string.h>
 
+#include <stdio.h>
+
 using namespace dodo;
 
-/* string::string() : buf(NULL), */
-/*                    len(0) */
-/* { */
-/* } */
+string::string() : buf(NULL),
+                   length(0)
+{
+}
 
-/* //------------------------------------------------------------------- */
+//-------------------------------------------------------------------
 
-/* string::string(const string &s) */
-/* { */
-/* } */
+string::string(const string &s)
+{
+}
 
-/* //------------------------------------------------------------------- */
+//-------------------------------------------------------------------
 
-/* string::string(const char *data) */
-/* { */
-/* } */
+string::string(const char *data)
+{
+}
 
-/* //------------------------------------------------------------------- */
+//-------------------------------------------------------------------
 
-/* string::string(const char *data, */
-/*                unsigned long length) */
-/* { */
-/* } */
+string::string(const char *data,
+               unsigned long length)
+{
+}
 
-/* //------------------------------------------------------------------- */
+//-------------------------------------------------------------------
 
-/* string::~string() */
-/* { */
-/* } */
+string::string(char symbol,
+               unsigned long count)
+{
+}
 
-/* //------------------------------------------------------------------- */
+//-------------------------------------------------------------------
 
-/* const char * */
-/* string::data() const */
-/* { */
-/* } */
+string::~string()
+{
+}
 
-/* //------------------------------------------------------------------- */
+//-------------------------------------------------------------------
 
-/* unsigned long */
-/* string::size() const */
-/* { */
-/* } */
+const char *
+string::data() const
+{
+}
 
-/* //------------------------------------------------------------------- */
+//-------------------------------------------------------------------
 
-/* bool */
-/* string::empty() */
-/* { */
-/* } */
+unsigned long
+string::size() const
+{
+}
+
+//-------------------------------------------------------------------
+
+bool
+string::empty() const
+{
+}
+
+//-------------------------------------------------------------------
+
+void
+string::erase(unsigned long index,
+              unsigned long count)
+{
+}
+
+//-------------------------------------------------------------------
+
+void
+string::clear()
+{
+}
+
+//-------------------------------------------------------------------
+
+void
+string::resize(unsigned long length)
+{
+}
+
+//-------------------------------------------------------------------
+
+unsigned long
+string::find(const string &str,
+             unsigned long index) const
+{
+}
+
+//-------------------------------------------------------------------
+
+string &
+string::replace(unsigned long index,
+                unsigned long num,
+                const string &str)
+{
+}
+
+//-------------------------------------------------------------------
+
+string &
+string::insert(unsigned long index,
+               const string &str)
+{
+}
+
+//-------------------------------------------------------------------
+
+string
+string::substr(unsigned long index,
+               unsigned long length) const
+{
+}
+
+//-------------------------------------------------------------------
+
+void
+string::reserve(unsigned long count)
+{
+}
+
+//-------------------------------------------------------------------
+
+string &
+string::operator=(const string &data)
+{
+}
+
+//-------------------------------------------------------------------
+
+string &
+string::operator+=(const string &str)
+{
+}
 
 //-------------------------------------------------------------------
 
 char
-string::operator[](unsigned long index)
+string::operator[](unsigned long index) const
+{
+}
+
+//-------------------------------------------------------------------
+
+
+bool &
+operator<(const string &s1,
+          const string &s2)
+{
+}
+
+//-------------------------------------------------------------------
+
+bool &
+operator>(const string &s1,
+          const string &s2)
+{
+}
+
+//-------------------------------------------------------------------
+
+bool &
+operator==(const string &s1,
+           const string &s2)
 {
 }
 
 //-------------------------------------------------------------------
 
 string &
-string::operator+(const string &data);
-{
-}
-
-//-------------------------------------------------------------------
-
-string &
-string::operator=(const string &data);
+operator+(const string &s1,
+          const string &s2)
 {
 }
 

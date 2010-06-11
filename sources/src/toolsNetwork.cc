@@ -367,7 +367,7 @@ network::mail(const dodo::string &host,
     bool auth = login.size() > 0 ? true : false;
 
     short family = connection::PROTOCOL_FAMILY_IPV4;
-    if (host.find(":") != dodo::string::npos)
+    if (host.find(":") != dodo::string::POSITION_END)
         family = connection::PROTOCOL_FAMILY_IPV6;
 
     exchange ex;

@@ -52,19 +52,25 @@ namespace dodo {
 
         /**
          * constructor
+         * @param data defines null-terminated buffer to construct the string
          */
         string(const char *data);
 
         /**
          * constructor
+         * @param data defines buffer to construct the string
+         * @param data defines length of the buffer
          */
         string(const char *data,
                unsigned long length);
 
         /**
          * constructor
+         * @param symbol defines character to construct the string
+         * @param count defines amount of characters to fill the string
          */
-        string(char, unsigned long length = 1);
+        string(char symbol,
+               unsigned long count = 1);
 
         /**
          * destructor
@@ -72,49 +78,25 @@ namespace dodo {
         ~string();
 
         /**
-         * @return pointer to the data
+         * @return pointer to the string data
          */
         const char *data() const;
 
         /**
-         * @return length of the data
+         * @return length of the string
          */
         unsigned long size() const;
 
         /**
-         *
+         * @return true if string is empty
          */
         bool empty() const;
 
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string & append(const string &); */
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string & append(const string &, unsigned long); */
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string & append(unsigned long, char); */
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string& append( const string& str, unsigned long index, unsigned long len ); */
-
         /**
          *
          */
-        string & erase(unsigned long);
-
-        /**
-         *
-         */
-        string & erase(unsigned long, unsigned long);
+        void erase(unsigned long index = POSITION_BEGIN,
+                   unsigned long count = POSITION_END);
 
         /**
          *
@@ -124,122 +106,86 @@ namespace dodo {
         /**
          *
          */
-        void resize(unsigned long);
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string & assign(const string &); */
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string & assign(const char *, unsigned long); */
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string & assign(unsigned long, char); */
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string& assign( const string& str, unsigned long index, unsigned long len ); */
+        void resize(unsigned long length);
 
         /**
          *
          */
-        unsigned long find(const string &) const;
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* unsigned long find(char) const; */
+        unsigned long find(const string &str,
+                           unsigned long index = POSITION_BEGIN) const;
 
         /**
          *
          */
-        unsigned long find(const string &, unsigned long) const;
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* unsigned long find(char, unsigned long) const; */
-
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string &replace(unsigned long index1, */
-        /*                 unsigned long num1, */
-        /*                 const string& str, */
-        /*                 unsigned long index2, */
-        /*                 unsigned long num2 ); */
-
-        string& replace( unsigned long index, unsigned long num, const string& str );
-
-
-        string& insert( unsigned long index, const char* str );
-
-        string substr( unsigned long index = 0, unsigned long length = string::npos ) const;
-
-        void reserve( unsigned long size = 0 );
+        string & replace(unsigned long index,
+                         unsigned long num,
+                         const string &str);
 
         /**
          *
          */
-        string & operator=(const string &data);
+        string & insert(unsigned long index,
+                        const string &str);
+
+        /**
+         *
+         */
+        string substr(unsigned long index,
+                      unsigned long length = POSITION_END) const;
+
+        /**
+         *
+         */
+        void reserve(unsigned long count);
+
+        /**
+         *
+         */
+        string & operator=(const string &str);
 
         /**
          *
          */
         string & operator+=(const string &);
 
-        /* /\** */
-        /*  * */
-        /*  *\/ */
-        /* string & operator=(char data); */
-
         /**
          *
          */
         char operator[](unsigned long index) const;
 
-        static unsigned long npos;
+        enum positionEnum {
+            POSITION_BEGIN = 0,
+            POSITION_END = -1,
+        };
 
       private:
 
-        char *buf; ///< internal buffer to hold string and metadata
-        unsigned long len; ///< actual length of the string
+        char *buf; ///< internal buffer to hold string data
+        unsigned long length; ///< actual length of the string
     };
 
     /**
      *
      */
-    bool & operator<(const string &, const string &data);
+    bool & operator<(const string &s1,
+                     const string &s2);
 
     /**
      *
      */
-    bool & operator>(const string &, const string &data);
+    bool & operator>(const string &s1,
+                     const string &s2);
 
     /**
      *
      */
-    bool & operator==(const string &, const string &data);
+    bool & operator==(const string &s1,
+                      const string &s2);
 
     /**
      *
      */
-    string & operator+(const string &data, const string &);
-
-    /**
-     *
-     */
-    string & operator+(const string &, const char *data);
-
-    /**
-     *
-     */
-    string & operator+(const char *data, const string &);
+    string & operator+(const string &s1,
+                       const string &s2);
 };
 #endif

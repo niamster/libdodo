@@ -282,7 +282,7 @@ misc::split(const dodo::string &fields,
         }
 
         i = fields.find(separator, i);
-        if (i == dodo::string::npos) {
+        if (i == dodo::string::POSITION_END) {
             arr.push_back(dodo::string(fields.data() + j, fields.size() - j));
 
             break;

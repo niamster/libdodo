@@ -1070,7 +1070,7 @@ client::getHeaders(const dodo::string &headers,
 
     while (i < size) {
         i = headers.find("\n", i);
-        if (i == dodo::string::npos)
+        if (i == dodo::string::POSITION_END)
             return;
 
         piece = tools::string::trim(dodo::string(headers.data() + j, i - j), '\r');
@@ -1105,9 +1105,9 @@ client::extractHeaders(const dodo::string &data,
     headers += dodo::string(data);
 
     unsigned long i = headers.find("\r\n\r\n");
-    if (i == dodo::string::npos) {
+    if (i == dodo::string::POSITION_END) {
         i = headers.find("\n\n");
-        if (i == dodo::string::npos)
+        if (i == dodo::string::POSITION_END)
             return 0;
         else {
             headers.erase(i + 1);
@@ -1148,9 +1148,9 @@ client::getProxyConnectResponse(exchange *ex,
             headers += dodo::string(data);
 
             i = headers.find("\r\n\r\n");
-            if (i == dodo::string::npos) {
+            if (i == dodo::string::POSITION_END) {
                 i = headers.find("\n\n");
-                if (i != dodo::string::npos) {
+                if (i != dodo::string::POSITION_END) {
                     headers.erase(i + 1);
 
                     endOfHeaders = true;
@@ -1240,15 +1240,15 @@ client::getContent(exchange *ex,
                 }
 
                 eoc = data.find("\r\n");
-                if (eoc == dodo::string::npos) {
+                if (eoc == dodo::string::POSITION_END) {
                     eoc = data.find('\n');
-                    if (eoc != dodo::string::npos)
+                    if (eoc != dodo::string::POSITION_END)
                         ++eoc;
                 } else {
                     eoc += 2;
                 }
 
-                if (eoc != dodo::string::npos) {
+                if (eoc != dodo::string::POSITION_END) {
                     chunkSizeHex.clear();
 
                     for (unsigned long i = 0; i < eoc; ++i) {

@@ -984,13 +984,13 @@ code::parseUrl(const dodo::string &url)
 
     __url__ temp;
 
-    if ((pos = url.find("://", 0)) != dodo::string::npos) {
+    if ((pos = url.find("://", 0)) != dodo::string::POSITION_END) {
         temp.protocol = dodo::string(url.data(), pos);
 
         begin = pos + 3;
     }
 
-    if ((pos = url.find('@', begin)) != dodo::string::npos) {
+    if ((pos = url.find('@', begin)) != dodo::string::POSITION_END) {
         if ((pos1 = url.find(':', begin)) < pos) {
             temp.login = dodo::string(url.data() + begin, pos1 - begin);
 
@@ -1003,7 +1003,7 @@ code::parseUrl(const dodo::string &url)
         begin = pos + 1;
     }
 
-    if ((pos = url.find('/', begin)) != dodo::string::npos) {
+    if ((pos = url.find('/', begin)) != dodo::string::POSITION_END) {
         if ((pos1 = url.find(':', begin)) < pos) {
             temp.host = dodo::string(url.data() + begin, pos1 - begin);
 
@@ -1015,13 +1015,13 @@ code::parseUrl(const dodo::string &url)
 
         begin = pos + 1;
 
-        if ((pos = url.find('?', begin)) != dodo::string::npos) {
+        if ((pos = url.find('?', begin)) != dodo::string::POSITION_END) {
             temp.path = dodo::string(url.data() + begin, pos - begin);
             temp.request = dodo::string(url.data() + pos + 1, url.size() - pos - 1);
         } else
             temp.path = dodo::string(url.data() + begin, url.size() - begin);
     } else {
-        if ((pos1 = url.find(':', begin)) != dodo::string::npos) {
+        if ((pos1 = url.find(':', begin)) != dodo::string::POSITION_END) {
             temp.host = dodo::string(url.data() + begin, pos1 - begin);
 
             ++pos1;

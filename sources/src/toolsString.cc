@@ -106,23 +106,23 @@ string::find(const dodo::string &str,
              bool             icase)
 {
     if (position > str.size())
-        return dodo::string::npos;
+        return dodo::string::POSITION_END;
 
     char *pos = NULL;
 
     if (icase) {
         if ((pos = strcasestr((char *)(str.data() + position), needle.data())) == NULL)
-            return dodo::string::npos;
+            return dodo::string::POSITION_END;
         else
             return (pos - str.data());
     } else {
         if ((pos = strstr((char *)(str.data() + position), needle.data())) == NULL)
-            return dodo::string::npos;
+            return dodo::string::POSITION_END;
         else
             return (pos - str.data());
     }
 
-    return dodo::string::npos;
+    return dodo::string::POSITION_END;
 }
 
 //-------------------------------------------------------------------
@@ -422,7 +422,7 @@ string::replace(const dodo::string &needle,
 
     while (true) {
         i = data.find(needle, i);
-        if (i == dodo::string::npos)
+        if (i == dodo::string::POSITION_END)
             break;
 
         data.replace(i, j, replacement.substr(0, k));

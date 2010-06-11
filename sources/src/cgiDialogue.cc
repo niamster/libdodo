@@ -273,7 +273,7 @@ dialogue::charset()
     dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
     for (; b != e; ++b) {
         temp = tools::string::find(*b, "charset=", true);
-        if (temp == dodo::string::npos)
+        if (temp == dodo::string::POSITION_END)
             continue;
 
         return dodo::string(b->data() + temp + 8, b->size() - temp - 8);
@@ -641,7 +641,7 @@ dialogue::makePost()
             dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
             for (; b != e; ++b) {
                 temp0 = tools::string::find(*b, "boundary=", true);
-                if (temp0 == dodo::string::npos)
+                if (temp0 == dodo::string::POSITION_END)
                     continue;
 
                 dodo::string delimiter = "--";
@@ -664,13 +664,13 @@ dialogue::makePost()
                     if (i->size() == 2 && (*i)[0] == '-' && (*i)[1] == '-') ///< '--' in the last portion
                         break;
                     else {
-                        if (i->find("filename") != dodo::string::npos) {
-                            if ((temp0 = i->find("name=\"")) == dodo::string::npos)
+                        if (i->find("filename") != dodo::string::POSITION_END) {
+                            if ((temp0 = i->find("name=\"")) == dodo::string::POSITION_END)
                                 continue;
 
                             temp0 += 6;
 
-                            if ((temp1 = i->find("\"", temp0)) == dodo::string::npos)
+                            if ((temp1 = i->find("\"", temp0)) == dodo::string::POSITION_END)
                                 continue;
 
                             dodo::string post_name = dodo::string(i->data() + temp0, temp1 - temp0);
@@ -764,12 +764,12 @@ dialogue::makePost()
 
                             FILES.insert(std::make_pair(post_name, file));
                         } else {
-                            if ((temp0 = i->find("name=\"")) == dodo::string::npos)
+                            if ((temp0 = i->find("name=\"")) == dodo::string::POSITION_END)
                                 continue;
 
                             temp0 += 6;
 
-                            if ((temp1 = i->find("\"", temp0)) == dodo::string::npos)
+                            if ((temp1 = i->find("\"", temp0)) == dodo::string::POSITION_END)
                                 continue;
 
                             argument = i->data();
