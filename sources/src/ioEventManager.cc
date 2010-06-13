@@ -2,8 +2,8 @@
  *            ioEventManager.cc
  *
  *  Thu Sep 09 2006
- *  Copyright  2006  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2006  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

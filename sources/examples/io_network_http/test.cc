@@ -20,7 +20,7 @@ main(int  argc UNUSED,
 {
     try {
         dodoStringMap cookies;
-        cookies["test"] = "Ni@m";
+        cookies["test"] = "Dmytro Milinevskyy";
 
         dodoStringMap map;
 

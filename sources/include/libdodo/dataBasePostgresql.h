@@ -2,8 +2,8 @@
  *            dataBasePostgresql.h
  *
  *  Fri Jan  13 2006
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

@@ -2,8 +2,8 @@
  *            rpcXmlServer.h
  *
  *  Wed Apr 09 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

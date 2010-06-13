@@ -2,8 +2,8 @@
  *            toolsLogger.h
  *
  *  Fri Mar 21 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

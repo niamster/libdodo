@@ -25,7 +25,7 @@ handler(exchange &ex)
 
     dialogue d(ex, POST_SIZE_LIMIT, true);
 
-    d.setCookie(cookie("test", "Ni@m"));
+    d.setCookie(cookie("test", "Dmytro Milinevskyy"));
 
         ///increment counter in shared memory
     int *inc = (int *)object.acquire();

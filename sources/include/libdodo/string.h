@@ -2,8 +2,8 @@
  *            string.h
  *
  *  Thu Jun  10 2010
- *  Copyright  2010  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2010  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

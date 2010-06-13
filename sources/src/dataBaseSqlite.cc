@@ -2,8 +2,8 @@
  *            dataBaseSqlite.cc
  *
  *  Thu Apr  30 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

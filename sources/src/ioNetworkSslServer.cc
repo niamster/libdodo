@@ -1,9 +1,9 @@
 /***************************************************************************
  *            ioNetworkSslServer.cc
  *  Tue Jun 10 2008
- *  Copyright  2008  Ni@m
+ *  Copyright  2008  Dmytro Milinevskyy
 
- *  niam.niam@gmail.com
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
