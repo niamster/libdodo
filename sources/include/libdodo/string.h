@@ -54,7 +54,7 @@ namespace dodo {
          * constructor
          * @param data defines null-terminated buffer to construct the string
          */
-        string(const char *data);
+        string(const char *str);
 
         /**
          * constructor
@@ -165,8 +165,9 @@ namespace dodo {
 
       private:
 
-        char *buf; ///< internal buffer to hold string data
-        unsigned long length; ///< actual length of the string
+        char *buf; ///< buffer to hold data
+        unsigned long bufSize; ///< actual size of the buffer
+        unsigned long strLen; ///< actual length of the data
     };
 };
 
