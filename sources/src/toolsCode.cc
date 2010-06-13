@@ -572,7 +572,7 @@ code::decodeUrl(const dodo::string &string)
 
             case '%':
 
-                if ((k - o) >= 2 /* && std::isxdigit(string[o + 1]) && std::isxdigit(string[o + 2]) */) { // FIXME
+                if ((k - o) >= 2 && string[o + 1] - '0' < 10 && string[o + 2] - '0' < 10) {
                     result += dodo::string(1, code::hexToChar(string[o + 1], string[o + 2]));
                     o += 2;
                 } else {
