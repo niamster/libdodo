@@ -77,27 +77,27 @@ node::node(const dodoMap<dodo::string, node, dodoMapStringCompare> &value) : obj
 
 //-------------------------------------------------------------------
 
-node::node(const node &on) : valueDataType(on.valueDataType)
+node::node(const node &n) : valueDataType(n.valueDataType)
 {
     switch (valueDataType) {
         case DATA_STRING:
-            stringValue = new dodo::string(*on.stringValue);
+            stringValue = new dodo::string(*n.stringValue);
             break;
 
         case DATA_OBJECT:
-            objectValue = new dodoMap<dodo::string, node, dodoMapStringCompare>(*on.objectValue);
+            objectValue = new dodoMap<dodo::string, node, dodoMapStringCompare>(*n.objectValue);
             break;
 
         case DATA_ARRAY:
-            arrayValue = new dodoArray<node>(*on.arrayValue);
+            arrayValue = new dodoArray<node>(*n.arrayValue);
             break;
 
         case DATA_NUMERIC:
-            numericValue = on.numericValue;
+            numericValue = n.numericValue;
             break;
 
         case DATA_BOOLEAN:
-            booleanValue = on.booleanValue;
+            booleanValue = n.booleanValue;
             break;
     }
 }
@@ -112,7 +112,7 @@ node::~node()
             break;
 
         case DATA_OBJECT:
-            delete objectValue ;
+            delete objectValue;
             break;
 
         case DATA_ARRAY:
@@ -408,6 +408,51 @@ bool
 node::isNull() const
 {
     return (valueDataType == DATA_NULL);
+}
+
+//-------------------------------------------------------------------
+
+node &
+node::operator=(const node &n)
+{
+    switch (valueDataType) {
+        case DATA_STRING:
+            delete stringValue;
+            break;
+
+        case DATA_OBJECT:
+            delete objectValue;
+            break;
+
+        case DATA_ARRAY:
+            delete arrayValue;
+            break;
+    }
+
+    valueDataType = n.valueDataType;
+    switch (valueDataType) {
+        case DATA_STRING:
+            stringValue = new dodo::string(*n.stringValue);
+            break;
+
+        case DATA_OBJECT:
+            objectValue = new dodoMap<dodo::string, node, dodoMapStringCompare>(*n.objectValue);
+            break;
+
+        case DATA_ARRAY:
+            arrayValue = new dodoArray<node>(*n.arrayValue);
+            break;
+
+        case DATA_NUMERIC:
+            numericValue = n.numericValue;
+            break;
+
+        case DATA_BOOLEAN:
+            booleanValue = n.booleanValue;
+            break;
+    }
+
+    return *this;
 }
 
 //-------------------------------------------------------------------

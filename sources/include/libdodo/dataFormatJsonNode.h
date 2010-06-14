@@ -180,6 +180,12 @@ namespace dodo {
                     node operator[](unsigned long key) const;
 
                     /**
+                     * assign operator
+                     * @param n defines node to be assigned
+                     */
+                    node & operator=(const node &n);
+
+                    /**
                      * @return type of node, @see json::dataEnum
                      */
                     short type() const;

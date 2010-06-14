@@ -128,6 +128,7 @@ main(int  argc UNUSED,
         p.fromMap(map, json);
         cout << endl << json << endl;
 
+        json.pos = 0;
         jn = p.process(json);
         showJSON(jn);
     } catch (dodo::exception::basic &ex)   {
