@@ -36,37 +36,44 @@
 
 using namespace dodo;
 
-string::string() : buf(NULL),
-                   bufSize(0),
+string::string() : buf(new char[1]),
+                   bufSize(1),
                    strLen(0)
 {
+    buf[0] = 0x0;
 }
 
 //-------------------------------------------------------------------
 
 string::string(const string &s) : buf(NULL),
-                                  bufSize(s.bufSize),
+                                  bufSize(1),
                                   strLen(s.strLen)
 {
-    if (bufSize) {
+    if (strLen) {
+        bufSize = strLen + 1;
         buf = new char[bufSize];
-        memcpy(buf, s.buf, bufSize);
+        memcpy(buf, s.buf, strLen);
+        buf[strLen] = 0x0;
+    } else {
+        buf = new char[1];
+        buf[0] = 0x0;
     }
 }
 
 //-------------------------------------------------------------------
 
 string::string(const char *data) : buf(NULL),
-                                   bufSize(0),
+                                   bufSize(1),
                                    strLen(0)
 {
     if (data) {
         strLen = strlen(data);
-        if (strLen) {
-            bufSize = strLen + 1;
-            buf = new char[bufSize];
-            memcpy(buf, data, bufSize);
-        }
+        bufSize = strLen + 1;
+        buf = new char[bufSize];
+        memcpy(buf, data, bufSize);
+    } else {
+        buf = new char[1];
+        buf[0] = 0x0;
     }
 }
 
@@ -74,14 +81,17 @@ string::string(const char *data) : buf(NULL),
 
 string::string(const char *str,
                unsigned long length) : buf(NULL),
-                                       bufSize(0),
+                                       bufSize(1),
                                        strLen(length)
 {
-    if (str && strLen) {
+    if (str) {
         bufSize = strLen + 1;
         buf = new char[bufSize];
         memcpy(buf, str, strLen);
         buf[strLen] = 0x0;
+    } else {
+        buf = new char[1];
+        buf[0] = 0x0;
     }
 }
 
@@ -89,7 +99,7 @@ string::string(const char *str,
 
 string::string(char symbol,
                unsigned long count) : buf(NULL),
-                                      bufSize(0),
+                                      bufSize(1),
                                       strLen(count)
 {
     if (strLen) {
@@ -97,6 +107,9 @@ string::string(char symbol,
         buf = new char[bufSize];
         memset(buf, symbol, strLen);
         buf[strLen] = 0x0;
+    } else {
+        buf = new char[1];
+        buf[0] = 0x0;
     }
 }
 
@@ -104,8 +117,7 @@ string::string(char symbol,
 
 string::~string()
 {
-    if (buf)
-        delete [] buf;
+    delete [] buf;
 }
 
 //-------------------------------------------------------------------
@@ -129,7 +141,7 @@ string::size() const
 bool
 string::empty() const
 {
-    return !(buf && strLen);
+    return strLen == 0;
 }
 
 //-------------------------------------------------------------------
@@ -138,8 +150,8 @@ void
 string::erase(unsigned long index,
               unsigned long count)
 {
-    if (!buf)
-        return;
+    if (count == POSITION_END)
+        count = strLen;
 
     unsigned long end = index + count;
 
@@ -157,8 +169,7 @@ void
 string::clear()
 {
     strLen = 0;
-    if (buf)
-        buf[strLen] = 0x0;
+    buf[0] = 0x0;
 }
 
 //-------------------------------------------------------------------
@@ -174,10 +185,8 @@ string::resize(unsigned long len)
 
         char *newBuf = new char[newBufSize];
 
-        if (buf) {
-            memcpy(newBuf, buf, strLen+1);
-            delete [] buf;
-        }
+        memcpy(newBuf, buf, bufSize);
+        delete [] buf;
         /* memset(newBuf+strLen, 0x0, newBufSize - bufSize); */
 
         buf = newBuf;
@@ -194,10 +203,14 @@ unsigned long
 string::find(const string &str,
              unsigned long index) const
 {
-    if (!buf || !str.buf || index > strLen)
+    if (!str.buf || index > strLen)
         return POSITION_END;
 
-    return strstr(buf+index, str.buf) - buf;
+    char *pos = strstr(buf+index, str.buf);
+    if (!pos)
+        return POSITION_END;
+    else
+        return pos - buf;
 }
 
 //-------------------------------------------------------------------
@@ -207,7 +220,27 @@ string::replace(unsigned long index,
                 unsigned long num,
                 const string &str)
 {
-    // TODO
+    if (!str.buf || index > strLen)
+        return *this; // FIXME: throw exception
+
+    if (bufSize < strLen - num + str.strLen) {
+        unsigned long newBufSize = strLen - num + str.strLen + 1;
+
+        char *newBuf = new char[newBufSize];
+
+        memcpy(newBuf, buf, bufSize);
+        delete [] buf;
+
+        buf = newBuf;
+        bufSize = newBufSize;
+    }
+
+    if (num != str.strLen)
+        memmove(buf+index+str.strLen, buf+index+num, strLen-(index+num));
+    memcpy(buf+index, str.buf, str.strLen);
+    strLen += (int)str.strLen - (int)num;
+
+    return *this;
 }
 
 //-------------------------------------------------------------------
@@ -216,7 +249,26 @@ string &
 string::insert(unsigned long index,
                const string &str)
 {
-    // TODO
+    if (!str.buf || index > strLen)
+        return *this; // FIXME: throw exception
+
+    if (bufSize < strLen + str.strLen) {
+        unsigned long newBufSize = strLen + str.strLen + 1;
+
+        char *newBuf = new char[newBufSize];
+
+        memcpy(newBuf, buf, bufSize);
+        delete [] buf;
+
+        buf = newBuf;
+        bufSize = newBufSize;
+    }
+
+    memmove(buf+index+str.strLen, buf+index, strLen-index);
+    memcpy(buf+index, str.buf, str.strLen);
+    strLen += str.strLen;
+
+    return *this;
 }
 
 //-------------------------------------------------------------------
@@ -225,10 +277,13 @@ string
 string::substr(unsigned long index,
                unsigned long length) const
 {
-    if (!buf || index > strLen)
+    if (index > strLen)
         return string(); // FIXME: throw exception
 
-    return string(buf+index, length+index>strLen?strLen-index:length);
+    if (length == POSITION_END)
+        length = strLen;
+
+    return string(buf+index, (length+index>strLen)?strLen-index:length);
 }
 
 //-------------------------------------------------------------------
@@ -246,14 +301,13 @@ string::operator=(const string &data)
 {
     strLen = data.strLen;
 
-    if (buf)
-        delete [] buf;
+    delete [] buf;
 
-    if (strLen) {
-        bufSize = strLen + 1;
-        buf = new char[bufSize];
-        memcpy(buf, data.buf, bufSize);
-    }
+    bufSize = strLen + 1;
+    buf = new char[bufSize];
+    memcpy(buf, data.buf, bufSize);
+
+    return *this;
 }
 
 //-------------------------------------------------------------------
@@ -261,7 +315,21 @@ string::operator=(const string &data)
 string &
 string::operator+=(const string &str)
 {
-    // TODO
+    if (bufSize < strLen + str.strLen) {
+        unsigned long newBufSize = strLen + str.strLen + 1;
+
+        char *newBuf = new char[newBufSize];
+
+        memcpy(newBuf, buf, strLen);
+        delete [] buf;
+
+        buf = newBuf;
+        bufSize = newBufSize;
+    }
+    memcpy(buf+strLen, str.buf, str.strLen+1);
+    strLen += str.strLen;
+
+    return *this;
 }
 
 //-------------------------------------------------------------------
@@ -269,7 +337,7 @@ string::operator+=(const string &str)
 char
 string::operator[](unsigned long index) const
 {
-    if (!buf || index > strLen)
+    if (index > strLen)
         return 0x0; // FIXME: throw exception
 
     return buf[index];
@@ -285,47 +353,73 @@ string::operator const char *() const
 
 //-------------------------------------------------------------------
 
-bool
-operator<(const string &s1,
-          const string &s2)
-{
-    // TODO
-}
+namespace dodo {
+    bool
+    operator<(const string &s1,
+              const string &s2)
+    {
+        return memcmp(s1.buf, s2.buf, s1.strLen) < 0;
+    }
 
-//-------------------------------------------------------------------
+    //-------------------------------------------------------------------
 
-bool
-operator>(const string &s1,
-          const string &s2)
-{
-    // TODO
-}
+    bool
+    operator>(const string &s1,
+              const string &s2)
+    {
+        return memcmp(s1.buf, s2.buf, s1.strLen) > 0;
+    }
 
-//-------------------------------------------------------------------
+    //-------------------------------------------------------------------
 
-bool
-operator==(const string &s1,
-           const string &s2)
-{
-    // TODO
-}
+    bool
+    operator==(const string &s1,
+               const string &s2)
+    {
+        return memcmp(s1.buf, s2.buf, s1.strLen) == 0;
+    }
 
-//-------------------------------------------------------------------
+    //-------------------------------------------------------------------
 
-bool
-operator==(const string &s1,
-           const char *s2)
-{
-    // TODO
-}
+    bool
+    operator==(const string &s1,
+               const char *s2)
+    {
+        return memcmp(s1.buf, s2, s1.strLen) == 0;
+    }
 
-//-------------------------------------------------------------------
+    //-------------------------------------------------------------------
 
-string &
-operator+(const string &s1,
-          const string &s2)
-{
-    // TODO
-}
+    string
+    operator+(const string &s1,
+              const string &s2)
+    {
+        string str = s1;
+        str += s2;
+        return str;
+    }
+
+    //-------------------------------------------------------------------
+
+    string
+    operator+(const string &s1,
+              const char *s2)
+    {
+        string str = s1;
+        str += s2;
+        return str;
+    }
+
+    //-------------------------------------------------------------------
+
+    string
+    operator+(const char *s1,
+              const string &s2)
+    {
+        string str = s1;
+        str += s2;
+        return str;
+    }
+};
 
 //-------------------------------------------------------------------

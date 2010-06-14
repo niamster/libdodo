@@ -425,7 +425,7 @@ string::replace(const dodo::string &needle,
         if (i == dodo::string::POSITION_END)
             break;
 
-        data.replace(i, j, replacement.substr(0, k));
+        data.replace(i, j, replacement);
         i += k;
     }
 }

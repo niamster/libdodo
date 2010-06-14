@@ -315,7 +315,7 @@ processor::processNumeric(long             &node,
             case '-':
             case 'e':
             case 'E':
-                numeric += dodo::string(1, root[i]);
+                numeric += dodo::string(root[i]);
 
                 break;
 
@@ -516,18 +516,20 @@ processor::processString(dodo::string       &jnode,
                         initial = false;
 
                         break;
-                    } else
+                    } else {
                         return i;
+                    }
                 }
 
             default:
                 if (escape) {
                     escape = false;
 
-                    jnode += dodo::string(1, '\\');
-                    jnode += dodo::string(1, root[i]);
-                } else
-                    jnode += dodo::string(1, root[i]);
+                    jnode += dodo::string('\\');
+                    jnode += dodo::string(root[i]);
+                } else {
+                    jnode += dodo::string(root[i]);
+                }
         }
     }
 

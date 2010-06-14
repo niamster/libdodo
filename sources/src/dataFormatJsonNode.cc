@@ -112,7 +112,7 @@ node::~node()
             break;
 
         case DATA_OBJECT:
-            delete objectValue;
+            delete objectValue ;
             break;
 
         case DATA_ARRAY:

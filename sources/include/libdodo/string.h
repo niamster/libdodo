@@ -38,6 +38,14 @@ namespace dodo {
      * @brief defines basic string type
      */
     class string {
+        friend bool operator<(const string &s1, const string &s2);
+        friend bool operator>(const string &s1, const string &s2);
+        friend bool operator==(const string &s1, const string &s2);
+        friend bool operator==(const string &s1, const char *s2);
+        friend string operator+(const string &s1, const string &s2);
+        friend string operator+(const string &s1, const char *s2);
+        friend string operator+(const char *s1, const string &s2);
+
       public:
 
         /**
@@ -169,35 +177,47 @@ namespace dodo {
         unsigned long bufSize; ///< actual size of the buffer
         unsigned long strLen; ///< actual length of the data
     };
+
+    /**
+     *
+     */
+    bool operator<(const string &s1,
+                   const string &s2);
+
+    /**
+     *
+     */
+    bool operator>(const string &s1,
+                   const string &s2);
+
+    /**
+     *
+     */
+    bool operator==(const string &s1,
+                    const string &s2);
+
+    /**
+     *
+     */
+    bool operator==(const string &s1,
+                    const char *s2);
+
+    /**
+     *
+     */
+    string operator+(const string &s1,
+                     const string &s2);
+
+    /**
+     *
+     */
+    string operator+(const string &s1,
+                     const char *s2);
+
+    /**
+     *
+     */
+    string operator+(const char *s1,
+                     const string &s2);
 };
-
-/**
- *
- */
-bool operator<(const dodo::string &s1,
-               const dodo::string &s2);
-
-/**
- *
- */
-bool operator>(const dodo::string &s1,
-               const dodo::string &s2);
-
-/**
- *
- */
-bool operator==(const dodo::string &s1,
-                const dodo::string &s2);
-
-/**
- *
- */
-bool operator==(const dodo::string &s1,
-                const char *s2);
-
-/**
- *
- */
-dodo::string & operator+(const dodo::string &s1,
-                         const dodo::string &s2);
 #endif
