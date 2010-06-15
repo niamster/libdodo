@@ -207,8 +207,8 @@ string::replace(unsigned long index,
                 unsigned long num,
                 const string &str)
 {
-    if (!str.buf || index > strLen)
-        return *this; // FIXME: throw exception
+    if (index > strLen)
+        return *this;
 
     if (bufSize < strLen - num + str.strLen) {
         unsigned long newBufSize = strLen - num + str.strLen + 1;
@@ -236,8 +236,8 @@ string &
 string::insert(unsigned long index,
                const string &str)
 {
-    if (!str.buf || index > strLen)
-        return *this; // FIXME: throw exception
+    if (index > strLen)
+        return *this;
 
     if (bufSize < strLen + str.strLen) {
         unsigned long newBufSize = strLen + str.strLen + 1;
@@ -265,7 +265,7 @@ string::substr(unsigned long index,
                unsigned long length) const
 {
     if (index > strLen)
-        return string(); // FIXME: throw exception
+        return string();
 
     if (length == POSITION_END)
         length = strLen;
@@ -278,7 +278,16 @@ string::substr(unsigned long index,
 void
 string::reserve(unsigned long count)
 {
-    // TODO
+    if (count > bufSize) {
+        bufSize = count + 1;
+
+        char *newBuf = new char[bufSize];
+
+        memcpy(newBuf, buf, strLen);
+        delete [] buf;
+
+        buf = newBuf;
+    }
 }
 
 //-------------------------------------------------------------------
@@ -318,7 +327,10 @@ string::operator=(const char *data)
 string &
 string::operator=(char ch)
 {
-    // TODO
+    buf[0] = ch;
+    buf[1] = 0x0;
+    strLen = 1;
+
     return *this;
 }
 
@@ -328,15 +340,14 @@ string &
 string::operator+=(const string &str)
 {
     if (bufSize < strLen + str.strLen) {
-        unsigned long newBufSize = strLen + str.strLen + 1;
+        bufSize = strLen + str.strLen + 1;
 
-        char *newBuf = new char[newBufSize];
+        char *newBuf = new char[bufSize];
 
         memcpy(newBuf, buf, strLen);
         delete [] buf;
 
         buf = newBuf;
-        bufSize = newBufSize;
     }
     memcpy(buf+strLen, str.buf, str.strLen+1);
     strLen += str.strLen;
@@ -352,15 +363,14 @@ string::operator+=(const char *str)
     unsigned long len = strlen(str);
 
     if (bufSize < strLen + len) {
-        unsigned long newBufSize = strLen + len + 1;
+        bufSize = strLen + len + 1;
 
-        char *newBuf = new char[newBufSize];
+        char *newBuf = new char[bufSize];
 
         memcpy(newBuf, buf, strLen);
         delete [] buf;
 
         buf = newBuf;
-        bufSize = newBufSize;
     }
     memcpy(buf+strLen, str, len+1);
     strLen += len;
@@ -373,7 +383,20 @@ string::operator+=(const char *str)
 string &
 string::operator+=(char c)
 {
-    // TODO
+    if (bufSize < strLen + 1) {
+        ++bufSize;
+
+        char *newBuf = new char[bufSize];
+
+        memcpy(newBuf, buf, strLen);
+        delete [] buf;
+
+        buf = newBuf;
+    }
+    buf[strLen] = c;
+    ++strLen;
+    buf[strLen] = 0x0;
+
     return *this;
 }
 
@@ -382,8 +405,8 @@ string::operator+=(char c)
 char
 string::operator[](unsigned long index) const
 {
-    if (index > strLen)
-        return 0x0; // FIXME: throw exception
+    /* if (index > strLen) */
+    /*     throw ... */
 
     return buf[index];
 }
