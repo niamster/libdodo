@@ -177,21 +177,8 @@ string::clear()
 void
 string::resize(unsigned long len)
 {
-    if (len == strLen)
+    if (len >= strLen)
         return;
-
-    if (!(len < strLen || bufSize > len)) {
-        unsigned long newBufSize = len + 1;
-
-        char *newBuf = new char[newBufSize];
-
-        memcpy(newBuf, buf, bufSize);
-        delete [] buf;
-        /* memset(newBuf+strLen, 0x0, newBufSize - bufSize); */
-
-        buf = newBuf;
-        bufSize = newBufSize;
-    }
 
     strLen = len;
     buf[strLen] = 0x0;
@@ -313,6 +300,22 @@ string::operator=(const string &data)
 //-------------------------------------------------------------------
 
 string &
+string::operator=(const char *data)
+{
+    strLen = strlen(data);
+
+    delete [] buf;
+
+    bufSize = strLen + 1;
+    buf = new char[bufSize];
+    memcpy(buf, data, bufSize);
+
+    return *this;
+}
+
+//-------------------------------------------------------------------
+
+string &
 string::operator=(char ch)
 {
     // TODO
@@ -337,6 +340,30 @@ string::operator+=(const string &str)
     }
     memcpy(buf+strLen, str.buf, str.strLen+1);
     strLen += str.strLen;
+
+    return *this;
+}
+
+//-------------------------------------------------------------------
+
+string &
+string::operator+=(const char *str)
+{
+    unsigned long len = strlen(str);
+
+    if (bufSize < strLen + len) {
+        unsigned long newBufSize = strLen + len + 1;
+
+        char *newBuf = new char[newBufSize];
+
+        memcpy(newBuf, buf, strLen);
+        delete [] buf;
+
+        buf = newBuf;
+        bufSize = newBufSize;
+    }
+    memcpy(buf+strLen, str, len+1);
+    strLen += len;
 
     return *this;
 }
