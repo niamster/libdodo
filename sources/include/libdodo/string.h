@@ -154,7 +154,17 @@ namespace dodo {
         /**
          *
          */
+        string & operator=(char);
+
+        /**
+         *
+         */
         string & operator+=(const string &);
+
+        /**
+         *
+         */
+        string & operator+=(char);
 
         /**
          *

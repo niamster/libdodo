@@ -315,7 +315,7 @@ processor::processNumeric(long             &node,
             case '-':
             case 'e':
             case 'E':
-                numeric += dodo::string(root[i]);
+                numeric += root[i];
 
                 break;
 
@@ -525,10 +525,10 @@ processor::processString(dodo::string       &jnode,
                 if (escape) {
                     escape = false;
 
-                    jnode += dodo::string('\\');
-                    jnode += dodo::string(root[i]);
+                    jnode += '\\';
+                    jnode += root[i];
                 } else {
-                    jnode += dodo::string(root[i]);
+                    jnode += root[i];
                 }
         }
     }

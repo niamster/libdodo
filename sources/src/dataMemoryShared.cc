@@ -118,7 +118,7 @@ shared::shared(int a_key) : handle(-1),
 #ifdef __FreeBSD__
     key->key = "/tmp/";
 #else
-    key->key = '/';
+    key->key = "/";
 #endif
 
     if (a_key == 0) {
@@ -184,7 +184,7 @@ shared::open(int a_key) const
 #ifdef __FreeBSD__
     key->key = "/tmp/";
 #else
-    key->key = '/';
+    key->key = "/";
 #endif
 
     if (a_key == 0) {

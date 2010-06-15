@@ -313,6 +313,15 @@ string::operator=(const string &data)
 //-------------------------------------------------------------------
 
 string &
+string::operator=(char ch)
+{
+    // TODO
+    return *this;
+}
+
+//-------------------------------------------------------------------
+
+string &
 string::operator+=(const string &str)
 {
     if (bufSize < strLen + str.strLen) {
@@ -329,6 +338,15 @@ string::operator+=(const string &str)
     memcpy(buf+strLen, str.buf, str.strLen+1);
     strLen += str.strLen;
 
+    return *this;
+}
+
+//-------------------------------------------------------------------
+
+string &
+string::operator+=(char c)
+{
+    // TODO
     return *this;
 }
 

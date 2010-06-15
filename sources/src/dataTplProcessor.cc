@@ -912,7 +912,7 @@ processor::_for(const dodo::string &buffer,
 
                         if (key)
                             lns[keyName] = tools::string::lToString(i);
-                        lns[varName] = dodo::string(k->second[i]);
+                        lns[varName] = k->second[i];
 
                         _processString(forSpace, path, tpl);
 
@@ -945,7 +945,7 @@ processor::_for(const dodo::string &buffer,
 
                     if (key)
                         lns[keyName] = tools::string::lToString(i);
-                    lns[varName] = dodo::string(k->second[i]);
+                    lns[varName] = k->second[i];
 
                     _processString(forSpace, path, tpl);
 
@@ -1083,7 +1083,7 @@ processor::_for(const dodo::string &buffer,
 
                                 if (key)
                                     lns[keyName] = tools::string::lToString(i);
-                                lns[varName] = dodo::string(k->second[i]);
+                                lns[varName] = k->second[i];
 
                                 _processString(forSpace, path, tpl);
 
@@ -1119,7 +1119,7 @@ processor::_for(const dodo::string &buffer,
 
                             if (key)
                                 lns[keyName] = tools::string::lToString(i);
-                            lns[varName] = dodo::string(k->second[i]);
+                            lns[varName] = k->second[i];
 
                             _processString(forSpace, path, tpl);
 
@@ -1154,7 +1154,7 @@ processor::_for(const dodo::string &buffer,
 
                             if (key)
                                 lns[keyName] = tools::string::lToString(i);
-                            lns[varName] = dodo::string(o->second[pos][i]);
+                            lns[varName] = o->second[pos][i];
 
                             _processString(forSpace, path, tpl);
 
@@ -1228,7 +1228,7 @@ processor::_for(const dodo::string &buffer,
 
                                     if (key)
                                         lns[keyName] = tools::string::lToString(i);
-                                    lns[varName] = dodo::string(k->second[i]);
+                                    lns[varName] = k->second[i];
 
                                     _processString(forSpace, path, tpl);
 
@@ -1263,7 +1263,7 @@ processor::_for(const dodo::string &buffer,
 
             if (key)
                 lns[keyName] = tools::string::lToString(i);
-            lns[varName] = dodo::string(targetVar[i]);
+            lns[varName] = targetVar[i];
 
             _processString(forSpace, path, tpl);
 
