@@ -117,4 +117,9 @@ size_t strnlen(const char *s,
                size_t     maxlen);
 #endif
 
+/**
+ * minimal size of buffer for string allocation
+ */
+#define STRING_BUFFER_ALINGMENT 32
+
 #endif
