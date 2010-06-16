@@ -36,8 +36,8 @@
 
 using namespace dodo;
 
-string::string() : buf(new char[1]),
-                   bufSize(1),
+string::string() : buf(new char[STRING_BUFFER_ALINGMENT]),
+                   bufSize(STRING_BUFFER_ALINGMENT),
                    strLen(0)
 {
     buf[0] = 0x0;
@@ -46,16 +46,16 @@ string::string() : buf(new char[1]),
 //-------------------------------------------------------------------
 
 string::string(const string &s) : buf(NULL),
-                                  bufSize(1),
+                                  bufSize(STRING_BUFFER_ALINGMENT),
                                   strLen(s.strLen)
 {
     if (strLen) {
-        bufSize = strLen + 1;
+        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
         buf = new char[bufSize];
         memcpy(buf, s.buf, strLen);
         buf[strLen] = 0x0;
     } else {
-        buf = new char[1];
+        buf = new char[STRING_BUFFER_ALINGMENT];
         buf[0] = 0x0;
     }
 }
@@ -63,16 +63,16 @@ string::string(const string &s) : buf(NULL),
 //-------------------------------------------------------------------
 
 string::string(const char *data) : buf(NULL),
-                                   bufSize(1),
+                                   bufSize(STRING_BUFFER_ALINGMENT),
                                    strLen(0)
 {
     if (data) {
         strLen = strlen(data);
-        bufSize = strLen + 1;
+        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
         buf = new char[bufSize];
         memcpy(buf, data, bufSize);
     } else {
-        buf = new char[1];
+        buf = new char[STRING_BUFFER_ALINGMENT];
         buf[0] = 0x0;
     }
 }
@@ -81,16 +81,16 @@ string::string(const char *data) : buf(NULL),
 
 string::string(const char *str,
                unsigned long length) : buf(NULL),
-                                       bufSize(1),
+                                       bufSize(STRING_BUFFER_ALINGMENT),
                                        strLen(length)
 {
     if (str) {
-        bufSize = strLen + 1;
+        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
         buf = new char[bufSize];
         memcpy(buf, str, strLen);
         buf[strLen] = 0x0;
     } else {
-        buf = new char[1];
+        buf = new char[STRING_BUFFER_ALINGMENT];
         buf[0] = 0x0;
     }
 }
@@ -99,16 +99,16 @@ string::string(const char *str,
 
 string::string(char symbol,
                unsigned long count) : buf(NULL),
-                                      bufSize(1),
+                                      bufSize(STRING_BUFFER_ALINGMENT),
                                       strLen(count)
 {
     if (strLen) {
-        bufSize = strLen + 1;
+        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
         buf = new char[bufSize];
         memset(buf, symbol, strLen);
         buf[strLen] = 0x0;
     } else {
-        buf = new char[1];
+        buf = new char[STRING_BUFFER_ALINGMENT];
         buf[0] = 0x0;
     }
 }
@@ -181,7 +181,7 @@ string::resize(unsigned long len)
         return;
 
     if (!(len < strLen || bufSize > len)) {
-        unsigned long newBufSize = len + 1;
+        unsigned long newBufSize = (len + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
 
         char *newBuf = new char[newBufSize];
 
@@ -224,7 +224,7 @@ string::replace(unsigned long index,
         return *this; // FIXME: throw exception
 
     if (bufSize < strLen - num + str.strLen) {
-        unsigned long newBufSize = strLen - num + str.strLen + 1;
+        unsigned long newBufSize = (strLen - num + str.strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
 
         char *newBuf = new char[newBufSize];
 
@@ -253,7 +253,7 @@ string::insert(unsigned long index,
         return *this; // FIXME: throw exception
 
     if (bufSize < strLen + str.strLen) {
-        unsigned long newBufSize = strLen + str.strLen + 1;
+        unsigned long newBufSize = (strLen + str.strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
 
         char *newBuf = new char[newBufSize];
 
@@ -301,10 +301,13 @@ string::operator=(const string &data)
 {
     strLen = data.strLen;
 
-    delete [] buf;
+    if (bufSize <= strLen) {
+        delete [] buf;
 
-    bufSize = strLen + 1;
-    buf = new char[bufSize];
+        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        buf = new char[bufSize];
+    }
+
     memcpy(buf, data.buf, bufSize);
 
     return *this;
@@ -316,7 +319,7 @@ string &
 string::operator+=(const string &str)
 {
     if (bufSize < strLen + str.strLen) {
-        unsigned long newBufSize = strLen + str.strLen + 1;
+        unsigned long newBufSize = (strLen + str.strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
 
         char *newBuf = new char[newBufSize];
 
@@ -326,6 +329,7 @@ string::operator+=(const string &str)
         buf = newBuf;
         bufSize = newBufSize;
     }
+
     memcpy(buf+strLen, str.buf, str.strLen+1);
     strLen += str.strLen;
 
