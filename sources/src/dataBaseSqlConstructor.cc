@@ -690,15 +690,14 @@ constructor::construct()
 dodo::string
 constructor::escapeFields(const dodo::string &data)
 {
-    dodo::string temp;
-
     unsigned long size = data.size();
+    dodo::string temp('\0', size+size/4);
 
     for (unsigned long i = 0; i < size; ++i) {
         if (data[i] == '\\')
-            temp += dodo::string("\\\\");
+            temp += "\\\\";
         else if (data[i] == '\'')
-            temp += dodo::string("\\'");
+            temp += "\\'";
         temp += dodo::string(data[i]);
     }
 
