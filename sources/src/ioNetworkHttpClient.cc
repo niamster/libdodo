@@ -1225,7 +1225,7 @@ client::getContent(exchange *ex,
                         data += dodo::string(ex->read());
                     }
 
-                    response.data += data.substr(chunkSize);
+                    response.data += data.substr(0, chunkSize);
 
                     data.erase(0, chunkSize);
                     chunkSize = 0;
@@ -1252,10 +1252,12 @@ client::getContent(exchange *ex,
                     chunkSizeHex.clear();
 
                     for (unsigned long i = 0; i < eoc; ++i) {
-                        if (data[i] == '\r' || data[i] == ';' || data[i] == '\n')
+                        if (data[i] == '\r')
+                            continue;
+                        if (data[i] == '\n' || data[i] == ';')
                             break;
 
-                        chunkSizeHex += dodo::string(1, data[i]);
+                        chunkSizeHex += data[i];
                     }
                     data.erase(0, eoc);
 
@@ -1344,7 +1346,7 @@ client::getContent(exchange *ex,
                         if (chunked) {
                             data.erase(0, endOfHeaders);
                         } else {
-                            response.data = data.substr(endOfHeaders);
+                            response.data = data.substr(0, endOfHeaders);
 
                             contentSize = tools::string::stringToUL(response.headers[RESPONSE_HEADER_CONTENTLENGTH]);
 

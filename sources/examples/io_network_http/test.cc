@@ -51,7 +51,6 @@ main(int  argc UNUSED,
 
         cout << res.code << "\n~~\n";
         cout << res.headers[RESPONSE_HEADER_CONTENTTYPE] << "\n~~\n";
-            //cout << res.data << "\n~~\n";
         cout << res.headers[RESPONSE_HEADER_CONTENTLENGTH] << "\n~~\n";
         cout << res.data.size() << "\n~~\n";
 

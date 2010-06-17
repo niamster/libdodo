@@ -691,9 +691,9 @@ dodo::string
 constructor::escapeFields(const dodo::string &data)
 {
     unsigned long size = data.size();
-    dodo::string temp;
+    dodo::string temp('\0', size+size/4);
 
-    temp.reserve(size+size/4);
+    temp.clear();
 
     for (unsigned long i = 0; i < size; ++i) {
         if (data[i] == '\\' || data == '\'')
