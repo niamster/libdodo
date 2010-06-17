@@ -235,16 +235,17 @@ exchange::_write(const char * const data) const
     if (socket == -1)
         throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-    unsigned long iter = bs / outSocketBufferSize;
-    unsigned long rest = bs % outSocketBufferSize;
+    unsigned long blockSize = bs;
+    unsigned long bufferSize;
 
     const char *s = data;
 
     long n;
 
-    for (unsigned long i = 0; i < iter; ++i) {
-        while (true) {
-            if ((n = SSL_write(handle->handle, s, outSocketBufferSize)) <= 0) {
+    while (blockSize > 0) {
+        bufferSize = blockSize%outSocketBufferSize;
+        while (bufferSize > 0) {
+            if ((n = SSL_write(handle->handle, s, bufferSize)) <= 0) {
                 switch (SSL_get_error(handle->handle, n)) {
                     case SSL_ERROR_WANT_READ:
                     case SSL_ERROR_WANT_WRITE:
@@ -266,37 +267,9 @@ exchange::_write(const char * const data) const
                 }
             }
 
-            break;
-        }
-
-        s += outSocketBufferSize;
-    }
-
-    if (rest > 0) {
-        while (true) {
-            if ((n = SSL_write(handle->handle, s, rest)) <= 0) {
-                switch (SSL_get_error(handle->handle, n)) {
-                    case SSL_ERROR_WANT_READ:
-                    case SSL_ERROR_WANT_WRITE:
-                    case SSL_ERROR_WANT_X509_LOOKUP:
-
-                        continue;
-
-                    case SSL_ERROR_SYSCALL:
-
-                        if (errno == 0)
-                            continue;
-
-
-                    default:
-                    {
-                        unsigned long nerr = ERR_get_error();
-                        throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-                    }
-                }
-            }
-
-            break;
+            s += n;
+            bufferSize -= n;
+            blockSize -= n;
         }
     }
 
@@ -311,16 +284,17 @@ exchange::_read(char * const data) const
     if (socket == -1)
         throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
-    long iter = bs / inSocketBufferSize;
-    long rest = bs % inSocketBufferSize;
+    unsigned long blockSize = bs;
+    unsigned long bufferSize;
 
     char *s = data;
 
     long n;
 
-    for (long i = 0; i < iter; ++i) {
-        while (true) {
-            if ((n = SSL_read(handle->handle, s, inSocketBufferSize)) <= 0) {
+    while (blockSize > 0) {
+        bufferSize = blockSize%inSocketBufferSize;
+        while (bufferSize > 0) {
+            if ((n = SSL_read(handle->handle, s, bufferSize)) <= 0) {
                 switch (SSL_get_error(handle->handle, n)) {
                     case SSL_ERROR_WANT_READ:
                     case SSL_ERROR_WANT_WRITE:
@@ -342,40 +316,9 @@ exchange::_read(char * const data) const
                 }
             }
 
-            break;
-        }
-
-        s += inSocketBufferSize;
-    }
-
-    if (rest > 0) {
-        while (true) {
-            if ((n = SSL_read(handle->handle, s, rest)) <= 0) {
-                switch (SSL_get_error(handle->handle, n)) {
-                    case SSL_ERROR_WANT_READ:
-                    case SSL_ERROR_WANT_WRITE:
-                    case SSL_ERROR_WANT_X509_LOOKUP:
-
-                        continue;
-
-                    case SSL_ERROR_SYSCALL:
-
-                        if (errno == 0)
-                            continue;
-
-
-                    default:
-                    {
-                        unsigned long nerr = ERR_get_error();
-                        throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-                    }
-                }
-            }
-
-            if (n < rest)
-                continue;
-
-            break;
+            s += n;
+            bufferSize -= n;
+            blockSize -= n;
         }
     }
 
