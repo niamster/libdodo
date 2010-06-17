@@ -226,7 +226,7 @@ processor::process(const __definition__ &definition,
         if (bufferPart.size() == 0)
             break;
 
-        buffer += dodo::string(bufferPart);
+        buffer += bufferPart;
     }
     bufferPart.clear();
 
@@ -543,11 +543,11 @@ processor::getNode(const __node__ &xnode UNUSED,
     }
 
     if (xnode.node->name != NULL)
-        resNode.name = dodo::string((char *)xnode.node->name);
+        resNode.name = (char *)xnode.node->name;
 
     unsigned char *xChar = xmlNodeListGetString(document->doc, xnode.node->children, 1);
     if (xChar != NULL) {
-        resNode.nodeValue = dodo::string((char *)xChar);
+        resNode.nodeValue = (char *)xChar;
         xmlFree(xChar);
     }
 #endif
@@ -642,7 +642,7 @@ processor::process(const io::channel &io)
         if (bufferPart.size() == 0)
             break;
 
-        buffer += dodo::string(bufferPart);
+        buffer += bufferPart;
     }
     bufferPart.clear();
 

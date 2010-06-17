@@ -133,9 +133,9 @@ condition::order(const dodo::string &field,
         case ORDER_DIRECTION_ASC:
         case ORDER_DIRECTION_DESC:
             if (!_orderby.empty())
-                _orderby += dodo::string(", ");
-            _orderby += dodo::string(field);
-            _orderby += dodo::string(dir[direction]);
+                _orderby += ", ";
+            _orderby += field;
+            _orderby += dir[direction];
     }
 
     return *this;
@@ -378,36 +378,36 @@ constructor::select()
     if (collectedData.condition._table.size() > 0) {
         request = statements[STATEMENT_SELECT];
         if (collectedData.condition._fields.size() == 0)
-            request += dodo::string(statements[STATEMENT_STAR]);
+            request += statements[STATEMENT_STAR];
         else
-            request += dodo::string(tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]));
-        request += dodo::string(statements[STATEMENT_FROM]);
-        request += dodo::string(collectedData.condition._table);
+            request += tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]);
+        request += statements[STATEMENT_FROM];
+        request += collectedData.condition._table;
     } else {
         request = statements[STATEMENT_SELECT];
         if (collectedData.condition._fields.size() == 0)
-            request += dodo::string(statements[STATEMENT_STAR]);
+            request += statements[STATEMENT_STAR];
         else
-            request += dodo::string(tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]));
+            request += tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]);
     }
 
     if (collectedData.condition._statement.size() > 0) {
-        request += dodo::string(statements[STATEMENT_WHERE]);
-        request += dodo::string(collectedData.condition._statement);
+        request += statements[STATEMENT_WHERE];
+        request += collectedData.condition._statement;
     }
 
     if (collectedData.condition._orderby.size() > 0) {
-        request += dodo::string(statements[STATEMENT_ORDERBY]);
-        request += dodo::string(collectedData.condition._orderby);
+        request += statements[STATEMENT_ORDERBY];
+        request += collectedData.condition._orderby;
     }
 
     if (collectedData.condition._limit != -1) {
-        request += dodo::string(statements[STATEMENT_LIMIT]);
-        request += dodo::string(tools::string::lToString(collectedData.condition._limit));
+        request += statements[STATEMENT_LIMIT];
+        request += tools::string::lToString(collectedData.condition._limit);
 
         if (collectedData.condition._offset != -1) {
-            request += dodo::string(statements[STATEMENT_OFFSET]);
-            request += dodo::string(tools::string::lToString(collectedData.condition._offset));
+            request += statements[STATEMENT_OFFSET];
+            request += tools::string::lToString(collectedData.condition._offset);
         }
     }
 
@@ -416,29 +416,29 @@ constructor::select()
         for (;i!=j;++i) {
             switch (i->type) {
                 case condition::JOIN_LEFT:
-                    request += dodo::string(statements[STATEMENT_JOINLEFT]);
+                    request += statements[STATEMENT_JOINLEFT];
 
                     break;
 
                 case condition::JOIN_RIGHT:
-                    request += dodo::string(statements[STATEMENT_JOINRIGHT]);
+                    request += statements[STATEMENT_JOINRIGHT];
 
                     break;
 
                 case condition::JOIN_INNER:
-                    request += dodo::string(statements[STATEMENT_JOININNER]);
+                    request += statements[STATEMENT_JOININNER];
 
                     break;
 
                 case condition::JOIN_OUTER:
-                    request += dodo::string(statements[STATEMENT_JOINOUTER]);
+                    request += statements[STATEMENT_JOINOUTER];
 
                     break;
             }
-            request += dodo::string(i->table);
+            request += i->table;
             if (!i->condition.empty()) {
-                request += dodo::string(statements[STATEMENT_ON]);
-                request += dodo::string(i->condition);
+                request += statements[STATEMENT_ON];
+                request += i->condition;
             }
         }
     }
@@ -453,14 +453,14 @@ constructor::insert()
 {
     dodo::string request = statements[STATEMENT_INSERT];
 
-    request += dodo::string(statements[STATEMENT_INTO]);
-    request += dodo::string(collectedData.condition._table);
+    request += statements[STATEMENT_INTO];
+    request += collectedData.condition._table;
     if (collectedData.rows.fields.size() != 0) {
-        request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
-        request += dodo::string(tools::misc::join(collectedData.rows.fields, statements[STATEMENT_COMA]));
-        request += dodo::string(statements[STATEMENT_RIGHTBRACKET]);
+        request += statements[STATEMENT_LEFTBRACKET];
+        request += tools::misc::join(collectedData.rows.fields, statements[STATEMENT_COMA]);
+        request += statements[STATEMENT_RIGHTBRACKET];
     }
-    request += dodo::string(statements[STATEMENT_VALUES]);
+    request += statements[STATEMENT_VALUES];
 
     dodoArray<dodoStringArray>::iterator k(collectedData.rows.values.begin()), l(collectedData.rows.values.end());
     if (k != l) {
@@ -473,7 +473,7 @@ constructor::insert()
 
             --l;
             for (; k != l; ++k) {
-                request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
+                request += statements[STATEMENT_LEFTBRACKET];
 
                 t = collectedData.rows.fields.begin();
 
@@ -482,24 +482,24 @@ constructor::insert()
                     type = types->second.find(*t);
                     if (type != typesEnd) {
                         if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
-                            request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                            request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA];
                         else
-                            request += dodo::string(*i + statements[STATEMENT_COMA]);
+                            request += *i + statements[STATEMENT_COMA];
                     } else
-                        request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                        request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA];
                 }
                 type = types->second.find(*t);
                 if (type != typesEnd) {
                     if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
-                        request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                        request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE];
                     else
-                        request += dodo::string(*i);
+                        request += *i;
                 } else
-                    request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                    request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE];
 
-                request += dodo::string(statements[STATEMENT_RIGHTBRACKETCOMA]);
+                request += statements[STATEMENT_RIGHTBRACKETCOMA];
             }
-            request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
+            request += statements[STATEMENT_LEFTBRACKET];
 
             t = collectedData.rows.fields.begin();
 
@@ -508,32 +508,32 @@ constructor::insert()
                 type = types->second.find(*t);
                 if (type != typesEnd) {
                     if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
-                        request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                        request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA];
                     else
-                        request += dodo::string(*i + statements[STATEMENT_COMA]);
+                        request += *i + statements[STATEMENT_COMA];
                 } else
-                    request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                    request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA];
             }
             type = types->second.find(*t);
             if (type != typesEnd) {
                 if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
-                    request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                    request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE];
                 else
-                    request += dodo::string(*i);
+                    request += *i;
             } else
-                request += dodo::string(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE];
 
-            request += dodo::string(statements[STATEMENT_RIGHTBRACKET]);
+            request += statements[STATEMENT_RIGHTBRACKET];
         } else {
             --l;
             for (; k != l; ++k) {
-                request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
-                request += dodo::string(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
-                request += dodo::string(statements[STATEMENT_RIGHTBRACKETCOMA]);
+                request += statements[STATEMENT_LEFTBRACKET];
+                request += joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]);
+                request += statements[STATEMENT_RIGHTBRACKETCOMA];
             }
-            request += dodo::string(statements[STATEMENT_LEFTBRACKET]);
-            request += dodo::string(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
-            request += dodo::string(statements[STATEMENT_RIGHTBRACKET]);
+            request += statements[STATEMENT_LEFTBRACKET];
+            request += joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]);
+            request += statements[STATEMENT_RIGHTBRACKET];
         }
     }
 
@@ -547,8 +547,8 @@ constructor::update()
 {
     dodo::string request = statements[STATEMENT_UPDATE];
 
-    request += dodo::string(collectedData.condition._table);
-    request += dodo::string(statements[STATEMENT_SET]);
+    request += collectedData.condition._table;
+    request += statements[STATEMENT_SET];
 
     dodoArray<dodoStringArray>::iterator v = collectedData.rows.values.begin();
     if (v != collectedData.rows.values.end()) {
@@ -565,71 +565,71 @@ constructor::update()
 
                 --o;
                 for (unsigned int k(0); k < o; ++i, ++k, ++j) {
-                    request += dodo::string(*i);
+                    request += *i;
 
                     type = types->second.find(*i);
                     if (type != typesEnd) {
                         if (type->second == FIELD_TEXT || type->second == FIELD_BINARY) {
-                            request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
-                            request += dodo::string(escapeFields(*j));
-                            request += dodo::string(statements[STATEMENT_APOSTROPHECOMA]);
+                            request += statements[STATEMENT_EQUALAPOSTROPHE];
+                            request += escapeFields(*j);
+                            request += statements[STATEMENT_APOSTROPHECOMA];
                         } else {
-                            request += dodo::string(statements[STATEMENT_EQUAL]);
-                            request += dodo::string(*j);
-                            request += dodo::string(statements[STATEMENT_COMA]);
+                            request += statements[STATEMENT_EQUAL];
+                            request += *j;
+                            request += statements[STATEMENT_COMA];
                         }
                     } else {
-                        request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
-                        request += dodo::string(escapeFields(*j));
-                        request += dodo::string(statements[STATEMENT_APOSTROPHECOMA]);
+                        request += statements[STATEMENT_EQUALAPOSTROPHE];
+                        request += escapeFields(*j);
+                        request += statements[STATEMENT_APOSTROPHECOMA];
                     }
                 }
-                request += dodo::string(*i);
+                request += *i;
 
                 type = types->second.find(*i);
                 if (type != typesEnd) {
                     if (type->second == FIELD_TEXT || type->second == FIELD_BINARY) {
-                        request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
-                        request += dodo::string(escapeFields(*j));
-                        request += dodo::string(statements[STATEMENT_APOSTROPHE]);
+                        request += statements[STATEMENT_EQUALAPOSTROPHE];
+                        request += escapeFields(*j);
+                        request += statements[STATEMENT_APOSTROPHE];
                     } else {
-                        request += dodo::string(statements[STATEMENT_EQUAL]);
-                        request += dodo::string(*j);
+                        request += statements[STATEMENT_EQUAL];
+                        request += *j;
                     }
                 } else {
-                    request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
-                    request += dodo::string(escapeFields(*j));
-                    request += dodo::string(statements[STATEMENT_APOSTROPHE]);
+                    request += statements[STATEMENT_EQUALAPOSTROPHE];
+                    request += escapeFields(*j);
+                    request += statements[STATEMENT_APOSTROPHE];
                 }
             } else {
                 --o;
                 for (unsigned int k(0); k < o; ++i, ++k, ++j) {
-                    request += dodo::string(*i);
-                    request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
-                    request += dodo::string(escapeFields(*j));
-                    request += dodo::string(statements[STATEMENT_APOSTROPHECOMA]);
+                    request += *i;
+                    request += statements[STATEMENT_EQUALAPOSTROPHE];
+                    request += escapeFields(*j);
+                    request += statements[STATEMENT_APOSTROPHECOMA];
                 }
-                request += dodo::string(*i);
-                request += dodo::string(statements[STATEMENT_EQUALAPOSTROPHE]);
-                request += dodo::string(escapeFields(*j));
-                request += dodo::string(statements[STATEMENT_APOSTROPHE]);
+                request += *i;
+                request += statements[STATEMENT_EQUALAPOSTROPHE];
+                request += escapeFields(*j);
+                request += statements[STATEMENT_APOSTROPHE];
             }
         }
     }
 
     if (collectedData.condition._statement.size() > 0) {
-        request += dodo::string(statements[STATEMENT_WHERE]);
-        request += dodo::string(collectedData.condition._statement);
+        request += statements[STATEMENT_WHERE];
+        request += collectedData.condition._statement;
     }
 
     if (collectedData.condition._orderby.size() > 0) {
-        request += dodo::string(statements[STATEMENT_ORDERBY]);
-        request += dodo::string(collectedData.condition._orderby);
+        request += statements[STATEMENT_ORDERBY];
+        request += collectedData.condition._orderby;
     }
 
     if (collectedData.condition._limit != -1) {
-        request += dodo::string(statements[STATEMENT_LIMIT]);
-        request += dodo::string(tools::string::lToString(collectedData.condition._limit));
+        request += statements[STATEMENT_LIMIT];
+        request += tools::string::lToString(collectedData.condition._limit);
     }
 
     return request;
@@ -642,22 +642,22 @@ constructor::remove()
 {
     dodo::string request = statements[STATEMENT_DELETE];
 
-    request += dodo::string(statements[STATEMENT_FROM]);
-    request += dodo::string(collectedData.condition._table);
+    request += statements[STATEMENT_FROM];
+    request += collectedData.condition._table;
 
     if (collectedData.condition._statement.size() > 0) {
-        request += dodo::string(statements[STATEMENT_WHERE]);
-        request += dodo::string(collectedData.condition._statement);
+        request += statements[STATEMENT_WHERE];
+        request += collectedData.condition._statement;
     }
 
     if (collectedData.condition._orderby.size() > 0) {
-        request += dodo::string(statements[STATEMENT_ORDERBY]);
-        request += dodo::string(collectedData.condition._orderby);
+        request += statements[STATEMENT_ORDERBY];
+        request += collectedData.condition._orderby;
     }
 
     if (collectedData.condition._limit != -1) {
-        request += dodo::string(statements[STATEMENT_LIMIT]);
-        request += dodo::string(tools::string::lToString(collectedData.condition._limit));
+        request += statements[STATEMENT_LIMIT];
+        request += tools::string::lToString(collectedData.condition._limit);
     }
 
     return request;
@@ -724,13 +724,13 @@ constructor::joinFields(const dodoStringArray &fields,
                     return temp;
                 ++k;
             }
-            temp += dodo::string(frame);
-            temp += dodo::string(escapeFields(*i));
-            temp += dodo::string(fs);
+            temp += frame;
+            temp += escapeFields(*i);
+            temp += fs;
         }
-        temp += dodo::string(frame);
-        temp += dodo::string(escapeFields(*i));
-        temp += dodo::string(frame);
+        temp += frame;
+        temp += escapeFields(*i);
+        temp += frame;
     }
 
     return temp;

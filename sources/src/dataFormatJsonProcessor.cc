@@ -436,7 +436,7 @@ processor::process(const io::channel &io)
         if (jsonPart.size() == 0)
             break;
 
-        json += dodo::string(jsonPart);
+        json += jsonPart;
     }
     jsonPart.clear();
 

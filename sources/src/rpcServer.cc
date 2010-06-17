@@ -59,7 +59,7 @@ server::rpcDefaultHandler(const dodo::string &,
                           void *)
 {
     response response;
-    response.fault(dodo::string("rpcDefaultHandler"));
+    response.fault("rpcDefaultHandler");
 
     return response;
 }
@@ -110,7 +110,7 @@ server::serve()
         processCallResult(response);
     } catch (...) {
         response response;
-        response.fault(dodo::string("An unknown error."));
+        response.fault("An unknown error.");
 
         processCallResult(response);
     }

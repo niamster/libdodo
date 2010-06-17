@@ -892,7 +892,7 @@ basic::backtrace()
     dodoArray<__call__>::iterator i = callStack.begin(), j = callStack.end();
     for (; i != j; ++i) {
         snprintf(str, 32, " [0x%lx]", (long)i->address);
-        stack += dodo::string(i->object + ": " + i->symbol + dodo::string(str) + "\n");
+        stack += i->object + ": " + i->symbol + str + "\n";
     }
 
     return stack;

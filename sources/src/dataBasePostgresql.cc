@@ -383,9 +383,9 @@ postgresql::requestFieldsTypes(const dodo::string &table)
         if (field == fieldsEnd) {
             if (strcasestr(columnType, "char") != NULL ||
                 strcasestr(columnType, "date") != NULL ||
-                strcasestr(columnType, "text") != NULL)
+                strcasestr(columnType, "text") != NULL) {
                 types->second.insert(std::make_pair(dodo::string(columnName), sql::FIELD_TEXT));
-            else {
+            } else {
                 if (strcasestr(columnType, "bytea") != NULL ||
                     strcasestr(columnType, "array") != NULL ||
                     strcasestr(columnType, "cidr") != NULL ||
@@ -398,9 +398,9 @@ postgresql::requestFieldsTypes(const dodo::string &table)
         } else {
             if (strcasestr(columnType, "char") != NULL ||
                 strcasestr(columnType, "date") != NULL ||
-                strcasestr(columnType, "text") != NULL)
+                strcasestr(columnType, "text") != NULL) {
                 field->second = sql::FIELD_TEXT;
-            else {
+            } else {
                 if (strcasestr(columnType, "bytea") != NULL ||
                     strcasestr(columnType, "array") != NULL ||
                     strcasestr(columnType, "cidr") != NULL ||

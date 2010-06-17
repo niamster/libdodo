@@ -322,7 +322,7 @@ server::accept(exchange::__init__ &init,
 
             char temp[INET_ADDRSTRLEN];
             if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
-                info.host = dodo::string(temp);
+                info.host = temp;
             info.port = ntohs(sa.sin_port);
 
             break;
@@ -344,7 +344,7 @@ server::accept(exchange::__init__ &init,
 
             char temp[INET6_ADDRSTRLEN];
             if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
-                info.host = dodo::string(temp);
+                info.host = temp;
             info.port = ntohs(sa.sin6_port);
 
             break;

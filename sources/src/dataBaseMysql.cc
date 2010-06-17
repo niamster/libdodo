@@ -382,9 +382,9 @@ mysql::requestFieldsTypes(const dodo::string &table)
                 strcasestr(mysqlRow[1], "time") != NULL ||
                 strcasestr(mysqlRow[1], "text") != NULL ||
                 strcasestr(mysqlRow[1], "enum") != NULL ||
-                strcasestr(mysqlRow[1], "set") != NULL)
+                strcasestr(mysqlRow[1], "set") != NULL) {
                 types->second.insert(std::make_pair(dodo::string(mysqlRow[0]), sql::FIELD_TEXT));
-            else {
+            } else {
                 if (strcasestr(mysqlRow[1], "blob") != NULL)
                     types->second.insert(std::make_pair(dodo::string(mysqlRow[0]), sql::FIELD_BINARY));
                 else
@@ -396,9 +396,9 @@ mysql::requestFieldsTypes(const dodo::string &table)
                 strcasestr(mysqlRow[1], "time") != NULL ||
                 strcasestr(mysqlRow[1], "text") != NULL ||
                 strcasestr(mysqlRow[1], "enum") != NULL ||
-                strcasestr(mysqlRow[1], "set") != NULL)
+                strcasestr(mysqlRow[1], "set") != NULL) {
                 field->second = sql::FIELD_TEXT;
-            else {
+            } else {
                 if (strcasestr(mysqlRow[1], "blob") != NULL)
                     field->second = sql::FIELD_BINARY;
                 else

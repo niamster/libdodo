@@ -362,9 +362,9 @@ dialogue::requestAuthentication(const dodo::string &realm,
     returnCode = STATUS_CODE_UNAUTHORIZED;
 
     if (type == AUTH_BASIC)
-        HEADERS.insert(std::make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, dodo::string("Basic realm=\"") + realm + "\""));
+        HEADERS.insert(std::make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, "Basic realm=\"" + realm + "\""));
     else if (type == AUTH_DIGEST)
-        HEADERS.insert(std::make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, dodo::string("Digest realm=\"") +
+        HEADERS.insert(std::make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, "Digest realm=\"" +
                                  realm +
                                  "\", qop=\"auth\", nonce=\"" +
                                  tools::code::MD5Hex(tools::misc::stringRandom(16)) +
@@ -430,7 +430,7 @@ dialogue::isAuthenticated(const dodo::string &user,
         tools::code::MD5Update(&context, (unsigned char *)HA2.data(), HA2.size());
         tools::code::MD5Final(HA, &context);
 
-        return (tools::string::equal(tools::code::binToHex(dodo::string((char *)&HA, 16)), authInfo.response));
+        return tools::string::equal(tools::code::binToHex(dodo::string((char *)&HA, 16)), authInfo.response);
     } else {
         return false;
     }
@@ -540,8 +540,8 @@ dialogue::initHeaders(dodoMap<short, dodo::string> &headers)
     if (headers.size() > 0) {
         HEADERS.insert(headers.begin(), headers.end());
     } else {
-        HEADERS.insert(std::make_pair(RESPONSE_HEADER_CONTENTTYPE, dodo::string("text/html")));
-        HEADERS.insert(std::make_pair(RESPONSE_HEADER_XPOWEREDBY, dodo::string(PACKAGE_NAME "/" PACKAGE_VERSION)));
+        HEADERS.insert(std::make_pair(RESPONSE_HEADER_CONTENTTYPE, "text/html"));
+        HEADERS.insert(std::make_pair(RESPONSE_HEADER_XPOWEREDBY, PACKAGE_NAME "/" PACKAGE_VERSION));
     }
 }
 

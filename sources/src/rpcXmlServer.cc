@@ -127,7 +127,7 @@ server::serve()
         processCallResult(response);
     } catch (...) {
         rpc::response response;
-        response.fault(dodo::string("An unknown error."));
+        response.fault("An unknown error.");
 
         processCallResult(response);
     }
