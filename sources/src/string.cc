@@ -36,6 +36,11 @@
 
 using namespace dodo;
 
+unsigned long string::POSITION_BEGIN = 0;
+unsigned long string::POSITION_END = -1;
+
+//-------------------------------------------------------------------
+
 string::string() : buf(new char[STRING_BUFFER_ALINGMENT]),
                    bufSize(STRING_BUFFER_ALINGMENT),
                    strLen(0)
@@ -155,11 +160,13 @@ string::erase(unsigned long index,
 
     unsigned long end = index + count;
 
+
     if (end >= strLen) {
         buf[strLen = index] = 0x0;
     } else {
-        memmove(buf+index, buf+end, count);
         strLen -= count;
+        memmove(buf+index, buf+end, strLen);
+        buf[strLen] = 0x0;
     }
 }
 
@@ -203,7 +210,7 @@ unsigned long
 string::find(const string &str,
              unsigned long index) const
 {
-    if (!str.buf || index > strLen)
+    if (index > strLen)
         return POSITION_END;
 
     char *pos = strstr(buf+index, str.buf);
@@ -301,6 +308,46 @@ string::reserve(unsigned long count)
 
         buf = newBuf;
     }
+}
+
+//-------------------------------------------------------------------
+
+void
+string::assign(const char *data,
+               unsigned long length)
+{
+    strLen = length;
+
+    if (bufSize <= strLen) {
+        delete [] buf;
+
+        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        buf = new char[bufSize];
+    }
+
+    memcpy(buf, data, strLen);
+    buf[strLen] = 0x0;
+}
+
+//-------------------------------------------------------------------
+
+void
+string::append(const char *data,
+                   unsigned long length)
+{
+    if (bufSize < strLen + length) {
+        bufSize = (strLen + length + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+
+        char *newBuf = new char[bufSize];
+
+        memcpy(newBuf, buf, strLen);
+        delete [] buf;
+
+        buf = newBuf;
+    }
+    memcpy(buf+strLen, data, length);
+    strLen += length;
+    buf[strLen] = 0x0;
 }
 
 //-------------------------------------------------------------------
@@ -418,17 +465,6 @@ string::operator+=(char c)
     buf[strLen] = 0x0;
 
     return *this;
-}
-
-//-------------------------------------------------------------------
-
-char
-string::operator[](unsigned long index) const
-{
-    /* if (index > strLen) */
-    /*     throw ... */
-
-    return buf[index];
 }
 
 //-------------------------------------------------------------------

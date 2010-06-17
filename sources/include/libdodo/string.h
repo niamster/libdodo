@@ -109,6 +109,22 @@ namespace dodo {
                    unsigned long count = POSITION_END);
 
         /**
+         * appends data to the string
+         * @param data defines buffer to append to the string
+         * @param length defines length of the data
+         */
+        void append(const char *data,
+                    unsigned long length);
+
+        /**
+         * assigns data to the string
+         * @param data defines buffer to assign to the string
+         * @param length defines length of the data
+         */
+        void assign(const char *data,
+                    unsigned long length);
+
+        /**
          * clears the string
          */
         void clear();
@@ -204,24 +220,12 @@ namespace dodo {
         string & operator+=(char symbol);
 
         /**
-         * dereference operator
-         * @return symbol of the string
-         * @param index defines position of the symbol in the string
-         */
-        char operator[](unsigned long index) const;
-
-        /**
          * cast operator
          */
         operator const char *() const;
 
-        /**
-         * @enum positionEnum defines position withing the string
-         */
-        enum positionEnum {
-            POSITION_BEGIN = 0,
-            POSITION_END = -1,
-        };
+        static unsigned long POSITION_BEGIN; ///< defines start of the string
+        static unsigned long POSITION_END; ///< defines end of the string
 
       private:
 
