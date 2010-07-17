@@ -549,7 +549,7 @@ code::longToHex(unsigned long numeric)
     dodo::string hex;
 
     for (long i = 2 * sizeof(unsigned long) - 1; i >= 0; --i)
-        hex += dodo::string(1, hexEncodeChars[(numeric >> i * 4) & 0xf]);
+        hex += hexEncodeChars[(numeric >> i * 4) & 0xf];
 
     return hex;
 }
@@ -565,25 +565,20 @@ code::decodeUrl(const dodo::string &string)
     for (; o < k; ++o) {
         switch (string[o]) {
             case '+':
-
-                result += dodo::string(1, ' ');
-
+                result += ' ';
                 break;
 
             case '%':
-
-                if ((k - o) >= 2 && string[o + 1] - '0' < 10 && string[o + 2] - '0' < 10) {
-                    result += dodo::string(1, code::hexToChar(string[o + 1], string[o + 2]));
+                if ((k - o) >= 2) {
+                    result += code::hexToChar(string[o + 1], string[o + 2]);
                     o += 2;
                 } else {
-                    result += dodo::string(1, '%');
+                    result += '%';
                 }
-
                 break;
 
             default:
-
-                result += dodo::string(1, string[o]);
+                result += string[o];
         }
     }
 
@@ -604,7 +599,7 @@ code::encodeUrl(const dodo::string &string)
         switch (string[i]) {
             case ' ':
 
-                result += dodo::string(1, '+');
+                result += '+';
 
                 break;
 
@@ -675,15 +670,15 @@ code::encodeUrl(const dodo::string &string)
             case '.':
             case '~':
 
-                result += dodo::string(1, string[i]);
+                result += string[i];
 
                 break;
 
             default:
 
-                result += dodo::string(1, '%');
+                result += '%';
                 charToHex(temp, string[i]);
-                result += dodo::string(temp);
+                result += temp;
         }
     }
 
@@ -707,7 +702,7 @@ code::_encodeASCII85(dodo::string    &result,
 
     i = count;
     do
-        result += dodo::string(1, (char)(*--s + '!'));
+        result += (char)(*--s + '!');
     while (i-- > 0);
 }
 
@@ -747,7 +742,7 @@ code::encodeASCII85(const dodo::string &string)
                 tuple |= string[k];
 
                 if (tuple == 0)
-                    result += dodo::string(1, 'z');
+                    result += 'z';
                 else
                     code::_encodeASCII85(result, tuple, count);
 
@@ -761,7 +756,7 @@ code::encodeASCII85(const dodo::string &string)
     if (count > 0)
         code::_encodeASCII85(result, tuple, count);
 
-    result += dodo::string("~>");
+    result += "~>";
 
     return result;
 }
@@ -775,33 +770,25 @@ code::_decodeASCII85(dodo::string    &result,
 {
     switch (count) {
         case 4:
-
-            result += dodo::string(1, (char)(tuple >> 24));
-            result += dodo::string(1, (char)(tuple >> 16));
-            result += dodo::string(1, (char)(tuple >>  8));
-            result += dodo::string(1, (char)(tuple));
-
+            result += (char)(tuple >> 24);
+            result += (char)(tuple >> 16);
+            result += (char)(tuple >>  8);
+            result += (char)(tuple);
             break;
 
         case 3:
-
-            result += dodo::string(1, (char)(tuple >> 24));
-            result += dodo::string(1, (char)(tuple >> 16));
-            result += dodo::string(1, (char)(tuple >>  8));
-
+            result += (char)(tuple >> 24);
+            result += (char)(tuple >> 16);
+            result += (char)(tuple >>  8);
             break;
 
         case 2:
-
-            result += dodo::string(1, (char)(tuple >> 24));
-            result += dodo::string(1, (char)(tuple >> 16));
-
+            result += (char)(tuple >> 24);
+            result += (char)(tuple >> 16);
             break;
 
         case 1:
-
-            result += dodo::string(1, (char)(tuple >> 24));
-
+            result += (char)(tuple >> 24);
             break;
     }
 }
@@ -826,7 +813,7 @@ code::decodeASCII85(const dodo::string &string)
                             if (count != 0)
                                 throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
-                            result += dodo::string(4, '\0');
+                            result += dodo::string('\0', 4);
 
                             break;
 
@@ -871,11 +858,11 @@ code::decodeASCII85(const dodo::string &string)
                     }
                 }
             } else {
-                result += dodo::string(1, '<');
-                result += dodo::string(1, string[k]);
+                result += '<';
+                result += string[k];
             }
         } else
-            result += dodo::string(1, string[k]);
+            result += string[k];
     }
 
     return result;
@@ -918,7 +905,7 @@ code::encodeBase64(const dodo::string &string)
         if (len > 0) {
             _encodeBase64(in, out, len);
             for (i = 0; i < 4; ++i)
-                result += dodo::string(1, out[i]);
+                result += out[i];
         }
     }
 
@@ -968,7 +955,7 @@ code::decodeBase64(const dodo::string &string)
         if (len > 0) {
             _decodeBase64(in, out);
             for (i = 0; i < len - 1; ++i)
-                result += dodo::string(1, out[i]);
+                result += out[i];
         }
     }
 
