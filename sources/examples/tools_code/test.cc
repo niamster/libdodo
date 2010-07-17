@@ -25,8 +25,6 @@ main(int  argc UNUSED,
 
         dodo::string longString = dodo::string('l', 1000000) + dodo::string('i', 1000000) + dodo::string('b', 1000000) + dodo::string('d', 1000000) + dodo::string('o', 1000000) + dodo::string('d', 1000000) + dodo::string('o', 1000000);
 
-        cout << "longString = dodo::string(1000000, 'l') + dodo::string(1000000, 'i') + dodo::string(1000000, 'b') + dodo::string(1000000, 'd') + dodo::string(1000000, 'o') + dodo::string(1000000, 'd') + dodo::string(1000000, 'o');" << endl;
-
         cout << "MD5 of \"\", should be d41d8cd98f00b204e9800998ecf8427e" << endl;
         cout << "MD5 of \"\",        is " << tools::code::MD5Hex("") <<  endl;
         cout << "MD5 of \"abc\", should be 900150983cd24fb0d6963f7d28e17f72" << endl;
