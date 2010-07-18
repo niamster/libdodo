@@ -36,11 +36,6 @@
 
 using namespace dodo;
 
-unsigned long string::POSITION_BEGIN = 0;
-unsigned long string::POSITION_END = -1;
-
-//-------------------------------------------------------------------
-
 string::string() : buf(new char[STRING_BUFFER_ALINGMENT]),
                    bufSize(STRING_BUFFER_ALINGMENT),
                    strLen(0)
@@ -116,37 +111,6 @@ string::string(char symbol,
         buf = new char[STRING_BUFFER_ALINGMENT];
         buf[0] = 0x0;
     }
-}
-
-//-------------------------------------------------------------------
-
-string::~string()
-{
-    delete [] buf;
-}
-
-//-------------------------------------------------------------------
-
-const char *
-string::data() const
-{
-    return buf;
-}
-
-//-------------------------------------------------------------------
-
-unsigned long
-string::size() const
-{
-    return strLen;
-}
-
-//-------------------------------------------------------------------
-
-bool
-string::empty() const
-{
-    return strLen == 0;
 }
 
 //-------------------------------------------------------------------
@@ -466,14 +430,6 @@ string::operator+=(char c)
 
     return *this;
 }
-
-//-------------------------------------------------------------------
-
-string::operator const char *() const
-{
-    return buf;
-}
-
 
 //-------------------------------------------------------------------
 

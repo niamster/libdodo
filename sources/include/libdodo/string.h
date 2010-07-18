@@ -83,22 +83,22 @@ namespace dodo {
         /**
          * destructor
          */
-        ~string();
+        ~string() { delete buf; }
 
         /**
          * @return pointer to the string data
          */
-        const char *data() const;
+        inline const char *data() const { return buf; }
 
         /**
          * @return length of the string
          */
-        unsigned long size() const;
+        inline unsigned long size() const { return strLen; }
 
         /**
          * @return true if the string is empty
          */
-        bool empty() const;
+        inline bool empty() const { return strLen == 0; }
 
         /**
          * removes symbols in the string
@@ -222,10 +222,15 @@ namespace dodo {
         /**
          * cast operator
          */
-        operator const char *() const;
+        inline operator const char *() const { return buf; }
 
-        static unsigned long POSITION_BEGIN; ///< defines start of the string
-        static unsigned long POSITION_END; ///< defines end of the string
+        /**
+         * @enum positionEnum defines position within the string
+         */
+        enum positionEnum {
+            POSITION_BEGIN = 0UL, ///< defines start of the string
+            POSITION_END = -1UL, ///< defines end of the string
+        };
 
       private:
 
