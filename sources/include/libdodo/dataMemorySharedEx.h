@@ -2,8 +2,8 @@
  *            dataMemorySharedEx.h
  *
  *  Wed Nov 21 2007
- *  Copyright  2007  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2007  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

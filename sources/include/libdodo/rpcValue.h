@@ -2,8 +2,8 @@
  *            rpcValue.h
  *
  *  Sat Mar 22 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -85,7 +85,7 @@ namespace dodo {
              * constructor
              * @param value defines string, date/time, base64 value
              */
-            value(const dodoString &value);
+            value(const dodo::string &value);
 
             /**
              * constructor
@@ -115,7 +115,7 @@ namespace dodo {
              * constructor
              * @param value defines object value
              */
-            value(const dodoMap<dodoString, value, dodoMapStringCompare> &value);
+            value(const dodoMap<dodo::string, value, dodoMapStringCompare> &value);
 
             /**
              * destructor
@@ -126,7 +126,7 @@ namespace dodo {
              * set string, date/time, base64 value
              * @param value defines string value
              */
-            void setString(const dodoString &value);
+            void setString(const dodo::string &value);
 
             /**
              * set boolean value
@@ -151,7 +151,7 @@ namespace dodo {
              * @param name defines struct member name
              * @param value defines struct member value
              */
-            void addStructureMember(const dodoString &name,
+            void addStructureMember(const dodo::string &name,
                                     const value      &value);
 
             /**
@@ -164,14 +164,14 @@ namespace dodo {
              * set struct value
              * @param value defines struct value
              */
-            void setStruct(const dodoMap<dodoString, value, dodoMapStringCompare> &value);
+            void setStruct(const dodoMap<dodo::string, value, dodoMapStringCompare> &value);
 
             /**
              * @return structure member
              * @param name defines structure member name
              * @note throws exception if data type is not DATA_STRUCT
              */
-            value operator[](const dodoString &name);
+            value operator[](const dodo::string &name);
 
             /**
              * @return array element
@@ -189,7 +189,7 @@ namespace dodo {
              * get string, date/time, base64 value
              * @note throws exception if data type is not DATA_STRING, DATA_DATETIME, DATA_BASE64
              */
-            dodoString string();
+            dodo::string string();
 
             /**
              * get boolean value
@@ -213,18 +213,18 @@ namespace dodo {
              * get struct value
              * @note throws exception if data type is not DATA_STRUCT
              */
-            dodoMap<dodoString, value, dodoMapStringCompare> structure();
+            dodoMap<dodo::string, value, dodoMapStringCompare> structure();
 
           protected:
 
             mutable short valueDataType;                                                                                    ///< argument type, @see rpc::dataEnum
 
             union {
-                dodoString                                       *stringValue;                                              ///< string, datetime, base64 value
+                dodo::string                                       *stringValue;                                              ///< string, datetime, base64 value
                 mutable bool                                     booleanValue;                                              ///< boolean value
                 double                                           numericValue;                                              ///< double value
                 dodoArray<value>                                 *arrayValue;                                               ///< array value
-                dodoMap<dodoString, value, dodoMapStringCompare> *structValue;                                              ///< struct value
+                dodoMap<dodo::string, value, dodoMapStringCompare> *structValue;                                              ///< struct value
             };
         };
     };

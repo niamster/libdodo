@@ -2,8 +2,8 @@
  *            ioNetworkClient.cc
  *
  *  Thu Sep 20 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -40,6 +40,7 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #include <libdodo/ioNetworkClient.h>
 #include <libdodo/ioNetworkClientEx.h>
@@ -176,7 +177,7 @@ client::makeSocket()
 //-------------------------------------------------------------------
 
 void
-client::connect(const dodoString &host,
+client::connect(const dodo::string &host,
                 int              port,
                 exchange         &exchange)
 {
@@ -230,8 +231,8 @@ client::connect(const dodoString &host,
 //-------------------------------------------------------------------
 
 void
-client::connectFrom(const dodoString &local,
-                    const dodoString &host,
+client::connectFrom(const dodo::string &local,
+                    const dodo::string &host,
                     int              port,
                     exchange         &exchange)
 {
@@ -303,7 +304,7 @@ client::connectFrom(const dodoString &local,
 //-------------------------------------------------------------------
 
 void
-client::connect(const dodoString &path,
+client::connect(const dodo::string &path,
                 exchange         &exchange)
 {
 #ifndef IO_WO_XEXEC

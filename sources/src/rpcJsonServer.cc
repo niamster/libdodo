@@ -2,8 +2,8 @@
  *            rpcJsonServer.cc
  *
  *  Mon Jul 07 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -43,7 +43,7 @@
 
 using namespace dodo::rpc::json;
 
-__additional__::__additional__(dodoString &version,
+__additional__::__additional__(dodo::string &version,
                                long       &id) : version(version),
                                                  id(id)
 {
@@ -91,7 +91,7 @@ server::processCallResult(const rpc::response &resp)
 //-------------------------------------------------------------------
 
 void
-server::setResponseVersion(const dodoString &version)
+server::setResponseVersion(const dodo::string &version)
 {
     rpVersion = version;
 }
@@ -104,14 +104,14 @@ server::serve()
     try {
         rpc::method meth = processCallRequest();
 
-        dodoString version = rqVersion;
+        dodo::string version = rqVersion;
 
         __additional__ idata(rqVersion, rqId);
 
         rpId = rqId;
         __additional__ odata(rpVersion, rpId);
 
-        dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
+        dodoMap<dodo::string, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
         if (handler == handlers.end())
             processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata));
@@ -128,7 +128,7 @@ server::serve()
         processCallResult(response);
     } catch (...) {
         rpc::response response;
-        response.fault(dodoString("An unknown error."));
+        response.fault("An unknown error.");
 
         rpId = rqId;
 

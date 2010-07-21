@@ -2,8 +2,8 @@
  *            pcExecutionProcess.h
  *
  *  Wed Oct 08 2009
- *  Copyright  2009  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2009  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -65,7 +65,7 @@ namespace dodo {
                  * @param data defines process data
                  * @param toInit defines library init data
                  */
-                process(const dodoString &module,
+                process(const dodo::string &module,
                         void             *data,
                         void             *toInit = NULL);
 #endif
@@ -135,7 +135,7 @@ namespace dodo {
                  * @param module defines path to the library[if not in ldconfig db] or library name
                  * @param toInit defines library init data
                  */
-                static __module__ module(const dodoString &module,
+                static __module__ module(const dodo::string &module,
                                          void             *toInit = NULL);
 #endif
 

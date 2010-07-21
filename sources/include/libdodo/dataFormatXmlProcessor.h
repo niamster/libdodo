@@ -2,8 +2,8 @@
  *            dataFormatXmlProcessor.h
  *
  *  Tue Nov 29 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -60,18 +60,18 @@ namespace dodo {
                      * @param name defines node name
                      * @param ns defines namespace of the node
                      */
-                    __definition__(const dodoString &name,
-                                   const            dodoString &ns = __dodostring__);
+                    __definition__(const dodo::string &name,
+                                   const            dodo::string &ns = __dodostring__);
 
-                    dodoString                          name;               ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
+                    dodo::string                          name;               ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-                    dodoMap<dodoString, __definition__> children;           ///< children definitions
+                    dodoMap<dodo::string, __definition__> children;           ///< children definitions
                     bool                                allChildren;        ///< if true - get all children tree[true by default]
 
                     dodoStringArray                     attributes;         ///< node attrributes; if empty - take all
                     bool                                allAttributes;      ///< if true - get all attributes[true by default]
 
-                    dodoString                          ns;                 ///< node namespace; if empty parser skips namespace specification
+                    dodo::string                          ns;                 ///< node namespace; if empty parser skips namespace specification
                 };
 
                 /**
@@ -88,14 +88,14 @@ namespace dodo {
                      * constructor
                      * @note initializes with user values
                      */
-                    __info__(const dodoString &version,
-                             const            dodoString &encoding,
-                             const            dodoString &root,
+                    __info__(const dodo::string &version,
+                             const            dodo::string &encoding,
+                             const            dodo::string &root,
                              int              compression);
 
-                    dodoString version;                                     ///< version of XML document
-                    dodoString encoding;                                    ///< encoding of XML document
-                    dodoString root;                                        ///< name of the root element of XML document
+                    dodo::string version;                                     ///< version of XML document
+                    dodo::string encoding;                                    ///< encoding of XML document
+                    dodo::string root;                                        ///< name of the root element of XML document
 
                     int        compression;                                 ///< compression of XML document
                 };
@@ -161,8 +161,8 @@ namespace dodo {
                      * @param io defines output destination for XML
                      */
                     void make(const node        &root,
-                              const dodoString  &encoding,
-                              const dodoString  &version,
+                              const dodo::string  &encoding,
+                              const dodo::string  &version,
                               const io::channel &io)  const;
 
                     /**
@@ -275,7 +275,7 @@ namespace dodo {
                         STATEMENT_ENUMSIZE
                     };
 
-                    static const dodoString statements[STATEMENT_ENUMSIZE]; ///< processor statements
+                    static const dodo::string statements[STATEMENT_ENUMSIZE]; ///< processor statements
 
                     __info__ info;
                 };

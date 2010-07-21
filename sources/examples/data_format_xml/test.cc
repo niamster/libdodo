@@ -64,7 +64,7 @@ main(int  argc UNUSED,
         p.make(p.process(io::file::regular("./test.xml", io::file::regular::OPEN_MODE_READ_ONLY)), "utf-8", "1.0", buffer);
         cout  << endl << buffer << endl << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << endl;
     } catch (std::exception &ex)   {
         cout << ex.what();
     } catch (...)   {

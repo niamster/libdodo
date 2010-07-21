@@ -2,8 +2,8 @@
  *            pcSyncProtector.h
  *
  *  Mon Oct 22 2007
- *  Copyright  2007  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2007  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

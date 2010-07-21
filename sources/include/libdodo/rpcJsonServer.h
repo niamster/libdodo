@@ -2,8 +2,8 @@
  *            rpcJsonServer.h
  *
  *  Mon Jul 07 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -55,9 +55,9 @@ namespace dodo {
                  * @param version defines response/request version
                  * @param id defines response/request ID
                  */
-                __additional__(dodoString &version, long &id);
+                __additional__(dodo::string &version, long &id);
 
-                dodoString &version;    ///< response/request version
+                dodo::string &version;    ///< response/request version
                 long       &id;         ///< response/request ID
             };
 
@@ -83,7 +83,7 @@ namespace dodo {
                  * set version of JSON-RPC response
                  * @param version defines version of JSON-RPC response
                  */
-                virtual void setResponseVersion(const dodoString &version);
+                virtual void setResponseVersion(const dodo::string &version);
 
                 /**
                  * serve rpc call
@@ -108,8 +108,8 @@ namespace dodo {
                  */
                 virtual void processCallResult(const rpc::response &response);
 
-                dodoString rqVersion;   ///< request version
-                dodoString rpVersion;   ///< response version['1.1' by default]
+                dodo::string rqVersion;   ///< request version
+                dodo::string rpVersion;   ///< response version['1.1' by default]
 
                 long rqId;              ///< request ID
                 long rpId;              ///< response ID

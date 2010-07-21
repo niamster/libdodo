@@ -2,8 +2,8 @@
  *            cgiExchange.h
  *
  *  Sat Aug  5 2006
- *  Copyright  2006  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2006  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

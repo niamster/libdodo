@@ -2,8 +2,8 @@
  *            ioMemory.cc
  *
  *  Wed Oct 8 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -106,7 +106,7 @@ memory::memory(const memory &fd) : block::channel(fd.protection),
 
 //-------------------------------------------------------------------
 
-memory::memory(const dodoString &buffer,
+memory::memory(const dodo::string &buffer,
                short            protection) : block::channel(protection),
                                               size(buffer.size()),
                                               flags(FLAGS_NORMAL),

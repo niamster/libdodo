@@ -2,8 +2,8 @@
  *            rpcXmlServer.h
  *
  *  Wed Apr 09 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -54,9 +54,9 @@ namespace dodo {
                  * constructor
                  * @param encoding defines response/request encoding
                  */
-                __additional__(dodoString &encoding);
+                __additional__(dodo::string &encoding);
 
-                dodoString &encoding; ///< response/request encoding
+                dodo::string &encoding; ///< response/request encoding
             };
 
             /**
@@ -80,7 +80,7 @@ namespace dodo {
                 /**
                  * @param encoding defines response encoding
                  */
-                void setResponseEncoding(const dodoString &encoding);
+                void setResponseEncoding(const dodo::string &encoding);
 
                 /**
                  * serve rpc call
@@ -104,8 +104,8 @@ namespace dodo {
                  */
                 virtual void processCallResult(const rpc::response &response);
 
-                dodoString rpEncoding;  ///< encoding of the messages['UTF-8' by default]
-                dodoString rqEncoding;  ///< encoding of the messages['UTF-8' by default]
+                dodo::string rpEncoding;  ///< encoding of the messages['UTF-8' by default]
+                dodo::string rqEncoding;  ///< encoding of the messages['UTF-8' by default]
             };
         };
     };

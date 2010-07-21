@@ -30,7 +30,7 @@ main(int  argc UNUSED,
             cout << arr[i];
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     } catch (...)   {
         cout << "not exists\n";
     }
@@ -80,7 +80,7 @@ main(int  argc UNUSED,
            !12345890$!!@
          */
 
-        dodoString str;
+        dodo::string str;
 
         io1.pos = 2*14;
         str = io1.readString();
@@ -91,7 +91,7 @@ main(int  argc UNUSED,
         cout << "\nSize: " << str.size() << endl;
         cout << "~~" << str << "~~" << endl << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

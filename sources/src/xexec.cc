@@ -2,8 +2,8 @@
  *            xexec.cc
  *
  *  Wed Aug 24 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -214,7 +214,7 @@ xexec::performXExec(dodoList<__item__> &list,
 
 #ifdef DL_EXT
 xexec::__module__
-xexec::module(const dodoString &module,
+xexec::module(const dodo::string &module,
               void             *initData)
 {
 #ifdef DL_FAST
@@ -247,7 +247,7 @@ xexec::module(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-xexec::addXExec(const dodoString &module,
+xexec::addXExec(const dodo::string &module,
                 void             *data,
                 int              &preExecId,
                 int              &postExecId,

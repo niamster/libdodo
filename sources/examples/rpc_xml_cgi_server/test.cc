@@ -18,7 +18,7 @@ class cgiIO : public io::stream::channel {
   public:
 
     cgiIO(cgi::exchange &cf,
-          dodoMap<short, dodoString> &headers) : io::stream::channel(io::channel::PROTECTION_NONE),
+          dodoMap<short, dodo::string> &headers) : io::stream::channel(io::channel::PROTECTION_NONE),
                                                  provider(cf, headers)
     {
     }
@@ -83,7 +83,7 @@ class cgiIO : public io::stream::channel {
 };
 
 response
-handler(const dodoString       &method,
+handler(const dodo::string       &method,
         const dodoArray<value> &values,
         const void             *idata UNUSED,
         void                   *odata UNUSED)
@@ -91,8 +91,8 @@ handler(const dodoString       &method,
     response resp;
 
 
-    resp.addArgument(dodoString("Got method: ") + method + "\n");
-    resp.addArgument(dodoString("Amount of values: ") + tools::string::ulToString(values.size()) + "\n");
+    resp.addArgument(dodo::string("Got method: ") + method + "\n");
+    resp.addArgument(dodo::string("Amount of values: ") + tools::string::ulToString(values.size()) + "\n");
 
     return resp;
 }
@@ -101,7 +101,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    dodoMap<short, dodoString> headers;
+    dodoMap<short, dodo::string> headers;
     headers[cgi::ENVIRONMENT_CONTENTTYPE] = "application/json";
 
     cgi::basic::exchange io;
@@ -114,7 +114,7 @@ main(int  argc UNUSED,
 
         srv.serve();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

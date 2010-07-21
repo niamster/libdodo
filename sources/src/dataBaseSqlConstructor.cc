@@ -2,8 +2,8 @@
  *            dataBaseSqlConstructor.cc
  *
  *  Mon Jul 18 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -37,7 +37,7 @@
 
 using namespace dodo::data::base::sql;
 
-const dodoString constructor::statements[] = {
+const dodo::string constructor::statements[] = {
     "=",
     "='",
     "'",
@@ -78,8 +78,8 @@ condition::condition() : _limit(-1),
 
 //-------------------------------------------------------------------
 
-condition::condition(const dodoString &table,
-                     const dodoString &statement) : _limit(-1),
+condition::condition(const dodo::string &table,
+                     const dodo::string &statement) : _limit(-1),
                                                     _offset(-1),
                                                     _table(table),
                                                     _statement(statement)
@@ -88,9 +88,9 @@ condition::condition(const dodoString &table,
 
 //-------------------------------------------------------------------
 
-condition::condition(const dodoString &table,
+condition::condition(const dodo::string &table,
                      const dodoStringArray &fields,
-                     const dodoString &statement) : _limit(-1),
+                     const dodo::string &statement) : _limit(-1),
                                                     _offset(-1),
                                                     _table(table),
                                                     _statement(statement),
@@ -121,10 +121,10 @@ condition::offset(long a_offset) const
 //-------------------------------------------------------------------
 
 const condition &
-condition::order(const dodoString &field,
+condition::order(const dodo::string &field,
                  short direction) const
 {
-    dodoString dir[] = {
+    dodo::string dir[] = {
         " ASC",
         " DESC",
     };
@@ -133,9 +133,9 @@ condition::order(const dodoString &field,
         case ORDER_DIRECTION_ASC:
         case ORDER_DIRECTION_DESC:
             if (!_orderby.empty())
-                _orderby.append(", ");
-            _orderby.append(field);
-            _orderby.append(dir[direction]);
+                _orderby += ", ";
+            _orderby += field;
+            _orderby += dir[direction];
     }
 
     return *this;
@@ -144,8 +144,8 @@ condition::order(const dodoString &field,
 //-------------------------------------------------------------------
 
 const condition &
-condition::join(const dodoString &table,
-                const dodoString &condition,
+condition::join(const dodo::string &table,
+                const dodo::string &condition,
                 short type) const
 {
     __join__ j;
@@ -255,7 +255,7 @@ query::query()
 
 //-------------------------------------------------------------------
 
-query::query(const dodoString &sql) : sql(sql)
+query::query(const dodo::string &sql) : sql(sql)
 {
 }
 
@@ -361,8 +361,8 @@ constructor::remove(const dodo::data::base::condition &condition)
 //-------------------------------------------------------------------
 
 void
-constructor::setFieldType(const dodoString &table,
-                          const dodoString &field,
+constructor::setFieldType(const dodo::string &table,
+                          const dodo::string &field,
                           short            type)
 {
     fieldTypes[table][field] = type;
@@ -370,44 +370,44 @@ constructor::setFieldType(const dodoString &table,
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 constructor::select()
 {
-    dodoString request;
+    dodo::string request;
 
     if (collectedData.condition._table.size() > 0) {
         request = statements[STATEMENT_SELECT];
         if (collectedData.condition._fields.size() == 0)
-            request.append(statements[STATEMENT_STAR]);
+            request += statements[STATEMENT_STAR];
         else
-            request.append(tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]));
-        request.append(statements[STATEMENT_FROM]);
-        request.append(collectedData.condition._table);
+            request += tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]);
+        request += statements[STATEMENT_FROM];
+        request += collectedData.condition._table;
     } else {
         request = statements[STATEMENT_SELECT];
         if (collectedData.condition._fields.size() == 0)
-            request.append(statements[STATEMENT_STAR]);
+            request += statements[STATEMENT_STAR];
         else
-            request.append(tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]));
+            request += tools::misc::join(collectedData.condition._fields, statements[STATEMENT_COMA]);
     }
 
     if (collectedData.condition._statement.size() > 0) {
-        request.append(statements[STATEMENT_WHERE]);
-        request.append(collectedData.condition._statement);
+        request += statements[STATEMENT_WHERE];
+        request += collectedData.condition._statement;
     }
 
     if (collectedData.condition._orderby.size() > 0) {
-        request.append(statements[STATEMENT_ORDERBY]);
-        request.append(collectedData.condition._orderby);
+        request += statements[STATEMENT_ORDERBY];
+        request += collectedData.condition._orderby;
     }
 
     if (collectedData.condition._limit != -1) {
-        request.append(statements[STATEMENT_LIMIT]);
-        request.append(tools::string::lToString(collectedData.condition._limit));
+        request += statements[STATEMENT_LIMIT];
+        request += tools::string::lToString(collectedData.condition._limit);
 
         if (collectedData.condition._offset != -1) {
-            request.append(statements[STATEMENT_OFFSET]);
-            request.append(tools::string::lToString(collectedData.condition._offset));
+            request += statements[STATEMENT_OFFSET];
+            request += tools::string::lToString(collectedData.condition._offset);
         }
     }
 
@@ -416,29 +416,29 @@ constructor::select()
         for (;i!=j;++i) {
             switch (i->type) {
                 case condition::JOIN_LEFT:
-                    request.append(statements[STATEMENT_JOINLEFT]);
+                    request += statements[STATEMENT_JOINLEFT];
 
                     break;
 
                 case condition::JOIN_RIGHT:
-                    request.append(statements[STATEMENT_JOINRIGHT]);
+                    request += statements[STATEMENT_JOINRIGHT];
 
                     break;
 
                 case condition::JOIN_INNER:
-                    request.append(statements[STATEMENT_JOININNER]);
+                    request += statements[STATEMENT_JOININNER];
 
                     break;
 
                 case condition::JOIN_OUTER:
-                    request.append(statements[STATEMENT_JOINOUTER]);
+                    request += statements[STATEMENT_JOINOUTER];
 
                     break;
             }
-            request.append(i->table);
+            request += i->table;
             if (!i->condition.empty()) {
-                request.append(statements[STATEMENT_ON]);
-                request.append(i->condition);
+                request += statements[STATEMENT_ON];
+                request += i->condition;
             }
         }
     }
@@ -448,32 +448,32 @@ constructor::select()
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 constructor::insert()
 {
-    dodoString request = statements[STATEMENT_INSERT];
+    dodo::string request = statements[STATEMENT_INSERT];
 
-    request.append(statements[STATEMENT_INTO]);
-    request.append(collectedData.condition._table);
+    request += statements[STATEMENT_INTO];
+    request += collectedData.condition._table;
     if (collectedData.rows.fields.size() != 0) {
-        request.append(statements[STATEMENT_LEFTBRACKET]);
-        request.append(tools::misc::join(collectedData.rows.fields, statements[STATEMENT_COMA]));
-        request.append(statements[STATEMENT_RIGHTBRACKET]);
+        request += statements[STATEMENT_LEFTBRACKET];
+        request += tools::misc::join(collectedData.rows.fields, statements[STATEMENT_COMA]);
+        request += statements[STATEMENT_RIGHTBRACKET];
     }
-    request.append(statements[STATEMENT_VALUES]);
+    request += statements[STATEMENT_VALUES];
 
     dodoArray<dodoStringArray>::iterator k(collectedData.rows.values.begin()), l(collectedData.rows.values.end());
     if (k != l) {
-        dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
+        dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
         if (types != fieldTypes.end()) {
-            dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
-            dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
+            dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator type;
+            dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
             dodoStringArray::iterator t;
 
             --l;
             for (; k != l; ++k) {
-                request.append(statements[STATEMENT_LEFTBRACKET]);
+                request += statements[STATEMENT_LEFTBRACKET];
 
                 t = collectedData.rows.fields.begin();
 
@@ -482,24 +482,24 @@ constructor::insert()
                     type = types->second.find(*t);
                     if (type != typesEnd) {
                         if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
-                            request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                            request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA];
                         else
-                            request.append(*i + statements[STATEMENT_COMA]);
+                            request += *i + statements[STATEMENT_COMA];
                     } else
-                        request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                        request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA];
                 }
                 type = types->second.find(*t);
                 if (type != typesEnd) {
                     if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
-                        request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                        request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE];
                     else
-                        request.append(*i);
+                        request += *i;
                 } else
-                    request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                    request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE];
 
-                request.append(statements[STATEMENT_RIGHTBRACKETCOMA]);
+                request += statements[STATEMENT_RIGHTBRACKETCOMA];
             }
-            request.append(statements[STATEMENT_LEFTBRACKET]);
+            request += statements[STATEMENT_LEFTBRACKET];
 
             t = collectedData.rows.fields.begin();
 
@@ -508,32 +508,32 @@ constructor::insert()
                 type = types->second.find(*t);
                 if (type != typesEnd) {
                     if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
-                        request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                        request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA];
                     else
-                        request.append(*i + statements[STATEMENT_COMA]);
+                        request += *i + statements[STATEMENT_COMA];
                 } else
-                    request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA]);
+                    request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHECOMA];
             }
             type = types->second.find(*t);
             if (type != typesEnd) {
                 if (type->second == FIELD_TEXT || type->second == FIELD_BINARY)
-                    request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                    request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE];
                 else
-                    request.append(*i);
+                    request += *i;
             } else
-                request.append(statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE]);
+                request += statements[STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[STATEMENT_APOSTROPHE];
 
-            request.append(statements[STATEMENT_RIGHTBRACKET]);
+            request += statements[STATEMENT_RIGHTBRACKET];
         } else {
             --l;
             for (; k != l; ++k) {
-                request.append(statements[STATEMENT_LEFTBRACKET]);
-                request.append(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
-                request.append(statements[STATEMENT_RIGHTBRACKETCOMA]);
+                request += statements[STATEMENT_LEFTBRACKET];
+                request += joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]);
+                request += statements[STATEMENT_RIGHTBRACKETCOMA];
             }
-            request.append(statements[STATEMENT_LEFTBRACKET]);
-            request.append(joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]));
-            request.append(statements[STATEMENT_RIGHTBRACKET]);
+            request += statements[STATEMENT_LEFTBRACKET];
+            request += joinFields(*k, statements[STATEMENT_COMA], statements[STATEMENT_APOSTROPHE]);
+            request += statements[STATEMENT_RIGHTBRACKET];
         }
     }
 
@@ -542,13 +542,13 @@ constructor::insert()
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 constructor::update()
 {
-    dodoString request = statements[STATEMENT_UPDATE];
+    dodo::string request = statements[STATEMENT_UPDATE];
 
-    request.append(collectedData.condition._table);
-    request.append(statements[STATEMENT_SET]);
+    request += collectedData.condition._table;
+    request += statements[STATEMENT_SET];
 
     dodoArray<dodoStringArray>::iterator v = collectedData.rows.values.begin();
     if (v != collectedData.rows.values.end()) {
@@ -558,78 +558,78 @@ constructor::update()
 
             unsigned int o(fn <= fv ? fn : fv);
 
-            dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
+            dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.condition._table);
             if (types != fieldTypes.end()) {
-                dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
-                dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
+                dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator type;
+                dodoMap<dodo::string, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
 
                 --o;
                 for (unsigned int k(0); k < o; ++i, ++k, ++j) {
-                    request.append(*i);
+                    request += *i;
 
                     type = types->second.find(*i);
                     if (type != typesEnd) {
                         if (type->second == FIELD_TEXT || type->second == FIELD_BINARY) {
-                            request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                            request.append(escapeFields(*j));
-                            request.append(statements[STATEMENT_APOSTROPHECOMA]);
+                            request += statements[STATEMENT_EQUALAPOSTROPHE];
+                            request += escapeFields(*j);
+                            request += statements[STATEMENT_APOSTROPHECOMA];
                         } else {
-                            request.append(statements[STATEMENT_EQUAL]);
-                            request.append(*j);
-                            request.append(statements[STATEMENT_COMA]);
+                            request += statements[STATEMENT_EQUAL];
+                            request += *j;
+                            request += statements[STATEMENT_COMA];
                         }
                     } else {
-                        request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                        request.append(escapeFields(*j));
-                        request.append(statements[STATEMENT_APOSTROPHECOMA]);
+                        request += statements[STATEMENT_EQUALAPOSTROPHE];
+                        request += escapeFields(*j);
+                        request += statements[STATEMENT_APOSTROPHECOMA];
                     }
                 }
-                request.append(*i);
+                request += *i;
 
                 type = types->second.find(*i);
                 if (type != typesEnd) {
                     if (type->second == FIELD_TEXT || type->second == FIELD_BINARY) {
-                        request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                        request.append(escapeFields(*j));
-                        request.append(statements[STATEMENT_APOSTROPHE]);
+                        request += statements[STATEMENT_EQUALAPOSTROPHE];
+                        request += escapeFields(*j);
+                        request += statements[STATEMENT_APOSTROPHE];
                     } else {
-                        request.append(statements[STATEMENT_EQUAL]);
-                        request.append(*j);
+                        request += statements[STATEMENT_EQUAL];
+                        request += *j;
                     }
                 } else {
-                    request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                    request.append(escapeFields(*j));
-                    request.append(statements[STATEMENT_APOSTROPHE]);
+                    request += statements[STATEMENT_EQUALAPOSTROPHE];
+                    request += escapeFields(*j);
+                    request += statements[STATEMENT_APOSTROPHE];
                 }
             } else {
                 --o;
                 for (unsigned int k(0); k < o; ++i, ++k, ++j) {
-                    request.append(*i);
-                    request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                    request.append(escapeFields(*j));
-                    request.append(statements[STATEMENT_APOSTROPHECOMA]);
+                    request += *i;
+                    request += statements[STATEMENT_EQUALAPOSTROPHE];
+                    request += escapeFields(*j);
+                    request += statements[STATEMENT_APOSTROPHECOMA];
                 }
-                request.append(*i);
-                request.append(statements[STATEMENT_EQUALAPOSTROPHE]);
-                request.append(escapeFields(*j));
-                request.append(statements[STATEMENT_APOSTROPHE]);
+                request += *i;
+                request += statements[STATEMENT_EQUALAPOSTROPHE];
+                request += escapeFields(*j);
+                request += statements[STATEMENT_APOSTROPHE];
             }
         }
     }
 
     if (collectedData.condition._statement.size() > 0) {
-        request.append(statements[STATEMENT_WHERE]);
-        request.append(collectedData.condition._statement);
+        request += statements[STATEMENT_WHERE];
+        request += collectedData.condition._statement;
     }
 
     if (collectedData.condition._orderby.size() > 0) {
-        request.append(statements[STATEMENT_ORDERBY]);
-        request.append(collectedData.condition._orderby);
+        request += statements[STATEMENT_ORDERBY];
+        request += collectedData.condition._orderby;
     }
 
     if (collectedData.condition._limit != -1) {
-        request.append(statements[STATEMENT_LIMIT]);
-        request.append(tools::string::lToString(collectedData.condition._limit));
+        request += statements[STATEMENT_LIMIT];
+        request += tools::string::lToString(collectedData.condition._limit);
     }
 
     return request;
@@ -637,27 +637,27 @@ constructor::update()
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 constructor::remove()
 {
-    dodoString request = statements[STATEMENT_DELETE];
+    dodo::string request = statements[STATEMENT_DELETE];
 
-    request.append(statements[STATEMENT_FROM]);
-    request.append(collectedData.condition._table);
+    request += statements[STATEMENT_FROM];
+    request += collectedData.condition._table;
 
     if (collectedData.condition._statement.size() > 0) {
-        request.append(statements[STATEMENT_WHERE]);
-        request.append(collectedData.condition._statement);
+        request += statements[STATEMENT_WHERE];
+        request += collectedData.condition._statement;
     }
 
     if (collectedData.condition._orderby.size() > 0) {
-        request.append(statements[STATEMENT_ORDERBY]);
-        request.append(collectedData.condition._orderby);
+        request += statements[STATEMENT_ORDERBY];
+        request += collectedData.condition._orderby;
     }
 
     if (collectedData.condition._limit != -1) {
-        request.append(statements[STATEMENT_LIMIT]);
-        request.append(tools::string::lToString(collectedData.condition._limit));
+        request += statements[STATEMENT_LIMIT];
+        request += tools::string::lToString(collectedData.condition._limit);
     }
 
     return request;
@@ -665,7 +665,7 @@ constructor::remove()
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 constructor::construct()
 {
     switch (collectedData.type) {
@@ -687,22 +687,18 @@ constructor::construct()
 
 //-------------------------------------------------------------------
 
-dodoString
-constructor::escapeFields(const dodoString &data)
+dodo::string
+constructor::escapeFields(const dodo::string &data)
 {
-    dodoString temp;
-
     unsigned long size = data.size();
+    dodo::string temp('\0', size+size/4);
+
+    temp.clear();
 
     for (unsigned long i = 0; i < size; ++i) {
-        if (data[i] == '\\')
-            temp.append("\\\\");
-        else {
-            if (data[i] == '\'')
-                temp.append("\\'");
-            else
-                temp.append(1, data[i]);
-        }
+        if (data[i] == '\\' || data == '\'')
+            temp += '\\';
+        temp += data[i];
     }
 
     return temp;
@@ -710,15 +706,15 @@ constructor::escapeFields(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 constructor::joinFields(const dodoStringArray &fields,
-                        const dodoString      &separator,
-                        const dodoString      &frame,
+                        const dodo::string      &separator,
+                        const dodo::string      &frame,
                         int                   limit)
 {
     int k(0);
 
-    dodoString temp, fs(frame + separator);
+    dodo::string temp, fs(frame + separator);
     dodoStringArray::const_iterator i(fields.begin()), j(fields.end());
     if (i != j) {
         --j;
@@ -728,13 +724,13 @@ constructor::joinFields(const dodoStringArray &fields,
                     return temp;
                 ++k;
             }
-            temp.append(frame);
-            temp.append(escapeFields(*i));
-            temp.append(fs);
+            temp += frame;
+            temp += escapeFields(*i);
+            temp += fs;
         }
-        temp.append(frame);
-        temp.append(escapeFields(*i));
-        temp.append(frame);
+        temp += frame;
+        temp += escapeFields(*i);
+        temp += frame;
     }
 
     return temp;

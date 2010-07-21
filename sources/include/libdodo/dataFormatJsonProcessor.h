@@ -2,8 +2,8 @@
  *            dataFormatJsonProcessor.h
  *
  *  Mon Oct 20 2007
- *  Copyright  2007  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2007  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -95,8 +95,8 @@ namespace dodo {
                      * @param root defines serialized JSON string object
                      * @param pos defines start position for parsing in serialized JSON string object
                      */
-                    unsigned long processString(dodoString       &node,
-                                                const dodoString &root,
+                    unsigned long processString(dodo::string       &node,
+                                                const dodo::string &root,
                                                 unsigned long    pos);
 
                     /**
@@ -107,7 +107,7 @@ namespace dodo {
                      * @param pos defines start position for parsing in serialized JSON string object
                      */
                     unsigned long processArray(dodoArray<node>  &node,
-                                               const dodoString &root,
+                                               const dodo::string &root,
                                                unsigned long    pos);
 
                     /**
@@ -117,8 +117,8 @@ namespace dodo {
                      * @param root defines serialized JSON string object
                      * @param pos defines start position for parsing in serialized JSON string object
                      */
-                    unsigned long processObject(dodoMap<dodoString, node, dodoMapStringCompare> &node,
-                                                const dodoString &root,
+                    unsigned long processObject(dodoMap<dodo::string, node, dodoMapStringCompare> &node,
+                                                const dodo::string &root,
                                                 unsigned long pos);
 
                     /**
@@ -129,7 +129,7 @@ namespace dodo {
                      * @param pos defines start position for parsing in serialized JSON string object
                      */
                     unsigned long processValue(node             &node,
-                                               const dodoString &root,
+                                               const dodo::string &root,
                                                unsigned long    pos);
 
                     /**
@@ -140,7 +140,7 @@ namespace dodo {
                      * @param pos defines start position for parsing in serialized JSON string object
                      */
                     unsigned long processBoolean(bool             &node,
-                                                 const dodoString &root,
+                                                 const dodo::string &root,
                                                  unsigned long    pos);
 
                     /**
@@ -151,7 +151,7 @@ namespace dodo {
                      * @param pos defines start position for parsing in serialized JSON string object
                      */
                     unsigned long processNumeric(long             &node,
-                                                 const dodoString &root,
+                                                 const dodo::string &root,
                                                  unsigned long    pos);
 
                     /**
@@ -160,7 +160,7 @@ namespace dodo {
                      * @param root defines serialized JSON string object
                      * @param pos defines start position for parsing in serialized JSON string object
                      */
-                    unsigned long processNull(const dodoString &root,
+                    unsigned long processNull(const dodo::string &root,
                                               unsigned long    pos);
 
                     /**

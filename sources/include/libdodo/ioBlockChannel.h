@@ -2,8 +2,8 @@
  *            ioBlockChannel.h
  *
  *  Sat Jun 13 2009
- *  Copyright  2009  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2009  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -60,21 +60,21 @@ namespace dodo {
                  * @return read data
                  * @note not more then bs
                  */
-                virtual dodoString read() const;
+                virtual dodo::string read() const;
 
                 /**
                  * @return amount in bytes of successfully written data
                  * @param data defines data that will be written
                  * @note not more then bs
                  */
-                virtual unsigned long write(const dodoString &data) const;
+                virtual unsigned long write(const dodo::string &data) const;
 
                 /**
                  * read null- or newline- terminated string
                  * @return read data
                  * @note not more then bs
                  */
-                virtual dodoString readString() const;
+                virtual dodo::string readString() const;
 
                 /**
                  * write null- terminated string
@@ -82,7 +82,7 @@ namespace dodo {
                  * @param data defines data that will be written
                  * @note not more then bs
                  */
-                virtual unsigned long writeString(const dodoString &data) const;
+                virtual unsigned long writeString(const dodo::string &data) const;
 
                 mutable unsigned long pos;  ///< read/write/erase position; incremented on read/write/erase[0 by default]
 

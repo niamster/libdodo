@@ -2,8 +2,8 @@
  *            ioBlockChannel.cc
  *
  *  Sat Jun 13 2009
- *  Copyright  2009  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2009  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -53,19 +53,19 @@ channel::~channel()
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 channel::read() const
 {
     pc::sync::stack pg(keeper);
 
-    dodoString data;
+    dodo::string data;
     unsigned long n;
 
 #ifndef IO_WO_XEXEC
     performPreExec(OPERATION_READ);
 #endif
 
-    data.assign(bs, '\0');
+    data = dodo::string('\0', bs);
 
     try {
         n = _read((char *)data.data());
@@ -98,19 +98,19 @@ channel::read() const
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 channel::readString() const
 {
     pc::sync::stack pg(keeper);
 
-    dodoString data;
+    dodo::string data;
     unsigned long n;
 
 #ifndef IO_WO_XEXEC
     performPreExec(OPERATION_READSTRING);
 #endif
 
-    data.assign(bs, '\0');
+    data = dodo::string('\0', bs);
 
     try {
         n = _readString((char *)data.data());
@@ -139,14 +139,14 @@ channel::readString() const
 //-------------------------------------------------------------------
 
 unsigned long
-channel::write(const dodoString &data) const
+channel::write(const dodo::string &data) const
 {
     pc::sync::stack pg(keeper);
 
     unsigned long n;
 
 #ifndef IO_WO_XEXEC
-    collectedData.buffer.assign(data, 0, bs);
+    collectedData.buffer = data;
 
     performPreExec(OPERATION_WRITE);
 
@@ -175,7 +175,7 @@ channel::write(const dodoString &data) const
 //-------------------------------------------------------------------
 
 unsigned long
-channel::writeString(const dodoString &data) const
+channel::writeString(const dodo::string &data) const
 {
     pc::sync::stack pg(keeper);
 

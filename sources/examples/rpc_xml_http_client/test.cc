@@ -18,7 +18,7 @@ using namespace std;
 class httpIO : public io::stream::channel, public io::network::http::client {
   public:
 
-    httpIO(const dodoString &url) : io::stream::channel(io::channel::PROTECTION_NONE),
+    httpIO(const dodo::string &url) : io::stream::channel(io::channel::PROTECTION_NONE),
                                     io::network::http::client(url),
                                     response(NULL)
     {
@@ -64,13 +64,13 @@ class httpIO : public io::stream::channel, public io::network::http::client {
     virtual unsigned long
     _write(const char * const data UNUSED) const
     {
-        throw dodoString("Not implemented");
+        throw dodo::string("Not implemented");
     }
 
     virtual unsigned long
     _writeString(const char * const idata) const
     {
-        data.append(idata);
+        data += dodo::string(idata);
 
         return strlen(idata);
     }
@@ -99,7 +99,7 @@ class httpIO : public io::stream::channel, public io::network::http::client {
         data.clear();
     }
 
-    mutable dodoString data;
+    mutable dodo::string data;
     mutable io::network::http::response * response;
 };
 
@@ -122,11 +122,11 @@ main(int  argc UNUSED,
         argument.setBoolean(true);
         method.addArgument(argument);
 
-        argument.addStructureMember("string", dodoString("string"));
+        argument.addStructureMember("string", dodo::string("string"));
         argument.addStructureMember("integer", (long)10);
         method.addArgument(argument);
 
-        argument.addArrayElement(dodoString("string"));
+        argument.addArrayElement(dodo::string("string"));
         argument.addArrayElement((double)10.0);
         method.addArgument(argument);
 
@@ -136,7 +136,7 @@ main(int  argc UNUSED,
         cout << "First value: " << resp.value().string() << endl;
         cout << "Second value: " << resp.value(1).string() << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

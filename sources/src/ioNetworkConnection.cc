@@ -2,8 +2,8 @@
  *            ioNetworkConnection.cc
  *
  *  Thu Sep 20 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -33,6 +33,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <libdodo/ioNetworkConnection.h>
 #include <libdodo/ioNetworkConnectionEx.h>

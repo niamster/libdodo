@@ -45,7 +45,7 @@ main(int  argc UNUSED,
 
                 int pos = manager.add(ex);
 
-                dodoString data;
+                dodo::string data;
 
                 while (true) {
                     if (manager.isReadable(pos)) {
@@ -59,7 +59,7 @@ main(int  argc UNUSED,
             }
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.file << "\t" << ex.line << endl;
+        cout << (dodo::string)ex << "\t" << ex.file << "\t" << ex.line << endl;
     }
 
     return 0;

@@ -2,8 +2,8 @@
  *            exceptionBasic.cc
  *
  *  Sun Jul 17 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -407,10 +407,10 @@ basic::basic(int              a_module,
              int              functionID,
              int              errnoSource,
              int              a_errno,
-             const dodoString &a_errstr,
+             const dodo::string &a_errstr,
              unsigned long    a_line,
-             const dodoString &a_file,
-             const dodoString &a_message) throw () : source(a_module),
+             const dodo::string &a_file,
+             const dodo::string &a_message) throw () : source(a_module),
                                                      function(functionID),
                                                      errnoSource(errnoSource),
                                                      errNo(a_errno),
@@ -436,387 +436,324 @@ basic::basic(int              a_module,
     for (int i = 0; i < CALLSTACK_MAXLEN; ++i) {
         switch (i) {
             case 0:
-                if (!__builtin_frame_address(0))
+                call.address = (void *)((unsigned long)__builtin_return_address(0)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(0);
                 break;
-
             case 1:
-                if (!__builtin_frame_address(1))
+                call.address = (void *)((unsigned long)__builtin_return_address(1)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(1);
                 break;
-
             case 2:
-                if (!__builtin_frame_address(2))
+                call.address = (void *)((unsigned long)__builtin_return_address(2)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(2);
                 break;
-
             case 3:
-                if (!__builtin_frame_address(3))
+                call.address = (void *)((unsigned long)__builtin_return_address(3)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(3);
                 break;
-
             case 4:
-                if (!__builtin_frame_address(4))
+                call.address = (void *)((unsigned long)__builtin_return_address(4)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(4);
                 break;
-
             case 5:
-                if (!__builtin_frame_address(5))
+                call.address = (void *)((unsigned long)__builtin_return_address(5)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(5);
                 break;
-
             case 6:
-                if (!__builtin_frame_address(6))
+                call.address = (void *)((unsigned long)__builtin_return_address(6)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(6);
                 break;
-
             case 7:
-                if (!__builtin_frame_address(7))
+                call.address = (void *)((unsigned long)__builtin_return_address(7)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(7);
                 break;
-
             case 8:
-                if (!__builtin_frame_address(8))
+                call.address = (void *)((unsigned long)__builtin_return_address(8)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(8);
                 break;
-
             case 9:
-                if (!__builtin_frame_address(9))
+                call.address = (void *)((unsigned long)__builtin_return_address(9)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(9);
                 break;
-
             case 10:
-                if (!__builtin_frame_address(10))
+                call.address = (void *)((unsigned long)__builtin_return_address(10)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(10);
                 break;
-
             case 11:
-                if (!__builtin_frame_address(11))
+                call.address = (void *)((unsigned long)__builtin_return_address(11)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(11);
                 break;
-
             case 12:
-                if (!__builtin_frame_address(12))
+                call.address = (void *)((unsigned long)__builtin_return_address(12)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(12);
                 break;
-
             case 13:
-                if (!__builtin_frame_address(13))
+                call.address = (void *)((unsigned long)__builtin_return_address(13)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(13);
                 break;
-
             case 14:
-                if (!__builtin_frame_address(14))
+                call.address = (void *)((unsigned long)__builtin_return_address(14)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(14);
                 break;
-
             case 15:
-                if (!__builtin_frame_address(15))
+                call.address = (void *)((unsigned long)__builtin_return_address(15)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(15);
                 break;
-
             case 16:
-                if (!__builtin_frame_address(16))
+                call.address = (void *)((unsigned long)__builtin_return_address(16)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(16);
                 break;
-
             case 17:
-                if (!__builtin_frame_address(17))
+                call.address = (void *)((unsigned long)__builtin_return_address(17)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(17);
                 break;
-
             case 18:
-                if (!__builtin_frame_address(18))
+                call.address = (void *)((unsigned long)__builtin_return_address(18)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(18);
                 break;
-
             case 19:
-                if (!__builtin_frame_address(19))
+                call.address = (void *)((unsigned long)__builtin_return_address(19)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(19);
                 break;
-
             case 20:
-                if (!__builtin_frame_address(20))
+                call.address = (void *)((unsigned long)__builtin_return_address(20)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(20);
                 break;
-
             case 21:
-                if (!__builtin_frame_address(21))
+                call.address = (void *)((unsigned long)__builtin_return_address(21)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(21);
                 break;
-
             case 22:
-                if (!__builtin_frame_address(22))
+                call.address = (void *)((unsigned long)__builtin_return_address(22)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(22);
                 break;
-
             case 23:
-                if (!__builtin_frame_address(23))
+                call.address = (void *)((unsigned long)__builtin_return_address(23)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(23);
                 break;
-
             case 24:
-                if (!__builtin_frame_address(24))
+                call.address = (void *)((unsigned long)__builtin_return_address(24)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(24);
                 break;
-
             case 25:
-                if (!__builtin_frame_address(25))
+                call.address = (void *)((unsigned long)__builtin_return_address(25)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(25);
                 break;
-
             case 26:
-                if (!__builtin_frame_address(26))
+                call.address = (void *)((unsigned long)__builtin_return_address(26)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(26);
                 break;
-
             case 27:
-                if (!__builtin_frame_address(27))
+                call.address = (void *)((unsigned long)__builtin_return_address(27)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(27);
                 break;
-
             case 28:
-                if (!__builtin_frame_address(28))
+                call.address = (void *)((unsigned long)__builtin_return_address(28)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(28);
                 break;
-
             case 29:
-                if (!__builtin_frame_address(29))
+                call.address = (void *)((unsigned long)__builtin_return_address(29)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(29);
                 break;
-
             case 30:
-                if (!__builtin_frame_address(30))
+                call.address = (void *)((unsigned long)__builtin_return_address(30)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(30);
                 break;
-
             case 31:
-                if (!__builtin_frame_address(31))
+                call.address = (void *)((unsigned long)__builtin_return_address(31)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(31);
                 break;
-
             case 32:
-                if (!__builtin_frame_address(32))
+                call.address = (void *)((unsigned long)__builtin_return_address(32)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(32);
                 break;
-
             case 33:
-                if (!__builtin_frame_address(33))
+                call.address = (void *)((unsigned long)__builtin_return_address(33)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(33);
                 break;
-
             case 34:
-                if (!__builtin_frame_address(34))
+                call.address = (void *)((unsigned long)__builtin_return_address(34)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(34);
                 break;
-
             case 35:
-                if (!__builtin_frame_address(35))
+                call.address = (void *)((unsigned long)__builtin_return_address(35)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(35);
                 break;
-
             case 36:
-                if (!__builtin_frame_address(36))
+                call.address = (void *)((unsigned long)__builtin_return_address(36)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(36);
                 break;
-
             case 37:
-                if (!__builtin_frame_address(37))
+                call.address = (void *)((unsigned long)__builtin_return_address(37)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(37);
                 break;
-
             case 38:
-                if (!__builtin_frame_address(38))
+                call.address = (void *)((unsigned long)__builtin_return_address(38)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(38);
                 break;
-
             case 39:
-                if (!__builtin_frame_address(39))
+                call.address = (void *)((unsigned long)__builtin_return_address(39)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(39);
                 break;
-
             case 40:
-                if (!__builtin_frame_address(40))
+                call.address = (void *)((unsigned long)__builtin_return_address(40)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(40);
                 break;
-
             case 41:
-                if (!__builtin_frame_address(41))
+                call.address = (void *)((unsigned long)__builtin_return_address(41)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(41);
                 break;
-
             case 42:
-                if (!__builtin_frame_address(42))
+                call.address = (void *)((unsigned long)__builtin_return_address(42)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(42);
                 break;
-
             case 43:
-                if (!__builtin_frame_address(43))
+                call.address = (void *)((unsigned long)__builtin_return_address(43)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(43);
                 break;
-
             case 44:
-                if (!__builtin_frame_address(44))
+                call.address = (void *)((unsigned long)__builtin_return_address(44)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(44);
                 break;
-
             case 45:
-                if (!__builtin_frame_address(45))
+                call.address = (void *)((unsigned long)__builtin_return_address(45)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(45);
                 break;
-
             case 46:
-                if (!__builtin_frame_address(46))
+                call.address = (void *)((unsigned long)__builtin_return_address(46)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(46);
                 break;
-
             case 47:
-                if (!__builtin_frame_address(47))
+                call.address = (void *)((unsigned long)__builtin_return_address(47)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(47);
                 break;
-
             case 48:
-                if (!__builtin_frame_address(48))
+                call.address = (void *)((unsigned long)__builtin_return_address(48)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(48);
                 break;
-
             case 49:
-                if (!__builtin_frame_address(49))
+                call.address = (void *)((unsigned long)__builtin_return_address(49)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(49);
                 break;
-
             case 50:
-                if (!__builtin_frame_address(50))
+                call.address = (void *)((unsigned long)__builtin_return_address(50)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(50);
                 break;
-
             case 51:
-                if (!__builtin_frame_address(51))
+                call.address = (void *)((unsigned long)__builtin_return_address(51)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(51);
                 break;
-
             case 52:
-                if (!__builtin_frame_address(52))
+                call.address = (void *)((unsigned long)__builtin_return_address(52)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(52);
                 break;
-
             case 53:
-                if (!__builtin_frame_address(53))
+                call.address = (void *)((unsigned long)__builtin_return_address(53)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(53);
                 break;
-
             case 54:
-                if (!__builtin_frame_address(54))
+                call.address = (void *)((unsigned long)__builtin_return_address(54)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(54);
                 break;
-
             case 55:
-                if (!__builtin_frame_address(55))
+                call.address = (void *)((unsigned long)__builtin_return_address(55)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(55);
                 break;
-
             case 56:
-                if (!__builtin_frame_address(56))
+                call.address = (void *)((unsigned long)__builtin_return_address(56)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(56);
                 break;
-
             case 57:
-                if (!__builtin_frame_address(57))
+                call.address = (void *)((unsigned long)__builtin_return_address(57)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(57);
                 break;
-
             case 58:
-                if (!__builtin_frame_address(58))
+                call.address = (void *)((unsigned long)__builtin_return_address(58)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(58);
                 break;
-
             case 59:
-                if (!__builtin_frame_address(59))
+                call.address = (void *)((unsigned long)__builtin_return_address(59)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(59);
                 break;
-
             case 60:
-                if (!__builtin_frame_address(60))
+                call.address = (void *)((unsigned long)__builtin_return_address(60)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(60);
                 break;
-
             case 61:
-                if (!__builtin_frame_address(61))
+                call.address = (void *)((unsigned long)__builtin_return_address(61)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(61);
                 break;
-
             case 62:
-                if (!__builtin_frame_address(62))
+                call.address = (void *)((unsigned long)__builtin_return_address(62)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(62);
                 break;
-
             case 63:
-                if (!__builtin_frame_address(63))
+                call.address = (void *)((unsigned long)__builtin_return_address(63)&0xFFFFFF00);
+                if (!call.address)
                     goto handle;
-                call.address = __builtin_return_address(63);
                 break;
         }
 
@@ -882,17 +819,17 @@ basic::~basic() throw ()
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 basic::backtrace()
 {
-    dodoString stack;
+    dodo::string stack;
 
     char str[32];
 
     dodoArray<__call__>::iterator i = callStack.begin(), j = callStack.end();
     for (; i != j; ++i) {
         snprintf(str, 32, " [0x%lx]", (long)i->address);
-        stack.append(i->object + ": " + i->symbol + dodoString(str) + "\n");
+        stack += i->object + ": " + i->symbol + str + "\n";
     }
 
     return stack;
@@ -900,7 +837,7 @@ basic::backtrace()
 
 //-------------------------------------------------------------------
 
-basic::operator const dodoString
+basic::operator const dodo::string
 & ()
 {
     sync::stack tg;
@@ -1053,7 +990,7 @@ basic::removeHandlers()
 
 #ifdef DL_EXT
 void
-basic::setHandler(const dodoString &path,
+basic::setHandler(const dodo::string &path,
                   void             *data,
                   void             *toInit)
 {
@@ -1113,7 +1050,7 @@ basic::setHandler(const dodoString &path,
 //-------------------------------------------------------------------
 
 basic::__module__
-basic::module(const dodoString &module,
+basic::module(const dodo::string &module,
               void             *toInit)
 {
     sync::stack tg;

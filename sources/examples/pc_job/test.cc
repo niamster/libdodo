@@ -19,7 +19,7 @@ job0(void *data)
     try {
         cout << endl << (char *)data << ": " << tools::time::millinow() << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 10;
@@ -35,7 +35,7 @@ job1(void *data)
 
         cout << endl << "<<" << (char *)data << ": " << tools::time::millinow() << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 10;
@@ -56,15 +56,15 @@ main(int  argc UNUSED,
 
         execution::manager manager;
 
-        dodoString ids[amount];
+        dodo::string ids[amount];
         int pos[amount];
         for (int i = 0; i < amount; ++i) {
             ids[i] = tools::string::lToString(i);
             if (i % 2 == 0) {
-                pos[i] = manager.add(execution::thread(::job1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
+                pos[i] = manager.add(execution::thread(::job1, (void *)ids[i].data(), execution::ON_DESTRUCTION_STOP));
                 cout << "Job #"<< pos[i] << " is a thread" << endl;
             } else {
-                pos[i] = manager.add(execution::process(::job1, (void *)ids[i].c_str(), execution::ON_DESTRUCTION_STOP));
+                pos[i] = manager.add(execution::process(::job1, (void *)ids[i].data(), execution::ON_DESTRUCTION_STOP));
                 cout << "Job #"<< pos[i] << " is a process" << endl;
             }
         }
@@ -103,7 +103,7 @@ main(int  argc UNUSED,
         for (int i = 0; i < amount; ++i)
             cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

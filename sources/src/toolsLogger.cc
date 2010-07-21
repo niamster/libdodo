@@ -2,8 +2,8 @@
  *            toolsLogger.cc
  *
  *  Fri Mar 21 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -41,7 +41,7 @@
 
 using namespace dodo::tools;
 
-const dodoString logger::levels[] = {
+const dodo::string logger::levels[] = {
     "INFO",
     "NOTICE",
     "DEBUG",
@@ -123,7 +123,7 @@ logger::remove(unsigned long position)
 
 void
 logger::log(short            level,
-            const dodoString &msg)
+            const dodo::string &msg)
 {
     pc::sync::stack pg(keeper);
 
@@ -159,7 +159,7 @@ logger::log(short            level,
 //-------------------------------------------------------------------
 
 void
-logger::setTimeFormat(const dodoString &format)
+logger::setTimeFormat(const dodo::string &format)
 {
     timeFormat = " " + format + ": ";
 }

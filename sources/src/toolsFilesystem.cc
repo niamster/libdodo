@@ -2,8 +2,8 @@
  *            toolsFilesystem.cc
  *
  *  Wed Oct 8 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -48,7 +48,7 @@
 using namespace dodo::tools;
 
 void
-filesystem::unlink(const dodoString &path,
+filesystem::unlink(const dodo::string &path,
                    bool             force)
 {
     int status(0);
@@ -71,8 +71,8 @@ filesystem::unlink(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::rename(const dodoString &oldPath,
-                   const dodoString &newPath)
+filesystem::rename(const dodo::string &oldPath,
+                   const dodo::string &newPath)
 {
     if (::rename(oldPath.data(), newPath.data()) == -1)
         throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RENAME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
@@ -81,8 +81,8 @@ filesystem::rename(const dodoString &oldPath,
 //-------------------------------------------------------------------
 
 void
-filesystem::symlink(const dodoString &oldPath,
-                    const dodoString &newPath,
+filesystem::symlink(const dodo::string &oldPath,
+                    const dodo::string &newPath,
                     bool             force)
 {
     if (force) {
@@ -102,8 +102,8 @@ filesystem::symlink(const dodoString &oldPath,
 //-------------------------------------------------------------------
 
 void
-filesystem::link(const dodoString &oldPath,
-                 const dodoString &newPath)
+filesystem::link(const dodo::string &oldPath,
+                 const dodo::string &newPath)
 {
     if  (::link(oldPath.data(), newPath.data()) == -1)
         throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_LINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
@@ -112,7 +112,7 @@ filesystem::link(const dodoString &oldPath,
 //-------------------------------------------------------------------
 
 void
-filesystem::chown(const dodoString &path,
+filesystem::chown(const dodo::string &path,
                   int              uid)
 {
     if (::chown(path.data(), uid, (unsigned int)-1) == -1)
@@ -122,7 +122,7 @@ filesystem::chown(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::chgrp(const dodoString &path,
+filesystem::chgrp(const dodo::string &path,
                   int              gid)
 {
     if (::chown(path.data(), (unsigned int)-1, gid) == -1)
@@ -132,7 +132,7 @@ filesystem::chgrp(const dodoString &path,
 //-------------------------------------------------------------------
 
 int
-filesystem::userOwner(const dodoString &path)
+filesystem::userOwner(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -144,7 +144,7 @@ filesystem::userOwner(const dodoString &path)
 //-------------------------------------------------------------------
 
 int
-filesystem::groupOwner(const dodoString &path)
+filesystem::groupOwner(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -156,7 +156,7 @@ filesystem::groupOwner(const dodoString &path)
 //-------------------------------------------------------------------
 
 void
-filesystem::touch(const dodoString &path,
+filesystem::touch(const dodo::string &path,
                   int              a_time)
 {
     if (a_time == 1)
@@ -173,7 +173,7 @@ filesystem::touch(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::mkfifo(const dodoString &path,
+filesystem::mkfifo(const dodo::string &path,
                    int              permissions)
 {
     if (::mkfifo(path.data(), toRealPermission(permissions)) == -1)
@@ -183,7 +183,7 @@ filesystem::mkfifo(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::mkdir(const dodoString &path,
+filesystem::mkdir(const dodo::string &path,
                   int              permissions)
 {
     if (::mkdir(path.data(), toRealPermission(permissions)) == -1) {
@@ -214,7 +214,7 @@ filesystem::mkdir(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::chmod(const dodoString &path,
+filesystem::chmod(const dodo::string &path,
                   int              permissions)
 {
     if (::chmod(path.data(), toRealPermission(permissions)) == -1)
@@ -263,7 +263,7 @@ filesystem::toRealPermission(int permission)
 //-------------------------------------------------------------------
 
 void
-filesystem::rm(const dodoString &path,
+filesystem::rm(const dodo::string &path,
                bool             force)
 {
     struct stat st;
@@ -279,7 +279,7 @@ filesystem::rm(const dodoString &path,
             if (errno != ENOENT || !force)
                 throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
     } else {
-        dodoString attached;
+        dodo::string attached;
 
         DIR *directory = opendir(path.data());
 
@@ -293,7 +293,7 @@ filesystem::rm(const dodoString &path,
                 if ((strcmp(dd->d_name, ".") == 0) || (strcmp(dd->d_name, "..") == 0))
                     continue;
 
-                attached.assign(path + "/" + dd->d_name);
+                attached = dodo::string(path + "/" + dd->d_name);
 
                 if (::lstat(attached.data(), &st) == -1)
                     if (errno != ENOENT || !force)
@@ -319,7 +319,7 @@ filesystem::rm(const dodoString &path,
 //-------------------------------------------------------------------
 
 int
-filesystem::permissions(const dodoString &path)
+filesystem::permissions(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -362,7 +362,7 @@ filesystem::permissions(const dodoString &path)
 //-------------------------------------------------------------------
 
 int
-filesystem::fileType(const dodoString &path)
+filesystem::fileType(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -408,7 +408,7 @@ filesystem::fileType(const dodoString &path)
 //-------------------------------------------------------------------
 
 long
-filesystem::size(const dodoString &path)
+filesystem::size(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -420,7 +420,7 @@ filesystem::size(const dodoString &path)
 //-------------------------------------------------------------------
 
 long
-filesystem::accessTime(const dodoString &path)
+filesystem::accessTime(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -432,7 +432,7 @@ filesystem::accessTime(const dodoString &path)
 //-------------------------------------------------------------------
 
 long
-filesystem::modificationTime(const dodoString &path)
+filesystem::modificationTime(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -444,7 +444,7 @@ filesystem::modificationTime(const dodoString &path)
 //-------------------------------------------------------------------
 
 filesystem::__file__
-filesystem::file(const dodoString &path)
+filesystem::file(const dodo::string &path)
 {
     __file__ file;
 
@@ -452,7 +452,7 @@ filesystem::file(const dodoString &path)
     if (::lstat(path.data(), &st) == -1)
         throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-    file.name.assign(::basename((char *)path.data()));
+    file.name = dodo::string(::basename((char *)path.data()));
     file.type = filesystem::fileType(path);
     file.perm = filesystem::permissions(path);
     file.accTime = filesystem::accessTime(path);
@@ -467,7 +467,7 @@ filesystem::file(const dodoString &path)
 //-------------------------------------------------------------------
 
 dodoArray<filesystem::__file__>
-filesystem::dir(const dodoString &path)
+filesystem::dir(const dodo::string &path)
 {
     dodoArray<__file__> dir;
     struct stat st;
@@ -483,12 +483,12 @@ filesystem::dir(const dodoString &path)
         throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_DIRINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     dirent *dd;
-    dodoString attached;
+    dodo::string attached;
 
     while ((dd = readdir(directory)) != NULL) {
         if ((strcmp(dd->d_name, ".") == 0) || (strcmp(dd->d_name, "..") == 0))
             continue;
-        attached.assign(path + "/" + dd->d_name);
+        attached = dodo::string(path + "/" + dd->d_name);
         dir.push_back(filesystem::file(attached));
     }
 
@@ -497,8 +497,8 @@ filesystem::dir(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoString
-filesystem::followSymlink(const dodoString &path)
+dodo::string
+filesystem::followSymlink(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -519,8 +519,8 @@ filesystem::followSymlink(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoString
-filesystem::fileContents(const dodoString &path)
+dodo::string
+filesystem::fileContents(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -536,7 +536,7 @@ filesystem::fileContents(const dodoString &path)
     char buffer[IO_BLOCKSIZE];
 
     long iter = st.st_size / IO_BLOCKSIZE, rest = st.st_size % IO_BLOCKSIZE;
-    dodoString retS = "";
+    dodo::string retS = "";
 
     int i(0);
     for (; i < iter; ++i) {
@@ -552,7 +552,7 @@ filesystem::fileContents(const dodoString &path)
             }
         }
 
-        retS.append(buffer, IO_BLOCKSIZE);
+        retS += dodo::string(buffer, IO_BLOCKSIZE);
     }
     if (rest > 0) {
         if (fread(buffer, rest, 1, file) == 0) {
@@ -567,7 +567,7 @@ filesystem::fileContents(const dodoString &path)
             }
         }
 
-        retS.append(buffer, rest);
+        retS += dodo::string(buffer, rest);
     }
 
     if (fclose(file) != 0)
@@ -579,7 +579,7 @@ filesystem::fileContents(const dodoString &path)
 //-------------------------------------------------------------------
 
 dodo::dodoStringArray
-filesystem::fileContentsInArray(const dodoString &path)
+filesystem::fileContentsInArray(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
@@ -615,8 +615,8 @@ original_basename(char *path)
 
 #undef basename
 
-dodoString
-filesystem::basename(const dodoString &path)
+dodo::string
+filesystem::basename(const dodo::string &path)
 {
     if (path.size() >= PATH_MAXLEN)
         throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_BASENAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
@@ -628,8 +628,8 @@ filesystem::basename(const dodoString &path)
     return original_basename(temp);
 }
 #else
-dodoString
-filesystem::basename(const dodoString &path)
+dodo::string
+filesystem::basename(const dodo::string &path)
 {
     if (path.size() >= PATH_MAXLEN)
         throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_BASENAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
@@ -644,8 +644,8 @@ filesystem::basename(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoString
-filesystem::dirname(const dodoString &path)
+dodo::string
+filesystem::dirname(const dodo::string &path)
 {
     if (path.size() >= PATH_MAXLEN)
         throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_DIRNAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
@@ -660,11 +660,11 @@ filesystem::dirname(const dodoString &path)
 //-------------------------------------------------------------------
 
 void
-filesystem::copy(const dodoString &from,
-                 const dodoString &a_to,
+filesystem::copy(const dodo::string &from,
+                 const dodo::string &a_to,
                  bool             force)
 {
-    dodoString to = a_to;
+    dodo::string to = a_to;
 
     {
         char temp[PATH_MAXLEN];
@@ -672,7 +672,7 @@ filesystem::copy(const dodoString &from,
         strcpy(temp, to.data());
         char *bname = ::basename(temp);
         if (strcmp(bname, "..") == 0  || strcmp(bname, ".") == 0 || a_to[a_to.size() - 1] == '/')
-            to = bname + dodoString("/") + basename((char *)from.data());
+            to = bname + dodo::string("/") + basename((char *)from.data());
     }
 
     struct stat stFrom, stTo;
@@ -708,7 +708,7 @@ filesystem::copy(const dodoString &from,
             buffer[count] = '\0';
 
             if (::symlink(buffer, to.data()) == -1)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, dodoString(buffer) + "->" + to);
+                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, dodo::string(buffer) + "->" + to);
         } else if (::mknod(to.data(), stFrom.st_mode, 0) == 1)
             throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
     } else {
@@ -787,11 +787,11 @@ filesystem::copy(const dodoString &from,
 //-------------------------------------------------------------------
 
 void
-filesystem::copyDir(const dodoString &from,
-                    const dodoString &a_to,
+filesystem::copyDir(const dodo::string &from,
+                    const dodo::string &a_to,
                     bool             force)
 {
-    dodoString to = a_to;
+    dodo::string to = a_to;
 
     {
         char temp[PATH_MAXLEN];
@@ -799,7 +799,7 @@ filesystem::copyDir(const dodoString &from,
         strcpy(temp, to.data());
         char *bname = ::basename(temp);
         if (strcmp(bname, "..") == 0 || strcmp(bname, ".") == 0 || a_to[a_to.size() - 1] == '/')
-            to = bname + dodoString("/") + basename((char *)from.data());
+            to = bname + dodo::string("/") + basename((char *)from.data());
     }
 
     struct stat stFrom, stTo;
@@ -821,7 +821,7 @@ filesystem::copyDir(const dodoString &from,
         if (::mkdir(to.data(), stFrom.st_mode) == -1)
             throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 
-        dodoString attachedFrom, attachedTo;
+        dodo::string attachedFrom, attachedTo;
 
         DIR *directory = opendir(from.data());
         if (directory == NULL) {
@@ -837,8 +837,8 @@ filesystem::copyDir(const dodoString &from,
             if ((strcmp(dd->d_name, ".") == 0) || (strcmp(dd->d_name, "..") == 0))
                 continue;
 
-            attachedTo.assign(to + "/" + dd->d_name);
-            attachedFrom.assign(from + "/" + dd->d_name);
+            attachedTo = dodo::string(to + "/" + dd->d_name);
+            attachedFrom = dodo::string(from + "/" + dd->d_name);
 
             filesystem::copyDir(attachedFrom, attachedTo, force);
         }
@@ -851,7 +851,7 @@ filesystem::copyDir(const dodoString &from,
 //-------------------------------------------------------------------
 
 bool
-filesystem::exists(const dodoString &path)
+filesystem::exists(const dodo::string &path)
 {
     struct stat st;
 
@@ -864,8 +864,8 @@ filesystem::exists(const dodoString &path)
 //-------------------------------------------------------------------
 
 void
-filesystem::appendToFile(const dodoString &path,
-                         const dodoString &content)
+filesystem::appendToFile(const dodo::string &path,
+                         const dodo::string &content)
 {
     _writeToFile(path, content, "a+");
 }
@@ -873,7 +873,7 @@ filesystem::appendToFile(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::appendToFile(const dodoString      &path,
+filesystem::appendToFile(const dodo::string      &path,
                          const dodoStringArray &content)
 {
     _writeToFile(path, content, "a+");
@@ -882,8 +882,8 @@ filesystem::appendToFile(const dodoString      &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::writeToFile(const dodoString &path,
-                        const dodoString &content)
+filesystem::writeToFile(const dodo::string &path,
+                        const dodo::string &content)
 {
     _writeToFile(path, content, "w+");
 }
@@ -891,7 +891,7 @@ filesystem::writeToFile(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::writeToFile(const dodoString      &path,
+filesystem::writeToFile(const dodo::string      &path,
                         const dodoStringArray &content)
 {
     _writeToFile(path, content, "w+");
@@ -900,8 +900,8 @@ filesystem::writeToFile(const dodoString      &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::_writeToFile(const dodoString &path,
-                         const dodoString &content,
+filesystem::_writeToFile(const dodo::string &path,
+                         const dodo::string &content,
                          const char       *mode)
 {
     FILE *file = fopen(path.data(), mode);
@@ -916,7 +916,7 @@ filesystem::_writeToFile(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
-filesystem::_writeToFile(const dodoString      &path,
+filesystem::_writeToFile(const dodo::string      &path,
                          const dodoStringArray &content,
                          const char            *mode)
 {

@@ -2,8 +2,8 @@
  *            graphicsDraw.cc
  *
  *  Thu Nov 23 2007
- *  Copyright  2007  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2007  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -121,13 +121,13 @@ draw::line(graphics::image                  &image,
 {
     char pointDesc[128];
 
-    dodoString description = "polyline";
+    dodo::string description = "polyline";
 
     dodoArray<graphics::point>::const_iterator i = points.begin(), j = points.end();
     for (; i != j; ++i) {
         snprintf(pointDesc, 128, " %ld,%ld", i->x, i->y);
 
-        description.append(pointDesc);
+        description += pointDesc;
     }
 
     primitive(image, (char *)description.data(), color::transparent, lineColor, lineWidth);
@@ -154,8 +154,8 @@ draw::rectangle(graphics::image       &image,
 void
 draw::text(graphics::image       &image,
            const graphics::point &position,
-           const dodoString      &text,
-           const dodoString      &font,
+           const dodo::string      &text,
+           const dodo::string      &font,
            unsigned short        fontWidth,
            const __color__       &fillColor,
            const __color__       &borderColor,
@@ -165,9 +165,9 @@ draw::text(graphics::image       &image,
     if (image.collectedData.handle->im == NULL)
         throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-    dodoString txt = "text 0,0 \"";
-    txt.append(text);
-    txt.append("\"");
+    dodo::string txt = "text 0,0 \"";
+    txt += text;
+    txt += "\"";
 
 #ifndef IMAGEMAGICK_PRE_63
     DrawInfo *di = AcquireDrawInfo();

@@ -2,8 +2,8 @@
  *            dataBaseMysql.h
  *
  *  Thu Apr  30 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -66,11 +66,11 @@ namespace dodo {
                      * @brief defines SSL mySQL options
                      */
                     struct __ssl_options__ {
-                        dodoString key;     ///< pathname to the key file
-                        dodoString cert;    ///< pathname to the certificate file
-                        dodoString ca;      ///< pathname to the certificate authority file
-                        dodoString capath;  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
-                        dodoString cipher;  ///< allowed SSL ciphers
+                        dodo::string key;     ///< pathname to the key file
+                        dodo::string cert;    ///< pathname to the certificate file
+                        dodo::string ca;      ///< pathname to the certificate authority file
+                        dodo::string capath;  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
+                        dodo::string cipher;  ///< allowed SSL ciphers
                     };
 
                     /**
@@ -88,21 +88,21 @@ namespace dodo {
                      * @param port defines port
                      * @param type defines type of connection
                      */
-                    __connection_options__(const dodoString &db,
-                                           const            dodoString &host,
-                                           const            dodoString &user,
-                                           const            dodoString &password,
-                                           const            dodoString &path = __dodostring__,
+                    __connection_options__(const dodo::string &db,
+                                           const            dodo::string &host,
+                                           const            dodo::string &user,
+                                           const            dodo::string &password,
+                                           const            dodo::string &path = __dodostring__,
                                            unsigned int              port = 0,
                                            unsigned long    type = TYPE_MULTI_STATEMENTS);
 
                     unsigned long type; ///< type of connection [@see __connection_options__::typeEnum]
 
-                    dodoString   db;        ///< database name
-                    dodoString   host;      ///< hostname
-                    dodoString   user;      ///< username
-                    dodoString   password;  ///< password
-                    dodoString   path;      ///< path to db or unix socket
+                    dodo::string   db;        ///< database name
+                    dodo::string   host;      ///< hostname
+                    dodo::string   user;      ///< username
+                    dodo::string   password;  ///< password
+                    dodo::string   path;      ///< path to db or unix socket
                     unsigned int port;      ///< port
                     __ssl_options__ ssl;    ///< SSL options
                 };
@@ -148,7 +148,7 @@ namespace dodo {
                  * automaticaly detect fields types
                  * @param table defines table for which rules will be applied
                  */
-                virtual void requestFieldsTypes(const dodoString &table);
+                virtual void requestFieldsTypes(const dodo::string &table);
 
                 /**
                  * @param rows defines rows got from the request
@@ -180,12 +180,12 @@ namespace dodo {
                  * set sessions charset
                  * @param charset defines charset
                  */
-                void setCharset(const dodoString &charset);
+                void setCharset(const dodo::string &charset);
 
                 /**
                  * @return current session charset
                  */
-                dodoString charset() const;
+                dodo::string charset() const;
 
                 /**
                  * set connection timeout

@@ -2,8 +2,8 @@
  *            cgiFastServer.cc
  *
  *  Sat Aug  5 2006
- *  Copyright  2006  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2006  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -31,6 +31,10 @@
 
 #ifdef FASTCGI_EXT
 #include <fcgiapp.h>
+
+#ifdef PTHREAD_EXT
+#include <pthread.h>
+#endif
 
 #include "cgiFastRequest.inline"
 
@@ -137,6 +141,7 @@ server::serve(cgi::server::handler func)
 
     handler = func;
 
+#ifdef PTHREAD_EXT
     if (threading) {
         pthread_t *id = new pthread_t[threadsNum];
 
@@ -149,7 +154,9 @@ server::serve(cgi::server::handler func)
             pthread_join(id[i], NULL);
 
         delete [] id;
-    } else {
+    } else
+#endif
+    {
         unsigned long requests = 0;
 
         FCGX_Request req;

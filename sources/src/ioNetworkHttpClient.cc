@@ -2,8 +2,8 @@
  *            ioNetworkHttpClient.cc
  *
  *  Wed Oct 8 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -55,7 +55,7 @@
 
 using namespace dodo::io::network::http;
 
-const dodoString client::requestHeaderStatements[] = {
+const dodo::string client::requestHeaderStatements[] = {
     "Accept",
     "Accept-Charset",
     "Accept-Encoding",
@@ -72,7 +72,7 @@ const dodoString client::requestHeaderStatements[] = {
 
 //-------------------------------------------------------------------
 
-const dodoString client::responseHeaderStatements[] = {
+const dodo::string client::responseHeaderStatements[] = {
     "Accept-Ranges",
     "Age",
     "Allow",
@@ -104,8 +104,8 @@ response::response() : code(0),
 
 //-------------------------------------------------------------------
 
-file::file(const dodoString path,
-           const dodoString mime) : path(path),
+file::file(const dodo::string path,
+           const dodo::string mime) : path(path),
                                     mime(mime)
 {
 }
@@ -134,7 +134,7 @@ client::client() : followRedirection(true),
 
 //-------------------------------------------------------------------
 
-client::client(const dodoString &url) : followRedirection(true),
+client::client(const dodo::string &url) : followRedirection(true),
                                         cacheAuthentification(true),
                                         authTries(0),
                                         scheme(SCHEME_HTTP)
@@ -165,7 +165,7 @@ client::~client()
 //-------------------------------------------------------------------
 
 short
-client::getStatusCode(const dodoString &header) const
+client::getStatusCode(const dodo::string &header) const
 {
     if (header.size() < 12)
         return 0;
@@ -201,7 +201,7 @@ client::setSertificates(const io::ssl::__certificates__ &a_certs) const
 //-------------------------------------------------------------------
 
 void
-client::setUrl(const dodoString &a_url) const
+client::setUrl(const dodo::string &a_url) const
 {
     urlComponents = tools::code::parseUrl(a_url);
 
@@ -234,19 +234,19 @@ client::setUrl(const dodoString &a_url) const
     urlBasePath.clear();
     urlQuery.clear();
 
-    urlBasePath.append(urlComponents.protocol);
-    urlBasePath.append("://" );
-    urlBasePath.append(urlComponents.host);
+    urlBasePath += urlComponents.protocol;
+    urlBasePath += "://" ;
+    urlBasePath += urlComponents.host;
     if (portSize > 0) {
-        urlBasePath.append(":");
-        urlBasePath.append(urlComponents.port);
+        urlBasePath += ":";
+        urlBasePath += urlComponents.port;
     }
-    urlBasePath.append("/");
-    urlBasePath.append(urlComponents.path);
+    urlBasePath += "/";
+    urlBasePath += urlComponents.path;
 
     if (urlComponents.request.size() > 0) {
-        urlQuery.append("?");
-        urlQuery.append(tools::code::encodeUrl(urlComponents.request));
+        urlQuery += "?";
+        urlQuery += tools::code::encodeUrl(urlComponents.request);
     }
 }
 
@@ -255,20 +255,20 @@ client::setUrl(const dodoString &a_url) const
 void
 client::setCookies(const dodoStringMap &cookies) const
 {
-    dodoString data;
+    dodo::string data;
 
     dodoStringMap::const_iterator i = cookies.begin(), j = cookies.end();
     --j;
 
     for (; i != j; ++i) {
-        data.append(i->first);
-        data.append("=");
-        data.append(tools::code::encodeUrl(i->second));
-        data.append("; ");
+        data += i->first;
+        data += "=";
+        data += tools::code::encodeUrl(i->second);
+        data += "; ";
     }
-    data.append(i->first);
-    data.append("=");
-    data.append(tools::code::encodeUrl(i->second));
+    data += i->first;
+    data += "=";
+    data += tools::code::encodeUrl(i->second);
 
     requestHeaders[REQUEST_HEADER_COOKIE] = data;
 }
@@ -283,7 +283,7 @@ client::GET() const
     exchange *ex = NULL;
     network::client *net = NULL;
 
-    dodoString data;
+    dodo::string data;
 
     if (scheme == SCHEME_HTTP) {
         net = new network::client(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
@@ -304,18 +304,18 @@ client::GET() const
 #ifdef OPENSSL_EXT
         else {
             net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *ex);
-            data.append("CONNECT ");
-            data.append(urlComponents.host);
-            data.append(":");
-            data.append(urlComponents.port);
-            data.append(" HTTP/1.1\r\n");
+            data += "CONNECT ";
+            data += urlComponents.host;
+            data += ":";
+            data += urlComponents.port;
+            data += " HTTP/1.1\r\n";
             if (requestHeaders.find(REQUEST_HEADER_PROXYAUTHORIZATION) != requestHeaders.end()) {
-                data.append(requestHeaderStatements[REQUEST_HEADER_PROXYAUTHORIZATION]);
-                data.append(": ");
-                data.append(requestHeaders[REQUEST_HEADER_PROXYAUTHORIZATION]);
-                data.append("\r\n");
+                data += requestHeaderStatements[REQUEST_HEADER_PROXYAUTHORIZATION];
+                data += ": ";
+                data += requestHeaders[REQUEST_HEADER_PROXYAUTHORIZATION];
+                data += "\r\n";
             }
-            data.append("\r\n");
+            data += "\r\n";
 
             unsigned long bs = ex->bs;
             ex->bs = data.size();
@@ -438,10 +438,10 @@ client::GET() const
 
     data.clear();
 
-    data.append("GET ");
-    data.append(urlBasePath);
-    data.append(urlQuery);
-    data.append(" HTTP/1.1\r\n");
+    data += "GET ";
+    data += urlBasePath;
+    data += urlQuery;
+    data += " HTTP/1.1\r\n";
 
     if (cacheAuthentification) {
         dodoStringMap::iterator header = httpAuth.find(urlBasePath);
@@ -449,7 +449,7 @@ client::GET() const
             requestHeaders[REQUEST_HEADER_AUTHORIZATION] = header->second;
     }
 
-    dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
+    dodoMap<short, dodo::string>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
     for (; i != j; ++i) {
 #ifdef OPENSSL_EXT
         if (proxyAuthInfo.host.size() > 0 && scheme == SCHEME_HTTPS && i->first == REQUEST_HEADER_PROXYAUTHORIZATION)
@@ -457,15 +457,15 @@ client::GET() const
 
 #endif
 
-        data.append(requestHeaderStatements[i->first]);
-        data.append(": ");
-        data.append(i->second);
-        data.append("\r\n");
+        data += requestHeaderStatements[i->first];
+        data += ": ";
+        data += i->second;
+        data += "\r\n";
     }
-    data.append("Host: ");
-    data.append(urlComponents.host);
+    data += "Host: ";
+    data += urlComponents.host;
 
-    data.append("\r\n\r\n");
+    data += "\r\n\r\n";
 
     unsigned long bs = ex->bs;
 
@@ -607,7 +607,7 @@ client::GET() const
 //-------------------------------------------------------------------
 
 response
-client::GET(const dodoString &a_url) const
+client::GET(const dodo::string &a_url) const
 {
     setUrl(a_url);
 
@@ -617,9 +617,9 @@ client::GET(const dodoString &a_url) const
 //-------------------------------------------------------------------
 
 response
-client::POST(const dodoString &a_url,
+client::POST(const dodo::string &a_url,
              const dodoStringMap &arguments,
-             const dodoMap<dodoString, file> &files) const
+             const dodoMap<dodo::string, file> &files) const
 {
     setUrl(a_url);
 
@@ -630,43 +630,43 @@ client::POST(const dodoString &a_url,
 
 response
 client::POST(const dodoStringMap &arguments,
-             const dodoMap<dodoString, file> &files) const
+             const dodoMap<dodo::string, file> &files) const
 {
-    dodoString boundary = "---------------------------" + tools::string::ulToString(tools::misc::ulRandom()) + tools::string::ulToString(tools::misc::ulRandom());
-    dodoString type = "multipart/form-data; boundary=" + boundary;
+    dodo::string boundary = "---------------------------" + tools::string::ulToString(tools::misc::ulRandom()) + tools::string::ulToString(tools::misc::ulRandom());
+    dodo::string type = "multipart/form-data; boundary=" + boundary;
     boundary.insert(0, "--");
 
-    dodoString data;
+    dodo::string data;
 
-    dodoMap<dodoString, file>::const_iterator i = files.begin(), j = files.end();
+    dodoMap<dodo::string, file>::const_iterator i = files.begin(), j = files.end();
     for (; i != j; ++i) {
-        data.append(boundary);
-        data.append("\r\nContent-Disposition: form-data; name=\"");
-        data.append(i->first);
-        data.append("\"; filename=\"");
-        data.append(tools::filesystem::basename(i->second.path));
-        data.append("\"\r\n");
+        data += boundary;
+        data += "\r\nContent-Disposition: form-data; name=\"";
+        data += i->first;
+        data += "\"; filename=\"";
+        data += tools::filesystem::basename(i->second.path);
+        data += "\"\r\n";
 
-        data.append("Content-Type: ");
-        data.append(i->second.mime);
-        data.append("\r\n\r\n");
+        data += "Content-Type: ";
+        data += i->second.mime;
+        data += "\r\n\r\n";
 
-        data.append(tools::filesystem::fileContents(i->second.path));
-        data.append("\r\n");
+        data += tools::filesystem::fileContents(i->second.path);
+        data += "\r\n";
     }
 
     dodoStringMap::const_iterator o = arguments.begin(), p = arguments.end();
     for (; o != p; ++o) {
-        data.append(boundary);
-        data.append("\r\nContent-Disposition: form-data; name=\"");
-        data.append(o->first);
-        data.append("\"\r\n\r\n");
+        data += boundary;
+        data += "\r\nContent-Disposition: form-data; name=\"";
+        data += o->first;
+        data += "\"\r\n\r\n";
 
-        data.append(o->second);
-        data.append("\r\n");
+        data += o->second;
+        data += "\r\n";
     }
-    data.append(boundary);
-    data.append("--");
+    data += boundary;
+    data += "--";
 
     return POST(data, type);
 }
@@ -674,7 +674,7 @@ client::POST(const dodoStringMap &arguments,
 //-------------------------------------------------------------------
 
 response
-client::POST(const dodoString    &a_url,
+client::POST(const dodo::string    &a_url,
              const dodoStringMap &arguments) const
 {
     setUrl(a_url);
@@ -687,20 +687,20 @@ client::POST(const dodoString    &a_url,
 response
 client::POST(const dodoStringMap &arguments) const
 {
-    dodoString data;
+    dodo::string data;
 
     dodoStringMap::const_iterator i(arguments.begin()), j(arguments.end());
     --j;
 
     for (; i != j; ++i) {
-        data.append(tools::code::encodeUrl(i->first));
-        data.append("=");
-        data.append(tools::code::encodeUrl(i->second));
-        data.append("&");
+        data += tools::code::encodeUrl(i->first);
+        data += "=";
+        data += tools::code::encodeUrl(i->second);
+        data += "&";
     }
-    data.append(tools::code::encodeUrl(i->first));
-    data.append("=");
-    data.append(tools::code::encodeUrl(i->second));
+    data += tools::code::encodeUrl(i->first);
+    data += "=";
+    data += tools::code::encodeUrl(i->second);
 
     return POST(data, "application/x-www-form-urlencoded");
 }
@@ -708,9 +708,9 @@ client::POST(const dodoStringMap &arguments) const
 //-------------------------------------------------------------------
 
 response
-client::POST(const dodoString &a_url,
-             const dodoString &data,
-             const dodoString &type) const
+client::POST(const dodo::string &a_url,
+             const dodo::string &data,
+             const dodo::string &type) const
 {
     setUrl(a_url);
 
@@ -720,15 +720,15 @@ client::POST(const dodoString &a_url,
 //-------------------------------------------------------------------
 
 response
-client::POST(const dodoString &rdata,
-             const dodoString &type) const
+client::POST(const dodo::string &rdata,
+             const dodo::string &type) const
 {
     response response;
 
     exchange *ex = NULL;
     network::client *net = NULL;
 
-    dodoString data;
+    dodo::string data;
 
     if (scheme == SCHEME_HTTP) {
         net = new network::client(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
@@ -749,18 +749,18 @@ client::POST(const dodoString &rdata,
 #ifdef OPENSSL_EXT
         else {
             net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
-            data.append("CONNECT ");
-            data.append(urlComponents.host);
-            data.append(":");
-            data.append(urlComponents.port);
-            data.append(" HTTP/1.1\r\n");
+            data += "CONNECT ";
+            data += urlComponents.host;
+            data += ":";
+            data += urlComponents.port;
+            data += " HTTP/1.1\r\n";
             if (requestHeaders.find(REQUEST_HEADER_PROXYAUTHORIZATION) != requestHeaders.end()) {
-                data.append(requestHeaderStatements[REQUEST_HEADER_PROXYAUTHORIZATION]);
-                data.append(": ");
-                data.append(requestHeaders[REQUEST_HEADER_PROXYAUTHORIZATION]);
-                data.append("\r\n");
+                data += requestHeaderStatements[REQUEST_HEADER_PROXYAUTHORIZATION];
+                data += ": ";
+                data += requestHeaders[REQUEST_HEADER_PROXYAUTHORIZATION];
+                data += "\r\n";
             }
-            data.append("\r\n");
+            data += "\r\n";
 
             unsigned long bs = ex->bs;
             ex->bs = data.size();
@@ -880,10 +880,10 @@ client::POST(const dodoString &rdata,
 
     delete net;
 
-    data.append("POST ");
-    data.append(urlBasePath);
-    data.append(urlQuery);
-    data.append(" HTTP/1.1\r\n");
+    data += "POST ";
+    data += urlBasePath;
+    data += urlQuery;
+    data += " HTTP/1.1\r\n";
 
     if (cacheAuthentification) {
         dodoStringMap::iterator header = httpAuth.find(urlBasePath);
@@ -891,7 +891,7 @@ client::POST(const dodoString &rdata,
             requestHeaders[REQUEST_HEADER_AUTHORIZATION] = header->second;
     }
 
-    dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
+    dodoMap<short, dodo::string>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
     for (; i != j; ++i) {
 #ifdef OPENSSL_EXT
         if (proxyAuthInfo.host.size() > 0 && scheme == SCHEME_HTTPS && i->first == REQUEST_HEADER_PROXYAUTHORIZATION)
@@ -899,22 +899,22 @@ client::POST(const dodoString &rdata,
 
 #endif
 
-        data.append(requestHeaderStatements[i->first]);
-        data.append(": ");
-        data.append(i->second);
-        data.append("\r\n");
+        data += requestHeaderStatements[i->first];
+        data += ": ";
+        data += i->second;
+        data += "\r\n";
     }
-    data.append("Host: ");
-    data.append(urlComponents.host);
-    data.append("\r\n");
+    data += "Host: ";
+    data += urlComponents.host;
+    data += "\r\n";
 
-    data.append("Content-length: ");
-    data.append(tools::string::ulToString(rdata.size()));
-    data.append("\r\n");
+    data += "Content-length: ";
+    data += tools::string::ulToString(rdata.size());
+    data += "\r\n";
 
-    data.append("Content-type: ");
-    data.append(type);
-    data.append("\r\n\r\n");
+    data += "Content-type: ";
+    data += type;
+    data += "\r\n\r\n";
 
     unsigned long bs = ex->bs;
 
@@ -1038,10 +1038,10 @@ client::POST(const dodoString &rdata,
 //-------------------------------------------------------------------
 
 void
-client::setProxy(const dodoString &host,
+client::setProxy(const dodo::string &host,
                  unsigned int     port,
-                 const dodoString &user,
-                 const dodoString &password) const
+                 const dodo::string &user,
+                 const dodo::string &password) const
 {
     proxyAuthInfo.host = host;
     proxyAuthInfo.port = port;
@@ -1055,14 +1055,14 @@ client::setProxy(const dodoString &host,
 //-------------------------------------------------------------------
 
 void
-client::getHeaders(const dodoString &headers,
+client::getHeaders(const dodo::string &headers,
                    response         &response) const
 {
     unsigned long i(0), j(0);
     unsigned long size = headers.size();
 
     dodoStringArray arr;
-    dodoString piece;
+    dodo::string piece;
 
     short o;
 
@@ -1070,10 +1070,10 @@ client::getHeaders(const dodoString &headers,
 
     while (i < size) {
         i = headers.find("\n", i);
-        if (i == dodoString::npos)
+        if (i == dodo::string::POSITION_END)
             return;
 
-        piece = tools::string::trim(dodoString(headers.data() + j, i - j), '\r');
+        piece = tools::string::trim(dodo::string(headers.data() + j, i - j), '\r');
 
         arr = tools::misc::split(piece, ":", 2);
         if (arr.size() != 2) {
@@ -1099,15 +1099,15 @@ client::getHeaders(const dodoString &headers,
 //-------------------------------------------------------------------
 
 unsigned int
-client::extractHeaders(const dodoString &data,
-                       dodoString       &headers) const
+client::extractHeaders(const dodo::string &data,
+                       dodo::string       &headers) const
 {
-    headers.append(data);
+    headers += data;
 
     unsigned long i = headers.find("\r\n\r\n");
-    if (i == dodoString::npos) {
+    if (i == dodo::string::POSITION_END) {
         i = headers.find("\n\n");
-        if (i == dodoString::npos)
+        if (i == dodo::string::POSITION_END)
             return 0;
         else {
             headers.erase(i + 1);
@@ -1132,7 +1132,7 @@ client::getProxyConnectResponse(exchange *ex,
     unsigned long size = 0, i;
     bool endOfHeaders = false;
 
-    dodoString headers;
+    dodo::string headers;
 
     char data[512];
     ex->setInBufferSize(512);
@@ -1145,12 +1145,12 @@ client::getProxyConnectResponse(exchange *ex,
             if (size == 0)
                 break;
 
-            headers.append(data);
+            headers += data;
 
             i = headers.find("\r\n\r\n");
-            if (i == dodoString::npos) {
+            if (i == dodo::string::POSITION_END) {
                 i = headers.find("\n\n");
-                if (i != dodoString::npos) {
+                if (i != dodo::string::POSITION_END) {
                     headers.erase(i + 1);
 
                     endOfHeaders = true;
@@ -1202,19 +1202,19 @@ short
 client::getContent(exchange *ex,
                    response &response) const
 {
-    dodoString data;
+    dodo::string data;
 
     unsigned long contentSize = 0;
 
     unsigned long chunkSize = 0;
-    dodoString chunkSizeHex;
+    dodo::string chunkSizeHex;
 
     unsigned long eoc;
 
     unsigned int endOfHeaders = 0;
     bool chunked = false;
 
-    dodoString headers;
+    dodo::string headers;
 
     while (true) {
         try {
@@ -1222,10 +1222,10 @@ client::getContent(exchange *ex,
                 if (chunkSize > 0) {
                     if (chunkSize > data.size()) {
                         ex->bs = chunkSize - data.size();
-                        data.append(ex->read());
+                        data += ex->read();
                     }
 
-                    response.data.append(data, 0, chunkSize);
+                    response.data += data.substr(0, chunkSize);
 
                     data.erase(0, chunkSize);
                     chunkSize = 0;
@@ -1240,22 +1240,24 @@ client::getContent(exchange *ex,
                 }
 
                 eoc = data.find("\r\n");
-                if (eoc == dodoString::npos) {
+                if (eoc == dodo::string::POSITION_END) {
                     eoc = data.find('\n');
-                    if (eoc != dodoString::npos)
+                    if (eoc != dodo::string::POSITION_END)
                         ++eoc;
                 } else {
                     eoc += 2;
                 }
 
-                if (eoc != dodoString::npos) {
+                if (eoc != dodo::string::POSITION_END) {
                     chunkSizeHex.clear();
 
                     for (unsigned long i = 0; i < eoc; ++i) {
-                        if (data[i] == '\r' || data[i] == ';' || data[i] == '\n')
+                        if (data[i] == '\r')
+                            continue;
+                        if (data[i] == '\n' || data[i] == ';')
                             break;
 
-                        chunkSizeHex.append(1, data[i]);
+                        chunkSizeHex += data[i];
                     }
                     data.erase(0, eoc);
 
@@ -1270,20 +1272,20 @@ client::getContent(exchange *ex,
                         break;
                 } else {
                     ex->bs = 512;
-                    data.append(ex->readString());
+                    data += ex->readString();
                 }
             } else {
                 data = ex->readString();
 
                 if (data.size() == 0 && contentSize <= 0) {
                     if (endOfHeaders == 0 && headers.size() > 0)
-                        response.data.assign(headers);
+                        response.data = headers;
 
                     break;
                 }
 
                 if (endOfHeaders != 0) {
-                    response.data.append(data);
+                    response.data += data;
                 } else {
                     endOfHeaders = extractHeaders(data, headers);
 
@@ -1344,7 +1346,7 @@ client::getContent(exchange *ex,
                         if (chunked) {
                             data.erase(0, endOfHeaders);
                         } else {
-                            response.data = data.substr(endOfHeaders);
+                            response.data = data.substr(0, endOfHeaders);
 
                             contentSize = tools::string::stringToUL(response.headers[RESPONSE_HEADER_CONTENTLENGTH]);
 
@@ -1366,7 +1368,7 @@ client::getContent(exchange *ex,
 #endif
             {
                 if (!endOfHeaders && headers.size() > 0)
-                    response.data.assign(headers);
+                    response.data = headers;
 
                 break;
             } else {
@@ -1385,17 +1387,17 @@ client::getContent(exchange *ex,
 void
 client::makeDigestAuth(short            requestHeader,
                        short            responseHeader,
-                       const dodoString &method,
-                       const dodoString &user,
-                       const dodoString &password,
+                       const dodo::string &method,
+                       const dodo::string &user,
+                       const dodo::string &password,
                        response         &response) const
 {
-    dodoString nonce, opaque, realm;
+    dodo::string nonce, opaque, realm;
 
-    dodoString &rh = response.headers[requestHeader];
-    dodoStringArray parts = tools::misc::split(dodoString(rh.data() + 7, rh.size() - 7), ",");
+    dodo::string &rh = response.headers[requestHeader];
+    dodoStringArray parts = tools::misc::split(dodo::string(rh.data() + 7, rh.size() - 7), ",");
 
-    dodoString HA1;
+    dodo::string HA1;
 
     unsigned char HA[16];
     tools::code::__MD5Context__ context;
@@ -1419,7 +1421,7 @@ client::makeDigestAuth(short            requestHeader,
             tools::code::MD5Update(&context, (unsigned char *)password.data(), password.size());
             tools::code::MD5Final(HA, &context);
 
-            HA1 = tools::code::binToHex(dodoString((char *)&HA, 16));
+            HA1 = tools::code::binToHex(dodo::string((char *)&HA, 16));
         } else {
             if (tools::string::iequal(tuple[0], "nonce"))
                 nonce = tools::string::trim(tuple[1], '"');
@@ -1428,19 +1430,19 @@ client::makeDigestAuth(short            requestHeader,
         }
     }
 
-    dodoString cnonce = tools::code::MD5Hex(tools::misc::stringRandom(5));
+    dodo::string cnonce = tools::code::MD5Hex(tools::misc::stringRandom(5));
 
-    dodoString methodForAuth = method + ":";
+    dodo::string methodForAuth = method + ":";
 
-    dodoString url = urlBasePath;
-    url.append(urlQuery);
+    dodo::string url = urlBasePath;
+    url += urlQuery;
 
     tools::code::MD5Init(&context);
     tools::code::MD5Update(&context, (unsigned char *)methodForAuth.data(), methodForAuth.size());
     tools::code::MD5Update(&context, (unsigned char *)url.data(), url.size());
     tools::code::MD5Final(HA, &context);
 
-    dodoString HA2 = tools::code::binToHex(dodoString((char *)&HA, 16));
+    dodo::string HA2 = tools::code::binToHex(dodo::string((char *)&HA, 16));
 
     tools::code::MD5Init(&context);
     tools::code::MD5Update(&context, (unsigned char *)HA1.data(), HA1.size());
@@ -1453,7 +1455,7 @@ client::makeDigestAuth(short            requestHeader,
     tools::code::MD5Final(HA, &context);
 
     {
-        dodoString response = tools::code::binToHex(dodoString((char *)&HA, 16));
+        dodo::string response = tools::code::binToHex(dodo::string((char *)&HA, 16));
 
         requestHeaders[responseHeader] = "Digest username=\"" + user +
                                          "\", realm=\"" + realm +
@@ -1470,8 +1472,8 @@ client::makeDigestAuth(short            requestHeader,
 
 void
 client::makeBasicAuth(short            responseHeader,
-                      const dodoString &user,
-                      const dodoString &password) const
+                      const dodo::string &user,
+                      const dodo::string &password) const
 {
     requestHeaders[responseHeader] = "Basic " + tools::code::encodeBase64(user + ":" + password);
 }
@@ -1487,7 +1489,7 @@ client::clear() const
         requestHeaders.erase(REQUEST_HEADER_PROXYAUTHORIZATION);
         proxyAuthInfo.authType = PROXY_AUTH_NONE;
     } else {
-        dodoMap<short, dodoString>::iterator header = requestHeaders.find(REQUEST_HEADER_AUTHORIZATION);
+        dodoMap<short, dodo::string>::iterator header = requestHeaders.find(REQUEST_HEADER_AUTHORIZATION);
         if (header != requestHeaders.end())
             httpAuth[urlBasePath] = header->second;
     }
@@ -1498,8 +1500,8 @@ client::clear() const
 //-------------------------------------------------------------------
 
 void
-client::setAuth(const dodoString &user,
-                const dodoString &password) const
+client::setAuth(const dodo::string &user,
+                const dodo::string &password) const
 {
     urlComponents.login = user;
     urlComponents.password = password;
@@ -1508,7 +1510,7 @@ client::setAuth(const dodoString &user,
 //-------------------------------------------------------------------
 
 dodo::cgi::cookie
-client::parseCookie(const dodoString &header) const
+client::parseCookie(const dodo::string &header) const
 {
     dodoStringArray parts = tools::misc::split(header, ";");
 

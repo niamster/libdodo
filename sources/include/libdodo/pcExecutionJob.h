@@ -2,8 +2,8 @@
  *            pcExecutionJob.h
  *
  *  Wed Oct 07 2009
- *  Copyright  2009  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2009  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

@@ -2,8 +2,8 @@
  *            ioChannel.h
  *
  *  Tue Oct 11 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -116,7 +116,7 @@ namespace dodo {
                 __collected_data__(xexec *executor,
                                    short execObject);
 
-                dodoString buffer; ///< data buffer
+                dodo::string buffer; ///< data buffer
             };
 #endif
 
@@ -124,21 +124,21 @@ namespace dodo {
              * @return read data
              * @note not more then bs
              */
-            virtual dodoString read() const = 0;
+            virtual dodo::string read() const = 0;
 
             /**
              * @return amount in bytes of successfully written data
              * @param data defines data that will be written
              * @note not more then bs
              */
-            virtual unsigned long write(const dodoString &data) const = 0;
+            virtual unsigned long write(const dodo::string &data) const = 0;
 
             /**
              * read null- or newline- terminated string
              * @return read data
              * @note not more then bs
              */
-            virtual dodoString readString() const = 0;
+            virtual dodo::string readString() const = 0;
 
             /**
              * write null- terminated string
@@ -146,7 +146,7 @@ namespace dodo {
              * @param data defines data that will be written
              * @note not more then bs
              */
-            virtual unsigned long writeString(const dodoString &data) const = 0;
+            virtual unsigned long writeString(const dodo::string &data) const = 0;
 
             /**
              * flush output

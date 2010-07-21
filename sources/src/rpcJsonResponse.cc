@@ -2,8 +2,8 @@
  *            rpcJsonResponse.cc
  *
  *  Mon Jul 07 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -40,7 +40,7 @@ using namespace dodo::rpc::json;
 
 dodo::rpc::response
 response::jsonToResponse(dodo::data::format::json::node &node,
-                         dodoString                     &version,
+                         dodo::string                     &version,
                          long                           &id)
 {
     if (node.valueDataType != dodo::data::format::json::node::DATA_OBJECT)
@@ -77,32 +77,32 @@ response::jsonToResponse(dodo::data::format::json::node &node,
 
 dodo::data::format::json::node
 response::responseToJson(const rpc::response &data,
-                         const dodoString    &version,
+                         const dodo::string    &version,
                          long                id)
 {
     dodo::data::format::json::node resp;
     dodo::data::format::json::node node;
 
     resp.valueDataType = dodo::data::format::json::node::DATA_OBJECT;
-    resp.objectValue = new dodoMap<dodoString, dodo::data::format::json::node, dodoMapStringCompare>;
+    resp.objectValue = new dodoMap<dodo::string, dodo::data::format::json::node, dodoMapStringCompare>;
 
     node.valueDataType = dodo::data::format::json::node::DATA_STRING;
 
-    node.stringValue = new dodoString(version);
-    resp.objectValue->insert(make_pair(dodoString("version"), node));
+    node.stringValue = new dodo::string(version);
+    resp.objectValue->insert(std::make_pair(dodo::string("version"), node));
     delete node.stringValue;
 
     node.valueDataType = dodo::data::format::json::node::DATA_NUMERIC;
     node.numericValue = id;
-    resp.objectValue->insert(make_pair(dodoString("id"), node));
+    resp.objectValue->insert(std::make_pair(dodo::string("id"), node));
 
     dodoArray<rpc::value>::const_iterator i = data.rValues.begin(), j = data.rValues.end();
     if (i != j) {
         if (!data.succ)
-            resp.objectValue->insert(make_pair(dodoString("error"), value::valueToJson(*i)));
+            resp.objectValue->insert(std::make_pair(dodo::string("error"), value::valueToJson(*i)));
         else {
             if (data.rValues.size() == 1)
-                resp.objectValue->insert(make_pair(dodoString("result"), value::valueToJson(*i)));
+                resp.objectValue->insert(std::make_pair(dodo::string("result"), value::valueToJson(*i)));
             else {
                 node.valueDataType = dodo::data::format::json::node::DATA_ARRAY;
                 node.arrayValue = new dodoArray<dodo::data::format::json::node>;
@@ -110,7 +110,7 @@ response::responseToJson(const rpc::response &data,
                 for (; i != j; ++i)
                     node.arrayValue->push_back(value::valueToJson(*i));
 
-                resp.objectValue->insert(make_pair(dodoString("result"), node));
+                resp.objectValue->insert(std::make_pair(dodo::string("result"), node));
 
                 delete node.arrayValue;
                 node.valueDataType = dodo::data::format::json::node::DATA_NULL;

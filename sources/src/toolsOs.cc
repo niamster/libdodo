@@ -2,8 +2,8 @@
  *            toolsOs.cc
  *
  *  Sat Nov 19 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -134,7 +134,7 @@ dodo::pc::sync::thread os::keeper;
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 os::workingDir()
 {
     char wd[PATH_MAXLEN];
@@ -148,7 +148,7 @@ os::workingDir()
 //-------------------------------------------------------------------
 
 void
-os::setWorkingDir(const dodoString &path)
+os::setWorkingDir(const dodo::string &path)
 {
     if (chdir(path.data()) == -1)
         throw exception::basic(exception::MODULE_TOOLSOS, OSEX_SETWORKINGDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -173,7 +173,7 @@ os::usage()
 //-------------------------------------------------------------------
 
 void
-os::changeRoot(const dodoString &path)
+os::changeRoot(const dodo::string &path)
 {
     setWorkingDir(path);
 
@@ -449,7 +449,7 @@ os::user(int uid)
 //-------------------------------------------------------------------
 
 os::__user__
-os::user(const dodoString &uid)
+os::user(const dodo::string &uid)
 {
     passwd *in = getpwnam(uid.data());
     if (in == NULL)
@@ -541,7 +541,7 @@ os::group(int uid)
 //-------------------------------------------------------------------
 
 os::__group__
-os::group(const dodoString &uid)
+os::group(const dodo::string &uid)
 {
     ::group *in = getgrnam(uid.data());
     if (in == NULL)
@@ -584,7 +584,7 @@ os::groups()
 //-------------------------------------------------------------------
 
 void
-os::die(const dodoString &message,
+os::die(const dodo::string &message,
         int              status)
 {
     unsigned short tries = DIE_MAXTRIES;
@@ -687,66 +687,66 @@ os::setGPID(int pid,
 //-------------------------------------------------------------------
 
 void
-os::sigMask(sigset_t *set,
+os::sigMask(void *set,
             long     blockSignals)
 {
     if (blockSignals != -1) {
         if (isSetFlag(blockSignals, SIGNAL_HANGUP))
-            sigaddset(set, SIGHUP);
+            sigaddset((sigset_t *)set, SIGHUP);
 
         if (isSetFlag(blockSignals, SIGNAL_INTERRUPT))
-            sigaddset(set, SIGINT);
+            sigaddset((sigset_t *)set, SIGINT);
 
         if (isSetFlag(blockSignals, SIGNAL_QUIT))
-            sigaddset(set, SIGQUIT);
+            sigaddset((sigset_t *)set, SIGQUIT);
 
         if (isSetFlag(blockSignals, SIGNAL_ILLEGAL_INSTRUCTION))
-            sigaddset(set, SIGILL);
+            sigaddset((sigset_t *)set, SIGILL);
 
         if (isSetFlag(blockSignals, SIGNAL_ABORT))
-            sigaddset(set, SIGABRT);
+            sigaddset((sigset_t *)set, SIGABRT);
 
         if (isSetFlag(blockSignals, SIGNAL_BUS_FAULT))
-            sigaddset(set, SIGBUS);
+            sigaddset((sigset_t *)set, SIGBUS);
 
         if (isSetFlag(blockSignals, SIGNAL_FLOATINGPOINT_FAULT))
-            sigaddset(set, SIGFPE);
+            sigaddset((sigset_t *)set, SIGFPE);
 
         if (isSetFlag(blockSignals, SIGNAL_USER_DEFINED1))
-            sigaddset(set, SIGUSR1);
+            sigaddset((sigset_t *)set, SIGUSR1);
 
         if (isSetFlag(blockSignals, SIGNAL_SEGMENTATION_FAULT))
-            sigaddset(set, SIGSEGV);
+            sigaddset((sigset_t *)set, SIGSEGV);
 
         if (isSetFlag(blockSignals, SIGNAL_USER_DEFINED2))
-            sigaddset(set, SIGUSR2);
+            sigaddset((sigset_t *)set, SIGUSR2);
 
         if (isSetFlag(blockSignals, SIGNAL_PIPE_FAULT))
-            sigaddset(set, SIGPIPE);
+            sigaddset((sigset_t *)set, SIGPIPE);
 
         if (isSetFlag(blockSignals, SIGNAL_ALARM))
-            sigaddset(set, SIGALRM);
+            sigaddset((sigset_t *)set, SIGALRM);
 
         if (isSetFlag(blockSignals, SIGNAL_TERMINATION))
-            sigaddset(set, SIGTERM);
+            sigaddset((sigset_t *)set, SIGTERM);
 
         if (isSetFlag(blockSignals, SIGNAL_CHILD_CHANGED))
-            sigaddset(set, SIGCHLD);
+            sigaddset((sigset_t *)set, SIGCHLD);
 
         if (isSetFlag(blockSignals, SIGNAL_CONTINUE))
-            sigaddset(set, SIGCONT);
+            sigaddset((sigset_t *)set, SIGCONT);
 
         if (isSetFlag(blockSignals, SIGNAL_KEYBOARD_STOP))
-            sigaddset(set, SIGTSTP);
+            sigaddset((sigset_t *)set, SIGTSTP);
 
         if (isSetFlag(blockSignals, SIGNAL_CPULIMIT_EXCEEDED))
-            sigaddset(set, SIGXCPU);
+            sigaddset((sigset_t *)set, SIGXCPU);
 
         if (isSetFlag(blockSignals, SIGNAL_FILESIZE_EXCEEDED))
-            sigaddset(set, SIGXFSZ);
+            sigaddset((sigset_t *)set, SIGXFSZ);
 
         if (isSetFlag(blockSignals, SIGNAL_BAD_SYSCALL))
-            sigaddset(set, SIGSYS);
+            sigaddset((sigset_t *)set, SIGSYS);
     }
 }
 
@@ -956,7 +956,7 @@ os::removeSignalHandler(long signal)
 
 #ifdef DL_EXT
 os::__signal_module__
-os::module(const dodoString &module,
+os::module(const dodo::string &module,
            void             *toInit)
 {
 #ifdef DL_FAST
@@ -989,7 +989,7 @@ os::module(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-os::setSignalHandler(const dodoString &path,
+os::setSignalHandler(const dodo::string &path,
                      void             *toInit)
 {
     pc::sync::stack tg(&keeper);

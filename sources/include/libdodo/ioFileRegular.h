@@ -2,8 +2,8 @@
  *            ioFileRegular.h
  *
  *  Tue Oct 8 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -83,7 +83,7 @@ namespace dodo {
                  * @param mode defines mode to open file, @see file::regular::openModeEnum
                  * @param protection defines type of IO protection, @see io::channel::protectionEnum
                  */
-                regular(const dodoString &path,
+                regular(const dodo::string &path,
                         short            mode,
                         short            protection = channel::PROTECTION_PROCESS);
 
@@ -110,7 +110,7 @@ namespace dodo {
                  * @param path defines path to the file
                  * @param mode defines mode to open file, @see file::regular::openModeEnum
                  */
-                void open(const dodoString &path,
+                void open(const dodo::string &path,
                           short            mode);
 
                 /**
@@ -171,7 +171,7 @@ namespace dodo {
 
               private:
 
-                dodoString path;        ///< file path
+                dodo::string path;        ///< file path
                 short mode;             ///< file open mode, @see file::regular::openModeEnum
 
                 __file__ *handle;       ///< file handle

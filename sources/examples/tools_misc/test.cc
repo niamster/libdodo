@@ -18,7 +18,7 @@ handler(int                    module UNUSED,
         dodo::exception::basic *ex,
         void                   *data UNUSED)
 {
-    cout << "baseHandler: " << (dodoString) * ex << endl << ex->backtrace() << endl;
+    cout << "baseHandler: " << (dodo::string) * ex << endl << ex->backtrace() << endl;
 }
 
 int
@@ -42,15 +42,15 @@ main(int  argc UNUSED,
         } catch (...)    {
         }
 
-        dodoString string = "abcdef";
-        dodoString original = string;
+        dodo::string string = "abcdef";
+        dodo::string original = string;
         tools::string::replace("cd", "CD", string);
         cout << "In " << original << " 'cd' replaced with 'CD': " << string << endl;
 
-        dodoString random = tools::misc::stringRandom(12);
+        dodo::string random = tools::misc::stringRandom(12);
         cout << "Random:" << tools::code::MD5Hex(random) << endl;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     } catch (std::exception &ex)   {
         cout << endl << ex.what() << endl;
     }

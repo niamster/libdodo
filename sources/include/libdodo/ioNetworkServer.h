@@ -2,8 +2,8 @@
  *            ioNetworkServer.h
  *
  *  Thu Oct 04 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -115,7 +115,7 @@ namespace dodo {
                  * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
                  * @note host can be '*' to specify all interfaces on the box
                  */
-                virtual void serve(const dodoString &host,
+                virtual void serve(const dodo::string &host,
                                    int              port,
                                    int              numberOfConnections);
 
@@ -126,7 +126,7 @@ namespace dodo {
                  * @param force defines if unix socket should be deleted if it exists
                  * @note host can be '*' to specify all interfaces on the box
                  */
-                virtual void serve(const dodoString &path,
+                virtual void serve(const dodo::string &path,
                                    int              numberOfConnections,
                                    bool             force = false);
 
@@ -177,7 +177,7 @@ namespace dodo {
                  */
                 void makeSocket();
 
-                dodoString unixSock;                                    ///< path to unix socket
+                dodo::string unixSock;                                    ///< path to unix socket
 
 #ifndef IO_WO_XEXEC
                 __collected_data__ collectedData;                       ///< data collected for xexec

@@ -2,8 +2,8 @@
  *            toolsCode.cc
  *
  *  Thu Jul 24 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -266,10 +266,10 @@ const char code::hexEncodeChars[] = "0123456789abcdef";
 //-------------------------------------------------------------------
 
 #ifdef ICONV_EXT
-dodoString
-code::codesetConversion(const dodoString &buffer,
-                        const dodoString &toCode,
-                        const dodoString &fromCode)
+dodo::string
+code::codesetConversion(const dodo::string &buffer,
+                        const dodo::string &toCode,
+                        const dodo::string &fromCode)
 {
     iconv_t conv = iconv_open(toCode.data(), fromCode.data());
     if (conv == (iconv_t)(-1))
@@ -296,8 +296,8 @@ code::codesetConversion(const dodoString &buffer,
         throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 
-    dodoString result;
-    result.assign(outBuffer, outBefore - out);
+    dodo::string result;
+    result = dodo::string(outBuffer, outBefore - out);
 
     delete [] outBuffer;
 
@@ -308,15 +308,15 @@ code::codesetConversion(const dodoString &buffer,
 //-------------------------------------------------------------------
 
 #ifdef ZLIB_EXT
-dodoString
-code::zCompress(const dodoString &buffer,
+dodo::string
+code::zCompress(const dodo::string &buffer,
                 unsigned short   level,
                 short            type)
 {
     z_stream strm;
     int ret;
 
-    dodoString strBuf;
+    dodo::string strBuf;
     Bytef *byteBuf;
 
     strm.zalloc = Z_NULL;
@@ -343,7 +343,7 @@ code::zCompress(const dodoString &buffer,
             throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
         }
 
-        strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
+        strBuf += dodo::string((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
     } while (strm.avail_out == 0);
 
     deflateEnd(&strm);
@@ -354,13 +354,13 @@ code::zCompress(const dodoString &buffer,
 
 //-------------------------------------------------------------------
 
-dodoString
-code::zDecompress(const dodoString &buffer)
+dodo::string
+code::zDecompress(const dodo::string &buffer)
 {
     z_stream strm;
     int ret;
 
-    dodoString strBuf;
+    dodo::string strBuf;
     Bytef *byteBuf;
 
     strm.zalloc = Z_NULL;
@@ -387,7 +387,7 @@ code::zDecompress(const dodoString &buffer)
             throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
         }
 
-        strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
+        strBuf += dodo::string((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
     } while (strm.avail_out == 0);
 
     inflateEnd(&strm);
@@ -459,7 +459,7 @@ code::hexToChar(char first,
 //-------------------------------------------------------------------
 
 unsigned long
-code::hexToLong(const dodoString &string)
+code::hexToLong(const dodo::string &string)
 {
     long i = string.size() - 1;
     if (i < 0)
@@ -543,46 +543,42 @@ code::charToHex(char result[3],
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 code::longToHex(unsigned long numeric)
 {
-    dodoString hex;
+    dodo::string hex;
 
     for (long i = 2 * sizeof(unsigned long) - 1; i >= 0; --i)
-        hex.append(1, hexEncodeChars[(numeric >> i * 4) & 0xf]);
+        hex += hexEncodeChars[(numeric >> i * 4) & 0xf];
 
     return hex;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-code::decodeUrl(const dodoString &string)
+dodo::string
+code::decodeUrl(const dodo::string &string)
 {
-    dodoString result;
+    dodo::string result;
     unsigned long o(0), k(string.size());
 
     for (; o < k; ++o) {
         switch (string[o]) {
             case '+':
-
-                result.append(1, ' ');
-
+                result += ' ';
                 break;
 
             case '%':
-
-                if ((k - o) >= 2 && std::isxdigit(string[o + 1]) && std::isxdigit(string[o + 2])) {
-                    result.append(1, code::hexToChar(string[o + 1], string[o + 2]));
+                if ((k - o) >= 2) {
+                    result += code::hexToChar(string[o + 1], string[o + 2]);
                     o += 2;
-                } else
-                    result.append(1, '%');
-
+                } else {
+                    result += '%';
+                }
                 break;
 
             default:
-
-                result.append(1, string[o]);
+                result += string[o];
         }
     }
 
@@ -591,10 +587,10 @@ code::decodeUrl(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-dodoString
-code::encodeUrl(const dodoString &string)
+dodo::string
+code::encodeUrl(const dodo::string &string)
 {
-    dodoString result;
+    dodo::string result;
 
     unsigned long i(0), j(string.size());
     char temp[3];
@@ -603,7 +599,7 @@ code::encodeUrl(const dodoString &string)
         switch (string[i]) {
             case ' ':
 
-                result.append(1, '+');
+                result += '+';
 
                 break;
 
@@ -674,15 +670,15 @@ code::encodeUrl(const dodoString &string)
             case '.':
             case '~':
 
-                result.append(1, string[i]);
+                result += string[i];
 
                 break;
 
             default:
 
-                result.append(1, '%');
+                result += '%';
                 charToHex(temp, string[i]);
-                result.append(temp);
+                result += temp;
         }
     }
 
@@ -692,7 +688,7 @@ code::encodeUrl(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-code::_encodeASCII85(dodoString    &result,
+code::_encodeASCII85(dodo::string    &result,
                      unsigned long tuple,
                      int           count)
 {
@@ -706,16 +702,16 @@ code::_encodeASCII85(dodoString    &result,
 
     i = count;
     do
-        result.append(1, (char)(*--s + '!'));
+        result += (char)(*--s + '!');
     while (i-- > 0);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-code::encodeASCII85(const dodoString &string)
+dodo::string
+code::encodeASCII85(const dodo::string &string)
 {
-    dodoString result("<~");
+    dodo::string result("<~");
     unsigned long tuple = 0;
 
     unsigned short count(0);
@@ -746,7 +742,7 @@ code::encodeASCII85(const dodoString &string)
                 tuple |= string[k];
 
                 if (tuple == 0)
-                    result.append(1, 'z');
+                    result += 'z';
                 else
                     code::_encodeASCII85(result, tuple, count);
 
@@ -760,7 +756,7 @@ code::encodeASCII85(const dodoString &string)
     if (count > 0)
         code::_encodeASCII85(result, tuple, count);
 
-    result.append("~>");
+    result += "~>";
 
     return result;
 }
@@ -768,51 +764,43 @@ code::encodeASCII85(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-code::_decodeASCII85(dodoString    &result,
+code::_decodeASCII85(dodo::string    &result,
                      unsigned long tuple,
                      int           count)
 {
     switch (count) {
         case 4:
-
-            result.append(1, (char)(tuple >> 24));
-            result.append(1, (char)(tuple >> 16));
-            result.append(1, (char)(tuple >>  8));
-            result.append(1, (char)(tuple));
-
+            result += (char)(tuple >> 24);
+            result += (char)(tuple >> 16);
+            result += (char)(tuple >>  8);
+            result += (char)(tuple);
             break;
 
         case 3:
-
-            result.append(1, (char)(tuple >> 24));
-            result.append(1, (char)(tuple >> 16));
-            result.append(1, (char)(tuple >>  8));
-
+            result += (char)(tuple >> 24);
+            result += (char)(tuple >> 16);
+            result += (char)(tuple >>  8);
             break;
 
         case 2:
-
-            result.append(1, (char)(tuple >> 24));
-            result.append(1, (char)(tuple >> 16));
-
+            result += (char)(tuple >> 24);
+            result += (char)(tuple >> 16);
             break;
 
         case 1:
-
-            result.append(1, (char)(tuple >> 24));
-
+            result += (char)(tuple >> 24);
             break;
     }
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-code::decodeASCII85(const dodoString &string)
+dodo::string
+code::decodeASCII85(const dodo::string &string)
 {
     unsigned long j = string.size(), count = 0, tuple = 0;
     bool _break = false;
-    dodoString result;
+    dodo::string result;
 
     for (unsigned long k(0); k < j; ++k) {
         if (string[k] == '<') {
@@ -825,7 +813,7 @@ code::decodeASCII85(const dodoString &string)
                             if (count != 0)
                                 throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
-                            result.append(4, '\0');
+                            result += dodo::string('\0', 4);
 
                             break;
 
@@ -870,11 +858,11 @@ code::decodeASCII85(const dodoString &string)
                     }
                 }
             } else {
-                result.append(1, '<');
-                result.append(1, string[k]);
+                result += '<';
+                result += string[k];
             }
         } else
-            result.append(1, string[k]);
+            result += string[k];
     }
 
     return result;
@@ -895,13 +883,13 @@ code::_encodeBase64(unsigned char in[3],
 
 //-------------------------------------------------------------------
 
-dodoString
-code::encodeBase64(const dodoString &string)
+dodo::string
+code::encodeBase64(const dodo::string &string)
 {
     unsigned long j = string.size();
     unsigned char in[3], out[4];
     unsigned short i, len;
-    dodoString result;
+    dodo::string result;
 
     for (unsigned long k(0); k < j;) {
         len = 0;
@@ -917,7 +905,7 @@ code::encodeBase64(const dodoString &string)
         if (len > 0) {
             _encodeBase64(in, out, len);
             for (i = 0; i < 4; ++i)
-                result.append(1, out[i]);
+                result += out[i];
         }
     }
 
@@ -937,13 +925,13 @@ code::_decodeBase64(unsigned char in[4],
 
 //-------------------------------------------------------------------
 
-dodoString
-code::decodeBase64(const dodoString &string)
+dodo::string
+code::decodeBase64(const dodo::string &string)
 {
     unsigned long j = string.size() + 1;
     unsigned char in[4], out[3], v;
     unsigned short i, len;
-    dodoString result;
+    dodo::string result;
 
     for (unsigned long k(0); k < j;) {
         len = 0;
@@ -967,7 +955,7 @@ code::decodeBase64(const dodoString &string)
         if (len > 0) {
             _decodeBase64(in, out);
             for (i = 0; i < len - 1; ++i)
-                result.append(1, out[i]);
+                result += out[i];
         }
     }
 
@@ -977,57 +965,57 @@ code::decodeBase64(const dodoString &string)
 //-------------------------------------------------------------------
 
 dodo::__url__
-code::parseUrl(const dodoString &url)
+code::parseUrl(const dodo::string &url)
 {
     unsigned long begin(0), pos, pos1;
 
     __url__ temp;
 
-    if ((pos = url.find("://", 0)) != dodoString::npos) {
-        temp.protocol.assign(url.data(), pos);
+    if ((pos = url.find("://", 0)) != dodo::string::POSITION_END) {
+        temp.protocol = dodo::string(url.data(), pos);
 
         begin = pos + 3;
     }
 
-    if ((pos = url.find('@', begin)) != dodoString::npos) {
+    if ((pos = url.find('@', begin)) != dodo::string::POSITION_END) {
         if ((pos1 = url.find(':', begin)) < pos) {
-            temp.login.assign(url.data() + begin, pos1 - begin);
+            temp.login = dodo::string(url.data() + begin, pos1 - begin);
 
             ++pos1;
 
-            temp.password.assign(url.data() + pos1, pos - pos1);
+            temp.password = dodo::string(url.data() + pos1, pos - pos1);
         } else
-            temp.login.assign(url.data() + begin, pos - begin);
+            temp.login = dodo::string(url.data() + begin, pos - begin);
 
         begin = pos + 1;
     }
 
-    if ((pos = url.find('/', begin)) != dodoString::npos) {
+    if ((pos = url.find('/', begin)) != dodo::string::POSITION_END) {
         if ((pos1 = url.find(':', begin)) < pos) {
-            temp.host.assign(url.data() + begin, pos1 - begin);
+            temp.host = dodo::string(url.data() + begin, pos1 - begin);
 
             ++pos1;
 
-            temp.port.assign(url.data() + pos1, pos - pos1);
+            temp.port = dodo::string(url.data() + pos1, pos - pos1);
         } else
-            temp.host.assign(url.data() + begin, pos - begin);
+            temp.host = dodo::string(url.data() + begin, pos - begin);
 
         begin = pos + 1;
 
-        if ((pos = url.find('?', begin)) != dodoString::npos) {
-            temp.path.assign(url.data() + begin, pos - begin);
-            temp.request.assign(url.data() + pos + 1, url.size() - pos - 1);
+        if ((pos = url.find('?', begin)) != dodo::string::POSITION_END) {
+            temp.path = dodo::string(url.data() + begin, pos - begin);
+            temp.request = dodo::string(url.data() + pos + 1, url.size() - pos - 1);
         } else
-            temp.path.assign(url.data() + begin, url.size() - begin);
+            temp.path = dodo::string(url.data() + begin, url.size() - begin);
     } else {
-        if ((pos1 = url.find(':', begin)) != dodoString::npos) {
-            temp.host.assign(url.data() + begin, pos1 - begin);
+        if ((pos1 = url.find(':', begin)) != dodo::string::POSITION_END) {
+            temp.host = dodo::string(url.data() + begin, pos1 - begin);
 
             ++pos1;
 
-            temp.port.assign(url.data() + pos1, url.size() - pos1);
+            temp.port = dodo::string(url.data() + pos1, url.size() - pos1);
         } else
-            temp.host.assign(url.data() + begin, url.size() - begin);
+            temp.host = dodo::string(url.data() + begin, url.size() - begin);
     }
 
     return temp;
@@ -1035,35 +1023,35 @@ code::parseUrl(const dodoString &url)
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 code::makeUrl(const __url__ &url)
 {
-    dodoString stringUrl;
+    dodo::string stringUrl;
 
     unsigned long logbs = url.login.size();
 
     if (url.protocol.size() > 0) {
-        stringUrl.append(url.protocol);
-        stringUrl.append("://" );
+        stringUrl += dodo::string(url.protocol);
+        stringUrl += dodo::string("://" );
     }
     if (logbs > 0)
-        stringUrl.append(url.login);
+        stringUrl += dodo::string(url.login);
     if (url.password.size() > 0) {
-        stringUrl.append(":");
-        stringUrl.append(url.password);
+        stringUrl += dodo::string(":");
+        stringUrl += dodo::string(url.password);
     }
     if (logbs > 0)
-        stringUrl.append("@");
-    stringUrl.append(url.host);
+        stringUrl += dodo::string("@");
+    stringUrl += dodo::string(url.host);
     if (url.port.size() > 0) {
-        stringUrl.append(":");
-        stringUrl.append(url.port);
+        stringUrl += dodo::string(":");
+        stringUrl += dodo::string(url.port);
     }
-    stringUrl.append("/");
-    stringUrl.append(url.path);
+    stringUrl += dodo::string("/");
+    stringUrl += dodo::string(url.path);
     if (url.request.size() > 0) {
-        stringUrl.append("?");
-        stringUrl.append(url.request);
+        stringUrl += dodo::string("?");
+        stringUrl += dodo::string(url.request);
     }
 
     return stringUrl;
@@ -1072,8 +1060,8 @@ code::makeUrl(const __url__ &url)
 //-------------------------------------------------------------------
 
 #ifdef BZIP2_EXT
-dodoString
-code::bzCompress(const dodoString &buffer,
+dodo::string
+code::bzCompress(const dodo::string &buffer,
                  unsigned short   level,
                  unsigned short   type)
 {
@@ -1084,13 +1072,13 @@ code::bzCompress(const dodoString &buffer,
     if (ret != BZ_OK)
         throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZCOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZCOMPRESSION, TOOLSCODEEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
 
-    return dodoString(dst, len);
+    return dodo::string(dst, len);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-code::bzDecompress(const dodoString &buffer)
+dodo::string
+code::bzDecompress(const dodo::string &buffer)
 {
     bz_stream bzs;
 
@@ -1114,7 +1102,7 @@ code::bzDecompress(const dodoString &buffer)
     bzs.next_in = src;
     bzs.avail_in = src_len;
 
-    dodoString _buffer;
+    dodo::string _buffer;
 
     while ((ret = BZ2_bzDecompress(&bzs)) == BZ_OK && bzs.avail_in > 0) {
         bzs.avail_out = src_len;
@@ -1125,7 +1113,7 @@ code::bzDecompress(const dodoString &buffer)
 
     if (ret == BZ_STREAM_END || ret == BZ_OK) {
         size = (bzs.total_out_hi32 * (unsigned int)-1) + bzs.total_out_lo32;
-        _buffer.assign(dst, size);
+        _buffer = dodo::string(dst, size);
 
         delete [] src;
         free(dst);
@@ -1311,8 +1299,8 @@ code::MD5Update(__MD5Context__      *context,
 
 //-------------------------------------------------------------------
 
-dodoString
-code::MD5(const dodoString &string)
+dodo::string
+code::MD5(const dodo::string &string)
 {
     __MD5Context__ context;
     unsigned char digest[16];
@@ -1321,29 +1309,29 @@ code::MD5(const dodoString &string)
     MD5Update(&context, (unsigned char *)string.data(), string.size());
     MD5Final(digest, &context);
 
-    return dodoString((char *)digest, 16);
+    return dodo::string((char *)digest, 16);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-code::MD5Hex(const dodoString &string)
+dodo::string
+code::MD5Hex(const dodo::string &string)
 {
     return binToHex(MD5(string));
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-code::binToHex(const dodoString &string)
+dodo::string
+code::binToHex(const dodo::string &string)
 {
     int j = string.size();
-    dodoString hex;
+    dodo::string hex;
     char tmp[3];
 
     for (int i = 0; i < j; ++i) {
         charToHex(tmp, string[i]);
-        hex.append(tmp, 2);
+        hex += dodo::string(tmp, 2);
     }
 
     return hex;
@@ -1509,8 +1497,8 @@ code::SHA1ProcessMessageBlock(__SHA1_256Context__ *context)
 
 //-------------------------------------------------------------------
 
-dodoString
-code::SHA1(const dodoString &string)
+dodo::string
+code::SHA1(const dodo::string &string)
 {
     __SHA1_256Context__ context;
     unsigned char digest[20];
@@ -1519,13 +1507,13 @@ code::SHA1(const dodoString &string)
     SHA1Input(&context, (unsigned char *)string.data(), string.size());
     SHA1Result(&context, digest);
 
-    return dodoString((char *)digest, 20);
+    return dodo::string((char *)digest, 20);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-code::SHA1Hex(const dodoString &string)
+dodo::string
+code::SHA1Hex(const dodo::string &string)
 {
     return binToHex(SHA1(string));
 }
@@ -1689,8 +1677,8 @@ code::SHA256ProcessMessageBlock(__SHA1_256Context__ *context)
 
 //-------------------------------------------------------------------
 
-dodoString
-code::SHA256(const dodoString &string)
+dodo::string
+code::SHA256(const dodo::string &string)
 {
     __SHA1_256Context__ context;
     unsigned char digest[32];
@@ -1699,13 +1687,13 @@ code::SHA256(const dodoString &string)
     SHA256Input(&context, (unsigned char *)string.data(), string.size());
     SHA256Result(&context, digest);
 
-    return dodoString((char *)digest, 32);
+    return dodo::string((char *)digest, 32);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-code::SHA256Hex(const dodoString &string)
+dodo::string
+code::SHA256Hex(const dodo::string &string)
 {
     return binToHex(SHA256(string));
 }
@@ -1906,8 +1894,8 @@ code::SHA512ProcessMessageBlock(__SHA512Context__ *context)
 
 //-------------------------------------------------------------------
 
-dodoString
-code::SHA512(const dodoString &string)
+dodo::string
+code::SHA512(const dodo::string &string)
 {
     __SHA512Context__ context;
     unsigned char digest[64];
@@ -1916,13 +1904,13 @@ code::SHA512(const dodoString &string)
     SHA512Input(&context, (unsigned char *)string.data(), string.size());
     SHA512Result(&context, digest);
 
-    return dodoString((char *)digest, 64);
+    return dodo::string((char *)digest, 64);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-code::SHA512Hex(const dodoString &string)
+dodo::string
+code::SHA512Hex(const dodo::string &string)
 {
     return binToHex(SHA512(string));
 }

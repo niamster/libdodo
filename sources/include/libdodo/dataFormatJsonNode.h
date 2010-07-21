@@ -2,8 +2,8 @@
  *            dataFormatJsonNode.h
  *
  *  Mon Oct 20 2007
- *  Copyright  2007  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2007  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -85,7 +85,7 @@ namespace dodo {
                      * constructor
                      * @param value defines string value
                      */
-                    node(const dodoString &value);
+                    node(const dodo::string &value);
 
                     /**
                      * constructor
@@ -109,7 +109,7 @@ namespace dodo {
                      * constructor
                      * @param value defines object value
                      */
-                    node(const dodoMap<dodoString, node, dodoMapStringCompare> &value);
+                    node(const dodoMap<dodo::string, node, dodoMapStringCompare> &value);
 
                     /**
                      * destructor
@@ -120,7 +120,7 @@ namespace dodo {
                      * set string, date/time, base64 value
                      * @param value defines string value
                      */
-                    void setString(const dodoString &value);
+                    void setString(const dodo::string &value);
 
                     /**
                      * set boolean value
@@ -150,7 +150,7 @@ namespace dodo {
                      * @param name defines struct member name
                      * @param value defines struct member value
                      */
-                    void addObjectMember(const dodoString &name,
+                    void addObjectMember(const dodo::string &name,
                                          const node       &value);
 
                     /**
@@ -163,14 +163,14 @@ namespace dodo {
                      * set struct value
                      * @param value defines struct value
                      */
-                    void setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value);
+                    void setObject(const dodoMap<dodo::string, node, dodoMapStringCompare> &value);
 
                     /**
                      * @return node by string key
                      * @param key defines key to search for node
                      * @note throws exception if data type is not DATA_OBJECT
                      */
-                    node operator[](const dodoString &key) const;
+                    node operator[](const dodo::string &key) const;
 
                     /**
                      * @return node by numeric key
@@ -199,7 +199,7 @@ namespace dodo {
                      * @return string value
                      * @note throws exception if data type is not DATA_STRING
                      */
-                    dodoString string() const;
+                    dodo::string string() const;
 
                     /**
                      * @return boolean value
@@ -223,13 +223,13 @@ namespace dodo {
                      * @return object value
                      * @note throws exception if data type is not DATA_OBJECT
                      */
-                    dodoMap<dodoString, node, dodoMapStringCompare> object() const;
+                    dodoMap<dodo::string, node, dodoMapStringCompare> object() const;
 
                   private:
 
                     union {
-                        dodoString                                      *stringValue;                                               ///< string value of node
-                        dodoMap<dodoString, node, dodoMapStringCompare> *objectValue;                                               ///< object value of node
+                        dodo::string                                      *stringValue;                                               ///< string value of node
+                        dodoMap<dodo::string, node, dodoMapStringCompare> *objectValue;                                               ///< object value of node
                         dodoArray<node>                                 *arrayValue;                                                ///< array value of node
                         bool                                            booleanValue;                                               ///< boolean value of node
                         long                                            numericValue;                                               ///< numeric value of node

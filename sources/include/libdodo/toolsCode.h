@@ -2,8 +2,8 @@
  *            toolsCode.h
  *
  *  Wed Aug 24 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -67,9 +67,9 @@ namespace dodo {
              * @param toCode defines codeset in what perform conversion
              * @param fromCode defines buffer codeset
              */
-            static dodoString codesetConversion(const dodoString &buffer,
-                                                const dodoString &toCode,
-                                                const dodoString &fromCode);
+            static dodo::string codesetConversion(const dodo::string &buffer,
+                                                const dodo::string &toCode,
+                                                const dodo::string &fromCode);
 #endif
 
 #ifdef ZLIB_EXT
@@ -90,7 +90,7 @@ namespace dodo {
              * @param level defines compression level[1..9]
              * @param type defines compression strategy, @see code::zlibCompressionStrategyEnum
              */
-            static dodoString zCompress(const dodoString &buffer,
+            static dodo::string zCompress(const dodo::string &buffer,
                                         unsigned short   level = 6,
                                         short            type = ZLIB_HUFFMAN_COMRESSION);
 
@@ -98,20 +98,20 @@ namespace dodo {
              * @return decompressed buffer
              * @param buffer defines data to decompress
              */
-            static dodoString zDecompress(const dodoString &buffer);
+            static dodo::string zDecompress(const dodo::string &buffer);
 #endif
 
             /**
              * @return decoded Url
              * @param string defines Url to decode
              */
-            static dodoString decodeUrl(const dodoString &string);
+            static dodo::string decodeUrl(const dodo::string &string);
 
             /**
              * @return encoded Url
              * @param string defines Url to encode
              */
-            static dodoString encodeUrl(const dodoString &string);
+            static dodo::string encodeUrl(const dodo::string &string);
 
             /**
              * @return converted from HEX
@@ -125,13 +125,13 @@ namespace dodo {
              * @return numeric converted from HEX
              * @param string defines numeric in HEX
              */
-            static unsigned long hexToLong(const dodoString &string);
+            static unsigned long hexToLong(const dodo::string &string);
 
             /**
              * @return numeric converted to HEX
              * @param numeric defines numeric
              */
-            static dodoString longToHex(unsigned long numeric);
+            static dodo::string longToHex(unsigned long numeric);
 
             /**
              * @param result defines converted to HEX
@@ -143,91 +143,91 @@ namespace dodo {
              * @return encoded string with ASCII85 method
              * @param string defines data to encode
              */
-            static dodoString encodeASCII85(const dodoString &string);
+            static dodo::string encodeASCII85(const dodo::string &string);
 
             /**
              * @return decoded string with ASCII85 method
              * @param string defines data to decode
              */
-            static dodoString decodeASCII85(const dodoString &string);
+            static dodo::string decodeASCII85(const dodo::string &string);
 
             /**
              * @return encoded string with base64 method
              * @param string defines data to encode
              */
-            static dodoString encodeBase64(const dodoString &string);
+            static dodo::string encodeBase64(const dodo::string &string);
 
             /**
              * @return decoded string with base64 method
              * @param string defines data to decode
              */
-            static dodoString decodeBase64(const dodoString &string);
+            static dodo::string decodeBase64(const dodo::string &string);
 
             /**
              * @return parts of Url
              * @param url defines Url
              */
-            static __url__ parseUrl(const dodoString &url);
+            static __url__ parseUrl(const dodo::string &url);
 
             /**
              * @return Url
              * @param url defines Url parts
              */
-            static dodoString makeUrl(const __url__ &url);
+            static dodo::string makeUrl(const __url__ &url);
 
             /**
              * @return MD5 hash of string
              * @param string defines string for what generate hash
              */
-            static dodoString MD5(const dodoString &string);
+            static dodo::string MD5(const dodo::string &string);
 
             /**
              * @return MD5 hash of string in 'hex' representation(e.g. 'fbc093901857fcd118f065f900982c24')
              * @param string defines string to convert
              */
-            static dodoString MD5Hex(const dodoString &string);
+            static dodo::string MD5Hex(const dodo::string &string);
 
             /**
              * @return SHA-1 hash of string
              * @param string defines string for what generate hash
              */
-            static dodoString SHA1(const dodoString &string);
+            static dodo::string SHA1(const dodo::string &string);
 
             /**
              * @return SHA-1 hash of string in 'hex' representation(e.g. 'da39a3ee5e6b4b0d3255bfef95601890afd80709')
              * @param string defines string to convert
              */
-            static dodoString SHA1Hex(const dodoString &string);
+            static dodo::string SHA1Hex(const dodo::string &string);
 
             /**
              * @return SHA-256 hash of string
              * @param string defines string for what generate hash
              */
-            static dodoString SHA256(const dodoString &string);
+            static dodo::string SHA256(const dodo::string &string);
 
             /**
              * @return SHA-256 hash of string in 'hex' representation(e.g. 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855')
              * @param string defines string to convert
              */
-            static dodoString SHA256Hex(const dodoString &string);
+            static dodo::string SHA256Hex(const dodo::string &string);
 
             /**
              * @return SHA-512 hash of string
              * @param string defines string for what generate hash
              */
-            static dodoString SHA512(const dodoString &string);
+            static dodo::string SHA512(const dodo::string &string);
 
             /**
              * @return SHA-512 hash of string in 'hex' representation(e.g. 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e')
              * @param string defines string to convert
              */
-            static dodoString SHA512Hex(const dodoString &string);
+            static dodo::string SHA512Hex(const dodo::string &string);
 
             /**
              * @return binary string represented in 'hex'
              * @param string defines string to convert
              */
-            static dodoString binToHex(const dodoString &string);
+            static dodo::string binToHex(const dodo::string &string);
 
 #ifdef BZIP2_EXT
             /**
@@ -236,7 +236,7 @@ namespace dodo {
              * @param level defines compression level[1..9]
              * @param type defines compression strategy;controls how the compression phase behaves when presented with worst case, highly repetitive, input data[0..250]
              */
-            static dodoString bzCompress(const dodoString &buffer,
+            static dodo::string bzCompress(const dodo::string &buffer,
                                          unsigned short   level = 6,
                                          unsigned short   type = 30);
 
@@ -244,7 +244,7 @@ namespace dodo {
              * @return decompressed buffer
              * @param buffer defines data to decompress
              */
-            static dodoString bzDecompress(const dodoString &buffer);
+            static dodo::string bzDecompress(const dodo::string &buffer);
 #endif
 
           private:
@@ -273,7 +273,7 @@ namespace dodo {
              * @param tuple defines part of data
              * @param count defines size of data
              */
-            static void _encodeASCII85(dodoString    &result,
+            static void _encodeASCII85(dodo::string    &result,
                                        unsigned long tuple,
                                        int           count);
 
@@ -283,7 +283,7 @@ namespace dodo {
              * @param tuple defines part of encoded data
              * @param count defines size of encoded data
              */
-            static void _decodeASCII85(dodoString    &result,
+            static void _decodeASCII85(dodo::string    &result,
                                        unsigned long tuple,
                                        int           count);
 

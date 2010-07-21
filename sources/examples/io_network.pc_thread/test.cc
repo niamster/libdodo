@@ -42,7 +42,7 @@ process(void *data)
         ex->bs = 7;
         ex->writeString("test\n");
 
-        dodoString str = "";
+        dodo::string str = "";
         try {
             ex->bs = 4;
             str = ex->read();
@@ -56,7 +56,7 @@ process(void *data)
                 ::data.release();
             }
         } catch (dodo::exception::basic &ex)   {
-            cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+            cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
             cout.flush();
         }
 
@@ -70,7 +70,7 @@ process(void *data)
             cout.flush();
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     delete ex;
@@ -128,7 +128,7 @@ main(int  argc UNUSED,
 
         manager.wait();
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

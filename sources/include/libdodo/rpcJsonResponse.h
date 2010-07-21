@@ -2,8 +2,8 @@
  *            rpcJsonResponse.h
  *
  *  Mon Jul 07 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -60,7 +60,7 @@ namespace dodo {
                  * @param id defines ID of JSON-RPC response
                  */
                 static rpc::response jsonToResponse(dodo::data::format::json::node &node,
-                                                    dodoString                     &version,
+                                                    dodo::string                     &version,
                                                     long                           &id);
 
                 /**
@@ -70,7 +70,7 @@ namespace dodo {
                  * @param id defines ID of JSON-RPC request
                  */
                 static dodo::data::format::json::node responseToJson(const rpc::response &data,
-                                                                     const dodoString    &version,
+                                                                     const dodo::string    &version,
                                                                      long                id);
             };
         };

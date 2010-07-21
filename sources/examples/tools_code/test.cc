@@ -23,9 +23,7 @@ main(int  argc UNUSED,
         cout << tools::code::codesetConversion(tools::code::codesetConversion("тест", "utf-8", "cp1251"), "cp1251", "utf-8") << endl;
 #endif
 
-        dodoString longString = dodoString(1000000, 'l') + dodoString(1000000, 'i') + dodoString(1000000, 'b') + dodoString(1000000, 'd') + dodoString(1000000, 'o') + dodoString(1000000, 'd') + dodoString(1000000, 'o');
-
-        cout << "longString = dodoString(1000000, 'l') + dodoString(1000000, 'i') + dodoString(1000000, 'b') + dodoString(1000000, 'd') + dodoString(1000000, 'o') + dodoString(1000000, 'd') + dodoString(1000000, 'o');" << endl;
+        dodo::string longString = dodo::string('l', 1000000) + dodo::string('i', 1000000) + dodo::string('b', 1000000) + dodo::string('d', 1000000) + dodo::string('o', 1000000) + dodo::string('d', 1000000) + dodo::string('o', 1000000);
 
         cout << "MD5 of \"\", should be d41d8cd98f00b204e9800998ecf8427e" << endl;
         cout << "MD5 of \"\",        is " << tools::code::MD5Hex("") <<  endl;
@@ -56,8 +54,7 @@ main(int  argc UNUSED,
         cout << "SHA-512 of longString, should be d64cdf8f171e1474423a002c0627be1c10bfb0d6c84ffcb555d9eca7c033504c38fb0f41e1ef0e1c86d6c61b1c09100a7192566f18dc5ecc9aa8121a50b521e7" << endl;
         cout << "SHA-512 of longString,        is " << tools::code::SHA512Hex(longString) <<  endl;
 
-        cout << "tools::code::hexToLong(tools::code::longToHex(356456942))" << endl;
-        cout << tools::code::hexToLong(tools::code::longToHex(356456942)) << endl;
+        cout << "tools::code::hexToLong(tools::code::longToHex(356456942)) is " << tools::code::hexToLong(tools::code::longToHex(356456942UL)) << endl;
 
 #ifdef ICONV_EXT
         tools::code::codesetConversion(tools::filesystem::fileContents("test.cc"), "cp1251", "utf-8");
@@ -68,18 +65,20 @@ main(int  argc UNUSED,
         cout << tools::code::zDecompress(tools::code::zCompress(tools::filesystem::fileContents("test.cc")));
 #endif
 
-        cout << tools::code::decodeUrl(tools::code::encodeUrl("@!()HEY, that's working!")) << endl;
-        cout << tools::code::encodeUrl("@!()HEY, that's working!") << endl;
+        dodo::string code = "@!()HEY, that's working!";
 
-        cout << tools::code::decodeASCII85(tools::code::encodeASCII85("HEY, that's working!")) << endl;
-        cout << tools::code::encodeASCII85("HEY, that's working!") << endl;
+        cout << tools::code::decodeUrl(tools::code::encodeUrl(code)) << endl;
+        cout << tools::code::encodeUrl(code) << endl;
+
+        cout << tools::code::decodeASCII85(tools::code::encodeASCII85(code)) << endl;
+        cout << tools::code::encodeASCII85(code) << endl;
         cout << "size of test ASCII85-encoded : " <<  tools::code::encodeASCII85(tools::filesystem::fileContents("test")).size() << endl;
 
-        cout << tools::code::decodeBase64(tools::code::encodeBase64("HEY, that's working!")) << endl;
-        cout << tools::code::encodeBase64("HEY, that's working!") << endl;
+        cout << tools::code::decodeBase64(tools::code::encodeBase64(code)) << endl;
+        cout << tools::code::encodeBase64(code) << endl;
         cout << "size of test base64-encoded : " <<  tools::code::encodeBase64(tools::filesystem::fileContents("test")).size() << endl;
 
-        dodoString url = "ftp://user:pass@localhost.domain:32/path/init.cgi?net=true&work=true";
+        dodo::string url = "ftp://user:pass@localhost.domain:32/path/init.cgi?net=true&work=true";
         cout << endl << url << endl;
         cout << tools::code::parseUrl(url).host << endl;
         cout << tools::code::parseUrl(url).login << endl;
@@ -96,7 +95,7 @@ main(int  argc UNUSED,
         cout << "Size of bziped Makefile" << tools::code::bzCompress(tools::filesystem::fileContents("Makefile"), 9).size() << endl;
 #endif
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     } catch (std::exception ex)   {
         cout << endl << ex.what() << endl;
     }

@@ -2,8 +2,8 @@
  *			  strnlen.h
  *
  *	Wed Sep 30 2009
- *	Copyright  2009	 Ni@m
- *	niam.niam@gmail.com
+ *	Copyright  2009	 Dmytro Milinevskyy
+ *	milinevskyy@gmail.com
  ****************************************************************************/
 
 /*

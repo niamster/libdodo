@@ -23,9 +23,9 @@ main(int  argc UNUSED,
     expr.multiline = true;
     expr.greedy = false;
 
-    dodoString sample = "string1234\n";
+    dodo::string sample = "string1234\n";
 
-    dodoString pattern = "^(.*)([0-9]+)([^0-9]+)";
+    dodo::string pattern = "^(.*)([0-9]+)([^0-9]+)";
 
     cout << "\nMatch: pattern: " << pattern << "\n\ntest string: " << sample << "\n\npockets:\n";
 

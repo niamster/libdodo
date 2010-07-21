@@ -2,8 +2,8 @@
  *            ioSsl.h
  *
  *  Wed Jun 11 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -70,13 +70,13 @@ namespace dodo {
                  */
                 __certificates__();
 
-                dodoString key;         ///< pathname to the key file
-                dodoString keyPassword; ///< password for the key file
+                dodo::string key;         ///< pathname to the key file
+                dodo::string keyPassword; ///< password for the key file
                 short      keyType;     ///< type of the key, @see io::ssl::keyEnum
-                dodoString cert;        ///< pathname to the certificate file
-                dodoString ca;          ///< pathname to the certificate authority file
-                dodoString caPath;      ///< pathname to a directory that contains trusted SSL CA certificates in PEM format or to a file of CA certificates in PEM format
-                dodoString cipher;      ///< allowed SSL ciphers
+                dodo::string cert;        ///< pathname to the certificate file
+                dodo::string ca;          ///< pathname to the certificate authority file
+                dodo::string caPath;      ///< pathname to a directory that contains trusted SSL CA certificates in PEM format or to a file of CA certificates in PEM format
+                dodo::string cipher;      ///< allowed SSL ciphers
             };
         };
     };

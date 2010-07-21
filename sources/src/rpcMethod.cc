@@ -2,8 +2,8 @@
  *            rpcMethod.cc
  *
  *  Sat Mar 22 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -48,7 +48,7 @@ method::~method()
 //-------------------------------------------------------------------
 
 void
-method::setName(const dodoString &name)
+method::setName(const dodo::string &name)
 {
     this->name = name;
 }

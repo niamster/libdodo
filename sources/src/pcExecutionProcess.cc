@@ -2,8 +2,8 @@
  *            pcExecutionProcess.cc
  *
  *  Wed Oct 08 2009
- *  Copyright  2009  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2009  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -112,7 +112,7 @@ process::process(routine func,
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
-process::process(const dodoString &module,
+process::process(const dodo::string &module,
                  void             *data,
                  void             *toInit)
 try : job(TYPE_PROCESS),
@@ -297,7 +297,7 @@ process::wait()
 
 #ifdef DL_EXT
 process::__module__
-process::module(const dodoString &module,
+process::module(const dodo::string &module,
                 void             *toInit)
 {
 #ifdef DL_FAST

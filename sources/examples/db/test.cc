@@ -92,7 +92,7 @@ main(int  argc UNUSED,
         try {
             db->exec(sql::query("DROP TABLE test"));
         } catch (dodo::exception::basic &ex)   {
-            cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+            cout << (dodo::string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
         }
 
         if (strcasecmp(argv[1], "postgresql") == 0)
@@ -103,7 +103,7 @@ main(int  argc UNUSED,
         try {
             ((sql::constructor *)db)->requestFieldsTypes("test");
         } catch (dodo::exception::basic &ex)    {
-            cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+            cout << (dodo::string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 
             ((sql::constructor *)db)->setFieldType("test", "t0", sql::FIELD_TEXT);
             ((sql::constructor *)db)->setFieldType("test", "t1", sql::FIELD_TEXT);
@@ -117,7 +117,7 @@ main(int  argc UNUSED,
         array["t1"] = "abc";
         array["i"] = "1";
 
-        dodoArray<dodoString> fields;
+        dodoArray<dodo::string> fields;
         fields.push_back("t0");
         fields.push_back("t1");
         fields.push_back("b");
@@ -165,7 +165,7 @@ main(int  argc UNUSED,
 
         ///put binary data into data base
         tools::filesystem::unlink("test.db");
-        dodoString b = tools::filesystem::fileContents("test");
+        dodo::string b = tools::filesystem::fileContents("test");
 
         array.clear();
 
@@ -191,7 +191,7 @@ main(int  argc UNUSED,
         delete db;
         delete ci;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+        cout << (dodo::string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
     }
 
     return 0;

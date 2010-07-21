@@ -2,8 +2,8 @@
  *            dataFormatJsonNode.cc
  *
  *  Mon Oct 20 2007
- *  Copyright  2007  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2007  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -42,7 +42,7 @@ node::node() : valueDataType(DATA_NULL)
 
 //-------------------------------------------------------------------
 
-node::node(const dodoString &value) : stringValue(new dodoString(value)),
+node::node(const dodo::string &value) : stringValue(new dodo::string(value)),
                                       valueDataType(DATA_STRING)
 {
 }
@@ -70,7 +70,7 @@ node::node(const dodoArray<node> &value) : arrayValue(new dodoArray<node>(value)
 
 //-------------------------------------------------------------------
 
-node::node(const dodoMap<dodoString, node, dodoMapStringCompare> &value) : objectValue(new dodoMap<dodoString, node, dodoMapStringCompare>(value)),
+node::node(const dodoMap<dodo::string, node, dodoMapStringCompare> &value) : objectValue(new dodoMap<dodo::string, node, dodoMapStringCompare>(value)),
                                                                            valueDataType(DATA_OBJECT)
 {
 }
@@ -81,11 +81,11 @@ node::node(const node &n) : valueDataType(n.valueDataType)
 {
     switch (valueDataType) {
         case DATA_STRING:
-            stringValue = new dodoString(*n.stringValue);
+            stringValue = new dodo::string(*n.stringValue);
             break;
 
         case DATA_OBJECT:
-            objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>(*n.objectValue);
+            objectValue = new dodoMap<dodo::string, node, dodoMapStringCompare>(*n.objectValue);
             break;
 
         case DATA_ARRAY:
@@ -124,7 +124,7 @@ node::~node()
 //-------------------------------------------------------------------
 
 void
-node::setString(const dodoString &value)
+node::setString(const dodo::string &value)
 {
     if (valueDataType != DATA_STRING) {
         switch (valueDataType) {
@@ -138,7 +138,7 @@ node::setString(const dodoString &value)
         }
 
         valueDataType = DATA_STRING;
-        stringValue = new dodoString(value);
+        stringValue = new dodo::string(value);
     } else
         *stringValue = value;
 }
@@ -249,7 +249,7 @@ node::addArrayElement(const node &value)
 //-------------------------------------------------------------------
 
 void
-node::addObjectMember(const dodoString &name,
+node::addObjectMember(const dodo::string &name,
                       const node       &value)
 {
     if (valueDataType != DATA_OBJECT) {
@@ -264,10 +264,10 @@ node::addObjectMember(const dodoString &name,
         }
 
         valueDataType = DATA_OBJECT;
-        objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>;
+        objectValue = new dodoMap<dodo::string, node, dodoMapStringCompare>;
     }
 
-    objectValue->insert(make_pair(name, value));
+    objectValue->insert(std::make_pair(name, value));
 }
 
 //-------------------------------------------------------------------
@@ -295,7 +295,7 @@ node::setArray(const dodoArray<node> &value)
 //-------------------------------------------------------------------
 
 void
-node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
+node::setObject(const dodoMap<dodo::string, node, dodoMapStringCompare> &value)
 {
     if (valueDataType != DATA_OBJECT) {
         switch (valueDataType) {
@@ -309,7 +309,7 @@ node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
         }
 
         valueDataType = DATA_OBJECT;
-        objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>(value);
+        objectValue = new dodoMap<dodo::string, node, dodoMapStringCompare>(value);
     } else
         *objectValue = value;
 }
@@ -317,7 +317,7 @@ node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
 //-------------------------------------------------------------------
 
 node
-node::operator[](const dodoString &key) const
+node::operator[](const dodo::string &key) const
 {
     if (valueDataType != DATA_OBJECT)
         throw exception::basic(exception::MODULE_DATAFORMATJSONNODE, NODEEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, NODEEX_WRONGTYPEREQUESTED, DATAFORMATJSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
@@ -349,7 +349,7 @@ node::type() const
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 node::string() const
 {
     if (valueDataType != DATA_STRING)
@@ -393,7 +393,7 @@ node::array() const
 
 //-------------------------------------------------------------------
 
-dodoMap<dodoString, node, dodo::dodoMapStringCompare>
+dodoMap<dodo::string, node, dodo::dodoMapStringCompare>
 node::object() const
 {
     if (valueDataType != DATA_OBJECT)
@@ -432,11 +432,11 @@ node::operator=(const node &n)
     valueDataType = n.valueDataType;
     switch (valueDataType) {
         case DATA_STRING:
-            stringValue = new dodoString(*n.stringValue);
+            stringValue = new dodo::string(*n.stringValue);
             break;
 
         case DATA_OBJECT:
-            objectValue = new dodoMap<dodoString, node, dodoMapStringCompare>(*n.objectValue);
+            objectValue = new dodoMap<dodo::string, node, dodoMapStringCompare>(*n.objectValue);
             break;
 
         case DATA_ARRAY:

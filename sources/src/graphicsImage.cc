@@ -2,8 +2,8 @@
  *            graphicsImage.cc
  *
  *  Thu Nov 23 2007
- *  Copyright  2007  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2007  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -160,7 +160,7 @@ __image_init__::imErrorHandler(const ExceptionType,
                                const char          *reason,
                                const char          *description)
 {
-    throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason ? reason : __dodostring__, __LINE__, __FILE__, description ? description : __dodostring__);
+    throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason ? dodo::string(reason) : __dodostring__, __LINE__, __FILE__, description ? dodo::string(description) : __dodostring__);
 }
 
 //-------------------------------------------------------------------
@@ -266,14 +266,14 @@ image::read(const io::channel &img)
     if (collectedData.handle->im != NULL)
         DestroyImage(collectedData.handle->im);
 
-    dodoString data, dataPart;
+    dodo::string data, dataPart;
 
     while (true) {
         dataPart = img.read();
         if (dataPart.size() == 0)
             break;
 
-        data.append(dataPart);
+        data += dodo::string(dataPart);
     }
     dataPart.clear();
 
@@ -438,7 +438,7 @@ image::write(const io::channel &img,
         throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
 
     img.bs = size;
-    img.write(dodoString((char *)data, size));
+    img.write(dodo::string((char *)data, size));
 
 #ifndef GRAPHICS_WO_XEXEC
     performPostExec(OPERATION_WRITE);

@@ -46,20 +46,20 @@ process(exchange &ex)
     if (ex.isAlive())
         ex.writeString("Alive");
 
-    dodoString str = "";
+    dodo::string str = "";
     try {
         ex.bs = 4;
         str = ex.read();
 
         cout << str << ":" << str.size() << endl;
         cout.flush();
-        if (str.compare("exit") == 0) {
+        if (str == "exit") {
             ex.close();
 
             exit(0);
         }
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
         cout.flush();
     }
 }
@@ -98,7 +98,7 @@ main(int  argc UNUSED,
         }
 #endif
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

@@ -2,8 +2,8 @@
  *            dataFormatXmlProcessor.cc
  *
  *  Wed Nov 30 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -99,9 +99,9 @@ namespace dodo {
 
 using namespace dodo::data::format::xml;
 
-__info__::__info__(const dodoString &version,
-                   const dodoString &encoding,
-                   const dodoString &root,
+__info__::__info__(const dodo::string &version,
+                   const dodo::string &encoding,
+                   const dodo::string &root,
                    int              compression) : version(version),
                                                    encoding(encoding),
                                                    root(root),
@@ -124,8 +124,8 @@ __definition__::__definition__() : allChildren(true),
 
 //-------------------------------------------------------------------
 
-__definition__::__definition__(const dodoString &name,
-                               const dodoString &ns) : name(name),
+__definition__::__definition__(const dodo::string &name,
+                               const dodo::string &ns) : name(name),
                                                        allChildren(true),
                                                        allAttributes(true),
                                                        ns(ns)
@@ -134,7 +134,7 @@ __definition__::__definition__(const dodoString &name,
 
 //-------------------------------------------------------------------
 
-const dodoString processor::statements[] = {
+const dodo::string processor::statements[] = {
     "<",
     ":",
     " ",
@@ -220,13 +220,13 @@ processor::process(const __definition__ &definition,
     xmlFreeDoc(document->doc);
 #endif
 
-    dodoString buffer, bufferPart;
+    dodo::string buffer, bufferPart;
     while (true) {
         bufferPart = io.readString();
         if (bufferPart.size() == 0)
             break;
 
-        buffer.append(bufferPart);
+        buffer += bufferPart;
     }
     bufferPart.clear();
 
@@ -318,9 +318,9 @@ processor::parse(const __definition__ &definition UNUSED)
         }
     } else {
         if (definition.children.size() > 0) {
-            dodoMap<dodoString, __definition__>::const_iterator i(definition.children.begin()), j(definition.children.end());
+            dodoMap<dodo::string, __definition__>::const_iterator i(definition.children.begin()), j(definition.children.end());
             for (; i != j; ++i)
-                n.nodeChildren.insert(make_pair(i->first, parse(i->second, xnode.node->children)));
+                n.nodeChildren.insert(std::make_pair(i->first, parse(i->second, xnode.node->children)));
         }
     }
 #endif
@@ -420,9 +420,9 @@ processor::parse(const __definition__ &definition UNUSED,
             }
         } else {
             if (definition.children.size() > 0) {
-                dodoMap<dodoString, __definition__>::const_iterator i(definition.children.begin()), j(definition.children.end());
+                dodoMap<dodo::string, __definition__>::const_iterator i(definition.children.begin()), j(definition.children.end());
                 for (; i != j; ++i)
-                    n.nodeChildren.insert(make_pair(i->first, parse(i->second, xnode->children)));
+                    n.nodeChildren.insert(std::make_pair(i->first, parse(i->second, xnode->children)));
             }
         }
 
@@ -543,11 +543,11 @@ processor::getNode(const __node__ &xnode UNUSED,
     }
 
     if (xnode.node->name != NULL)
-        resNode.name.assign((char *)xnode.node->name);
+        resNode.name = (char *)xnode.node->name;
 
     unsigned char *xChar = xmlNodeListGetString(document->doc, xnode.node->children, 1);
     if (xChar != NULL) {
-        resNode.nodeValue.assign((char *)xChar);
+        resNode.nodeValue = (char *)xChar;
         xmlFree(xChar);
     }
 #endif
@@ -636,13 +636,13 @@ processor::process(const io::channel &io)
 
     node n;
 
-    dodoString buffer, bufferPart;
+    dodo::string buffer, bufferPart;
     while (true) {
         bufferPart = io.readString();
         if (bufferPart.size() == 0)
             break;
 
-        buffer.append(bufferPart);
+        buffer += bufferPart;
     }
     bufferPart.clear();
 
@@ -745,8 +745,8 @@ processor::clear()
 
 void
 processor::make(const node        &root,
-                const dodoString  &encoding,
-                const dodoString  &version,
+                const dodo::string  &encoding,
+                const dodo::string  &version,
                 const io::channel &io) const
 {
     if (root.name.empty())
@@ -787,7 +787,7 @@ processor::make(const node        &xnode,
         io.writeString(statements[STATEMENT_DQUOTE]);
     }
 
-    dodoMap<dodoString, dodoString, dodoMapStringCompare>::const_iterator i = xnode.attributes.begin(), j = xnode.attributes.end();
+    dodoMap<dodo::string, dodo::string, dodoMapStringCompare>::const_iterator i = xnode.attributes.begin(), j = xnode.attributes.end();
     for (; i != j; ++i) {
         io.writeString(statements[STATEMENT_SPACE]);
         io.writeString(i->first);
@@ -813,7 +813,7 @@ processor::make(const node        &xnode,
             io.writeString(xnode.nodeValue);
     }
 
-    dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare>::const_iterator o = xnode.nodeChildren.begin(), p = xnode.nodeChildren.end();
+    dodoMap<dodo::string, dodoArray<node>, dodoMapStringCompare>::const_iterator o = xnode.nodeChildren.begin(), p = xnode.nodeChildren.end();
     dodoArray<node>::const_iterator x, y;
     for (; o != p; ++o) {
         x = o->second.begin();

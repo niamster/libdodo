@@ -2,8 +2,8 @@
  *            dataFormatXmlNode.h
  *
  *  Tue Nov 29 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -66,8 +66,8 @@ namespace dodo {
                      * @brief defines node namespace
                      */
                     struct __namespace__ {
-                        dodoString prefix;  ///< prefix for the namespace
-                        dodoString href;    ///< URL for the namespace
+                        dodo::string prefix;  ///< prefix for the namespace
+                        dodo::string href;    ///< URL for the namespace
                     };
 
                     /**
@@ -82,10 +82,10 @@ namespace dodo {
                      * @param value devines node value
                      * @param ns defines node namespace
                      */
-                    node(const dodoString    &name,
+                    node(const dodo::string    &name,
                          const dodoStringMap &attributes,
-                         const dodoString    &value,
-                         const dodoString    &ns = __dodostring__);
+                         const dodo::string    &value,
+                         const dodo::string    &ns = __dodostring__);
 
                     /**
                      * add child to the node
@@ -104,7 +104,7 @@ namespace dodo {
                      * @param name defines name of child nodes to get
                      * @param recursive defines if walk through all children in deep
                      */
-                    dodoArray<node> children(const dodoString &name,
+                    dodoArray<node> children(const dodo::string &name,
                                              bool             recursive = false);
 
                     /**
@@ -117,33 +117,33 @@ namespace dodo {
                      * @return attribute value
                      * @param name defines attribute name
                      */
-                    dodoString operator[](const dodoString &name);
+                    dodo::string operator[](const dodo::string &name);
 
                     /**
                      * set value of the node
                      * @param value defines value to be set
                      * @param CDATA defines if value is CDATA
                      */
-                    void setValue(const dodoString &value,
+                    void setValue(const dodo::string &value,
                                   bool             CDATA = false);
 
                     /**
                      * @return value of the node
                      */
-                    dodoString value();
+                    dodo::string value();
 
                     dodoStringMap attributes;                                                       ///< attributes
 
-                    dodoString name;                                                                ///< name of the node [[tag]]
+                    dodo::string name;                                                                ///< name of the node [[tag]]
 
                     __namespace__ ns;                                                               ///< namespace of the node
                     __namespace__ nsDef;                                                            ///< namespace definition of the node
 
                   protected:
 
-                    dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> nodeChildren;        ///< children
+                    dodoMap<dodo::string, dodoArray<node>, dodoMapStringCompare> nodeChildren;        ///< children
 
-                    dodoString nodeValue;                                                           ///< value of the node
+                    dodo::string nodeValue;                                                           ///< value of the node
 
                     bool CDATA;                                                                     ///< true if node contains CDATA
                 };

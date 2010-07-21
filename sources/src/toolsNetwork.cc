@@ -2,8 +2,8 @@
  *            toolsNetwork.cc
  *
  *  Thu Sep 20 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -38,6 +38,7 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/toolsNetworkEx.h>
@@ -52,7 +53,7 @@
 using namespace dodo::tools;
 
 network::__host__
-network::host(const dodoString &host)
+network::host(const dodo::string &host)
 {
     hostent *ent = gethostbyname(host.data());
 
@@ -102,8 +103,8 @@ network::host(const dodoString &host)
 
 //-------------------------------------------------------------------
 
-dodoString
-network::hostPrimaryIp(const dodoString &host)
+dodo::string
+network::hostPrimaryIp(const dodo::string &host)
 {
     hostent *ent = gethostbyname(host.data());
 
@@ -156,8 +157,8 @@ network::interfacesNames()
 //-------------------------------------------------------------------
 
 network::__service__
-network::service(const dodoString &host,
-                 const dodoString &protocol)
+network::service(const dodo::string &host,
+                 const dodo::string &protocol)
 {
     servent *ent = getservbyname(host.data(), protocol.data());
 
@@ -181,7 +182,7 @@ network::service(const dodoString &host,
 
 network::__service__
 network::service(int              port,
-                 const dodoString &protocol)
+                 const dodo::string &protocol)
 {
     servent *ent = getservbyport(port, protocol.data());
 
@@ -204,7 +205,7 @@ network::service(int              port,
 //-------------------------------------------------------------------
 
 network::__interface__
-network::interface(const dodoString &interface)
+network::interface(const dodo::string &interface)
 {
     int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
     if (socket == -1)
@@ -288,10 +289,10 @@ network::interface(const dodoString &interface)
 
 //-------------------------------------------------------------------
 
-dodoString
+dodo::string
 network::localName()
 {
-    dodoString temp0;
+    dodo::string temp0;
     char *temp1 = new char[256];
 
     if (::gethostname(temp1, 255) == -1) {
@@ -300,7 +301,7 @@ network::localName()
         throw exception::basic(exception::MODULE_TOOLSNETWORK, NETWORKEX_LOCALNAME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 
-    temp0.assign(temp1);
+    temp0 = dodo::string(temp1);
 
     delete [] temp1;
 
@@ -310,7 +311,7 @@ network::localName()
 //-------------------------------------------------------------------
 
 void
-network::setLocalName(const dodoString &host)
+network::setLocalName(const dodo::string &host)
 {
     if (::sethostname(host.data(), host.size()) == -1)
         throw exception::basic(exception::MODULE_TOOLSNETWORK, NETWORKEX_SETLOCALNAME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -319,11 +320,11 @@ network::setLocalName(const dodoString &host)
 //-------------------------------------------------------------------
 
 void
-network::mail(const dodoString &to,
-              const dodoString &subject,
-              const dodoString &message,
-              const dodoString &headers,
-              const dodoString &path)
+network::mail(const dodo::string &to,
+              const dodo::string &subject,
+              const dodo::string &message,
+              const dodo::string &headers,
+              const dodo::string &path)
 {
     FILE *sendmail = popen((path + " " + to).data(), "w");
 
@@ -343,15 +344,15 @@ network::mail(const dodoString &to,
 //-------------------------------------------------------------------
 
 void
-network::mail(const dodoString &host,
+network::mail(const dodo::string &host,
               int              port,
-              const dodoString &to,
-              const dodoString &from,
-              const dodoString &subject,
-              const dodoString &message,
-              const dodoString &login,
-              const dodoString &pass,
-              const dodoString &headers)
+              const dodo::string &to,
+              const dodo::string &from,
+              const dodo::string &subject,
+              const dodo::string &message,
+              const dodo::string &login,
+              const dodo::string &pass,
+              const dodo::string &headers)
 {
     using namespace io::network;
 
@@ -366,7 +367,7 @@ network::mail(const dodoString &host,
     bool auth = login.size() > 0 ? true : false;
 
     short family = connection::PROTOCOL_FAMILY_IPV4;
-    if (host.find(":") != dodoString::npos)
+    if (host.find(":") != dodo::string::POSITION_END)
         family = connection::PROTOCOL_FAMILY_IPV6;
 
     exchange ex;
@@ -374,13 +375,13 @@ network::mail(const dodoString &host,
 
     net.connect(host, port, ex);
 
-    dodoString mess;
+    dodo::string mess;
 
     mess = ex.readString();
     ex.writeString("EHLO " + network::localName() + "\r\n");
     mess = ex.readString();
 
-    if (string::stringToI(dodoString(mess.data(), 3)) != 250)
+    if (string::stringToI(dodo::string(mess.data(), 3)) != 250)
         throw exception::basic(exception::MODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_LIBDODO, NETWORKEX_BADMAILHELO, TOOLSNETWORKEX_BADMAILHELO_STR, __LINE__, __FILE__);
 
     if (auth) {
@@ -399,12 +400,12 @@ network::mail(const dodoString &host,
             ex.writeString("AUTH CRAM-MD5\r\n");
             mess = ex.readString();
 
-            if (string::stringToI(dodoString(mess.data(), 3)) != 334)
+            if (string::stringToI(dodo::string(mess.data(), 3)) != 334)
                 throw exception::basic(exception::MODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
-            dodoString ticket = code::decodeBase64(dodoString(mess.data() + 4, mess.size() - 4));
+            dodo::string ticket = code::decodeBase64(dodo::string(mess.data() + 4, mess.size() - 4));
 
-            dodoString md5pass;
+            dodo::string md5pass;
             if (pass.size() > 64)
                 md5pass = code::MD5(pass);
             else
@@ -437,38 +438,38 @@ network::mail(const dodoString &host,
             code::MD5Update(&context, digest, 16);
             code::MD5Final(digest, &context);
 
-            md5pass = code::binToHex(dodoString((char *)&digest, 16));
+            md5pass = code::binToHex(dodo::string((char *)&digest, 16));
 
             ex.writeString(code::encodeBase64(login + " " + md5pass) + "\r\n");
             mess = ex.readString();
 
-            if (string::stringToI(dodoString(mess.data(), 3)) != 235)
+            if (string::stringToI(dodo::string(mess.data(), 3)) != 235)
                 throw exception::basic(exception::MODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
         } else {
             if (isSetFlag(authType, SMTPAUTH_LOGIN)) {
                 ex.writeString("AUTH LOGIN\r\n");
                 mess = ex.readString();
 
-                if (string::stringToI(dodoString(mess.data(), 3)) != 334)
+                if (string::stringToI(dodo::string(mess.data(), 3)) != 334)
                     throw exception::basic(exception::MODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
                 ex.writeString(code::encodeBase64(login) + "\r\n");
                 mess = ex.readString();
 
-                if (string::stringToI(dodoString(mess.data(), 3)) != 334)
+                if (string::stringToI(dodo::string(mess.data(), 3)) != 334)
                     throw exception::basic(exception::MODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
                 ex.writeString(code::encodeBase64(pass) + "\r\n");
                 mess = ex.readString();
 
-                if (string::stringToI(dodoString(mess.data(), 3)) != 235)
+                if (string::stringToI(dodo::string(mess.data(), 3)) != 235)
                     throw exception::basic(exception::MODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
             } else {
                 if (isSetFlag(authType, SMTPAUTH_PLAIN)) {
                     ex.writeString("AUTH PLAIN" + code::encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
                     mess = ex.readString();
 
-                    if (string::stringToI(dodoString(mess.data(), 3)) != 334)
+                    if (string::stringToI(dodo::string(mess.data(), 3)) != 334)
                         throw exception::basic(exception::MODULE_TOOLSNETWORK, NETWORKEX_MAIL, exception::ERRNO_ERRNO, NETWORKEX_BADMAILAUTH, TOOLSNETWORKEX_BADMAILAUTH_STR, __LINE__, __FILE__);
                 }
             }

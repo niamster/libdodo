@@ -25,7 +25,7 @@ handler(exchange &ex)
 
     dialogue d(ex, POST_SIZE_LIMIT, true);
 
-    d.setCookie(cookie("test", "Ni@m"));
+    d.setCookie(cookie("test", "Dmytro Milinevskyy"));
 
         ///increment counter in shared memory
     int *inc = (int *)object.acquire();
@@ -108,7 +108,7 @@ main(int  argc UNUSED,
 
         delete shared;
     } catch (dodo::exception::basic &ex)   {
-        cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
     }
 
     return 0;

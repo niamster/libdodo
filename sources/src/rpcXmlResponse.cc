@@ -2,8 +2,8 @@
  *            rpcXmlResponse.cc
  *
  *  Wed Apr 09 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -42,7 +42,7 @@ using namespace dodo::rpc::xml;
 dodo::rpc::response
 response::xmlToResponse(dodo::data::format::xml::node &node)
 {
-    dodoMap<dodoString, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.nodeChildren.begin();
+    dodoMap<dodo::string, dodoArray<dodo::data::format::xml::node>, dodoMapStringCompare>::iterator i = node.nodeChildren.begin();
     if (i == node.nodeChildren.end())
         return rpc::response();
 
@@ -103,14 +103,14 @@ response::responseToXml(const rpc::response &data)
             param.nodeChildren.clear();
 
             nodeArr.assign(1, value::valueToXml(*i));
-            param.nodeChildren.insert(make_pair("node", nodeArr));
+            param.nodeChildren.insert(std::make_pair("node", nodeArr));
 
             subNodeArr.push_back(param);
         }
-        params.nodeChildren.insert(make_pair("param", subNodeArr));
+        params.nodeChildren.insert(std::make_pair("param", subNodeArr));
 
         nodeArr.assign(1, params);
-        resp.nodeChildren.insert(make_pair(params.name, nodeArr));
+        resp.nodeChildren.insert(std::make_pair(params.name, nodeArr));
     } else {
         dodo::data::format::xml::node fault;
         fault.name = "fault";
@@ -118,11 +118,11 @@ response::responseToXml(const rpc::response &data)
         dodoArray<rpc::value>::const_iterator i = data.rValues.begin();
         if (i != data.rValues.end()) {
             nodeArr.assign(1, value::valueToXml(*i));
-            fault.nodeChildren.insert(make_pair("node", nodeArr));
+            fault.nodeChildren.insert(std::make_pair("node", nodeArr));
         }
 
         nodeArr.assign(1, fault);
-        resp.nodeChildren.insert(make_pair(fault.name, nodeArr));
+        resp.nodeChildren.insert(std::make_pair(fault.name, nodeArr));
     }
 
     return resp;

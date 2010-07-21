@@ -2,8 +2,8 @@
  *            rpcMethod.h
  *
  *  Sat Mar 22 2008
- *  Copyright  2008  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2008  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -76,7 +76,7 @@ namespace dodo {
              * set method name
              * @param name defines method name
              */
-            void setName(const dodoString &name);
+            void setName(const dodo::string &name);
 
             /**
              * clear arguments information
@@ -92,7 +92,7 @@ namespace dodo {
           private:
 
             dodoArray<value> arguments; ///< method arguments
-            dodoString name;            ///< method name
+            dodo::string name;            ///< method name
         };
     };
 };

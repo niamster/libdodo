@@ -2,8 +2,8 @@
  *            toolsRegexp.cc
  *
  *  Thu Sep 20 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -79,7 +79,7 @@ regexp::regexp() : extended(true),
 
 //-------------------------------------------------------------------
 
-regexp::regexp(const dodoString &pattern) : extended(true),
+regexp::regexp(const dodo::string &pattern) : extended(true),
                                             icase(false),
                                             greedy(true),
                                             multiline(false),
@@ -110,8 +110,8 @@ regexp::~regexp()
 //-------------------------------------------------------------------
 
 bool
-regexp::match(const dodoString &pattern,
-              const dodoString &sample,
+regexp::match(const dodo::string &pattern,
+              const dodo::string &sample,
               dodoStringArray  &pockets)
 {
     try {
@@ -129,7 +129,7 @@ regexp::match(const dodoString &pattern,
 //-------------------------------------------------------------------
 
 bool
-regexp::match(const dodoString &sample,
+regexp::match(const dodo::string &sample,
               dodoStringArray  &pockets)
 {
     pockets.clear();
@@ -142,7 +142,7 @@ regexp::match(const dodoString &sample,
 
     dodoArray<__regex_match__>::const_iterator i(boundaries.begin()), j(boundaries.end());
     for (; i != j; ++i)
-        pockets.push_back(dodoString(sample.data() + i->begin, i->end - i->begin));
+        pockets.push_back(dodo::string(sample.data() + i->begin, i->end - i->begin));
 
     return true;
 }
@@ -150,7 +150,7 @@ regexp::match(const dodoString &sample,
 //-------------------------------------------------------------------
 
 bool
-regexp::boundMatch(const dodoString &sample)
+regexp::boundMatch(const dodo::string &sample)
 {
     boundaries.clear();
 
@@ -210,7 +210,7 @@ regexp::boundMatch(const dodoString &sample)
 //-------------------------------------------------------------------
 
 void
-regexp::compile(const dodoString &pattern)
+regexp::compile(const dodo::string &pattern)
 {
     int bits(0);
 
@@ -252,9 +252,9 @@ regexp::compile(const dodoString &pattern)
 
 //-------------------------------------------------------------------
 
-dodoString
-regexp::replace(const dodoString      &pattern,
-                const dodoString      &sample,
+dodo::string
+regexp::replace(const dodo::string      &pattern,
+                const dodo::string      &sample,
                 const dodoStringArray &replacements)
 {
     try {
@@ -271,8 +271,8 @@ regexp::replace(const dodoString      &pattern,
 
 //-------------------------------------------------------------------
 
-dodoString
-regexp::replace(const dodoString      &sample,
+dodo::string
+regexp::replace(const dodo::string      &sample,
                 const dodoStringArray &replacements)
 {
     if (!boundMatch(sample))
@@ -283,7 +283,7 @@ regexp::replace(const dodoString      &sample,
     dodoStringArray::const_iterator k(replacements.begin());
     int subs = replacements.size();
 
-    dodoString temp = sample;
+    dodo::string temp = sample;
 
     long shift = 0;
     unsigned long begin(0), end(0);

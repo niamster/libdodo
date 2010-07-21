@@ -2,8 +2,8 @@
  *            toolsMisc.h
  *
  *  Wed Aug 24 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Copyright  2005  Dmytro Milinevskyy
+ *  milinevskyy@gmail.com
  ****************************************************************************/
 
 /*
@@ -41,7 +41,7 @@ namespace dodo {
          * @brief defines escape function for split/join
          * @param dta defines data to escape
          */
-        typedef dodoString (*escape)(const dodoString &data);
+        typedef dodo::string (*escape)(const dodo::string &data);
 
         /**
          * @class misc
@@ -78,7 +78,7 @@ namespace dodo {
              * RANDOM_STRENGTH_STRONG may block
              * nulls are replaced with '*'
              */
-            static dodoString stringRandom(unsigned long size,
+            static dodo::string stringRandom(unsigned long size,
                                            short         strength = RANDOM_STRENGTH_DEFAULT);
 
             /**
@@ -160,7 +160,7 @@ namespace dodo {
              * @param icase defines case sensitivity
              */
             static bool isInList(const dodoStringList &arr,
-                                 const dodoString     &needle,
+                                 const dodo::string     &needle,
                                  bool                 icase = false);
 
             /**
@@ -170,7 +170,7 @@ namespace dodo {
              * @param icase defines case sensitivity
              */
             static bool isInArray(const dodoStringArray &arr,
-                                  const dodoString      &needle,
+                                  const dodo::string      &needle,
                                   bool                  icase = false);
 
             /**
@@ -180,8 +180,8 @@ namespace dodo {
              * @param limit defines maximum number of parts to divide string; -1 for unlimit
              * @note split will stop when amount of parts exceed limit and the rest of the buffer will be appended to the last piece
              */
-            static dodoStringArray split(const dodoString &string,
-                                         const dodoString &separator,
+            static dodoStringArray split(const dodo::string &string,
+                                         const dodo::string &separator,
                                          int              limit = -1);
 
             /**
@@ -190,8 +190,8 @@ namespace dodo {
              * @param separator defines separator string
              * @param limit defines maximum number of parts to divide string; -1 for unlimit
              */
-            static dodoString join(const dodoStringArray &fields,
-                                   const dodoString      &separator,
+            static dodo::string join(const dodoStringArray &fields,
+                                   const dodo::string      &separator,
                                    int                   limit = -1);
         };
     };
