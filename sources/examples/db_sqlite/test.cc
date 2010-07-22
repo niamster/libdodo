@@ -35,7 +35,7 @@ main(int  argc UNUSED,
      char **argv UNUSED)
 {
 #ifdef SQLITE3_EXT
-    try {
+    dodo_try {
         tools::filesystem::unlink("test.lite", true);
 
         sqlite::__connection_options__ ci("test.lite");
@@ -46,9 +46,9 @@ main(int  argc UNUSED,
         db.addXExec(xexec::ACTION_PREEXEC, ::hook, (void *)"id");
 #endif
 
-        try {
+        dodo_try {
             db.exec(sql::query("DROP TABLE test"));
-        } catch (...)   {
+        } dodo_catch (exception::basic *e UNUSED)   {
         }
 
         db.exec(sql::query("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id int default NULL, i int default NULL, b longblob)"));
@@ -103,11 +103,11 @@ main(int  argc UNUSED,
                 cout << "[" << *m << "]\t";
             cout << endl;
         }
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << endl << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << endl << endl;
     }
 #else
-    cout << "No SQLite exteinsion was compiled!";
+    cout << "No SQLite *eteinsion was compiled!";
 #endif
 
     return 0;

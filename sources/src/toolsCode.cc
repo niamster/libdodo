@@ -273,7 +273,7 @@ code::codesetConversion(const dodo::string &buffer,
 {
     iconv_t conv = iconv_open(toCode.data(), fromCode.data());
     if (conv == (iconv_t)(-1))
-        throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     size_t in, out, outBefore;
     char *inFake, *outFake;
@@ -293,7 +293,7 @@ code::codesetConversion(const dodo::string &buffer,
     {
         delete [] outBuffer;
 
-        throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_CODESETCONVERSION, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 
     dodo::string result;
@@ -324,7 +324,7 @@ code::zCompress(const dodo::string &buffer,
     strm.opaque = Z_NULL;
 
     if ((ret = deflateInit2(&strm, level, Z_DEFLATED, 15, level, type)) < 0)
-        throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 
     strm.avail_in =  buffer.size();
     strm.next_in = (Bytef *)buffer.data();
@@ -340,7 +340,7 @@ code::zCompress(const dodo::string &buffer,
         if ((ret = deflate(&strm, Z_FINISH)) < 0) {
             delete [] byteBuf;
 
-            throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
         }
 
         strBuf += dodo::string((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -368,7 +368,7 @@ code::zDecompress(const dodo::string &buffer)
     strm.opaque = Z_NULL;
 
     if ((ret = inflateInit2(&strm, 15)) < 0)
-        throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 
     byteBuf = new Bytef[ZLIB_CHUNK];
 
@@ -384,7 +384,7 @@ code::zDecompress(const dodo::string &buffer)
         if ((ret = inflate(&strm, Z_NO_FLUSH)) < 0) {
             delete [] byteBuf;
 
-            throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
         }
 
         strBuf += dodo::string((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -811,7 +811,7 @@ code::decodeASCII85(const dodo::string &string)
                         case 'z':
 
                             if (count != 0)
-                                throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+                                dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
                             result += dodo::string('\0', 4);
 
@@ -831,7 +831,7 @@ code::decodeASCII85(const dodo::string &string)
                                 break;
                             }
 
-                            throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+                            dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
                         case '\n':
                         case '\r':
@@ -847,7 +847,7 @@ code::decodeASCII85(const dodo::string &string)
                         default:
 
                             if (string[k] < '!' || string[k] > 'u')
-                                throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
+                                dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_DECODEASCII85, exception::ERRNO_LIBDODO, CODEEX_BADASCII85, TOOLSCODEEX_BADASCII85_STR, __LINE__, __FILE__);
 
                             tuple += (string[k] - '!') * powASCII85[count++];
                             if (count == 5) {
@@ -1070,7 +1070,7 @@ code::bzCompress(const dodo::string &buffer,
 
     int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.data(), len, level, 0, type);
     if (ret != BZ_OK)
-        throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZCOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZCOMPRESSION, TOOLSCODEEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZCOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZCOMPRESSION, TOOLSCODEEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
 
     return dodo::string(dst, len);
 }
@@ -1087,7 +1087,7 @@ code::bzDecompress(const dodo::string &buffer)
 
     int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
     if (ret != BZ_OK)
-        throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONINIT, TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONINIT, TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
 
     int src_len = buffer.size();
     char *src = new char[src_len + 1];
@@ -1121,12 +1121,12 @@ code::bzDecompress(const dodo::string &buffer)
         delete [] src;
         free(dst);
 
-        throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSION, TOOLSCODEEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSION, TOOLSCODEEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
     }
 
     ret = BZ2_bzDecompressEnd(&bzs);
     if (ret != BZ_OK)
-        throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONFINISH, TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_BZDECOMPRESS, exception::ERRNO_BZIP, CODEEX_BADBZDECOMPRESSIONFINISH, TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
 
     return _buffer;
 }

@@ -151,7 +151,7 @@ xexec::removeXExec(int id)
 
 #ifndef DL_FAST
         if (dlclose(current->handle) != 0)
-            throw exception::basic(exception::MODULE_XEXEC, XEXECEX_REMOVEXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_XEXEC, XEXECEX_REMOVEXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
     }
 #endif
@@ -169,7 +169,7 @@ xexec::addXExec(short type,
     else if (type == ACTION_POSTEXEC)
         return addXExec(postExec, func, data);
     else
-        throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_LIBDODO, XEXECEX_WRONGTYPE, XEXECEX_WRONGTYPE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_LIBDODO, XEXECEX_WRONGTYPE, XEXECEX_WRONGTYPE_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -223,11 +223,11 @@ xexec::module(const dodo::string &module,
     void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
     if (handle == NULL)
-        throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     initModule init = (initModule)dlsym(handle, "initXexecModule");
     if (init == NULL)
-        throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     __module__ mod = init(initData);
 
@@ -237,7 +237,7 @@ xexec::module(const dodo::string &module,
 
 #ifndef DL_FAST
     if (dlclose(handle) != 0)
-        throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_XEXEC, XEXECEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 
@@ -263,17 +263,17 @@ xexec::addXExec(const dodo::string &module,
     e.handle = dlopen(module.data(), RTLD_LAZY);
 #endif
     if (e.handle == NULL)
-        throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     initModule init = (initModule)dlsym(e.handle, "initXexecModule");
     if (init == NULL)
-        throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     __module__ mod = init(initData);
 
     hook in = (hook)dlsym(e.handle, mod.hook);
     if (in == NULL)
-        throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_XEXEC, XEXECEX_ADDXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     e.func = in;
     memcpy(e.cookie, mod.cookie, 32);

@@ -18,7 +18,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         io::memory io0;
 
         io0.writeString("!12345890#!!@\n");
@@ -56,8 +56,8 @@ main(int  argc UNUSED,
         cout << io0 << endl;
         cout << "io1:" << endl;
         cout << io1 << endl;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

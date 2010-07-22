@@ -56,7 +56,7 @@ filesystem::unlink(const dodo::string &path,
 
     if (::lstat(path.data(), &st) == -1)
         if (errno != ENOENT || !force)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_UNLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_UNLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     if (S_ISDIR(st.st_mode))
         status = ::rmdir(path.data());
@@ -65,7 +65,7 @@ filesystem::unlink(const dodo::string &path,
 
     if (status == -1)
         if (errno != ENOENT || !force)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_UNLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_UNLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -75,7 +75,7 @@ filesystem::rename(const dodo::string &oldPath,
                    const dodo::string &newPath)
 {
     if (::rename(oldPath.data(), newPath.data()) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RENAME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RENAME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
 }
 
 //-------------------------------------------------------------------
@@ -89,14 +89,14 @@ filesystem::symlink(const dodo::string &oldPath,
         struct stat st;
         if (::lstat(newPath.data(), &st) != -1) {
             if (!S_ISLNK(st.st_mode))
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, newPath);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, newPath);
             else if (::unlink(newPath.data()) == -1)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
         }
     }
 
     if (::symlink(oldPath.data(), newPath.data()) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
 }
 
 //-------------------------------------------------------------------
@@ -106,7 +106,7 @@ filesystem::link(const dodo::string &oldPath,
                  const dodo::string &newPath)
 {
     if  (::link(oldPath.data(), newPath.data()) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_LINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_LINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
 }
 
 //-------------------------------------------------------------------
@@ -116,7 +116,7 @@ filesystem::chown(const dodo::string &path,
                   int              uid)
 {
     if (::chown(path.data(), uid, (unsigned int)-1) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_CHOWN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_CHOWN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -126,7 +126,7 @@ filesystem::chgrp(const dodo::string &path,
                   int              gid)
 {
     if (::chown(path.data(), (unsigned int)-1, gid) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_CHGRP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_CHGRP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -136,7 +136,7 @@ filesystem::userOwner(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_USEROWNER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_USEROWNER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     return st.st_uid;
 }
@@ -148,7 +148,7 @@ filesystem::groupOwner(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GROUPOWNER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GROUPOWNER, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     return st.st_gid;
 }
@@ -167,7 +167,7 @@ filesystem::touch(const dodo::string &path,
     };
 
     if (::utime(path.data(), &temp) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_TOUCH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_TOUCH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -177,7 +177,7 @@ filesystem::mkfifo(const dodo::string &path,
                    int              permissions)
 {
     if (::mkfifo(path.data(), toRealPermission(permissions)) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKFIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKFIFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -190,10 +190,10 @@ filesystem::mkdir(const dodo::string &path,
         if (errno == EEXIST) {
             struct stat st;
             if (::lstat(path.data(), &st) == -1)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
             if (!S_ISDIR(st.st_mode))
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_LIBDODO, FILESYSTEMEX_NOTADIR, TOOLSFILESYSTEMEX_NOTADIR_STR, __LINE__, __FILE__, path);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_LIBDODO, FILESYSTEMEX_NOTADIR, TOOLSFILESYSTEMEX_NOTADIR_STR, __LINE__, __FILE__, path);
         } else {
             mkdir(dirname(path), permissions);
 
@@ -201,10 +201,10 @@ filesystem::mkdir(const dodo::string &path,
                 if (errno == EEXIST) {
                     struct stat st;
                     if (::lstat(path.data(), &st) == -1)
-                        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
                     if (!S_ISDIR(st.st_mode))
-                        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_LIBDODO, FILESYSTEMEX_NOTADIR, TOOLSFILESYSTEMEX_NOTADIR_STR, __LINE__, __FILE__, path);
+                        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKDIR, exception::ERRNO_LIBDODO, FILESYSTEMEX_NOTADIR, TOOLSFILESYSTEMEX_NOTADIR_STR, __LINE__, __FILE__, path);
                 }
             }
         }
@@ -218,7 +218,7 @@ filesystem::chmod(const dodo::string &path,
                   int              permissions)
 {
     if (::chmod(path.data(), toRealPermission(permissions)) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_CHMOD, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_CHMOD, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -269,7 +269,7 @@ filesystem::rm(const dodo::string &path,
     struct stat st;
     if (::lstat(path.data(), &st) == -1) {
         if (errno != ENOENT || !force)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
         else
             return ;
     }
@@ -277,7 +277,7 @@ filesystem::rm(const dodo::string &path,
     if (!S_ISDIR(st.st_mode)) {
         if (::unlink(path.data()) == -1)
             if (errno != ENOENT || !force)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
     } else {
         dodo::string attached;
 
@@ -285,7 +285,7 @@ filesystem::rm(const dodo::string &path,
 
         if (directory == NULL) {
             if (errno != ENOENT || !force)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
         } else {
             dirent *dd;
 
@@ -297,21 +297,21 @@ filesystem::rm(const dodo::string &path,
 
                 if (::lstat(attached.data(), &st) == -1)
                     if (errno != ENOENT || !force)
-                        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
                 if (S_ISDIR(st.st_mode))
                     filesystem::rm(attached.data());
                 else if (::unlink(attached.data()) == -1)
                     if (errno != ENOENT || !force)
-                        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
             }
 
             if (closedir(directory) == -1)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
             if (::rmdir(path.data()) == -1)
                 if (errno != ENOENT || !force)
-                    throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                    dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
         }
     }
 }
@@ -323,7 +323,7 @@ filesystem::permissions(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_PERMISSIONS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_PERMISSIONS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     int mode(PERMISSION_NONE);
 
@@ -366,7 +366,7 @@ filesystem::fileType(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILETYPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILETYPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     st.st_mode &= ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
 
@@ -412,7 +412,7 @@ filesystem::size(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     return st.st_size;
 }
@@ -424,7 +424,7 @@ filesystem::accessTime(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_ACCTIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_ACCTIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     return st.st_atime;
 }
@@ -436,7 +436,7 @@ filesystem::modificationTime(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MODTIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MODTIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     return st.st_mtime;
 }
@@ -450,7 +450,7 @@ filesystem::file(const dodo::string &path)
 
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILEINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     file.name = dodo::string(::basename((char *)path.data()));
     file.type = filesystem::fileType(path);
@@ -472,7 +472,7 @@ filesystem::dir(const dodo::string &path)
     dodoArray<__file__> dir;
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_DIRINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_DIRINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     if (!S_ISDIR(st.st_mode))
         return dir;
@@ -480,7 +480,7 @@ filesystem::dir(const dodo::string &path)
     DIR *directory = opendir(path.data());
 
     if (directory == NULL)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_DIRINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_DIRINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     dirent *dd;
     dodo::string attached;
@@ -502,17 +502,17 @@ filesystem::followSymlink(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FOLLOWSYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FOLLOWSYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     char buffer[PATH_MAXLEN + 1];
 
     if (!S_ISLNK(st.st_mode))
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 
     int count = 0;
 
     if ((count = ::readlink(path.data(), buffer, PATH_MAXLEN)) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FOLLOWSYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FOLLOWSYMLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     return buffer;
 }
@@ -524,14 +524,14 @@ filesystem::fileContents(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     if (!S_ISREG(st.st_mode))
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 
     FILE *file = fopen(path.data(), "r");
     if (file == NULL)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     char buffer[IO_BLOCKSIZE];
 
@@ -548,7 +548,7 @@ filesystem::fileContents(const dodo::string &path)
                 case EOVERFLOW:
                 case EROFS:
 
-                    throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                    dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
             }
         }
 
@@ -563,7 +563,7 @@ filesystem::fileContents(const dodo::string &path)
                 case EOVERFLOW:
                 case EROFS:
 
-                    throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                    dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
             }
         }
 
@@ -571,7 +571,7 @@ filesystem::fileContents(const dodo::string &path)
     }
 
     if (fclose(file) != 0)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTS, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     return retS;
 }
@@ -583,14 +583,14 @@ filesystem::fileContentsInArray(const dodo::string &path)
 {
     struct stat st;
     if (::lstat(path.data(), &st) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTSARR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTSARR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     if (!S_ISREG(st.st_mode))
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTSARR, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTSARR, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 
     FILE *file = fopen(path.data(), "r");
     if (file == NULL)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTSARR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTSARR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     char buffer[LINE_MAXLEN];
     dodoStringArray arr;
@@ -599,7 +599,7 @@ filesystem::fileContentsInArray(const dodo::string &path)
         arr.push_back(buffer);
 
     if (fclose(file) != 0)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTSARR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FILECONTENTSARR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     return arr;
 }
@@ -619,7 +619,7 @@ dodo::string
 filesystem::basename(const dodo::string &path)
 {
     if (path.size() >= PATH_MAXLEN)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_BASENAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_BASENAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
 
     char temp[PATH_MAXLEN];
 
@@ -632,7 +632,7 @@ dodo::string
 filesystem::basename(const dodo::string &path)
 {
     if (path.size() >= PATH_MAXLEN)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_BASENAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_BASENAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
 
     char temp[PATH_MAXLEN];
 
@@ -648,7 +648,7 @@ dodo::string
 filesystem::dirname(const dodo::string &path)
 {
     if (path.size() >= PATH_MAXLEN)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_DIRNAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_DIRNAME, exception::ERRNO_LIBDODO, FILESYSTEMEX_TOOLONGPATH, TOOLSFILESYSTEMEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
 
     char temp[PATH_MAXLEN];
 
@@ -678,49 +678,49 @@ filesystem::copy(const dodo::string &from,
     struct stat stFrom, stTo;
 
     if (::lstat(from.data(), &stFrom) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 
     if (::lstat(to.data(), &stTo) == -1) {
         if (errno != ENOENT)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
     } else {
         if (force) {
             if (!S_ISDIR(stTo.st_mode)) {
                 if (::unlink(to.data()) == -1)
-                    throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_UNLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+                    dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_UNLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
             } else if (::rmdir(to.data()) == -1)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_UNLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_UNLINK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
         } else
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, to);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, to);
     }
 
     if (!S_ISREG(stFrom.st_mode)) {
         if (S_ISDIR(stFrom.st_mode)) {
             if (::mkdir(to.data(), stFrom.st_mode) == 1)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
         } else if (S_ISLNK(stFrom.st_mode)) {
             char buffer[PATH_MAXLEN];
             int count = 0;
 
             if ((count = ::readlink(from.data(), buffer, PATH_MAXLEN)) == -1)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 
             buffer[count] = '\0';
 
             if (::symlink(buffer, to.data()) == -1)
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, dodo::string(buffer) + "->" + to);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, dodo::string(buffer) + "->" + to);
         } else if (::mknod(to.data(), stFrom.st_mode, 0) == 1)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
     } else {
         long iter = stFrom.st_size / IO_BLOCKSIZE, rest = stFrom.st_size % IO_BLOCKSIZE;
 
         FILE *fromFile = fopen(from.data(), "r");
         if (fromFile == NULL)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 
         FILE *toFile = fopen(to.data(), "w+");
         if (toFile == NULL)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 
         char buffer[IO_BLOCKSIZE];
 
@@ -734,7 +734,7 @@ filesystem::copy(const dodo::string &from,
                     case EOVERFLOW:
                     case EROFS:
 
-                        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+                        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
                 }
             }
 
@@ -746,7 +746,7 @@ filesystem::copy(const dodo::string &from,
                     case EOVERFLOW:
                     case EROFS:
 
-                        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+                        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
                 }
             }
         }
@@ -759,7 +759,7 @@ filesystem::copy(const dodo::string &from,
                     case EOVERFLOW:
                     case EROFS:
 
-                        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+                        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
                 }
             }
 
@@ -771,16 +771,16 @@ filesystem::copy(const dodo::string &from,
                     case EOVERFLOW:
                     case EROFS:
 
-                        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+                        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
                 }
             }
         }
 
         if (fclose(fromFile) != 0)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 
         if (fclose(toFile) != 0)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
     }
 }
 
@@ -805,21 +805,21 @@ filesystem::copyDir(const dodo::string &from,
     struct stat stFrom, stTo;
 
     if (::lstat(from.data(), &stFrom) == -1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 
     if (::lstat(to.data(), &stTo) == -1) {
         if (errno != ENOENT)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
     } else if (force)
         filesystem::rm(to, force);
     else
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, to);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, to);
 
     if (!S_ISDIR(stFrom.st_mode))
         filesystem::copy(from, to, force);
     else {
         if (::mkdir(to.data(), stFrom.st_mode) == -1)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 
         dodo::string attachedFrom, attachedTo;
 
@@ -828,7 +828,7 @@ filesystem::copyDir(const dodo::string &from,
             if (errno == ENOENT)
                 return ;
             else
-                throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+                dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
         }
 
         dirent *dd;
@@ -844,7 +844,7 @@ filesystem::copyDir(const dodo::string &from,
         }
 
         if (closedir(directory) == -1)
-            throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+            dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPYDIR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
     }
 }
 
@@ -906,11 +906,11 @@ filesystem::_writeToFile(const dodo::string &path,
 {
     FILE *file = fopen(path.data(), mode);
     if (file == NULL)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     unsigned long size = content.size();
     if (size > 0 && fwrite(content.data(), size, 1, file) != 1)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -922,7 +922,7 @@ filesystem::_writeToFile(const dodo::string      &path,
 {
     FILE *file = fopen(path.data(), mode);
     if (file == NULL)
-        throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     dodoStringArray::const_iterator i = content.begin(), j = content.end();
     for (; i != j; ++i) {
@@ -938,7 +938,7 @@ filesystem::_writeToFile(const dodo::string      &path,
                 case ENOMEM:
                 case ENXIO:
 
-                    throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                    dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
             }
         }
 
@@ -954,7 +954,7 @@ filesystem::_writeToFile(const dodo::string      &path,
                 case ENOMEM:
                 case ENXIO:
 
-                    throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                    dodo_throw exception::basic(exception::MODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
             }
         }
     }

@@ -75,7 +75,7 @@ void
 exchange::flush() const
 {
     if (FCGX_FFlush(request->request->out) == -1)
-        throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_FLUSH, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOFLUSH, CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_FLUSH, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOFLUSH, CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -91,7 +91,7 @@ exchange::getenv(const char *buf)
 int
 exchange::inDescriptor() const
 {
-    throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT, CGIFASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
+    dodo_throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT, CGIFASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -99,7 +99,7 @@ exchange::inDescriptor() const
 int
 exchange::outDescriptor() const
 {
-    throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT, CGIFASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
+    dodo_throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT, CGIFASTEXCHANGEEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -118,7 +118,7 @@ exchange::_write(const char *const data) const
     long n;
 
     if ((n = FCGX_PutStr(data, bs, request->request->out)) == -1)
-        throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 
     return n;
 }
@@ -131,7 +131,7 @@ exchange::_writeString(const char * const data) const
     long n;
 
     if ((n = FCGX_PutStr(data, strnlen(data, bs), request->request->out)) == -1)
-        throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITESTRING, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITESTRING, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 
     return n;
 }

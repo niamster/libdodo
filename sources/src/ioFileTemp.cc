@@ -60,7 +60,7 @@ temp::temp(bool  open,
         if (handle->file == NULL) {
             delete handle;
 
-            throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     }
 }
@@ -87,14 +87,14 @@ temp::temp(const temp &fd) : block::channel(protection),
         if (oldDesc == -1) {
             delete handle;
 
-            throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         newDesc = dup(oldDesc);
         if (newDesc == -1) {
             delete handle;
 
-            throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         handle->file = fdopen(newDesc, "r+");
@@ -102,7 +102,7 @@ temp::temp(const temp &fd) : block::channel(protection),
         if (handle->file == NULL) {
             delete handle;
 
-            throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_TEMP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     }
 }
@@ -126,7 +126,7 @@ temp::clone(const temp &fd)
 
     if (handle->file != NULL) {
         if (fclose(handle->file) != 0)
-            throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         handle->file = NULL;
     }
@@ -140,16 +140,16 @@ temp::clone(const temp &fd)
 
         oldDesc = fileno(fd.handle->file);
         if (oldDesc == -1)
-            throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         newDesc = dup(oldDesc);
         if (newDesc == -1)
-            throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         handle->file = fdopen(newDesc, "r+");
 
         if (handle->file == NULL)
-            throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 }
 
@@ -166,14 +166,14 @@ temp::open()
 
     if (handle->file != NULL) {
         if (fclose(handle->file) != 0)
-            throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         handle->file = NULL;
     }
 
     handle->file = tmpfile();
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOFILETEMP, TEMPEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #ifndef IO_WO_XEXEC
     performPostExec(OPERATION_OPEN);

@@ -37,11 +37,13 @@ main(int  argc UNUSED,
 
         return 1;
     }
+	
+	exception::basic *e;
 
     __connection_options__ *ci;
     connector *db;
 
-    try {
+    dodo_try {
         if (strcasecmp(argv[1], "postgresql") == 0) {
 #ifdef POSTGRESQL_EXT
             ci = new postgresql::__connection_options__("test", argc>2?argv[2]:"localhost", "postgres", "", 5432);
@@ -89,10 +91,10 @@ main(int  argc UNUSED,
 #endif
         }
 
-        try {
+        dodo_try {
             db->exec(sql::query("DROP TABLE test"));
-        } catch (dodo::exception::basic &ex)   {
-            cout << (dodo::string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+        } dodo_catch (e)   {
+            cout << (dodo::string)*e << endl << e->file << endl << e->message << endl << e->line << endl << endl;
         }
 
         if (strcasecmp(argv[1], "postgresql") == 0)
@@ -100,10 +102,10 @@ main(int  argc UNUSED,
         else
             db->exec(sql::query("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id integer default NULL, i integer default NULL, b longblob)"));
 
-        try {
+        dodo_try {
             ((sql::constructor *)db)->requestFieldsTypes("test");
-        } catch (dodo::exception::basic &ex)    {
-            cout << (dodo::string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+        } dodo_catch (e)    {
+            cout << (dodo::string)*e << endl << e->file << endl << e->message << endl << e->line << endl << endl;
 
             ((sql::constructor *)db)->setFieldType("test", "t0", sql::FIELD_TEXT);
             ((sql::constructor *)db)->setFieldType("test", "t1", sql::FIELD_TEXT);
@@ -190,8 +192,8 @@ main(int  argc UNUSED,
 
         delete db;
         delete ci;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+    } dodo_catch (e)   {
+        cout << (dodo::string)*e << endl << e->file << endl << e->message << endl << e->line << endl << endl;
     }
 
     return 0;

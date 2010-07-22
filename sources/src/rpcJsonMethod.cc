@@ -45,7 +45,7 @@ method::jsonToMethod(dodo::data::format::json::node &node,
                      long                           &id)
 {
     if (node.valueDataType != dodo::data::format::json::node::DATA_OBJECT)
-        throw exception::basic(exception::MODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
 
     rpc::method meth;
 
@@ -57,7 +57,7 @@ method::jsonToMethod(dodo::data::format::json::node &node,
 
     if (params.valueDataType != dodo::data::format::json::node::DATA_ARRAY &&
         params.valueDataType != dodo::data::format::json::node::DATA_OBJECT)
-        throw exception::basic(exception::MODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_PARAMSNOTANARRAY, RPCJSONMETHODEX_PARAMSNOTANARRAY_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, exception::ERRNO_LIBDODO, METHODEX_PARAMSNOTANARRAY, RPCJSONMETHODEX_PARAMSNOTANARRAY_STR, __LINE__, __FILE__);
 
     if (params.valueDataType == dodo::data::format::json::node::DATA_ARRAY) {
         dodoArray<dodo::data::format::json::node>::iterator

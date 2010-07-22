@@ -59,7 +59,7 @@ memory::memory(char          *a_data,
         if (flags & FLAGS_EXTERN)
             data = a_data;
         else
-            throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_MEMORY, exception::ERRNO_LIBDODO, MEMORYEX_WRONGFLAGS, IOMEMORYEX_WRONGFLAGS_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_MEMORY, exception::ERRNO_LIBDODO, MEMORYEX_WRONGFLAGS, IOMEMORYEX_WRONGFLAGS_STR, __LINE__, __FILE__);
     }
 }
 
@@ -133,7 +133,7 @@ memory::~memory()
 int
 memory::inDescriptor() const
 {
-    throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
+    dodo_throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -141,7 +141,7 @@ memory::inDescriptor() const
 int
 memory::outDescriptor() const
 {
-    throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
+    dodo_throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, MEMORYEX_CANTBEUSEDWITHIOEVENT, IOMEMORYEX_CANTBEUSEDWITHIOEVENT_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -198,7 +198,7 @@ unsigned long
 memory::_read(char * const a_data) const
 {
     if (pos + bs > size)
-        throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__READ, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__READ, exception::ERRNO_LIBDODO, MEMORYEX_OUTOFBOUNDS, IOMEMORYEX_OUTOFBOUNDS_STR, __LINE__, __FILE__);
 
     memcpy(a_data, data + pos, bs);
 
@@ -212,7 +212,7 @@ memory::_write(const char *const a_data) const
 {
     if (append) {
         if (flags & FLAGS_FIXED_LENGTH) {
-            throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_APPENDTOFIXED, IOMEMORYEX_APPENDTOFIXED_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_APPENDTOFIXED, IOMEMORYEX_APPENDTOFIXED_STR, __LINE__, __FILE__);
         } else {
             char *newData = new char[size + bs];
             memcpy(newData, data, size);
@@ -225,7 +225,7 @@ memory::_write(const char *const a_data) const
         unsigned long shift = pos + bs;
         if (shift > size) {
             if (flags & FLAGS_FIXED_LENGTH) {
-                throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
             } else {
                 shift -= size;
                 char *newData = new char[size + shift];
@@ -253,7 +253,7 @@ memory::erase()
     unsigned long shift = pos + bs;
     if (shift > size) {
         if (flags & FLAGS_FIXED_LENGTH) {
-            throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_ERASE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX_ERASE, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
         } else {
             shift -= size;
             char *newData = new char[size + shift];
@@ -295,7 +295,7 @@ unsigned long
 memory::_writeString(const char *const a_data) const
 {
     if (flags & FLAGS_FIXED_LENGTH)
-        throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITESTRING, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOMEMORY, MEMORYEX__WRITESTRING, exception::ERRNO_LIBDODO, MEMORYEX_EXTENDFIXED, IOMEMORYEX_EXTENDFIXED_STR, __LINE__, __FILE__);
 
     unsigned long _bs = strnlen(a_data, bs);
 

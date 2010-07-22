@@ -126,13 +126,13 @@ exchange::_close(int                     socket,
     int err = SSL_shutdown(handle->handle);
     if (err < 0) {
         unsigned long nerr = ERR_get_error();
-        throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
     }
     if (err == 0) {
         err = SSL_shutdown(handle->handle);
         if (err < 0) {
             unsigned long nerr = ERR_get_error();
-            throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
         }
     }
 
@@ -233,7 +233,7 @@ unsigned long
 exchange::_write(const char * const data) const
 {
     if (socket == -1)
-        throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
     unsigned long blockSize = bs;
     unsigned long bufferSize;
@@ -262,7 +262,7 @@ exchange::_write(const char * const data) const
                     default:
                     {
                         unsigned long nerr = ERR_get_error();
-                        throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+                        dodo_throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
                     }
                 }
             }
@@ -282,7 +282,7 @@ unsigned long
 exchange::_read(char * const data) const
 {
     if (socket == -1)
-        throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
     unsigned long blockSize = bs;
     unsigned long bufferSize;
@@ -311,7 +311,7 @@ exchange::_read(char * const data) const
                     default:
                     {
                         unsigned long nerr = ERR_get_error();
-                        throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+                        dodo_throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
                     }
                 }
             }
@@ -331,7 +331,7 @@ unsigned long
 exchange::_readString(char * const s) const
 {
     if (socket == -1)
-        throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
     long n;
 
@@ -354,7 +354,7 @@ exchange::_readString(char * const s) const
                 default:
                 {
                     unsigned long nerr = ERR_get_error();
-                    throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
                 }
             }
         }

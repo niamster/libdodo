@@ -131,7 +131,7 @@ processor::_preProcessString(const dodo::string &buffer,
         if (i == dodo::string::POSITION_END) {
             j = buffer.find(statements[STATEMENT_CLOSE_ST], begin);
             if (j != dodo::string::POSITION_END)
-                throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.data()));
+                dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.data()));
 
             break;
         } else {
@@ -139,7 +139,7 @@ processor::_preProcessString(const dodo::string &buffer,
 
             j = temp.find(statements[STATEMENT_CLOSE_ST], begin);
             if (j != dodo::string::POSITION_END)
-                throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, i), path.data()));
+                dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, i), path.data()));
         }
 
         i += 2;
@@ -151,7 +151,7 @@ processor::_preProcessString(const dodo::string &buffer,
 
                 continue;
             } else
-                throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>`", getLineNumber(newLinePos, j), path.data()));
+                dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>`", getLineNumber(newLinePos, j), path.data()));
         }
 
         if (buffer[i] == '*') {
@@ -161,23 +161,23 @@ processor::_preProcessString(const dodo::string &buffer,
 
                 continue;
             } else
-                throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>`", getLineNumber(newLinePos, j), path.data()));
+                dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>`", getLineNumber(newLinePos, j), path.data()));
         }
 
         j = buffer.find(statements[STATEMENT_CLOSE_ST], i);
         if (j == dodo::string::POSITION_END)
-            throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, j), path.data()));
+            dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, j), path.data()));
 
         if (j > 0 && buffer[j - 1] == '*')
-            throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>", getLineNumber(newLinePos, j), path.data()));
+            dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>", getLineNumber(newLinePos, j), path.data()));
 
         if (j > 0 && buffer[j - 1] == '<')
-            throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>", getLineNumber(newLinePos, j), path.data()));
+            dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>", getLineNumber(newLinePos, j), path.data()));
 
         dodo::string temp = dodo::string(buffer.data() + i, j - i);
 
         if (temp.find(statements[STATEMENT_OPEN_ST]) != dodo::string::POSITION_END)
-            throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.data()));
+            dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, DATATPLPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.data()));
 
         j += 2;
     }
@@ -437,7 +437,7 @@ processor::assign(dodo::string                     varName,
                   const dodoArray<dodoStringMap> &varVal)
 {
     if (tools::string::equal(varName, statements[STATEMENT_DODO]))
-        throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
     global.erase(varName);
     globalArray.erase(varName);
@@ -453,7 +453,7 @@ processor::assign(dodo::string          varName,
                   const dodoStringMap &varVal)
 {
     if (tools::string::equal(varName, statements[STATEMENT_DODO]))
-        throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
     global.erase(varName);
     globalArray.erase(varName);
@@ -469,7 +469,7 @@ processor::assign(dodo::string            varName,
                   const dodoStringArray &varVal)
 {
     if (tools::string::equal(varName, statements[STATEMENT_DODO]))
-        throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
     global.erase(varName);
     globalHash.erase(varName);
@@ -485,7 +485,7 @@ processor::assign(dodo::string       varName,
                   const dodo::string &varVal)
 {
     if (tools::string::equal(varName, statements[STATEMENT_DODO]))
-        throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
     globalArray.erase(varName);
     globalHash.erase(varName);
@@ -628,9 +628,9 @@ processor::_if(const dodo::string &buffer,
     unsigned long u(blockEnd(buffer, start, statements[STATEMENT_OPEN_IF], statements[STATEMENT_CLOSE_IF], path)), v(0);
     bool found(true);
 
-    try {
+    dodo_try {
         v = blockEnd(buffer, start, statements[STATEMENT_OPEN_IF], statements[STATEMENT_ELSE], path);
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         found = false;
     }
 
@@ -664,11 +664,11 @@ processor::blockEnd(const dodo::string &buffer,
     while (true) {
         u = buffer.find(statements[STATEMENT_OPEN_ST], m);
         if (u == dodo::string::POSITION_END)
-            throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, DATATPLPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
+            dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, DATATPLPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
         b = buffer.find(statements[STATEMENT_CLOSE_ST], u + 2);
         if (b == dodo::string::POSITION_END)
-            throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, DATATPLPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
+            dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, DATATPLPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
         for (p = u; p < b; ++p) {
             if (buffer[p] != ' ' && buffer[p] != '\t' && buffer[p] != '\n' && buffer[p] != '\r') {
@@ -765,17 +765,17 @@ processor::_assign(unsigned long    start,
     dodoStringArray temp = tools::misc::split(statement, statements[STATEMENT_ASSIGN_OP], 2);
 
     if (temp.size() == 0)
-        throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
+        dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
     dodo::string varName = trim(tools::string::trim(temp[0], " \t\r\n", 4));
     if (varName.size() == 0)
-        throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
+        dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, DATATPLPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
     if (varName[0] == '$')
         varName = dodo::string(varName.data() + 1, varName.size() - 1);
 
     if (tools::string::equal(varName, statements[STATEMENT_DODO]))
-        throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
+        dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, DATATPLPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
     local[namespaceDeepness][varName] = getVar(temp[1], start, path);
 
@@ -846,7 +846,7 @@ processor::_for(const dodo::string &buffer,
 
     p = statement.find(statements[STATEMENT_IN], i + 1);
     if (p == dodo::string::POSITION_END)
-        throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__FOR, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGFORSTATEMENT, DATATPLPROCESSOREX_WRONGFORSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
+        dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX__FOR, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGFORSTATEMENT, DATATPLPROCESSOREX_WRONGFORSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
     dodo::string targetVar = getVarName(tools::string::trim(dodo::string(statement.data() + p + 2), " \t\r\n", 4), start, path);
     dodo::string forSpace = dodo::string(buffer.data() + start, u - start);
@@ -1308,7 +1308,7 @@ processor::getVarName(const dodo::string &a_varName,
         while (true) {
             b = varName.find(statements[STATEMENT_CLOSE_VARPART], c + 1);
             if (b == dodo::string::POSITION_END)
-                throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_GETVARNAME, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGVARSTATEMENT, DATATPLPROCESSOREX_WRONGVARSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
+                dodo_throw exception::basic(exception::MODULE_DATATPLPROCESSOR, PROCESSOREX_GETVARNAME, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGVARSTATEMENT, DATATPLPROCESSOREX_WRONGVARSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.data()));
 
             ++cb;
 

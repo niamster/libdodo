@@ -18,7 +18,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         file::regular *disk = new file::regular;
         disk->open("./test.log", io::file::regular::OPEN_MODE_READ_WRITE_TRUNCATE);
         disk->append = true;
@@ -54,8 +54,8 @@ main(int  argc UNUSED,
 
         delete disk;
         delete std;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
     return 0;
 }

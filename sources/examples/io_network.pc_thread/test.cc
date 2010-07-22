@@ -22,7 +22,7 @@ process(void *data)
 {
     exchange *ex = (exchange *)data;
 
-    try {
+    dodo_try {
         if (ex->isBlocked()) {
             cout << "Blocked\n";
             cout.flush();
@@ -43,7 +43,7 @@ process(void *data)
         ex->writeString("test\n");
 
         dodo::string str = "";
-        try {
+        dodo_try {
             ex->bs = 4;
             str = ex->read();
 
@@ -55,8 +55,8 @@ process(void *data)
                 *exit_condition = true;
                 ::data.release();
             }
-        } catch (dodo::exception::basic &ex)   {
-            cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        } dodo_catch (exception::basic *e)   {
+            cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
             cout.flush();
         }
 
@@ -69,8 +69,8 @@ process(void *data)
             cout << "Closed\n";
             cout.flush();
         }
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     delete ex;
@@ -82,7 +82,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         server s(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
 
         connection::__peer__ info;
@@ -109,7 +109,7 @@ main(int  argc UNUSED,
                 exchange *ex = new exchange(accepted);
                 manager.run(manager.add(execution::thread(::process, (void *)ex, execution::ON_DESTRUCTION_KEEP_ALIVE)));
 
-                try {
+                dodo_try {
                     dodoList<unsigned long> threads = manager.jobs();
                     dodoList<unsigned long>::iterator i = threads.begin(), j = threads.end();
                     for (; i != j; ++i)
@@ -121,14 +121,14 @@ main(int  argc UNUSED,
                             manager.remove(*i);
                             cout.flush();
                         }
-                } catch (...)   {
+                } dodo_catch (exception::basic *e UNUSED)   {
                 }
             }
         }
 
         manager.wait();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

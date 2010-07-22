@@ -215,7 +215,7 @@ client::setUrl(const dodo::string &a_url) const
         else
 #endif
 
-        throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_SETURL, exception::ERRNO_LIBDODO, CLIENTEX_UNSUPPORTEDSURICHEME, IONETWORKHTTPCLIENTEX_UNSUPPORTEDSURICHEME_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_SETURL, exception::ERRNO_LIBDODO, CLIENTEX_UNSUPPORTEDSURICHEME, IONETWORKHTTPCLIENTEX_UNSUPPORTEDSURICHEME_STR, __LINE__, __FILE__);
     }
 
     unsigned long portSize = urlComponents.port.size();
@@ -322,7 +322,7 @@ client::GET() const
             ex->exchange::_write(data.data());
             ex->bs = bs;
 
-            try {
+            dodo_try {
                 switch (getProxyConnectResponse(ex, response)) {
                     case GETCONTENTSTATUS_NORMAL:
 
@@ -333,7 +333,7 @@ client::GET() const
                         if (authTries > 2) {
                             authTries = 0;
 
-                            throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                            dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                         }
 
                         makeBasicAuth(REQUEST_HEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
@@ -350,7 +350,7 @@ client::GET() const
                         if (authTries > 2) {
                             authTries = 0;
 
-                            throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                            dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                         }
 
                         makeDigestAuth(RESPONSE_HEADER_PROXYAUTHENTICATE, REQUEST_HEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password, response);
@@ -362,13 +362,13 @@ client::GET() const
 
                         return GET();
                 }
-            } catch (...) {
+            } dodo_catch (exception::basic *e UNUSED) {
                 delete ex;
                 delete net;
 
                 clear();
 
-                throw;
+                dodo_rethrow;
             }
 
             if (certsSet)
@@ -390,7 +390,7 @@ client::GET() const
 
         dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
         for (; o != p; ++o) {
-            try {
+            dodo_try {
                 if (scheme == SCHEME_HTTP) {
                     net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
                     ex->setInBufferSize(512);
@@ -409,19 +409,19 @@ client::GET() const
 #endif
 
                 break;
-            } catch (exception::basic &exp) {
+            } dodo_catch (exception::basic *e UNUSED) {
 #ifdef OPENSSL_EXT
-                if (exp.function == CLIENTEX_CONNECT || exp.function == ssl::CLIENTEX_CONNECT)
+                if (e->function == CLIENTEX_CONNECT || e->function == ssl::CLIENTEX_CONNECT)
 
 #else
-                if (exp.function == CLIENTEX_CONNECT)
+                if (e->function == CLIENTEX_CONNECT)
 #endif
                 {
                     if ((o + 1) == p) {
                         delete net;
                         delete ex;
 
-                        throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_CANNOTCONNECT, IONETWORKHTTPCLIENTEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
+                        dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_CANNOTCONNECT, IONETWORKHTTPCLIENTEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
                     } else
                         continue;
                 }
@@ -429,7 +429,7 @@ client::GET() const
                 delete net;
                 delete ex;
 
-                throw;
+                dodo_rethrow;
             }
         }
     }
@@ -474,7 +474,7 @@ client::GET() const
 
     ex->bs = bs;
 
-    try {
+    dodo_try {
         switch (getContent(ex, response)) {
             case GETCONTENTSTATUS_NORMAL:
 
@@ -494,7 +494,7 @@ client::GET() const
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeBasicAuth(REQUEST_HEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
@@ -509,7 +509,7 @@ client::GET() const
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeBasicAuth(REQUEST_HEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
@@ -524,7 +524,7 @@ client::GET() const
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeDigestAuth(RESPONSE_HEADER_PROXYAUTHENTICATE, REQUEST_HEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password, response);
@@ -539,7 +539,7 @@ client::GET() const
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeDigestAuth(RESPONSE_HEADER_WWWAUTHENTICATE, REQUEST_HEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password, response);
@@ -554,7 +554,7 @@ client::GET() const
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeBasicAuth(REQUEST_HEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
@@ -574,7 +574,7 @@ client::GET() const
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GET, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeDigestAuth(RESPONSE_HEADER_WWWAUTHENTICATE, REQUEST_HEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password, response);
@@ -589,12 +589,12 @@ client::GET() const
 
                 return GET();
         }
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         delete ex;
 
         clear();
 
-        throw;
+        dodo_rethrow;
     }
 
     delete ex;
@@ -767,7 +767,7 @@ client::POST(const dodo::string &rdata,
             ex->exchange::_write(data.data());
             ex->bs = bs;
 
-            try {
+            dodo_try {
                 switch (getProxyConnectResponse(ex, response)) {
                     case GETCONTENTSTATUS_NORMAL:
 
@@ -778,7 +778,7 @@ client::POST(const dodo::string &rdata,
                         if (authTries > 2) {
                             authTries = 0;
 
-                            throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                            dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                         }
 
                         makeBasicAuth(REQUEST_HEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
@@ -795,7 +795,7 @@ client::POST(const dodo::string &rdata,
                         if (authTries > 2) {
                             authTries = 0;
 
-                            throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                            dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                         }
 
                         makeDigestAuth(RESPONSE_HEADER_PROXYAUTHENTICATE, REQUEST_HEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password, response);
@@ -807,13 +807,13 @@ client::POST(const dodo::string &rdata,
 
                         return POST(data, type);
                 }
-            } catch (...) {
+            } dodo_catch (exception::basic *e UNUSED) {
                 delete ex;
                 delete net;
 
                 clear();
 
-                throw;
+                dodo_rethrow;
             }
 
             if (certsSet)
@@ -835,7 +835,7 @@ client::POST(const dodo::string &rdata,
 
         dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
         for (; o != p; ++o) {
-            try {
+            dodo_try {
                 if (scheme == SCHEME_HTTP) {
                     net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
                     ex->setInBufferSize(512);
@@ -854,18 +854,18 @@ client::POST(const dodo::string &rdata,
 #endif
 
                 break;
-            } catch (exception::basic &exp) {
+            } dodo_catch (exception::basic *e UNUSED) {
 #ifdef OPENSSL_EXT
-                if (exp.function == CLIENTEX_CONNECT || exp.function == ssl::CLIENTEX_CONNECT)
+                if (e->function == CLIENTEX_CONNECT || e->function == ssl::CLIENTEX_CONNECT)
 #else
-                if (exp.function == CLIENTEX_CONNECT)
+                if (e->function == CLIENTEX_CONNECT)
 #endif
                 {
                     if ((o + 1) == p) {
                         delete net;
                         delete ex;
 
-                        throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_CANNOTCONNECT, IONETWORKHTTPCLIENTEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
+                        dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_CANNOTCONNECT, IONETWORKHTTPCLIENTEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
                     } else
                         continue;
                 }
@@ -873,7 +873,7 @@ client::POST(const dodo::string &rdata,
                 delete net;
                 delete ex;
 
-                throw;
+                dodo_rethrow;
             }
         }
     }
@@ -926,7 +926,7 @@ client::POST(const dodo::string &rdata,
 
     ex->bs = bs;
 
-    try {
+    dodo_try {
         switch (getContent(ex, response)) {
             case GETCONTENTSTATUS_NORMAL:
 
@@ -943,7 +943,7 @@ client::POST(const dodo::string &rdata,
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeBasicAuth(REQUEST_HEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
@@ -955,7 +955,7 @@ client::POST(const dodo::string &rdata,
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeBasicAuth(REQUEST_HEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
@@ -967,7 +967,7 @@ client::POST(const dodo::string &rdata,
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeDigestAuth(RESPONSE_HEADER_PROXYAUTHENTICATE, REQUEST_HEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password, response);
@@ -979,7 +979,7 @@ client::POST(const dodo::string &rdata,
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeDigestAuth(RESPONSE_HEADER_WWWAUTHENTICATE, REQUEST_HEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password, response);
@@ -991,7 +991,7 @@ client::POST(const dodo::string &rdata,
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeBasicAuth(REQUEST_HEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
@@ -1008,7 +1008,7 @@ client::POST(const dodo::string &rdata,
                 if (authTries > 2) {
                     authTries = 0;
 
-                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_POST, exception::ERRNO_LIBDODO, CLIENTEX_NOTAUTHORIZED, IONETWORKHTTPCLIENTEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
                 }
 
                 makeDigestAuth(RESPONSE_HEADER_WWWAUTHENTICATE, REQUEST_HEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password, response);
@@ -1020,12 +1020,12 @@ client::POST(const dodo::string &rdata,
 
                 return POST(rdata, type);
         }
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         delete ex;
 
         clear();
 
-        throw;
+        dodo_rethrow;
     }
 
     delete ex;
@@ -1139,7 +1139,7 @@ client::getProxyConnectResponse(exchange *ex,
     ex->bs = 512;
 
     while (true) {
-        try {
+        dodo_try {
             size = ex->exchange::_readString(data);
 
             if (size == 0)
@@ -1177,17 +1177,17 @@ client::getProxyConnectResponse(exchange *ex,
 
                             return GETCONTENTSTATUS_PROXYDIGESTAUTH;
                         } else
-                            throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GETPROXYCONNECTRESPONSE, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNPROXYAUTH_STR, __LINE__, __FILE__);
+                            dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GETPROXYCONNECTRESPONSE, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNPROXYAUTH_STR, __LINE__, __FILE__);
                     }
                 }
 
                 break;
             }
-        } catch (exception::basic &ex) {
-            if (ex.function == EXCHANGEEX__READSTRING)
+        } dodo_catch (exception::basic *e UNUSED) {
+            if (e->function == EXCHANGEEX__READSTRING)
                 break;
             else
-                throw;
+                dodo_rethrow;
         }
     }
 
@@ -1217,7 +1217,7 @@ client::getContent(exchange *ex,
     dodo::string headers;
 
     while (true) {
-        try {
+        dodo_try {
             if (chunked) {
                 if (chunkSize > 0) {
                     if (chunkSize > data.size()) {
@@ -1309,7 +1309,7 @@ client::getContent(exchange *ex,
                                     if (tools::string::contains(response.headers[RESPONSE_HEADER_WWWAUTHENTICATE], "Digest"))
                                         return GETCONTENTSTATUS_WWWPROXYDIGESTAUTH;
                                     else
-                                        throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GETCONTENT, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNWWWAUTH_STR, __LINE__, __FILE__);
+                                        dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GETCONTENT, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNWWWAUTH_STR, __LINE__, __FILE__);
                                 }
                             } else {
                                 if (tools::string::contains(response.headers[RESPONSE_HEADER_WWWAUTHENTICATE], "Basic")) {
@@ -1318,7 +1318,7 @@ client::getContent(exchange *ex,
                                     if (tools::string::contains(response.headers[RESPONSE_HEADER_WWWAUTHENTICATE], "Digest"))
                                         return GETCONTENTSTATUS_WWWDIGESTAUTH;
                                     else
-                                        throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GETCONTENT, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNWWWAUTH_STR, __LINE__, __FILE__);
+                                        dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GETCONTENT, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNWWWAUTH_STR, __LINE__, __FILE__);
                                 }
                             }
                         }
@@ -1336,7 +1336,7 @@ client::getContent(exchange *ex,
 
                                     return GETCONTENTSTATUS_PROXYDIGESTAUTH;
                                 } else {
-                                    throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GETCONTENT, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNPROXYAUTH_STR, __LINE__, __FILE__);
+                                    dodo_throw exception::basic(exception::MODULE_IONETWORKHTTP, CLIENTEX_GETCONTENT, exception::ERRNO_LIBDODO, CLIENTEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPCLIENTEX_UNKNOWNPROXYAUTH_STR, __LINE__, __FILE__);
                                 }
                             }
                         }
@@ -1360,11 +1360,11 @@ client::getContent(exchange *ex,
                 if (contentSize > 0 && response.data.size() == contentSize)
                     break;
             }
-        } catch (exception::basic &ex) {
+        } dodo_catch (exception::basic *e UNUSED) {
 #ifdef OPENSSL_EXT
-            if (ex.function == EXCHANGEEX__READSTRING || ex.function == ssl::EXCHANGEEX__READSTRING)
+            if (e->function == EXCHANGEEX__READSTRING || e->function == ssl::EXCHANGEEX__READSTRING)
 #else
-            if (ex.function == EXCHANGEEX__READSTRING)
+            if (e->function == EXCHANGEEX__READSTRING)
 #endif
             {
                 if (!endOfHeaders && headers.size() > 0)
@@ -1372,7 +1372,7 @@ client::getContent(exchange *ex,
 
                 break;
             } else {
-                throw;
+                dodo_rethrow;
             }
         }
     }

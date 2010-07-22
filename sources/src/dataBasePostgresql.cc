@@ -158,14 +158,14 @@ postgresql::postgresql(const data::base::__connection_options__ &a_info) : handl
 
     int status = PQstatus(handle->handle);
 
-    try {
+    dodo_try {
         if (status != CONNECTION_OK) {
-            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_POSTGRESQL, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_POSTGRESQL, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
         }
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         delete handle;
 
-        throw;
+        dodo_rethrow;
     }
 }
 
@@ -225,7 +225,7 @@ postgresql::connect(const data::base::__connection_options__ &a_info)
     if (status != CONNECTION_OK) {
         handle->handle = NULL;
 
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_CONNECT, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_CONNECT, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
     }
 
 #ifndef DATABASE_WO_XEXEC
@@ -272,7 +272,7 @@ postgresql::fetchedRows(data::base::rows &a_rows) const
     rows->fields.clear();
     rows->values.clear();
 
-    if (!handle->result) // FIXME: throw exception?
+    if (!handle->result) // FIXME: dodo_throw exception?
         return;
 
     int rowsNum = PQntuples(handle->result);
@@ -317,7 +317,7 @@ unsigned int
 postgresql::fetchedRows() const
 {
     if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_FETCHEDROWS, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_FETCHEDROWS, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     return PQntuples(handle->result);
 }
@@ -328,7 +328,7 @@ unsigned int
 postgresql::affectedRows() const
 {
     if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_AFFECTEDROWS, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_AFFECTEDROWS, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     return atoi(PQcmdTuples(handle->result));
 }
@@ -339,7 +339,7 @@ void
 postgresql::requestFieldsTypes(const dodo::string &table)
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_REQUESTFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_REQUESTFIELDSTYPES, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(table);
 
@@ -353,7 +353,7 @@ postgresql::requestFieldsTypes(const dodo::string &table)
 
     handle->result = PQexecParams(handle->handle, request.data(), 0, NULL, NULL, NULL, NULL, 1);
     if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__, request);
+        dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__, request);
 
     int status = PQresultStatus(handle->result);
 
@@ -363,7 +363,7 @@ postgresql::requestFieldsTypes(const dodo::string &table)
         case PGRES_NONFATAL_ERROR:
         case PGRES_FATAL_ERROR:
 
-            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
     }
 
     int rowsNum = PQntuples(handle->result);
@@ -429,12 +429,12 @@ postgresql::exec()
 
 void
 postgresql::exec(const query &a_query)
-    try
-    {
+{
+    dodo_try {
         collectedData.query = dynamic_cast<const sql::query *>(&a_query);
 
         if (handle->handle == NULL)
-            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
         performPreExec(OPERATION_EXEC);
@@ -467,7 +467,7 @@ postgresql::exec(const query &a_query)
         }
 
         if (handle->result == NULL)
-            throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
+            dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
 
         status = PQresultStatus(handle->result);
         switch (status) {
@@ -476,7 +476,7 @@ postgresql::exec(const query &a_query)
             case PGRES_NONFATAL_ERROR:
             case PGRES_FATAL_ERROR:
 
-                throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
 
             /* case PGRES_COMMAND_OK: */
 
@@ -491,9 +491,12 @@ postgresql::exec(const query &a_query)
 #endif
 
         collectedData.clear();
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         collectedData.clear();
+
+        dodo_rethrow;
     }
+}
 
 //-------------------------------------------------------------------
 
@@ -765,11 +768,11 @@ void
 postgresql::setCharset(const dodo::string &charset)
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     int status = PQsetClientEncoding(handle->handle, charset.data());
     if (status == -1)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_MYSQL, status, PQerrorMessage(handle->handle), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -778,7 +781,7 @@ dodo::string
 postgresql::charset() const
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_CHARSET, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEPOSTGRESQL, POSTGRESQLEX_CHARSET, exception::ERRNO_LIBDODO, POSTGRESQLEX_NOTOPENED, DATABASEPOSTGRESQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
     int encoding = PQclientEncoding(handle->handle);

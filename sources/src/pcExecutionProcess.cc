@@ -115,42 +115,43 @@ process::process(routine func,
 process::process(const dodo::string &module,
                  void             *data,
                  void             *toInit)
-try : job(TYPE_PROCESS),
+/* FIXME */
+/* dodo_try */ : job(TYPE_PROCESS),
       handle(NULL)
-    {
-        handle = new __process__;
+{
+    handle = new __process__;
 
-        handle->data = data;
+    handle->data = data;
 
 #ifdef DL_FAST
-        handle->handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
+    handle->handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-        handle->handle = dlopen(module.data(), RTLD_LAZY);
+    handle->handle = dlopen(module.data(), RTLD_LAZY);
 #endif
-        if (handle->handle == NULL)
-            throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    if (handle->handle == NULL)
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-        initModule init = (initModule)dlsym(handle->handle, "initPcExecutionProcessModule");
-        if (init == NULL)
-            throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    initModule init = (initModule)dlsym(handle->handle, "initPcExecutionProcessModule");
+    if (init == NULL)
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-        __module__ m = init(toInit);
+    __module__ m = init(toInit);
 
-        void *f = dlsym(handle->handle, m.hook);
-        if (f == NULL)
-            throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    void *f = dlsym(handle->handle, m.hook);
+    if (f == NULL)
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-        handle->action = m.action;
-        handle->func = f;
-        memcpy(handle->cookie, m.cookie, 32);
-    } catch (...) {
-        if (handle) {
-            if (handle->handle)
-                dlclose(handle->handle);
+    handle->action = m.action;
+    handle->func = f;
+    memcpy(handle->cookie, m.cookie, 32);
+} /* dodo_catch (exception::basic *e UNUSED) { */
+/*     if (handle) { */
+/*         if (handle->handle) */
+/*             dlclose(handle->handle); */
 
-            delete handle;
-        }
-    }
+/*         delete handle; */
+/*     } */
+/* } */
 #endif
 
 //-------------------------------------------------------------------
@@ -212,7 +213,7 @@ process::isRunning() const
         if (errno == ESRCH)
             return false;
 
-        throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 
     int status;
@@ -231,7 +232,7 @@ process::isRunning() const
         return false;
     }
 
-    throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -240,7 +241,7 @@ void
 process::run()
 {
     if (isRunning())
-        throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_RUN, exception::ERRNO_LIBDODO, PROCESSEX_ISALREADYRUNNING, PCEXECUTIONPROCESSEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_RUN, exception::ERRNO_LIBDODO, PROCESSEX_ISALREADYRUNNING, PCEXECUTIONPROCESSEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
     pid_t pid = fork();
 
@@ -248,7 +249,7 @@ process::run()
         _exit(((routine)handle->func)(handle->data));
     } else {
         if (pid == -1)
-            throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         else
             handle->pid = pid;
     }
@@ -263,7 +264,7 @@ void
 process::stop()
 {
     if (kill(handle->pid, 9) == -1)
-        throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     handle->executed = false;
 }
@@ -277,12 +278,12 @@ process::wait()
         return handle->status;
 
     if (!handle->executed)
-        throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_WAIT, exception::ERRNO_LIBDODO, PROCESSEX_ISNOTLAUNCHED, PCEXECUTIONPROCESSEX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_WAIT, exception::ERRNO_LIBDODO, PROCESSEX_ISNOTLAUNCHED, PCEXECUTIONPROCESSEX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
 
     int status;
 
     if (waitpid(handle->pid, &status, 0) == -1)
-        throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     if (WIFEXITED(status))
         handle->status = WEXITSTATUS(status);
@@ -306,11 +307,11 @@ process::module(const dodo::string &module,
     void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
     if (handle == NULL)
-        throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     initModule init = (initModule)dlsym(handle, "initPcExecutionProcessModule");
     if (init == NULL)
-        throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     __module__ mod = init(toInit);
 
@@ -320,7 +321,7 @@ process::module(const dodo::string &module,
 
 #ifndef DL_FAST
     if (dlclose(handle) != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 
     return mod;

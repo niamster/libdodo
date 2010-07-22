@@ -22,7 +22,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
 #ifdef DL_EXT
 #ifdef BFD_EXT
         dodoStringArray arr = library::symbols("./module");
@@ -39,8 +39,8 @@ main(int  argc UNUSED,
 
         ((print)sll.function("print"))("get");
 #endif
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << endl;
     }
     return 0;
 }

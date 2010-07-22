@@ -14,6 +14,7 @@ AR:=@AR@
 TAGS:=@TAGS@
 
 CPPFLAGS+=-I./include @CPPFLAGS@
+CXXFLAGS+=@CXXFLAGS@
 LDFLAGS+=-L./ @LDFLAGS@
 CFLAGS+=@CFLAGS@ @DEFS@
 
@@ -43,7 +44,7 @@ build: all
 
 .cc.o: include/libdodo/directives.runtime.h
 	@echo "-- Compiling: $<"
-	@$(CXX) $(CFLAGS) $(CPPFLAGS) -fPIC -c $<
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $(CXXFLAGS) -fPIC -c $<
 
 deps: $(DEPS)
 %.d: %.cc

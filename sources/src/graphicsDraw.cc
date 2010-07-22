@@ -62,7 +62,7 @@ draw::primitive(graphics::image &image,
                 unsigned short  borderWidth)
 {
     if (image.collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
 #ifndef IMAGEMAGICK_PRE_63
     DrawInfo *di = AcquireDrawInfo();
@@ -88,7 +88,7 @@ draw::primitive(graphics::image &image,
         di->primitive = NULL;
         DestroyDrawInfo(di);
 
-        throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_PRIMITIVE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
     }
 
     di->primitive = NULL;
@@ -163,7 +163,7 @@ draw::text(graphics::image       &image,
            double                angle)
 {
     if (image.collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     dodo::string txt = "text 0,0 \"";
     txt += text;
@@ -221,7 +221,7 @@ draw::text(graphics::image       &image,
         di->font = NULL;
         DestroyDrawInfo(di);
 
-        throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_TEXT, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
     }
 
     di->primitive = NULL;
@@ -238,7 +238,7 @@ draw::image(graphics::image       &image,
             double                angle)
 {
     if (image.collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     AffineMatrix current;
     GetAffineMatrix(&current);
@@ -268,7 +268,7 @@ draw::image(graphics::image       &image,
     current.ty = _current.rx * affine.tx + _current.sy * affine.ty + _current.ty;
 
     if (DrawAffineImage(image.collectedData.handle->im, a_im.collectedData.handle->im, &current) == MagickFalse)
-        throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_IMAGE, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -280,7 +280,7 @@ draw::point(graphics::image       &image,
             unsigned short        pointWidth)
 {
     if (image.collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_EMPTYIMAGE, GRAPHICSDRAWEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     char description[128];
 
@@ -306,7 +306,7 @@ draw::point(graphics::image       &image,
         di->primitive = NULL;
         DestroyDrawInfo(di);
 
-        throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSDRAW, DRAWEX_POINT, exception::ERRNO_IMAGEMAGICK, DRAWEX_CANNOTDRAWPRIMITIVE, GRAPHICSDRAWEX_CANNOTDRAWPRIMITIVE_STR, __LINE__, __FILE__);
     }
 
     di->primitive = NULL;

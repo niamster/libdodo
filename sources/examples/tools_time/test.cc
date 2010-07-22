@@ -16,7 +16,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         cout << tools::time::byFormat("%A-%Y-%H", tools::time::now()) << endl;
 
         cout << tools::time::now() << endl;
@@ -28,8 +28,8 @@ main(int  argc UNUSED,
         cout << tools::time::week(tools::time::now(), "%A")[0] << endl;
 
         cout << tools::time::timestamp(tools::time::now()).sec << endl;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << endl;
     }
 
     return 0;

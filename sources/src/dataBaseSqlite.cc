@@ -92,16 +92,16 @@ sqlite::sqlite(const data::base::__connection_options__ &a_info) : handle(new __
     collectedData.setExecObject(xexec::OBJECT_DATABASESQLITE);
 #endif
 
-    try {
+    dodo_try {
         if (sqlite3_open(info.path.data(), &handle->handle) != SQLITE_OK) {
             sqlite3_close(handle->handle);
 
-            throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_SQLITE, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_SQLITE, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
         }
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         delete handle;
 
-        throw;
+        dodo_rethrow;
     }
 }
 
@@ -143,7 +143,7 @@ sqlite::connect(const data::base::__connection_options__ &a_info)
         }
 
         if (sqlite3_close(handle->handle) != SQLITE_OK)
-            throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
         handle->handle = NULL;
     }
@@ -151,7 +151,7 @@ sqlite::connect(const data::base::__connection_options__ &a_info)
     if (sqlite3_open(info.path.data(), &handle->handle) != SQLITE_OK) {
         sqlite3_close(handle->handle);
 
-        throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_CONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
     }
 
 #ifndef DATABASE_WO_XEXEC
@@ -175,7 +175,7 @@ sqlite::disconnect()
         }
 
         if (sqlite3_close(handle->handle) != SQLITE_OK)
-            throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_DISCONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_DISCONNECT, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
         performPostExec(OPERATION_DISCONNECT);
@@ -193,7 +193,7 @@ sqlite::fetchedRows(data::base::rows &a_rows) const
     sql::rows *rows = dynamic_cast<sql::rows *>(&a_rows);
 
     if (handle->handle == NULL || handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_FETCHEDROWS, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_FETCHEDROWS, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
     performPreExec(OPERATION_FETCHEDROWS);
@@ -235,7 +235,7 @@ sqlite::fetchedRows(data::base::rows &a_rows) const
 
             case SQLITE_ERROR:
 
-                throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_FETCHEDROWS, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_FETCHEDROWS, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
             case SQLITE_ROW:
 
@@ -297,11 +297,11 @@ unsigned int
 sqlite::fetchedRows() const
 {
     if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_FETCHEDROWS, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_FETCHEDROWS, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     sqlite3_reset(handle->result);
 
-    if (sqlite3_column_count(handle->result) == 0) /// FIXME: throw exception?
+    if (sqlite3_column_count(handle->result) == 0) /// FIXME: dodo_throw exception?
         return 0;
 
     bool iterate = true;
@@ -321,7 +321,7 @@ sqlite::fetchedRows() const
 
             case SQLITE_ERROR:
 
-                throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_FETCHEDROWS, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_FETCHEDROWS, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
             case SQLITE_ROW:
 
@@ -340,7 +340,7 @@ unsigned int
 sqlite::affectedRows() const
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_AFFECTEDROWS, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_AFFECTEDROWS, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     return sqlite3_changes(handle->handle);
 }
@@ -351,7 +351,7 @@ void
 sqlite::requestFieldsTypes(const dodo::string &table)
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(table);
 
@@ -367,10 +367,10 @@ sqlite::requestFieldsTypes(const dodo::string &table)
     dodo::string request = "select * from " + table + " limit 1";
 
     if (sqlite3_prepare(handle->handle, request.data(), request.size(), &handle->result, NULL) != SQLITE_OK)
-        throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
+        dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
 
     if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
     unsigned int numFields = sqlite3_column_count(handle->result);
 
@@ -392,7 +392,7 @@ sqlite::requestFieldsTypes(const dodo::string &table)
                                           NULL) != SQLITE_OK) {
             sqlite3_finalize(handle->result);
 
-            throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
+            dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
         }
 
         field = types->second.find(columnName);
@@ -431,10 +431,10 @@ sqlite::requestFieldsTypes(const dodo::string &table)
     dodo::string request = "pragma table_info(" + table + ")";
 
     if (sqlite3_prepare(handle->handle, request.data(), request.size(), &handle->result, NULL) != SQLITE_OK)
-        throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
+        dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, request);
 
     if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
     bool iterate = true;
 
@@ -456,7 +456,7 @@ sqlite::requestFieldsTypes(const dodo::string &table)
 
             case SQLITE_ERROR:
 
-                throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_REQUESTFIELDSTYPES, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
             case SQLITE_ROW:
 
@@ -516,12 +516,12 @@ sqlite::exec()
 
 void
 sqlite::exec(const query &a_query)
-    try
-    {
+{
+    dodo_try {
         collectedData.query = dynamic_cast<const sql::query *>(&a_query);
 
         if (handle->handle == NULL)
-            throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_LIBDODO, SQLITEEX_NOTOPENED, DATABASESQLITEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
         performPreExec(OPERATION_EXEC);
@@ -533,33 +533,36 @@ sqlite::exec(const query &a_query)
         }
 
         if (sqlite3_prepare(handle->handle, collectedData.query->sql.data(), collectedData.query->sql.size(), &handle->result, NULL) != SQLITE_OK)
-            throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
+            dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
 
         dodoList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
         for (; i != j; ++i) {
             if (sqlite3_bind_blob(handle->result, i->reference, i->value->data(), i->value->size(), SQLITE_TRANSIENT) != SQLITE_OK) {
                 blobs.clear();
 
-                throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
             }
         }
 
         blobs.clear();
 
         if (handle->result == NULL)
-            throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
         int status = sqlite3_step(handle->result);
         if (status != SQLITE_DONE && status != SQLITE_ROW)
-            throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
         performPostExec(OPERATION_EXEC);
 #endif
         collectedData.clear();
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         collectedData.clear();
+
+        dodo_rethrow;
     }
+}
 
 //-------------------------------------------------------------------
 

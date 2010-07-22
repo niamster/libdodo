@@ -17,7 +17,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         server s(connection::PROTOCOL_FAMILY_IPV4, connection::TRANSFER_STREAM);
 
         exchange::__init__ accepted;
@@ -52,14 +52,14 @@ main(int  argc UNUSED,
                         data = ex.readString();
                         cout << "'" << tools::string::trim(data, trimSym, 2) << "'" << endl;
 
-                        if (tools::string::trim(data, trimSym, 2) == "exit")
+                        if (tools::string::trim(data, trimSym, 2) == "*eit")
                             tools::os::die(data);
                     }
                 }
             }
         }
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.file << "\t" << ex.line << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->file << "\t" << e->line << endl;
     }
 
     return 0;

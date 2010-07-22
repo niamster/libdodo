@@ -35,7 +35,7 @@ handler(exchange &ex)
     io->writeString("The headers thould be already printed successfully.<br>");
 
 #ifndef FASTCGI_EXT
-    io->writeString("No fastCGI extension was compiled!<br>");
+    io->writeString("No fastCGI *etension was compiled!<br>");
 #endif
 
     ex.writeString("counter: " + tools::string::iToString(*inc) + "<br>");
@@ -48,7 +48,7 @@ handler(exchange &ex)
     ex.writeString("FILES[\"file\"].size: " + tools::string::iToString(d.FILES["file"].size) + "<br>");
     ex.writeString("tpl::processor:<br>");
 
-    try {
+    dodo_try {
         processor p;
 
         p.assign("test", "test");
@@ -73,8 +73,8 @@ handler(exchange &ex)
         p.assign("strmaparr", strmaparr);
 
         p.processFile("test.tpl", *io);
-    } catch (dodo::exception::basic &ex)   {
-        d.printString(ex.errStr + " " + tools::string::lToString(ex.line));
+    } dodo_catch (exception::basic *e)   {
+        d.printString(e->errStr + " " + tools::string::lToString(e->line));
     }
 
     ex.writeString("<br>");
@@ -88,7 +88,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         int *shared = new int(1);
         object.set((void *)shared);
 
@@ -107,8 +107,8 @@ main(int  argc UNUSED,
         c.serve(&handler);
 
         delete shared;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

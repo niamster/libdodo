@@ -20,7 +20,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
 #ifdef OPENSSL_EXT
         dodo::string host = "kernel.org";
 
@@ -65,8 +65,8 @@ main(int  argc UNUSED,
 
         cout << tools::misc::split(str, "\r\n\r\n")[0] << endl;
 #endif
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

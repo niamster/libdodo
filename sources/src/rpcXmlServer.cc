@@ -103,7 +103,7 @@ server::processCallResult(const rpc::response &resp)
 void
 server::serve()
 {
-    try {
+    dodo_try {
         rpc::method meth = processCallRequest();
 
         dodo::string encoding = rpEncoding;
@@ -120,14 +120,9 @@ server::serve()
             processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
 
         rpEncoding = encoding;
-    } catch (exception::basic &ex) {
+    } dodo_catch (exception::basic *e UNUSED) {
         rpc::response response;
-        response.fault(ex.errStr);
-
-        processCallResult(response);
-    } catch (...) {
-        rpc::response response;
-        response.fault("An unknown error.");
+        response.fault(e->errStr);
 
         processCallResult(response);
     }

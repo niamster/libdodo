@@ -20,7 +20,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
 #ifdef OPENSSL_EXT
         server s(io::network::connection::PROTOCOL_FAMILY_IPV4, io::network::connection::TRANSFER_STREAM);
 
@@ -62,7 +62,7 @@ main(int  argc UNUSED,
                         data = ex.readString();
                         cout << data << endl;
 
-                        if (tools::string::trim(data, trimSym, 2) == "exit") {
+                        if (tools::string::trim(data, trimSym, 2) == "*eit") {
                             ex.close();
 
                             tools::os::die(data);
@@ -72,8 +72,8 @@ main(int  argc UNUSED,
             }
         }
 #endif
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.file << "\t" << ex.line << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->file << "\t" << e->line << endl;
     }
 
     return 0;

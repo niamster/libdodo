@@ -28,13 +28,13 @@ hook(xexec::__collected_data__ *odata,
     image::__collected_data__ *imData = (image::__collected_data__ *)odata;
 
     if (operation == image::OPERATION_WRITE) {
-        try {
+        dodo_try {
             cout << "Rotating" << endl;
 
             image *img = dynamic_cast<image *>(imData->executor);
             transform::rotate(*img, transform::ROTATE_DIRECTION_ANGLE_180);
-        } catch (dodo::exception::basic &ex)   {
-            cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        } dodo_catch (dodo::exception::basic *e)   {
+            cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
         }
     }
 }
@@ -45,7 +45,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
 #ifdef IMAGEMAGICK_EXT
         image im;
 
@@ -124,8 +124,8 @@ main(int  argc UNUSED,
         im.setOpacity(65535 / 2);
         im.write(file::regular("new-5.png", file::regular::OPEN_MODE_READ_WRITE_TRUNCATE), image::ENCODER_PNG);
 #endif
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (dodo::exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

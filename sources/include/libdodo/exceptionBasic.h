@@ -32,7 +32,7 @@
 
 #include <libdodo/directives.h>
 
-#include <exception>
+#include <setjmp.h>
 
 #include <libdodo/types.h>
 
@@ -42,6 +42,7 @@ namespace dodo {
          * @enum errnoEnum defines sources, where the code of the error has been got
          */
         enum errnoEnum {
+            ERRNO_USER,
             ERRNO_LIBDODO,
             ERRNO_ERRNO,
             ERRNO_MYSQL,
@@ -62,7 +63,8 @@ namespace dodo {
          * @enum moduleEnum defines modules where exception might be thrown
          */
         enum moduleEnum {
-            MODULE_DATABASEMYSQL = 0,
+            MODULE_UNKNOWN,
+            MODULE_DATABASEMYSQL,
             MODULE_DATABASEPOSTGRESQL,
             MODULE_DATABASESQLITE,
             MODULE_DATAFORMATXMLPROCESSOR,
@@ -125,12 +127,51 @@ namespace dodo {
             void       *address;    ///< address of the call
         };
 
+        class basic;
+
+        /**
+         * @struct __context__
+         * @brief defines exception context
+         */
+        struct __context__ {
+            jmp_buf *context;    ///< return context
+            basic *exception;    ///< exception raised
+        };
+
+        extern __thread __context__ global_exeption_context;
+        extern __thread char exeption_storage[];
+
+#define dodo_try                                        \
+        {                                               \
+            jmp_buf *__prev, __cur;                     \
+            __prev = exception::global_exeption_context.context;   \
+            exception::global_exeption_context.context = &__cur;   \
+            if (setjmp(__cur) == 0) {                   \
+                do
+
+#define dodo_catch(e)                                               \
+                while (exception::global_exeption_context.exception = NULL,    \
+                    0);                                             \
+            }                                                       \
+            exception::global_exeption_context.context = __prev;               \
+        }                                                           \
+        e = exception::global_exeption_context.exception;                    \
+        if (exception::global_exeption_context.exception)
+
+#define dodo_throw                                                      \
+        for (delete exception::global_exeption_context.exception;                  \
+             ;                                                          \
+             longjmp(*exception::global_exeption_context.context, 1))              \
+            exception::global_exeption_context.exception = new ((void *)&exception::exeption_storage)
+
+#define dodo_rethrow                                              \
+        longjmp(*exception::global_exeption_context.context, 1)              \
+
         /**
          * @class basic
          * @brief describes exception that has been thrown
          */
-        class basic : public std::exception,
-                      public singleton<basic>{
+        class basic : public singleton<basic>{
             friend class singleton<basic>;
 
           private:
@@ -138,7 +179,7 @@ namespace dodo {
             /**
              * constructor
              */
-            basic() throw ();
+            basic();
 
           public:
 
@@ -160,12 +201,29 @@ namespace dodo {
                   const dodo::string &errStr,
                   unsigned long    line,
                   const dodo::string &file,
-                  const dodo::string &message = __dodostring__) throw ();
+                    const dodo::string &message = __dodostring__);
 
             /**
              * destructor
              */
-            ~basic() throw ();
+            ~basic();
+
+            /**
+             * new opertor
+             */
+            void * operator new(size_t size,
+                    void *mem);
+
+            /**
+             * new opertor
+             */
+            void * operator new(size_t size);
+
+            /**
+             * delete operator
+             */
+            void operator delete(void *p);
+
 
 #ifdef DL_EXT
             /**
@@ -214,7 +272,7 @@ namespace dodo {
             /**
              * return error string
              */
-            virtual const char *what() const throw ();
+            virtual const char *what() const;
 
             /**
              * @return call stack to the exception point

@@ -80,7 +80,7 @@ manager::add(const execution::job &job)
             break;
 
         default:
-            throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ADD, exception::ERRNO_LIBDODO, MANAGEREX_UNKNOWNJOB, PCEXECUTIONMANAGEREX_UNKNOWNJOB_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ADD, exception::ERRNO_LIBDODO, MANAGEREX_UNKNOWNJOB, PCEXECUTIONMANAGEREX_UNKNOWNJOB_STR, __LINE__, __FILE__);
     }
 
     handles.insert(std::make_pair(counter, j));
@@ -119,7 +119,7 @@ manager::run(unsigned long id)
     dodoMap<unsigned long, execution::job *>::iterator job = handles.find(id);
 
     if (job == handles.end())
-        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_RUN, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
     job->second->run();
 }
@@ -134,7 +134,7 @@ manager::stop(unsigned long id)
     dodoMap<unsigned long, execution::job *>::iterator job = handles.find(id);
 
     if (job == handles.end())
-        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_STOP, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
     job->second->stop();
 }
@@ -162,7 +162,7 @@ manager::wait(unsigned long id)
     dodoMap<unsigned long, execution::job *>::iterator job = handles.find(id);
 
     if (job == handles.end())
-        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_WAIT, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
     return job->second->wait();
 }
@@ -190,7 +190,7 @@ manager::isRunning(unsigned long id) const
     dodoMap<unsigned long, execution::job *>::const_iterator job = handles.find(id);
 
     if (job == handles.end())
-        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_ISRUNNING, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
     return job->second->isRunning();
 }
@@ -240,7 +240,7 @@ manager::job(unsigned long id)
     dodoMap<unsigned long, execution::job *>::const_iterator job = handles.find(id);
 
     if (job == handles.end())
-        throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_JOB, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONMANAGER, MANAGEREX_JOB, exception::ERRNO_LIBDODO, MANAGEREX_NOTFOUND, PCEXECUTIONMANAGEREX_NOTFOUND_STR, __LINE__, __FILE__);
 
     return job->second;
 }

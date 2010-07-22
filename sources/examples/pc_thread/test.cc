@@ -19,7 +19,7 @@ sync::data::object data(protector);
 int
 thread(void *data)
 {
-    try {
+    dodo_try {
         cout << endl << (char *)data << ": " << tools::time::now() << endl;
         cout.flush();
 
@@ -29,11 +29,11 @@ thread(void *data)
 
         cout << endl << (char *)data << ": " << tools::time::now() << endl;
         cout.flush();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
-    // throwing exception
+    // throwing *eception
     tools::os::os::setWorkingDir("./dir/");
 
     return 0;
@@ -43,7 +43,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         int *data = new int(1);
 
         ::data.set((void *)data);
@@ -76,8 +76,8 @@ main(int  argc UNUSED,
         }
 
         delete data;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

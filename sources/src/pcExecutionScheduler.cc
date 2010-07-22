@@ -96,23 +96,23 @@ __manager__::__manager__() : exit(false)
 
     errno = pthread_mutexattr_init(&attr);
     if (errno != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
     if (errno != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     errno = pthread_mutex_init(&mutex, &attr);
     if (errno != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     errno = pthread_mutexattr_destroy(&attr);
     if (errno != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     errno = pthread_cond_init(&condition, NULL);
     if (errno != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 #endif
 }
 
@@ -211,7 +211,8 @@ __manager__::manager(void *data)
 //-------------------------------------------------------------------
 
 scheduler::scheduler()
-try : counter(0),
+    /* FIXME */
+/* dodo_try */ : counter(0),
       keeper(NULL),
       manager(NULL)
  {
@@ -221,12 +222,12 @@ try : counter(0),
 #ifdef PTHREAD_EXT
      errno = pthread_create(&manager->thread, NULL, __manager__::manager, this);
      if (errno != 0)
-         throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+         dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 #endif
- } catch (...) {
-    delete manager;
-    delete keeper;
- }
+ }/*  dodo_catch (exception::basic *e UNUSED) { */
+ /*    delete manager; */
+ /*    delete keeper; */
+ /* } */
 
 //-------------------------------------------------------------------
 
@@ -272,7 +273,7 @@ scheduler::schedule(const execution::job &job,
             break;
 
         default:
-            throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX_SCHEDULE, exception::ERRNO_LIBDODO, SCHEDULEREX_UNKNOWNJOB, PCEXECUTIONSCHEDULEREX_UNKNOWNJOB_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX_SCHEDULE, exception::ERRNO_LIBDODO, SCHEDULEREX_UNKNOWNJOB, PCEXECUTIONSCHEDULEREX_UNKNOWNJOB_STR, __LINE__, __FILE__);
     }
 
     __job__ j = {_job, timeout, tools::time::millinow(), repeat};

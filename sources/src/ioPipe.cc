@@ -63,15 +63,15 @@ io::pipe::pipe(bool  open,
         int pipefd[2];
 
         if (::pipe(pipefd) != 0)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         in->file = fdopen(pipefd[0], "r");
         if (in->file == NULL)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         out->file = fdopen(pipefd[1], "w");
         if (out->file == NULL)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 }
 
@@ -93,27 +93,27 @@ io::pipe::pipe(const pipe &fd) : stream::channel(protection),
 
         oldDesc = fileno(fd.in->file);
         if (oldDesc == -1)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         newDesc = dup(oldDesc);
         if (newDesc == -1)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         in->file = fdopen(newDesc, "r");
         if (in->file == NULL)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         oldDesc = fileno(fd.out->file);
         if (oldDesc == -1)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         newDesc = dup(oldDesc);
         if (newDesc == -1)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         out->file = fdopen(newDesc, "w");
         if (out->file == NULL)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PIPE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 }
 
@@ -140,14 +140,14 @@ io::pipe::clone(const pipe &fd)
 
     if (in->file != NULL) {
         if (fclose(in->file) != 0)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         in->file = NULL;
     }
 
     if (out->file != NULL) {
         if (fclose(out->file) != 0)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         out->file = NULL;
     }
@@ -160,27 +160,27 @@ io::pipe::clone(const pipe &fd)
 
         oldDesc = fileno(fd.in->file);
         if (oldDesc == -1)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         newDesc = dup(oldDesc);
         if (newDesc == -1)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         in->file = fdopen(newDesc, "r");
         if (in->file == NULL)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         oldDesc = fileno(fd.out->file);
         if (oldDesc == -1)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         newDesc = dup(oldDesc);
         if (newDesc == -1)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         out->file = fdopen(newDesc, "w");
         if (out->file == NULL)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 }
 
@@ -192,7 +192,7 @@ io::pipe::inDescriptor() const
     pc::sync::stack pg(keeper);
 
     if (in->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_INDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     return fileno(in->file);
 }
@@ -205,7 +205,7 @@ io::pipe::outDescriptor() const
     pc::sync::stack pg(keeper);
 
     if (out->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     return fileno(out->file);
 }
@@ -223,14 +223,14 @@ io::pipe::close()
 
     if (in->file != NULL) {
         if (fclose(in->file) != 0)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         in->file = NULL;
     }
 
     if (out->file != NULL) {
         if (fclose(out->file) != 0)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         out->file = NULL;
     }
@@ -253,14 +253,14 @@ io::pipe::open()
 
     if (in->file != NULL) {
         if (fclose(in->file) != 0)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         in->file = NULL;
     }
 
     if (out->file != NULL) {
         if (fclose(out->file) != 0)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         out->file = NULL;
     }
@@ -268,15 +268,15 @@ io::pipe::open()
     int pipefd[2];
 
     if (::pipe(pipefd) != 0)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     in->file = fdopen(pipefd[0], "r");
     if (in->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     out->file = fdopen(pipefd[1], "w");
     if (out->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #ifndef IO_WO_XEXEC
     performPostExec(OPERATION_OPEN);
@@ -289,7 +289,7 @@ unsigned long
 io::pipe::_read(char * const data) const
 {
     if (in->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     char *s = data;
 
@@ -305,7 +305,7 @@ io::pipe::_read(char * const data) const
                     continue;
 
                 if (ferror(in->file) != 0)
-                    throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
 
             break;
@@ -324,7 +324,7 @@ unsigned long
 io::pipe::_write(const char *const data) const
 {
     if (out->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     const char *s = data;
 
@@ -340,7 +340,7 @@ io::pipe::_write(const char *const data) const
                     return bs - batch;
 
                 if (ferror(out->file) != 0)
-                    throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
 
             break;
@@ -361,10 +361,10 @@ io::pipe::flush() const
     pc::sync::stack pg(keeper);
 
     if (out->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     if (fflush(out->file) != 0)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -375,7 +375,7 @@ io::pipe::peer()
     pc::sync::stack pg(keeper);
 
     if (in->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     network::exchange::__peer__ info;
 
@@ -385,11 +385,11 @@ io::pipe::peer()
 
     int desc = fileno(in->file);
     if (desc == -1)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     if (::getpeername(desc, &sa, &len) == 1) {
         if (errno != ENOTSOCK)
-            throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_PEERINFO, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         else
             return info;
     }
@@ -445,7 +445,7 @@ io::pipe::block(bool flag)
     pc::sync::stack pg(keeper);
 
     if (in->file == NULL && out->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     if (blocked == flag)
         return;
@@ -455,11 +455,11 @@ io::pipe::block(bool flag)
 
     desc = fileno(in->file);
     if (desc == -1)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     blockFlag = fcntl(desc, F_GETFL);
     if (blockFlag == -1)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     if (flag)
         blockFlag &= ~O_NONBLOCK;
@@ -467,15 +467,15 @@ io::pipe::block(bool flag)
         blockFlag |= O_NONBLOCK;
 
     if (fcntl(desc, F_SETFL, blockFlag) == -1)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     desc = fileno(out->file);
     if (desc == -1)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     blockFlag = fcntl(desc, F_GETFL);
     if (blockFlag == -1)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     if (flag)
         blockFlag &= ~O_NONBLOCK;
@@ -483,7 +483,7 @@ io::pipe::block(bool flag)
         blockFlag |= O_NONBLOCK;
 
     if (fcntl(desc, F_SETFL, blockFlag) == -1)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     blocked = flag;
 }
@@ -494,7 +494,7 @@ unsigned long
 io::pipe::_readString(char * const data) const
 {
     if (in->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTRING, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTRING, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     unsigned long readSize = bs + 1;
 
@@ -507,7 +507,7 @@ io::pipe::_readString(char * const data) const
                 return 0;
 
             if (ferror(in->file) != 0)
-                throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         break;
@@ -522,12 +522,12 @@ unsigned long
 io::pipe::_writeString(const char * const data) const
 {
     if (out->file == NULL)
-        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTRING, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__READSTRING, exception::ERRNO_LIBDODO, PIPEEX_PIPENOTOPENED, IOPIPEEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     unsigned long _bs = bs;
     unsigned long written;
 
-    try {
+    dodo_try {
         bs = strnlen(data, bs);
 
         written = _write(data);
@@ -542,7 +542,7 @@ io::pipe::_writeString(const char * const data) const
                         break;
 
                     if (ferror(out->file) != 0)
-                        throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITESTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                        dodo_throw exception::basic(exception::MODULE_IOPIPE, PIPEEX__WRITESTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
 
                 break;
@@ -550,10 +550,10 @@ io::pipe::_writeString(const char * const data) const
         }
 
         bs = _bs;
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         bs = _bs;
 
-        throw;
+        dodo_rethrow;
     }
 
     return written;

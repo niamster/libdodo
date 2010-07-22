@@ -19,7 +19,7 @@ main(int  argc UNUSED,
      char **argv UNUSED)
 {
 #ifdef LIBXML2_EXT
-    try {
+    dodo_try {
         processor p;
         p.icaseNames = true;
 
@@ -63,15 +63,11 @@ main(int  argc UNUSED,
         io::memory buffer;
         p.make(p.process(io::file::regular("./test.xml", io::file::regular::OPEN_MODE_READ_ONLY)), "utf-8", "1.0", buffer);
         cout  << endl << buffer << endl << endl;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << endl;
-    } catch (std::exception &ex)   {
-        cout << ex.what();
-    } catch (...)   {
-        cout << "WTF";
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << endl;
     }
 #else
-    cout << "No XML extension was compiled!";
+    cout << "No XML *etension was compiled!";
 #endif
 
     return 0;

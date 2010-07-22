@@ -109,12 +109,12 @@ main(int  argc UNUSED,
 
     xml::server srv(provider);
 
-    try {
+    dodo_try {
         srv.setHandler("callTest", ::handler);
 
         srv.serve();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

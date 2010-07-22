@@ -129,7 +129,7 @@ namespace dodo {
       public:
 
         /**
-         * @return logger instance which can be used globally
+         * @return instance which can be used globally
          */
         static T &
         instance()

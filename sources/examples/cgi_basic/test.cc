@@ -21,8 +21,8 @@ handler(exchange &ex)
 
     ///first type: pass headers and print them immediately
     //	dodoStringMap head;
-    //	head[cgi::RESPONSE_HEADER_CONTENTTYPE] = "text/html";
-    //	dialogue d(&ex, head, false);
+    //	head[cgi::RESPONSE_HEADER_CONTENTTYPE] = "t*et/html";
+    //	dialogue d(&*e, head, false);
 
         ///second type: use default headers and do not print them immediately
     dialogue d(ex, POST_SIZE_LIMIT, true);
@@ -64,7 +64,7 @@ handler(exchange &ex)
         }
     }
 
-    d.HEADERS[cgi::RESPONSE_HEADER_CONTENTTYPE] = "text/html";
+    d.HEADERS[cgi::RESPONSE_HEADER_CONTENTTYPE] = "t*et/html";
 
     d.setCookie(cookie("test", "cookie"));
 
@@ -74,7 +74,7 @@ handler(exchange &ex)
     d.printString("User: " + user + "<br>");
     d.printString("GET[\"argument\"]: " + d.GET["argument"] + "<br>");
     d.printString("POST[\"hidden\"]: " + d.POST["hidden"] + "<br>");
-    d.printString("POST[\"text\"]: " + d.POST["text"] + "<br>");
+    d.printString("POST[\"t*et\"]: " + d.POST["text"] + "<br>");
     d.printString("ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]: " + d.ENVIRONMENT[cgi::ENVIRONMENT_QUERYSTRING] + "<br>");
     d.printString("COOKIES[\"test\"]: " + d.COOKIES["test"] + "<br>");
     d.printString("FILES[\"file\"].size: " + tools::string::iToString(d.FILES["file"].size) + "<br>");
@@ -82,10 +82,10 @@ handler(exchange &ex)
     d.printString("charset: " + d.charset() + "<br>");
     d.printString("tpl::processor:<br>");
 
-    try {
+    dodo_try {
         processor p;
 
-        p.assign("main", "index.tpl");
+        p.assign("main", "inde->tpl");
         p.assign("test", "test");
         p.assign("show", "show");
         p.assign("one", "one");
@@ -109,8 +109,8 @@ handler(exchange &ex)
         p.assign("strmaparr", strmaparr);
 
         p.processFile("test.tpl", *io);
-    } catch (dodo::exception::basic &ex)   {
-        d.printString((dodo::string)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
+    } dodo_catch (exception::basic *e)   {
+        d.printString((dodo::string)*e + " " + tools::string::lToString(e->line) + " " + e->file + " " + e->message );
     }
 }
 

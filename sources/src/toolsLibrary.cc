@@ -58,7 +58,7 @@ library::library(const dodo::string &path)
 #endif
 
     if (handle == NULL)
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_LIBRARY, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_LIBRARY, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -80,7 +80,7 @@ library::open(const dodo::string &path)
 #ifndef DL_FAST
     if (handle != NULL)
         if (dlclose(handle) != 0)
-            throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 
@@ -91,7 +91,7 @@ library::open(const dodo::string &path)
 #endif
 
     if (handle == NULL)
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_OPEN, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -102,7 +102,7 @@ library::close()
 #ifndef DL_FAST
     if (handle != NULL)
         if (dlclose(handle) != 0)
-            throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_CLOSE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_CLOSE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 }
 
@@ -112,11 +112,11 @@ void *
 library::function(const dodo::string &name)
 {
     if (handle == NULL)
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_FUNCTION, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_FUNCTION, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     void *func = dlsym(handle, name.data());
     if (func == NULL)
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_FUNCTION, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_FUNCTION, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     return func;
 }
@@ -127,11 +127,11 @@ void *
 library::operator[](const dodo::string &name)
 {
     if (handle == NULL)
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, LIBRARYEX_LIBRARYNOTOPENED, TOOLSLIBRARYEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     void *func = dlsym(handle, name.data());
     if (func == NULL)
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_BROPERATORSTRING, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     return func;
 }
@@ -147,19 +147,19 @@ library::symbols(const dodo::string &path)
     bfd *lib = bfd_openr(path.data(), NULL);
     if (lib == NULL) {
         bfd_error_type err = bfd_get_error();
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
     }
 
     if (bfd_check_format(lib, bfd_object) == FALSE) {
         bfd_error_type err = bfd_get_error();
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
     }
 
     long storageSize = bfd_get_symtab_upper_bound(lib);
 
     if (storageSize < 0) {
         bfd_error_type err = bfd_get_error();
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
     }
 
     if (storageSize == 0)
@@ -171,7 +171,7 @@ library::symbols(const dodo::string &path)
 
     if (numberOfSymbols < 0) {
         bfd_error_type err = bfd_get_error();
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
     }
 
     dodoStringArray arr;
@@ -181,7 +181,7 @@ library::symbols(const dodo::string &path)
 
     if (bfd_close(lib) == FALSE) {
         bfd_error_type err = bfd_get_error();
-        throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
     }
 
     return arr;

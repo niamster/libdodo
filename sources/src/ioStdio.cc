@@ -35,6 +35,7 @@
 #include "ioFile.inline"
 
 #include <libdodo/ioStdio.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/types.h>
 #include <libdodo/ioPipe.h>
 
@@ -112,16 +113,16 @@ stdio::_writeString(const char * const data) const
     unsigned long _bs = bs;
     unsigned long written;
 
-    try {
+    dodo_try {
         bs = strnlen(data, bs);
 
         written = _write(data);
 
         bs = _bs;
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         bs = _bs;
 
-        throw;
+        dodo_rethrow;
     }
 
     return written;

@@ -16,10 +16,10 @@ using namespace std;
 int
 job0(void *data)
 {
-    try {
+    dodo_try {
         cout << endl << (char *)data << ": " << tools::time::millinow() << endl;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 10;
@@ -28,14 +28,14 @@ job0(void *data)
 int
 job1(void *data)
 {
-    try {
+    dodo_try {
         cout << endl << ">>" << (char *)data << ": " << tools::time::millinow() << endl;
 
         tools::os::sleep(tools::string::stringToUL((char *)data));
 
         cout << endl << "<<" << (char *)data << ": " << tools::time::millinow() << endl;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 10;
@@ -45,7 +45,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         const int amount = 10;
 
         execution::scheduler scheduler;
@@ -102,8 +102,8 @@ main(int  argc UNUSED,
 
         for (int i = 0; i < amount; ++i)
             cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

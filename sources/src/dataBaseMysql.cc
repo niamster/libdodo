@@ -123,7 +123,7 @@ mysql::mysql(const data::base::__connection_options__ &a_info) : handle(new __my
                       info.ssl.cipher.size() == 0 ? NULL : info.ssl.cipher.data()) == 0)
         type |= CLIENT_SSL;
 
-    try {
+    dodo_try {
         if (!mysql_real_connect(handle->handle,
                                 info.host.size() == 0 ? NULL : info.host.data(),
                                 info.user.size() == 0 ? NULL : info.user.data(),
@@ -132,13 +132,13 @@ mysql::mysql(const data::base::__connection_options__ &a_info) : handle(new __my
                                 info.port,
                                 info.path.size() == 0 ? NULL : info.path.data(),
                                 type))
-            throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_MYSQL, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
-    } catch (...) {
+            dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_MYSQL, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
+    } dodo_catch (exception::basic *e UNUSED) {
         mysql_close(handle->handle);
 
         delete handle;
 
-        throw;
+        dodo_rethrow;
     }
 
 #ifndef MYSQL_NO_OPT_RECONNECT
@@ -217,7 +217,7 @@ mysql::connect(const data::base::__connection_options__ &a_info)
                             info.port,
                             info.path.size() == 0 ? NULL : info.path.data(),
                             type))
-        throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_CONNECT, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_CONNECT, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
 
 #ifndef MYSQL_NO_OPT_RECONNECT
     if (reconnect) {
@@ -270,7 +270,7 @@ mysql::fetchedRows(data::base::rows &a_rows) const
     rows->fields.clear();
     rows->values.clear();
 
-    if (!handle->result) // FIXME: throw exception?
+    if (!handle->result) // FIXME: dodo_throw exception?
         return;
 
     mysql_data_seek(handle->result, 0);
@@ -324,7 +324,7 @@ unsigned int
 mysql::fetchedRows() const
 {
     if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_FETCHEDROWS, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_FETCHEDROWS, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     return mysql_num_rows(handle->result);
 }
@@ -335,7 +335,7 @@ unsigned int
 mysql::affectedRows() const
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_AFFECTEDROWS, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_AFFECTEDROWS, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     return mysql_affected_rows(handle->handle);
 }
@@ -346,7 +346,7 @@ void
 mysql::requestFieldsTypes(const dodo::string &table)
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_REQUESTFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_REQUESTFIELDSTYPES, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     dodoMap<dodo::string, dodoMap<dodo::string, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(table);
 
@@ -360,14 +360,14 @@ mysql::requestFieldsTypes(const dodo::string &table)
         if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST)) {
             connect(info);
             if (mysql_real_query(handle->handle, request.data(), request.size()) != 0)
-                throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
+                dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
         } else
-            throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
+            dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, request);
     }
 
     handle->result = mysql_store_result(handle->handle);
     if (handle->result == NULL)
-        throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_REQUESTFIELDSTYPES, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
 
     MYSQL_ROW mysqlRow;
 
@@ -423,12 +423,12 @@ mysql::exec()
 
 void
 mysql::exec(const query &a_query)
-    try
-    {
+{
+    dodo_try {
         collectedData.query = dynamic_cast<const sql::query *>(&a_query);
 
         if (handle->handle == NULL)
-            throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
 #ifndef DATABASE_WO_XEXEC
         performPreExec(OPERATION_EXEC);
@@ -443,16 +443,16 @@ mysql::exec(const query &a_query)
             if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST)) {
                 connect(info);
                 if (mysql_real_query(handle->handle, collectedData.query->sql.data(), collectedData.query->sql.size()) != 0)
-                    throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
+                    dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
             } else {
-                throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
+                dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
             }
         }
 
         if (mysql_field_count(handle->handle) != 0) {
             handle->result = mysql_store_result(handle->handle);
             if (handle->result == NULL)
-                throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysql_errno(handle->handle), mysql_error(handle->handle), __LINE__, __FILE__);
         }
 
 #ifndef DATABASE_WO_XEXEC
@@ -460,9 +460,12 @@ mysql::exec(const query &a_query)
 #endif
 
         collectedData.clear();
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         collectedData.clear();
+
+        dodo_rethrow;
     }
+}
 
 //-------------------------------------------------------------------
 
@@ -470,7 +473,7 @@ void
 mysql::setCharset(const dodo::string &charset)
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_SETCHARSET, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_SETCHARSET, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     mysql_options(handle->handle, MYSQL_SET_CHARSET_NAME, charset.data());
 }
@@ -481,7 +484,7 @@ void
 mysql::setConnectionTimeout(unsigned int time)
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_SETCONNECTIONTIMEOUT, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_SETCONNECTIONTIMEOUT, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     mysql_options(handle->handle, MYSQL_OPT_CONNECT_TIMEOUT, (char *)&time);
 }
@@ -492,7 +495,7 @@ dodo::string
 mysql::charset() const
 {
     if (handle->handle == NULL)
-        throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_CHARSET, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATABASEMYSQL, MYSQLEX_CHARSET, exception::ERRNO_LIBDODO, MYSQLEX_NOTOPENED, DATABASEMYSQLEX_NOTOPENED_STR, __LINE__, __FILE__);
 
     return mysql_character_set_name(handle->handle);
 }

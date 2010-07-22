@@ -18,28 +18,30 @@ handler(int                    module UNUSED,
         dodo::exception::basic *ex,
         void                   *data UNUSED)
 {
-    cout << "baseHandler: " << (dodo::string) * ex << endl << ex->backtrace() << endl;
+    cout << "baseHandler: " << (dodo::string)*ex << endl << ex->backtrace() << endl;
 }
 
 int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         dodo::exception::basic::setHandler(dodo::exception::MODULE_IOFILEREGULAR, &handler, NULL);
 #ifdef DL_EXT
         dodo::exception::basic::setHandler("./module", NULL);
 #endif
 
-        try {
+		exception::basic *e;
+
+        dodo_try {
             tools::filesystem::unlink("some.file", false);
-        } catch (...)    {
+        } dodo_catch (e)    {
         }
 
-        try {
+        dodo_try {
             file::regular f;
             f.open("some.file", file::regular::OPEN_MODE_READ_ONLY);
-        } catch (...)    {
+        } dodo_catch (e)    {
         }
 
         dodo::string string = "abcdef";
@@ -49,10 +51,8 @@ main(int  argc UNUSED,
 
         dodo::string random = tools::misc::stringRandom(12);
         cout << "Random:" << tools::code::MD5Hex(random) << endl;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
-    } catch (std::exception &ex)   {
-        cout << endl << ex.what() << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

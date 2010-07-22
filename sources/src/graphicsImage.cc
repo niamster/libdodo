@@ -160,7 +160,7 @@ __image_init__::imErrorHandler(const ExceptionType,
                                const char          *reason,
                                const char          *description)
 {
-    throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason ? dodo::string(reason) : __dodostring__, __LINE__, __FILE__, description ? dodo::string(description) : __dodostring__);
+    dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_IMERRORHANDLER, exception::ERRNO_LIBDODO, IMAGEEX_IMERROR, reason ? dodo::string(reason) : __dodostring__, __LINE__, __FILE__, description ? dodo::string(description) : __dodostring__);
 }
 
 //-------------------------------------------------------------------
@@ -279,7 +279,7 @@ image::read(const io::channel &img)
 
     collectedData.handle->im = BlobToImage(collectedData.handle->imInfo, data.data(), data.size(), (ExceptionInfo *)exInfo);
     if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_READ, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
 
     collectedData.handle->imInfo->compression = collectedData.handle->im->compression;
     collectedData.handle->imInfo->quality = collectedData.handle->im->quality;
@@ -324,7 +324,7 @@ image::create(unsigned long   width,
 
     collectedData.handle->im = NewMagickImage(collectedData.handle->imInfo, width, height, &bg);
     if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_CREATE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_CREATE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
 
     collectedData.handle->imInfo->compression = collectedData.handle->im->compression;
     collectedData.handle->imInfo->quality = collectedData.handle->im->quality;
@@ -342,13 +342,13 @@ void
 image::setColorSpecification(short type)
 {
     if (type < 0 || type >= COLOR_SPECIFICATION_ENUMSIZE)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETTYPE, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETTYPE, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
     if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETTYPE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETTYPE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     if (SetImageType(collectedData.handle->im, (ImageType)typeStatements[type]) == MagickFalse)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETTYPE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_CANNOTSETCOLORSPECIFICATION, GRAPHICSIMAGEEX_CANNOTSETCOLORSPECIFICATION_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETTYPE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_CANNOTSETCOLORSPECIFICATION, GRAPHICSIMAGEEX_CANNOTSETCOLORSPECIFICATION_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -357,7 +357,7 @@ void
 image::setAlpha()
 {
     if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETALPHA, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETALPHA, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     collectedData.handle->im->matte = MagickTrue;
 }
@@ -368,7 +368,7 @@ void
 image::removeAlpha()
 {
     if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_REMOVEALPHA, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_REMOVEALPHA, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     collectedData.handle->im->matte = MagickFalse;
 }
@@ -379,7 +379,7 @@ void
 image::setOpacity(unsigned short opacity)
 {
     if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETOPACITY, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETOPACITY, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     SetImageOpacity(collectedData.handle->im, opacity);
 }
@@ -390,7 +390,7 @@ void
 image::setBackgroundColor(__color__ background)
 {
     if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETBACKGROUNDCOLOR, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETBACKGROUNDCOLOR, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     collectedData.handle->im->background_color.red = background.red;
     collectedData.handle->im->background_color.green = background.green;
@@ -423,19 +423,19 @@ image::write(const io::channel &img,
 #endif
 
     if (collectedData.handle->im == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, GRAPHICSIMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
     GetExceptionInfo((ExceptionInfo *)exInfo);
 
     if (encoder < 0 || encoder >= ENCODER_ENUMSIZE)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
     strcpy(collectedData.handle->imInfo->magick, encoderStatements[encoder]);
 
     size_t size = 0;
     unsigned char *data = ImageToBlob(collectedData.handle->imInfo, collectedData.handle->im, (size_t *)&size, (ExceptionInfo *)exInfo);
     if (data == NULL)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, ((ExceptionInfo *)exInfo)->error_number, ((ExceptionInfo *)exInfo)->reason, __LINE__, __FILE__, ((ExceptionInfo *)exInfo)->description ? ((ExceptionInfo *)exInfo)->description : __dodostring__);
 
     img.bs = size;
     img.write(dodo::string((char *)data, size));
@@ -451,7 +451,7 @@ void
 image::setCompression(short type)
 {
     if (type < 0 || type >= COMPRESSION_ENUMSIZE)
-        throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETCOMPRESSION, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_GRAPHICSIMAGE, IMAGEEX_SETCOMPRESSION, exception::ERRNO_LIBDODO, IMAGEEX_BADINFO, GRAPHICSIMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
     collectedData.handle->imInfo->compression = (CompressionType)compressionStatements[type];
 }

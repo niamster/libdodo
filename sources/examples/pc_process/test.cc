@@ -30,7 +30,7 @@ process0(void *data)
 {
     cout << "process0:" << (char *)data << endl, cout.flush();
 
-    try {
+    dodo_try {
         dodo::data::memory::shared shared(data_key);
         io::memory memory((char *)shared.data(), shared.size(), io::memory::FLAGS_EXTERN | io::memory::FLAGS_FIXED_LENGTH);
         cout << "Shared memory: " << endl, cout.flush();
@@ -46,8 +46,8 @@ process0(void *data)
         data1.release();
 
         cout << endl << memory << ": " << tools::time::now() << endl, cout.flush();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << ex.line << endl, cout.flush();
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << e->line << endl, cout.flush();
     }
 
     return 0;
@@ -60,7 +60,7 @@ process1(void *data)
 
     cout << "process1(protected):" << (char *)data << endl, cout.flush();
 
-    try {
+    dodo_try {
         pc::sync::stack pg(&section); /* section could be acquired recursively by current process */
 
         dodo::data::memory::shared shared(data_key);
@@ -81,8 +81,8 @@ process1(void *data)
         data1.release();
 
         cout << endl << (char *)dt << ": " << tools::time::now() << endl, cout.flush();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << ex.line << endl, cout.flush();
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << e->line << endl, cout.flush();
     }
 
     return 0;
@@ -92,7 +92,9 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+	exception::basic *e;
+    
+	dodo_try {
         data1.set((char *)"%test%\n");
 
         dodo::data::memory::shared shared(data_key);
@@ -127,15 +129,15 @@ main(int  argc UNUSED,
         }
 
         manager.wait();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
+    } dodo_catch (e)   {
+        cout << (dodo::string)*e << "\t" <<  e->file << "\t" << e->line << endl;
     }
 
-    try {
+    dodo_try {
         data::memory::shared::remove(data_key);
         sync::process::remove(lock_key);
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
+    } dodo_catch (e)   {
+        cout << (dodo::string)*e << "\t" <<  e->file << "\t" << e->line << endl;
     }
 
     return 0;

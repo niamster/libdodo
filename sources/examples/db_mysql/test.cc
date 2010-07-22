@@ -36,8 +36,10 @@ main(int  argc UNUSED,
 {
     long now = tools::time::now();
 
+	exception::basic *e;
+
 #ifdef MYSQL_EXT
-    try {
+    dodo_try {
         mysql::__connection_options__ ci("test", argc>1?argv[1]:"localhost", "root", "password", "", 3306);
 
         mysql db(ci);
@@ -46,13 +48,13 @@ main(int  argc UNUSED,
         db.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
 #endif
 
-        try {
+        dodo_try {
             db.exec(sql::query("DROP TABLE test0"));
-        } catch (...)   {
+        } dodo_catch (e)   {
         }
-        try {
+        dodo_try {
             db.exec(sql::query("DROP TABLE test1"));
-        } catch (...)   {
+        } dodo_catch (e)   {
         }
 
         db.exec(sql::query("CREATE TABLE test0 (id int(11) NOT NULL auto_increment, i int(11), t0 text NOT NULL, t1 text NOT NULL, PRIMARY KEY  (id))"));
@@ -141,11 +143,11 @@ main(int  argc UNUSED,
                 cout << "[" << *m << "]\t";
             cout << endl;
         }
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl << ex.backtrace();
+    } dodo_catch (e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl << e->backtrace();
     }
 #else
-    cout << "No MySQL extension was compiled!";
+    cout << "No MySQL *etension was compiled!";
 #endif
 
     now = tools::time::now() - now;

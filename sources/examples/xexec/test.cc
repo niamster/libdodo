@@ -17,7 +17,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         stdio io;
 #ifdef DL_EXT
 #ifndef IO_WO_XEXEC
@@ -36,8 +36,8 @@ main(int  argc UNUSED,
         io.bs = sizeof("xexec") - 1;
         io.write("xexec");
         io.flush();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << endl;
     }
     return 0;
 }

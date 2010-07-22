@@ -76,7 +76,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         processor p;
 
         node node0, node1, node2;
@@ -131,8 +131,8 @@ main(int  argc UNUSED,
         json.pos = 0;
         jn = p.process(json);
         showJSON(jn);
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

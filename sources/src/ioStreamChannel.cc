@@ -32,6 +32,7 @@
 #include <string.h>
 
 #include <libdodo/ioStreamChannel.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
@@ -67,17 +68,17 @@ channel::read() const
 
     data = dodo::string('\0', bs);
 
-    try {
+    dodo_try {
         n = _read((char *)data.data());
         data.resize(n);
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         data.clear();
 
 #ifndef IO_WO_XEXEC
         collectedData.buffer.clear();
 #endif
 
-        throw;
+        dodo_rethrow;
     }
 
 #ifndef IO_WO_XEXEC
@@ -110,13 +111,13 @@ channel::readString() const
     data = dodo::string('\0', bs);
     unsigned long n = 0;
 
-    try {
+    dodo_try {
         n = _readString((char *)data.data());
         data.resize(n);
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         data.clear();
 
-        throw;
+        dodo_rethrow;
     }
 
 #ifndef IO_WO_XEXEC
@@ -146,12 +147,12 @@ channel::write(const dodo::string &data) const
 
     performPreExec(OPERATION_WRITE);
 
-    try {
+    dodo_try {
         n = _write(collectedData.buffer.data());
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         collectedData.buffer.clear();
 
-        throw;
+        dodo_rethrow;
     }
 #else
     n = _write(data.data());
@@ -180,12 +181,12 @@ channel::writeString(const dodo::string &data) const
 
     performPreExec(OPERATION_WRITESTRING);
 
-    try {
+    dodo_try {
         n = _writeString(collectedData.buffer.data());
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         collectedData.buffer.clear();
 
-        throw;
+        dodo_rethrow;
     }
 #else
     n = _writeString(data.data());

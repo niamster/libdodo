@@ -19,7 +19,7 @@ threadRead(void *data)
     cout << "READER->\n";
     cout.flush();
 
-    try {
+    dodo_try {
         dodo::string str;
 
         io::channel *pipe = (io::channel *)data;
@@ -36,8 +36,8 @@ threadRead(void *data)
         str = pipe->read();
         cout << "%MD5: " << tools::code::MD5Hex(str) << "%\n";
         cout.flush();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     cout << "<-READER\n";
@@ -52,7 +52,7 @@ threadWrite(void *data)
     cout << "WRITER->\n";
     cout.flush();
 
-    try {
+    dodo_try {
         dodo::string str;
 
         io::channel *pipe = (io::channel *)data;
@@ -68,8 +68,8 @@ threadWrite(void *data)
         pipe->bs = str.size();
         pipe->write(str);
         pipe->flush();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     cout << "<-WRITER\n";
@@ -82,7 +82,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         manager threads;
 
         cout << "\n~~using one pipe for the thread~~\n";
@@ -133,8 +133,8 @@ main(int  argc UNUSED,
                                        ON_DESTRUCTION_STOP)));
 
         threads.wait();
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

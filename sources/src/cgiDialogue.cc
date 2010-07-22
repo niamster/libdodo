@@ -553,7 +553,7 @@ dialogue::setResponseStatus(short code)
     if (code <= STATUS_CODE_HTTPVERSIONNOTSUPPORTED)
         returnCode = code;
     else
-        throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_SETRESPONSESTATUS, exception::ERRNO_LIBDODO, DIALOGUEEX_WRONGSTATUSCODE, CGIDIALOGUEEX_WRONGSTATUSCODE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_SETRESPONSESTATUS, exception::ERRNO_LIBDODO, DIALOGUEEX_WRONGSTATUSCODE, CGIDIALOGUEEX_WRONGSTATUSCODE_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -743,7 +743,7 @@ dialogue::makePost()
 
                                         default:
 
-                                            throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                                            dodo_throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                                     }
                                 } else {
                                     if (fwrite(i->data() + temp1, file.size, 1, fp) == 0) {
@@ -751,14 +751,14 @@ dialogue::makePost()
                                             file.error = FILE_ERROR_NO_SPACE;
                                         } else {
                                             if (fclose(fp) != 0)
-                                                throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                                                dodo_throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-                                            throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                                            dodo_throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                                         }
                                     }
 
                                     if (fclose(fp) != 0)
-                                        throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                                        dodo_throw exception::basic(exception::MODULE_CGIDIALOGUE, DIALOGUEEX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                                 }
                             }
 

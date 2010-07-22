@@ -85,7 +85,7 @@ tools::time::byFormat(const dodo::string &format,
         tTime = gmtime((const time_t *)&timestamp);
 
     if (tTime == NULL)
-        throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_BYFORMAT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_BYFORMAT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     char formatted[30];
 
@@ -102,7 +102,7 @@ tools::time::millinow()
     timeval tv;
 
     if (gettimeofday(&tv, NULL) == -1)
-        throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_MILLINOW, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_MILLINOW, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     return 1000 * tv.tv_sec + tv.tv_usec / 1000;
 }
@@ -114,7 +114,7 @@ tools::time::now()
 {
     time_t tTime = ::time(NULL);
     if (tTime == (time_t)-1)
-        throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_NOW, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_NOW, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     return tTime;
 }
@@ -201,7 +201,7 @@ tools::time::timestamp(long seconds,
         tTime = gmtime((const time_t *)&seconds);
 
     if (tTime == NULL)
-        throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_MAKETIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSTIME, TIMEEX_MAKETIME, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     __time__ timeInfo;
 

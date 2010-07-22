@@ -53,14 +53,14 @@ misc::random(void          *data,
     if (strength == RANDOM_STRENGTH_DEFAULT) {
         file = fopen("/dev/urandom", "r");
         if (file == NULL)
-            throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     } else {
         if (strength == RANDOM_STRENGTH_STRONG) {
             file = fopen("/dev/random", "r");
             if (file == NULL)
-                throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         } else
-            throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
     }
 
     while (true) {
@@ -72,14 +72,14 @@ misc::random(void          *data,
                 continue;
 
             if (ferror(file) != 0)
-                throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         break;
     }
 
     if (fclose(file) != 0)
-        throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -89,12 +89,12 @@ misc::stringRandom(unsigned long size,
                    short         strength)
 {
     char *data = new char[size + 1];
-    try {
+    dodo_try {
         random(data, size, strength);
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         delete [] data;
 
-        throw;
+        dodo_rethrow;
     }
     for (unsigned long i = 0; i < size; ++i)
         if (data[i] == '\0')
@@ -304,7 +304,7 @@ misc::join(const dodoStringArray &fields,
            int                   limit)
 {
     if (fields.size() == 0)
-        throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_JOIN, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_JOIN, exception::ERRNO_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
 
     int k(0);
 

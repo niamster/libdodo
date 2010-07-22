@@ -114,13 +114,13 @@ regexp::match(const dodo::string &pattern,
               const dodo::string &sample,
               dodoStringArray  &pockets)
 {
-    try {
+    dodo_try {
         compile(pattern);
-    } catch (exception::basic &ex) {
-        if (ex.function == REGEXPEX_COMPILE)
+    } dodo_catch (exception::basic *e UNUSED) {
+        if (e->function == REGEXPEX_COMPILE)
             return false;
         else
-            throw;
+            dodo_rethrow;
     }
 
     return match(sample, pockets);
@@ -227,7 +227,7 @@ regexp::compile(const dodo::string &pattern)
     const char *error;
     regex->code = pcre_compile2(pattern.data(), bits, &errn, &error, &errOffset, NULL);
     if (regex->code == NULL)
-        throw exception::basic(exception::MODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
+        dodo_throw exception::basic(exception::MODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
 
 #else
     if (extended)
@@ -245,7 +245,7 @@ regexp::compile(const dodo::string &pattern)
 #define ERROR_LEN 256
         char error[ERROR_LEN];
         regerror(errn, &regex->code, error, ERROR_LEN);
-        throw exception::basic(exception::MODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
+        dodo_throw exception::basic(exception::MODULE_TOOLSREGEXP, REGEXPEX_COMPILE, exception::ERRNO_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
     }
 #endif
 }
@@ -257,13 +257,13 @@ regexp::replace(const dodo::string      &pattern,
                 const dodo::string      &sample,
                 const dodoStringArray &replacements)
 {
-    try {
+    dodo_try {
         compile(pattern);
-    } catch (exception::basic &ex) {
-        if (ex.function == REGEXPEX_COMPILE)
+    } dodo_catch (exception::basic *e UNUSED) {
+        if (e->function == REGEXPEX_COMPILE)
             return sample;
         else
-            throw;
+            dodo_rethrow;
     }
 
     return replace(sample, replacements);

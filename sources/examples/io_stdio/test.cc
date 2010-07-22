@@ -39,7 +39,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         stdio st;
         cout << st.peer().host << endl;
 
@@ -69,9 +69,9 @@ main(int  argc UNUSED,
 
         st.bs = 40;
         st.writeString(o);
-        st.writeString("\nexiting\n");
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+        st.writeString("\n*eiting\n");
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

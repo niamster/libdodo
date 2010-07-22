@@ -18,7 +18,9 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+	exception::basic *e;
+    
+	dodo_try {
         cout << filesystem::fileContents("test.cc");
         filesystem::copy("test.cc", "test.cc.copy", true);
 
@@ -29,13 +31,11 @@ main(int  argc UNUSED,
         for (unsigned int i = 0; i < arr.size(); i++) {
             cout << arr[i];
         }
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
-    } catch (...)   {
-        cout << "not exists\n";
+    } dodo_catch (e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
-    try {
+    dodo_try {
         filesystem::rm("./test.cc.copy");
 
         filesystem::mkdir("dir");
@@ -90,8 +90,8 @@ main(int  argc UNUSED,
         str = io1.read();
         cout << "\nSize: " << str.size() << endl;
         cout << "~~" << str << "~~" << endl << endl;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

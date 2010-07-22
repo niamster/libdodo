@@ -17,7 +17,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         cout << "тест" << endl;
 #ifdef ICONV_EXT
         cout << tools::code::codesetConversion(tools::code::codesetConversion("тест", "utf-8", "cp1251"), "cp1251", "utf-8") << endl;
@@ -54,7 +54,7 @@ main(int  argc UNUSED,
         cout << "SHA-512 of longString, should be d64cdf8f171e1474423a002c0627be1c10bfb0d6c84ffcb555d9eca7c033504c38fb0f41e1ef0e1c86d6c61b1c09100a7192566f18dc5ecc9aa8121a50b521e7" << endl;
         cout << "SHA-512 of longString,        is " << tools::code::SHA512Hex(longString) <<  endl;
 
-        cout << "tools::code::hexToLong(tools::code::longToHex(356456942)) is " << tools::code::hexToLong(tools::code::longToHex(356456942UL)) << endl;
+        cout << "tools::code::h*eToLong(tools::code::longToHex(356456942)) is " << tools::code::hexToLong(tools::code::longToHex(356456942UL)) << endl;
 
 #ifdef ICONV_EXT
         tools::code::codesetConversion(tools::filesystem::fileContents("test.cc"), "cp1251", "utf-8");
@@ -94,10 +94,8 @@ main(int  argc UNUSED,
 #ifdef BZ2_EXT
         cout << "Size of bziped Makefile" << tools::code::bzCompress(tools::filesystem::fileContents("Makefile"), 9).size() << endl;
 #endif
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
-    } catch (std::exception ex)   {
-        cout << endl << ex.what() << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

@@ -35,7 +35,7 @@ main(int  argc UNUSED,
      char **argv UNUSED)
 {
 #ifdef POSTGRESQL_EXT
-    try {
+    dodo_try {
         postgresql::__connection_options__ ci("test", argc>1?argv[1]:"localhost", "postgres", "", 5432);
 
         postgresql db(ci);
@@ -44,9 +44,9 @@ main(int  argc UNUSED,
         db.addXExec(xexec::ACTION_PREEXEC, ::hook, NULL);
 #endif
 
-        try {
+        dodo_try {
             db.exec(sql::query("DROP TABLE test"));
-        } catch (...)   {
+        } dodo_catch (exception::basic *e UNUSED)   {
         }
 
         db.exec(sql::query("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id integer default NULL, i integer default NULL, b bytea)"));
@@ -96,12 +96,12 @@ main(int  argc UNUSED,
                 cout << "[" << *m << "]\t";
             cout << endl;
         }
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << ex.line;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << e->line;
     }
 #else
 
-    cout << "No Postresql extension was compiled";
+    cout << "No Postresql *etension was compiled";
 
 #endif
 

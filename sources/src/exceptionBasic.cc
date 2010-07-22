@@ -48,6 +48,12 @@
 
 using namespace dodo::exception;
 
+__thread __context__ dodo::exception::global_exeption_context = {
+    NULL,
+    NULL};
+
+__thread char dodo::exception::exeption_storage[sizeof(basic)];
+
 unsigned long basic::instances = 0;
 
 //-------------------------------------------------------------------
@@ -396,7 +402,7 @@ basic::sync::stack::~stack()
 
 //-------------------------------------------------------------------
 
-basic::basic() throw ()
+basic::basic()
 {
     instances = 1;
 }
@@ -410,7 +416,7 @@ basic::basic(int              a_module,
              const dodo::string &a_errstr,
              unsigned long    a_line,
              const dodo::string &a_file,
-             const dodo::string &a_message) throw () : source(a_module),
+             const dodo::string &a_message) : source(a_module),
                                                      function(functionID),
                                                      errnoSource(errnoSource),
                                                      errNo(a_errno),
@@ -785,11 +791,14 @@ handle:
 
     if (handlerMap[source])
         handlers[source](source, this, handlerData[source]);
+
+    if (!exception::global_exeption_context.context)
+        abort();
 }
 
 //-------------------------------------------------------------------
 
-basic::~basic() throw ()
+basic::~basic()
 {
     sync::stack tg;
 
@@ -848,7 +857,7 @@ basic::operator const dodo::string
 //-------------------------------------------------------------------
 
 const char *
-basic::what() const throw ()
+basic::what() const
 {
     sync::stack tg;
 
@@ -1082,6 +1091,32 @@ basic::module(const dodo::string &module,
     return mod;
 }
 #endif
+
+//-------------------------------------------------------------------
+
+void *
+basic::operator new(size_t size UNUSED,
+        void *mem)
+{
+    return mem;
+}
+
+//-------------------------------------------------------------------
+
+void *
+basic::operator new(size_t size)
+{
+    return new char [size];
+}
+
+//-------------------------------------------------------------------
+
+void
+basic::operator delete(void *p)
+{
+    if (p != (void *)&exeption_storage)
+        delete [] (char *)p;
+}
 
 //-------------------------------------------------------------------
 

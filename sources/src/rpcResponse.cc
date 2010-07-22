@@ -53,7 +53,7 @@ value
 response::value(unsigned long position)
 {
     if (position >= rValues.size())
-        throw exception::basic(exception::MODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 
     return rValues[position];
 }
@@ -92,7 +92,7 @@ dodo::rpc::value
 response::operator[](unsigned long position)
 {
     if (position >= rValues.size())
-        throw exception::basic(exception::MODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, exception::ERRNO_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 
     return rValues[position];
 }

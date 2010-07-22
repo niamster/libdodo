@@ -118,7 +118,7 @@ server::makeSocket()
         ::shutdown(socket, SHUT_RDWR);
 
         if (::close(socket) == -1)
-            throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         socket = -1;
     }
@@ -146,7 +146,7 @@ server::makeSocket()
 
         default:
 
-            throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
     }
 
     switch (type) {
@@ -164,12 +164,12 @@ server::makeSocket()
 
         default:
 
-            throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
     }
 
     socket = ::socket(real_domain, real_type, 0);
     if (socket == -1)
-        throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     restoreOptions();
 }
@@ -189,7 +189,7 @@ server::serve(const dodo::string &host,
 
     int sockFlag(1);
     if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == 1)
-        throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     addFlag(socketOpts, 1 << OPTION_REUSE_ADDRESS);
 
@@ -207,7 +207,7 @@ server::serve(const dodo::string &host,
             inet_pton(AF_INET6, host.data(), &sa.sin6_addr);
 
         if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-            throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     } else {
         struct sockaddr_in sa;
 
@@ -219,12 +219,12 @@ server::serve(const dodo::string &host,
             inet_pton(AF_INET, host.data(), &sa.sin_addr);
 
         if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-            throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 
     if (type == TRANSFER_STREAM)
         if (::listen(socket, numberOfConnections) == -1)
-            throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #ifndef IO_WO_XEXEC
     performPostExec(OPERATION_BINDNLISTEN);
@@ -250,13 +250,13 @@ server::serve(const dodo::string &path,
             if (S_ISSOCK(st.st_mode))
                 ::unlink(path.data());
             else
-                throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_WRONGFILENAME, IONETWORKSERVEREX_WRONGFILENAME_STR, __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_WRONGFILENAME, IONETWORKSERVEREX_WRONGFILENAME_STR, __LINE__, __FILE__);
         }
     }
 
     int sockFlag(1);
     if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-        throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     addFlag(socketOpts, 1 << OPTION_REUSE_ADDRESS);
 
@@ -267,16 +267,16 @@ server::serve(const dodo::string &path,
     unsigned long size = path.size();
 
     if (size >= 108)
-        throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_LONGPATH, IONETWORKSERVEREX_LONGPATH_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_LIBDODO, SERVEREX_LONGPATH, IONETWORKSERVEREX_LONGPATH_STR, __LINE__, __FILE__);
 
     strncpy(sa.sun_path, path.data(), size);
     sa.sun_family = AF_UNIX;
 
     if (::bind(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
-        throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     if (::listen(socket, numberOfConnections) == -1)
-        throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     unixSock = path;
 
@@ -317,7 +317,7 @@ server::accept(exchange::__init__ &init,
                 if (errno == EAGAIN)
                     return false;
                 else
-                    throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
 
             char temp[INET_ADDRSTRLEN];
@@ -339,7 +339,7 @@ server::accept(exchange::__init__ &init,
                 if (errno == EAGAIN)
                     return false;
                 else
-                    throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
 
             char temp[INET6_ADDRSTRLEN];
@@ -357,14 +357,14 @@ server::accept(exchange::__init__ &init,
                 if (errno == EAGAIN)
                     return false;
                 else
-                    throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
 
             break;
 
         default:
 
-            throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
     }
 
     init.socket = sock;
@@ -400,7 +400,7 @@ server::accept(exchange::__init__ &init)
         if (errno == EAGAIN)
             return false;
         else
-            throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKSERVER, SERVEREX_ACCEPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 
     init.socket = sock;

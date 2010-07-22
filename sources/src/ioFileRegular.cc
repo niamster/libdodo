@@ -73,7 +73,7 @@ regular::regular(const dodo::string &a_path,
     if (path.size() == 0) {
         delete handle;
 
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
     } else {
         struct stat st;
 
@@ -81,7 +81,7 @@ regular::regular(const dodo::string &a_path,
             if (errno != ENOENT) {
                 delete handle;
 
-                throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
             }
         } else {
             exists = true;
@@ -90,7 +90,7 @@ regular::regular(const dodo::string &a_path,
         if (exists && !S_ISREG(st.st_mode) && !S_ISBLK(st.st_mode)) {
             delete handle;
 
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
         }
 
         switch (mode) {
@@ -118,16 +118,16 @@ regular::regular(const dodo::string &a_path,
     if (handle->file == NULL) {
         delete handle;
 
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
     }
 
     if (!exists) {
-        try {
+        dodo_try {
             tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
-        } catch (...) {
+        } dodo_catch (exception::basic *e UNUSED) {
             delete handle;
 
-            throw;
+            dodo_rethrow;
         }
     }
 }
@@ -155,14 +155,14 @@ regular::regular(const regular &fd) : block::channel(fd.protection),
         if (oldDesc == -1) {
             delete handle;
 
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         newDesc = dup(oldDesc);
         if (newDesc == -1) {
             delete handle;
 
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         switch (mode) {
@@ -182,7 +182,7 @@ regular::regular(const regular &fd) : block::channel(fd.protection),
         if (handle->file == NULL) {
             delete handle;
 
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_REGULAR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     }
 }
@@ -205,7 +205,7 @@ regular::inDescriptor() const
     pc::sync::stack pg(keeper);
 
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_INDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_INDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
     return fileno(handle->file);
 }
@@ -218,7 +218,7 @@ regular::outDescriptor() const
     pc::sync::stack pg(keeper);
 
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OUTDESCRIPTOR, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
     return fileno(handle->file);
 }
@@ -232,7 +232,7 @@ regular::clone(const regular &fd)
 
     if (handle->file !=  NULL) {
         if (fclose(handle->file) != 0)
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         handle->file = NULL;
     }
@@ -248,11 +248,11 @@ regular::clone(const regular &fd)
 
         oldDesc = fileno(fd.handle->file);
         if (oldDesc == -1)
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         newDesc = dup(oldDesc);
         if (newDesc == -1)
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         switch (mode) {
             case OPEN_MODE_READ_WRITE:
@@ -269,7 +269,7 @@ regular::clone(const regular &fd)
         }
 
         if (handle->file == NULL)
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLONE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 }
 
@@ -286,7 +286,7 @@ regular::close()
 
     if (handle->file !=  NULL) {
         if (fclose(handle->file) != 0)
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
         handle->file = NULL;
     }
@@ -313,7 +313,7 @@ regular::open(const dodo::string &a_path,
 
     if (handle->file !=  NULL) {
         if (fclose(handle->file) != 0)
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
         handle->file = NULL;
     }
@@ -321,18 +321,18 @@ regular::open(const dodo::string &a_path,
     bool exists(false);
 
     if (path.size() == 0)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
     else {
         struct stat st;
 
         if (::lstat(path.data(), &st) == -1) {
             if (errno != ENOENT)
-                throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
         } else
             exists = true;
 
         if (exists && !S_ISREG(st.st_mode) && !S_ISBLK(st.st_mode))
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_LIBDODO, REGULAREX_WRONGFILENAME, IOFILEREGULAREX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 
         switch (mode) {
             case OPEN_MODE_READ_WRITE:
@@ -357,7 +357,7 @@ regular::open(const dodo::string &a_path,
     }
 
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_OPEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     if (!exists)
         tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
@@ -373,10 +373,10 @@ unsigned long
 regular::_read(char * const data) const
 {
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
     if (fseek(handle->file, pos, SEEK_SET) == -1)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     char *s = data;
 
@@ -392,7 +392,7 @@ regular::_read(char * const data) const
                     continue;
 
                 if (ferror(handle->file) != 0)
-                    throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
 
             break;
@@ -411,14 +411,14 @@ unsigned long
 regular::_write(const char *const data) const
 {
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
     if (append) {
         if (fseek(handle->file, 0, SEEK_END) == -1)
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
     } else {
         if (fseek(handle->file, pos, SEEK_SET) == -1)
-            throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+            dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
     }
 
     const char *s = data;
@@ -435,7 +435,7 @@ regular::_write(const char *const data) const
                     break;
 
                 if (ferror(handle->file) != 0)
-                    throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
 
             break;
@@ -458,12 +458,12 @@ regular::erase()
     char *empty = new char[bs];
 
     memset(empty, 0, bs);
-    try {
+    dodo_try {
         _write(empty);
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         delete [] empty;
 
-        throw;
+        dodo_rethrow;
     }
 
     delete [] empty;
@@ -477,10 +477,10 @@ regular::flush() const
     pc::sync::stack pg(keeper);
 
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
     if (fflush(handle->file) != 0)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX_FLUSH, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -489,12 +489,12 @@ unsigned long
 regular::_readString(char * const data) const
 {
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READSTRING, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READSTRING, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
     unsigned long readSize = bs + 1;
 
     if (fseek(handle->file, pos, SEEK_SET) == -1)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     while (true) {
         if (fgets(data, readSize, handle->file) == NULL) {
@@ -505,7 +505,7 @@ regular::_readString(char * const data) const
                 break;
 
             if (ferror(handle->file) != 0)
-                throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         break;
@@ -520,24 +520,24 @@ unsigned long
 regular::_writeString(const char *const data) const
 {
     if (handle->file == NULL)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITESTRING, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITESTRING, exception::ERRNO_LIBDODO, REGULAREX_NOTOPENED, IOFILEREGULAREX_NOTOPENED_STR, __LINE__, __FILE__, path);
 
     if (fseek(handle->file, 0, SEEK_END) == -1)
-        throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITESTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+        dodo_throw exception::basic(exception::MODULE_IOFILEREGULAR, REGULAREX__WRITESTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
     unsigned long _bs = bs;
     unsigned long written;
 
-    try {
+    dodo_try {
         bs = strnlen(data, bs);
 
         written = _write(data);
 
         bs = _bs;
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         bs = _bs;
 
-        throw;
+        dodo_rethrow;
     }
 
     return written;

@@ -92,7 +92,7 @@ namespace dodo {
                 bool           detached;            ///< true if thread is detached
                 short          action;              ///< action on object destruction[@see onDestructionEnum]
 
-                exception::basic *ex; ///< uncought exception thrown by thread routine
+                exception::basic *ex; ///< uncought exception dodo_rethrown by thread routine
 
 #ifdef DL_EXT
                 void           *handle;             ///< handle to library
@@ -118,13 +118,14 @@ __thread__::routine(void *data)
 {
     __thread__ *ti = (__thread__ *)data;
 
-    try {
+    dodo_try {
         delete ti->ex;
         ti->ex = NULL;
 
         ti->status = ((execution::routine)ti->func)(ti->data);
-    } catch (exception::basic &ex) {
-        ti->ex = new exception::basic(ex);
+    } dodo_catch (exception::basic *e UNUSED) {
+        /* FIXME */
+        ti->ex = new exception::basic(*e);
         ti->status = 0;
     }
 
@@ -147,7 +148,8 @@ thread::thread(routine       func,
                short         action,
                bool          detached,
                unsigned long stackSize)
-try : job(TYPE_THREAD),
+    /* FIXME */
+/* dodo_try */ : job(TYPE_THREAD),
       handle(NULL)
     {
         handle = new __thread__;
@@ -173,26 +175,27 @@ try : job(TYPE_THREAD),
 
         errno = pthread_attr_setstacksize(&handle->attr, stackSize);
         if (errno != 0)
-            throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 #endif
 
 #ifdef PTHREAD_EXT
         pthread_attr_destroy(&handle->attr);
 #endif
-    } catch (...) {
-        if (handle) {
-#ifdef PTHREAD_EXT
-            pthread_attr_destroy(&handle->attr);
-#endif
-            delete handle;
-        }
-    }
+    }/*  dodo_catch (exception::basic *e UNUSED) { */
+/*         if (handle) { */
+/* #ifdef PTHREAD_EXT */
+/*             pthread_attr_destroy(&handle->attr); */
+/* #endif */
+/*             delete handle; */
+/*         } */
+/*     } */
 
 #ifdef DL_EXT
 thread::thread(const dodo::string &module,
                void             *data,
                void             *toInit)
-try : job(TYPE_THREAD),
+    /* FIXME */
+/* dodo_try */ : job(TYPE_THREAD),
       handle(NULL)
     {
         handle = new __thread__;
@@ -205,17 +208,17 @@ try : job(TYPE_THREAD),
         handle->handle = dlopen(module.data(), RTLD_LAZY);
 #endif
         if (handle->handle == NULL)
-            throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
         initModule init = (initModule)dlsym(handle->handle, "initPcExecutionThreadModule");
         if (init == NULL)
-            throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
         __module__ m = init(toInit);
 
         void *f = dlsym(handle->handle, m.hook);
         if (f == NULL)
-            throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
         if (m.detached)
             pthread_attr_setdetachstate(&handle->attr, PTHREAD_CREATE_DETACHED);
@@ -224,24 +227,24 @@ try : job(TYPE_THREAD),
 
         errno = pthread_attr_setstacksize(&handle->attr, m.stackSize);
         if (errno != 0)
-            throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         handle->detached = m.detached;
         handle->action = m.action;
         handle->func = f;
         memcpy(handle->cookie, m.cookie, 32);
-    } catch (...) {
-        if (handle) {
-            if (handle->handle)
-                dlclose(handle->handle);
+    } /* dodo_catch (exception::basic *e UNUSED) { */
+/*         if (handle) { */
+/*             if (handle->handle) */
+/*                 dlclose(handle->handle); */
 
-#ifdef PTHREAD_EXT
-            pthread_attr_destroy(&handle->attr);
-#endif
+/* #ifdef PTHREAD_EXT */
+/*             pthread_attr_destroy(&handle->attr); */
+/* #endif */
 
-            delete handle;
-        }
-    }
+/*             delete handle; */
+/*         } */
+/*     } */
 #endif
 
 //-------------------------------------------------------------------
@@ -311,12 +314,12 @@ void
 thread::run()
 {
     if (isRunning())
-        throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_RUN, exception::ERRNO_LIBDODO, THREADEX_ISALREADYRUNNING, PCEXECUTIONTHREADEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_RUN, exception::ERRNO_LIBDODO, THREADEX_ISALREADYRUNNING, PCEXECUTIONTHREADEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
     errno = pthread_create(&handle->thread, &handle->attr, __thread__::routine, handle);
     if (errno != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_RUN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 #endif
 
     handle->executed = true;
@@ -329,7 +332,7 @@ thread::wait()
 {
     if (handle->detached) {
         if (isRunning())
-            throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_WAIT, exception::ERRNO_LIBDODO, THREADEX_ISDETACHED, PCEXECUTIONTHREADEX_ISDETACHED_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_WAIT, exception::ERRNO_LIBDODO, THREADEX_ISDETACHED, PCEXECUTIONTHREADEX_ISDETACHED_STR, __LINE__, __FILE__);
         else
             return handle->status;
     }
@@ -338,14 +341,14 @@ thread::wait()
         return handle->status;
 
     if (!handle->executed)
-        throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_WAIT, exception::ERRNO_LIBDODO, THREADEX_ISNOTLAUNCHED, PCEXECUTIONTHREADEX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_WAIT, exception::ERRNO_LIBDODO, THREADEX_ISNOTLAUNCHED, PCEXECUTIONTHREADEX_ISNOTLAUNCHED_STR, __LINE__, __FILE__);
 
     int status = 0;
 
 #ifdef PTHREAD_EXT
     errno = pthread_join(handle->thread, NULL);
     if (errno != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_WAIT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     status = handle->status;
 #endif
@@ -364,7 +367,7 @@ thread::stop()
 #ifdef PTHREAD_EXT
     errno = pthread_cancel(handle->thread);
     if (errno != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_STOP, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 #endif
 
     handle->executed = false;
@@ -384,7 +387,7 @@ thread::isRunning() const
         if (errno == ESRCH || errno == EAGAIN)
             return false;
 
-        throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_ISRUNNING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 #endif
 
@@ -404,11 +407,11 @@ thread::module(const dodo::string &module,
     void *handle = dlopen(module.data(), RTLD_LAZY);
 #endif
     if (handle == NULL)
-        throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     initModule init = (initModule)dlsym(handle, "initPcExecutionThreadModule");
     if (init == NULL)
-        throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
     __module__ mod = init(toInit);
 
@@ -418,7 +421,7 @@ thread::module(const dodo::string &module,
 
 #ifndef DL_FAST
     if (dlclose(handle) != 0)
-        throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_MODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 #endif
 

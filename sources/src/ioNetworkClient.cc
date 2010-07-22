@@ -118,7 +118,7 @@ client::makeSocket()
         ::shutdown(socket, SHUT_RDWR);
 
         if (::close(socket) == -1)
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         socket = -1;
     }
@@ -146,7 +146,7 @@ client::makeSocket()
 
         default:
 
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
     }
 
     switch (type) {
@@ -164,12 +164,12 @@ client::makeSocket()
 
         default:
 
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_LIBDODO, CLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
     }
 
     socket = ::socket(real_domain, real_type, 0);
     if (socket == -1)
-        throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     restoreOptions();
 }
@@ -197,11 +197,11 @@ client::connect(const dodo::string &host,
 
         if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
             if (::close(socket) == -1)
-                throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
             socket = -1;
 
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     } else {
         struct sockaddr_in sa;
@@ -211,11 +211,11 @@ client::connect(const dodo::string &host,
 
         if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
             if (::close(socket) == -1)
-                throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
             socket = -1;
 
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     }
 
@@ -244,7 +244,7 @@ client::connectFrom(const dodo::string &local,
 
     int sockFlag(1);
     if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-        throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
     addFlag(socketOpts, 1 << OPTION_REUSE_ADDRESS);
 
@@ -257,18 +257,18 @@ client::connectFrom(const dodo::string &local,
         inet_pton(AF_INET6, local.data(), &sa.sin6_addr);
 
         if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         sa.sin6_port = htons(port);
         inet_pton(AF_INET6, host.data(), &sa.sin6_addr);
 
         if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
             if (::close(socket) == -1)
-                throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
             socket = -1;
 
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     } else {
         struct sockaddr_in sa;
@@ -277,18 +277,18 @@ client::connectFrom(const dodo::string &local,
         inet_aton(local.data(), &sa.sin_addr);
 
         if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         sa.sin_port = htons(port);
         inet_aton(host.data(), &sa.sin_addr);
 
         if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
             if (::close(socket) == -1)
-                throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
             socket = -1;
 
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     }
 
@@ -318,18 +318,18 @@ client::connect(const dodo::string &path,
     unsigned long size = path.size();
 
     if (size >= 108)
-        throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_LIBDODO, CLIENTEX_LONGPATH, IONETWORKCLIENTEX_LONGPATH_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_LIBDODO, CLIENTEX_LONGPATH, IONETWORKCLIENTEX_LONGPATH_STR, __LINE__, __FILE__);
 
     strncpy(sa.sun_path, path.data(), size);
     sa.sun_family = AF_UNIX;
 
     if (::connect(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1) {
         if (::close(socket) == -1)
-            throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
         socket = -1;
 
-        throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     }
 
     exchange.init(socket, blocked, blockInherited);

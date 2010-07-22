@@ -190,7 +190,7 @@ unsigned long
 exchange::_write(const char * const data) const
 {
     if (socket == -1)
-        throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
     unsigned long iter = bs / outSocketBufferSize;
     unsigned long rest = bs % outSocketBufferSize;
@@ -210,7 +210,7 @@ exchange::_write(const char * const data) const
                     if (errno == EAGAIN)
                         return s - data;
 
-                    throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
 
                 break;
@@ -232,7 +232,7 @@ exchange::_write(const char * const data) const
                     if (errno == EAGAIN)
                         return s - data;
 
-                    throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
 
                 break;
@@ -252,7 +252,7 @@ unsigned long
 exchange::_read(char * const data) const
 {
     if (socket == -1)
-        throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
     unsigned long iter = bs / inSocketBufferSize;
     unsigned long rest = bs % inSocketBufferSize;
@@ -273,7 +273,7 @@ exchange::_read(char * const data) const
                     if (errno == EAGAIN)
                         return s - _s;
 
-                    throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
 
                 break;
@@ -298,7 +298,7 @@ exchange::_read(char * const data) const
                     if (errno == EAGAIN)
                         return s - _s;
 
-                    throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
                 }
 
                 break;
@@ -323,16 +323,16 @@ exchange::_writeString(const char * const s) const
     unsigned long _bs = bs;
     unsigned long written;
 
-    try {
+    dodo_try {
         bs = strnlen(s, bs) + 1;
 
         written = _write(s);
 
         bs = _bs;
-    } catch (...) {
+    } dodo_catch (exception::basic *e UNUSED) {
         bs = _bs;
 
-        throw;
+        dodo_rethrow;
     }
 
     return written;
@@ -344,7 +344,7 @@ unsigned long
 exchange::_readString(char * const s) const
 {
     if (socket == -1)
-        throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
     long n = 0;
 
@@ -356,7 +356,7 @@ exchange::_readString(char * const s) const
             if (errno == EAGAIN)
                 return 0;
 
-            throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTRING, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
 
         break;

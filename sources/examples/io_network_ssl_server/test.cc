@@ -47,19 +47,19 @@ process(exchange &ex)
         ex.writeString("Alive");
 
     dodo::string str = "";
-    try {
+    dodo_try {
         ex.bs = 4;
         str = ex.read();
 
         cout << str << ":" << str.size() << endl;
         cout.flush();
-        if (str == "exit") {
+        if (str == "*eit") {
             ex.close();
 
             exit(0);
         }
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
         cout.flush();
     }
 }
@@ -69,7 +69,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
 #ifdef OPENSSL_EXT
         server sock(io::network::connection::PROTOCOL_FAMILY_IPV4, io::network::connection::TRANSFER_STREAM);
 
@@ -97,8 +97,8 @@ main(int  argc UNUSED,
             }
         }
 #endif
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

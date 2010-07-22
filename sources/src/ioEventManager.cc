@@ -133,7 +133,7 @@ manager::isReadable(const dodoArray<int> &pos,
             } else {
                 delete [] fds;
 
-                throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
         }
     }
@@ -200,7 +200,7 @@ manager::isWritable(const dodoArray<int> &pos,
             } else {
                 delete [] fds;
 
-                throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                dodo_throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
         }
     }
@@ -240,7 +240,7 @@ manager::isReadable(int pos,
                 if (res == 0)
                     return false;
                 else
-                    throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
         }
     }
@@ -292,7 +292,7 @@ manager::isWritable(int pos,
                 if (res == 0)
                     return false;
                 else
-                    throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    dodo_throw exception::basic(exception::MODULE_IOEVENTMANAGER, MANAGEREX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
         }
     }

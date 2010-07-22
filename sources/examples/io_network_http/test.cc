@@ -18,18 +18,18 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         dodoStringMap cookies;
         cookies["test"] = "Dmytro Milinevskyy";
 
         dodoStringMap map;
 
         map["hidden"] = "hidden";
-        map["text"] = "text";
+        map["t*et"] = "text";
 
         dodoMap<dodo::string, file> files;
 
-        files["file"] = file("./test.cc", "text/plain");
+        files["file"] = file("./test.cc", "t*et/plain");
 
         client HTTP;
         response res;
@@ -69,8 +69,8 @@ main(int  argc UNUSED,
         cout << res.headers[RESPONSE_HEADER_CONTENTLENGTH] << "\n~~\n";
         cout << res.data.size() << "\n~~\n";
 #endif
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

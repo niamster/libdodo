@@ -17,7 +17,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         network::__host__ host;
 
         host = network::host("localhost");
@@ -34,12 +34,12 @@ main(int  argc UNUSED,
 
         dodoStringArray ifaces = network::interfacesNames();
         for (unsigned int i(0); i < ifaces.size(); i++) {
-            try {
+            dodo_try {
                 cout << ifaces[i] << ":\t" << network::interface(ifaces[i]).hwaddr << endl;
                 cout << ifaces[i] << ":\t" << network::interface(ifaces[i]).broadcast << endl;
                 cout << ifaces[i] << ":\t" << network::interface(ifaces[i]).netmask << endl;
-            } catch (dodo::exception::basic &ex)   {
-                cout << ifaces[i] << ":\t" << (dodo::string)ex << endl;
+            } dodo_catch (exception::basic *e)   {
+                cout << ifaces[i] << ":\t" << (dodo::string)*e << endl;
             }
         }
 
@@ -56,8 +56,8 @@ main(int  argc UNUSED,
 
         //tools::misc::mail("niam", "test", "test");
         //tools::misc::mail("127.0.0.1", 25, "niam@niam.mu", "niam@niam.mu", "test", "test", "niam", "niam");
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
     return 0;

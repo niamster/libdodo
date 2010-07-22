@@ -101,7 +101,7 @@ server::setResponseVersion(const dodo::string &version)
 void
 server::serve()
 {
-    try {
+    dodo_try {
         rpc::method meth = processCallRequest();
 
         dodo::string version = rqVersion;
@@ -119,16 +119,9 @@ server::serve()
             processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata));
 
         rpVersion = version;
-    } catch (exception::basic &ex) {
+    } dodo_catch (exception::basic *e UNUSED) {
         rpc::response response;
-        response.fault(ex.errStr);
-
-        rpId = rqId;
-
-        processCallResult(response);
-    } catch (...) {
-        rpc::response response;
-        response.fault("An unknown error.");
+        response.fault(e->errStr);
 
         rpId = rqId;
 

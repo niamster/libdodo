@@ -299,7 +299,7 @@ value
 value::operator[](const dodo::string &name)
 {
     if (valueDataType != DATA_STRUCT)
-        throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_BROPERATORSTRING, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
     return (*structValue)[name];
 }
@@ -310,10 +310,10 @@ value
 value::operator[](unsigned long key)
 {
     if (valueDataType != DATA_ARRAY)
-        throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
     if (key >= arrayValue->size())
-        throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, VALUEEX_ARRAYOUTOFRANGE, RPCVALUEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_BROPERATORNUMERIC, exception::ERRNO_LIBDODO, VALUEEX_ARRAYOUTOFRANGE, RPCVALUEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
 
     return (*arrayValue)[key];
 }
@@ -332,7 +332,7 @@ dodo::string
 value::string()
 {
     if (valueDataType != DATA_STRING)
-        throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_STRING, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_STRING, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
     return *stringValue;
 }
@@ -343,7 +343,7 @@ bool
 value::boolean()
 {
     if (valueDataType != DATA_BOOLEAN)
-        throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_BOOLEAN, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_BOOLEAN, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
     return booleanValue;
 }
@@ -354,7 +354,7 @@ long
 value::numeric()
 {
     if (valueDataType != DATA_NUMERIC)
-        throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_NUMERIC, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_NUMERIC, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
     return (long)numericValue;
 }
@@ -365,7 +365,7 @@ dodoArray<value>
 value::array()
 {
     if (valueDataType != DATA_ARRAY)
-        throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_ARRAY, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_ARRAY, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
     return *arrayValue;
 }
@@ -376,7 +376,7 @@ dodoMap<dodo::string, value, dodo::dodoMapStringCompare>
 value::structure()
 {
     if (valueDataType != DATA_STRUCT)
-        throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_STRUCT, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCVALUE, VALUEEX_STRUCT, exception::ERRNO_LIBDODO, VALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
     return *structValue;
 }

@@ -236,9 +236,9 @@ processor::process(const __definition__ &definition,
         xmlErrorPtr error = xmlGetLastError();
 
         if (error == NULL)
-            throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
         else
-            throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
     }
 #endif
 
@@ -262,9 +262,9 @@ processor::parse(const __definition__ &definition UNUSED)
         xmlErrorPtr error = xmlGetLastError();
 
         if (error == NULL)
-            throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
         else
-            throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
     }
 
     xnode = findNode(definition, xnode);
@@ -652,9 +652,9 @@ processor::process(const io::channel &io)
         xmlErrorPtr error = xmlGetLastError();
 
         if (error == NULL)
-            throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, DATAFORMATXMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
         else
-            throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
     }
 
     info = __info__(document->doc->version != NULL ? (char *)document->doc->version : __dodostring__,
@@ -668,9 +668,9 @@ processor::process(const io::channel &io)
         xmlErrorPtr error = xmlGetLastError();
 
         if (error == NULL)
-            throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, DATAFORMATXMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
         else
-            throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+            dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
     }
 
     n = *(parse(__node__(xnode)).begin());
@@ -750,7 +750,7 @@ processor::make(const node        &root,
                 const io::channel &io) const
 {
     if (root.name.empty())
-        throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
 
     io.writeString("<?xml version=\"");
     io.writeString(version);
@@ -768,7 +768,7 @@ processor::make(const node        &xnode,
                 const io::channel &io) const
 {
     if (xnode.name.empty())
-        throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_DATAFORMATXMLPROCESSOR, PROCESSOREX_MAKE, exception::ERRNO_LIBDODO, PROCESSOREX_NONAME, DATAFORMATXMLPROCESSOREX_NONAME_STR, __LINE__, __FILE__);
 
     io.writeString(statements[STATEMENT_LT]);
 

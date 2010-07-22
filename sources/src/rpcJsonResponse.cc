@@ -44,7 +44,7 @@ response::jsonToResponse(dodo::data::format::json::node &node,
                          long                           &id)
 {
     if (node.valueDataType != dodo::data::format::json::node::DATA_OBJECT)
-        throw exception::basic(exception::MODULE_RPCJSONRESPONSE, RESPONSEEX_JSONTORESPONSE, exception::ERRNO_LIBDODO, RESPONSEEX_ROOTNOTANOBJECT, RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_RPCJSONRESPONSE, RESPONSEEX_JSONTORESPONSE, exception::ERRNO_LIBDODO, RESPONSEEX_ROOTNOTANOBJECT, RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
 
     rpc::response resp;
 

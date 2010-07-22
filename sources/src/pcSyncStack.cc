@@ -45,10 +45,10 @@ stack::stack(protector *keeper) : keeper(keeper)
 
 stack::~stack()
 {
-    try {
+    dodo_try {
         if (keeper != NULL)
             keeper->release();
-    } catch (exception::basic &ex) {
+    } dodo_catch (exception::basic *e UNUSED) {
     }
 }
 

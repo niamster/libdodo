@@ -63,7 +63,7 @@ class httpIO : public io::stream::channel, public io::network::http::client {
     virtual unsigned long
     _write(const char * const data UNUSED) const
     {
-        throw dodo::string("Not implemented");
+        dodo_throw exception::basic(exception::MODULE_UNKNOWN, 0, exception::ERRNO_USER, 0, "Not implemented", __LINE__, __FILE__);
     }
 
     virtual unsigned long
@@ -106,7 +106,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-    try {
+    dodo_try {
         httpIO io("http://localhost/libdodo/rpcjsoncgiserver_test/test.cgi");
         json::client client(io);
 
@@ -135,8 +135,8 @@ main(int  argc UNUSED,
         cout << "Response ID: " << client.responseId() << endl;
         cout << "First value: " << resp.value().string() << endl;
         cout << "Second value: " << resp.value(1).string() << endl;
-    } catch (dodo::exception::basic &ex)   {
-        cout << (dodo::string)ex << endl;
+    } dodo_catch (exception::basic *e)   {
+        cout << (dodo::string)*e << endl;
     }
 
     return 0;
