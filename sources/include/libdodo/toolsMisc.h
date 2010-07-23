@@ -54,7 +54,8 @@ namespace dodo {
              * @enum randomStrengthEnum defines type of randomness
              */
             enum randomStrengthEnum {
-                RANDOM_STRENGTH_DEFAULT,
+                RANDOM_STRENGTH_WEAK,
+                RANDOM_STRENGTH_NORMAL,
                 RANDOM_STRENGTH_STRONG
             };
 
@@ -68,7 +69,7 @@ namespace dodo {
              */
             static void random(void          *data,
                                unsigned long size,
-                               short         strength = RANDOM_STRENGTH_DEFAULT);
+                               short         strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random data
@@ -79,7 +80,7 @@ namespace dodo {
              * nulls are replaced with '*'
              */
             static dodo::string stringRandom(unsigned long size,
-                                           short         strength = RANDOM_STRENGTH_DEFAULT);
+                                           short         strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random unsigned long
@@ -87,7 +88,7 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static unsigned long ulRandom(short strength = RANDOM_STRENGTH_DEFAULT);
+            static unsigned long ulRandom(short strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random long
@@ -95,7 +96,7 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static long lRandom(short strength = RANDOM_STRENGTH_DEFAULT);
+            static long lRandom(short strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random unsigned int
@@ -103,7 +104,7 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static unsigned int uiRandom(short strength = RANDOM_STRENGTH_DEFAULT);
+            static unsigned int uiRandom(short strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random int
@@ -111,7 +112,7 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static int iRandom(short strength = RANDOM_STRENGTH_DEFAULT);
+            static int iRandom(short strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random unsigned short
@@ -119,7 +120,7 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static unsigned short usRandom(short strength = RANDOM_STRENGTH_DEFAULT);
+            static unsigned short usRandom(short strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random short
@@ -127,7 +128,7 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static short sRandom(short strength = RANDOM_STRENGTH_DEFAULT);
+            static short sRandom(short strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random unsigned char
@@ -135,7 +136,7 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static unsigned char ucRandom(short strength = RANDOM_STRENGTH_DEFAULT);
+            static unsigned char ucRandom(short strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random char
@@ -143,7 +144,7 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static char cRandom(short strength = RANDOM_STRENGTH_DEFAULT);
+            static char cRandom(short strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random double
@@ -151,7 +152,7 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static double dRandom(short strength = RANDOM_STRENGTH_DEFAULT);
+            static double dRandom(short strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return true if needle has been found

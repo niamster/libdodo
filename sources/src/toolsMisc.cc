@@ -33,6 +33,8 @@
 #include <errno.h>
 #include <string.h>
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 #include <libdodo/toolsMisc.h>
 #include <libdodo/types.h>
@@ -50,17 +52,28 @@ misc::random(void          *data,
 {
     FILE *file;
 
-    if (strength == RANDOM_STRENGTH_DEFAULT) {
+    if (strength == RANDOM_STRENGTH_WEAK) {
+        srand(time(NULL));
+
+        unsigned long i = 0;
+        for (;i<size;i+=sizeof(int)) {
+            ((int *)data)[i] = rand();
+        }
+        unsigned long reminder = size%sizeof(int);
+        if (reminder) {
+            size = rand();
+            memcpy((char *)data+(i-sizeof(int)), &size, reminder);
+        }
+    } else if (strength == RANDOM_STRENGTH_NORMAL) {
         file = fopen("/dev/urandom", "r");
         if (file == NULL)
             dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-    } else {
-        if (strength == RANDOM_STRENGTH_STRONG) {
+    } else if (strength == RANDOM_STRENGTH_STRONG) {
             file = fopen("/dev/random", "r");
             if (file == NULL)
                 dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        } else
-            dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
+    } else {
+        dodo_throw exception::basic(exception::MODULE_TOOLSMISC, MISCEX_RANDOM, exception::ERRNO_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
     }
 
     while (true) {
