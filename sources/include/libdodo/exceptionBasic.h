@@ -171,7 +171,12 @@ namespace dodo {
          * @class basic
          * @brief describes exception that has been thrown
          */
-        class basic : public singleton<basic>{
+        class basic
+#ifdef DL_EXT
+            : public singleton<basic>
+#endif
+        {
+#ifdef DL_EXT
             friend class singleton<basic>;
 
           private:
@@ -180,6 +185,7 @@ namespace dodo {
              * constructor
              */
             basic();
+#endif
 
           public:
 
@@ -382,7 +388,9 @@ namespace dodo {
                 };
             };
 
+#ifdef DL_EXT
             static unsigned long instances;
+#endif
         };
     };
 };

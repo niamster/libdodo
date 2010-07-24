@@ -54,7 +54,9 @@ __thread __context__ dodo::exception::global_exeption_context = {
 
 __thread char dodo::exception::exeption_storage[sizeof(basic)];
 
+#ifdef DL_EXT
 unsigned long basic::instances = 0;
+#endif
 
 //-------------------------------------------------------------------
 
@@ -402,10 +404,12 @@ basic::sync::stack::~stack()
 
 //-------------------------------------------------------------------
 
+#ifdef DL_EXT
 basic::basic()
 {
     instances = 1;
 }
+#endif
 
 //-------------------------------------------------------------------
 
@@ -785,9 +789,12 @@ basic::basic(int              a_module,
 
 handle:
 #endif
+
+#ifdef DL_EXT
     instance();
 
     ++instances;
+#endif
 
     if (handlerMap[source])
         handlers[source](source, this, handlerData[source]);
@@ -800,12 +807,12 @@ handle:
 
 basic::~basic()
 {
+#ifdef DL_EXT
     sync::stack tg;
 
     --instances;
 
     if (instances == 0) {
-#ifdef DL_EXT
         deinitModule deinit;
 
         for (int i(0); i < MODULE_ENUMSIZE; ++i) {
@@ -822,8 +829,8 @@ basic::~basic()
             dlclose(handles[i]);
 #endif
         }
-#endif
     }
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -846,8 +853,7 @@ basic::backtrace()
 
 //-------------------------------------------------------------------
 
-basic::operator const dodo::string
-& ()
+basic::operator const dodo::string &()
 {
     sync::stack tg;
 
@@ -873,9 +879,9 @@ basic::setHandler(moduleEnum module,
 {
     sync::stack tg;
 
+#ifdef DL_EXT
     instance();
 
-#ifdef DL_EXT
     if (handlesOpened[module]) {
         deinitModule deinit;
 
@@ -905,9 +911,9 @@ basic::setHandler(handler handler,
 {
     sync::stack tg;
 
+#ifdef DL_EXT
     instance();
 
-#ifdef DL_EXT
     deinitModule deinit;
 #endif
 
