@@ -122,21 +122,21 @@ namespace dodo {
 
             /**
              * @return read data
-             * @note not more then bs
+             * @note not more than io::channel::bs
              */
             virtual dodo::string read() const = 0;
 
             /**
              * @return amount in bytes of successfully written data
              * @param data defines data that will be written
-             * @note not more then bs
+             * @note not more than io::channel::bs
              */
             virtual unsigned long write(const dodo::string &data) const = 0;
 
             /**
              * read null- or newline- terminated string
              * @return read data
-             * @note not more then bs
+             * @note not more than io::channel::bs
              */
             virtual dodo::string readString() const = 0;
 
@@ -144,7 +144,7 @@ namespace dodo {
              * write null- terminated string
              * @return amount in bytes of successfully written data
              * @param data defines data that will be written
-             * @note not more then bs
+             * @note not more than io::channel::bs
              */
             virtual unsigned long writeString(const dodo::string &data) const = 0;
 
@@ -160,7 +160,7 @@ namespace dodo {
             /**
              * @return amount in bytes of successfully read data
              * @param data defines buffer that will be filled
-             * @note not more then bs(including null)
+             * @note not more than io::channel::bs(including null)
              */
             virtual unsigned long _read(char * const data) const = 0;
 
@@ -168,14 +168,14 @@ namespace dodo {
              * read null- or newline- terminated string
              * @return amount in bytes of successfully read data
              * @param data defines buffer that will be filled
-             * @note not more then bs(including null)
+             * @note not more than io::channel::bs(including null)
              */
             virtual unsigned long _readString(char * const data) const = 0;
 
             /**
              * @return amount in bytes of successfully written data
              * @param data defines data that will be written
-             * @note not more then bs(including null)
+             * @note not more than io::channel::bs(including null)
              */
             virtual unsigned long _write(const char * const data) const = 0;
 
@@ -183,7 +183,7 @@ namespace dodo {
              * write null- terminated string
              * @return amount in bytes of successfully written data
              * @param data defines data that will be written
-             * @note not more then bs(including null)
+             * @note not more than io::channel::bs(including null)
              */
             virtual unsigned long _writeString(const char * const data) const = 0;
 

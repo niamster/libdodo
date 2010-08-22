@@ -145,7 +145,7 @@ namespace dodo {
                 /**
                  * @return amount in bytes of successfully read data
                  * @param data defines buffer that will be filled
-                 * @note not more then bs(including null)
+                 * @note not more than io::channel::bs(including null)
                  */
                 virtual unsigned long _read(char * const data) const;
 
@@ -153,7 +153,7 @@ namespace dodo {
                  * read null- or newline- terminated string
                  * @return amount in bytes of successfully read data
                  * @param data defines buffer that will be filled
-                 * @note not more then bs(including null)
+                 * @note not more than io::channel::bs(including null)
                  */
                 virtual unsigned long _readString(char * const data) const;
 

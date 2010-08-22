@@ -58,21 +58,21 @@ namespace dodo {
 
                 /**
                  * @return read data
-                 * @note not more then bs
+                 * @note not more than io::channel::bs
                  */
                 virtual dodo::string read() const;
 
                 /**
                  * @return amount in bytes of successfully written data
                  * @param data defines data that will be written
-                 * @note not more then bs
+                 * @note not more than io::channel::bs
                  */
                 virtual unsigned long write(const dodo::string &data) const;
 
                 /**
                  * read null- or newline- terminated string
                  * @return read data
-                 * @note not more then bs
+                 * @note not more than io::channel::bs
                  */
                 virtual dodo::string readString() const;
 
@@ -80,7 +80,7 @@ namespace dodo {
                  * write null- terminated string
                  * @return amount in bytes of successfully written data
                  * @param data defines data that will be written
-                 * @note not more then bs
+                 * @note not more than io::channel::bs
                  */
                 virtual unsigned long writeString(const dodo::string &data) const;
             };
