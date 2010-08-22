@@ -1,0 +1,12 @@
+CXX:=@CXX@
+CPPFLAGS+=-I../../include @CPPFLAGS@
+LDFLAGS+=-L../.. @LDFLAGS@
+CFLAGS+=@CFLAGS@ @DEFS@
+
+test: test.cc
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) $< -ldodo $(LDFLAGS) -o $@ 
+
+clean:
+	@rm -rf test
+
+force: clean test

@@ -810,6 +810,7 @@ AC_CONFIG_FILES([bin/dodo-config
 	examples/pc_thread/Makefile
 	examples/pc_process/Makefile
 	examples/pc_job/Makefile
+	examples/pc_workqueue/Makefile
 	examples/tools_network/Makefile
 	examples/tools_os/Makefile
 	examples/tools_time/Makefile

@@ -38,6 +38,7 @@
 #include <libdodo/pcExecutionManager.h>
 #include <libdodo/pcExecutionScheduler.h>
 #include <libdodo/pcExecutionSchedulerEx.h>
+#include <libdodo/pcExecutionWorkqueue.h>
 #include <libdodo/pcSyncDataObject.h>
 #include <libdodo/pcSyncProcess.h>
 #include <libdodo/pcSyncProcessEx.h>

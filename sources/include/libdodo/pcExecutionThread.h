@@ -109,9 +109,14 @@ namespace dodo {
                 virtual bool isRunning() const;
 
                 /**
+                 * @return true if calle is in the same thread as represented by instance
+                 */
+                bool self() const;
+
+                /**
                  * @return uncought exception thrown by thread routine
                  */
-                virtual exception::basic *exception();
+                exception::basic *exception();
 
 #ifdef DL_EXT
                 /**
