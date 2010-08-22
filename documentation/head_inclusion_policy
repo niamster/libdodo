@@ -1,11 +1,31 @@
 
 Sequence of inclusion of header files in .cc/.h:
 
+***
+.h:
 [[libdodo/directives.h]]
 
 [[external dependencies]]
 
+[[libdodo/types.h]]
+[[internal dependencies]]
+
+class {
+	...
+};
+
 [[inline]]
 
-((declaration header file for .cc))
+***
+.c:
+[[libdodo/directives.h]]
+
+[[external dependencies]]
+
+[[libdodo/types.h]]
 [[internal dependencies]]
+((declaration header file for .cc))
+
+[[inline]]
+
+...
