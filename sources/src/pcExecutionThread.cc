@@ -147,104 +147,95 @@ thread::thread(routine       func,
                void          *data,
                short         action,
                bool          detached,
-               unsigned long stackSize)
-    /* FIXME */
-/* dodo_try */ : job(TYPE_THREAD),
-      handle(NULL)
-    {
-        handle = new __thread__;
-
-#ifdef PTHREAD_EXT
-        pthread_attr_init(&handle->attr);
-#endif
-
-        handle->detached = detached;
-        handle->data = data;
-        handle->func = (void *)func;
-        handle->action = action;
-
+               unsigned long stackSize) : job(TYPE_THREAD),
+                                          handle(new __thread__)
+{
+    handle->detached = detached;
+    handle->data = data;
+    handle->func = (void *)func;
+    handle->action = action;
 #ifdef DL_EXT
-        handle->handle = NULL;
+    handle->handle = NULL;
 #endif
 
 #ifdef PTHREAD_EXT
-        if (detached)
-            pthread_attr_setdetachstate(&handle->attr, PTHREAD_CREATE_DETACHED);
-        else
-            pthread_attr_setdetachstate(&handle->attr, PTHREAD_CREATE_JOINABLE);
+    pthread_attr_init(&handle->attr);
 
-        errno = pthread_attr_setstacksize(&handle->attr, stackSize);
-        if (errno != 0)
-            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-#endif
+    if (detached)
+        pthread_attr_setdetachstate(&handle->attr, PTHREAD_CREATE_DETACHED);
+    else
+        pthread_attr_setdetachstate(&handle->attr, PTHREAD_CREATE_JOINABLE);
 
-#ifdef PTHREAD_EXT
+    errno = pthread_attr_setstacksize(&handle->attr, stackSize);
+    if (errno != 0) {
         pthread_attr_destroy(&handle->attr);
+        delete handle;
+
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    }
 #endif
-    }/*  dodo_catch (exception::basic *e UNUSED) { */
-/*         if (handle) { */
-/* #ifdef PTHREAD_EXT */
-/*             pthread_attr_destroy(&handle->attr); */
-/* #endif */
-/*             delete handle; */
-/*         } */
-/*     } */
+}
 
 #ifdef DL_EXT
 thread::thread(const dodo::string &module,
                void             *data,
-               void             *toInit)
-    /* FIXME */
-/* dodo_try */ : job(TYPE_THREAD),
-      handle(NULL)
-    {
-        handle = new __thread__;
-
-        handle->data = data;
+               void             *toInit) : job(TYPE_THREAD),
+                                           handle(new __thread__)
+{
+    handle->data = data;
 
 #ifdef DL_FAST
-        handle->handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
+    handle->handle = dlopen(module.data(), RTLD_LAZY | RTLD_NODELETE);
 #else
-        handle->handle = dlopen(module.data(), RTLD_LAZY);
+    handle->handle = dlopen(module.data(), RTLD_LAZY);
 #endif
-        if (handle->handle == NULL)
-            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    if (handle->handle == NULL) {
+        delete handle;
 
-        initModule init = (initModule)dlsym(handle->handle, "initPcExecutionThreadModule");
-        if (init == NULL)
-            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    }
 
-        __module__ m = init(toInit);
+    initModule init = (initModule)dlsym(handle->handle, "initPcExecutionThreadModule");
+    if (init == NULL) {
+        dlclose(handle->handle);
+        delete handle;
 
-        void *f = dlsym(handle->handle, m.hook);
-        if (f == NULL)
-            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    }
 
-        if (m.detached)
-            pthread_attr_setdetachstate(&handle->attr, PTHREAD_CREATE_DETACHED);
-        else
-            pthread_attr_setdetachstate(&handle->attr, PTHREAD_CREATE_JOINABLE);
+    __module__ m = init(toInit);
 
-        errno = pthread_attr_setstacksize(&handle->attr, m.stackSize);
-        if (errno != 0)
-            dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    void *f = dlsym(handle->handle, m.hook);
+    if (f == NULL) {
+        dlclose(handle->handle);
+        delete handle;
 
-        handle->detached = m.detached;
-        handle->action = m.action;
-        handle->func = f;
-        memcpy(handle->cookie, m.cookie, 32);
-    } /* dodo_catch (exception::basic *e UNUSED) { */
-/*         if (handle) { */
-/*             if (handle->handle) */
-/*                 dlclose(handle->handle); */
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    }
 
-/* #ifdef PTHREAD_EXT */
-/*             pthread_attr_destroy(&handle->attr); */
-/* #endif */
+#ifdef PTHREAD_EXT
+    pthread_attr_init(&handle->attr);
 
-/*             delete handle; */
-/*         } */
-/*     } */
+    if (m.detached)
+        pthread_attr_setdetachstate(&handle->attr, PTHREAD_CREATE_DETACHED);
+    else
+        pthread_attr_setdetachstate(&handle->attr, PTHREAD_CREATE_JOINABLE);
+
+    errno = pthread_attr_setstacksize(&handle->attr, m.stackSize);
+    if (errno != 0) {
+        dlclose(handle->handle);
+        pthread_attr_destroy(&handle->attr);
+        delete handle;
+
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONTHREAD, THREADEX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    }
+#endif
+
+    handle->detached = m.detached;
+    handle->action = m.action;
+    handle->func = f;
+    memcpy(handle->cookie, m.cookie, 32);
+}
 #endif
 
 //-------------------------------------------------------------------

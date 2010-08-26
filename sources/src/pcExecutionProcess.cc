@@ -114,13 +114,9 @@ process::process(routine func,
 #ifdef DL_EXT
 process::process(const dodo::string &module,
                  void             *data,
-                 void             *toInit)
-/* FIXME */
-/* dodo_try */ : job(TYPE_PROCESS),
-      handle(NULL)
+                 void             *toInit) : job(TYPE_PROCESS),
+                                             handle(new __process__)
 {
-    handle = new __process__;
-
     handle->data = data;
 
 #ifdef DL_FAST
@@ -128,30 +124,34 @@ process::process(const dodo::string &module,
 #else
     handle->handle = dlopen(module.data(), RTLD_LAZY);
 #endif
-    if (handle->handle == NULL)
+    if (handle->handle == NULL) {
+        delete handle;
+
         dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    }
 
     initModule init = (initModule)dlsym(handle->handle, "initPcExecutionProcessModule");
-    if (init == NULL)
+    if (init == NULL) {
+        dlclose(handle->handle);
+        delete handle;
+
         dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    }
 
     __module__ m = init(toInit);
 
     void *f = dlsym(handle->handle, m.hook);
-    if (f == NULL)
+    if (f == NULL) {
+        dlclose(handle->handle);
+        delete handle;
+
         dodo_throw exception::basic(exception::MODULE_PCEXECUTIONPROCESS, PROCESSEX_CONSTRUCTOR, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+    }
 
     handle->action = m.action;
     handle->func = f;
     memcpy(handle->cookie, m.cookie, 32);
-} /* dodo_catch (exception::basic *e UNUSED) { */
-/*     if (handle) { */
-/*         if (handle->handle) */
-/*             dlclose(handle->handle); */
-
-/*         delete handle; */
-/*     } */
-/* } */
+}
 #endif
 
 //-------------------------------------------------------------------

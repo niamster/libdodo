@@ -210,25 +210,26 @@ __manager__::manager(void *data)
 
 //-------------------------------------------------------------------
 
-scheduler::scheduler()
-    /* FIXME */
-/* dodo_try */ : counter(0),
+scheduler::scheduler() : counter(0),
       keeper(NULL),
       manager(NULL)
- {
-     keeper = new pc::sync::thread;
-     manager = new __manager__;
+{
+    dodo_try {
+        keeper = new pc::sync::thread;
+        manager = new __manager__;
+    } dodo_catch (exception::basic *e UNUSED) {
+        delete manager;
+        delete keeper;
+
+        dodo_rethrow;
+    }
 
 #ifdef PTHREAD_EXT
-     errno = pthread_create(&manager->thread, NULL, __manager__::manager, this);
-     if (errno != 0)
-         dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+    errno = pthread_create(&manager->thread, NULL, __manager__::manager, this);
+    if (errno != 0)
+        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 #endif
- }/*  dodo_catch (exception::basic *e UNUSED) { */
- /*    delete manager; */
- /*    delete keeper; */
- /* } */
-
+}
 //-------------------------------------------------------------------
 
 scheduler::~scheduler()
