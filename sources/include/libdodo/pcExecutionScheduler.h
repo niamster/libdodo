@@ -44,14 +44,13 @@ namespace dodo {
 
         namespace execution {
             class job;
+            class thread;
 
             /**
              * @class scheduler
              * @brief provides interface for jobs management
              */
             class scheduler {
-                friend struct __manager__;
-
               public:
 
                 /**
@@ -85,6 +84,13 @@ namespace dodo {
 
               protected:
 
+                /**
+                 * schedule manager
+                 * @return thread exit status
+                 * @param data defines user data
+                 */
+                static int manager(void *data);
+
                 struct __job__ {
                     execution::job *job; ///< job for scheduling
                     unsigned long timeout; ///< timeout for job scheduling
@@ -97,8 +103,9 @@ namespace dodo {
                 unsigned long counter;              ///< job id counter
 
                 sync::protector *keeper;            ///< section locker
+                execution::thread *thread;
 
-                __manager__ *manager; ///< schedule manager handle
+                __manager__ *handle; ///< schedule manager handle
             };
         };
     };

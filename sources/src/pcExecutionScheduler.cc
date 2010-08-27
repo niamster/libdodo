@@ -56,17 +56,8 @@ namespace dodo {
                 bool exit; ///< true if the scheduler thread should exit
 
 #ifdef PTHREAD_EXT
-                pthread_t      thread;              ///< thread descriptor
-
                 pthread_mutex_t     mutex;          ///< event mutex
                 pthread_cond_t      condition;      ///< condition lock
-
-                /**
-                 * schedule manager
-                 * @return thread exit status
-                 * @param data defines user data
-                 */
-                static void *manager(void *data);
 #endif
             };
         };
@@ -86,10 +77,6 @@ namespace dodo {
 using namespace dodo::pc::execution;
 
 __manager__::__manager__() : exit(false)
-#ifdef PTHREAD_EXT
-                           ,
-                             thread(0)
-#endif
 {
 #ifdef PTHREAD_EXT
     pthread_mutexattr_t attr;
@@ -129,9 +116,49 @@ __manager__::~__manager__()
 
 //-------------------------------------------------------------------
 
+scheduler::scheduler() : counter(0),
+                         keeper(NULL),
+                         thread(NULL),
+                         handle(NULL)
+{
+    dodo_try {
+        keeper = new pc::sync::thread;
+        handle = new __manager__;
+        thread = new execution::thread(scheduler::manager, this, execution::ON_DESTRUCTION_STOP, false);
+
+        thread->run();
+    } dodo_catch (exception::basic *e UNUSED) {
+        delete thread;
+        delete handle;
+        delete keeper;
+
+        dodo_rethrow;
+    }
+}
+//-------------------------------------------------------------------
+
+scheduler::~scheduler()
+{
 #ifdef PTHREAD_EXT
-void *
-__manager__::manager(void *data)
+    pthread_mutex_lock(&handle->mutex);
+
+    handle->exit = true;
+
+    pthread_cond_signal(&handle->condition);
+    pthread_mutex_unlock(&handle->mutex);
+#endif
+
+    thread->wait();
+
+    delete thread;
+    delete handle;
+    delete keeper;
+}
+
+//-------------------------------------------------------------------
+
+int
+scheduler::manager(void *data)
 {
     scheduler *parent = (scheduler *)data;
 
@@ -139,9 +166,9 @@ __manager__::manager(void *data)
 
     while (true) {
         if (idle != 0) {
-            pthread_mutex_lock(&parent->manager->mutex);
+            pthread_mutex_lock(&parent->handle->mutex);
             if (idle == ~0UL) {
-                pthread_cond_wait(&parent->manager->condition, &parent->manager->mutex);
+                pthread_cond_wait(&parent->handle->condition, &parent->handle->mutex);
             } else {
                 timespec ts;
 
@@ -149,15 +176,15 @@ __manager__::manager(void *data)
                 ts.tv_sec += idle/1000;
                 ts.tv_nsec += (idle % 1000) * 1000000;
 
-                pthread_cond_timedwait(&parent->manager->condition, &parent->manager->mutex, &ts);
+                pthread_cond_timedwait(&parent->handle->condition, &parent->handle->mutex, &ts);
             }
 
-            if (parent->manager->exit) {
-                pthread_mutex_unlock(&parent->manager->mutex);
+            if (parent->handle->exit) {
+                pthread_mutex_unlock(&parent->handle->mutex);
 
-                return NULL;
+                return 0;
             }
-            pthread_mutex_unlock(&parent->manager->mutex);
+            pthread_mutex_unlock(&parent->handle->mutex);
 
             idle = 0;
         } else {
@@ -167,13 +194,13 @@ __manager__::manager(void *data)
 
             dodoMap<unsigned long, scheduler::__job__>::iterator i = parent->handles.begin(), j = parent->handles.end();
             while (i!=j) {
-                pthread_mutex_lock(&parent->manager->mutex);
-                if (parent->manager->exit) {
-                    pthread_mutex_unlock(&parent->manager->mutex);
+                pthread_mutex_lock(&parent->handle->mutex);
+                if (parent->handle->exit) {
+                    pthread_mutex_unlock(&parent->handle->mutex);
 
-                    return NULL;
+                    return 0;
                 }
-                pthread_mutex_unlock(&parent->manager->mutex);
+                pthread_mutex_unlock(&parent->handle->mutex);
 
                 scheduler::__job__ &j = i->second;
                 unsigned long ts = tools::time::nowMs();
@@ -204,49 +231,7 @@ __manager__::manager(void *data)
         }
     }
 
-    return NULL;
-}
-#endif
-
-//-------------------------------------------------------------------
-
-scheduler::scheduler() : counter(0),
-      keeper(NULL),
-      manager(NULL)
-{
-    dodo_try {
-        keeper = new pc::sync::thread;
-        manager = new __manager__;
-    } dodo_catch (exception::basic *e UNUSED) {
-        delete manager;
-        delete keeper;
-
-        dodo_rethrow;
-    }
-
-#ifdef PTHREAD_EXT
-    errno = pthread_create(&manager->thread, NULL, __manager__::manager, this);
-    if (errno != 0)
-        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX_CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-#endif
-}
-//-------------------------------------------------------------------
-
-scheduler::~scheduler()
-{
-#ifdef PTHREAD_EXT
-    pthread_mutex_lock(&manager->mutex);
-
-    manager->exit = true;
-
-    pthread_cond_signal(&manager->condition);
-    pthread_mutex_unlock(&manager->mutex);
-
-    pthread_join(manager->thread, NULL);
-#endif
-
-    delete manager;
-    delete keeper;
+    return 0;
 }
 
 //-------------------------------------------------------------------
@@ -264,12 +249,12 @@ scheduler::schedule(const execution::job &job,
 
     switch (job.type) {
         case execution::job::TYPE_PROCESS:
-            _job = new process(*dynamic_cast<process *>(orig));
+            _job = new process(*dynamic_cast<execution::process *>(orig));
 
             break;
 
         case execution::job::TYPE_THREAD:
-            _job = new thread(*dynamic_cast<thread *>(orig));
+            _job = new execution::thread(*dynamic_cast<execution::thread *>(orig));
 
             break;
 
@@ -281,9 +266,9 @@ scheduler::schedule(const execution::job &job,
 
     handles.insert(std::make_pair(counter, j));
 
-    pthread_mutex_lock(&manager->mutex);
-    pthread_cond_signal(&manager->condition);
-    pthread_mutex_unlock(&manager->mutex);
+    pthread_mutex_lock(&handle->mutex);
+    pthread_cond_signal(&handle->condition);
+    pthread_mutex_unlock(&handle->mutex);
 
     return counter++;
 }
