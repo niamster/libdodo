@@ -32,14 +32,12 @@
 #ifdef FASTCGI_EXT
 #include <fcgiapp.h>
 
-#ifdef PTHREAD_EXT
-#include <pthread.h>
-#endif
-
 #include "cgiFastRequest.inline"
 
 #include <libdodo/cgiFastServer.h>
 #include <libdodo/types.h>
+#include <libdodo/pcExecutionThread.h>
+#include <libdodo/pcExecutionManager.h>
 #include <libdodo/cgiFastServerEx.h>
 #include <libdodo/cgiFastExchange.h>
 #include <libdodo/pcSyncThread.h>
@@ -91,7 +89,7 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-void *
+int
 server::thread(void *data)
 {
     FCGX_Request req;
@@ -128,7 +126,7 @@ server::thread(void *data)
         FCGX_Finish_r(request.request);
     }
 
-    return NULL;
+    return 0;
 }
 
 //-------------------------------------------------------------------
@@ -141,22 +139,14 @@ server::serve(cgi::server::handler func)
 
     handler = func;
 
-#ifdef PTHREAD_EXT
     if (threading) {
-        pthread_t *id = new pthread_t[threadsNum];
+        pc::execution::manager m;
 
-        unsigned int i = 0;
+        for (unsigned int i = 0; i < threadsNum; ++i)
+            m.run(m.add(pc::execution::thread(server::thread, &limit, pc::execution::ON_DESTRUCTION_STOP, false)));
 
-        for (; i < threadsNum; ++i)
-            pthread_create(&id[i], NULL, server::thread, &limit);
-
-        for (i = 0; i < threadsNum; ++i)
-            pthread_join(id[i], NULL);
-
-        delete [] id;
-    } else
-#endif
-    {
+        m.wait();
+    } else {
         unsigned long requests = 0;
 
         FCGX_Request req;

@@ -94,7 +94,7 @@ namespace dodo {
                  * thread that processes one queue of CGI requests
                  * @param data defines the data passed to the thread
                  */
-                static void *thread(void *data);
+                static int thread(void *data);
 
                 static pc::sync::thread accept;                 ///< accept lock
                 static pc::sync::thread request;                ///< request lock
