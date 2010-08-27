@@ -22,7 +22,7 @@ work(void *data)
     if (data == NULL) {
         lock.acquire();
         ++done;
-        cout << "#" << done << ": NULL : " << tools::time::millinow() << endl, cout.flush();
+        cout << "#" << done << ": NULL : " << tools::time::nowMs() << endl, cout.flush();
         lock.release();
 
         tools::os::sleep(5);
@@ -34,7 +34,7 @@ work(void *data)
 
         lock.acquire();
         ++done;
-        cout << "#" << done << ": " << (char *)data << ": " << tools::time::millinow() << endl, cout.flush();
+        cout << "#" << done << ": " << (char *)data << ": " << tools::time::nowMs() << endl, cout.flush();
         lock.release();
     } dodo_catch (exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
@@ -52,7 +52,7 @@ main(int  argc UNUSED,
 
         tools::os::sleep(1);
 
-        cout << "Launching jobs: " << tools::time::millinow() << endl;
+        cout << "Launching jobs: " << tools::time::nowMs() << endl;
 
         for (int i=0;i<100;++i)
             wq.add(work, (void *)"work");

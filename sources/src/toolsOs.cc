@@ -604,18 +604,27 @@ os::die(const dodo::string &message,
 //-------------------------------------------------------------------
 
 void
-os::microSleep(unsigned long period)
+os::sleepMs(unsigned long period)
 {
-    if (period < 1000000)
-        ::usleep(period);
-    else
-        ::sleep(period / 1000000);
+    timespec ts = {period/1000, (period%1000)*1000000};
+
+    nanosleep(&ts, NULL);
 }
 
 //-------------------------------------------------------------------
 
 void
-os::sleep(long period)
+os::sleepUs(unsigned long period)
+{
+    timespec ts = {period/1000000, (period%1000000)*1000};
+
+    nanosleep(&ts, NULL);
+}
+
+//-------------------------------------------------------------------
+
+void
+os::sleep(unsigned long period)
 {
     ::sleep(period);
 }

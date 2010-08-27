@@ -17,7 +17,7 @@ int
 job0(void *data)
 {
     dodo_try {
-        cout << endl << (char *)data << ": " << tools::time::millinow() << endl;
+        cout << endl << (char *)data << ": " << tools::time::nowMs() << endl;
     } dodo_catch (exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
@@ -29,11 +29,11 @@ int
 job1(void *data)
 {
     dodo_try {
-        cout << endl << ">>" << (char *)data << ": " << tools::time::millinow() << endl;
+        cout << endl << ">>" << (char *)data << ": " << tools::time::nowMs() << endl;
 
         tools::os::sleep(tools::string::stringToUL((char *)data));
 
-        cout << endl << "<<" << (char *)data << ": " << tools::time::millinow() << endl;
+        cout << endl << "<<" << (char *)data << ": " << tools::time::nowMs() << endl;
     } dodo_catch (exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
@@ -70,7 +70,7 @@ main(int  argc UNUSED,
         }
 
         cout << "Launching jobs" << endl;
-        cout << tools::time::millinow() << endl;
+        cout << tools::time::nowMs() << endl;
 
         for (int i = 0; i < amount; ++i)
             manager.run(pos[i]);
@@ -78,21 +78,21 @@ main(int  argc UNUSED,
         for (int i = 0; i < amount; ++i)
             cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
 
-        cout << tools::time::millinow() << endl;
+        cout << tools::time::nowMs() << endl;
         tools::os::sleep(2);
-        cout << tools::time::millinow() << endl;
+        cout << tools::time::nowMs() << endl;
         scheduler.remove(pID);
 
         for (int i = 0; i < amount; ++i)
             cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
 
         pID = scheduler.schedule(execution::thread(::job0, (void *)"periodic", execution::ON_DESTRUCTION_STOP), 100, true);
-        cout << tools::time::millinow() << endl;
+        cout << tools::time::nowMs() << endl;
         tools::os::sleep(2);
         scheduler.remove(pID);
-        cout << tools::time::millinow() << endl;
+        cout << tools::time::nowMs() << endl;
         tools::os::sleep(2);
-        cout << tools::time::millinow() << endl;
+        cout << tools::time::nowMs() << endl;
 
         for (int i = 0; i < amount; ++i)
             cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;

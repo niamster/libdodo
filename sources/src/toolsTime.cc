@@ -97,7 +97,7 @@ tools::time::byFormat(const dodo::string &format,
 //-------------------------------------------------------------------
 
 unsigned long
-tools::time::millinow()
+tools::time::nowMs()
 {
     timeval tv;
 

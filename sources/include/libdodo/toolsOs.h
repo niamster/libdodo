@@ -215,16 +215,22 @@ namespace dodo {
             static void atExit(void (*func)());
 
             /**
-             * suspend
+             * suspend for given timeout
              * @param period defines time in microseconds
              */
-            static void microSleep(unsigned long period);
+            static void sleepUs(unsigned long period);
 
             /**
-             * suspend
+             * suspend for given timeout
+             * @param period defines time in milliseconds
+             */
+            static void sleepMs(unsigned long period);
+
+            /**
+             * suspend for given timeout
              * @param period defines time in seconds
              */
-            static void sleep(long period);
+            static void sleep(unsigned long period);
 
             /**
              * daemonize function call

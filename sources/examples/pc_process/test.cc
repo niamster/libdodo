@@ -37,7 +37,7 @@ process0(void *data)
         cout << "Data: '" << memory << "'" << endl, cout.flush();
 
         cout << (char *)data0.acquire(1), cout.flush();
-        tools::os::microSleep(1000);
+        tools::os::sleepMs(1);
         data0.release();
 
         cout << endl << memory << ": " << tools::time::now() << endl, cout.flush();

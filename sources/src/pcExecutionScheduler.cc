@@ -176,7 +176,7 @@ __manager__::manager(void *data)
                 pthread_mutex_unlock(&parent->manager->mutex);
 
                 scheduler::__job__ &j = i->second;
-                unsigned long ts = tools::time::millinow();
+                unsigned long ts = tools::time::nowMs();
                 if (ts - j.ts >= j.timeout) {
                     if (!j.job->isRunning()) {
                         j.job->run();
@@ -277,7 +277,7 @@ scheduler::schedule(const execution::job &job,
             dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX_SCHEDULE, exception::ERRNO_LIBDODO, SCHEDULEREX_UNKNOWNJOB, PCEXECUTIONSCHEDULEREX_UNKNOWNJOB_STR, __LINE__, __FILE__);
     }
 
-    __job__ j = {_job, timeout, tools::time::millinow(), repeat};
+    __job__ j = {_job, timeout, tools::time::nowMs(), repeat};
 
     handles.insert(std::make_pair(counter, j));
 

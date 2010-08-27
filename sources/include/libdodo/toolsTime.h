@@ -138,7 +138,7 @@ namespace dodo {
             /**
              * @return number of milliseconds from 00:00:00 UTC, January 1, 1970 till now
              */
-            static unsigned long millinow();
+            static unsigned long nowMs();
 
             /**
              * @return dates of the week
