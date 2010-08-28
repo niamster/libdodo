@@ -33,7 +33,7 @@ thread(void *data)
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
-    // throwing *eception
+    // throwing exception
     tools::os::os::setWorkingDir("./dir/");
 
     return 0;
@@ -47,6 +47,8 @@ main(int  argc UNUSED,
         int *data = new int(1);
 
         ::data.set((void *)data);
+
+        execution::thread(thread, (void *)"detached", execution::ON_DESTRUCTION_KEEP_ALIVE, true).run();
 
         execution::manager manager;
 

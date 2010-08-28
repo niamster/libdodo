@@ -129,6 +129,23 @@ __thread__::routine(void *data)
         ti->status = 0;
     }
 
+    if (ti->detached) {
+#ifdef DL_EXT
+        if (ti->handle != NULL) {
+            thread::deinitModule deinit = (thread::deinitModule)dlsym(ti->handle, "deinitPcExecutionThreadModule");
+            if (deinit != NULL)
+                deinit(ti->cookie);
+
+#ifndef DL_FAST
+            dlclose(ti->handle);
+#endif
+        }
+#endif
+
+        delete ti->ex;
+        delete ti;
+    }
+
     return NULL;
 }
 #endif
@@ -154,9 +171,6 @@ thread::thread(routine       func,
     handle->data = data;
     handle->func = (void *)func;
     handle->action = action;
-#ifdef DL_EXT
-    handle->handle = NULL;
-#endif
 
 #ifdef PTHREAD_EXT
     pthread_attr_init(&handle->attr);
@@ -243,47 +257,38 @@ thread::thread(const dodo::string &module,
 thread::~thread()
 {
     if (!cloned) {
-#ifdef DL_EXT
-        deinitModule deinit;
-#endif
-
 #ifdef PTHREAD_EXT
         pthread_attr_destroy(&handle->attr);
 #endif
 
-        if (!isRunning() || handle->detached)
-            return;
+        if (isRunning()) {
+            if (handle->detached)
+                return;
 
-        switch (handle->action) {
-            case ON_DESTRUCTION_KEEP_ALIVE:
-
+            switch (handle->action) {
+                case ON_DESTRUCTION_KEEP_ALIVE:
+                    handle->detached = true;
 #ifdef PTHREAD_EXT
-                pthread_detach(handle->thread);
+                    pthread_detach(handle->thread);
 #endif
+                    return;
 
-                break;
-
-            case ON_DESTRUCTION_STOP:
-
+                case ON_DESTRUCTION_STOP:
 #ifdef PTHREAD_EXT
-                pthread_cancel(handle->thread);
+                    pthread_cancel(handle->thread);
 #endif
-
-                break;
-
-            case ON_DESTRUCTION_WAIT:
-            default:
-
-#ifdef PTHREAD_EXT
-                pthread_join(handle->thread, NULL);
-#endif
-
-                break;
+                    break;
+            }
         }
+
+#ifdef PTHREAD_EXT
+        if (!handle->joined)
+            pthread_join(handle->thread, NULL);
+#endif
 
 #ifdef DL_EXT
         if (handle->handle != NULL) {
-            deinit = (deinitModule)dlsym(handle->handle, "deinitPcExecutionThreadModule");
+            deinitModule deinit = (deinitModule)dlsym(handle->handle, "deinitPcExecutionThreadModule");
             if (deinit != NULL)
                 deinit(handle->cookie);
 
@@ -292,11 +297,10 @@ thread::~thread()
 #endif
         }
 #endif
+
+        delete handle->ex;
+        delete handle;
     }
-
-    delete handle->ex;
-
-    delete handle;
 }
 
 //-------------------------------------------------------------------
