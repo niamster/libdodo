@@ -122,4 +122,9 @@ size_t strnlen(const char *s,
  */
 #define STRING_BUFFER_ALINGMENT 32
 
+/**
+ * default thread stack size
+ */
+#define THREAD_STACK_SIZE 262144
+
 #endif

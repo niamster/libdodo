@@ -63,7 +63,7 @@ namespace dodo {
                        void          *data,
                        short         action,
                        bool          detached = false,
-                       unsigned long stackSize = 8388608);
+                       unsigned long stackSize = THREAD_STACK_SIZE);
 
 #ifdef DL_EXT
                 /**
