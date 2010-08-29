@@ -175,6 +175,10 @@ scheduler::manager(void *data)
                 clock_gettime(CLOCK_REALTIME, &ts);
                 ts.tv_sec += idle/1000;
                 ts.tv_nsec += (idle % 1000) * 1000000;
+                if (ts.tv_nsec > 999999999) {
+                    ts.tv_sec += 1;
+                    ts.tv_nsec -= 999999999;
+                }
 
                 pthread_cond_timedwait(&parent->handle->condition, &parent->handle->mutex, &ts);
             }

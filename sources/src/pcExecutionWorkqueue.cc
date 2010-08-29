@@ -95,6 +95,11 @@ namespace dodo {
 
                     clock_gettime(CLOCK_REALTIME, &now);
                     now.tv_sec += timeout->tv_sec;
+                    now.tv_nsec += timeout->tv_nsec;
+                    if (now.tv_nsec > 999999999) {
+                        now.tv_sec += 1;
+                        now.tv_nsec -= 999999999;
+                    }
 
                     pthread_mutex_lock(&mutex);
                     rc = pthread_cond_timedwait(&cond, &mutex, &now);
