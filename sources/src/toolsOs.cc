@@ -626,7 +626,9 @@ os::sleepUs(unsigned long period)
 void
 os::sleep(unsigned long period)
 {
-    ::sleep(period);
+    timespec ts = {period, 0};
+
+    nanosleep(&ts, NULL);
 }
 
 //-------------------------------------------------------------------
