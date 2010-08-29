@@ -41,10 +41,12 @@ namespace dodo {
             class thread;
         };
 
+        namespace notification {
+            class thread;
+        };
+
         namespace execution {
             class thread;
-            struct __work__;
-            struct __wake__;
 
             /**
              * @class workqueue
@@ -85,6 +87,7 @@ namespace dodo {
 
               protected:
 
+                struct __work__;
                 dodoList<__work__ *> tasks;  ///< pending work
 
                 dodoList<execution::thread *> active;  ///< active thread
@@ -97,7 +100,9 @@ namespace dodo {
                 sync::thread *tasksProtector; ///< tasks queue protector
                 sync::thread *threadsProtector; ///< threads queues protector
 
-                __wake__ *wake; ///< thread wake handler
+                notification::thread *notification; ///< thread wake handler
+
+                bool closing;                   ///< closing flag
             };
         };
     };
