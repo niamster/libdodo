@@ -83,7 +83,7 @@ namespace dodo {
         /**
          * destructor
          */
-        ~string() { delete buf; }
+        ~string();
 
         /**
          * @return pointer to the string data

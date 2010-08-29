@@ -115,6 +115,13 @@ string::string(char symbol,
 
 //-------------------------------------------------------------------
 
+string::~string()
+{
+    delete [] buf;
+}
+
+//-------------------------------------------------------------------
+
 void
 string::erase(unsigned long index,
               unsigned long count)
