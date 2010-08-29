@@ -40,6 +40,7 @@
 #include <libdodo/pcExecutionJob.h>
 #include <libdodo/pcSyncThread.h>
 #include <libdodo/pcNotificationThread.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/pcSyncStack.h>
 #include <libdodo/types.h>
 
@@ -76,19 +77,31 @@ workqueue::workqueue(unsigned int maxThreads,
         unsigned long minIdleTime) : maxThreads(maxThreads),
                                      minThreads(minThreads),
                                      minIdleTime(minIdleTime),
-                                     tasksProtector(new pc::sync::thread),
-                                     threadsProtector(new pc::sync::thread),
-                                     notification(new pc::notification::thread(*tasksProtector)),
+                                     tasksProtector(NULL),
+                                     threadsProtector(NULL),
+                                     notification(NULL),
                                      closing(false)
 {
-    if (maxThreads < minThreads)
-        maxThreads = minThreads;
+    dodo_try {
+        tasksProtector = new pc::sync::thread;
+        threadsProtector = new pc::sync::thread;
+        notification = new pc::notification::thread(*tasksProtector);
 
-    thread *t;
-    for (unsigned int i=0; i<minThreads; ++i) {
-        t = new thread((routine)workqueue::worker, this, ON_DESTRUCTION_STOP);
-        inactive.push_back(t);
-        t->run();
+        if (maxThreads < minThreads)
+            maxThreads = minThreads;
+
+        thread *t;
+        for (unsigned int i=0; i<minThreads; ++i) {
+            t = new thread((routine)workqueue::worker, this, ON_DESTRUCTION_STOP);
+            inactive.push_back(t);
+            t->run();
+        }
+    } dodo_catch (exception::basic *e UNUSED) {
+        delete notification;
+        delete tasksProtector;
+        delete threadsProtector;
+
+        dodo_rethrow;
     }
 }
 
