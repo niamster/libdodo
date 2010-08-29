@@ -224,42 +224,19 @@ process::acquire(unsigned long microseconds)
     }
 
 #ifdef XSI_IPC
-    if (microseconds == 0) {
-        lock->operations[0].sem_op = -1;
+    lock->operations[0].sem_op = -1;
 
+    if (microseconds == 0) {
         if (semop(lock->keeper, lock->operations, 1) != 0)
             dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     } else {
-        bool locked = true;
-        unsigned long slept = 0;
+        timespec ts = {microseconds/1000000, (microseconds%1000000)*1000};
 
-        lock->operations[0].sem_op = -1;
-        lock->operations[0].sem_flg = IPC_NOWAIT;
-
-        while (locked) {
-            if (semop(lock->keeper, lock->operations, 1) != 0) {
-                if (errno != EAGAIN) {
-                    lock->operations[0].sem_flg = 0;
-
-                    dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                }
-
-                if (usleep(1) == -1) {
-                    lock->operations[0].sem_flg = 0;
-
-                    dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                }
-
-                slept += 1;
-
-                if (slept > microseconds) {
-                    lock->operations[0].sem_flg = 0;
-
-                    dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_LIBDODO, PROCESSEX_CANNOTLOCK, PCSYNCPROCESSEX_CANNOTLOCK_STR, __LINE__, __FILE__);
-                }
-            } else {
-                locked = false;
-            }
+        if (semtimedop(lock->keeper, lock->operations, 1, &ts) != 0) {
+            if (errno == EAGAIN)
+                dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_LIBDODO, PROCESSEX_CANNOTLOCK, PCSYNCPROCESSEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+            else
+                dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     }
 #else
@@ -267,24 +244,22 @@ process::acquire(unsigned long microseconds)
         if (sem_wait(lock->keeper) != 0)
             dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
     } else {
-        bool locked = true;
-        unsigned long slept = 0;
+        timespec ts = {microseconds/1000000, (microseconds%1000000)*1000};
+        timespec now;
 
-        while (locked) {
-            if (sem_trywait(lock->keeper) != 0) {
-                if (errno != EAGAIN)
-                    dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        clock_gettime(CLOCK_REALTIME, &now);
+        ts.tv_sec += now.tv_sec;
+        ts.tv_nsec += now.tv_nsec;
+        if (ts.tv_nsec > 999999999) {
+            ts.tv_sec += 1;
+            ts.tv_nsec -= 999999999;
+        }
 
-                if (usleep(1) == -1)
-                    dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-                slept += 1;
-
-                if (slept > microseconds)
-                    dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_LIBDODO, PROCESSEX_CANNOTLOCK, PCSYNCPROCESSEX_CANNOTLOCK_STR, __LINE__, __FILE__);
-            } else {
-                locked = false;
-            }
+        if (sem_timedwait(lock->keeper, &ts) != 0) {
+            if (errno == ETIMEDOUT)
+                dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_LIBDODO, PROCESSEX_CANNOTLOCK, PCSYNCPROCESSEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+            else
+                dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     }
 #endif
