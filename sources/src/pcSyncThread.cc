@@ -43,21 +43,7 @@
 #include <libdodo/pcSyncProtector.h>
 #include <libdodo/types.h>
 
-namespace dodo {
-    namespace pc {
-        namespace sync {
-            /**
-             * @struct thread::__lock__
-             * @brief defines thread mutex
-             */
-            struct thread::__lock__ {
-#ifdef PTHREAD_EXT
-                pthread_mutex_t keeper;  ///< lock
-#endif
-            };
-        };
-    };
-};
+#include "pcSyncThread.inline"
 
 using namespace dodo::pc::sync;
 

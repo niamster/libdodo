@@ -1,8 +1,8 @@
 /***************************************************************************
- *            pcSyncThread.h
+ *            pcNotificationThread.h
  *
- *  Tue Nov 29 2005
- *  Copyright  2005  Dmytro Milinevskyy
+ *  Sun Aug 29 2010
+ *  Copyright  2010  Dmytro Milinevskyy
  *  milinevskyy@gmail.com
  ****************************************************************************/
 
@@ -27,27 +27,23 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCSYNCTHREAD_H_
-#define _PCSYNCTHREAD_H_ 1
+#ifndef _PCNOTIFICATIONTHREAD_H_
+#define _PCNOTIFICATIONTHREAD_H_ 1
 
 #include <libdodo/directives.h>
 
-#include <libdodo/pcSyncProtector.h>
-
 namespace dodo {
     namespace pc {
-        namespace notification {
+        namespace sync {
             class thread;
         };
 
-        namespace sync {
+        namespace notification {
             /**
              * @class thread
              * @brief provides lock mechanism for threads
              */
-            class thread : public sync::protector {
-                friend class notification::thread;
-
+            class thread {
               private:
 
                 /**
@@ -61,7 +57,7 @@ namespace dodo {
                 /**
                  * constructor
                  */
-                thread();
+                thread(sync::thread &lock);
 
                 /**
                  * destructor
@@ -69,21 +65,28 @@ namespace dodo {
                 virtual ~thread();
 
                 /**
-                 * lock
-                 * @param timeout defines wait timeout for unlock in microseconds
+                 * wait for notification
+                 * @return true if nofitication was received
+                 * @param timeout defines wait timeout for waiting for notification in microseconds
                  * @note if timeout is 0 it will wait infinitely
+                 * the lock should be acquired before this call
+                 * the lock is still acquired after the call
+                 * if call may block the lock is released for the blocking time
                  */
-                virtual void acquire(unsigned long timeout = 0);
+                virtual bool wait(unsigned long timeout = 0);
 
                 /**
-                 * unlock
+                 * notify waiters
+                 * @param all defines whether all waiters should be notified
                  */
-                virtual void release();
+                virtual void notify(bool all = false);
 
               protected:
 
-                struct __lock__;
-                __lock__ *lock;         ///< lock
+                sync::thread &lock;         ///< lock
+
+                struct __wake__;
+                __wake__ *wake; ///< thread wake handler
             };
         };
     };
