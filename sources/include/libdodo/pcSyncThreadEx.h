@@ -38,18 +38,6 @@ namespace dodo {
     namespace pc {
         namespace sync {
             /**
-             * libdodo defined errors
-             */
-            enum threadExR {
-                THREADEX_CANNOTLOCK
-            };
-
-            /**
-             * explanations for libdodo defined errors
-             */
-#define PCSYNCTHREADEX_CANNOTLOCK_STR      "Item is currently locked, timeout exhousted"
-
-            /**
              * IDs of functions where exception might be thrown
              */
             enum threadFunctionsID {

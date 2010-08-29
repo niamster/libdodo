@@ -49,10 +49,11 @@ namespace dodo {
 
                 /**
                  * lock
+                 * @return false if lock was not acquired within given timeout
                  * @param timeout defines wait timeout for unlock in microseconds
                  * @note if timeout is 0 it will wait infinitely
                  */
-                virtual void acquire(unsigned long timeout) = 0;
+                virtual bool acquire(unsigned long timeout) = 0;
 
                 /**
                  * unlock

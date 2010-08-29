@@ -1,5 +1,5 @@
 /***************************************************************************
- *            pcNotificationThreadEx.h
+ *            pcSyncDataobjectEx.h
  *
  *  Sun Aug 29 2010
  *  Copyright  2010  Dmytro Milinevskyy
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _PCNOTIFICATIONTHREADEX_H_
-#define _PCNOTIFICATIONTHREADEX_H_ 1
+#ifndef _PCSYNCDATAOBJECTEX_H_
+#define _PCSYNCDATAOBJECTEX_H_ 1
 
 #include <libdodo/directives.h>
 
@@ -36,16 +36,27 @@
 
 namespace dodo {
     namespace pc {
-        namespace notification {
+        namespace sync {
+            /**
+             * libdodo defined errors
+             */
+            enum dataobjectExR {
+                DATAOBJECTEX_CANNOTLOCK,
+            };
+
+            /**
+             * explanations for libdodo defined errors
+             */
+#define PCSYNCDATAOBJECTEX_CANNOTLOCK_STR      "Item is currently locked, timeout exhousted"
+
             /**
              * IDs of functions where exception might be thrown
              */
-            enum threadFunctionsID {
-                THREADEX_WAIT,
-                THREADEX_NOTIFY,
-                THREADEX_CONSTRUCTOR,
+            enum dataobjectFunctionsID {
+                DATAOBJECTEX_ACQUIRE,
             };
         };
     };
 };
 #endif
+

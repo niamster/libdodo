@@ -212,7 +212,7 @@ process::remove(int a_key)
 
 //-------------------------------------------------------------------
 
-void
+bool
 process::acquire(unsigned long microseconds)
 {
     int pid = getpid();
@@ -220,7 +220,7 @@ process::acquire(unsigned long microseconds)
     if (acquired() && pid == current) {
         ++recursive;
 
-        return;
+        return true;
     }
 
 #ifdef XSI_IPC
@@ -234,7 +234,7 @@ process::acquire(unsigned long microseconds)
 
         if (semtimedop(lock->keeper, lock->operations, 1, &ts) != 0) {
             if (errno == EAGAIN)
-                dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_LIBDODO, PROCESSEX_CANNOTLOCK, PCSYNCPROCESSEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+                return false;
             else
                 dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
@@ -257,7 +257,7 @@ process::acquire(unsigned long microseconds)
 
         if (sem_timedwait(lock->keeper, &ts) != 0) {
             if (errno == ETIMEDOUT)
-                dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_LIBDODO, PROCESSEX_CANNOTLOCK, PCSYNCPROCESSEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+                return false;
             else
                 dodo_throw exception::basic(exception::MODULE_PCSYNCPROCESS, PROCESSEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
@@ -266,6 +266,8 @@ process::acquire(unsigned long microseconds)
 
     current = pid;
     recursive = 0;
+
+    return true;
 }
 
 //-------------------------------------------------------------------

@@ -74,6 +74,7 @@ namespace dodo {
                      * @return shared data
                      * @param timeout defines wait timeout for unlock in microseconds
                      * @note if timeout is 0 it will wait infinitely
+                     * raises an exception if lock was not acquired within given timeout
                      */
                     virtual void *acquire(unsigned long timeout = 0);
 

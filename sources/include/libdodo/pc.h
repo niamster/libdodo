@@ -39,7 +39,10 @@
 #include <libdodo/pcExecutionScheduler.h>
 #include <libdodo/pcExecutionSchedulerEx.h>
 #include <libdodo/pcExecutionWorkqueue.h>
+#include <libdodo/pcNotificationThread.h>
+#include <libdodo/pcNotificationThreadEx.h>
 #include <libdodo/pcSyncDataObject.h>
+#include <libdodo/pcSyncDataObjectEx.h>
 #include <libdodo/pcSyncProcess.h>
 #include <libdodo/pcSyncProcessEx.h>
 #include <libdodo/pcSyncThread.h>

@@ -30,6 +30,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/pcSyncDataObject.h>
+#include <libdodo/pcSyncDataObjectEx.h>
 #include <libdodo/pcSyncProtector.h>
 #include <libdodo/pcSyncStack.h>
 #include <libdodo/types.h>
@@ -71,7 +72,9 @@ object::get()
 void *
 object::acquire(unsigned long timeout)
 {
-    lock.acquire(timeout);
+    if (!lock.acquire(timeout))
+        dodo_throw exception::basic(exception::MODULE_PCSYNCDATAOBJECT, DATAOBJECTEX_ACQUIRE, exception::ERRNO_LIBDODO, DATAOBJECTEX_CANNOTLOCK, PCSYNCDATAOBJECTEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+
     return data;
 }
 

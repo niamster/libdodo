@@ -104,7 +104,7 @@ thread::~thread()
 
 //-------------------------------------------------------------------
 
-void
+bool
 thread::acquire(unsigned long microseconds)
 {
 #ifdef PTHREAD_EXT
@@ -127,12 +127,14 @@ thread::acquire(unsigned long microseconds)
         errno = pthread_mutex_timedlock(&lock->keeper, &ts);
         if (errno != 0) {
             if (errno == ETIMEDOUT)
-                dodo_throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, THREADEX_CANNOTLOCK, PCSYNCTHREADEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+                return false;
             else
                 dodo_throw exception::basic(exception::MODULE_PCSYNCTHREAD, THREADEX_ACQUIRE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
         }
     }
 #endif
+
+    return true;
 }
 
 //-------------------------------------------------------------------

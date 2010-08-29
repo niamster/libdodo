@@ -47,7 +47,7 @@ process0(void *data)
 
         cout << endl << memory << ": " << tools::time::now() << endl, cout.flush();
     } dodo_catch (exception::basic *e)   {
-        cout << (dodo::string)*e << e->line << endl, cout.flush();
+        cout << (dodo::string)*e << " " << e->file << ":" << e->line << endl, cout.flush();
     }
 
     return 0;
