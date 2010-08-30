@@ -112,11 +112,9 @@ workqueue::~workqueue()
     dodoList<thread *>::iterator i, j;
     dodoList<__work__ *>::iterator o, p;
 
-    threadsProtector->acquire();
-    closing = true;
-    threadsProtector->release();
-
     tasksProtector->acquire();
+    closing = true;
+
     o = tasks.begin();
     p = tasks.end();
     for (; o != p; ++o)
@@ -129,7 +127,7 @@ workqueue::~workqueue()
     i = inactive.begin();
     j = inactive.end();
     for (; i != j; ++i) {
-        /* (*i)->stop(); */
+        /* (*i)->wait(); */
         delete *i;
     }
     threadsProtector->release();
@@ -203,8 +201,13 @@ workqueue::worker(workqueue *queue)
                 active = false;
             }
 
-            if (queue->closing)
+            tasksProtector->acquire();
+            if (queue->closing) {
+                tasksProtector->release();
+
                 return 0;
+            }
+            tasksProtector->release();
 
             unsigned long delta = queue->maxThreads - queue->minThreads;
             if (delta > 0) {
@@ -222,10 +225,13 @@ workqueue::worker(workqueue *queue)
             tasksProtector->acquire();
             if (!queue->notification->wait(timeout)) {
                 unsigned long queueSize = tasks.size();
-                tasksProtector->release();
 
-                if (queue->closing)
+                if (queue->closing) {
+                    tasksProtector->release();
+
                     return 0;
+                }
+                tasksProtector->release();
 
                 if (queueSize == 0) {
                     threadsProtector->acquire();
