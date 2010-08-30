@@ -29,46 +29,12 @@
 
 #include <libdodo/directives.h>
 
-#ifdef PTHREAD_EXT
-#include <pthread.h>
-#endif
-#include <errno.h>
-#include <string.h>
-
-namespace dodo {
-    namespace pc {
-        namespace execution {
-            /**
-             * @struct __manager__
-             * @brief defines process information
-             */
-            struct __manager__ {
-                /**
-                 * contructor
-                 */
-                __manager__();
-
-                /**
-                 * destructor
-                 */
-                ~__manager__();
-
-                bool exit; ///< true if the scheduler thread should exit
-
-#ifdef PTHREAD_EXT
-                pthread_mutex_t     mutex;          ///< event mutex
-                pthread_cond_t      condition;      ///< condition lock
-#endif
-            };
-        };
-    };
-};
-
 #include <libdodo/pcExecutionScheduler.h>
 #include <libdodo/pcExecutionSchedulerEx.h>
 #include <libdodo/pcExecutionJob.h>
 #include <libdodo/pcExecutionThread.h>
 #include <libdodo/pcExecutionProcess.h>
+#include <libdodo/pcNotificationThread.h>
 #include <libdodo/types.h>
 #include <libdodo/pcSyncThread.h>
 #include <libdodo/pcSyncStack.h>
@@ -76,60 +42,21 @@ namespace dodo {
 
 using namespace dodo::pc::execution;
 
-__manager__::__manager__() : exit(false)
-{
-#ifdef PTHREAD_EXT
-    pthread_mutexattr_t attr;
-
-    errno = pthread_mutexattr_init(&attr);
-    if (errno != 0)
-        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-    errno = pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
-    if (errno != 0)
-        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-    errno = pthread_mutex_init(&mutex, &attr);
-    if (errno != 0)
-        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-    errno = pthread_mutexattr_destroy(&attr);
-    if (errno != 0)
-        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-    errno = pthread_cond_init(&condition, NULL);
-    if (errno != 0)
-        dodo_throw exception::basic(exception::MODULE_PCEXECUTIONSCHEDULER, SCHEDULEREX___MANAGER__CONSTRUCTOR, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-#endif
-}
-
-//-------------------------------------------------------------------
-
-__manager__::~__manager__()
-{
-#ifdef PTHREAD_EXT
-    pthread_mutex_destroy(&mutex);
-
-    pthread_cond_destroy(&condition);
-#endif
-}
-
-//-------------------------------------------------------------------
-
 scheduler::scheduler() : counter(0),
                          keeper(NULL),
                          thread(NULL),
-                         handle(NULL)
+                         notification(NULL),
+                         closing(false)
 {
     dodo_try {
         keeper = new pc::sync::thread;
-        handle = new __manager__;
+        notification = new pc::notification::thread(*keeper);
         thread = new execution::thread(scheduler::manager, this, execution::ON_DESTRUCTION_STOP, false);
 
         thread->run();
     } dodo_catch (exception::basic *e UNUSED) {
         delete thread;
-        delete handle;
+        delete notification;
         delete keeper;
 
         dodo_rethrow;
@@ -139,19 +66,16 @@ scheduler::scheduler() : counter(0),
 
 scheduler::~scheduler()
 {
-#ifdef PTHREAD_EXT
-    pthread_mutex_lock(&handle->mutex);
+    keeper->acquire();
+    closing = true;
+    keeper->release();
 
-    handle->exit = true;
+    notification->notify();
 
-    pthread_cond_signal(&handle->condition);
-    pthread_mutex_unlock(&handle->mutex);
-#endif
-
-    thread->wait();
+    /* thread->wait(); */
 
     delete thread;
-    delete handle;
+    delete notification;
     delete keeper;
 }
 
@@ -166,29 +90,15 @@ scheduler::manager(void *data)
 
     while (true) {
         if (idle != 0) {
-            pthread_mutex_lock(&parent->handle->mutex);
-            if (idle == ~0UL) {
-                pthread_cond_wait(&parent->handle->condition, &parent->handle->mutex);
-            } else {
-                timespec ts;
+            parent->keeper->acquire();
+            parent->notification->wait(idle);
 
-                clock_gettime(CLOCK_REALTIME, &ts);
-                ts.tv_sec += idle/1000;
-                ts.tv_nsec += (idle % 1000) * 1000000;
-                if (ts.tv_nsec > 999999999) {
-                    ts.tv_sec += 1;
-                    ts.tv_nsec -= 999999999;
-                }
-
-                pthread_cond_timedwait(&parent->handle->condition, &parent->handle->mutex, &ts);
-            }
-
-            if (parent->handle->exit) {
-                pthread_mutex_unlock(&parent->handle->mutex);
+            if (parent->closing) {
+                parent->keeper->release();
 
                 return 0;
             }
-            pthread_mutex_unlock(&parent->handle->mutex);
+            parent->keeper->release();
 
             idle = 0;
         } else {
@@ -198,13 +108,8 @@ scheduler::manager(void *data)
 
             dodoMap<unsigned long, scheduler::__job__>::iterator i = parent->handles.begin(), j = parent->handles.end();
             while (i!=j) {
-                pthread_mutex_lock(&parent->handle->mutex);
-                if (parent->handle->exit) {
-                    pthread_mutex_unlock(&parent->handle->mutex);
-
+                if (parent->closing)
                     return 0;
-                }
-                pthread_mutex_unlock(&parent->handle->mutex);
 
                 scheduler::__job__ &j = i->second;
                 unsigned long ts = tools::time::nowMs();
@@ -270,9 +175,7 @@ scheduler::schedule(const execution::job &job,
 
     handles.insert(std::make_pair(counter, j));
 
-    pthread_mutex_lock(&handle->mutex);
-    pthread_cond_signal(&handle->condition);
-    pthread_mutex_unlock(&handle->mutex);
+    notification->notify();
 
     return counter++;
 }

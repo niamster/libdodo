@@ -37,10 +37,12 @@
 namespace dodo {
     namespace pc {
         namespace sync {
-            class protector;
+            class thread;
         };
 
-        struct __manager__;
+        namespace notification {
+            class thread;
+        };
 
         namespace execution {
             class job;
@@ -102,10 +104,12 @@ namespace dodo {
 
                 unsigned long counter;              ///< job id counter
 
-                sync::protector *keeper;            ///< section locker
+                sync::thread *keeper;            ///< section locker
                 execution::thread *thread;
 
-                __manager__ *handle; ///< schedule manager handle
+                notification::thread *notification; ///< thread wake handler
+
+                bool closing;                   ///< closing flag
             };
         };
     };

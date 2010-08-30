@@ -53,7 +53,6 @@ namespace dodo {
              * ID of function where exception was thrown
              */
             enum schedulerFunctionsID {
-                SCHEDULEREX___MANAGER__CONSTRUCTOR,
                 SCHEDULEREX_CONSTRUCTOR,
                 SCHEDULEREX_SCHEDULE,
             };
