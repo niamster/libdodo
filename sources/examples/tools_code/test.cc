@@ -91,8 +91,9 @@ main(int  argc UNUSED,
         cout << tools::code::makeUrl(tools::code::parseUrl(url)) << endl;
 
         cout << "Size of Makefile" << tools::filesystem::fileContents("Makefile").size() << endl;
-#ifdef BZ2_EXT
+#ifdef BZIP2_EXT
         cout << "Size of bziped Makefile" << tools::code::bzCompress(tools::filesystem::fileContents("Makefile"), 9).size() << endl;
+        cout << tools::code::bzDecompress(tools::code::bzCompress(tools::filesystem::fileContents("test.cc")));
 #endif
     } catch (dodo::exception::basic &ex)   {
         cout << (dodo::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
