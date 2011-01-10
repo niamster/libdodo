@@ -113,7 +113,7 @@ main(int  argc UNUSED,
         srv.setHandler("callTest", ::handler);
 
         srv.serve();
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

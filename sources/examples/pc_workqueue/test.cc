@@ -26,7 +26,7 @@ work(void *data)
         ++done;
         cout << "#" << done << ": " << (char *)data << " : " << tools::time::nowMs() << endl, cout.flush();
         lock.release();
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
@@ -49,7 +49,7 @@ main(int  argc UNUSED,
         wq.add(work, (void *)"last");
 
         tools::os::sleep(20);
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

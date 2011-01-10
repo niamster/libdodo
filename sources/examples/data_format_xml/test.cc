@@ -63,7 +63,7 @@ main(int  argc UNUSED,
         io::memory buffer;
         p.make(p.process(io::file::regular("./test.xml", io::file::regular::OPEN_MODE_READ_ONLY)), "utf-8", "1.0", buffer);
         cout  << endl << buffer << endl << endl;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << endl;
     }
 #else

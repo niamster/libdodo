@@ -36,7 +36,7 @@ main(int  argc UNUSED,
         io.bs = sizeof("xexec") - 1;
         io.write("xexec");
         io.flush();
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << endl;
     }
     return 0;

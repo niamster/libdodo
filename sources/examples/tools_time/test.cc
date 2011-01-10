@@ -28,7 +28,7 @@ main(int  argc UNUSED,
         cout << tools::time::week(tools::time::now(), "%A")[0] << endl;
 
         cout << tools::time::timestamp(tools::time::now()).sec << endl;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << endl;
     }
 

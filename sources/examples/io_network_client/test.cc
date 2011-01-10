@@ -49,7 +49,7 @@ main(int  argc UNUSED,
         str = ex.readString();
 
         cout << tools::misc::split(str, "\r\n\r\n")[0] << endl;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

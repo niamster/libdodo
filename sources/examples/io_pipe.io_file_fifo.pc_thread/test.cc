@@ -36,7 +36,7 @@ threadRead(void *data)
         str = pipe->read();
         cout << "%MD5: " << tools::code::MD5Hex(str) << "%\n";
         cout.flush();
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
@@ -68,7 +68,7 @@ threadWrite(void *data)
         pipe->bs = str.size();
         pipe->write(str);
         pipe->flush();
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
@@ -133,7 +133,7 @@ main(int  argc UNUSED,
                                        ON_DESTRUCTION_STOP)));
 
         threads.wait();
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

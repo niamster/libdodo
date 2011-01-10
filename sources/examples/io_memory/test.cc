@@ -56,7 +56,7 @@ main(int  argc UNUSED,
         cout << io0 << endl;
         cout << "io1:" << endl;
         cout << io1 << endl;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

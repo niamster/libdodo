@@ -46,7 +46,7 @@ main(int  argc UNUSED,
 
         dodo_try {
             db.exec(sql::query("DROP TABLE test"));
-        } dodo_catch (exception::basic *e UNUSED)   {
+        } dodo_catch (dodo::exception::basic *e UNUSED)   {
         }
 
         db.exec(sql::query("CREATE TABLE test (t0 text NOT NULL, t1 text NOT NULL, id integer default NULL, i integer default NULL, b bytea)"));
@@ -96,7 +96,7 @@ main(int  argc UNUSED,
                 cout << "[" << *m << "]\t";
             cout << endl;
         }
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << e->line;
     }
 #else

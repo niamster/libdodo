@@ -72,7 +72,7 @@ main(int  argc UNUSED,
             }
         }
 #endif
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->file << "\t" << e->line << endl;
     }
 

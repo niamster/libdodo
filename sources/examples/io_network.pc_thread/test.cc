@@ -55,7 +55,7 @@ process(void *data)
                 *exit_condition = true;
                 ::data.release();
             }
-        } dodo_catch (exception::basic *e)   {
+        } dodo_catch (dodo::exception::basic *e)   {
             cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
             cout.flush();
         }
@@ -69,7 +69,7 @@ process(void *data)
             cout << "Closed\n";
             cout.flush();
         }
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
@@ -121,13 +121,13 @@ main(int  argc UNUSED,
                             manager.remove(*i);
                             cout.flush();
                         }
-                } dodo_catch (exception::basic *e UNUSED)   {
+                } dodo_catch (dodo::exception::basic *e UNUSED)   {
                 }
             }
         }
 
         manager.wait();
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

@@ -73,7 +73,7 @@ handler(exchange &ex)
         p.assign("strmaparr", strmaparr);
 
         p.processFile("test.tpl", *io);
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         d.printString(e->errStr + " " + tools::string::lToString(e->line));
     }
 
@@ -107,7 +107,7 @@ main(int  argc UNUSED,
         c.serve(&handler);
 
         delete shared;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

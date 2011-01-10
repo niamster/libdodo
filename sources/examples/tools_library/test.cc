@@ -39,7 +39,7 @@ main(int  argc UNUSED,
 
         ((print)sll.function("print"))("get");
 #endif
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << endl;
     }
     return 0;

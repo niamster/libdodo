@@ -143,31 +143,31 @@ namespace dodo {
         extern __thread __context__ global_exeption_context;
         extern __thread char exeption_storage[];
 
-#define dodo_try                                        \
-        {                                               \
-            jmp_buf *__prev, __cur;                     \
-            __prev = exception::global_exeption_context.context;   \
-            exception::global_exeption_context.context = &__cur;   \
-            if (setjmp(__cur) == 0) {                   \
-                do
+#define dodo_try                                                    \
+        {                                                           \
+        jmp_buf *__prev, __cur;                                     \
+        __prev = dodo::exception::global_exeption_context.context;  \
+        dodo::exception::global_exeption_context.context = &__cur;  \
+        if (setjmp(__cur) == 0) {                                   \
+        do
 
-#define dodo_catch(e)                                               \
-                while (exception::global_exeption_context.exception = NULL,    \
-                    0);                                             \
-            }                                                       \
-            exception::global_exeption_context.context = __prev;               \
-        }                                                           \
-        e = exception::global_exeption_context.exception;                    \
-        if (exception::global_exeption_context.exception)
+#define dodo_catch(e)                                                   \
+        while (dodo::exception::global_exeption_context.exception = NULL, \
+                0);                                                     \
+    }                                                                   \
+                                                                    dodo::exception::global_exeption_context.context = __prev; \
+    }                                                                   \
+                                                                                                                                                 e = dodo::exception::global_exeption_context.exception; \
+                                                                                                                                                 if (dodo::exception::global_exeption_context.exception)
 
 #define dodo_throw                                                      \
-        for (delete exception::global_exeption_context.exception;                  \
+        for (delete dodo::exception::global_exeption_context.exception; \
              ;                                                          \
-             longjmp(*exception::global_exeption_context.context, 1))              \
-            exception::global_exeption_context.exception = new ((void *)&exception::exeption_storage)
+             longjmp(*dodo::exception::global_exeption_context.context, 1)) \
+            dodo::exception::global_exeption_context.exception = new ((void *)&dodo::exception::exeption_storage)
 
-#define dodo_rethrow                                              \
-        longjmp(*exception::global_exeption_context.context, 1)              \
+#define dodo_rethrow                                                    \
+        longjmp(*dodo::exception::global_exeption_context.context, 1)   \
 
         /**
          * @class basic
@@ -280,12 +280,12 @@ namespace dodo {
             /**
              * return error string
              */
-            virtual const char *what() const;
+            const char *what() const;
 
             /**
              * @return call stack to the exception point
              */
-            virtual dodo::string backtrace();
+            dodo::string backtrace();
 
             int source;                             ///< module where exception has been thrown
             int function;                           ///< function where exception has been thrown, @see *Ex.h headers for IDs
@@ -384,7 +384,7 @@ namespace dodo {
                     /**
                      * destructor
                      */
-                    virtual ~stack();
+                    ~stack();
 
                     void *keeper; ///< section locker
                 };

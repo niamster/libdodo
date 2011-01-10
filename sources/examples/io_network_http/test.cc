@@ -69,7 +69,7 @@ main(int  argc UNUSED,
         cout << res.headers[RESPONSE_HEADER_CONTENTLENGTH] << "\n~~\n";
         cout << res.data.size() << "\n~~\n";
 #endif
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

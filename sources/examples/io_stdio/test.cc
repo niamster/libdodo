@@ -70,7 +70,7 @@ main(int  argc UNUSED,
         st.bs = 40;
         st.writeString(o);
         st.writeString("\n*eiting\n");
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

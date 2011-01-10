@@ -38,7 +38,7 @@ main(int  argc UNUSED,
                 cout << ifaces[i] << ":\t" << network::interface(ifaces[i]).hwaddr << endl;
                 cout << ifaces[i] << ":\t" << network::interface(ifaces[i]).broadcast << endl;
                 cout << ifaces[i] << ":\t" << network::interface(ifaces[i]).netmask << endl;
-            } dodo_catch (exception::basic *e)   {
+            } dodo_catch (dodo::exception::basic *e)   {
                 cout << ifaces[i] << ":\t" << (dodo::string)*e << endl;
             }
         }
@@ -56,7 +56,7 @@ main(int  argc UNUSED,
 
         //tools::misc::mail("niam", "test", "test");
         //tools::misc::mail("127.0.0.1", 25, "niam@niam.mu", "niam@niam.mu", "test", "test", "niam", "niam");
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

@@ -38,7 +38,7 @@ main(int  argc UNUSED,
         return 1;
     }
 	
-	exception::basic *e;
+	dodo::exception::basic *e;
 
     __connection_options__ *ci;
     connector *db;

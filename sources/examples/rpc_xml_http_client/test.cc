@@ -64,7 +64,7 @@ class httpIO : public io::stream::channel, public io::network::http::client {
     virtual unsigned long
     _write(const char * const data UNUSED) const
     {
-        dodo_throw exception::basic(exception::MODULE_UNKNOWN, 0, exception::ERRNO_USER, 0, "Not implemented", __LINE__, __FILE__);
+        dodo_throw dodo::exception::basic(dodo::exception::MODULE_UNKNOWN, 0, dodo::exception::ERRNO_USER, 0, "Not implemented", __LINE__, __FILE__);
     }
 
     virtual unsigned long
@@ -135,7 +135,7 @@ main(int  argc UNUSED,
         cout << "Amount of values: " << resp.values().size() << endl;
         cout << "First value: " << resp.value().string() << endl;
         cout << "Second value: " << resp.value(1).string() << endl;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

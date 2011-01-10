@@ -131,7 +131,7 @@ main(int  argc UNUSED,
         json.pos = 0;
         jn = p.process(json);
         showJSON(jn);
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

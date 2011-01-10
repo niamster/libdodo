@@ -18,7 +18,7 @@ job0(void *data)
 {
     dodo_try {
         cout << endl << (char *)data << ": " << tools::time::nowMs() << endl;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
@@ -34,7 +34,7 @@ job1(void *data)
         tools::os::sleep(tools::string::stringToUL((char *)data));
 
         cout << endl << "<<" << (char *)data << ": " << tools::time::nowMs() << endl;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 
@@ -102,7 +102,7 @@ main(int  argc UNUSED,
 
         for (int i = 0; i < amount; ++i)
             cout << "Job #"<< pos[i] << " is " << (manager.isRunning(pos[i])?"running":"not running") << endl;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

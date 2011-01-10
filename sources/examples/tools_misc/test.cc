@@ -31,7 +31,7 @@ main(int  argc UNUSED,
         dodo::exception::basic::setHandler("./module", NULL);
 #endif
 
-		exception::basic *e;
+		dodo::exception::basic *e;
 
         dodo_try {
             tools::filesystem::unlink("some.file", false);
@@ -51,7 +51,7 @@ main(int  argc UNUSED,
 
         dodo::string random = tools::misc::stringRandom(12);
         cout << "Random:" << tools::code::MD5Hex(random) << endl;
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

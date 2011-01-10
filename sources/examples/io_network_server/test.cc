@@ -43,7 +43,7 @@ process(exchange &ex)
 
             exit(0);
         }
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
         cout.flush();
     }
@@ -82,7 +82,7 @@ main(int  argc UNUSED,
                 process(ex);
             }
         }
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }
 

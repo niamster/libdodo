@@ -36,7 +36,7 @@ main(int  argc UNUSED,
 {
     long now = tools::time::now();
 
-	exception::basic *e;
+	dodo::exception::basic *e;
 
 #ifdef MYSQL_EXT
     dodo_try {

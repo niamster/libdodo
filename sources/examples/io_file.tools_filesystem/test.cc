@@ -18,7 +18,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-	exception::basic *e;
+	dodo::exception::basic *e;
     
 	dodo_try {
         cout << filesystem::fileContents("test.cc");

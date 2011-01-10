@@ -46,7 +46,7 @@ process0(void *data)
         data1.release();
 
         cout << endl << memory << ": " << tools::time::now() << endl, cout.flush();
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << " " << e->file << ":" << e->line << endl, cout.flush();
     }
 
@@ -81,7 +81,7 @@ process1(void *data)
         data1.release();
 
         cout << endl << (char *)dt << ": " << tools::time::now() << endl, cout.flush();
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << e->line << endl, cout.flush();
     }
 
@@ -92,7 +92,7 @@ int
 main(int  argc UNUSED,
      char **argv UNUSED)
 {
-	exception::basic *e;
+	dodo::exception::basic *e;
     
 	dodo_try {
         data1.set((char *)"%test%\n");

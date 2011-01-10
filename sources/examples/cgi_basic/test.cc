@@ -109,7 +109,7 @@ handler(exchange &ex)
         p.assign("strmaparr", strmaparr);
 
         p.processFile("test.tpl", *io);
-    } dodo_catch (exception::basic *e)   {
+    } dodo_catch (dodo::exception::basic *e)   {
         d.printString((dodo::string)*e + " " + tools::string::lToString(e->line) + " " + e->file + " " + e->message );
     }
 }
