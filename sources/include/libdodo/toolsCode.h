@@ -234,7 +234,7 @@ namespace dodo {
              * @return compressed buffer
              * @param buffer defines data to compress
              * @param level defines compression level[1..9]
-             * @param type defines compression strategy;controls how the compression phase behaves when presented with worst case, highly repetitive, input data[0..250]
+             * @param type defines compression strategy; controls how the compression phase behaves when presented with worst case, highly repetitive, input data[0..250]
              */
             static dodo::string bzCompress(const dodo::string &buffer,
                                          unsigned short   level = 6,

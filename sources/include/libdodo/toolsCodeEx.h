@@ -41,10 +41,14 @@ namespace dodo {
          */
         enum codeExR {
             CODEEX_BADASCII85,
+#ifdef BZIP2_EXT
+            CODEEX_BADBZCOMPRESSIONINIT,
+            CODEEX_BADBZCOMPRESSIONFINISH,
             CODEEX_BADBZCOMPRESSION,
             CODEEX_BADBZDECOMPRESSIONINIT,
             CODEEX_BADBZDECOMPRESSIONFINISH,
             CODEEX_BADBZDECOMPRESSION,
+#endif
         };
 
         /**
@@ -52,7 +56,9 @@ namespace dodo {
          */
 #define TOOLSCODEEX_BADASCII85_STR "Bad character in ASCII85"
 #ifdef BZIP2_EXT
-#define TOOLSCODEEX_BADBZCOMPRESSION_STR         "Error occured during comression"
+#define TOOLSCODEEX_BADBZCOMPRESSIONINIT_STR   "Error occured during preparations for decompression"
+#define TOOLSCODEEX_BADBZCOMPRESSIONFINISH_STR "Error occured during finishing decompression"
+#define TOOLSCODEEX_BADBZCOMPRESSION_STR       "Error occured during decompression"
 #define TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR   "Error occured during preparations for decompression"
 #define TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression"
 #define TOOLSCODEEX_BADBZDECOMPRESSION_STR       "Error occured during decompression"
