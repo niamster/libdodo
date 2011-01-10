@@ -366,7 +366,7 @@ code::zDecompress(const dodo::string &buffer)
     zs.zfree = Z_NULL;
     zs.opaque = Z_NULL;
 
-    if ((ret = inflateInit2(&zs, 15)) < 0)
+    if ((ret = inflateInit2(&zs, 16+MAX_WBITS)) < 0)
         throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZDECOMPRESS, exception::ERRNO_ZLIB, ret, zs.msg == NULL ? "" : zs.msg, __LINE__, __FILE__);
 
     byteBuf = new Bytef[ZLIB_CHUNK];
