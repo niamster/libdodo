@@ -322,7 +322,7 @@ code::zCompress(const dodo::string &buffer,
     zs.zfree = Z_NULL;
     zs.opaque = Z_NULL;
 
-    if ((ret = deflateInit2(&zs, level, Z_DEFLATED, 15, level, type)) < 0)
+    if ((ret = deflateInit2(&zs, level, Z_DEFLATED, 16+MAX_WBITS, level, type)) < 0)
         throw exception::basic(exception::MODULE_TOOLSCODE, CODEEX_ZCOMPRESS, exception::ERRNO_ZLIB, ret, zs.msg == NULL ? "" : zs.msg, __LINE__, __FILE__);
 
     zs.avail_in =  buffer.size();
