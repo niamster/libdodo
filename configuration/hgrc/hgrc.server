@@ -5,12 +5,20 @@ username = <user>
 users = <user1, user1>
 groups = <group1, group2>
 
+[extensions]
+hgext.highlight=
+bookmarks =
+
+[bookmarks]
+track.current = True
+
 [web]
 allow_archive = zip gz bz2
 style = paper
 baseurl = <url to repository>
 allow_push = <user1, user1>
 push_ssl = false
+pygments_style = emacs
 
 [hooks]
 incoming.notify_push = for i in $(cat <path to list with email>); do hg log -r $HG_NODE --template '\nchangeset: {rev}:{node|short}\nbranch:    {branches}\nuser:      {author}\ndate:      {date|date}\n\ndescription:\n{desc}\n\n' -p | mail -s "libdodo: $HG_NODE" "$i" -a "From: <<from>>"; done; /bin/true
