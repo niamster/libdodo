@@ -776,9 +776,36 @@ AC_CHECK_HEADERS([net/if.h],
 	]])
 
 AC_LANG_PUSH(C++)
-AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <string.h>]], [[strnlen("test", 4);]]), [],
-	[echo -n -e "#define NO_STRNLEN 1\n\n" >> include/libdodo/directives.runtime.h])
+AC_COMPILE_IFELSE(AC_LANG_PROGRAM(
+    [[#include <string.h>]],
+    [[strnlen("test", 4);]]),
+
+    [], [echo -n -e "#define NO_STRNLEN 1\n\n" >> include/libdodo/directives.runtime.h])
 AC_LANG_POP()
+
+AC_RUN_IFELSE(AC_LANG_PROGRAM(
+    [[
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <string.h>
+      #include <unistd.h>
+      #include <sys/types.h>
+      #include <sys/stat.h>
+      #include <fcntl.h>
+    ]],
+    [[
+      unsigned long ps = getpagesize();
+      char *buf = malloc(1024);
+      int n, r;
+      int fd = open("include/libdodo/directives.runtime.h", O_WRONLY|O_APPEND);
+      if (fd < 0 && buf == NULL) return 1;
+      n = sprintf(buf, "#define PAGE_SIZE %lu\n\n", ps);
+      r = write(fd, buf, n);
+      close(fd);
+      return (r!=n?1:0);
+    ]]),
+
+    [], [echo -n -e "#define PAGE_SIZE 4096\n\n" >> include/libdodo/directives.runtime.h])
 
 echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
 
