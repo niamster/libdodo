@@ -118,7 +118,7 @@ size_t strnlen(const char *s,
 #endif
 
 /**
- * minimal size of buffer for string allocation
+ * string buffer size alignment
  */
 #define STRING_BUFFER_ALINGMENT 32
 

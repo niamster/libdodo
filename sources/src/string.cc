@@ -36,8 +36,13 @@
 
 using namespace dodo;
 
-string::string() : buf(new char[STRING_BUFFER_ALINGMENT]),
-                   bufSize(STRING_BUFFER_ALINGMENT),
+#define ALIGN(x, a) (((x) + ((a) - 1))&~((a) - 1))
+#define ALIGN_STRING_BUFFER_SIZE(x) ALIGN(x, (x)>STRING_BUFFER_ALIGNMENT?PAGE_SIZE:STRING_BUFFER_ALIGNMENT)
+
+//-------------------------------------------------------------------
+
+string::string() : buf(new char[STRING_BUFFER_ALIGNMENT]),
+                   bufSize(STRING_BUFFER_ALIGNMENT),
                    strLen(0)
 {
     buf[0] = 0x0;
@@ -46,16 +51,16 @@ string::string() : buf(new char[STRING_BUFFER_ALINGMENT]),
 //-------------------------------------------------------------------
 
 string::string(const string &s) : buf(NULL),
-                                  bufSize(STRING_BUFFER_ALINGMENT),
+                                  bufSize(STRING_BUFFER_ALIGNMENT),
                                   strLen(s.strLen)
 {
     if (strLen) {
-        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + 1);
         buf = new char[bufSize];
         memcpy(buf, s.buf, strLen);
         buf[strLen] = 0x0;
     } else {
-        buf = new char[STRING_BUFFER_ALINGMENT];
+        buf = new char[STRING_BUFFER_ALIGNMENT];
         buf[0] = 0x0;
     }
 }
@@ -63,16 +68,16 @@ string::string(const string &s) : buf(NULL),
 //-------------------------------------------------------------------
 
 string::string(const char *data) : buf(NULL),
-                                   bufSize(STRING_BUFFER_ALINGMENT),
+                                   bufSize(STRING_BUFFER_ALIGNMENT),
                                    strLen(0)
 {
     if (data) {
         strLen = strlen(data);
-        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + 1);
         buf = new char[bufSize];
         memcpy(buf, data, bufSize);
     } else {
-        buf = new char[STRING_BUFFER_ALINGMENT];
+        buf = new char[STRING_BUFFER_ALIGNMENT];
         buf[0] = 0x0;
     }
 }
@@ -81,16 +86,16 @@ string::string(const char *data) : buf(NULL),
 
 string::string(const char *str,
                unsigned long length) : buf(NULL),
-                                       bufSize(STRING_BUFFER_ALINGMENT),
+                                       bufSize(STRING_BUFFER_ALIGNMENT),
                                        strLen(length)
 {
     if (str) {
-        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + 1);
         buf = new char[bufSize];
         memcpy(buf, str, strLen);
         buf[strLen] = 0x0;
     } else {
-        buf = new char[STRING_BUFFER_ALINGMENT];
+        buf = new char[STRING_BUFFER_ALIGNMENT];
         buf[0] = 0x0;
     }
 }
@@ -99,16 +104,16 @@ string::string(const char *str,
 
 string::string(char symbol,
                unsigned long count) : buf(NULL),
-                                      bufSize(STRING_BUFFER_ALINGMENT),
+                                      bufSize(STRING_BUFFER_ALIGNMENT),
                                       strLen(count)
 {
     if (strLen) {
-        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + 1);
         buf = new char[bufSize];
         memset(buf, symbol, strLen);
         buf[strLen] = 0x0;
     } else {
-        buf = new char[STRING_BUFFER_ALINGMENT];
+        buf = new char[STRING_BUFFER_ALIGNMENT];
         buf[0] = 0x0;
     }
 }
@@ -159,7 +164,7 @@ string::resize(unsigned long len)
         return;
 
     if (!(len < strLen || bufSize > len)) {
-        unsigned long newBufSize = (len + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        unsigned long newBufSize = ALIGN_STRING_BUFFER_SIZE(len + 1);
 
         char *newBuf = new char[newBufSize];
 
@@ -202,7 +207,7 @@ string::replace(unsigned long index,
         return *this;
 
     if (bufSize < strLen - num + str.strLen) {
-        unsigned long newBufSize = (strLen - num + str.strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        unsigned long newBufSize = ALIGN_STRING_BUFFER_SIZE(strLen - num + str.strLen + 1);
 
         char *newBuf = new char[newBufSize];
 
@@ -231,7 +236,7 @@ string::insert(unsigned long index,
         return *this;
 
     if (bufSize < strLen + str.strLen) {
-        unsigned long newBufSize = (strLen + str.strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        unsigned long newBufSize = ALIGN_STRING_BUFFER_SIZE(strLen + str.strLen + 1);
 
         char *newBuf = new char[newBufSize];
 
@@ -270,7 +275,7 @@ void
 string::reserve(unsigned long count)
 {
     if (count > bufSize) {
-        bufSize = (count + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(count + 1);
 
         char *newBuf = new char[bufSize];
 
@@ -292,7 +297,7 @@ string::assign(const char *data,
     if (bufSize <= strLen) {
         delete [] buf;
 
-        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + 1);
         buf = new char[bufSize];
     }
 
@@ -307,7 +312,7 @@ string::append(const char *data,
                    unsigned long length)
 {
     if (bufSize < strLen + length) {
-        bufSize = (strLen + length + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + length + 1);
 
         char *newBuf = new char[bufSize];
 
@@ -331,7 +336,7 @@ string::operator=(const string &data)
     if (bufSize <= strLen) {
         delete [] buf;
 
-        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + 1);
         buf = new char[bufSize];
     }
 
@@ -350,7 +355,7 @@ string::operator=(const char *data)
     if (bufSize <= strLen) {
         delete [] buf;
 
-        bufSize = (strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + 1);
         buf = new char[bufSize];
     }
 
@@ -377,7 +382,7 @@ string &
 string::operator+=(const string &str)
 {
     if (bufSize < strLen + str.strLen) {
-        bufSize = (strLen + str.strLen + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + str.strLen + 1);
 
         char *newBuf = new char[bufSize];
 
@@ -401,7 +406,7 @@ string::operator+=(const char *str)
     unsigned long len = strlen(str);
 
     if (bufSize < strLen + len) {
-        bufSize = (strLen + len + 1 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + len + 1);
 
         char *newBuf = new char[bufSize];
 
@@ -422,7 +427,7 @@ string &
 string::operator+=(char c)
 {
     if (bufSize < strLen + 1) {
-        bufSize = (strLen + 2 + (STRING_BUFFER_ALINGMENT - 1))&~(STRING_BUFFER_ALINGMENT - 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + STRING_BUFFER_ALIGNMENT + 1);
 
         char *newBuf = new char[bufSize];
 
