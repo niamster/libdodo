@@ -120,7 +120,7 @@ size_t strnlen(const char *s,
 /**
  * string buffer size alignment
  */
-#define STRING_BUFFER_ALINGMENT 32
+#define STRING_BUFFER_ALIGNMENT 32
 
 /**
  * default thread stack size

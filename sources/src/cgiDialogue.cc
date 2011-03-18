@@ -367,9 +367,9 @@ dialogue::requestAuthentication(const dodo::string &realm,
         HEADERS.insert(std::make_pair(RESPONSE_HEADER_WWWAUTHENTICATE, "Digest realm=\"" +
                                  realm +
                                  "\", qop=\"auth\", nonce=\"" +
-                                 tools::code::MD5Hex(tools::misc::stringRandom(16)) +
+                                 tools::code::MD5Hex(tools::misc::randomString(16)) +
                                  "\", opaque=\"" +
-                                 tools::code::MD5Hex(tools::misc::stringRandom(16)) + "\""));
+                                 tools::code::MD5Hex(tools::misc::randomString(16)) + "\""));
 }
 
 //-------------------------------------------------------------------

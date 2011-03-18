@@ -49,8 +49,9 @@ main(int  argc UNUSED,
         tools::string::replace("cd", "CD", string);
         cout << "In " << original << " 'cd' replaced with 'CD': " << string << endl;
 
-        dodo::string random = tools::misc::stringRandom(12);
-        cout << "Random:" << tools::code::MD5Hex(random) << endl;
+        cout << "Random string:" << tools::misc::randomString(12) << endl;
+        cout << "Random unsigned int:" << tools::misc::random<unsigned int>() << endl;
+        cout << "Random unsigned long:" << tools::misc::random<unsigned long>() << endl;
     } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }

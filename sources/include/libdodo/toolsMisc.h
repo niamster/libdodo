@@ -67,9 +67,9 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static void random(void          *data,
-                               unsigned long size,
-                               short         strength = RANDOM_STRENGTH_NORMAL);
+            static void randomBlob(void          *data,
+                    unsigned long size,
+                    short         strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random data
@@ -79,8 +79,8 @@ namespace dodo {
              * RANDOM_STRENGTH_STRONG may block
              * nulls are replaced with '*'
              */
-            static dodo::string stringRandom(unsigned long size,
-                                           short         strength = RANDOM_STRENGTH_NORMAL);
+            static dodo::string randomString(unsigned long size,
+                    short         strength = RANDOM_STRENGTH_NORMAL);
 
             /**
              * @return random unsigned long
@@ -88,71 +88,8 @@ namespace dodo {
              * @note based on /dev/(u)?random
              * RANDOM_STRENGTH_STRONG may block
              */
-            static unsigned long ulRandom(short strength = RANDOM_STRENGTH_NORMAL);
-
-            /**
-             * @return random long
-             * @param strength defines the ramndomness
-             * @note based on /dev/(u)?random
-             * RANDOM_STRENGTH_STRONG may block
-             */
-            static long lRandom(short strength = RANDOM_STRENGTH_NORMAL);
-
-            /**
-             * @return random unsigned int
-             * @param strength defines the ramndomness
-             * @note based on /dev/(u)?random
-             * RANDOM_STRENGTH_STRONG may block
-             */
-            static unsigned int uiRandom(short strength = RANDOM_STRENGTH_NORMAL);
-
-            /**
-             * @return random int
-             * @param strength defines the ramndomness
-             * @note based on /dev/(u)?random
-             * RANDOM_STRENGTH_STRONG may block
-             */
-            static int iRandom(short strength = RANDOM_STRENGTH_NORMAL);
-
-            /**
-             * @return random unsigned short
-             * @param strength defines the ramndomness
-             * @note based on /dev/(u)?random
-             * RANDOM_STRENGTH_STRONG may block
-             */
-            static unsigned short usRandom(short strength = RANDOM_STRENGTH_NORMAL);
-
-            /**
-             * @return random short
-             * @param strength defines the ramndomness
-             * @note based on /dev/(u)?random
-             * RANDOM_STRENGTH_STRONG may block
-             */
-            static short sRandom(short strength = RANDOM_STRENGTH_NORMAL);
-
-            /**
-             * @return random unsigned char
-             * @param strength defines the ramndomness
-             * @note based on /dev/(u)?random
-             * RANDOM_STRENGTH_STRONG may block
-             */
-            static unsigned char ucRandom(short strength = RANDOM_STRENGTH_NORMAL);
-
-            /**
-             * @return random char
-             * @param strength defines the ramndomness
-             * @note based on /dev/(u)?random
-             * RANDOM_STRENGTH_STRONG may block
-             */
-            static char cRandom(short strength = RANDOM_STRENGTH_NORMAL);
-
-            /**
-             * @return random double
-             * @param strength defines the ramndomness
-             * @note based on /dev/(u)?random
-             * RANDOM_STRENGTH_STRONG may block
-             */
-            static double dRandom(short strength = RANDOM_STRENGTH_NORMAL);
+            template <typename T>
+            static inline T random(short strength = RANDOM_STRENGTH_NORMAL) { T random; randomBlob(&random, sizeof(T), strength); return random; }
 
             /**
              * @return true if needle has been found

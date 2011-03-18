@@ -46,7 +46,7 @@ using namespace dodo::tools;
 //-------------------------------------------------------------------
 
 void
-misc::random(void          *data,
+misc::randomBlob(void          *data,
              unsigned long size,
              short         strength)
 {
@@ -98,133 +98,19 @@ misc::random(void          *data,
 //-------------------------------------------------------------------
 
 dodo::string
-misc::stringRandom(unsigned long size,
+misc::randomString(unsigned long size,
                    short         strength)
 {
-    char *data = new char[size + 1];
-    dodo_try {
-        random(data, size, strength);
-    } dodo_catch (exception::basic *e UNUSED) {
-        delete [] data;
+    dodo::string s('\0', size);
+    char *data = (char *)s.data();
 
-        dodo_rethrow;
-    }
+    randomBlob(data, size, strength);
+
     for (unsigned long i = 0; i < size; ++i)
         if (data[i] == '\0')
             data[i] = '*';
 
-    dodo::string res(data, size);
-    delete [] data;
-
-    return res;
-}
-
-//-------------------------------------------------------------------
-
-unsigned long
-misc::ulRandom(short strength)
-{
-    unsigned long rnd;
-
-    random(&rnd, sizeof(unsigned long), strength);
-
-    return rnd;
-}
-
-//-------------------------------------------------------------------
-
-long
-misc::lRandom(short strength)
-{
-    long rnd;
-
-    random(&rnd, sizeof(long), strength);
-
-    return rnd;
-}
-
-//-------------------------------------------------------------------
-
-unsigned int
-misc::uiRandom(short strength)
-{
-    unsigned int rnd;
-
-    random(&rnd, sizeof(unsigned int), strength);
-
-    return rnd;
-}
-
-//-------------------------------------------------------------------
-
-int
-misc::iRandom(short strength)
-{
-    int rnd;
-
-    random(&rnd, sizeof(int), strength);
-
-    return rnd;
-}
-
-//-------------------------------------------------------------------
-
-unsigned short
-misc::usRandom(short strength)
-{
-    unsigned short rnd;
-
-    random(&rnd, sizeof(unsigned short), strength);
-
-    return rnd;
-}
-
-//-------------------------------------------------------------------
-
-short
-misc::sRandom(short strength)
-{
-    short rnd;
-
-    random(&rnd, sizeof(short), strength);
-
-    return rnd;
-}
-
-//-------------------------------------------------------------------
-
-unsigned char
-misc::ucRandom(short strength)
-{
-    unsigned char rnd;
-
-    random(&rnd, sizeof(unsigned char), strength);
-
-    return rnd;
-}
-
-//-------------------------------------------------------------------
-
-char
-misc::cRandom(short strength)
-{
-    char rnd;
-
-    random(&rnd, sizeof(char), strength);
-
-    return rnd;
-}
-
-//-------------------------------------------------------------------
-
-double
-misc::dRandom(short strength)
-{
-    double rnd;
-
-    random(&rnd, sizeof(double), strength);
-
-    return rnd;
+    return s;
 }
 
 //-------------------------------------------------------------------

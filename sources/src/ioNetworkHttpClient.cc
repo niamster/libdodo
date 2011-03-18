@@ -632,7 +632,7 @@ response
 client::POST(const dodoStringMap &arguments,
              const dodoMap<dodo::string, file> &files) const
 {
-    dodo::string boundary = "---------------------------" + tools::string::ulToString(tools::misc::ulRandom()) + tools::string::ulToString(tools::misc::ulRandom());
+    dodo::string boundary = "---------------------------" + tools::string::ulToString(tools::misc::random<unsigned long>()) + tools::string::ulToString(tools::misc::random<unsigned long>());
     dodo::string type = "multipart/form-data; boundary=" + boundary;
     boundary.insert(0, "--");
 
@@ -1430,7 +1430,7 @@ client::makeDigestAuth(short            requestHeader,
         }
     }
 
-    dodo::string cnonce = tools::code::MD5Hex(tools::misc::stringRandom(5));
+    dodo::string cnonce = tools::code::MD5Hex(tools::misc::randomString(5));
 
     dodo::string methodForAuth = method + ":";
 
