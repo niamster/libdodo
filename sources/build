@@ -18,25 +18,25 @@ function build()
 }
 
 # with_all, POSIX ipc, PCRE regex
-build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick --with-bfd $@
+build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick  $@
 
 # with_all, XSI ipc, PCRE regex
-build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick --with-bfd --with-ipc=XSI $@
+build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick  --with-ipc=XSI $@
 
 # with_all-openssl, POSIX ipc, PCRE regex
-build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick --with-bfd $@
+build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick  $@
 
 # with_all-libxml2, POSIX ipc, PCRE regex
-build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-bzip2 --with-zlib --with-iconv --with-imagemagick --with-bfd $@
+build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-bzip2 --with-zlib --with-iconv --with-imagemagick  $@
 
 # with_all-dl, POSIX ipc, PCRE regex
 build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick $@
 
 # with_all, POSIX ipc, PCRE regex, disable dequeue
-build --disable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick --with-bfd $@
+build --disable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick  $@
 
 # with_all, POSIX ipc, PCRE regex, disable xexecs
-build --enable-deque --disable-io-xexec --disable-graphics-xexec --disable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick --with-bfd $@
+build --enable-deque --disable-io-xexec --disable-graphics-xexec --disable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick  $@
 
 # with_none, POSIX ipc
 build --enable-deque --enable-io-xexec --enable-graphics-xexec --enable-database-xexec $@

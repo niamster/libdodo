@@ -76,10 +76,6 @@ class LibdodoHg(CPackageRecipe):
 			r.buildRequires += ['ImageMagick:devel']
 			extraconfig +=' --with-imagemagick'
 
-		if Use.bfd:
-			r.buildRequires += ['binutils:devel']
-			extraconfig +=' --with-bfd'
-
 		if Use.ipcxsi:
 			extraconfig +=' --with-ipc=XSI'
 

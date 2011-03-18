@@ -3,8 +3,8 @@
 #for configure
 
 #everything enabled
-./configure --with-sqlite3 --with-postgresql --with-mysql --with-fast-cgi --with-dl --with-libxml2 --with-threading-lib=pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre --with-bfd --with-openssl --prefix=/opt/libdodo
+./configure --with-sqlite3 --with-postgresql --with-mysql --with-fast-cgi --with-dl --with-libxml2 --with-threading-lib=pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre  --with-openssl --prefix=/opt/libdodo
 
 #everything enabled except xexec actions
-./configure --with-sqlite3 --with-postgresql --with-mysql --with-fast-cgi --with-dl --with-libxml2 --with-threading-lib=pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre --with-bfd --with-openssl --prefix=/opt/libdodo --disable-graphics-xexec --disable-database-xexec --disable-io-xexec
+./configure --with-sqlite3 --with-postgresql --with-mysql --with-fast-cgi --with-dl --with-libxml2 --with-threading-lib=pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre  --with-openssl --prefix=/opt/libdodo --disable-graphics-xexec --disable-database-xexec --disable-io-xexec
 

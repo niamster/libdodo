@@ -46,7 +46,7 @@ def useNotOneOtherAll(uses):
 
 rmake = ["rmake", "build"]
 
-uses = ("bfd", "bzip2", "dl", "fastcgi", "iconv", "imagemagick", "libxml2", "mysql", "pcre", "postgresql", "sqlite3", "zlib", "ssl", "ipcxsi")
+uses = ("bzip2", "dl", "fastcgi", "iconv", "imagemagick", "libxml2", "mysql", "pcre", "postgresql", "sqlite3", "zlib", "ssl", "ipcxsi")
 
 xexecFlags = ("databaseXexec", "graphicsXexec", "ioXexec")
 

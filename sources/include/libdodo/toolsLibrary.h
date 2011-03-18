@@ -84,15 +84,6 @@ namespace dodo {
              */
             virtual void *operator[](const dodo::string &name);
 
-#ifdef BFD_EXT
-            /**
-             * get symbols from the library
-             * @return symbols of the library
-             * @param path defines path to the library[if not in ldconfig db] or library name
-             */
-            static dodoStringArray symbols(const dodo::string &path);
-#endif
-
           protected:
 
             void *handle; ///< handle to library

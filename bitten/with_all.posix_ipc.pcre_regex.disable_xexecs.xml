@@ -8,7 +8,7 @@
   </step>
   <step id="configure"
         description="Configure with all external dependecies, POSIX ipc, PCRE regex, disable xexecs">
-    <sh:exec executable="sh" args="-c 'cd sources; ./configure --enable-deque --disable-io-xexec --disable-graphics-xexec --disable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick --with-bfd'" />
+    <sh:exec executable="sh" args="-c 'cd sources; ./configure --enable-deque --disable-io-xexec --disable-graphics-xexec --disable-database-xexec --with-sqlite3 --with-postgresql --with-mysql --with-openssl --with-fast-cgi --with-pcre --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick '" />
   </step>
   <step id="build-library" description="Build library">
     <c:make jobs="4" target="clean" directory="sources" />

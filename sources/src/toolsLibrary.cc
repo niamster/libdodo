@@ -31,9 +31,6 @@
 
 #ifdef DL_EXT
 #include <dlfcn.h>
-#ifdef BFD_EXT
-#include <bfd.h>
-#endif
 #include <stdlib.h>
 
 #include <libdodo/toolsLibrary.h>
@@ -136,57 +133,6 @@ library::operator[](const dodo::string &name)
     return func;
 }
 
-//-------------------------------------------------------------------
-
-#ifdef BFD_EXT
-dodo::dodoStringArray
-library::symbols(const dodo::string &path)
-{
-    bfd_init();
-
-    bfd *lib = bfd_openr(path.data(), NULL);
-    if (lib == NULL) {
-        bfd_error_type err = bfd_get_error();
-        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-    }
-
-    if (bfd_check_format(lib, bfd_object) == FALSE) {
-        bfd_error_type err = bfd_get_error();
-        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-    }
-
-    long storageSize = bfd_get_symtab_upper_bound(lib);
-
-    if (storageSize < 0) {
-        bfd_error_type err = bfd_get_error();
-        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-    }
-
-    if (storageSize == 0)
-        return dodoStringArray();
-
-    asymbol **symbolTable = (asymbol **)malloc(storageSize);
-
-    long numberOfSymbols = bfd_canonicalize_symtab(lib, symbolTable);
-
-    if (numberOfSymbols < 0) {
-        bfd_error_type err = bfd_get_error();
-        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-    }
-
-    dodoStringArray arr;
-    for (long i = 0; i < numberOfSymbols; ++i)
-        if (isSetFlag(symbolTable[i]->flags, BSF_FUNCTION) && isSetFlag(symbolTable[i]->flags, BSF_GLOBAL))
-            arr.push_back(symbolTable[i]->name);
-
-    if (bfd_close(lib) == FALSE) {
-        bfd_error_type err = bfd_get_error();
-        dodo_throw exception::basic(exception::MODULE_TOOLSLIBRARY, LIBRARYEX_SYMBOLS, exception::ERRNO_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
-    }
-
-    return arr;
-}
-#endif
 #endif
 
 //-------------------------------------------------------------------

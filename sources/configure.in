@@ -279,34 +279,6 @@ else
 	RESULT="$RESULT\nOpenSSL\t\t\t\t\t\t\t\tdisabled"
 fi
 
-AC_ARG_WITH([bfd],
-	AS_HELP_STRING([--with-bfd@<:@=DIR@:>@], [support library name resolution]),
-		[MOD_BFD_DIR="$withval"], [MOD_BFD="no"])
-if test "$MOD_BFD" != "no" -a "$MOD_BFD_DIR" != "no"
-then
-	if test "$MOD_BFD_DIR" = "yes"
-	then
-		MOD_BFD_DIR=/usr
-	fi
-	case "$OS" in
-		FreeBSD)
-			BFD_SO=$(/sbin/ldconfig -r | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
-			;;
-		Linux)
-			BFD_SO=$(/sbin/ldconfig -p | awk '{if (match($1, /^libbfd-.+\.so$/)!=0) {print substr($1, RSTART+3, RLENGTH-6)}}')
-			;;
-	esac
-	CPPFLAGS="$CPPFLAGS -I$MOD_BFD_DIR/include"
-	LDFLAGS="$LDFLAGS -L$MOD_BFD_DIR/lib -l$BFD_SO"
-	AC_CHECK_LIB([$BFD_SO], [bfd_fopen], [], AC_MSG_ERROR(bfd lib was not found))
-	AC_CHECK_HEADER([bfd.h], [], AC_MSG_ERROR(bfd header was not found))
-	echo -n -e "#define BFD_EXT 1\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\nLibrary name resolution\t\t\t\t\t\tenabled"
-else
-	RESULT="$RESULT\nLibrary name resolution\t\t\t\t\t\tdisabled"
-fi
-
 AC_ARG_WITH([postgresql],
 	AS_HELP_STRING([--with-postgresql@<:@=DIR@:>@], [use postgresql]),
 		[MOD_POSTGRESQL_DIR="$withval"], [MOD_POSTGRESQL="no"])
@@ -331,7 +303,7 @@ then
 	AC_CHECK_HEADER([libpq-fe.h], [], AC_MSG_ERROR(postgresql header was not found))
 
 	AC_LANG_PUSH(C++)
-	AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <libpq-fe.h>]], [[pg_encoding_to_char(0);]]), [],
+	AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <libpq-fe.h>]], [[pg_encoding_to_char(0);]])], [],
 		[echo -n -e "#define POSTGRESQL_NO_ENCODINGTOCHAR 1\n\n" >> include/libdodo/directives.runtime.h])
 	AC_LANG_POP()
 
@@ -373,7 +345,7 @@ then
 	AC_CHECK_HEADER([mysql.h], [], AC_MSG_ERROR(mySQL header was not found))
 
 	AC_LANG_PUSH(C++)
-	AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <mysql.h>]], [[my_bool rc = 1; mysql_options(0, MYSQL_OPT_RECONNECT, &rc);]]), [],
+	AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <mysql.h>]], [[my_bool rc = 1; mysql_options(0, MYSQL_OPT_RECONNECT, &rc);]])], [],
 		[echo -n -e "#define MYSQL_NO_OPT_RECONNECT 1\n\n" >> include/libdodo/directives.runtime.h])
 	AC_LANG_POP()
 
@@ -776,14 +748,14 @@ AC_CHECK_HEADERS([net/if.h],
 	]])
 
 AC_LANG_PUSH(C++)
-AC_COMPILE_IFELSE(AC_LANG_PROGRAM(
+AC_COMPILE_IFELSE([AC_LANG_SOURCE(
     [[#include <string.h>]],
-    [[strnlen("test", 4);]]),
+    [[strnlen("test", 4);]])],
 
     [], [echo -n -e "#define NO_STRNLEN 1\n\n" >> include/libdodo/directives.runtime.h])
 AC_LANG_POP()
 
-AC_RUN_IFELSE(AC_LANG_PROGRAM(
+AC_RUN_IFELSE([AC_LANG_SOURCE(
     [[
       #include <stdio.h>
       #include <stdlib.h>
@@ -803,7 +775,7 @@ AC_RUN_IFELSE(AC_LANG_PROGRAM(
       r = write(fd, buf, n);
       close(fd);
       return (r!=n?1:0);
-    ]]),
+    ]])],
 
     [], [echo -n -e "#define PAGE_SIZE 4096\n\n" >> include/libdodo/directives.runtime.h])
 
