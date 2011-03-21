@@ -37,12 +37,12 @@
 using namespace dodo;
 
 #define ALIGN(x, a) (((x) + ((a) - 1))&~((a) - 1))
-#define ALIGN_STRING_BUFFER_SIZE(x) ALIGN(x, (x)>STRING_BUFFER_ALIGNMENT?PAGE_SIZE:STRING_BUFFER_ALIGNMENT)
+#define ALIGN_STRING_BUFFER_SIZE(x) ALIGN(x, (x)>LEVEL1_DCACHE_LINESIZE?PAGE_SIZE:LEVEL1_DCACHE_LINESIZE)
 
 //-------------------------------------------------------------------
 
-string::string() : buf(new char[STRING_BUFFER_ALIGNMENT]),
-                   bufSize(STRING_BUFFER_ALIGNMENT),
+string::string() : buf(new char[LEVEL1_DCACHE_LINESIZE]),
+                   bufSize(LEVEL1_DCACHE_LINESIZE),
                    strLen(0)
 {
     buf[0] = 0x0;
@@ -51,7 +51,7 @@ string::string() : buf(new char[STRING_BUFFER_ALIGNMENT]),
 //-------------------------------------------------------------------
 
 string::string(const string &s) : buf(NULL),
-                                  bufSize(STRING_BUFFER_ALIGNMENT),
+                                  bufSize(LEVEL1_DCACHE_LINESIZE),
                                   strLen(s.strLen)
 {
     if (strLen) {
@@ -60,7 +60,7 @@ string::string(const string &s) : buf(NULL),
         memcpy(buf, s.buf, strLen);
         buf[strLen] = 0x0;
     } else {
-        buf = new char[STRING_BUFFER_ALIGNMENT];
+        buf = new char[LEVEL1_DCACHE_LINESIZE];
         buf[0] = 0x0;
     }
 }
@@ -68,7 +68,7 @@ string::string(const string &s) : buf(NULL),
 //-------------------------------------------------------------------
 
 string::string(const char *data) : buf(NULL),
-                                   bufSize(STRING_BUFFER_ALIGNMENT),
+                                   bufSize(LEVEL1_DCACHE_LINESIZE),
                                    strLen(0)
 {
     if (data) {
@@ -77,7 +77,7 @@ string::string(const char *data) : buf(NULL),
         buf = new char[bufSize];
         memcpy(buf, data, bufSize);
     } else {
-        buf = new char[STRING_BUFFER_ALIGNMENT];
+        buf = new char[LEVEL1_DCACHE_LINESIZE];
         buf[0] = 0x0;
     }
 }
@@ -86,7 +86,7 @@ string::string(const char *data) : buf(NULL),
 
 string::string(const char *str,
                unsigned long length) : buf(NULL),
-                                       bufSize(STRING_BUFFER_ALIGNMENT),
+                                       bufSize(LEVEL1_DCACHE_LINESIZE),
                                        strLen(length)
 {
     if (str) {
@@ -95,7 +95,7 @@ string::string(const char *str,
         memcpy(buf, str, strLen);
         buf[strLen] = 0x0;
     } else {
-        buf = new char[STRING_BUFFER_ALIGNMENT];
+        buf = new char[LEVEL1_DCACHE_LINESIZE];
         buf[0] = 0x0;
     }
 }
@@ -104,7 +104,7 @@ string::string(const char *str,
 
 string::string(char symbol,
                unsigned long count) : buf(NULL),
-                                      bufSize(STRING_BUFFER_ALIGNMENT),
+                                      bufSize(LEVEL1_DCACHE_LINESIZE),
                                       strLen(count)
 {
     if (strLen) {
@@ -113,7 +113,7 @@ string::string(char symbol,
         memset(buf, symbol, strLen);
         buf[strLen] = 0x0;
     } else {
-        buf = new char[STRING_BUFFER_ALIGNMENT];
+        buf = new char[LEVEL1_DCACHE_LINESIZE];
         buf[0] = 0x0;
     }
 }
@@ -427,7 +427,7 @@ string &
 string::operator+=(char c)
 {
     if (bufSize < strLen + 1) {
-        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + STRING_BUFFER_ALIGNMENT + 1);
+        bufSize = ALIGN_STRING_BUFFER_SIZE(strLen + LEVEL1_DCACHE_LINESIZE + 1);
 
         char *newBuf = new char[bufSize];
 

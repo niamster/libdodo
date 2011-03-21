@@ -5304,6 +5304,13 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <libpq-fe.h>
+int
+main ()
+{
+pg_encoding_to_char(0);
+  ;
+  return 0;
+}
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
@@ -5422,6 +5429,13 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <mysql.h>
+int
+main ()
+{
+my_bool rc = 1; mysql_options(0, MYSQL_OPT_RECONNECT, &rc);
+  ;
+  return 0;
+}
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
@@ -6622,6 +6636,13 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <string.h>
+int
+main ()
+{
+strnlen("test", 4);
+  ;
+  return 0;
+}
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
 
@@ -6653,6 +6674,23 @@ else
       #include <sys/stat.h>
       #include <fcntl.h>
 
+int
+main ()
+{
+
+      unsigned long ps = getpagesize();
+      char *buf = malloc(1024);
+      int n, r;
+      int fd = open("include/libdodo/directives.runtime.h", O_WRONLY|O_APPEND);
+      if (fd < 0 && buf == NULL) return 1;
+      n = sprintf(buf, "#define PAGE_SIZE %lu\n\n", ps);
+      r = write(fd, buf, n);
+      close(fd);
+      return (r!=n?1:0);
+
+  ;
+  return 0;
+}
 _ACEOF
 if ac_fn_c_try_run "$LINENO"; then :
 
@@ -6662,6 +6700,52 @@ fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
   conftest.$ac_objext conftest.beam conftest.$ac_ext
 fi
+
+
+if test "$cross_compiling" = yes; then :
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "cannot run test program while cross compiling
+See \`config.log' for more details" "$LINENO" 5; }
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <string.h>
+      #include <unistd.h>
+      #include <sys/types.h>
+      #include <sys/stat.h>
+      #include <fcntl.h>
+
+int
+main ()
+{
+
+      long cls = sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
+      char *buf = malloc(1024);
+      int n, r;
+      int fd = open("include/libdodo/directives.runtime.h", O_WRONLY|O_APPEND);
+      if (fd < 0 && buf == NULL) return 1;
+      n = sprintf(buf, "#define LEVEL1_DCACHE_LINESIZE %ld\n\n", cls);
+      r = write(fd, buf, n);
+      close(fd);
+      return (r!=n?1:0);
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+
+else
+  echo -n -e "#define LEVEL1_DCACHE_LINESIZE 32\n\n" >> include/libdodo/directives.runtime.h
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
 
 
 echo -n -e "#endif\n" >> include/libdodo/directives.runtime.h
