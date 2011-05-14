@@ -76,7 +76,7 @@ xexec::~xexec()
 #ifdef DL_EXT
     deinitModule deinit;
 
-    dodoList<__item__>::iterator i(preExec.begin()), j(preExec.end());
+    dodo::slList<__item__>::iterator i(preExec.begin()), j(preExec.end());
     for (; i != j; ++i) {
         if (i->handle == NULL)
             continue;
@@ -110,7 +110,7 @@ xexec::~xexec()
 //-------------------------------------------------------------------
 
 int
-xexec::addXExec(dodoList<__item__> &list,
+xexec::addXExec(dodo::slList<__item__> &list,
                 hook               func,
                 void               *data)
 {
@@ -124,7 +124,7 @@ xexec::addXExec(dodoList<__item__> &list,
     e.handle = NULL;
 #endif
 
-    list.push_back(e);
+    list.push(e);
 
     return e.id;
 }
@@ -135,9 +135,9 @@ void
 xexec::removeXExec(int id)
 {
     if (getXexec(preExec, id))
-        preExec.erase(current);
+        preExec.remove(current);
     else if (getXexec(postExec, id))
-        postExec.erase(current);
+        postExec.remove(current);
     else
         return;
 
@@ -191,13 +191,13 @@ xexec::performPostExec(short operation) const
 //-------------------------------------------------------------------
 
 void
-xexec::performXExec(dodoList<__item__> &list,
+xexec::performXExec(dodo::slList<__item__> &list,
                     short              operation) const
 {
     if (disableXExecs)
         return;
 
-    dodoList<__item__>::iterator i(list.begin()), j(list.end());
+    dodo::slList<__item__>::iterator i(list.begin()), j(list.end());
 
     for (; i != j; ++i) {
         if (safeXExecs)
@@ -280,13 +280,13 @@ xexec::addXExec(const dodo::string &module,
 
     if (mod.type & ACTION_PREEXEC) {
         e.id = ++execs;
-        preExec.push_back(e);
+        preExec.push(e);
         preExecId = e.id;
     }
 
     if (mod.type & ACTION_POSTEXEC) {
         e.id = ++execs;
-        postExec.push_back(e);
+        postExec.push(e);
         postExecId = e.id;
     }
 }
@@ -296,10 +296,10 @@ xexec::addXExec(const dodo::string &module,
 //-------------------------------------------------------------------
 
 bool
-xexec::getXexec(dodoList<__item__> &list,
+xexec::getXexec(dodo::slList<__item__> &list,
                 int                id)
 {
-    dodoList<__item__>::iterator i(list.begin()), j(list.end());
+    dodo::slList<__item__>::iterator i(list.begin()), j(list.end());
     for (; i != j; ++i) {
         if (i->id == id) {
             current = i;

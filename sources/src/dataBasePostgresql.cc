@@ -278,16 +278,12 @@ postgresql::fetchedRows(data::base::rows &a_rows) const
     int rowsNum = PQntuples(handle->result);
     int fieldsNum = PQnfields(handle->result);
 
-#ifndef USE_DEQUE
     rows->fields.reserve(fieldsNum);
     rows->values.reserve(rowsNum);
-#endif
 
     dodoStringArray values;
 
-#ifndef USE_DEQUE
     values.reserve(fieldsNum);
-#endif
 
     for (int i(0); i < fieldsNum; ++i)
         rows->fields.push_back(PQfname(handle->result, i));
@@ -452,7 +448,7 @@ postgresql::exec(const query &a_query)
             int *lengths = new int[size];
             int *formats = new int[size];
 
-            dodoList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
+            dodo::slList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
             for (int o = 0; i != j; ++i, ++o) {
                 values[o] = (char *)i->value->data();
                 lengths[o] = i->value->size();
@@ -559,7 +555,7 @@ postgresql::update()
                                 blob.reference = k;
                                 blob.value = &(*j);
 
-                                blobs.push_back(blob);
+                                blobs.push(blob);
                             } else {
                                 request += dodo::string(statements[sql::constructor::STATEMENT_EQUAL]);
                                 request += dodo::string(*j);
@@ -589,7 +585,7 @@ postgresql::update()
                             blob.reference = k;
                             blob.value = &(*j);
 
-                            blobs.push_back(blob);
+                            blobs.push(blob);
                         } else {
                             request += dodo::string(statements[sql::constructor::STATEMENT_EQUAL]);
                             request += dodo::string(*j);
@@ -669,7 +665,7 @@ postgresql::insert()
                                 blob.reference = o;
                                 blob.value = &(*i);
 
-                                blobs.push_back(blob);
+                                blobs.push(blob);
                             } else
                                 request += dodo::string(*i + statements[sql::constructor::STATEMENT_COMA]);
                         }
@@ -689,7 +685,7 @@ postgresql::insert()
                             blob.reference = o;
                             blob.value = &(*i);
 
-                            blobs.push_back(blob);
+                            blobs.push(blob);
                         } else
                             request += dodo::string(*i);
                     }
@@ -718,7 +714,7 @@ postgresql::insert()
                             blob.reference = o;
                             blob.value = &(*i);
 
-                            blobs.push_back(blob);
+                            blobs.push(blob);
                         } else
                             request += dodo::string(*i + statements[sql::constructor::STATEMENT_COMA]);
                     }
@@ -738,7 +734,7 @@ postgresql::insert()
                         blob.reference = o;
                         blob.value = &(*i);
 
-                        blobs.push_back(blob);
+                        blobs.push(blob);
                     } else
                         request += dodo::string(*i);
                 }

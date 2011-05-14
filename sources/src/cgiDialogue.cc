@@ -573,7 +573,7 @@ dialogue::printHeaders() const
         io.writeString(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
 
     if (cookies.size() > 0) {
-        dodoList<cookie>::const_iterator i(cookies.begin()), j(cookies.end());
+        dodo::slList<cookie>::iterator i(cookies.begin()), j(cookies.end());
         for (; i != j; ++i) {
             io.writeString("Set-Cookie: ");
             io.writeString(i->name + "=" + i->value + "; ");
@@ -817,7 +817,7 @@ dialogue::operator[](const dodo::string &name)
 void
 dialogue::setCookie(const cookie &cookie)
 {
-    cookies.push_back(cookie);
+    cookies.push(cookie);
 }
 
 //-------------------------------------------------------------------

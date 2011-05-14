@@ -201,9 +201,7 @@ rows::rows(const dodoArray<dodoStringMap> &map)
                 fields.push_back(o->first);
 
             dodoStringArray array;
-#ifndef USE_DEQUE
             array.reserve(i->size());
-#endif
 
             for (;i!=j;++i) {
                 o = i->begin();
@@ -231,9 +229,7 @@ rows::rows(const dodoStringMap &map)
         o = map.begin();
 
         dodoStringArray array;
-#ifndef USE_DEQUE
         array.reserve(map.size());
-#endif
 
         for (;o!=p;++o)
             array.push_back(o->second);

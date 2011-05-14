@@ -171,7 +171,7 @@ namespace dodo {
                     const dodo::string *value;        ///< pointer to blob value
                 };
 
-                dodoList<__blob__> blobs;           ///< references to blob data
+                dodo::slList<__blob__> blobs;           ///< references to blob data
 
               private:
 

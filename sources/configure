@@ -673,7 +673,6 @@ enable_option_checking
 enable_debug
 enable_profiling
 enable_libwrap
-enable_deque
 enable_io_xexec
 enable_database_xexec
 with_ipc
@@ -1323,7 +1322,6 @@ Optional Features:
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
   --disable-libwrap       disable libwrap support
-  --disable-deque         use std::vector instead of std::deque
   --disable-io-xexec      compile io:: w/o xexec support
   --disable-database-xexec
                           compile data::base:: w/o xexec support
@@ -4890,22 +4888,6 @@ fi
 	fi
 else
 	RESULT="$RESULT\nlibwrap\t\t\t\t\t\t\t\tdisabled"
-fi
-
-# Check whether --enable-deque was given.
-if test "${enable_deque+set}" = set; then :
-  enableval=$enable_deque; DEQUE="$enableval"
-else
-  DEQUE="yes"
-fi
-
-if test "$DEQUE" = "yes"
-then
-	echo -n -e "#define USE_DEQUE 1\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\nDeque\t\t\t\t\t\t\t\tenabled"
-else
-	RESULT="$RESULT\nDeque\t\t\t\t\t\t\t\tdisabled"
 fi
 
 # Check whether --enable-io-xexec was given.

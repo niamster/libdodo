@@ -30,7 +30,6 @@
 #include <libdodo/directives.h>
 
 #include <vector>
-#include <list>
 #include <deque>
 #include <map>
 #include <string>

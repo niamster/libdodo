@@ -279,11 +279,9 @@ mysql::fetchedRows(data::base::rows &a_rows) const
     unsigned int numFields = mysql_num_fields(handle->result);
     MYSQL_FIELD *mysqlFields = mysql_fetch_fields(handle->result);
 
-#ifndef USE_DEQUE
     rows->fields.reserve(numFields);
 
     rows->values.reserve(mysql_num_rows(handle->result));
-#endif
 
     unsigned long *length, j;
 
@@ -291,9 +289,7 @@ mysql::fetchedRows(data::base::rows &a_rows) const
 
     MYSQL_ROW mysqlRow;
 
-#ifndef USE_DEQUE
     values.reserve(numFields);
-#endif
 
     for (unsigned int i(0); i < numFields; ++i)
         rows->fields.push_back(mysqlFields[i].name);

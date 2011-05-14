@@ -88,10 +88,11 @@ namespace dodo {
               protected:
 
                 struct __work__;
-                dodoList<__work__ *> tasks;  ///< pending work
 
-                dodoList<execution::thread *> active;  ///< active thread
-                dodoList<execution::thread *> inactive;  ///< inactive thread
+                dodo::dlList<__work__ *> tasks;  ///< pending work
+
+                dodo::dlList<execution::thread *> active;  ///< active thread
+                dodo::dlList<execution::thread *> inactive;  ///< inactive thread
 
                 unsigned int maxThreads; ///< max amount of active threads
                 unsigned int minThreads; ///< min amount of active threads

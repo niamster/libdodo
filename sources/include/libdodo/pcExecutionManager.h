@@ -118,7 +118,7 @@ namespace dodo {
                 /**
                  * @return list of jobs in object
                  */
-                dodoList<unsigned long> jobs();
+                dodo::slList<unsigned long> jobs();
 
                 /**
                  * @return job object

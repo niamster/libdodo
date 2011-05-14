@@ -261,7 +261,7 @@ namespace dodo {
             bool autocleanFiles;                                                                        ///< defines whether to clean POST files in destructor
             dodo::string postFilesTmpDir;                                                                 ///< directory for POST files if on they are saved on the disk
 
-            dodoList<cookie> cookies;                                                                   ///< cookies
+            dodo::slList<cookie> cookies;                                                                   ///< cookies
             int requestMethod;                                                                          ///< request method
 
             dodoStringArray contenTypeExtensions;                                                       ///< contains contentype extension[boundary, modification-date, etc]

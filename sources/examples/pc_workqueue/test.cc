@@ -48,7 +48,7 @@ main(int  argc UNUSED,
             wq.add(work, (void *)"work");
         wq.add(work, (void *)"last");
 
-        tools::os::sleep(20);
+        tools::os::sleep(30);
     } dodo_catch (dodo::exception::basic *e)   {
         cout << (dodo::string)*e << "\t" << e->line << "\t" << e->file << endl;
     }

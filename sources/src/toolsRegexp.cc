@@ -136,9 +136,7 @@ regexp::match(const dodo::string &sample,
     if (!boundMatch(sample))
         return false;
 
-#ifndef USE_DEQUE
     pockets.reserve(boundaries.size());
-#endif
 
     dodoArray<__regex_match__>::const_iterator i(boundaries.begin()), j(boundaries.end());
     for (; i != j; ++i)

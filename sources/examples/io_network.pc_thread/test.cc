@@ -110,8 +110,8 @@ main(int  argc UNUSED,
                 manager.run(manager.add(execution::thread(::process, (void *)ex, execution::ON_DESTRUCTION_KEEP_ALIVE)));
 
                 dodo_try {
-                    dodoList<unsigned long> threads = manager.jobs();
-                    dodoList<unsigned long>::iterator i = threads.begin(), j = threads.end();
+                    dodo::slList<unsigned long> threads = manager.jobs();
+                    dodo::slList<unsigned long>::iterator i = threads.begin(), j = threads.end();
                     for (; i != j; ++i)
                         if (manager.isRunning(*i)) {
                             cout << *i << " is running\n";

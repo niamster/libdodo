@@ -32,11 +32,16 @@
 
 #include <libdodo/directives.h>
 #include <libdodo/string.h>
+#include <libdodo/list.h>
 
 #include <vector>
-#include <list>
 #include <deque>
 #include <map>
+#include <cstddef>
+
+#ifndef NULL
+#define NULL ((void *)0)
+#endif
 
 namespace dodo {
     /**
@@ -142,17 +147,11 @@ namespace dodo {
 
 #define dodoMap std::map
 
-#ifdef USE_DEQUE
-#define dodoArray    std::deque
-#else
 #define dodoArray    std::vector
-#endif
 
     typedef dodoArray<dodo::string> dodoStringArray;                                          ///< array of strings
 
-#define dodoList std::list
-
-    typedef dodoList<dodo::string> dodoStringList;                                            ///< array of strings
+    typedef dodo::slList<dodo::string> dodoStringList;                                            ///< array of strings
 
     typedef dodoMap<dodo::string, dodo::string, dodoMapStringCompare> dodoStringMap;            ///< hash of strings
     typedef dodoMap<dodo::string, dodo::string, dodoMapICaseStringCompare> dodoICaseStringMap;  ///< hash of strings[case insensitive]

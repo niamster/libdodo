@@ -137,18 +137,6 @@ else
 	RESULT="$RESULT\nlibwrap\t\t\t\t\t\t\t\tdisabled"
 fi
 
-AC_ARG_ENABLE(deque,
-	AS_HELP_STRING([--disable-deque], [use std::vector instead of std::deque]),
-		[DEQUE="$enableval"], [DEQUE="yes"])
-if test "$DEQUE" = "yes"
-then
-	echo -n -e "#define USE_DEQUE 1\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\nDeque\t\t\t\t\t\t\t\tenabled"
-else
-	RESULT="$RESULT\nDeque\t\t\t\t\t\t\t\tdisabled"
-fi
-
 AC_ARG_ENABLE(io-xexec,
 	AS_HELP_STRING([--disable-io-xexec], [compile io:: w/o xexec support]),
 		[IO_W_XEXEC="$enableval"], [IO_W_XEXEC="yes"])

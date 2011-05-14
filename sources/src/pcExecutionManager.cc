@@ -215,17 +215,17 @@ manager::running() const
 
 //-------------------------------------------------------------------
 
-dodoList<unsigned long>
+dodo::slList<unsigned long>
 manager::jobs()
 {
     pc::sync::stack tg(keeper);
 
-    dodoList<unsigned long> jobs;
+    dodo::slList<unsigned long> jobs;
 
     dodoMap<unsigned long, execution::job *>::const_iterator i = handles.begin(), j = handles.end();
 
     for (; i != j; ++i)
-        jobs.push_back(i->first);
+        jobs.push(i->first);
 
     return jobs;
 }

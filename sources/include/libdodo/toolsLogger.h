@@ -127,7 +127,7 @@ namespace dodo {
                 unsigned long position;                                 ///< log handler identificator
             };
 
-            dodoList<__log_map__> handlers;                             ///< list of log maps
+            dodo::slList<__log_map__> handlers;                             ///< list of log maps
 
             unsigned long handlersNum;                                  ///< number of registered handlers
 

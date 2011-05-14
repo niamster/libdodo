@@ -151,7 +151,7 @@ misc::isInList(const dodoStringList &arr,
     else
         cmpFunc = string::equal;
 
-    dodoStringList::const_iterator i(arr.begin()), j(arr.end());
+    dodoStringList::iterator i(arr.begin()), j(arr.end());
     for (; i != j; ++i)
         if (cmpFunc(*i, needle))
             return true;

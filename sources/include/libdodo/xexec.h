@@ -256,7 +256,7 @@ namespace dodo {
          * @param list defines list of hooks
          * @param id defines XExec identificator
          */
-        bool getXexec(dodoList<__item__> &list,
+        bool getXexec(dodo::slList<__item__> &list,
                       int                id);
 
         /**
@@ -266,7 +266,7 @@ namespace dodo {
          * @param func defines function that will be called
          * @param data defines hook data
          */
-        int addXExec(dodoList<__item__> &list,
+        int addXExec(dodo::slList<__item__> &list,
                      hook               func,
                      void               *data);
 
@@ -275,15 +275,15 @@ namespace dodo {
          * @param list defines list of hooks
          * @param operation defines what operation initiated the hook
          */
-        void performXExec(dodoList<__item__> &list,
+        void performXExec(dodo::slList<__item__> &list,
                           short              operation) const;
 
-        mutable dodoList<__item__> preExec;             ///< preExec hooks
-        mutable dodoList<__item__> postExec;            ///< postExec hooks
+        mutable dodo::slList<__item__> preExec;             ///< preExec hooks
+        mutable dodo::slList<__item__> postExec;            ///< postExec hooks
 
         int execs;                                      ///< hook counter
 
-        dodoList<__item__>::iterator current;           ///< iterator for list[for matched with getXexec method]
+        dodo::slList<__item__>::iterator current;           ///< iterator for list[for matched with getXexec method]
 
         short execObject;                               ///< type of object, @see xexec::objectEnum
         __collected_data__ *execObjectData;             ///< object data

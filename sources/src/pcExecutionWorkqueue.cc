@@ -93,7 +93,7 @@ workqueue::workqueue(unsigned int maxThreads,
         thread *t;
         for (unsigned int i=0; i<minThreads; ++i) {
             t = new thread((routine)workqueue::worker, this, ON_DESTRUCTION_STOP);
-            inactive.push_back(t);
+            inactive.pushBack(t);
             t->run();
         }
     } dodo_catch (exception::basic *e UNUSED) {
@@ -109,8 +109,8 @@ workqueue::workqueue(unsigned int maxThreads,
 
 workqueue::~workqueue()
 {
-    dodoList<thread *>::iterator i, j;
-    dodoList<__work__ *>::iterator o, p;
+    dodo::dlList<thread *>::iterator i, j;
+    dodo::dlList<__work__ *>::iterator o, p;
 
     tasksProtector->acquire();
     closing = true;
@@ -147,14 +147,14 @@ workqueue::worker(workqueue *queue)
     unsigned long timeout;
     bool active = false;
 
-    dodoList<thread *> &inactiveQueue = queue->inactive,
+    dodo::dlList<thread *> &inactiveQueue = queue->inactive,
         &activeQueue = queue->active;
     sync::thread *tasksProtector = queue->tasksProtector,
         *threadsProtector = queue->threadsProtector;
-    dodoList<__work__ *> &tasks = queue->tasks;
+    dodo::dlList<__work__ *> &tasks = queue->tasks;
 
     threadsProtector->acquire();
-    for (dodoList<thread *>::iterator i = inactiveQueue.begin(), j = inactiveQueue.end();
+    for (dodo::dlList<thread *>::iterator i = inactiveQueue.begin(), j = inactiveQueue.end();
          i != j;
          ++i) {
         if ((*i)->self()) {
@@ -171,7 +171,7 @@ workqueue::worker(workqueue *queue)
     for (;;) {
         if (tasks.size()) {
             work = *tasks.begin();
-            tasks.pop_front();
+            tasks.popFront();
         } else {
             work = NULL;
         }
@@ -181,7 +181,7 @@ workqueue::worker(workqueue *queue)
             if (!active) {
                 threadsProtector->acquire();
                 inactiveQueue.remove(self);
-                activeQueue.push_back(self);
+                activeQueue.pushBack(self);
                 threadsProtector->release();
 
                 active = true;
@@ -195,7 +195,7 @@ workqueue::worker(workqueue *queue)
             if (active) {
                 threadsProtector->acquire();
                 activeQueue.remove(self);
-                inactiveQueue.push_back(self);
+                inactiveQueue.pushBack(self);
                 threadsProtector->release();
 
                 active = false;
@@ -264,7 +264,7 @@ workqueue::add(routine routine,
     unsigned long activeSize, inactiveSize;
 
     tasksProtector->acquire();
-    tasks.push_back(work);
+    tasks.pushBack(work);
     tasksProtector->release();
 
     threadsProtector->acquire();
@@ -283,7 +283,7 @@ workqueue::add(routine routine,
     thread *t = new thread((execution::routine)workqueue::worker, this, ON_DESTRUCTION_STOP);
 
     threadsProtector->acquire();
-    inactive.push_back(t);
+    inactive.pushBack(t);
     threadsProtector->release();
 
     t->run();

@@ -703,11 +703,11 @@ processor::_include(unsigned long    start,
             temp1 = basePath + "/" + temp1;
 
         if (tools::filesystem::exists(temp1)) {
-            processed.push_back(path);
+            processed.push(path);
 
             processFile(temp1, tpl);
 
-            processed.pop_back();
+            processed.pop();
         }
     }
 

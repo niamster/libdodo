@@ -97,7 +97,7 @@ logger::add(short       level,
     lm.level = level;
     lm.position = ++handlersNum;
 
-    handlers.push_back(lm);
+    handlers.push(lm);
 
     return handlersNum;
 }
@@ -109,10 +109,10 @@ logger::remove(unsigned long position)
 {
     pc::sync::stack pg(keeper);
 
-    dodoList<__log_map__>::iterator i(handlers.begin()), j(handlers.end());
+    dodo::slList<__log_map__>::iterator i(handlers.begin()), j(handlers.end());
     for (; i != j; ++i) {
         if (i->position == position) {
-            handlers.erase(i);
+            handlers.remove(i);
 
             break;
         }
@@ -130,7 +130,7 @@ logger::log(short            level,
     if (level < 0 && level >= LOG_LEVEL_ENUMSIZE)
         return;
 
-    dodoList<__log_map__>::iterator i(handlers.begin()), j(handlers.end());
+    dodo::slList<__log_map__>::iterator i(handlers.begin()), j(handlers.end());
     for (; i != j; ++i) {
         if (i->level == level) {
             if (i->handler != NULL) {

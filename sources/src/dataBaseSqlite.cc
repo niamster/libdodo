@@ -212,9 +212,7 @@ sqlite::fetchedRows(data::base::rows &a_rows) const
     bool iterate = true;
     unsigned int i = 0;
 
-#ifndef USE_DEQUE
     rows->fields.reserve(numFields);
-#endif
 
     for (i = 0; i < numFields; ++i)
         rows->fields.push_back(sqlite3_column_name(handle->result, i));
@@ -240,10 +238,7 @@ sqlite::fetchedRows(data::base::rows &a_rows) const
             case SQLITE_ROW:
 
                 values.clear();
-
-#ifndef USE_DEQUE
                 values.reserve(numFields);
-#endif
 
                 for (i = 0; i < numFields; ++i) {
                     switch (sqlite3_column_type(handle->result, i)) {
@@ -535,7 +530,7 @@ sqlite::exec(const query &a_query)
         if (sqlite3_prepare(handle->handle, collectedData.query->sql.data(), collectedData.query->sql.size(), &handle->result, NULL) != SQLITE_OK)
             dodo_throw exception::basic(exception::MODULE_DATABASESQLITE, SQLITEEX_EXEC, exception::ERRNO_SQLITE, sqlite3_errcode(handle->handle), sqlite3_errmsg(handle->handle), __LINE__, __FILE__, collectedData.query->sql);
 
-        dodoList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
+        dodo::slList<__blob__>::iterator i(blobs.begin()), j(blobs.end());
         for (; i != j; ++i) {
             if (sqlite3_bind_blob(handle->result, i->reference, i->value->data(), i->value->size(), SQLITE_TRANSIENT) != SQLITE_OK) {
                 blobs.clear();
@@ -625,7 +620,7 @@ sqlite::update()
                                 blob.reference = k;
                                 blob.value = &(*j);
 
-                                blobs.push_back(blob);
+                                blobs.push(blob);
                             } else {
                                 request += dodo::string(statements[STATEMENT_EQUAL]);
                                 request += dodo::string(*j);
@@ -655,7 +650,7 @@ sqlite::update()
                             blob.reference = k;
                             blob.value = &(*j);
 
-                            blobs.push_back(blob);
+                            blobs.push(blob);
                         } else {
                             request += dodo::string(statements[STATEMENT_EQUAL]);
                             request += dodo::string(*j);
@@ -735,7 +730,7 @@ sqlite::insert()
                                 blob.reference = o;
                                 blob.value = &(*i);
 
-                                blobs.push_back(blob);
+                                blobs.push(blob);
                             } else
                                 request += dodo::string(*i + statements[STATEMENT_COMA]);
                         }
@@ -755,7 +750,7 @@ sqlite::insert()
                             blob.reference = o;
                             blob.value = &(*i);
 
-                            blobs.push_back(blob);
+                            blobs.push(blob);
                         } else
                             request += dodo::string(*i);
                     }
@@ -784,7 +779,7 @@ sqlite::insert()
                             blob.reference = o;
                             blob.value = &(*i);
 
-                            blobs.push_back(blob);
+                            blobs.push(blob);
                         } else
                             request += dodo::string(*i + statements[STATEMENT_COMA]);
                     }
@@ -804,7 +799,7 @@ sqlite::insert()
                         blob.reference = o;
                         blob.value = &(*i);
 
-                        blobs.push_back(blob);
+                        blobs.push(blob);
                     } else
                         request += dodo::string(*i);
                 }
